@@ -1,9 +1,3 @@
-import json
-from pathlib import Path
-
-IN_FILE = Path("data/clean_issues_stm32cubeh7.json")
-OUT_FILE = Path("data/chunks_issues_stm32cubeh7.json")
-
 def mcu_series_from_repo(repo: str | None) -> str | None:
     if not repo:
         return None
@@ -12,8 +6,9 @@ def mcu_series_from_repo(repo: str | None) -> str | None:
         return "H7"
     if "F4" in repo:
         return "F4"
-    # à compléter 
+    # Ajouter d'autres séries au besoin
     return None
+
 
 def clean_issue_to_chunk(issue: dict, ingest_version: str = "v1.0") -> dict:
     repo = issue.get("repo")
@@ -62,16 +57,3 @@ def clean_issue_to_chunk(issue: dict, ingest_version: str = "v1.0") -> dict:
         "metadata": metadata,
     }
     return chunk
-
-def main():
-    clean_issues = json.loads(IN_FILE.read_text(encoding="utf-8"))
-    chunks = [clean_issue_to_chunk(issue, ingest_version="v1.0") for issue in clean_issues]
-
-    OUT_FILE.write_text(
-        json.dumps(chunks, ensure_ascii=False, indent=2),
-        encoding="utf-8",
-    )
-    print(f"{len(chunks)} chunks écrits → {OUT_FILE}")
-
-if __name__ == "__main__":
-    main()

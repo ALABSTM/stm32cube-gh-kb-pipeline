@@ -1,0 +1,922 @@
+[
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 31,
+    "title": "Misleading bitoperation in OEMiROT_Boot clock configuration",
+    "state": "open",
+    "labels": [
+      "enhancement",
+      "hal",
+      "internal bug tracker",
+      "rcc"
+    ],
+    "created_at": "2026-02-17T10:25:02Z",
+    "closed_at": null,
+    "body": "**Describe the bug**\nIn the OEMiROT_Boot application (Projects/*/Applications/ROT/OEMiROT_Boot) there is this block in SetSysClock:\n\n```\nMODIFY_REG(RCC->PLL1CFGR, RCC_PLL1CFGR_PLL1RGE, RCC_PLL1CFGR_PLL1SRC_1 << RCC_PLL1CFGR_PLL1RGE_Pos);\nMODIFY_REG(RCC->PLL1CFGR, RCC_PLL1CFGR_PLL1VCOSEL, RCC_PLL1VCOWIDE << RCC_PLL1CFGR_PLL1VCOSEL_Pos);\n```\n\nPLL1RGE and PLL1SRC are unrelated fields in the register. Also RCC_PLL1CFGR_PLL1SRC_1 is already shifted to the right position in stm32h503xx.h\n\n`#define RCC_PLL1CFGR_PLL1SRC_1              (0x2UL << RCC_PLL1CFGR_PLL1SRC_Pos)     /*!< 0x00000002 */`\n\nThe line generates the correct bit pattern, but purely by chance.\n\nThe shift in the 2nd line is also incorrect. Since RCC_PLL1VCOWIDE = 0, it does not do anything. But if you would use RCC_PLL1VCOMEDIUM instead, it would expand to this:\n\n`(0x1UL << RCC_PLL1CFGR_PLL1VCOSEL_Pos) << RCC_PLL1CFGR_PLL1VCOSEL_Pos`\n\nYet again, the line generates the correct bit pattern, but purely by chance.\n\n**Suggested Fix**\nIt should be replaced with a clearer alternative:\n\n```\nMODIFY_REG(RCC->PLL1CFGR, RCC_PLL1CFGR_PLL1RGE, RCC_PLL1CFGR_PLL1RGE_1);\nMODIFY_REG(RCC->PLL1CFGR, RCC_PLL1CFGR_PLL1VCOSEL, RCC_PLL1VCOWIDE);\n```\n\nor\n\n```\nMODIFY_REG(RCC->PLL1CFGR, RCC_PLL1CFGR_PLL1RGE, RCC_PLL1_VCIRANGE_2);\nMODIFY_REG(RCC->PLL1CFGR, RCC_PLL1CFGR_PLL1VCOSEL, RCC_PLL1VCOWIDE);\n```\n",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2026-02-24T09:21:05Z",
+        "body": "ST Internal Reference: 227797"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/31"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 30,
+    "title": "image_macros_preprocessed_bl2.c is compiled and linked into the application on 2nd build in STM32CubeIDE",
+    "state": "closed",
+    "labels": [
+      "enhancement",
+      "wontfix",
+      "internal bug tracker",
+      "rot"
+    ],
+    "created_at": "2025-12-10T13:34:56Z",
+    "closed_at": "2026-02-04T10:13:32Z",
+    "body": "**Describe the set-up**\n*  STM32CubeIDE 1.18.0\n\n**Problem statement**\nApplications/ROT/OEMiROT_Boot/STM32CubeIDE\nThe project config has a build step that preprocesses `OEMiROT_Boot/Src/image_macros_to_preprocess_bl2.c` to `OEMiROT_Boot/STM32CubeIDE/image_macros_preprocessed_bl2.c` which will serve as input data to postbuild.sh\n\nIf you build the project again, Eclipse CDT will pick up the new source file and compile it and provide it as an object when linking OEMiROT_Boot.elf.\n\nThe `STM32CubeIDE/Debug/image_macros_preprocessed_bl2.o` has empty .text, .data and .bss sections, so the only effect on the elf is some extra debug info which will be stripped away when creating the .bin-file to flash onto the MCU.\n\nIt does cause the linking step to be repeated on each build since the build step that preprocesses will change the timestamp of `OEMiROT_Boot/STM32CubeIDE/image_macros_preprocessed_bl2.c` causing a re-build and re-link. On any reasonable developer box, this takes 10 seconds or less so it is not a biggie. And re-linking will happen anyway since the timestamp of output.ld changes.\n\n**Suggested improvement**\nStill - it would be beneficial if the image_macros_preprocessed_bl2.c was generated into the Release or Debug build-directory to keep CDT from picking it up.\n\npostbuild.sh could be modified to get the path to the build directory and pick up image_macros_preprocessed_bl2.c from there and also put the logfile in the same directory. This would cause less pollution of the source directory which is always beneficial - especially in CI context.",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2025-12-16T15:41:07Z",
+        "body": "Hello @jespertragardh,\n\nThank you for highlighting this.\n\nI will share your proposal with our team and keep you posted.\n\nWith regards,\n"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2026-01-07T16:22:05Z",
+        "body": "ST Internal Reference: 224727"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2026-02-04T10:13:32Z",
+        "body": "Hello @jespertragardh,\n\nRegarding the issue, our team decided that there are no plans for already delivered projects. However, the proposal will be taken into consideration for future derivative OEMiRoT_Boot projects.\n\nPlease, allow me to close this thread. Thank you in advance for your understanding.\n\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/30"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 29,
+    "title": "Remove redundant pre-processor symbol MCUBOOT_TARGET_CONFIG",
+    "state": "open",
+    "labels": [
+      "bug",
+      "projects",
+      "internal bug tracker",
+      "rot"
+    ],
+    "created_at": "2025-12-10T10:44:46Z",
+    "closed_at": null,
+    "body": "**Describe the set-up**\n * STM32CubeIDE 1.18.0\n\n**Describe the bug**\nProjects/*/Applications/ROT/OEMiROT_Boot\n\nAll the IDE-configs seem to add `'-DMCUBOOT_TARGET_CONFIG=<flash_layout.h>'` to the build command line.\nI have only tested with STM32CubeIDE but it is present in EWARM/Project.ewp and MDK-ARM/Project.uvprojx too.\n\nThis preprocessor symbol is redundant. No code tests for it.\n\nIn the upstream mcuboot 1.7.2 it is used in `boot/zephyr/include/target.h` but this file is not present in  Middlewares/Third_Party/mcuboot/ in this git. There is no Zephyr support in this git. And to my understanding (which I admit is limited), if you want to boot Zephyr using mcuboot, you build mcuboot as part of Zephyr. OEMiROT_Boot cannot be used for this purpose.\n\n**Suggested fix**\nRemove `'-DMCUBOOT_TARGET_CONFIG=<flash_layout.h>'` from the project configs for EWARM, MDK-ARM and STM32CubeIDE.",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2025-12-15T10:39:06Z",
+        "body": "See also #27 "
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-12-22T09:28:37Z",
+        "body": "Hello @jespertragardh,\n\nRegarding this ticket, are you saying that you have encountered an issue related to the macro `-DMCUBOOT_TARGET_CONFIG=<flash_layout.h>` in the preprocessor symbol?\n\nWith regards,"
+      },
+      {
+        "author": "jespertragardh",
+        "created_at": "2025-12-22T12:17:58Z",
+        "body": "> Regarding this ticket, are you saying that you have encountered an issue related to the macro `-DMCUBOOT_TARGET_CONFIG=<flash_layout.h>` in the preprocessor symbol?\n\nWell, yes it is not needed and causing confusion for the customers.\n\nI guess is a left-over from some other project's code that was transformed into OEMiROT_Boot for STM32H5. Maybe it has been added to OEMiROT_Boot for other MCUs too - I haven't checked.\nIt is not breaking anything at the moment but it would be good to clean it up when time permits.\n\nBest regards, Jesper\n"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-12-24T15:13:49Z",
+        "body": "Hello @jespertragardh,\n\nThank you for your feedback. I will share it with our team.\nSince it is related to the same application and was addressed in #27, I propose closing the other ticket and keeping track of this one.\n\nWith regards,"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-12-24T15:15:06Z",
+        "body": "ST Internal Reference: 223461"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/29"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 28,
+    "title": "Remove redundant Debug/Release parameter to postbuild.sh",
+    "state": "open",
+    "labels": [
+      "enhancement",
+      "projects",
+      "internal bug tracker",
+      "rot"
+    ],
+    "created_at": "2025-12-04T13:09:14Z",
+    "closed_at": null,
+    "body": "**Describe the set-up**\n *  STM32CubeIDE 1.18.0\n\n**Describe the bug**\nThe STM32CubeIDE/postbuild.sh files (17 in total for the different projects) have code like this:\n```\n# arg2 is the config type (Debug, Release)\nconfig=$2\n```\nAnd are called from STM32CubeIDE with the currently selected build type as positional parameter. For\n$Project/Applications/ROT/OEMiROT_Boot/STM32CubeIDE/postbuild.sh, the parameter is $1 but the rest of the description applies.\n\nThe parameter is not used since [v1.5.0](https://github.com/STMicroelectronics/STM32CubeH5/releases/tag/v1.5.0) when the code in postbuild.sh to copy the bin-file from the build output directory to Binary was replaced by a STM32CubeIDE postbuild step calling `arm-none-eabi-objcopy -O binary …` to generate the binfile.\n\nThis can be a bit confusing for developers who may think \"surely this must have some effect somewhere but I can't find out where\".\n\n**Suggested fix**\nRemove the remaining handling of parameter config from postbuild.sh and STM32CubeIDE's adding of the build config positional parameter.\n",
+    "comments": [
+      {
+        "author": "MKISTM",
+        "created_at": "2025-12-10T15:59:36Z",
+        "body": "Hello @jespertragardh,\n\nThank you for your report, I'll log an internal tracker.\n\nBR,\nMohamed Chaker."
+      },
+      {
+        "author": "MKISTM",
+        "created_at": "2025-12-10T16:00:49Z",
+        "body": "ST Internal Reference: 224299"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2026-01-12T13:58:08Z",
+        "body": "See also #29"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/28"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 27,
+    "title": "Remove redundant pre-processor symbol OEMUROT_ENABLE_NO",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "projects",
+      "internal bug tracker",
+      "rot"
+    ],
+    "created_at": "2025-12-03T17:27:13Z",
+    "closed_at": "2025-12-24T15:18:20Z",
+    "body": "**Describe the set-up**\n*  STM32CubeIDE 1.18.0\n\n**Describe the bug**\nApplications/ROT/OEMiROT_Boot/STM32CubeIDE/.cproject has\n```\n <option IS_BUILT\nIN_EMPTY=\"false\" IS_VALUE_EMPTY=\"false\" id=\"com.st.stm32cube.ide.mcu.gnu.managed\nbuild.tool.c.compiler.option.definedsymbols.1729823404\" name=\"Define symbols (-D\n)\" superClass=\"com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.\ndefinedsymbols\" useByScannerDiscovery=\"false\" valueType=\"definedSymbols\">\n    <listOptionValue builtIn=\"false\" value=\"OEMUROT_ENABLE_NO\"/>\n```\nfor both debug and release builds. This can also be seen in the UI in\nFile / Properties / C/C++ Build / Settings / MCU GCC Compiler / Preprocessor / Define symbols where `OEMUROT_ENABLE_NO` is shown in the list.\n\nThis will add `-DOEMUROT_ENABLE_NO` to the command line when building the project.\n\nThis preprocessor symbol is redundant. No code tests for it. The code tests for `OEMUROT_ENABLE`.\nTo my understanding from https://wiki.st.com/stm32mcu/wiki/Security:OEMiRoT_OEMuRoT_for_STM32H5, OEMUROT_ENABLE should not be set for STM32H563 as it does not support OEMuROT since it requires STiROT which is only available on STM32H33 and STM32H573.\n\n**Suggested fix**\nRemove pre-processor symbol OEMUROT_ENABLE_NO from STM32CubeIDE's build config.\n\nI don't think it is defined for the other MCUs in Project/ or for the the EWARM and MDK-ARM toolchains. But I don't have those tools so I can just grep in the project configs. Please remove it from those also if it is actually present.\n",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2025-12-09T08:56:27Z",
+        "body": "ST Internal Reference: 223461"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-12-24T15:18:20Z",
+        "body": "Hello @jespertragardh,\n\nAs discussed in #29, I will close this ticket as a duplicated.\n\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/27"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 24,
+    "title": "Trustzone project problem - STM32H563ZIT",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "invalid",
+      "projects",
+      "cube mx"
+    ],
+    "created_at": "2025-07-17T09:40:59Z",
+    "closed_at": "2025-08-12T10:01:37Z",
+    "body": "**Describe the set-up**\n * Nucleo-H563ZI\n * AC6 6.23 & 6.24\n\n***Describe the bug***\n\nI have created a Trustzone program with the STM32H563ZIT (nucleo board) as an example for a course. I use uVision for the course because of the debugging possibilities.  Compiler was AC6 6.23.\n\nTo be able to demonstrate the TZ-processes well, I have set the compiler optimization for both projects to O0.\n\n**Secure & Non-Secure O0**\n\nThe following problem has occurred:\n\n* The program starts normally Secure.\n* The change to Non-Secure works.\n* When calling the __HAL_PWR_VOLTAGESCALING_CONFIG() macro in the SystemClock_Config()  function and the following waiting loop called by main(), an exception occurs (NMI Secure). \n\nThe problem does not only occur during debugging. Even a reset button or poweron does not cause the program to work.\n\n\n**Secure O0 & Non-Secure O1**\n\nSince the program worked before, I set the compiler optimization of NS-Project to -O1. After that, the problem no longer occurred. The program also runs on reset or poweron.\n\n\n**Secure & Non-Secure O0   & Stopover**\n\nAs I wanted to find the cause of the problem, I set the NS project back to -O0. The problem occurred again. When debugging, the exception could be avoided by setting a breakpoint to the line after the macro call. The program also worked with this breakpoint. With reset or poweron the program could not be started correctly.\n\n\n**Secure & Non-Secure O0   & `__ISB()`**\n\nMy assumption is that certain machine instructions must be completed before the next line can be accessed. To ensure this, I inserted the `__ISB();` instruction. After that the program worked with the compiler settings O0 and O1. This also applies to Reset.\n\n\n**Keil Studio Compiler 6.24 & `__ISB()`**\n  \nI have also set up the same project in KeilStudio (windows) (compiler 6.24). There the problem could not be solved by changing the compiler optimization. Here the program only worked without an intermediate stop by inserting `__ISB()`.\n\n\n**Conclusion**\n\nSince the customization in the `SystemClock_Config()` function is overwritten with CunbeMX each time code is generated, the workaround is unsatisfactory.\n\nAll programs with deactivated Trustzone work without the need for a change.\n\n\n***Changed Code***\n\n```\nvoid SystemClock_Config(void)\n{\n  RCC_OscInitTypeDef RCC_OscInitStruct = {0};\n  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};\n\n  /** Configure the main internal regulator output voltage\n  */\n  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE0);\n\n  __ISB();   // FE\n  while(!__HAL_PWR_GET_FLAG(PWR_FLAG_VOSRDY)) {}\n```",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2025-07-22T13:32:58Z",
+        "body": "Hello @FerdinandEn,\n\nThank you for the report.\n\nCould you please share your project so that we can reproduce the issue? Which IDE are you using (MDK_ARM)?\nI will try to run some tests in the meantime.\n\nWith regards,"
+      },
+      {
+        "author": "FerdinandEn",
+        "created_at": "2025-07-22T14:34:21Z",
+        "body": "Hello @KRASTM ,\n\nhere is my test project.\n\nWith regards\n\n[100-TrustzoneBasic.zip](https://github.com/user-attachments/files/21369406/100-TrustzoneBasic.zip)"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-07-23T12:56:17Z",
+        "body": "Hello @FerdinandEn,\n\nCould you please try adding the instruction `__HAL_RCC_PWR_CLK_ENABLE()` to the stm32h5xx_hal_msp.c file inside the HAL_MspInit() API? Try it and share the result with us.\n\nWith regards,"
+      },
+      {
+        "author": "FerdinandEn",
+        "created_at": "2025-07-24T07:43:09Z",
+        "body": "Hello @KRASTM ,\n\nI have included the code `__HAL_RCC_PWR_CLK_ENABLE();`, but the Compiler can not find the macro. Could you please check the spelling.\n\nThe header main.h is include in stm32h5xx_hal_msp.c\n\nWith regards"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-07-24T15:55:14Z",
+        "body": "Hello @FerdinandEn,\n\nSorry, it was a quick analysis, but it seems that we don't need to enable the CLK for power on H5 because it's already set by the hardware, as described in RM0492 Rev 3.\n\nSo, could you please test the example in the 'Projects\\NUCLEO-H563ZI\\Examples\\GPIO\\GPIO_IOToggle_TrustZone' folder? \nI also suggest checking this section of the readme file:\n\n> User Option Bytes requirement (with the STM32CubeProgrammer tool).\n>         - TZEN = B4: System with TrustZone-M enabled.\n>         SECWM1_STRT = 0x0 SECWM1_END = 0x7F All 128 sectors of internal Flash Bank 1 are set as secure.\n>         SECWM2_STRT = 0x1; SECWM2_END = 0x0; No sectors of internal Flash Bank 2 are set as secure; therefore, Bank 2 is non-secure.\n\nI will try to find out more and keep you updated.\n\nWith regards,"
+      },
+      {
+        "author": "FerdinandEn",
+        "created_at": "2025-07-25T08:13:20Z",
+        "body": "Hello @KRASTM ,\n\nI had already set the Option Bytes correctly and did not change them for the tests.\n\nDuring the next tests, I repeatedly pressed Reset after programming to restart and test the programs.\n\nI have tested the _GPIO_IOToggle_TrustZone_ program. It worked. Then I changed the compiler optimization to **O0**. The program continued to work. Sometimes I had a security error. However, this happened very rarely.\n\nI started my program for comparison. Surprisingly, it worked most of the time without any modification. I pressed Reset several times. Most of the time it worked.\n\nI then used a different USB cable (USB A to USB C). I noticed by chance that it depends on how the USB C connector is plugged in. One side always works, the other usually does not in my program. If I add` _ISB()` as described, it always works regardless of how I plug in the USB-C connector.\n\nWith the problematic connector position, the GPIO_IOToggle_TrustZone program sometimes does not work either.\n\nI used my program in an online training course. The problem occurred on all computers there. It is therefore not due to my special cables.\n\nWith regards,\n"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-08-01T13:03:25Z",
+        "body": "hello @FerdinandEn,\n\nI tested the GPIO_IOToggle_TrustZone example on the board with the same config (optimization set to O0) and it worked just fine, and I didn't encounter any problem. Honestly, I don't understand what you mean by:\n\n`I then used a different USB cable (USB A to USB C). I noticed by chance that it depends on how the USB C connector is plugged in. One side always works, the other usually does not in my program`, is there a problem with the board USB-C port!?\n\nHave you tried using a different board?\n\nWith regards,\n"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-08-12T10:01:37Z",
+        "body": "Hello @FerdinandEn,\n\nPlease, allow me to close the issue. Thank you in advance for your understanding.\n\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/24"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 23,
+    "title": "Incorrect doc-string for FLASH_EraseInitTypeDef in `stm32h55xx_hal_flash_ex.h` ?",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "hal",
+      "internal bug tracker",
+      "flash"
+    ],
+    "created_at": "2025-06-02T12:28:40Z",
+    "closed_at": "2025-08-29T09:42:18Z",
+    "body": "**Describe the set-up**\n * NUCLEO-H563ZI \n * STM32CubeIDE 1.18.0\n\n**Describe the bug**\n`FLASH_EraseInitTypeDef` is defined as follows:\n\n```\ntypedef struct\n{\n  uint32_t TypeErase;   /*!< Mass erase or sector Erase.\n                             This parameter can be a value of @ref FLASH_Type_Erase */\n\n  uint32_t Banks;       /*!< Select banks to erase when Mass erase is enabled.\n                             This parameter can be a value of @ref FLASH_Banks\n                             (FLASH_BANK_BOTH should be used only for mass erase) */\n\n  uint32_t Sector;      /*!< Initial FLASH sector to erase when Mass erase is disabled\n                             This parameter can be a value of @ref FLASH_Sectors */\n\n  uint32_t NbSectors;   /*!< Number of sectors to be erased.\n                             This parameter can be a value between 1 and (max number of sectors in the bank -\n                             value of initial sector)*/\n} FLASH_EraseInitTypeDef;\n\n\n```\n\nThe `Banks` field is documented as `Select banks to erase when Mass erase is enabled`, but in the function `HAL_FLASHEx_Erase` that consumes the `FLASH_EraseInitTypeDef` struct, the `Banks` field is also accessed in the  case that the erase type is set to sectors (i.e. that the `TypeErase` field is set to `FLASH_TYPEERASE_SECTORS`) and not only when the erase type is mass erase. Is this intentional or a hiccup in the documentation?",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2025-06-05T14:44:36Z",
+        "body": "ST Internal Reference: 211710"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-08-29T09:42:18Z",
+        "body": "Fixed in Commit: https://github.com/STMicroelectronics/stm32h5xx-hal-driver/commit/3c84eaa6000ab620be01afbcfba2735389afe09b"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/23"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 22,
+    "title": "Redundant files OEMiROT_Boot/STM32CubeIDE/Example/Startup/startup_stm32h5*.s",
+    "state": "closed",
+    "labels": [
+      "enhancement",
+      "projects",
+      "internal bug tracker",
+      "rot"
+    ],
+    "created_at": "2025-05-21T15:08:34Z",
+    "closed_at": "2025-09-26T12:57:45Z",
+    "body": "**Describe the set-up**\n * STM32CubeIDE 1.18.0\n\n**Additional context**\nThe files `Projects/NUCLEO-H533RE/Applications/ROT/OEMiROT_Boot/STM32CubeIDE/Example/Startup/startup_stm32h533retx.s` and `Projects/NUCLEO-H563ZI/Applications/ROT/OEMiROT_Boot/STM32CubeIDE/Example/Startup/startup_stm32h563zitx.s` (they do not seem to exist for the other boards covered by this git) are redundant.\n\nThey contain a reset handler and interrupt vectors but these are never actually linked. The linker script in `OEMiROT_Boot/STM32CubeIDE/stm32h5xx_bl2.ld` links the implementations from `OEMiROT_Boot/Src/startup_stm32h5xx.c` which in turn partly relies on `_mainCRTStartup` from `lib/gcc/arm-none-eabi/13.3.1/thumb/v8-m.main+fp/hard/crt*.o` of the tool chain.\n\nI assume these are left-overs from creating a new STM32CubeIDE project and then setting up the project to use the common OEMiROT and mcuboot code.\n\nThey confuse the customers trying to debug the Reset_Handler.\n\nI suggest that they be removed from the project's sources.\n",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2025-05-26T11:32:25Z",
+        "body": "ST Internal Reference: 210776"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-09-26T12:57:45Z",
+        "body": "Fixed in Commit: https://github.com/STMicroelectronics/STM32CubeH5/commit/160c89558d312274f822ace0a83ed1b33516fd86"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/22"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 21,
+    "title": "FIXME should be fixed or removed in #define OEMIROT_OB_BOOT_LOCK OB_BOOT_LOCK_ENABLE",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "projects",
+      "internal bug tracker",
+      "rot"
+    ],
+    "created_at": "2025-05-16T10:51:15Z",
+    "closed_at": "2025-09-26T12:58:34Z",
+    "body": "In `Applications/ROT/OEMiROT_Boot/Inc/boot_hal_cfg.h` for projects NUCLEO-H533RE, NUCLEO-H563ZI and STM32H573I-DK\n```C\n#ifdef OEMIROT_DEV_MODE\n#define OEMIROT_OB_BOOT_LOCK OB_BOOT_LOCK_ENABLE /*!< BOOT Lock expected value  */\n#define OEMIROT_ERROR_HANDLER_STOP_EXEC /*!< Error handler stops execution (else it resets) */\n#else\n#define OEMIROT_OB_BOOT_LOCK OB_BOOT_LOCK_ENABLE /*!< FIXME BOOT Lock expected value  */\n#endif /* OEMIROT_DEV_MODE */\n```\n\nThe FIXME doesn't seem relevant. OB_BOOT_LOCK_ENABLE (defined in stm32h5xx_hal_flash_ex.h) is 0xB4U which according to RM0481 means enabled so you won't be able to change SECBOOT_ADD or SWAP_BANK which makes the boot setup more secure.\n\nBut since this is security related SW, any FIXME comment causes some unease in code security review.\n\n**Request**\nPlease either fix what needs to be fixed or remove the FIXME.",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2025-05-20T11:01:35Z",
+        "body": "ST Internal Reference: 210144"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-09-26T12:58:34Z",
+        "body": "Fixed in Commit: https://github.com/STMicroelectronics/STM32CubeH5/commit/86360fcf2e3c8b3eb0b774957ee8fd707a6b65cf"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/21"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 20,
+    "title": "warning: 'node_info.currentnode_addr' may be used uninitialized when using DMA with -Ofast compile flag",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "wontfix",
+      "dma",
+      "usart"
+    ],
+    "created_at": "2025-03-26T17:20:39Z",
+    "closed_at": "2025-04-14T10:00:42Z",
+    "body": "**Describe the set-up**\nCustom board with STM32H523ZWTx\nIDE: STM32CubeIDE 1.18.0\nSTM32Cube MCU Package and version: STM32H5 1.5.0\n\n**Describe the bug**\nWhen I try to use DMA with -Ofast or -O3 flag i got the following warning during compilation\n\n```\n../Drivers/STM32H5xx_HAL_Driver/Src/stm32h5xx_hal_dma_ex.c: In function 'HAL_DMAEx_List_ConvertQToDynamic':\n../Drivers/STM32H5xx_HAL_Driver/Src/stm32h5xx_hal_dma_ex.c:2992:77: warning: 'node_info.currentnode_addr' may be used uninitialized [-Wmaybe-uninitialized]\n 2992 |     if (((uint32_t)pQList->FirstCircularNode != 0U)                         &&\n      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~\n 2993 |         ((uint32_t)pQList->FirstCircularNode != node_info.currentnode_addr) &&\n      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  \n../Drivers/STM32H5xx_HAL_Driver/Src/stm32h5xx_hal_dma_ex.c:2939:26: note: 'node_info.currentnode_addr' was declared here\n 2939 |   DMA_NodeInQInfoTypeDef node_info;\n      |                          ^~~~~~~~~\n```\n\n**How To Reproduce**\n1. Create a blank C code ST project for STM32H523ZET6 with library copy.\n2. Enable USART1 as Asynchronous with Data Direction: Receive Only - other parameters default.\n3. Enable GPDMA1 Channel 0 - 2 Words internal FIFO as Standard Request Mode\n4. Configure the GPDMA1 Channel 0 as Circular Mode: Enable, Request: USART1_RX, Destination Address Increment After Transfer: Enabled - other parameters default.\n5. In NVIC enable USART1 global interrupt.\n6. Save and generate code - when prompted for enabling cache - ignore and click Yes.\n7. Right click on your project and open the projects Properties. Go to C/C++ Build, Settings, Tool Settings, MCU/MPU GCC Compiler, Optimization and use Optimization level: Optimize for speed (-Ofast). Click Apply and Apply and Close.\n8. Right click your project and click on Clean Project.\n9. Click on the build icon.\n\n**Attachments**\nI added the exported project to this issue [dma-test.zip](https://github.com/user-attachments/files/19472574/dma-test.zip)\n",
+    "comments": [
+      {
+        "author": "Halogenek",
+        "created_at": "2025-03-26T17:28:53Z",
+        "body": "I am experiencing some DMA hiccups in my device with this configuration, but the device is part of a complex system so I am still investigating if those are related. Problems like DMA is not working on first initialization and random lockups.\nAnyway the search lead me to this warning, which should not exist. :)"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-03-28T13:57:37Z",
+        "body": "Hello @Halogenek,\n\nThank you for the report.\n\nI get the same warning with your project. I will check with our team and run some tests, and I will keep you posted.\n\nWith regards"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-04-14T09:58:18Z",
+        "body": "Hello @Halogenek,\n\nI checked with our team about the level of optimization on Cube IDE, and we ensure zero errors and warnings when compiling with these 2 configurations:\n\n- Debug mode with No optimization\n- Release mode with Optimize for size (-OS)\n\nFor other levels of optimization, if there is a warning such as your case, you can modify the code locally in order to eliminate this warning and may help you to find out the root cause of your problem. So, we suggest initializing the structure `DMA_NodeInQInfoTypeDef node_info = {0}; `\n\nPlease, allow me to close the issue. Thank you in advance for your understanding.\n\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/20"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 19,
+    "title": "Can you give a simple example of IWDG with HAL_IWDG_RegisterCallback?",
+    "state": "closed",
+    "labels": [
+      "question",
+      "projects",
+      "iwdg"
+    ],
+    "created_at": "2025-03-24T20:19:06Z",
+    "closed_at": "2025-04-28T07:15:31Z",
+    "body": "I am trying to implement an IWDG in my program, which will save the value of the specified register to EEPROM before resetting. <br>\nBut I found that my program is not working. <br>\nI politely request your developers to provide a simple example of IWDG using HAL_SWDG_Registercallbacks. <br>\nMany thanks. :-)\n```c\nvoid IWDG_EarlyWakeupCallback(IWDG_HandleTypeDef *hiwdg)\n{\n    uint8_t arr[1] = {0xAA};\n    // if (imageAbortedFlag)\n    {\n        if (getCurrentRunningImage() == 0x01)\n        {\n            pRAMbootctrl->image_A_tasks_aborted_count++;\n        }\n        else if (getCurrentRunningImage() == 0x10)\n        {\n            pRAMbootctrl->image_B_tasks_aborted_count++;\n        }\n        MemoryStoreData(EEPROM_MSATABLE_UP03_INDEX, UPE6_128, 1, arr);\n        jump_to_IMAGE(BOOTLOADER_START_ADDRESS);\n    }\n}\n\nvoid MX_IWDG_Init(void)\n{\n    hiwdg.Instance = IWDG;\n    hiwdg.Init.Prescaler = IWDG_PRESCALER_8;\n    hiwdg.Init.Window = IWDG_WINDOW_DISABLE;\n    hiwdg.Init.Reload = 0x0FFF; // ?TBD\n    hiwdg.Init.EWI = 0; // ?? 0x0FFE\n\n    if (HAL_IWDG_Init(&hiwdg) != HAL_OK)\n    {\n        // Error_Handler();\n    }\n\n    if (HAL_IWDG_RegisterCallback(&hiwdg, HAL_IWDG_EWI_CB_ID, IWDG_EarlyWakeupCallback) != HAL_OK)\n    {\n        // Error_Handler();\n    }\n\n    #if 0\n    HAL_NVIC_SetPriority(IWDG_IRQn, NVICPreemptionPriority_IWDG, NVICSubPriority_IWDG);\n    HAL_NVIC_EnableIRQ(IWDG_IRQn);\n    #endif\n}\n```",
+    "comments": [
+      {
+        "author": "RJMSTM",
+        "created_at": "2025-03-28T14:13:09Z",
+        "body": "Hello @25th-engineer,\n\nUnfortunately, I tried to find an example of IWDG with HAL_IWDG_RegisterCallback for you, but there isn't one in our firmware. All examples are handled with an interrupt when the push-button is pressed.\n\nRegards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2025-04-24T09:29:43Z",
+        "body": "Hi @25th-engineer,\n\nAs pointed out by @RJMSTM, there is no IWDG example using the user callback registration. However, there are two applications provided with the **STM32CubeU5** firmware:\n* [TCP Echo Client](https://github.com/STMicroelectronics/STM32CubeU5/tree/main/Projects/B-U585I-IOT02A/Applications/NetXDuo/Nx_TCP_Echo_Client) running on the **B-U585I-IOT02A** board,\n* [I2C Tx-Rx with LPBAM](https://github.com/STMicroelectronics/STM32CubeU5/tree/main/Projects/NUCLEO-U575ZI-Q/Applications/LPBAM/LPBAM_I2C_TransmitReceive) running on the **NUCLEO-U575ZI-Q** board.\n\nYou will notice such lines in the [stm32u5xx_hal_conf.h](https://github.com/STMicroelectronics/STM32CubeU5/blob/2f30bf3950ee49ff0314631d160e22c2367dda06/Projects/NUCLEO-U575ZI-Q/Applications/LPBAM/LPBAM_I2C_TransmitReceive/Core/Inc/stm32u5xx_hal_conf.h#L211) files to **enable** the user callbacks registration...\n\n```c\n#define  USE_HAL_I2C_REGISTER_CALLBACKS        1U /* I2C register callback enabled       */\n#define  USE_HAL_RTC_REGISTER_CALLBACKS        1U /* RTC register callback enabled       */\n```\n\n... and, depending on the application, the user callbacks **defined**...\n\n```c\n/* USER CODE BEGIN Slave_ReloadSeq_Config */\n\n/**\n  * @brief  i2c3 error callback\n  * @param  hi2c3 pointer to I2C handle\n  * @retval None\n  */\nstatic void I2C3_Error_Callback(I2C_HandleTypeDef *hi2c3)\n{\n  /* Turn LED3 on */\n  BSP_LED_On(LED3);\n}\n/* USER CODE END Slave_ReloadSeq_Config */\n```\n\n... and **registered** in files such as the [lpbam_slave_reloadseq_config.c](https://github.com/STMicroelectronics/STM32CubeU5/blob/2f30bf3950ee49ff0314631d160e22c2367dda06/Projects/NUCLEO-U575ZI-Q/Applications/LPBAM/LPBAM_I2C_TransmitReceive/LPBAM/Slave/lpbam_slave_reloadseq_config.c#L549-L553), as show below...\n\n```c\n  /* Register i2c3 error callback */\n  if (HAL_I2C_RegisterCallback(&hi2c3, HAL_I2C_ERROR_CB_ID, I2C3_Error_Callback) != HAL_OK)\n```\n\nI hope this helps.\n\nWith regards,"
+      },
+      {
+        "author": "25th-engineer",
+        "created_at": "2025-04-28T01:29:22Z",
+        "body": "> Hello [@25th-engineer](https://github.com/25th-engineer),\n> \n> Unfortunately, I tried to find an example of IWDG with HAL_IWDG_RegisterCallback for you, but there isn't one in our firmware. All examples are handled with an interrupt when the push-button is pressed.\n> \n> Regards,\n\n@RJMSTM Thank you for your explanation. :-)"
+      },
+      {
+        "author": "25th-engineer",
+        "created_at": "2025-04-28T01:32:48Z",
+        "body": "> Hi [@25th-engineer](https://github.com/25th-engineer),\n> \n> As pointed out by [@RJMSTM](https://github.com/RJMSTM), there is no IWDG example using the user callback registration. However, there are two applications provided with the **STM32CubeU5** firmware:\n> \n> * [TCP Echo Client](https://github.com/STMicroelectronics/STM32CubeU5/tree/main/Projects/B-U585I-IOT02A/Applications/NetXDuo/Nx_TCP_Echo_Client) running on the **B-U585I-IOT02A** board,\n> * [I2C Tx-Rx with LPBAM](https://github.com/STMicroelectronics/STM32CubeU5/tree/main/Projects/NUCLEO-U575ZI-Q/Applications/LPBAM/LPBAM_I2C_TransmitReceive) running on the **NUCLEO-U575ZI-Q** board.\n> \n> You will notice such lines in the [stm32u5xx_hal_conf.h](https://github.com/STMicroelectronics/STM32CubeU5/blob/2f30bf3950ee49ff0314631d160e22c2367dda06/Projects/NUCLEO-U575ZI-Q/Applications/LPBAM/LPBAM_I2C_TransmitReceive/Core/Inc/stm32u5xx_hal_conf.h#L211) files to **enable** the user callbacks registration...\n> \n> #define  USE_HAL_I2C_REGISTER_CALLBACKS        1U /* I2C register callback enabled       */\n> #define  USE_HAL_RTC_REGISTER_CALLBACKS        1U /* RTC register callback enabled       */\n> ... and, depending on the application, the user callbacks **defined**...\n> \n> /* USER CODE BEGIN Slave_ReloadSeq_Config */\n> \n> /**\n>   * @brief  i2c3 error callback\n>   * @param  hi2c3 pointer to I2C handle\n>   * @retval None\n>   */\n> static void I2C3_Error_Callback(I2C_HandleTypeDef *hi2c3)\n> {\n>   /* Turn LED3 on */\n>   BSP_LED_On(LED3);\n> }\n> /* USER CODE END Slave_ReloadSeq_Config */\n> ... and **registered** in files such as the [lpbam_slave_reloadseq_config.c](https://github.com/STMicroelectronics/STM32CubeU5/blob/2f30bf3950ee49ff0314631d160e22c2367dda06/Projects/NUCLEO-U575ZI-Q/Applications/LPBAM/LPBAM_I2C_TransmitReceive/LPBAM/Slave/lpbam_slave_reloadseq_config.c#L549-L553), as show below...\n> \n>   /* Register i2c3 error callback */\n>   if (HAL_I2C_RegisterCallback(&hi2c3, HAL_I2C_ERROR_CB_ID, I2C3_Error_Callback) != HAL_OK)\n> I hope this helps.\n> \n> With regards,\n\n@ALABSTM Hi, Thanks. I'd fixed my problem but I would still like to say a big thank to you. I believe that your explanation will help other developers in the future. :-)"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2025-04-28T09:32:48Z",
+        "body": "Hi @25th-engineer,\n\nYou're very welcome. Really glad to read you are now able to register your callbacks.\n\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/19"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 18,
+    "title": "Feature Request: User Defined Context pointer in HAL Handles",
+    "state": "closed",
+    "labels": [
+      "enhancement",
+      "wontfix",
+      "hal",
+      "st community",
+      "spotted before customer"
+    ],
+    "created_at": "2025-03-14T13:47:03Z",
+    "closed_at": "2025-04-09T15:53:01Z",
+    "body": "Hi! \n\nI would like to re-open an old issue from the STM32CubeG4 repo:\n\nhttps://github.com/STMicroelectronics/STM32CubeG4/issues/23\n\nHoping that there might be better luck here in the H5 repo :)\n\nShort version:\nIt would be really beneficial to have a `void*` pointer in the HAL handles to associate any context that a user might need, which can be accessed in e.g. callbacks. This could make writing modular code and e.g. middleware simpler.\n\nFor details and discussions, see the attached issue in the G4 repo.\n\nThis feature could can potentially be enabled and disabled in config in the same way as registrable callbacks to prevent bloat.\n\nHoping this is something you could look into. Cheers!",
+    "comments": [
+      {
+        "author": "koniarik",
+        "created_at": "2025-03-17T21:13:11Z",
+        "body": "Yes, I concur that this would be most beneficial and the fact that we did not even get it for G4 is sad, H5 would definetly benefit from this too :)\n\nUntil that the registrable callbacks themselves lack usability for us, and hence we opted to not usem them at all, use the plain old direct callback and just setup custom registration mechanism. "
+      },
+      {
+        "author": "jostlowe",
+        "created_at": "2025-03-18T08:42:08Z",
+        "body": "Here's a community post linking to several similar discussions:\n\nhttps://community.st.com/t5/stm32-mcus-embedded-software/user-defined-context-in-hal-callbacks/m-p/783093#M61168"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2025-04-07T15:12:30Z",
+        "body": "Hi @jostlowe, @koniarik,\n\nI hear your point. Please let me reach out to our development teams to see if such an update is planned. I'll let you know as soon as I have their feedback.\n\nwith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2025-04-09T15:53:01Z",
+        "body": "Hi @jostlowe and @koniarik,\n\nThe feature you requested has been confirmed to be in the pipe and should be part of a future release. However, this will not be for the short term. We cannot share a date for the moment. I will keep you informed.\n\nPlease allow me to close this issue for the moment. Thank you for your comprehension and thank you again for having tackled this topic.\n\nWith regards,\n\n**PS:** I set the label `wontfix` simply to signify the change request is not considered yet **the moment** the issue has been closed at. But, as mentioned above, the feature is definitely in the pipe."
+      },
+      {
+        "author": "ChrisIdema",
+        "created_at": "2026-02-06T14:28:25Z",
+        "body": "Any updates?"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/18"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 17,
+    "title": "STM32H5 -> Cmsis-M33 S/NS issue",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "cmsis",
+      "needs clarification",
+      "scb"
+    ],
+    "created_at": "2025-01-31T19:52:26Z",
+    "closed_at": "2025-03-12T09:20:11Z",
+    "body": "**Caution**\nThe file cortex_cm33.h defines only secure version of SCB.\n\nhttps://github.com/STMicroelectronics/STM32CubeH5/blob/d4c01dd10d43ebf90d631d199a1a304bd8ffb84e/Drivers/CMSIS/Include/core_cm33.h#L2208C1-L2209C1\n\n**Describe the bug**\nSCB-VTOR sets VTOR_S, no possibility to set VTOR_NS\n\n\n",
+    "comments": [
+      {
+        "author": "TOUNSTM",
+        "created_at": "2025-02-07T17:00:09Z",
+        "body": "Hello @ArkadiuszRaj,\n\nYour point looks relevant. It has been forwarded to our development teams. I will keep you updated.\n\nBest regards,"
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2025-02-12T07:59:27Z",
+        "body": "Hello @ArkadiuszRaj,\n\nThank you for your report. Unfortunately, your point is not entirely clear. These files are provided by Arm, and we use them as they are. Additionally, I would like to point out that `SCB_NS` is declared at [line 2244](https://github.com/STMicroelectronics/STM32CubeH5/blob/d4c01dd10d43ebf90d631d199a1a304bd8ffb84e/Drivers/CMSIS/Include/core_cm33.h#L2244C11-L2244C17) if that is what you are referring to. Could you please provide more details?\n\nKind regards,"
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2025-03-12T09:20:11Z",
+        "body": "Hello @ArkadiuszRaj,\n\nThank you once more for your contribution. However, without additional details, we won't be able to investigate this issue further. Therefore, I will close this thread due to inactivity. You are welcome to reopen it at any time if you have more information to provide that can assist us in resolving this issue.\nThank you for your understanding.\n\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/17"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 16,
+    "title": "IAR dont see \"cmsis_iccarm.h\"",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "invalid",
+      "projects"
+    ],
+    "created_at": "2025-01-04T15:51:52Z",
+    "closed_at": "2025-01-04T16:07:03Z",
+    "body": "\r\nI'm working with IAR and stm32h503 and compiling CMSIS for a project? but it gives the following: Fatal Error[Pe1696]: cannot open source file \"cmsis_iccarm.h\"\tC:\\Users\\gorlov\\Desktop\\Study\\STM32\\CMSIS\\cmsis_compiler.h\t66\r\n\r\n\r\n**Describe the set-up**\r\n * stm32h503bct6\r\n * IAR EW for ARM v 9.50.1\r\n\r\n\r\n**Screenshots**\r\n\r\n![image](https://github.com/user-attachments/assets/aa3436f4-ee6a-4b14-b6fc-32850d5138b4)\r\n",
+    "comments": [
+      {
+        "author": "s1f0n4ik",
+        "created_at": "2025-01-04T16:07:03Z",
+        "body": "Problem solved. Check the quotes in file carefully  :)\r\n![image](https://github.com/user-attachments/assets/3ca30797-1188-4c76-98bc-e0353401baa8)\r\n"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/16"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 15,
+    "title": "Compilation of cmsis_os2.c fails if USE_MEMORY_POOL_ALLOCATION is defined.",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "internal bug tracker",
+      "mw",
+      "rtos"
+    ],
+    "created_at": "2024-07-25T10:20:33Z",
+    "closed_at": "2025-09-16T09:56:18Z",
+    "body": "**Describe the set-up**\r\n STM32CubeIDE Version: 1.15.1\r\n\r\n**Describe the bug**\r\n```\r\n#ifdef USE_DYNAMIC_MEMORY_ALLOCATION\r\n  unused_memory = (CHAR *)_tx_initialize_unused_memory;\r\n#elif  USE_MEMORY_POOL_ALLOCATION\r\n  static CHAR freememStack[RTOS2_BYTE_POOL_STACK_SIZE + RTOS2_INTERNAL_BYTE_POOL_SIZE];\r\n  static CHAR freememHeap[RTOS2_BYTE_POOL_HEAP_SIZE + RTOS2_INTERNAL_BYTE_POOL_SIZE];\r\n  unused_memory_Stack = (CHAR *)freememStack;\r\n  unused_memory_Heap = (CHAR *)freememHeap;\r\n#endif\r\n```\r\n\r\nCompiler Output:\r\n`cmsis_os2.c:270:34: error: #elif with no expression`\r\n\r\n**How To Reproduce**\r\ndefine USE_MEMORY_POOL_ALLOCATION instead of USE_DYNAMIC_MEMORY_ALLOCATION\r\n\r\nThe modules that you suspect to be the cause of the problem:\r\nstm32h5/Middlewares/ST/cmsis_rtos_threadx/cmsis_os2.c\r\n",
+    "comments": [
+      {
+        "author": "TOUNSTM",
+        "created_at": "2024-07-29T11:20:27Z",
+        "body": "ST Internal Reference: 187607"
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2024-07-29T11:21:52Z",
+        "body": "See Also https://github.com/STMicroelectronics/stm32_mw_cmsis_rtos_tx/issues/2"
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2025-09-16T09:56:18Z",
+        "body": "Fixed in 0d526a4930310cf8fa6dce7538ab891cc37eb250"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/15"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 14,
+    "title": "STM32H563/573: HAL_SPI)TransmitReceive not working on 1.8V",
+    "state": "closed",
+    "labels": [
+      "hal"
+    ],
+    "created_at": "2024-01-31T09:23:22Z",
+    "closed_at": "2024-02-19T10:39:22Z",
+    "body": "**Describe the set-up**\r\n * NUCLEO-H563ZI, (NUCLEO563ZI$MR2, STM32H563ZIT6U AA327 VQ X TWN AA 316 06)\r\n * STM32CubeIDE, Version: 1.14.0, Build: 19471_20231121_1200 (UTC)\r\n * GNU Tools for STM32 (11.3.rel1)\r\n * Jumper JP4 set to 1.8V\r\n\r\n**Describe the bug**\r\nSPI transaction (on both SPI1 and SPI2) does not work correctly when the MCU is running at 1.8V. When using `HAL_SPI_TransmitReceive` with `HAL_MAX_DELAY`, then the function never returns. With 3.3V it works as expected.\r\n\r\n**How To Reproduce**\r\nSee attached CubeIDE project\r\n[test_spi.zip](https://github.com/STMicroelectronics/STM32CubeH5/files/14109641/test_spi.zip)\r\n\r\n**Additional context**\r\nAfter some debugging, it seems that the `SPI_FLAG_RXP` (`stm32h5xx_hal_spi.c:1383`) is never set. Thus, the while loop inside `HAL_SPI_TransmitReceive` (`stm32h5xx_hal_spi.c:1367`) will never return.\r\n",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2024-02-07T16:43:07Z",
+        "body": "Hello @trembel,\r\n\r\nThank you for this contribution.\r\n\r\nFirst, I agree with you that `HAL_SPI_TransmitReceive ` API does not work correctly when the MCU running at 1.8V and the SPI Clock set at 250 Mhz.\r\nBut after analyzing the issue, you should put your SPI clock at 120 Mhz according to the datasheet [DS14121 Rev2 ](https://www.st.com/resource/en/datasheet/stm32h573ai.pdf)\r\n![image](https://github.com/STMicroelectronics/STM32CubeH5/assets/156921537/7796be7b-593e-40b2-90cb-f43bd2fc1582)\r\n\r\nAlso, there is a configuration that must be followed.\r\n![image](https://github.com/STMicroelectronics/STM32CubeH5/assets/156921537/10db63ab-37f0-452c-9633-b19cc47f28af)\r\n\r\nBest Regards"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2024-02-19T10:04:46Z",
+        "body": "Hello @trembel,\r\n\r\nAny News?\r\nDid you manage to get it to work?\r\n\r\nBRs"
+      },
+      {
+        "author": "trembel",
+        "created_at": "2024-02-19T10:12:24Z",
+        "body": "@KRASTM, thanks for your feedback (and sorry for not coming back here more early). Decreasing the SPI clock frequency did not immediately help. It worked, when the SPI clock frequency was <120 MHz AND the SPI baud below 10 MHz.\r\n\r\nFinally I could resolve the issue, by setting the SPI speed-settings to  \"very high\" (in CubeMX). Not sure though, why this is required for reception of packets (as a constant low MISO line should still be readable IMO)."
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2024-02-19T10:39:22Z",
+        "body": "Hello @trembel,\r\n\r\nI'm glad that you manage to resolve the issue.\r\n\r\nPlease, allow me to close the issue.\r\nBRs"
+      },
+      {
+        "author": "trembel",
+        "created_at": "2024-02-20T08:20:22Z",
+        "body": "Would there be a way to enforce a CubeMX warning on both\r\n- to high SPI frequency\r\n- to low drive settings for the selected speed (which I couldn't find a reference for in the DS)\r\nI think this could help to mitigate such issues directly. "
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/14"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 13,
+    "title": "EEPROM emulation problem on STM32H563ZI",
+    "state": "closed",
+    "labels": [
+      "internal bug tracker",
+      "st community"
+    ],
+    "created_at": "2023-11-05T14:35:57Z",
+    "closed_at": "2024-06-06T11:05:50Z",
+    "body": "Hi,\r\n\r\n1. I'm facing problem in reading data from EEPROM, which was written before power cycle.\r\n2. EE_Init() always causes formatting of EEPROM irrespective of EE_CONDITIONAL_ERASE or EE_FORCED_ERASE parameter passed, resulting in erasing the previous data\r\n\r\n**Configuration:** \"STM32H5 series using high-cycle data area\" with EDATA_ENABLED  &  START_PAGE_ADDRESS      0x0900C000U\r\n\r\nI'm using the latest version of EEPROM emulation driver \"X-CUBE-EEPROM version-6.0.0\" on dev kit \"NUCLEO-H563ZI\"\r\n\r\nThe example code works fine, it is able to write and read the data from the flash every time on power up by formatting the page, but when I wanted to read the data which was written in previous cycle, It always reads data zero.\r\n\r\nThe reason I found was,  it always give current page status as \"ERASING\". \r\n\r\nI made the following change in function FindPage(), having a switch case operation for \"FIND_READ_PAGE\" by adding a check currentpagestatus == STATE_PAGE_VALID as shown below. \r\n\r\nI added **STATE_PAGE_VALID** check instead of **STATE_PAGE_ERASING**, because, the debugger shows the current page status as valid in function FindPage()\r\n\r\ncase FIND_READ_PAGE:  /* ---- Read operation ---- */\r\n if (currentpagestatus == STATE_PAGE_ACTIVE || **currentpagestatus == STATE_PAGE_VALID)**\r\n {\r\n        return currentpage;\r\n }\r\n else\r\n {\r\n        if (currentpagestatus == STATE_PAGE_RECEIVE)\r\n        {\r\n          return previouspage;\r\n        }\r\n        else\r\n        {\r\n          return EE_NO_PAGE_FOUND;   /* No active Page */\r\n        }\r\n}\r\n\r\nIn main.c I added the following code just before initializing the EE_Init\r\n**ConfigureCrc();**\r\nfor (Index = 1; Index < NB_OF_VARIABLES+1; Index++)\r\n {\r\n      EE_ReadVariable32bits(Index, &a_VarDataTab[Index-1]);\r\n }\r\nwith the above change I'm now able to read data which was written in previously.\r\n\r\nAm I missing some settings? please help!\r\n",
+    "comments": [
+      {
+        "author": "TOUNSTM",
+        "created_at": "2024-06-05T14:53:25Z",
+        "body": "ST Internal Reference: 183453"
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2024-06-06T11:05:50Z",
+        "body": "Hello @Bhuvi-Naveen,\r\n\r\nActually, the point you raised has already been answered in our [Community Forum](https://community.st.com/t5/stm32-mcus-embedded-software/eeprom-emulation-problem-on-stm32h563/m-p/604991#M43090) . And as our software does not require any fixes at the moment, please allow me to close this thread.\r\n\r\nThank you very much for your attention. We look forward to hearing from you.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/13"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 12,
+    "title": "STM32H573I-DK HardFault while using TrustZone examples",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "invalid",
+      "projects"
+    ],
+    "created_at": "2023-10-23T09:31:44Z",
+    "closed_at": "2023-11-02T10:54:01Z",
+    "body": "Hi,\r\n**Setup**: \r\nBoard: STM32H573I-DK\r\nIDE: STM32CubeIDE 1.13.2, Build 18220_20230914_1601 (UTC), Ubuntu 22.04.1\r\n\r\n**Bug**:\r\nIm trying to run any project using TrustZone.\r\nI tried using [ GTZC_MPCWM_IllegalAccess_TrustZone](https://github.com/STMicroelectronics/STM32CubeH5/tree/main/Projects/STM32H573I-DK/Examples/GTZC/GTZC_MPCWM_IllegalAccess_TrustZone) and the [TrustZone Template](https://github.com/STMicroelectronics/STM32CubeH5/tree/main/Projects/STM32H573I-DK/Templates/TrustZoneEnabled).\r\n\r\nWith both I'm facing more or less the same issue.\r\nIn the GTZC Example:\r\nIn the function `SECURE_SAU_MPCWM_SetInitConfig()` that is called by the secure main.c, as the function returns the debugger goes straight to the `HardFault_Handler()`  in the file `XX_Secure/Core/Src/stm32h5xx-it.c`\r\n\r\n\r\nWith the latter after the call to `NonSecure_ResetHandler()` in `NonSecure_Init()`, the debugger goes straight to the `HardFault_Handler()` in the file `XX_Secure/Core/Src/stm32h5xx-it.c`\r\n\r\n**How To Reproduce**\r\nFor both i followed the instructions of the [GTZC Illegal Access Readme](https://github.com/STMicroelectronics/STM32CubeH5/tree/main/Projects/STM32H573I-DK/Examples/GTZC/GTZC_MPCWM_IllegalAccess_TrustZone/README.md):\r\nOpen STM32CubeIDE\r\nFile > Import. Point to the STM32CubeIDE folder of the example project. Click Finish.\r\nSelect and build the xxxxx_NS project, this will automatically trigger build of xxxxx_S project\r\nSelect the xxxxx_S project and select “Debug configuration”\r\nDouble click on “STM32 Cortex-M C/C++ Application”\r\nSelect “Startup” > “Add” >\r\nSelect the xxxxx_NS project\r\nBuild configuration : Select Release/Debug\r\nClick Debug to debug the example\r\n\r\n\r\n\r\nI'd appreciate any help :)",
+    "comments": [
+      {
+        "author": "funkii7",
+        "created_at": "2023-10-24T14:07:00Z",
+        "body": "I additionally examined the SCB registers which could be relevant when the execution lands in the hardfault handler: HFSR, CFSR, and BFAR.\r\n\r\nThe register values of the GTZC Illegal Access example are attached.\r\n\r\n![hfsr](https://github.com/STMicroelectronics/STM32CubeH5/assets/47930933/da0985a9-a50a-4573-a887-fc42fd7906f3)\r\n![bfar_cfsr](https://github.com/STMicroelectronics/STM32CubeH5/assets/47930933/d2c5b373-b90e-45fe-b768-f757a1a6f8b2)\r\n"
+      },
+      {
+        "author": "funkii7",
+        "created_at": "2023-11-02T10:54:01Z",
+        "body": "Turns out i just forgot to set the Option Bytes as described in [here](https://github.com/STMicroelectronics/STM32CubeH5/tree/main/Projects/STM32H573I-DK/Examples/GTZC/GTZC_MPCWM_IllegalAccess_TrustZone):\r\n\r\n```\r\nUser Option Bytes configuration:\r\n\r\nPlease note the internal Flash is fully secure by default in TZEN=0xB4 and User Option Bytes SECWM1_PSTRT/SECWM1_PEND and SECWM2_PSTRT/SECWM2_PEND should be set according to the application configuration. Here the proper User Option Bytes setup in line with the project linker/scatter file is as follows: - TZEN=0xB4 - SECWM1_PSTRT=0x0 SECWM1_PEND=0x7F meaning all 128 pages of Bank1 set as secure - SECWM2_PSTRT=0x1 SECWM2_PEND=0x0 meaning no page of Bank2 set as secure, hence Bank2 non-secure\r\n```"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/12"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 10,
+    "title": "size of g_pfnVectors is 0",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "cmsis"
+    ],
+    "created_at": "2023-09-14T04:44:22Z",
+    "closed_at": "2023-10-02T10:23:04Z",
+    "body": "The size of g_pfnVectors in startup code is set at the wrong place and it is set to 0.\r\n\r\n```\r\n$ arm-none-eabi-objdump -t startup_stm32h563zitx.o\r\n...\r\n00000000 l    d  .isr_vector    00000000 .isr_vector\r\n...\r\n```\r\n",
+    "comments": [
+      {
+        "author": "TOUNSTM",
+        "created_at": "2023-10-02T10:23:04Z",
+        "body": "Hello @metebalci,\r\n\r\nThank you for this report. As this issue is a duplicate of [STM32CubeH5#11](https://github.com/STMicroelectronics/STM32CubeH5/pull/11) please allow me thus to close this one and keep the other.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2023-10-25T10:43:42Z",
+        "body": "Fixed in d9bc683963de1190859e5fa57d3dbfd2ae3c4fd2 (part 1)"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2023-10-25T10:44:14Z",
+        "body": "Fixed in 278fb241992c71d287573a3210a703d6482ab698 (part 2)"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/10"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 9,
+    "title": "Register bit name typo causes compiler warning due to bug",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "hal",
+      "internal bug tracker"
+    ],
+    "created_at": "2023-09-02T15:44:32Z",
+    "closed_at": "2025-02-04T10:06:17Z",
+    "body": "There is a typo in the LL_PWR include for H5XX\r\n\r\nThis typo uses the wrong bit name:\r\n\r\nDrivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_ll_pwr.h:1507:106: warning: bitwise comparison always evaluates to false [-Wtautological-compare]\r\n1507 | return ((READ_BIT(PWR->VMSR, PWR_VMSR_PVDO) == (PWR_VMSR_AVDO)) ? 1UL : 0UL);\r\n\r\nThe correction is to read the bit PWR_VMSR_AVDO and not PWR_VMSR_PVDO\r\n\r\nbye.",
+    "comments": [
+      {
+        "author": "fpistm",
+        "created_at": "2023-09-02T18:44:39Z",
+        "body": "For ref: https://github.com/stm32duino/Arduino_Core_STM32/issues/2119"
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2023-09-11T13:43:44Z",
+        "body": "ST Internal Reference: 161158"
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2025-02-04T10:06:17Z",
+        "body": "Fixed in 0d526a4930310cf8fa6dce7538ab891cc37eb250"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/9"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 8,
+    "title": "Missing link template files for MDK-ARM",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "internal bug tracker",
+      "cmsis",
+      "cube mx"
+    ],
+    "created_at": "2023-08-24T01:38:15Z",
+    "closed_at": "2024-06-03T07:18:52Z",
+    "body": "Hello\r\n\r\nWill link template files be added in the path of \"Drivers\\CMSIS\\Device\\ST\\STM32H5xx\\Source\\Templates\\arm\"? Otherwise, how do I allocate NSC space for the Secure project in MDK-ARM? Is it referring to STM32L5? By the way, the TrustZone project for STM32H5 generated using STM32CubeMX does not seem to specify a location for NSC in Flash, but is automatically allocated by MDK, is this a problem?\r\n\r\nThank you",
+    "comments": [
+      {
+        "author": "TOUNSTM",
+        "created_at": "2024-05-29T14:21:30Z",
+        "body": "ST Internal Reference: 182803"
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2024-05-31T09:08:28Z",
+        "body": "Hello @xu-yingjing,\r\n\r\nFirst we would like to thank you for your report.\r\n\r\n>  **1-** Will link template files be added in the path of \"Drivers\\CMSIS\\Device\\ST\\STM32H5xx\\Source\\Templates\\arm\"? \r\n\r\nActually, the point you raised has been reported to our development teams. We will get back to you as soon we have updates.\r\n\r\n> **2-** how do I allocate NSC space for the Secure project in MDK-ARM? Is it referring to STM32L5? By the way, the TrustZone project for STM32H5 generated using STM32CubeMX does not seem to specify a location for NSC in Flash, but is automatically allocated by MDK, is this a problem?`\r\n\r\nThis point is related to the CubeMX generation problem and not directly related to the firmware published in this repository. Unfortunately we don't treat aspect related to CubeMX tool in our GitHub repositories.\r\nIn case you have CubeMX-related issues to share, please submit them in the [ST Community](https://community.st.com/s/question/0D53W00000JhsU4SAJ/stm32cubemx-ide-issue-throws-warning-when-using-macros) in the CubeMX related section. There you shall find people who will address your request and whom you will hopefully find a solution with.\r\n\r\nThank you for your comprehension and thank you again for having reported.\r\n\r\nKind regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/8"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 7,
+    "title": "Bug in UCPD_InitStruct() function",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "invalid",
+      "hal",
+      "usbpd"
+    ],
+    "created_at": "2023-08-22T06:25:44Z",
+    "closed_at": "2023-11-29T16:11:31Z",
+    "body": "[UCPD_InitStruct()](https://github.com/STMicroelectronics/STM32CubeH5/blob/3d723b2467cdb13c2d780ceaa583b269680b67a4/Drivers/STM32H5xx_HAL_Driver/Src/stm32h5xx_ll_ucpd.c#L131) function is missing value lshift\r\nis:\r\n`UCPD_InitStruct->psc_ucpdclk`\r\nshould be:\r\n`(UCPD_InitStruct->psc_ucpdclk << UCPD_CFG1_PSC_UCPDCLK_Pos)`\r\nsince UCPD_CFG1_PSC_UCPDCLK_Pos != 0\r\n\r\nBtw, **PSC_UCPDCLK** name is inconsistent with registry description ([RM0456](https://www.st.com/resource/en/reference_manual/rm0456-stm32u5-series-armbased-32bit-mcus-stmicroelectronics.pdf) section 74.8.1) - see https://github.com/STMicroelectronics/cmsis_device_u5/issues/1",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2023-11-29T16:11:31Z",
+        "body": "Hi @tdjastrzebski,\r\n\r\nThank you for this report. From what I see, there is no need to shift the value of  `UCPD_InitStruct->psc_ucpdclk` before the assignment.\r\n\r\nIndeed, the possible [values](https://github.com/STMicroelectronics/STM32CubeH5/blob/3d723b2467cdb13c2d780ceaa583b269680b67a4/Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_ll_ucpd.h#L225-L232) taken by `UCPD_InitStruct->psc_ucpdclk` are **already shifted**.\r\n\r\nThis is not the case for the other attributes like `UCPD_InitStruct->transwin` that are meant to take [values](https://github.com/STMicroelectronics/STM32CubeH5/blob/3d723b2467cdb13c2d780ceaa583b269680b67a4/Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_ll_ucpd.h#L60-L63) \"between Min_Data=0x1 and Max_Data=0x1F\" that are **not shifted**, thus **requiring the shift** operations.\r\n\r\nI hope this makes things clearer. Please allow me to close this issue in this case.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/7"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 6,
+    "title": "LAN8742 driver will always find PHY on device address 31",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "needs clarification"
+    ],
+    "created_at": "2023-08-18T09:17:54Z",
+    "closed_at": "2025-03-24T13:31:31Z",
+    "body": "**Describe the set-up**\r\nNUCLEO-H563ZI\r\nCubeIDE 1.13.0 and CubeMX 6.9.0 using STM32Cube FW_H5 V1.1.0\r\n\r\n**Describe the bug**\r\nIn the function LAN8742_Init(..) the PHY address is determined by polling the SMR with different addresses.\r\n\r\n```\r\n     /* Get the device address from special mode register */\r\n     for(addr = 0; addr <= LAN8742_MAX_DEV_ADDR; addr ++)\r\n     {\r\n       if(pObj->IO.ReadReg(addr, LAN8742_SMR, &regvalue) < 0)\r\n       {\r\n         status = LAN8742_STATUS_READ_ERROR;\r\n         /* Can't read from this device address\r\n            continue with next address */\r\n         continue;\r\n       }\r\n\r\n       if((regvalue & LAN8742_SMR_PHY_ADDR) == addr)\r\n       {\r\n         pObj->DevAddr = addr;\r\n         status = LAN8742_STATUS_OK;\r\n         break;\r\n       }\r\n     }\r\n\r\n     if(pObj->DevAddr > LAN8742_MAX_DEV_ADDR)\r\n     {\r\n       status = LAN8742_STATUS_ADDRESS_ERROR;\r\n     }\r\n```\r\n\r\n_addr_ won't get larger than 31 but later the address is checked if larger than 31 (LAN8742_MAX_DEV_ADDR) with will never lead to a LAN8742_STATUS_ADDRESS_ERROR.\r\n\r\n",
+    "comments": [
+      {
+        "author": "HBOSTM",
+        "created_at": "2023-08-24T14:55:13Z",
+        "body": "Hello @jotrax ,\r\n\r\nThank you for this contribution.\r\nI can't reproduce the problem from my side. So could you please give us more details about how you got this issue? And share the steps you have followed to reproduce this problem.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "jotrax",
+        "created_at": "2023-08-29T08:43:23Z",
+        "body": "The way how the address detection is implemented will never return with LAN8742_STATUS_ADDRESS_ERROR.\r\n\r\nYou can test it e.g. by removing the solder bridges SB62 and/or SB69. This simply cuts the MDIO connection to the PHY so the initial device address scan must not work. I would expect LAN8742_Init() to return with LAN8742_STATUS_ADDRESS_ERROR, but instead the function assumes the PHY to be found on address 31 and fails a few codes lines later with LAN8742_STATUS_RESET_TIMEOUT.\r\n\r\nReading the BCR register and requiring Bit 15 (Soft-Reset) to be cleared in addition (or instead) to reading the SMR register allows to detect if there was no PHY found --> LAN8742_STATUS_ADDRESS_ERROR."
+      },
+      {
+        "author": "ASEHSTM",
+        "created_at": "2024-08-16T09:54:24Z",
+        "body": "Hello @jotrax,\r\n\r\nSorry for the late reply. \r\nBefore the loop, pObj->DevAddr is initialized to `LAN8742_MAX_DEV_ADDR + 1`, which is greater than 31. After the device address detection loop, if no valid address is found within the loop, `pObj->DevAddr` will remain at its initial value. Consequently, the condition `if (pObj->DevAddr > LAN8742_MAX_DEV_ADDR)` will be true, and the status will be correctly set to LAN8742_STATUS_ADDRESS_ERROR.\r\n\r\nWith Regards,"
+      },
+      {
+        "author": "ASEHSTM",
+        "created_at": "2025-03-24T13:31:15Z",
+        "body": "Hello @jotrax,\n\nPlease allow me to close this thread.\n\nWith Regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/6"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 5,
+    "title": "STM32CubeIde generates incorrect code for I2C4",
+    "state": "closed",
+    "labels": [
+      "hal",
+      "internal bug tracker",
+      "cube mx"
+    ],
+    "created_at": "2023-08-17T02:26:33Z",
+    "closed_at": "2023-08-24T14:34:33Z",
+    "body": "**Describe the set-up**\r\n * NUCLEO-H563ZI\r\n * STM32CubeIDE 1.13.1\r\n * STM32Cube MCU Package for STM32H5 Series 1.1.0\r\n\r\n**Describe the bug**\r\nWhen you enable Event or Error interrupts in the NVIC controller the generated source code in stm32h5xx_it.c is incorrect. If you enable the error interrupt you get this.\r\n\r\n```\r\n/**\r\n  * @brief This function handles I2C4 ERROR interrupt.\r\n  */\r\nvoid I2C4_EV_IRQHandler(void)\r\n{\r\n  /* USER CODE BEGIN I2C4_EV_IRQn 0 */\r\n\r\n  /* USER CODE END I2C4_EV_IRQn 0 */\r\n  HAL_I2C_EV_IRQHandler(&hi2c4);\r\n  /* USER CODE BEGIN I2C4_EV_IRQn 1 */\r\n\r\n  /* USER CODE END I2C4_EV_IRQn 1 */\r\n}\r\n```\r\n\r\nNote that the comment is correct, but the function name is that of the EVENT interrupt.  Enabling the I2C4 EVENT interrupt results in the inverse of this.\r\n\r\n**How To Reproduce**\r\n1. Create a new project based on the H5 series MCU and enable I2C4 and then enable the ERROR/EVENT interrupts in the NVIC.\r\n2. Generate the code.\r\n3. Observe that the code is incorrect in the generated stm32h5xx_it.c source file.\r\n\r\n**Additional context**\r\nThis is not a problem with I2C1 and I2C2 (I haven't checked I2C3 as I can't enable it in my project because of used resources).\r\n",
+    "comments": [
+      {
+        "author": "HBOSTM",
+        "created_at": "2023-08-24T14:19:22Z",
+        "body": "ST Internal Reference: 159911"
+      },
+      {
+        "author": "HBOSTM",
+        "created_at": "2023-08-24T14:23:27Z",
+        "body": "Hi @Makin-Things ,\r\n\r\nThank you for this contribution, this point has been reported to our development teams. I will get back to you as soon as I have any updates.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "HBOSTM",
+        "created_at": "2023-08-24T14:34:33Z",
+        "body": "Hi @Makin-Things ,\r\n\r\nThe point you reported is actually related to the CubeMX generation problem and not to the firmware published in this repository. Unfortunately, we don't treat aspect related to CubeMX tool in our GitHub repositories. They are rather treated at the [STM32CubeMX](https://community.st.com/s/topic/0TO0X000000BTr8WAG/stm32cubemx) dedicated page of the ST Community ,However it has been reported.\r\n\r\nSince this issue is not directly related to the STM32Cube firmware but rather to our ecosystem, please allow me then to close this thread. Thank you for your comprehension.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/5"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 4,
+    "title": "System clock configuration issue in STM32H573I-DK OEMiROT_Boot sample project",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "projects",
+      "internal bug tracker"
+    ],
+    "created_at": "2023-08-02T15:02:47Z",
+    "closed_at": "2025-02-28T14:55:35Z",
+    "body": "Hello,\r\nIt seems that there is an issue in the PLL1M configuration in _Projects/STM32H573I-DK/Applications/ROT/OEMiROT_Boot/Src/system_stm32h5xx.c_ file _SetSysClock()_ function. **RCC_PLL1CFGR_PLL1M_Pos** was used as the value.\r\nhttps://github.com/STMicroelectronics/STM32CubeH5/blob/3d723b2467cdb13c2d780ceaa583b269680b67a4/Projects/STM32H573I-DK/Applications/ROT/OEMiROT_Boot/Src/system_stm32h5xx.c#L298\r\n\r\nAlso, I think the values for reaching 250MHz should be like this:\r\n- PLLM: 4 (RCC_PLL1CFGR_PLL1M_Pos will expand to 8)\r\n- PLLN: 31 (it's 60 in the current code)\r\n- PLLP: 2\r\n- PLLQ: 2\r\n- PLLR: 2\r\n- PLLFRACN: 2048\r\n\r\n**Screenshot**\r\n![image](https://github.com/STMicroelectronics/STM32CubeH5/assets/86543823/5cd8af91-2a29-4540-a311-31d945124c29)\r\n\r\nFurthermore, it might be better to use:\r\n_RCC_PLL1_VCORANGE_WIDE_ instead of _RCC_PLL1VCOWIDE_\r\n_RCC_PLL1_VCIRANGE_2_ instead of _RCC_PLL1CFGR_PLL1SRC_1_\r\n_RCC_SYSCLKSOURCE_PLLCLK_ instead of _(RCC_CFGR1_SW_1 | RCC_CFGR1_SW_0)_\r\n\r\nhttps://github.com/STMicroelectronics/STM32CubeH5/blob/3d723b2467cdb13c2d780ceaa583b269680b67a4/Projects/STM32H573I-DK/Applications/ROT/OEMiROT_Boot/Src/system_stm32h5xx.c#L297",
+    "comments": [
+      {
+        "author": "HBOSTM",
+        "created_at": "2023-08-04T13:03:08Z",
+        "body": "ST Internal Reference: 158775"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2025-02-28T14:55:35Z",
+        "body": "Hi @CuriousSaman,\n\nI hope you are doing well. Just to let you know this issue has been solved in the frame of version **1.5.0**, released just now.\n\nThank you for your patience and thank you again for having reported.\n\nWith regards, "
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/4"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 3,
+    "title": "OB_BOR_LEVEL_x: probable error in stm32h5xx_hal_flash_ex.h file",
+    "state": "closed",
+    "labels": [
+      "hal",
+      "internal bug tracker"
+    ],
+    "created_at": "2023-07-25T11:38:04Z",
+    "closed_at": "2024-03-21T10:33:06Z",
+    "body": "Hi,\r\nI think that the macros OB_BOR_LEVEL_1, OB_BOR_LEVEL_2 and OB_BOR_LEVEL_3 are wrong. They are defined in the STM32H5xx_HAL_Driver _stm32h5xx_hal_flash_ex.h_ header file, starting from line 305.\r\n\r\nAccording to page 328 of the [reference manual](https://www.st.com/resource/en/reference_manual/rm0481-stm32h563h573-and-stm32h562-armbased-32bit-mcus-stmicroelectronics.pdf) of the STM32H5, their values should be the following:\r\n\r\n`#define OB_BOR_LEVEL_1        (FLASH_OPTSR_BOR_LEV_1 | FLASH_OPTSR_BOR_LEV_0)  /*!< Reset level 1 threshold */`\r\n`#define OB_BOR_LEVEL_2        FLASH_OPTSR_BOR_LEV_0                            /*!< Reset level 2 threshold */`\r\n`#define OB_BOR_LEVEL_3        FLASH_OPTSR_BOR_LEV_1                            /*!< Reset level 3 threshold */`\r\n\r\nThank you\r\nAlessandro",
+    "comments": [
+      {
+        "author": "RJMSTM",
+        "created_at": "2023-07-28T12:49:20Z",
+        "body": "Hello @alessandro-ce,\r\n\r\nThank you for this report. We will get back to you as soon as we analyze it further. This may take some time. Thank you for your comprehension.\r\n\r\nWith regards,\r\nRania"
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2023-08-02T10:12:13Z",
+        "body": "ST Internal Reference: 158618"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2024-03-21T10:33:06Z",
+        "body": "Fixed in 182f4c8589bf775b330ed63af7c0c17060d8a649"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/3"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 2,
+    "title": "Missing DSP libraries",
+    "state": "closed",
+    "labels": [
+      "question",
+      "internal bug tracker",
+      "cmsis"
+    ],
+    "created_at": "2023-07-23T21:31:24Z",
+    "closed_at": "2024-06-13T14:34:34Z",
+    "body": "**Describe the set-up**\r\n * The board (either ST RPN reference or your custom board).\r\n   Nucleo-STM32H563ZI\r\n * IDE or at least the compiler and its version.\r\n   STM32CubeIDE 1.13.0\r\n\r\n**Describe the bug**\r\nThe firmware pack is missing the precompiled maths libraries. For other MCU's they are in Drivers/CMSIS/Lib or Drivers/CMSIS/DSP/Lib, but for the H5 they are missing. Can you please add these to the repository or provide instructions on how to build from source.\r\n",
+    "comments": [
+      {
+        "author": "TOUNSTM",
+        "created_at": "2023-08-02T14:56:17Z",
+        "body": "Hello @Makin-Things,\r\n\r\nThank you for this report. We will get back to you as soon as we analyze it further. This may take some time. Thank you for your comprehension.\r\n\r\nWith Regards,"
+      },
+      {
+        "author": "Makin-Things",
+        "created_at": "2023-08-17T10:47:39Z",
+        "body": "@TOUNSTM is there any update on this issue?\r\nAre you also able to point me in the direction of being able to raise issues and get support? The company I work for is willing to pay if needed, but getting timely responses is critical to the project we are working on."
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2023-08-29T13:10:05Z",
+        "body": "Hello @Makin-Things,\r\n\r\nThank you again for your contribution. Unfortunately, the pre-compiled DSP libraries are no longer provided by arm in the CMSIS package. This change occurred in `CMSIS v5.8.0`, so it’s up to you to add the necessary sources from `CMSIS/DSP/Source` to your project.\r\n\r\nYou can check this [Link](https://www.keil.com/pack/doc/CMSIS/DSP/html/index.html#using) it can be helpful. I will keep you informed if there are any updates that may help you.\r\n\r\nWith regards,\r\n\r\n"
+      },
+      {
+        "author": "Makin-Things",
+        "created_at": "2023-09-10T21:45:21Z",
+        "body": "Hello @TOUNSTM ,\r\n\r\nThanks for the update. I had noticed that ARM had split the DSP into it's own repo.\r\nAre there any instructions on how to get it compiling from source? I have tried and failed badly. It would also be nice if it was properly incorporated into STM32CubeIDE/CubeMX, there should simply be a an option within the Computing section to activate the DSP code.\r\n\r\nCheers\r\nSimon"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2024-03-07T14:23:36Z",
+        "body": "See also [cmsis_core#5](https://github.com/STMicroelectronics/cmsis_core/issues/5)"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2024-04-01T08:06:17Z",
+        "body": "ST Internal Reference: 175542"
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2024-06-13T14:34:34Z",
+        "body": "Hello @Makin-Things,\r\n\r\nI hope you are doing well. We finally got the feedback of our development teams.\r\nST was not responsible for generating the DSP libraries; instead, these were obtained directly from the official CMSIS Core release. Unfortunately, there is no plan to deliver DSP libraries at this time.\r\n\r\nI hope this answers your point. please allow me to close this issue.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/2"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 1,
+    "title": "File Missing and Projects not working on IAR",
+    "state": "closed",
+    "labels": [
+      "projects",
+      "cube mx"
+    ],
+    "created_at": "2023-05-30T11:17:29Z",
+    "closed_at": "2024-06-05T15:34:13Z",
+    "body": "Hello, \r\nI'm working on NUCLEO-H563ZI/Examples/GPIO/GPIO_IOToggle_TrustZone.\r\nI downloaded this example from STM32CubeMX\r\n\r\nMy set-up :\r\nNUCLEO-H563ZI \r\nIAR embedded Workbench for ARM 9.32.2.57414\r\nIAR embedded Workbench shared components 9.1.8.10480\r\n\r\nBug Description :\r\nWhen I build the program, I have errors like this :\r\n\"'.../Src/main.c', needed by '......./main.o', missing and no known rule to make it\t\"\r\nIn the file tree, if I double clic on main file, it is missing.\r\n\r\nSo, after adding all missing file, I can build both program.\r\nWhen I try to download it with “xxxxx_S” as active application I have error :\r\n\"Multiple images overlap (at address range 0xC000000 - 0xC001988)\r\n\r\nThus, I try to download it with \"xxxxx_NS\" as active application, the program freeze on \"SECURE_RegisterCallback\" function un the main.c file.\r\n\r\nThank you",
+    "comments": [
+      {
+        "author": "TOUNSTM",
+        "created_at": "2023-06-02T13:48:04Z",
+        "body": "Hello @Alex-ARO-WT,\r\n\r\nThank you for this report. We will get back to you as soon as we analyze it further. This may take some time. Thank you for your comprehension.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2024-06-05T15:34:13Z",
+        "body": "Hello @Alex-ARO-WT,\r\n\r\nThank you for your report. This point is related to the CubeMX generation problem and not directly related to the firmware published in this repository.\r\nWe tried to reproduce the issue you have described in [#1](https://github.com/STMicroelectronics/STM32CubeH5/issues/1) using STM32CubeMx v6.11.1, with no success.\r\nNow, as this issue is not directly related to some software component published within this repository (CMSIS, HAL, BSP, etc.) but rather to our ecosystem (namely the Cube MX tool), please allow me to close it.\r\n\r\nIn case you have other CubeMX-related issues to share, please submit them in the [ST Community](\r\nhttps://community.st.com/s/question/0D53W00000JhsU4SAJ/stm32cubemx-ide-issue-throws-warning-when-using-macros)\r\nin the CubeMX related section. There you shall find people who will address your request and whom you will hopefully find a solution with.\r\n\r\nThank you again for your report. We are looking forward to reading from you again.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/1"
+  }
+]

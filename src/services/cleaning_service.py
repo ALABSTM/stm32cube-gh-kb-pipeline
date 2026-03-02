@@ -1,22 +1,18 @@
-import json
 import re
-from pathlib import Path
-
-RAW_FILE = Path("data/raw_issues_stm32cubeh7.json")
-OUT_FILE = Path("data/clean_issues_stm32cubeh7.json")
-
 
 IMG_TAG_RE = re.compile(r"<img\b[^>]*src=[\"']([^\"']+)[\"'][^>]*>", re.IGNORECASE)
 
+
 def normalize_newlines(text: str) -> str:
     return text.replace("\r\n", "\n").replace("\r", "\n")
+
 
 def clean_body_or_comment(text: str) -> tuple[str, list[str]]:
     """
     - Normalise les \n
     - Remplace chaque <img ...> par [IMAGE ATTACHED]
     - Récupère toutes les URLs d'images
-    Retourne (clean_text, image_urls)
+    Retourne --> clean_text, image_urls
     """
     if not text:
         return "", []
@@ -32,11 +28,12 @@ def clean_body_or_comment(text: str) -> tuple[str, list[str]]:
 
     text = IMG_TAG_RE.sub(repl, text)
 
-   
+    # Évite que les backticks perturbent les traitements suivants
     text = text.replace("`", "")
 
     text = text.strip()
     return text, image_urls
+
 
 def build_clean_issue(issue: dict) -> dict:
     lines: list[str] = []
@@ -91,18 +88,3 @@ def build_clean_issue(issue: dict) -> dict:
         "images_count": len(all_image_urls),
     }
     return clean_issue
-
-def main():
-    raw_issues = json.loads(RAW_FILE.read_text(encoding="utf-8"))
-    clean_issues = []
-    for issue in raw_issues:
-        clean_issues.append(build_clean_issue(issue))
-
-    OUT_FILE.write_text(
-        json.dumps(clean_issues, ensure_ascii=False, indent=2),
-        encoding="utf-8",
-    )
-    print(f"{len(clean_issues)} issues nettoyées → {OUT_FILE}")
-
-if __name__ == "__main__":
-    main()
