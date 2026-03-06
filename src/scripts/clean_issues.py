@@ -9,6 +9,7 @@ def load_config() -> dict:
     return json.loads(cfg_path.read_text(encoding="utf-8"))
 
 
+
 def main():
     cfg = load_config()
     repos = cfg["repos"]

@@ -1,6 +1,21 @@
 [
   {
     "repo": "STM32CubeH7",
+    "issue_number": 338,
+    "title": "[Bug]: CubeMx allows an invalid combination of parameters for ADC with DMA",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "created_at": "2026-03-05T22:46:50Z",
+    "closed_at": null,
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/338",
+    "clean_text": "Title: [Bug]: CubeMx allows an invalid combination of parameters for ADC with DMA\n\nBody:\n### Bug Summary\n\nCubeMx allows an invalid combination of parameters for ADC with DMA\n\n### Detailed Description\n\nWhen DMA is enabled on an ADC, DMA requests will only be issued if ADC_InitTypeDef::ConversionDataManagement is set to ADC_CONVERSIONDATA_DMA_ONESHOT or ADC_CONVERSIONDATA_DMA_CIRCULAR. That is to say, ADC_CONVERSIONDATA_DR and ADC_CONVERSIONDATA_DFSDM are invalid when DMA is enabled.\n\nThe issue is that if Conversion Data Management Mode is not set to ADC_CONVERSIONDATA_DMA_CIRCULAR or ADC_CONVERSIONDATA_DR, then CubeMx will generate some unusable code.\n\nCubeMx could detect and flag this issue for the user. Or it could disable non-DMA values when DMA is enabled. Or it could make it more obvious to the user some other way that there is some DMA-relevant (and, indeed, crucial) setting in that otherwise irrelevant-looking \"Conversion Data Management Mode\".\n\n### Expected Behavior\n\n_No response_\n\n### Actual Behavior\n\n_No response_\n\n### Environment\n\nCubeMx 6.16.1, STM32H743VITx, ADC1\n\n### Severity\n\nNone",
+    "image_urls": [],
+    "images_count": 0
+  },
+  {
+    "repo": "STM32CubeH7",
     "issue_number": 337,
     "title": "IDE bug: Adding new compile time flags under all configurations",
     "state": "closed",
@@ -98,7 +113,7 @@
     "repo": "STM32CubeH7",
     "issue_number": 332,
     "title": "Keil compiler AC6 throwing error: 'sys/time.h' file not found",
-    "state": "open",
+    "state": "closed",
     "labels": [
       "bug",
       "mw",
@@ -106,9 +121,9 @@
       "lwip"
     ],
     "created_at": "2026-02-05T18:53:21Z",
-    "closed_at": null,
+    "closed_at": "2026-02-25T08:01:49Z",
     "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/332",
-    "clean_text": "Title: Keil compiler AC6 throwing error: 'sys/time.h' file not found\n\nBody:\nHi,\n\nI am observing an issue related with inclusion of time.h when generating project for NUCLEO-H753ZI with help of STM32CubeMX.\n\nattached ZIP file contains project and IOC file\n\n[lwIP_Ethernet_WORKS_03.zip](https://github.com/user-attachments/files/25109447/lwIP_Ethernet_WORKS_03.zip)\n\nI initially thought it to be an issue with LWIP related code, but later figured out that the problem reported in the file\nSTM32Cube_FW_H7_V1.12.1\\Middlewares\\Third_Party\\LwIP\\system\\arch\\cc.h is because of below conditional compilation which should work for Keil AC5 but will not work for Keil AC6\n\n\n#if defined (__GNUC__) & !defined (__CC_ARM)\n\n#define LWIP_TIMEVAL_PRIVATE 0\n#include <sys/time.h>\n\n#endif\n\n\nand possibly need to be updated to:\n\n\n#if defined (__GNUC__) & !( defined(__CC_ARM) /* Arm Compiler 5 */ || ( defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010000) /* Arm Compiler 6 (armclang) */ ) )\n\n#define LWIP_TIMEVAL_PRIVATE 0\n#include <sys/time.h>\n\n#endif\n\n\nMay you please help resolve the concern. The above fix may cause other issues to pop up, which shall also need fix within ethernetif.c\n\nThanks,\nRajeev\n\nComments:\n[ASAHSTM - 2026-02-11T10:49:58Z]\nHello @rxa1031,\n\nThank you for your report.\nThis issue is already being tracked internally and will be fixed in our next STM32CubeH7 release.\n\nWith Regards,\nAya",
+    "clean_text": "Title: Keil compiler AC6 throwing error: 'sys/time.h' file not found\n\nBody:\nHi,\n\nI am observing an issue related with inclusion of time.h when generating project for NUCLEO-H753ZI with help of STM32CubeMX.\n\nattached ZIP file contains project and IOC file\n\n[lwIP_Ethernet_WORKS_03.zip](https://github.com/user-attachments/files/25109447/lwIP_Ethernet_WORKS_03.zip)\n\nI initially thought it to be an issue with LWIP related code, but later figured out that the problem reported in the file\nSTM32Cube_FW_H7_V1.12.1\\Middlewares\\Third_Party\\LwIP\\system\\arch\\cc.h is because of below conditional compilation which should work for Keil AC5 but will not work for Keil AC6\n\n\n#if defined (__GNUC__) & !defined (__CC_ARM)\n\n#define LWIP_TIMEVAL_PRIVATE 0\n#include <sys/time.h>\n\n#endif\n\n\nand possibly need to be updated to:\n\n\n#if defined (__GNUC__) & !( defined(__CC_ARM) /* Arm Compiler 5 */ || ( defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010000) /* Arm Compiler 6 (armclang) */ ) )\n\n#define LWIP_TIMEVAL_PRIVATE 0\n#include <sys/time.h>\n\n#endif\n\n\nMay you please help resolve the concern. The above fix may cause other issues to pop up, which shall also need fix within ethernetif.c\n\nThanks,\nRajeev\n\nComments:\n[ASAHSTM - 2026-02-11T10:49:58Z]\nHello @rxa1031,\n\nThank you for your report.\nThis issue is already being tracked internally and will be fixed in our next STM32CubeH7 release.\n\nWith Regards,\nAya\n\n[ASAHSTM - 2026-02-25T08:01:49Z]\nHello @rxa1031,\n\nThe fix is now available in [STM32CubeH7](https://github.com/STMicroelectronics/STM32CubeH7) v1.13.0.\n\nWith Regards,",
     "image_urls": [],
     "images_count": 0
   },

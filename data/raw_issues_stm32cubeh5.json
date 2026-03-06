@@ -477,39 +477,6 @@
   },
   {
     "repo": "STM32CubeH5",
-    "issue_number": 15,
-    "title": "Compilation of cmsis_os2.c fails if USE_MEMORY_POOL_ALLOCATION is defined.",
-    "state": "closed",
-    "labels": [
-      "bug",
-      "internal bug tracker",
-      "mw",
-      "rtos"
-    ],
-    "created_at": "2024-07-25T10:20:33Z",
-    "closed_at": "2025-09-16T09:56:18Z",
-    "body": "**Describe the set-up**\r\n STM32CubeIDE Version: 1.15.1\r\n\r\n**Describe the bug**\r\n```\r\n#ifdef USE_DYNAMIC_MEMORY_ALLOCATION\r\n  unused_memory = (CHAR *)_tx_initialize_unused_memory;\r\n#elif  USE_MEMORY_POOL_ALLOCATION\r\n  static CHAR freememStack[RTOS2_BYTE_POOL_STACK_SIZE + RTOS2_INTERNAL_BYTE_POOL_SIZE];\r\n  static CHAR freememHeap[RTOS2_BYTE_POOL_HEAP_SIZE + RTOS2_INTERNAL_BYTE_POOL_SIZE];\r\n  unused_memory_Stack = (CHAR *)freememStack;\r\n  unused_memory_Heap = (CHAR *)freememHeap;\r\n#endif\r\n```\r\n\r\nCompiler Output:\r\n`cmsis_os2.c:270:34: error: #elif with no expression`\r\n\r\n**How To Reproduce**\r\ndefine USE_MEMORY_POOL_ALLOCATION instead of USE_DYNAMIC_MEMORY_ALLOCATION\r\n\r\nThe modules that you suspect to be the cause of the problem:\r\nstm32h5/Middlewares/ST/cmsis_rtos_threadx/cmsis_os2.c\r\n",
-    "comments": [
-      {
-        "author": "TOUNSTM",
-        "created_at": "2024-07-29T11:20:27Z",
-        "body": "ST Internal Reference: 187607"
-      },
-      {
-        "author": "TOUNSTM",
-        "created_at": "2024-07-29T11:21:52Z",
-        "body": "See Also https://github.com/STMicroelectronics/stm32_mw_cmsis_rtos_tx/issues/2"
-      },
-      {
-        "author": "TOUNSTM",
-        "created_at": "2025-09-16T09:56:18Z",
-        "body": "Fixed in 0d526a4930310cf8fa6dce7538ab891cc37eb250"
-      }
-    ],
-    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/15"
-  },
-  {
-    "repo": "STM32CubeH5",
     "issue_number": 14,
     "title": "STM32H563/573: HAL_SPI)TransmitReceive not working on 1.8V",
     "state": "closed",

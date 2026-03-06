@@ -1,3 +1,6 @@
+from typing import Any
+
+
 def mcu_series_from_repo(repo: str | None) -> str | None:
     if not repo:
         return None
@@ -6,11 +9,73 @@ def mcu_series_from_repo(repo: str | None) -> str | None:
         return "H7"
     if "F4" in repo:
         return "F4"
+    if "H5" in repo:
+        return "H5"
     # Ajouter d'autres séries au besoin
     return None
 
 
+def split_by_paragraphs(text: str, max_chars: int = 1200) -> list[str]:
+    """
+    Découpe un texte en "paragraphes" en respectant une taille maximale en caractères.
+    """
+    paragraphs = [p.strip() for p in text.split("\n\n") if p.strip()]
+    chunks: list[str] = []
+    current = ""
+
+    for p in paragraphs:
+        if len(current) + len(p) + 2 <= max_chars:
+            current = (current + "\n\n" + p).strip()
+        else:
+            if current:
+                chunks.append(current)
+            current = p
+
+    if current:
+        chunks.append(current)
+
+    return chunks
+
+
+def doc_issue_to_chunks(doc: dict[str, Any], max_chars: int = 1200) -> list[dict[str, Any]]:
+    """
+    Transforme un document "issue" enrichi en une liste de chunks prêts pour ingestion.
+    """
+    text = doc.get("clean_text") or ""
+    parts = split_by_paragraphs(text, max_chars=max_chars)
+
+    chunks: list[dict[str, Any]] = []
+
+    if not parts:
+        parts = [text]
+
+    chunk_count = len(parts)
+    base_id = doc.get("id") or "unknown-doc"
+
+    for idx, part in enumerate(parts):
+        metadata = dict(doc) 
+        metadata.pop("clean_text", None)
+
+        metadata["chunk_index"] = idx
+        metadata["chunk_count"] = chunk_count
+
+        chunk = {
+            "id": f"{base_id}-{idx}",
+            "text": part,
+            "metadata": metadata,
+        }
+        chunks.append(chunk)
+
+    return chunks
+
+
+
 def clean_issue_to_chunk(issue: dict, ingest_version: str = "v1.0") -> dict:
+    """
+    Ancienne version : enrichissement + chunking en 1 seul chunk.
+    À ne plus utiliser dans la nouvelle pipeline (docs_issues -> chunks_issues),
+    gardée ici uniquement pour compatibilité temporaire.
+    """
     repo = issue.get("repo")
     issue_number = issue.get("issue_number")
 
