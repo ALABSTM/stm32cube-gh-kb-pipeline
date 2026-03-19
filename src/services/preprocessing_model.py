@@ -2,6 +2,11 @@ import re
 from typing import Any
 
 from src.services.chunk_service import mcu_series_from_repo
+from src.services.stm32cube_preprocessing_heuristics import (
+    detect_layer,
+    detect_severity,
+)
+
 
 
 def classify_issue_kind(text: str, labels: list[str]) -> str:
@@ -150,6 +155,13 @@ class PreprocessingModelIssuesV2:
             "is_valid": is_valid,
         }
 
+
+        # V2.1 : couche logicielle
+        doc["layer"] = detect_layer(clean_text)
+
+        # V2.1 : sévérité heuristique
+        doc["severity"] = detect_severity(clean_text, labels)
+
         # V2 : classification issue_kind par règles
         if self.config.enable_issue_kind:
             doc["issue_kind"] = classify_issue_kind(clean_text, labels)
@@ -165,5 +177,67 @@ class PreprocessingModelIssuesV2:
             component = detect_component(clean_text)
             if component:
                 doc["component"] = component
+
+        return doc
+
+
+class PreprocessingModelFilesV2:
+    """
+    Modèle de prétraitement V2 pour les fichiers STM32Cube (README, Release Notes, Projects).
+    Entrée : fichier nettoyé (clean_files_*).
+    Sortie : document enrichi (docs_files_v2).
+    """
+
+    def __init__(self, config: PreprocessingConfig | None = None) -> None:
+        self.config = config or PreprocessingConfig()
+
+    def process_clean_file(self, file_obj: dict[str, Any]) -> dict[str, Any]:
+        repo = file_obj.get("repo")
+        path = file_obj.get("path") or ""
+        clean_text: str = file_obj.get("clean_text") or ""
+        file_type: str = file_obj.get("file_type") or "other"
+
+        # id simple basé sur le path
+        doc_id = f"{(repo or '').lower()}-file-{abs(hash(path))}"
+
+        # validité minimale : texte suffisant
+        is_valid = len(clean_text) >= 100
+
+        doc: dict[str, Any] = {
+            "id": doc_id,
+            "source_kind": "file",
+            "repo": repo,
+            "mcu_package": repo,
+            "mcu_series": mcu_series_from_repo(repo),
+            "type": "file",
+            "path": path,
+            "file_type": file_type,
+            "github_url": None,  # optionnel : tu pourras déduire l'URL plus tard
+            "board": None,
+            "category": None,
+            "component": None,
+            "example_name": None,
+            "ingest_version": self.config.version,
+            "clean_text": clean_text,
+            "is_valid": is_valid,
+        }
+
+        # Détection board / component sur path + contenu
+        text_for_detection = path + "\n" + clean_text
+
+        board = detect_board(text_for_detection)
+        if board:
+            doc["board"] = board
+
+        component = detect_component(text_for_detection)
+        if component:
+            doc["component"] = component
+
+        # Extraction du nom d'exemple si dans Projects/.../Examples/<ExampleName>/...
+        parts = path.replace("\\", "/").split("/")
+        if "Examples" in parts:
+            idx = parts.index("Examples")
+            if idx + 1 < len(parts):
+                doc["example_name"] = parts[idx + 1]
 
         return doc

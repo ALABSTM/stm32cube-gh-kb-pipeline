@@ -4,6 +4,69 @@ from src.services.preprocessing_model import PreprocessingConfig, PreprocessingM
 from src.utils.paths import DATA_DIR, get_config_path
 
 
+def debug_detect_severity(text: str, labels: list[str] | None = None) -> str:
+    """
+    Version locale (debug) de detect_severity pour vérifier le comportement
+    sur l'issue 338.
+    """
+
+    if labels is None:
+        labels = []
+
+    labels_lower = [lbl.lower() for lbl in labels]
+    txt_lower = (text or "").lower()
+
+    low_keywords = [
+        "documentation",
+        "doc issue",
+        "doc problem",
+        "typo",
+        "spelling",
+        "comment typo",
+        "example description",
+        "minor issue",
+        "cosmetic",
+    ]
+    low_labels = ["documentation", "doc", "typo"]
+
+    if any(lbl in labels_lower for lbl in low_labels) or any(
+        kw in txt_lower for kw in low_keywords
+    ):
+        return "low"
+
+    high_keywords = [
+        "hardfault",
+        "hard fault",
+        "crash",
+        "crashes",
+        "freeze",
+        "frozen",
+        "hang",
+        "stuck",
+        "blocking",
+        "block forever",
+        "deadlock",
+        "data corruption",
+        "corrupted data",
+        "doesn't start",
+        "does not start",
+        "cannot start",
+        "no communication",
+        "watchdog reset",
+        "wdg reset",
+        "reset loop",
+        "infinite loop",
+        "regression",
+    ]
+
+    for kw in high_keywords:
+        if kw in txt_lower:
+            print("[DEBUG] high severity triggered by keyword:", repr(kw))
+            return "high"
+
+    return "medium"
+
+
 def load_config() -> dict:
     cfg_path = get_config_path()
     return json.loads(cfg_path.read_text(encoding="utf-8"))

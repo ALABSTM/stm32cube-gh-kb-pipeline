@@ -29,6 +29,8 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "layer": "Other",
+    "severity": "medium",
     "issue_kind": "bug_report"
   },
   {
@@ -61,6 +63,8 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": false,
+    "layer": "Other",
+    "severity": "high",
     "issue_kind": "bug_report"
   },
   {
@@ -93,6 +97,8 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "layer": "Middleware",
+    "severity": "medium",
     "issue_kind": "bug_report"
   },
   {
@@ -125,6 +131,8 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "layer": "Other",
+    "severity": "medium",
     "issue_kind": "bug_report"
   },
   {
@@ -157,6 +165,8 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "layer": "Other",
+    "severity": "medium",
     "issue_kind": "bug_report"
   },
   {
@@ -189,6 +199,8 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": false,
+    "layer": "HAL",
+    "severity": "low",
     "issue_kind": "bug_report"
   },
   {
@@ -221,6 +233,8 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "layer": "HAL",
+    "severity": "low",
     "issue_kind": "bug_report"
   },
   {
@@ -253,6 +267,8 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "layer": "Other",
+    "severity": "medium",
     "issue_kind": "bug_report"
   },
   {
@@ -285,6 +301,8 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "layer": "HAL",
+    "severity": "high",
     "issue_kind": "bug_report"
   },
   {
@@ -317,6 +335,8 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": false,
+    "layer": "HAL",
+    "severity": "medium",
     "issue_kind": "bug_report"
   },
   {
@@ -348,6 +368,8 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "layer": "HAL",
+    "severity": "medium",
     "issue_kind": "usage_question"
   },
   {
@@ -381,6 +403,8 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": false,
+    "layer": "Middleware",
+    "severity": "high",
     "issue_kind": "other"
   },
   {
@@ -413,6 +437,8 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "layer": "Other",
+    "severity": "medium",
     "issue_kind": "bug_report"
   },
   {
@@ -444,6 +470,8 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": false,
+    "layer": "Other",
+    "severity": "medium",
     "issue_kind": "bug_report"
   },
   {
@@ -473,6 +501,8 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "layer": "HAL",
+    "severity": "medium",
     "issue_kind": "usage_question"
   },
   {
@@ -503,6 +533,8 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "layer": "Other",
+    "severity": "high",
     "issue_kind": "bug_report"
   },
   {
@@ -534,6 +566,8 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": false,
+    "layer": "Other",
+    "severity": "high",
     "issue_kind": "bug_report"
   },
   {
@@ -564,6 +598,8 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "layer": "Other",
+    "severity": "medium",
     "issue_kind": "bug_report"
   },
   {
@@ -595,6 +631,8 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "layer": "HAL",
+    "severity": "low",
     "issue_kind": "bug_report"
   },
   {
@@ -627,6 +665,8 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "layer": "CubeMX",
+    "severity": "medium",
     "issue_kind": "bug_report"
   },
   {
@@ -659,6 +699,8 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": false,
+    "layer": "HAL",
+    "severity": "medium",
     "issue_kind": "bug_report"
   },
   {
@@ -689,6 +731,8 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "layer": "CubeMX",
+    "severity": "medium",
     "issue_kind": "bug_report"
   },
   {
@@ -720,6 +764,8 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "layer": "HAL",
+    "severity": "medium",
     "issue_kind": "bug_report"
   },
   {
@@ -751,6 +797,8 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "layer": "Other",
+    "severity": "medium",
     "issue_kind": "bug_report"
   },
   {
@@ -781,6 +829,8 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "layer": "HAL",
+    "severity": "medium",
     "issue_kind": "bug_report"
   },
   {
@@ -812,6 +862,8 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "layer": "CubeMX",
+    "severity": "high",
     "issue_kind": "bug_report"
   },
   {
@@ -842,6 +894,8 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "layer": "CubeMX",
+    "severity": "high",
     "issue_kind": "other"
   }
 ]

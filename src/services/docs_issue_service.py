@@ -8,7 +8,7 @@ def clean_issue_to_doc(issue: dict[str, Any], ingest_version: str = "v1.0") -> d
     """
     Transforme une issue nettoyée en
     'document STM32Cube enrichi' prêt pour :
-      - ingestion ST RAG (mapping vers leur format),
+      - ingestion ST RAG (avec métadonnées spécifiques STM32),
       - chunking custom pour ton RAG.
     """
 

@@ -21,7 +21,7 @@ def webhook():
         if data.get("action") == "opened":
             repo = data["repository"]["full_name"]
             issue_number = data["issue"]["number"]
-            message = "Merci d’avoir ouvert une issue ! 🤖 Le bot réfléchit pour te répondre."
+            message = "Merci d’avoir ouvert une issue ! Le bot réfléchit pour te répondre."
             url = f"https://api.github.com/repos/{repo}/issues/{issue_number}/comments"
             headers = {"Authorization": f"Bearer {GITHUB_TOKEN}",
                        "Accept": "application/vnd.github+json"}
