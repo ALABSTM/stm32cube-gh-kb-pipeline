@@ -16,20 +16,23 @@ def mcu_series_from_repo(repo: str | None) -> str | None:
 
 
 def split_by_paragraphs(text: str, max_chars: int = 1200) -> list[str]:
-    """
-    Découpe un texte en "paragraphes" en respectant une taille maximale en caractères.
-    """
     paragraphs = [p.strip() for p in text.split("\n\n") if p.strip()]
     chunks: list[str] = []
     current = ""
 
     for p in paragraphs:
+        # 1) Si un paragraphe est lui-même trop long, on le découpe en sous-blocs
+        while len(p) > max_chars:
+            chunks.append(p[:max_chars])
+            p = p[max_chars:]
+
+        # 2) On concatène plusieurs paragraphes tant qu'on reste sous max_chars
         if len(current) + len(p) + 2 <= max_chars:
-            current = (current + "\n\n" + p).strip()
+            current = (current + "\n\n" + p).strip() if current else p.strip()
         else:
             if current:
                 chunks.append(current)
-            current = p
+            current = p.strip()
 
     if current:
         chunks.append(current)

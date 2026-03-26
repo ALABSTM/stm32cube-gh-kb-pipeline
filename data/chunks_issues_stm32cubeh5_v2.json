@@ -563,7 +563,7 @@
       "issue_kind": "usage_question",
       "related_issue_ids": [],
       "chunk_index": 0,
-      "chunk_count": 6
+      "chunk_count": 7
     }
   },
   {
@@ -602,7 +602,7 @@
       "issue_kind": "usage_question",
       "related_issue_ids": [],
       "chunk_index": 1,
-      "chunk_count": 6
+      "chunk_count": 7
     }
   },
   {
@@ -641,12 +641,12 @@
       "issue_kind": "usage_question",
       "related_issue_ids": [],
       "chunk_index": 2,
-      "chunk_count": 6
+      "chunk_count": 7
     }
   },
   {
     "id": "stm32cubeh5-issue-19-3",
-    "text": "c\n  /* Register i2c3 error callback */\n  if (HAL_I2C_RegisterCallback(&hi2c3, HAL_I2C_ERROR_CB_ID, I2C3_Error_Callback) != HAL_OK)\n\nI hope this helps.\n\nWith regards,\n\n[25th-engineer - 2025-04-28T01:29:22Z]\n> Hello [@25th-engineer](https://github.com/25th-engineer),\n> \n> Unfortunately, I tried to find an example of IWDG with HAL_IWDG_RegisterCallback for you, but there isn't one in our firmware. All examples are handled with an interrupt when the push-button is pressed.\n> \n> Regards,\n\n@RJMSTM Thank you for your explanation. :-)",
+    "text": "[25th-engineer - 2025-04-28T01:32:48Z]\n> Hi [@25th-engineer](https://github.com/25th-engineer),\n> \n> As pointed out by [@RJMSTM](https://github.com/RJMSTM), there is no IWDG example using the user callback registration. However, there are two applications provided with the **STM32CubeU5** firmware:\n> \n> * [TCP Echo Client](https://github.com/STMicroelectronics/STM32CubeU5/tree/main/Projects/B-U585I-IOT02A/Applications/NetXDuo/Nx_TCP_Echo_Client) running on the **B-U585I-IOT02A** board,\n> * [I2C Tx-Rx with LPBAM](https://github.com/STMicroelectronics/STM32CubeU5/tree/main/Projects/NUCLEO-U575ZI-Q/Applications/LPBAM/LPBAM_I2C_TransmitReceive) running on the **NUCLEO-U575ZI-Q** board.\n> \n> You will notice such lines in the [stm32u5xx_hal_conf.h](https://github.com/STMicroelectronics/STM32CubeU5/blob/2f30bf3950ee49ff0314631d160e22c2367dda06/Projects/NUCLEO-U575ZI-Q/Applications/LPBAM/LPBAM_I2C_TransmitReceive/Core/Inc/stm32u5xx_hal_conf.h#L211) files to **enable** the user callbacks registration...\n> \n> #define  USE_HAL_I2C_REGISTER_CALLBACKS        1U /* I2C register callback enabled       */\n> #define  USE_HAL_RTC_REGISTER_CALLBACKS        1U /* RTC register callback enabled       */",
     "metadata": {
       "id": "stm32cubeh5-issue-19",
       "source_kind": "issue",
@@ -680,12 +680,12 @@
       "issue_kind": "usage_question",
       "related_issue_ids": [],
       "chunk_index": 3,
-      "chunk_count": 6
+      "chunk_count": 7
     }
   },
   {
     "id": "stm32cubeh5-issue-19-4",
-    "text": "[25th-engineer - 2025-04-28T01:32:48Z]\n> Hi [@25th-engineer](https://github.com/25th-engineer),\n> \n> As pointed out by [@RJMSTM](https://github.com/RJMSTM), there is no IWDG example using the user callback registration. However, there are two applications provided with the **STM32CubeU5** firmware:\n> \n> * [TCP Echo Client](https://github.com/STMicroelectronics/STM32CubeU5/tree/main/Projects/B-U585I-IOT02A/Applications/NetXDuo/Nx_TCP_Echo_Client) running on the **B-U585I-IOT02A** board,\n> * [I2C Tx-Rx with LPBAM](https://github.com/STMicroelectronics/STM32CubeU5/tree/main/Projects/NUCLEO-U575ZI-Q/Applications/LPBAM/LPBAM_I2C_TransmitReceive) running on the **NUCLEO-U575ZI-Q** board.\n> \n> You will notice such lines in the [stm32u5xx_hal_conf.h](https://github.com/STMicroelectronics/STM32CubeU5/blob/2f30bf3950ee49ff0314631d160e22c2367dda06/Projects/NUCLEO-U575ZI-Q/Applications/LPBAM/LPBAM_I2C_TransmitReceive/Core/Inc/stm32u5xx_hal_conf.h#L211) files to **enable** the user callbacks registration...\n> \n> #define  USE_HAL_I2C_REGISTER_CALLBACKS        1U /* I2C register callback enabled       */\n> #define  USE_HAL_RTC_REGISTER_CALLBACKS        1U /* RTC register callback enabled       */\n> ... and, depending on the application, the user callbacks **defined**...\n> \n> /* USER CODE BEGIN Slave_ReloadSeq_Config */\n> \n> /**\n>   * @brief  i2c3 error callback\n>   * @param  hi2c3 pointer to I2C handle\n>   * @retval None\n>   */\n> static void I2C3_Error_Callback(I2C_HandleTypeDef *hi2c3)\n> {\n>   /* Turn LED3 on */\n>   BSP_LED_On(LED3);\n> }\n> /* USER CODE END Slave_ReloadSeq_Config */\n> ... and **registered** in files such as the [lpbam_slave_reloadseq_config.c](https://github.com/STMicroelectronics/STM32CubeU5/blob/2f30bf3950ee49ff0314631d160e22c2367dda06/Projects/NUCLEO-U575ZI-Q/Applications/LPBAM/LPBAM_I2C_TransmitReceive/LPBAM/Slave/lpbam_slave_reloadseq_config.c#L549-L553), as show below...\n> \n>   /* Register i2c3 error callback */\n>   if (HAL_I2C_RegisterCallback(&hi2c3, HAL_I2C_ERROR_CB_ID, I2C3_Error_Callback) != HAL_OK)\n> I hope this helps.\n> \n> With regards,",
+    "text": "c\n  /* Register i2c3 error callback */\n  if (HAL_I2C_RegisterCallback(&hi2c3, HAL_I2C_ERROR_CB_ID, I2C3_Error_Callback) != HAL_OK)\n\nI hope this helps.\n\nWith regards,\n\n[25th-engineer - 2025-04-28T01:29:22Z]\n> Hello [@25th-engineer](https://github.com/25th-engineer),\n> \n> Unfortunately, I tried to find an example of IWDG with HAL_IWDG_RegisterCallback for you, but there isn't one in our firmware. All examples are handled with an interrupt when the push-button is pressed.\n> \n> Regards,\n\n@RJMSTM Thank you for your explanation. :-)",
     "metadata": {
       "id": "stm32cubeh5-issue-19",
       "source_kind": "issue",
@@ -719,12 +719,12 @@
       "issue_kind": "usage_question",
       "related_issue_ids": [],
       "chunk_index": 4,
-      "chunk_count": 6
+      "chunk_count": 7
     }
   },
   {
     "id": "stm32cubeh5-issue-19-5",
-    "text": "@ALABSTM Hi, Thanks. I'd fixed my problem but I would still like to say a big thank to you. I believe that your explanation will help other developers in the future. :-)\n\n[ALABSTM - 2025-04-28T09:32:48Z]\nHi @25th-engineer,\n\nYou're very welcome. Really glad to read you are now able to register your callbacks.\n\nWith regards,",
+    "text": "> ... and, depending on the application, the user callbacks **defined**...\n> \n> /* USER CODE BEGIN Slave_ReloadSeq_Config */\n> \n> /**\n>   * @brief  i2c3 error callback\n>   * @param  hi2c3 pointer to I2C handle\n>   * @retval None\n>   */\n> static void I2C3_Error_Callback(I2C_HandleTypeDef *hi2c3)\n> {\n>   /* Turn LED3 on */\n>   BSP_LED_On(LED3);\n> }\n> /* USER CODE END Slave_ReloadSeq_Config */\n> ... and **registered** in files such as the [lpbam_slave_reloadseq_config.c](https://github.com/STMicroelectronics/STM32CubeU5/blob/2f30bf3950ee49ff0314631d160e22c2367dda06/Projects/NUCLEO-U575ZI-Q/Applications/LPBAM/LPBAM_I2C_TransmitReceive/LPBAM/Slave/lpbam_slave_reloadseq_config.c#L549-L553), as show below...\n> \n>   /* Register i2c3 error callback */\n>   if (HAL_I2C_RegisterCallback(&hi2c3, HAL_I2C_ERROR_CB_ID, I2C3_Error_Callback) != HAL_OK)\n> I hope this helps.\n> \n> With regards,\n\n@ALABSTM Hi, Thanks. I'd fixed my problem but I would still like to say a big thank to you. I believe that your explanation will help other developers in the future. :-)\n\n[ALABSTM - 2025-04-28T09:32:48Z]\nHi @25th-engineer,\n\nYou're very welcome. Really glad to read you are now able to register your callbacks.",
     "metadata": {
       "id": "stm32cubeh5-issue-19",
       "source_kind": "issue",
@@ -758,7 +758,46 @@
       "issue_kind": "usage_question",
       "related_issue_ids": [],
       "chunk_index": 5,
-      "chunk_count": 6
+      "chunk_count": 7
+    }
+  },
+  {
+    "id": "stm32cubeh5-issue-19-6",
+    "text": "With regards,",
+    "metadata": {
+      "id": "stm32cubeh5-issue-19",
+      "source_kind": "issue",
+      "repo": "STM32CubeH5",
+      "mcu_package": "STM32CubeH5",
+      "mcu_series": "H5",
+      "type": "issue",
+      "path": null,
+      "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/19",
+      "board": "NUCLEO-U575ZI",
+      "category": null,
+      "component": null,
+      "example_name": null,
+      "issue_number": 19,
+      "issue_title": "Can you give a simple example of IWDG with HAL_IWDG_RegisterCallback?",
+      "state": "closed",
+      "labels": [
+        "question",
+        "projects",
+        "iwdg"
+      ],
+      "is_confirmed_bug": false,
+      "created_at": "2025-03-24T20:19:06Z",
+      "closed_at": "2025-04-28T07:15:31Z",
+      "ingest_version": "v2.0",
+      "image_urls": [],
+      "images_count": 0,
+      "is_valid": true,
+      "layer": "HAL",
+      "severity": "medium",
+      "issue_kind": "usage_question",
+      "related_issue_ids": [],
+      "chunk_index": 6,
+      "chunk_count": 7
     }
   },
   {

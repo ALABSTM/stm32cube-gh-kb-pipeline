@@ -12,7 +12,7 @@ def load_config() -> dict:
 def main() -> None:
     cfg = load_config()
     repos = cfg["repos"]
-    max_chars = cfg.get("chunk_max_chars_file", 1200)  
+    max_chars = cfg.get("chunk_max_chars_file", 2000)  
 
     for repo in repos:
         in_file = DATA_DIR / f"docs_files_{repo.lower()}_v2.json"
