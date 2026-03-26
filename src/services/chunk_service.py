@@ -68,6 +68,37 @@ def doc_issue_to_chunks(doc: dict[str, Any], max_chars: int = 1200) -> list[dict
 
     return chunks
 
+def doc_file_to_chunks(doc: dict[str, Any], max_chars: int = 1200) -> list[dict[str, Any]]:
+    """
+    Transforme un document "file" enrichi (docs_files_v2) en une liste de chunks prêts pour ingestion.
+    """
+    text = doc.get("clean_text") or ""
+    parts = split_by_paragraphs(text, max_chars=max_chars)
+
+    chunks: list[dict[str, Any]] = []
+
+    if not parts:
+        parts = [text]
+
+    chunk_count = len(parts)
+    base_id = doc.get("id") or "unknown-file"
+
+    for idx, part in enumerate(parts):
+        metadata = dict(doc)
+        metadata.pop("clean_text", None)
+
+        metadata["chunk_index"] = idx
+        metadata["chunk_count"] = chunk_count
+
+        chunk = {
+            "id": f"{base_id}-{idx}",
+            "text": part,
+            "metadata": metadata,
+        }
+        chunks.append(chunk)
+
+    return chunks
+
 
 
 def clean_issue_to_chunk(issue: dict, ingest_version: str = "v1.0") -> dict:

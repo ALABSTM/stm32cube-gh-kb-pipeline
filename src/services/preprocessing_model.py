@@ -69,7 +69,15 @@ COMPONENT_KEYWORDS = {
     "ADC": ["adc"],
     "DMA": [" dma "],
     "UART": ["uart", "usart"],
-    "CAN": ["can fd", " can "],
+    "CAN": [
+        "fdcan",
+        " bxcan",
+        " hal_can_",
+        " can1",
+        " can2",
+        "can bus",
+        "canfd",
+    ],
     "FREERTOS": ["freertos"],
 }
 
