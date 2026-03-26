@@ -1,0 +1,174 @@
+début de stage : 9 février 2026
+aujourd’hui : 26 mars 2026
+ce que tu as réellement fait
+ce que tu vas faire avec le PC hors domaine (RAG de test) + préparation pour l’outil ST.
+Je découpe en 4 grands blocs faciles à expliquer à ton encadrant :
+
+Cadrage & Architecture
+Pipeline de données V2 (issues + fichiers)
+Custom RAG de test (PC hors domaine)
+Intégration & Évaluation (préparation pour ST RAG)
+Je te donne d’abord un résumé texte (que tu peux mettre dans Excel / PowerPoint), puis une version plus détaillée.
+
+1. Vue d’ensemble par mois
+Mois 1 : 9 février → 8 mars
+Cadrage & Architecture + début pipeline
+
+Analyse du besoin ST, contraintes moteur RAG interne
+Exploration des repos STM32Cube GitHub
+Design de l’architecture de prétraitement (V1/V2, issues + fichiers)
+Début implémentation ingestion / nettoyage issues
+Mois 2 : 9 mars → 8 avril
+Pipeline de données V2 (issues + fichiers) – ce que tu fais maintenant
+
+Ingestion & cleaning complets (issues + fichiers)
+Prétraitement V2 des issues (heuristiques, similarité, chunks)
+Prétraitement V2 des fichiers (README/Projects/Release Notes, chunks)
+Scripts de tests (stats, cohérence, TF‑IDF search)
+Mois 3 : 9 avril → 8 mai
+Custom RAG de test sur PC hors domaine
+
+Construction d’un RAG de test (Chroma + embeddings + LLM local / cloud)
+Indexation des différents jeux de chunks (V1, V2_paragraph, V2_small, V2_sections éventuel)
+Campagne d’évaluation RAG (questions types, scénarios issues + docs)
+Ajustements des heuristiques / chunking à partir des résultats
+Mois 4 : 9 mai → fin de stage
+Préparation intégration ST + Documentation & Évaluation
+
+Préparation du corpus “RAG‑ready” pour l’outil interne ST (mapping champs, formats)
+Documentation détaillée :
+architecture du pipeline,
+JSON schemas,
+méthodologie de tests et résultats.
+Rédaction du rapport PFE (incluant bonnes pratiques de prétraitement et de chunking)
+(si possible) Tests avec ST RAG sur un sous‑ensemble du corpus.
+2. Gantt détaillé avec tâches, périodes et avancement
+Phase 1 – Cadrage & Architecture (9 fév → 8 mars)
+T1.1 – Analyse besoin ST & contraintes RAG interne
+
+Période : 9 fév → 16 fév
+Contenu :
+Compréhension du moteur RAG existant chez ST (pas en refaire un),
+Clarification que ton PFE = prétraitement + corpus RAG‑ready.
+Statut : 100 % (fait).
+T1.2 – Exploration des repos GitHub STM32Cube
+
+Période : 9 fév → 20 fév
+Contenu :
+identification des repos pilotes (H7, H5),
+repérage des dossiers intéressants (Issues, Projects, Release Notes…).
+Statut : 100 % (fait).
+T1.3 – Design de l’architecture globale du pipeline
+
+Période : 16 fév → 28 fév
+Contenu :
+structure data/, src/scripts/, src/services/,
+choix V1 (baseline) vs V2 (prétraitement heuristique) vs V3 (futur IA),
+design des étapes : ingestion → cleaning → docs → similarity → chunks → tests.
+Statut : 100 % (fait).
+T1.4 – Début implémentation ingestion / nettoyage issues
+
+Période : 20 fév → 8 mars
+Contenu :
+github_service.py, fetch_issues.py,
+clean_issues.py + cleaning_service.py,
+premiers clean_issues_<repo>.json.
+Statut : 100 % (fait).
+Phase 2 – Pipeline de données V2 (issues + fichiers) (9 mars → 8 avril)
+T2.1 – Ingestion & cleaning des fichiers STM32Cube
+
+Période : 9 mars → 18 mars
+Contenu :
+fetch_files.py + file_collect_service.py,
+clean_files.py, clean_files_<repo>.json, classification file_type.
+Statut : ~80–100 % (tu as déjà les clean_files et docs_files_v2, à ajuster selon ton état réel).
+T2.2 – Prétraitement V2 des issues (docs_issues_v2, V2_sim)
+
+Période : 9 mars → 26 mars (en cours)
+Contenu :
+PreprocessingModelIssuesV2 (fields : issue_kind, board, component, layer, severity, is_valid),
+docs_issues_<repo>_v2.json,
+compute_issue_similarity_v2.py → docs_issues_<repo>_v2_sim.json.
+Statut : ≈100 % (tu as corrigé CAN, regénéré V2/V2_sim).
+T2.3 – Chunking V2 des issues
+
+Période : 20 mars → 26 mars
+Contenu :
+chunk_service.py (split_by_paragraphs, doc_issue_to_chunks),
+docs_to_chunks_issues_v2.py → chunks_issues_<repo>_v2.json.
+Statut : 100 % (script en place, re‑run après correction CAN).
+T2.4 – Prétraitement V2 des fichiers
+
+Période : 18 mars → 31 mars
+Contenu :
+PreprocessingModelFilesV2 (fields : file_type, board, component, example_name, is_valid),
+docs_files_<repo>_v2.json.
+Statut : quasi terminé (à vérifier sur tous les repos).
+T2.5 – Chunking V2 des fichiers
+
+Période : 20 mars → 1 avril
+Contenu :
+doc_file_to_chunks dans chunk_service.py,
+docs_to_chunks_files_v2.py → chunks_files_<repo>_v2.json.
+Statut : en cours (tu es dessus maintenant).
+T2.6 – Scripts de tests (stats, cohérence, TF‑IDF)
+
+Période : 20 mars → 8 avril
+Contenu :
+test_stats_issues_v2.py, test_stats_files_v2.py,
+test_consistency_issues_v2_vs_sim.py,
+test_tfidf_search_issues_v2.py, test_tfidf_search_files_v2.py.
+Statut : en cours mais bien avancé (les scripts existent et tournent).
+Phase 3 – Custom RAG de test (PC hors domaine) (9 avril → 8 mai)
+T3.1 – Mise en place du RAG local (Chroma + embeddings + LLM)
+
+Période : 9 avril → 16 avril
+Contenu :
+copie des chunks_issues_*_v2.json et chunks_files_*_v2.json sur le PC hors domaine,
+normalisation des métadatas pour Chroma (listes → strings / None),
+création des collections Chroma (issues, files),
+choix d’un modèle d’embeddings (local ou API autorisée),
+intégration d’un LLM pour la génération (si possible).
+T3.2 – Versions de chunking multiples (V1, V2_paragraph, V2_small)
+
+Période : 16 avril → 23 avril
+Contenu :
+génération de chunks_issues_*_v1.json + chunks_files_*_v1.json (baseline),
+génération de chunks_issues_*_v2_small.json / chunks_files_*_v2_small.json (max_chars=600),
+indexation de ces versions dans Chroma (collections différentes ou tags).
+T3.3 – Campagne d’évaluation RAG
+
+Période : 23 avril → 8 mai
+Contenu :
+définition d’un petit set de questions / scénarios (issues + docs),
+pour chaque config (V1, V2_paragraph, V2_small) :
+recherche (retrieval),
+réponses LLM,
+analyse qualitative (pertinence, longueur des contextes, bruit),
+identification de bonnes pratiques de chunking :
+taille optimale,
+segmentation par paragraphes vs doc entier,
+importance des métadonnées pour filtrage/re‑ranking.
+Phase 4 – Intégration & Évaluation finale (9 mai → fin stage)
+T4.1 – Préparation du corpus RAG‑ready pour ST RAG
+
+Période : 9 mai → 20 mai
+Contenu :
+sélection d’une “meilleure” config (probablement V2_paragraph),
+nettoyage / standardisation des JSON (schemas stables),
+document de mapping vers la plateforme ST (champs text vs métadatas, filtres, facettes).
+T4.2 – Documentation technique complète
+
+Période : 9 mai → 31 mai (en parallèle avec T4.1/T4.3)
+Contenu :
+doc d’architecture du pipeline,
+doc détaillée des JSON schemas (docs_, chunks_),
+doc de la méthodologie de tests (stats, cohérence, TF‑IDF, RAG),
+éventuellement usage de ton agent VS Code pour t’aider à rédiger.
+T4.3 – Rapport PFE + préparation soutenance
+
+Période : 20 mai → fin stage
+Contenu :
+rédaction du rapport complet (contexte, approche, implémentation, évaluation, bonnes pratiques),
+préparation des slides (avec 1–2 schémas de pipeline + Gantt + résultats d’éval),
+si possible, démonstration du RAG de test et/ou intégration avec ST RAG.
