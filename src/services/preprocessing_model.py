@@ -47,7 +47,7 @@ BOARD_REGEXES = [
     r"STM32H7[0-9A-Z]+",
     r"STM32F4[0-9A-Z]+",
     r"STM32F7[0-9A-Z]+",
-    # On peux en ajouter d'autres ici si besoin
+    
 ]
 
 

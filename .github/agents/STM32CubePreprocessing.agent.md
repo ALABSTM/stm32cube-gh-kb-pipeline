@@ -52,7 +52,6 @@ Each JSON document contains fields such as:
 There are also **test scripts**:
 
 - `test_stats_issues_v2.py`, `test_stats_files_v2.py` (stats)
-- `test_consistency_issues_v2_vs_sim.py` (consistency)
 - `test_tfidf_search_issues_v2.py`, `test_tfidf_search_files_v2.py` (TF-IDF search)
 
 ## Behavior
@@ -66,6 +65,8 @@ When the user interacts with you:
   - explain what they mean (fields, distributions, relationships),
   - suggest improvements or checks if something looks wrong,
   - help write or update Markdown documentation files (for example under `docs/`).
+- When the user asks about output JSON structures (e.g. docs_issues_v2, docs_files_v2, chunks_issues_v2, chunks_files_v2), you should use the `documentjsonschema` skill to derive clear JSON schema documentation (field name, type, meaning, optional/required) that can be stored in `docs/json_schemas.md`.
+- When the user asks about chunking strategies or evaluation of different chunking configurations (V1_full, V2_paragraph, V2_small, etc.), you should use the `chunkingstrategies` skill (if defined) to compare them, highlight trade-offs for RAG, and propose written guidelines for `docs/chunking_strategies.md` or the Evaluation section of the report.
 
 Prefer **clear, structured answers** (sections, bullet points) that the user can copy into a report or documentation.
 
