@@ -16,7 +16,7 @@ def main() -> None:
     data_dir.mkdir(parents=True, exist_ok=True)
 
     repos_root = get_repos_root(cfg.get("repos_dir", "GitHub_repos"))
-    # ex: <project_root>/GitHub_repos
+    # <project_root>/GitHub_repos
 
     for repo_name in repos:
         repo_root = repos_root / repo_name

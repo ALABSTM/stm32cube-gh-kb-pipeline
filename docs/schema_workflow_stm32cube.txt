@@ -1,0 +1,45 @@
+SCHEMA RESUME - STM32Cube Preprocessing Agent
+
+Sources
+  |- GitHub Issues API
+  |- Repos locaux STM32Cube (README, Release Notes, Projects)
+
+        |
+        v
+[Ingestion]
+  |- fetch_issues.py  -> raw_issues_<repo>.json
+  |- fetch_files.py   -> raw_files_<repo>.json
+
+        |
+        v
+[Cleaning]
+  |- clean_issues.py  -> clean_issues_<repo>.json
+  |- clean_files.py   -> clean_files_<repo>.json
+
+        |
+        v
+[Enrichissement V2]
+  |- issues_to_docs_v2.py -> docs_issues_<repo>_v2.json
+  |- files_to_docs_v2.py  -> docs_files_<repo>_v2.json
+  |- Metadonnees: layer, severity, issue_kind, board, component, file_type, is_valid
+
+        |
+        +--------------------------+
+        |                          |
+        v                          v
+[Similarite Issues]            [Chunking optionnel]
+ compute_issue_similarity_v2   docs_to_chunks_issues_v2
+ -> docs_issues_v2_sim         docs_to_chunks_files_v2
+                               -> chunks_*_v2.json
+
+        |
+        v
+[Entree recommandee ST RAG si chunking natif ST]
+  |- docs_issues_<repo>_v2.json
+  |- docs_files_<repo>_v2.json
+
+
+ETAT D AVANCEMENT
+- H7: Issues complet, Fichiers complet
+- H5: Issues complet, Fichiers non demarre
+- Avancement global estime: 77.8% (14 artefacts sur 18)

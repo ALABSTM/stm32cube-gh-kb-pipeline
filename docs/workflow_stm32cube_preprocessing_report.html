@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Workflow STM32Cube Preprocessing Agent</title>
+  <style>
+    body { font-family: Calibri, Arial, sans-serif; margin: 36px auto; max-width: 980px; line-height: 1.45; color: #1f2937; }
+    h1, h2, h3 { color: #0f172a; }
+    h1 { border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+    .card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px; margin: 10px 0; }
+    ul { margin-top: 6px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+    th, td { border: 1px solid #cbd5e1; padding: 8px; text-align: left; }
+    th { background: #e2e8f0; }
+    pre { background: #0b1220; color: #dbeafe; padding: 14px; border-radius: 8px; white-space: pre-wrap; }
+    .small { font-size: 0.95rem; color: #334155; }
+  </style>
+</head>
+<body>
+  <h1>Workflow STM32Cube Preprocessing Agent</h1>
+
+  <div class="card">
+    <h2>Objectif</h2>
+    <p>Transformer des donnees GitHub STM32Cube (issues + fichiers) en corpus fiable et exploitable pour un systeme RAG, avec un role central de l agent dans l orchestration, la qualite et la documentation.</p>
+  </div>
+
+  <h2>Pipeline</h2>
+  <ol>
+    <li>Ingestion issues: fetch_issues.py -> raw_issues_&lt;repo&gt;.json</li>
+    <li>Ingestion fichiers: fetch_files.py -> raw_files_&lt;repo&gt;.json</li>
+    <li>Cleaning issues: clean_issues.py -> clean_issues_&lt;repo&gt;.json</li>
+    <li>Cleaning fichiers: clean_files.py -> clean_files_&lt;repo&gt;.json</li>
+    <li>Docs issues V2: issues_to_docs_v2.py -> docs_issues_&lt;repo&gt;_v2.json</li>
+    <li>Docs fichiers V2: files_to_docs_v2.py -> docs_files_&lt;repo&gt;_v2.json</li>
+    <li>Similarite issues: compute_issue_similarity_v2.py -> docs_issues_&lt;repo&gt;_v2_sim.json</li>
+    <li>Chunking optionnel: docs_to_chunks_issues_v2.py et docs_to_chunks_files_v2.py</li>
+  </ol>
+
+  <div class="card">
+    <h2>Regle importante pour ST RAG</h2>
+    <p><strong>Si ST fait deja le chunking, injecter uniquement les fichiers docs V2 (issues et fichiers), et ne pas injecter les chunks pour eviter le double chunking.</strong></p>
+  </div>
+
+  <h2>Schema resume</h2>
+  <pre>[GitHub API Issues] + [Repos locaux STM32Cube]
+                |
+                v
+       Ingestion (fetch_issues, fetch_files)
+                |
+                v
+        Raw JSON (raw_issues, raw_files)
+                |
+                v
+      Cleaning (clean_issues, clean_files)
+                |
+                v
+      Clean JSON (clean_issues, clean_files)
+                |
+                v
+ Enrichissement V2 (issues_to_docs_v2, files_to_docs_v2)
+                |
+                v
+      Docs V2 (metadata + clean_text + is_valid)
+                |
+                +----> Similarite Issues V2 (related_issue_ids)
+                |
+                +----> Chunking V2 (si necessaire)
+                |
+                v
+   Entree RAG ST recommandee: docs_issues_v2 + docs_files_v2</pre>
+
+  <h2>Etat d avancement</h2>
+  <table>
+    <thead>
+      <tr><th>Bloc</th><th>H7</th><th>H5</th><th>Statut</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Pipeline Issues V2</td><td>Complet</td><td>Complet</td><td>OK</td></tr>
+      <tr><td>Pipeline Fichiers V2</td><td>Complet</td><td>Absent</td><td>A completer cote H5</td></tr>
+      <tr><td>Tests stats et TF-IDF</td><td>Disponibles</td><td>Disponibles</td><td>OK</td></tr>
+    </tbody>
+  </table>
+  <p class="small">Progression globale estimee: 77.8% (14 artefacts presents sur 18 attendus).</p>
+
+  <h2>Evaluation qualite</h2>
+  <h3>Statistiques</h3>
+  <ul>
+    <li>test_stats_issues_v2.py: distributions layer, severity, issue_kind, board, component</li>
+    <li>test_stats_files_v2.py: file_type, board, component, ratio is_valid</li>
+  </ul>
+
+  <h3>Retrieval TF-IDF</h3>
+  <ul>
+    <li>test_tfidf_search_issues_v2.py: pertinence des top resultats sur docs issues valides</li>
+    <li>test_tfidf_search_files_v2.py: pertinence des top resultats sur docs fichiers valides</li>
+  </ul>
+
+  <p><strong>Conclusion:</strong> La base est solide sur les issues (H7 et H5) et sur les fichiers H7. La priorite immediate est de completer la branche fichiers H5.</p>
+</body>
+</html>

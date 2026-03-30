@@ -97,7 +97,7 @@ class PreprocessingConfig:
         self.enable_issue_kind = True
         self.enable_board_detection = True
         self.enable_component_detection = True
-        # plus tard : flags pour IA/LLM, résumés, etc.
+   
 
 
 class PreprocessingModelIssuesV2:
@@ -220,7 +220,7 @@ class PreprocessingModelFilesV2:
             "type": "file",
             "path": path,
             "file_type": file_type,
-            "github_url": None,  # optionnel : tu pourras déduire l'URL plus tard
+            "github_url": None,  
             "board": None,
             "category": None,
             "component": None,

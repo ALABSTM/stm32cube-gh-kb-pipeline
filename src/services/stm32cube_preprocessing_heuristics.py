@@ -117,8 +117,6 @@ def detect_severity(text: str, labels: List[str] | None = None) -> str:
 
     for kw in high_keywords:
         if kw in txt_lower:
-            # Tu peux laisser le debug ou l'enlever
-            # print("[DEBUG] high severity triggered by keyword:", repr(kw))
             return "high"
 
     # Par défaut
