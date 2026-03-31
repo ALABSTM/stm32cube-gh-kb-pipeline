@@ -28,7 +28,7 @@ def clean_body_or_comment(text: str) -> tuple[str, list[str]]:
 
     text = IMG_TAG_RE.sub(repl, text)
 
-    # Évite que les backticks perturbent les traitements suivants
+    # Avoid backticks interfering with subsequent processing
     text = text.replace("`", "")
 
     text = text.strip()

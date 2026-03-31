@@ -48,10 +48,10 @@ def is_top_level_readme(rel_path: Path) -> bool:
         return False
 
     parts = rel_path.parts
-    # README à la racine du repo
+    # Readme root level (ex: README.md)
     if len(parts) == 1:
         return True
-    # ou sous 'Documentation/'
+    # or under 'Documentation/'
     if parts[0].lower() == "documentation":
         return True
 
@@ -89,13 +89,13 @@ def read_file_content(path: Path) -> str:
         try:
             return path.read_text(encoding="latin-1")
         except Exception as e:
-            print(f"[WARN] Impossible de lire {path} : {e}")
+            print(f"[WARN] Unable to read {path} : {e}")
             return ""
 
 
 def collect_repo_docs(repo_name: str, repo_root: Path) -> list[dict]:
     """
-    Scanne un repo local (cloné) et retourne une liste d'objets :
+    Scan a local (cloned) repo and return a list of objects:
     {
       "repo": <repo_name>,
       "path": "relative/path",
@@ -105,19 +105,19 @@ def collect_repo_docs(repo_name: str, repo_root: Path) -> list[dict]:
     """
     if not repo_root.exists():
         raise FileNotFoundError(
-            f"Le dossier du repo n'existe pas : {repo_root}. "
-            "Vérifie que tu as bien cloné le repo."
+            f"The repo folder does not exist: {repo_root}. "
+            "Make sure you have cloned the repo."
         )
 
     raw_files: list[dict] = []
 
-    print(f"=== Scan du repo {repo_name} dans {repo_root} ===")
+    print(f"=== Scanning repo {repo_name} in {repo_root} ===")
 
     count = 0
     for file_path in iter_repo_files(repo_root):
         count += 1
         rel_path = file_path.relative_to(repo_root)
-        print(f"  [{count}] Lecture fichier : {rel_path}")
+        print(f"  [{count}] Reading file: {rel_path}")
 
         content = read_file_content(file_path)
 
@@ -129,7 +129,7 @@ def collect_repo_docs(repo_name: str, repo_root: Path) -> list[dict]:
         }
         raw_files.append(raw_obj)
 
-    print(f"=== {len(raw_files)} fichiers collectés pour {repo_name} ===")
+    print(f"=== {len(raw_files)} files collected for {repo_name} ===")
     return raw_files
 
 
@@ -138,4 +138,4 @@ def write_raw_files_json(raw_files: list[dict], output_file: Path) -> None:
         json.dumps(raw_files, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
-    print(f"Écriture dans {output_file}")
+    print(f"Writing to {output_file}")

@@ -36,7 +36,7 @@ def detect_file_type(path: str) -> str:
 def clean_content(text: str) -> str:
     if not text:
         return ""
-    # normalisation simple, on pourra raffiner plus tard
+    # simple normalization: unify newlines and trim
     text = text.replace("\r\n", "\n").replace("\r", "\n")
     return text.strip()
 

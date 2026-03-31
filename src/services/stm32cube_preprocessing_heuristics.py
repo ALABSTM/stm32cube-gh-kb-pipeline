@@ -119,7 +119,7 @@ def detect_severity(text: str, labels: List[str] | None = None) -> str:
         if kw in txt_lower:
             return "high"
 
-    # Par défaut
+    # default to medium if no low or high indicators found
     return "medium"
 
 

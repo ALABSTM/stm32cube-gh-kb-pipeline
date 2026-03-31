@@ -11,7 +11,7 @@ def mcu_series_from_repo(repo: str | None) -> str | None:
         return "F4"
     if "H5" in repo:
         return "H5"
-    # Ajouter d'autres séries au besoin
+    # Add other series as needed
     return None
 
 
@@ -21,12 +21,12 @@ def split_by_paragraphs(text: str, max_chars: int = 1200) -> list[str]:
     current = ""
 
     for p in paragraphs:
-        # 1) Si un paragraphe est lui-même trop long, on le découpe en sous-blocs
+        # 1) If a paragraph is too long, split it into sub-blocks
         while len(p) > max_chars:
             chunks.append(p[:max_chars])
             p = p[max_chars:]
 
-        # 2) On concatène plusieurs paragraphes tant qu'on reste sous max_chars
+        # 2) Concatenate multiple paragraphs as long as we stay under max_chars
         if len(current) + len(p) + 2 <= max_chars:
             current = (current + "\n\n" + p).strip() if current else p.strip()
         else:
@@ -42,7 +42,7 @@ def split_by_paragraphs(text: str, max_chars: int = 1200) -> list[str]:
 
 def doc_issue_to_chunks(doc: dict[str, Any], max_chars: int = 1200) -> list[dict[str, Any]]:
     """
-    Transforme un document "issue" enrichi en une liste de chunks prêts pour ingestion.
+    Transform an enriched "issue" document into a list of chunks ready for ingestion.
     """
     text = doc.get("clean_text") or ""
     parts = split_by_paragraphs(text, max_chars=max_chars)
@@ -73,7 +73,7 @@ def doc_issue_to_chunks(doc: dict[str, Any], max_chars: int = 1200) -> list[dict
 
 def doc_file_to_chunks(doc: dict[str, Any], max_chars: int = 1200) -> list[dict[str, Any]]:
     """
-    Transforme un document "file" enrichi (docs_files_v2) en une liste de chunks prêts pour ingestion.
+    Transform an enriched "file" document (docs_files_v2) into a list of chunks ready for ingestion.
     """
     text = doc.get("clean_text") or ""
     parts = split_by_paragraphs(text, max_chars=max_chars)
@@ -106,9 +106,9 @@ def doc_file_to_chunks(doc: dict[str, Any], max_chars: int = 1200) -> list[dict[
 
 def clean_issue_to_chunk(issue: dict, ingest_version: str = "v1.0") -> dict:
     """
-    Ancienne version : enrichissement + chunking en 1 seul chunk.
-    À ne plus utiliser dans la nouvelle pipeline (docs_issues -> chunks_issues),
-    gardée ici uniquement pour compatibilité temporaire.
+    Old version: enrichment + chunking in a single chunk.
+    Do not use in the new pipeline (docs_issues -> chunks_issues),
+    kept here only for temporary compatibility.
     """
     repo = issue.get("repo")
     issue_number = issue.get("issue_number")

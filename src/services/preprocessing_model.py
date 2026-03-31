@@ -11,11 +11,7 @@ from src.services.stm32cube_preprocessing_heuristics import (
 
 def classify_issue_kind(text: str, labels: list[str]) -> str:
     """
-    Classe simple pour V2 :
-    - bug_report
-    - usage_question
-    - configuration_help
-    - other
+simple classification heuristics to determine if an issue is likely a bug report, a usage question, a configuration help request, or other.
     """
     labels_lower = [lbl.lower() for lbl in labels]
 
@@ -35,8 +31,8 @@ def classify_issue_kind(text: str, labels: list[str]) -> str:
 
 def has_invalid_label(labels: list[str]) -> bool:
     """
-    Retourne True si l'issue est marquée comme invalide / duplicate / wontfix
-    via les labels GitHub.
+    return True if the issue has labels indicating it is invalid, duplicate or won't fix.
+    Such issues are not useful for training a model and can be filtered out.
     """
     labels_lower = [lbl.lower() for lbl in labels]
     return any(lbl in ("invalid", "duplicate", "wontfix") for lbl in labels_lower)
@@ -53,7 +49,8 @@ BOARD_REGEXES = [
 
 def detect_board(text: str) -> str | None:
     """
-    Détection simple de la carte à partir du texte.
+    Simple regex-based board detection. Not perfect but can catch common board mentions in issue text.
+    For example, if the text mentions "NUCLEO-H743ZI", it will detect "NUCLEO-H743ZI" as the board.
     """
     txt_upper = text.upper()
     for pattern in BOARD_REGEXES:
@@ -102,10 +99,15 @@ class PreprocessingConfig:
 
 class PreprocessingModelIssuesV2:
     """
-    Modèle de prétraitement V2 pour les issues STM32Cube.
+Preprocessing model for issue preprocessing, version 2.
+Input: cleaned issue (clean_issues_*).  
+Output: enriched issue document (docs_issues_v2) with new fields:
+- issue_kind : bug_report, usage_question, configuration_help, other
+- layer : HAL, LL, Middleware, CubeMX, Other
+- severity : low, medium, high
+- board : detected board name or None
+- component : detected component or None
 
-    Entrée : issue nettoyée (clean_issues_*).
-    Sortie : document enrichi (docs_issues_v2).
     """
 
     def __init__(self, config: PreprocessingConfig | None = None) -> None:
@@ -121,21 +123,21 @@ class PreprocessingModelIssuesV2:
         created_at = issue.get("created_at")
         closed_at = issue.get("closed_at")
 
-        # bug confirmé (déjà en V1)
+        # confirmed bug if has bug label
         is_confirmed_bug = any(lbl in ("bug", "internal bug tracker") for lbl in labels_lower)
 
-        # Filtrage V2 : is_valid 
+        # V2 filtering : is_valid 
         is_valid = True
         if self.config.enable_filtering:
-            # 1) texte trop court
+            # 1) very short text = likely not useful
             if len(clean_text) < 100:
                 is_valid = False
 
-            # 2) labels invalid/duplicate/wontfix
+            # 2) labels indicating invalid / duplicate / wontfix
             if has_invalid_label(labels):
                 is_valid = False
 
-        # Métadonnées de base (comme V1 + is_valid)
+        # Basic metadata (like V1 + is_valid)
         doc: dict[str, Any] = {
             "id": f"{(repo or '').lower()}-issue-{issue_number}",
             "source_kind": "issue",
@@ -164,23 +166,23 @@ class PreprocessingModelIssuesV2:
         }
 
 
-        # V2.1 : couche logicielle
+        # V2.1 : software layer
         doc["layer"] = detect_layer(clean_text)
 
-        # V2.1 : sévérité heuristique
+        # V2.1 : heuristic severity
         doc["severity"] = detect_severity(clean_text, labels)
 
-        # V2 : classification issue_kind par règles
+        # V2 : classification issue kind (bug_report, usage_question, configuration_help, other)
         if self.config.enable_issue_kind:
             doc["issue_kind"] = classify_issue_kind(clean_text, labels)
 
-        # V2 : détection board
+        # V2 : board detection
         if self.config.enable_board_detection:
             board = detect_board(clean_text)
             if board:
                 doc["board"] = board
 
-        # V2 : détection component
+        # V2 : component detection
         if self.config.enable_component_detection:
             component = detect_component(clean_text)
             if component:
@@ -205,10 +207,10 @@ class PreprocessingModelFilesV2:
         clean_text: str = file_obj.get("clean_text") or ""
         file_type: str = file_obj.get("file_type") or "other"
 
-        # id simple basé sur le path
+        # simple doc_id based on repo and path hash (could be improved if needed)
         doc_id = f"{(repo or '').lower()}-file-{abs(hash(path))}"
 
-        # validité minimale : texte suffisant
+        # minimal validity: sufficient text
         is_valid = len(clean_text) >= 100
 
         doc: dict[str, Any] = {
@@ -230,7 +232,7 @@ class PreprocessingModelFilesV2:
             "is_valid": is_valid,
         }
 
-        # Détection board / component sur path + contenu
+        # Board / component detection on path + content
         text_for_detection = path + "\n" + clean_text
 
         board = detect_board(text_for_detection)
@@ -241,7 +243,7 @@ class PreprocessingModelFilesV2:
         if component:
             doc["component"] = component
 
-        # Extraction du nom d'exemple si dans Projects/.../Examples/<ExampleName>/...
+        # Example name detection from path (heuristic: folder "Examples/<example_name>/")
         parts = path.replace("\\", "/").split("/")
         if "Examples" in parts:
             idx = parts.index("Examples")

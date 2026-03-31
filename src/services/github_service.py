@@ -50,7 +50,7 @@ class GitHubService:
                 break
 
             for item in data:
-                # Ignore les pull requests
+                # Ignore pull requests (issues API returns both issues and PRs, we only want issues)
                 if "pull_request" in item:
                     continue
 

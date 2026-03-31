@@ -25,19 +25,19 @@ def clean_issue_to_doc(issue: dict[str, Any], ingest_version: str = "v1.0") -> d
     images_count = issue.get("images_count") or 0
 
     doc = {
-        # identifiant document (sans chunk_index)
+        # unique id for the document, can be used as chunk id prefix if needed
         "id": doc_id,
 
-        # métadonnées de base
+        # basic metadata
         "source_kind": "issue",
         "repo": repo,
         "mcu_package": repo,
         "mcu_series": mcu_series_from_repo(repo),
 
-        # type fonctionnel
+        # functional type
         "type": "issue",
 
-        # métadonnées STM32 / GitHub
+        # STM32 / GitHub metadata
         "path": None,
         "github_url": issue.get("github_url"),
         "board": None,
@@ -50,14 +50,14 @@ def clean_issue_to_doc(issue: dict[str, Any], ingest_version: str = "v1.0") -> d
         "labels": labels,
         "is_confirmed_bug": is_confirmed_bug,
 
-        # temps
+        # time
         "created_at": issue.get("created_at"),
         "closed_at": issue.get("closed_at"),
 
         # ingestion
         "ingest_version": ingest_version,
 
-        # contenu
+        # content
         "clean_text": clean_text,
         "image_urls": image_urls,
         "images_count": images_count,

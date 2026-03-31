@@ -21,14 +21,14 @@ def build_tfidf_files(repo: str = "STM32CubeH7"):
         if not d.get("is_valid", True):
             continue
 
-        # On peut éventuellement inclure path + file_type pour enrichir le texte
+        # we can use the file path and type as a header to give more signal to the model about the content of the file, since we don't have a title like for issues
         header = f"{d.get('path', '')}\n[{d.get('file_type', '')}]"
         body = d.get("clean_text") or ""
         texts.append(header + "\n" + body)
         meta.append(d)
 
     if not texts:
-        raise RuntimeError(f"Aucun texte valide pour les fichiers de {repo}")
+        raise RuntimeError(f"No valid text for files of {repo}")
 
     vectorizer = TfidfVectorizer(max_features=8000)
     X = vectorizer.fit_transform(texts)
@@ -37,7 +37,8 @@ def build_tfidf_files(repo: str = "STM32CubeH7"):
 
 def search_files(query: str, meta, vectorizer, X, top_k: int = 5):
     """
-    Recherche les fichiers les plus pertinents pour une requête.
+    search in the files index using a TF-IDF vectorizer and cosine similarity.
+    Returns a list of (score, metadata) for the top_k most similar files.
     """
     q_vec = vectorizer.transform([query])
     sims = cosine_similarity(q_vec, X)[0]
@@ -63,7 +64,7 @@ def main():
             print(f"  board={d.get('board')}, component={d.get('component')}, example_name={d.get('example_name')}")
             print("  extrait:")
             clean_text = d.get("clean_text") or ""
-            # on affiche juste le début du texte pour comprendre de quoi il parle
+            # print only the first 300 chars of the clean text, replacing newlines by spaces for better readability
             print("   ", clean_text[:300].replace("\n", " ") + "...")
             print("-" * 80)
 
