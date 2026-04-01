@@ -1,5 +1,45 @@
 [
   {
+    "id": "stm32cubeh5-issue-32-0",
+    "text": "Title: [Bug]: STM32H5 missing } build failure with c++\n\nBody:\n### Bug Summary\n\nWhen building with cpp, the H5 HAL errors out due to a missing }.\n\n### Detailed Description\n\nOriginally discovered [on zephyr](https://github.com/zephyrproject-rtos/zephyr/issues/105698)\nWhen building with cpp, the H5 HAL errors out due to a missing }.\n\nThis seems to be an issue with the HAL header stack. In stm32h5xx_hal_mdf.h, #ifdef __cplusplus\n block is placed before the MDF1 conditional is closed. This breaks compilation.\nMoving it after the MDF1 close seems to fix the issue.\n\n### Expected Behavior\n\nBuild Succeeds\n\n### Actual Behavior\n\nBuild crashes with missing } error\n\n### Environment\n\nBuild with cpp enabled on zephyr\n\n### Severity\n\nMajor\n\nComments:\n[ASAHSTM - 2026-03-30T14:12:23Z]\nHello @IM-TechieScientist,\n\nThank you for your report.\nThis issue has been tracked internally.\n\nWith Regards,\n\n[ASAHSTM - 2026-03-30T14:12:53Z]\nST Internal Reference: CDM0061146",
+    "metadata": {
+      "id": "stm32cubeh5-issue-32",
+      "source_kind": "issue",
+      "repo": "STM32CubeH5",
+      "mcu_package": "STM32CubeH5",
+      "mcu_series": "H5",
+      "type": "issue",
+      "path": null,
+      "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/32",
+      "board": null,
+      "category": null,
+      "component": null,
+      "example_name": null,
+      "issue_number": 32,
+      "issue_title": "[Bug]: STM32H5 missing } build failure with c++",
+      "state": "closed",
+      "labels": [
+        "bug",
+        "hal",
+        "internal bug tracker",
+        "mdf"
+      ],
+      "is_confirmed_bug": true,
+      "created_at": "2026-03-21T08:46:42Z",
+      "closed_at": "2026-03-31T14:48:39Z",
+      "ingest_version": "v2.0",
+      "image_urls": [],
+      "images_count": 0,
+      "is_valid": true,
+      "layer": "HAL",
+      "severity": "high",
+      "issue_kind": "bug_report",
+      "related_issue_ids": [],
+      "chunk_index": 0,
+      "chunk_count": 1
+    }
+  },
+  {
     "id": "stm32cubeh5-issue-31-0",
     "text": "Title: Misleading bitoperation in OEMiROT_Boot clock configuration\n\nBody:\n**Describe the bug**\nIn the OEMiROT_Boot application (Projects/*/Applications/ROT/OEMiROT_Boot) there is this block in SetSysClock:\n\nMODIFY_REG(RCC->PLL1CFGR, RCC_PLL1CFGR_PLL1RGE, RCC_PLL1CFGR_PLL1SRC_1 << RCC_PLL1CFGR_PLL1RGE_Pos);\nMODIFY_REG(RCC->PLL1CFGR, RCC_PLL1CFGR_PLL1VCOSEL, RCC_PLL1VCOWIDE << RCC_PLL1CFGR_PLL1VCOSEL_Pos);\n\nPLL1RGE and PLL1SRC are unrelated fields in the register. Also RCC_PLL1CFGR_PLL1SRC_1 is already shifted to the right position in stm32h503xx.h\n\n#define RCC_PLL1CFGR_PLL1SRC_1              (0x2UL << RCC_PLL1CFGR_PLL1SRC_Pos)     /*!< 0x00000002 */\n\nThe line generates the correct bit pattern, but purely by chance.\n\nThe shift in the 2nd line is also incorrect. Since RCC_PLL1VCOWIDE = 0, it does not do anything. But if you would use RCC_PLL1VCOMEDIUM instead, it would expand to this:\n\n(0x1UL << RCC_PLL1CFGR_PLL1VCOSEL_Pos) << RCC_PLL1CFGR_PLL1VCOSEL_Pos\n\nYet again, the line generates the correct bit pattern, but purely by chance.\n\n**Suggested Fix**\nIt should be replaced with a clearer alternative:",
     "metadata": {

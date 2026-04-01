@@ -1,16 +1,62 @@
 [
   {
     "repo": "STM32CubeH7",
+    "issue_number": 339,
+    "title": "[Bug]: USART with a single line",
+    "state": "open",
+    "labels": [
+      "bug",
+      "cube mx",
+      "usart"
+    ],
+    "created_at": "2026-03-19T20:13:40Z",
+    "closed_at": null,
+    "body": "### Bug Summary\n\nIn CubeMx, the assignment of pins when trying to use a UART with a single data line is not OK\n\n### Detailed Description\n\nWhen setting a USART to Asynchronous and then setting Advanced Parameters->Data direction to Receive only or Transmit only, both pins stay selected and there's no way of unassigning one. For instance, if I set it to Receive only, I would expect the TX pin to be unassigned.\n\n### Expected Behavior\n\nIf I set it to Receive only, I would expect the TX pin to be unassigned.\n\n### Actual Behavior\n\nboth pins stay assigned and cannot be unassigned\n\n### Environment\n\nCubeMx 6.16.1\n\n### Severity\n\nNone",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2026-03-26T16:17:01Z",
+        "body": "ST Internal Reference: CDM0061073"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/339"
+  },
+  {
+    "repo": "STM32CubeH7",
     "issue_number": 338,
     "title": "[Bug]: CubeMx allows an invalid combination of parameters for ADC with DMA",
     "state": "open",
     "labels": [
-      "bug"
+      "enhancement",
+      "internal bug tracker",
+      "cube mx",
+      "adc"
     ],
     "created_at": "2026-03-05T22:46:50Z",
     "closed_at": null,
-    "body": "### Bug Summary\n\nCubeMx allows an invalid combination of parameters for ADC with DMA\n\n### Detailed Description\n\nWhen DMA is enabled on an ADC, DMA requests will only be issued if `ADC_InitTypeDef::ConversionDataManagement` is set to `ADC_CONVERSIONDATA_DMA_ONESHOT` or `ADC_CONVERSIONDATA_DMA_CIRCULAR`. That is to say, `ADC_CONVERSIONDATA_DR` and `ADC_CONVERSIONDATA_DFSDM` are invalid when DMA is enabled.\n\nThe issue is that if Conversion Data Management Mode is not set to `ADC_CONVERSIONDATA_DMA_CIRCULAR` or `ADC_CONVERSIONDATA_DR`, then CubeMx will generate some unusable code.\n\nCubeMx could detect and flag this issue for the user. Or it could disable non-DMA values when DMA is enabled. Or it could make it more obvious to the user some other way that there is some DMA-relevant (and, indeed, crucial) setting in that otherwise irrelevant-looking \"Conversion Data Management Mode\".\n\n### Expected Behavior\n\n_No response_\n\n### Actual Behavior\n\n_No response_\n\n### Environment\n\nCubeMx 6.16.1, STM32H743VITx, ADC1\n\n### Severity\n\nNone",
-    "comments": [],
+    "body": "### Bug Summary\n\nCubeMx allows an invalid combination of parameters for ADC with DMA\n\n### Detailed Description\n\nWhen DMA is enabled on an ADC, DMA requests will only be issued if `ADC_InitTypeDef::ConversionDataManagement` is set to `ADC_CONVERSIONDATA_DMA_ONESHOT` or `ADC_CONVERSIONDATA_DMA_CIRCULAR`. That is to say, `ADC_CONVERSIONDATA_DR` and `ADC_CONVERSIONDATA_DFSDM` are invalid when DMA is enabled.\n\nThe issue is that if Conversion Data Management Mode is not set to `ADC_CONVERSIONDATA_DMA_CIRCULAR` or ~~ADC CONVERSIONDATA DR~~ `ADC_CONVERSIONDATA_DMA_ONESHOT`, then CubeMx will generate some unusable code.\n\nCubeMx could detect and flag this issue for the user. Or it could disable non-DMA values when DMA is enabled. Or it could make it more obvious to the user some other way that there is some DMA-relevant (and, indeed, crucial) setting in that otherwise irrelevant-looking \"Conversion Data Management Mode\".\n\n### Expected Behavior\n\n_No response_\n\n### Actual Behavior\n\n_No response_\n\n### Environment\n\nCubeMx 6.16.1, STM32H743VITx, ADC1\n\n### Severity\n\nNone",
+    "comments": [
+      {
+        "author": "MKISTM",
+        "created_at": "2026-03-09T10:34:59Z",
+        "body": "Hello @giuliomoro,\n\nThank you for your report, I think there is a small typo in your sentence\n\n> The issue is that if Conversion Data Management Mode is not set to ADC_CONVERSIONDATA_DMA_CIRCULAR or ADC_CONVERSIONDATA_DR, then CubeMx will generate some unusable code.\n\nYou mean `ADC_CONVERSIONDATA_DMA_ONESHOT` instead `ADC_CONVERSIONDATA_DR` ?\n\nBR,\nMohamed Chaker."
+      },
+      {
+        "author": "giuliomoro",
+        "created_at": "2026-03-09T13:03:36Z",
+        "body": "yes correct, I now amended the original post for clarity."
+      },
+      {
+        "author": "MKISTM",
+        "created_at": "2026-03-19T14:00:07Z",
+        "body": "Hello @giuliomoro,\n\nThank you for your report, this point has been tracked internally.\nI'll keep you informed.\n\nBR,\nMohamed Chaker."
+      },
+      {
+        "author": "MKISTM",
+        "created_at": "2026-03-19T14:00:34Z",
+        "body": "ST Internal Reference: CDM0060711"
+      }
+    ],
     "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/338"
   },
   {
@@ -128,7 +174,9 @@
     "title": "Fix compile time warnings without removing the set compiler flags.",
     "state": "closed",
     "labels": [
+      "bug",
       "enhancement",
+      "cube mx",
       "cmsis"
     ],
     "created_at": "2026-02-08T09:33:06Z",
@@ -354,15 +402,14 @@
     "repo": "STM32CubeH7",
     "issue_number": 327,
     "title": "EEPROM emulation example - bugs",
-    "state": "open",
+    "state": "closed",
     "labels": [
       "bug",
       "internal bug tracker",
-      "projects",
-      "needs clarification"
+      "projects"
     ],
     "created_at": "2025-10-02T08:15:10Z",
-    "closed_at": null,
+    "closed_at": "2026-03-31T14:39:21Z",
     "body": "**Describe the set-up**\nThe example was ported to our custom board with STM32H735V and there I discovered the bugs.\nIDE used is STM32CubeIDE version 1.19.0.\n\n**Describe the bug**\n1. As mentioned [here](https://github.com/STMicroelectronics/STM32CubeH7/issues/309#issuecomment-3025018673), there are missing calls to `SCB_EnableICache()` before exit points in `EE_VerifyPageFullWriteVariable()`.\nhttps://github.com/STMicroelectronics/STM32CubeH7/blob/8bc11985e1ffb47ab74bac67d20e48fa26038dd3/Projects/NUCLEO-H743ZI/Applications/EEPROM/EEPROM_Emulation/Src/eeprom.c#L617-L645\nInstruction cache then may end up disabled forever.\n\n2. `EE_VerifyPageFullyErased()` - if really the whole sector is to be checked, either increments have to be 2-byte or dereferenced value be `uint32_t` (four bytes). I prefer the former since the value is checked against `ERASED` which is  `uint16_t`.\nhttps://github.com/STMicroelectronics/STM32CubeH7/blob/8bc11985e1ffb47ab74bac67d20e48fa26038dd3/Projects/NUCLEO-H743ZI/Applications/EEPROM/EEPROM_Emulation/Src/eeprom.c#L341-L360\nMy solution is that `EndAddress = (uint32_t)(Address + (PAGE_SIZE - 2U));` and increment `Address = Address + 2;`.\n\n3. `EE_VerifyPageFullWriteVariable()` does not actually check if all the bytes are set to `0xFFFFFFFF`. Since there are two 32-byte writes, actually 16 32-bit words should be checked for `0xFFFFFFFF`. \nhttps://github.com/STMicroelectronics/STM32CubeH7/blob/8bc11985e1ffb47ab74bac67d20e48fa26038dd3/Projects/NUCLEO-H743ZI/Applications/EEPROM/EEPROM_Emulation/Src/eeprom.c#L622-L634\nThe code actually checks only the first word. My fix was along the lines of\n`if (is_flashword_erased(Address) && is_flashword_erased(Address + 32))`\nwith\n```\nstatic inline int is_flashword_erased(uint32_t addr) {\n    for (int i = 0; i < 8; ++i) {\n        if (*((__IO uint32_t*)(addr + i*4)) != 0xFFFFFFFFU) return 0;\n    }\n    return 1;\n}\n```\n\n4. This is the gravest one that I think actually caused our problems. It consists of three parts:\na. Wrong offset in `EE_Init()` initial check for detecting the variable. \nhttps://github.com/STMicroelectronics/STM32CubeH7/blob/8bc11985e1ffb47ab74bac67d20e48fa26038dd3/Projects/NUCLEO-H743ZI/Applications/EEPROM/EEPROM_Emulation/Src/eeprom.c#L137\nWhere does the value 6 come from? I think that the correct should be 128 - 64 for the header and 64 for the address offset. So actually\n`if (( *(__IO uint16_t*)(PAGE0_BASE_ADDRESS + PAGE_HEADER_SIZE + EE_ADDRESS_OFFSET)) == VirtAddVarTab[VarIdx])` where PAGE_HEADER_SIZE is 64 and EE_ADDRESS_OFFSET is 64.\nb. Wrong stopping address in `EE_ReadVariable()` - the last check goes to the page header.\nhttps://github.com/STMicroelectronics/STM32CubeH7/blob/8bc11985e1ffb47ab74bac67d20e48fa26038dd3/Projects/NUCLEO-H743ZI/Applications/EEPROM/EEPROM_Emulation/Src/eeprom.c#L398. I think that the correct code is\n`while (Address >= (PageStartAddress + PAGE_HEADER_SIZE))`\nor maybe just `>` since the first four-word actually contains the variable value.\nc. `EE_VerifyPageFullWriteVariable()` start address - this is the main problem\nhttps://github.com/STMicroelectronics/STM32CubeH7/blob/8bc11985e1ffb47ab74bac67d20e48fa26038dd3/Projects/NUCLEO-H743ZI/Applications/EEPROM/EEPROM_Emulation/Src/eeprom.c#L612\nThe check actually starts at the sector beginning which should contain the page header. Even though it should not be erased if it is a valid page, this ends up colliding with the header after some time. I think that the correct start address should be `Address = (uint32_t)(EEPROM_START_ADDRESS + (uint32_t)(ValidPage * PAGE_SIZE) + PAGE_HEADER_SIZE);`\n\n\n**How To Reproduce**\nWith intensive writing, I always end up with both pages containing data with the page header inconsistent which in turn results in deleting of one of the pages and missing data. I think that it was caused by the point 4. which caused header invalidation and subsequent data inconsistency. With the fixes the code now seems to be running reliably.\n\n**Aditional Context**\nAgain, also relevant to STM32H743I-EVAL. Not sure for NUCLEO-H7A3ZI-Q, maybe all the offsets I introduce should be halved since the writes are half the size.",
     "comments": [
       {
@@ -379,6 +426,11 @@
         "author": "khevessy",
         "created_at": "2025-10-13T07:41:19Z",
         "body": "Page header has 2 bytes at the beginning (receive data / valid page), then there are 30 zero bytes from the 32 byte write. Since `EE_VerifyPageFullWriteVariable()` increases the address by 64 when searching the erased words, there are also 32 empty bytes, that's why I say that the header is 64 bytes in total.\n\n4a. IIUC, code tries directly checking the first variable saved in the memory. However, dereferencing `PAGE0_BASE_ADDRESS + 6` goes into page header.\n4b. Search for the variable to read goes into the page header in the last iteration.\n4c. Search for erased address for write of the variable starts at the page beginning which is occupied by the page header. The variable can never be written there.\n\nWith only points from 4., I am now unable to reproduce the issue with invalid header, it was probably caused by some combination of the mentioned issues since I was fixing them step by step."
+      },
+      {
+        "author": "MKISTM",
+        "created_at": "2026-03-31T14:39:21Z",
+        "body": "Hello @khevessy,\n\nSorry for later reply.  The valid point has been published since last release **V1.13.0**\n\nLet's explain the analyze result of last point **(4)** step by step:\n\n**4.a** is valid:\nThe current use of + 6 is wrong: it falls inside the page header and does not point to the virtual address field of an EEPROM element.\nThe offset must be derived dynamically, based on the element index (VarIdx) and the element size, as shown in the Gerrit link.\n\n**4.b** is not valid:\nIn EE_ReadVariable(), the search start address is computed as:\n\n/* Get the valid Page end Address */\nAddress = (uint32_t)((EEPROM_START_ADDRESS - 32) + (uint32_t)((1 + ValidPage) * PAGE_SIZE));\n\nGiven the layout:\n\n- Each EEPROM element = 64 bytes\n\n- For the last element in the page, this Address points to the last virtual address field.\n- The page header uses:\n  - First 32 bytes: page status\n  - Second 32 bytes: left erased and never used (skipped when the first element is written).\n\nThe function scans backwards in steps of 64 bytes, always landing on virtual address locations of elements. When we eventually reach the first element’s virtual address, subtracting 64 bytes from there brings us to:\n\nPageStartAddress + 32\n\nwhich corresponds exactly to the end of the header area.\n\n**4.c** isn't valid: \n- In EE_VerifyPageFullWriteVariable(), starting from the page base \n  \n  Address = EEPROM_START_ADDRESS + ValidPage * PAGE_SIZE;\n   \nis intentional. The function scans the page in 64-byte steps, and each EEPROM element is 64 bytes. Beginning at the page base keeps all Address = Address + 64; steps aligned with element boundaries.\n\n- The page header word is never 0xFFFFFFFF`:\n  - The header state is stored in the LSB 16 bits (0xFFFF for ERASED),\n  - The MSB 16 bits are 0x0000, so the word is 0x0000FFFF, not 0xFFFFFFFF.  \n  Therefore, the header cannot be mistaken for a free 32‑byte block, and there is no risk it will be reused or erased by this logic.\n\n- If you shifted the start to + PAGE_HEADER_SIZE, all subsequent +64 increments could be misaligned with the real 64-byte elements, and the free space detection would no longer work correctly.\n\nSo, the current start address at the page beginning is correct and must be kept.\n\nKind regards,\nMohamed."
       }
     ],
     "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/327"
@@ -932,14 +984,14 @@
     "repo": "STM32CubeH7",
     "issue_number": 309,
     "title": "NUCLEO-H743ZI EEPROM_Emulation Bug",
-    "state": "open",
+    "state": "closed",
     "labels": [
       "bug",
       "internal bug tracker",
       "projects"
     ],
     "created_at": "2025-02-12T04:51:45Z",
-    "closed_at": null,
+    "closed_at": "2026-03-31T13:25:38Z",
     "body": "\\Projects\\NUCLEO-H743ZI\\Applications\\EEPROM\\EEPROM_Emulation\\Src\\eeprom.c, EE_VerifyPageFullWriteVariable function\n\nSCB_EnableICache() was issued at an inappropriate location\n\n![Image](https://github.com/user-attachments/assets/c18cbc19-32be-4e9d-8df0-240c61df5dfc)",
     "comments": [
       {
@@ -966,6 +1018,11 @@
         "author": "TOUNSTM",
         "created_at": "2025-10-10T15:03:59Z",
         "body": "ST Internal Reference: 219313"
+      },
+      {
+        "author": "MKISTM",
+        "created_at": "2026-03-31T13:25:29Z",
+        "body": "Hello @Gorden1970,\n\nThis issue has been fixed in the latest release **V1.13.0**\n\nBR,\nMohamed."
       }
     ],
     "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/309"
@@ -974,7 +1031,7 @@
     "repo": "STM32CubeH7",
     "issue_number": 308,
     "title": "STM32 USB MSC with multiple luns can cause read/write errors",
-    "state": "open",
+    "state": "closed",
     "labels": [
       "bug",
       "internal bug tracker",
@@ -982,7 +1039,7 @@
       "usb"
     ],
     "created_at": "2025-02-01T13:58:46Z",
-    "closed_at": null,
+    "closed_at": "2026-03-26T16:44:55Z",
     "body": "I am using STM32Cube_FW_H7_V1.11.2 and found a bug in\n\n\\Middlewares\\ST\\STM32_USB_Device_Library\\Class\\MSC\\Src\\usbd_msc_scsi.c\n\nthat can cause read/write errors when using multiple luns of different sizes.\n\nThis is what happened ...\n\nI was unable to open a text file on the LUN 0 drive after Windows had detected the LUN 0 and 1 drives.\n\nI used WireShark and saw the following:\n\n...\nSCSI: Test Unit Ready LUN: 0x00 \nSCSI: Response LUN: 0x00 (Test Unit Ready) (Good)\nSCSI: Test Unit Ready LUN: 0x01 \nSCSI: Response LUN: 0x01 (Test Unit Ready) (Good)\nSCSI: Read(10) LUN: 0x00 (LBA: 0x00587bf0, Len: 1)\nSCSI: Response LUN: 0x00 (Read(10)) (Check Condition) with Status: Command Failed (0x01)\n...\n\nI put several breakpoints in the SCSI_Read10 function and saw that SCSI_CheckAddressRange was failing because the hmsc->scsi_blk_nbr variable contained the number of blocks for LUN 1, not LUN 0.\n\nThe SCSI_Read10, SCSI_Read12, SCSI_Write10 and SCSI_Write12 functions are all using the hmsc->scsi_blk_size and hmsc->scsi_blk_nbr variables but those values can be wrong when using multiple luns of different sizes. Those functions should first update those values via a call to GetCapacity just like the SCSI_ReadCapacity10, SCCSI_ReadCapacity16 and SCSI_ReadFormatCapacity functions do.\n\nI added the following code to the SCSI_Read10, SCSI_Read12, SCSI_Write10 and SCSI_Write12 functions and the issue was fixed.\n\n```\nif (((USBD_StorageTypeDef *)pdev->pUserData[pdev->classId])->GetCapacity(lun, &hmsc->scsi_blk_nbr, &hmsc->scsi_blk_size) != 0)\n{\n  SCSI_SenseCode(pdev, lun, NOT_READY, MEDIUM_NOT_PRESENT);\n  return -1;\n}\n```\n",
     "comments": [
       {
@@ -999,6 +1056,11 @@
         "author": "ALABSTM",
         "created_at": "2025-03-11T08:27:33Z",
         "body": "See also [STM32CubeL4#41](https://github.com/STMicroelectronics/STM32CubeL4/pull/41)"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2026-03-26T16:44:55Z",
+        "body": "Hi @timschuerewegen ,\n\nIssue fixed in version **2.11.4** of the [USB Device](https://github.com/STMicroelectronics/stm32-mw-usb-device) library, now supported by the **STM32CubeH7** firmware. Thank you for having reported.\n\nWith regards,\n\n"
       }
     ],
     "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/308"
@@ -1322,7 +1384,7 @@
     "repo": "STM32CubeH7",
     "issue_number": 300,
     "title": "USB composite CustomHID endpoint size configuration problem",
-    "state": "open",
+    "state": "closed",
     "labels": [
       "bug",
       "internal bug tracker",
@@ -1331,7 +1393,7 @@
       "st usb"
     ],
     "created_at": "2024-11-19T13:41:54Z",
-    "closed_at": null,
+    "closed_at": "2026-03-26T16:39:57Z",
     "body": "Brief description\r\nUSB composite CustomHID wrongly refers endpoint size definitons and mismatch IN and OUT endpoints configuration.\r\n\r\nDescribe the set-up\r\nThe board: (not relevant) custom board with STM32H7B0IBT6 MCU\r\nIDE: (not relevant) STM32CubeIDE 1.16.1, GNU Tools for STM32 11.3rel1.\r\n\r\nDescribe the bug\r\nUSBD_CMPSIT_CUSTOMHIDDesc() in usbd_composite_builder.c uses wrong definition for [Out Endpoint size configuration](https://github.com/STMicroelectronics/STM32CubeH7/blob/d0e2e3886ee013b56082e57f48ae9bc6c34c849a/Middlewares/ST/STM32_USB_Device_Library/Class/CompositeBuilder/Src/usbd_composite_builder.c#L1406). It uses \"CUSTOM_HID_EPIN_SIZE\" instead of \"CUSTOM_HID_EPOUT_SIZE\", which will causes issues if sizes are different.\r\nSimilarly, SBD_CMPSIT_AddToConfDesc() function, in CLASS_TYPE_CHID case, [refers to CUSTOM_HID_EPOUT_SIZE](https://github.com/STMicroelectronics/STM32CubeH7/blob/d0e2e3886ee013b56082e57f48ae9bc6c34c849a/Middlewares/ST/STM32_USB_Device_Library/Class/CompositeBuilder/Src/usbd_composite_builder.c#L502) for both endpoint setting (with USBD_CMPSIT_AssignEp).\r\n\r\nHow To Reproduce\r\nConfigure a composite USB Device that includes a CustomHID interface.\r\nSet different sizes for IN and OUT endpoints.",
     "comments": [
       {
@@ -1343,6 +1405,11 @@
         "author": "ALABSTM",
         "created_at": "2024-11-21T14:42:12Z",
         "body": "ST Internal Reference: 196750"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2026-03-26T16:39:57Z",
+        "body": "Hi @LaurentGolay,\n\nIssue fixed in version **2.11.4** of the [USB Device](https://github.com/STMicroelectronics/stm32-mw-usb-device) library, now supported by the **STM32CubeH7** firmware. Thank you for having reported.\n\nIn function `USBD_CMPSIT_AddToConfDesc()`, the last argument passed to each one of the `USBD_CMPSIT_AssignEp()` function calls has been changed, as shown below...\n\n```diff\n      /* Set IN endpoint slot */\n      iEp = pdev->tclasslist[pdev->classId].EpAdd[0];\n-      USBD_CMPSIT_AssignEp(pdev, iEp, USBD_EP_TYPE_INTR, pdev->tclasslist[pdev->classId].CurrPcktSze);\n+      USBD_CMPSIT_AssignEp(pdev, iEp, USBD_EP_TYPE_INTR,CUSTOM_HID_EPIN_SIZE);\n\n      /* Set OUT endpoint slot */\n      iEp = pdev->tclasslist[pdev->classId].EpAdd[1];\n-      USBD_CMPSIT_AssignEp(pdev, iEp, USBD_EP_TYPE_INTR, pdev->tclasslist[pdev->classId].CurrPcktSze);\n+      USBD_CMPSIT_AssignEp(pdev, iEp, USBD_EP_TYPE_INTR, CUSTOM_HID_EPOUT_SIZE);\n```\n\nSimilarly, in `USBD_CMPSIT_CUSTOMHIDDesc()`, the output endpoint size argument passed to `__USBD_CMPSIT_SET_EP()` has been changed too.\n\n```diff\n  /* Append Endpoint descriptor to Configuration descriptor */\n  __USBD_CMPSIT_SET_EP(pdev->tclasslist[pdev->classId].Eps[1].add, \\\n-                       USBD_EP_TYPE_INTR, CUSTOM_HID_EPIN_SIZE, CUSTOM_HID_HS_BINTERVAL, CUSTOM_HID_FS_BINTERVAL);\n+                       USBD_EP_TYPE_INTR, CUSTOM_HID_EPOUT_SIZE, CUSTOM_HID_HS_BINTERVAL, CUSTOM_HID_FS_BINTERVAL);\n```\n\nWith regards,"
       }
     ],
     "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/300"
@@ -2074,14 +2141,14 @@
     "repo": "STM32CubeH7",
     "issue_number": 275,
     "title": "STM32H7B3I-DK PLL3 VCO output exceeds 560MHz limit",
-    "state": "open",
+    "state": "closed",
     "labels": [
       "bug",
       "internal bug tracker",
       "bsp"
     ],
     "created_at": "2023-09-10T06:50:47Z",
-    "closed_at": null,
+    "closed_at": "2026-03-31T11:39:03Z",
     "body": "STM32H7B3I-BK BSP LCD driver sets PLL3 VCO output to 800MHz.\r\nI know it works, but Data sheet says maximum value is 560MHz.\r\n\r\nhttps://github.com/STMicroelectronics/STM32CubeH7/blob/91d4c89228e766a968f8daebc78eb7143d95184e/Drivers/BSP/STM32H7B3I-DK/stm32h7b3i_discovery_lcd.c#L437-L450\r\n",
     "comments": [
       {
@@ -2098,6 +2165,11 @@
         "author": "TOUNSTM",
         "created_at": "2024-03-27T09:09:39Z",
         "body": "ST Internal Reference: 177140"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2026-03-31T11:39:03Z",
+        "body": "Hi @sirius506,\n\nIssue fixed in the frame of release **1.13.0**. Thank you for your patience and thank you again for having reported.\n\nWith regards,"
       }
     ],
     "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/275"
