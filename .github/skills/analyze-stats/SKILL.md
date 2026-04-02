@@ -1,6 +1,6 @@
 ---
-name: analyzestats
-description: "Analyze statistical outputs of the STM32Cube preprocessing V2 (layers, severities, file_types, boards, components, etc.)."
+name: analyze-stats
+description: "Use when: analyzing outputs of pipeline/evaluation/test_stats_issues_v2.py or pipeline/evaluation/test_stats_files_v2.py; summarize distributions (layer, severity, issue_kind, file_type, board, component, is_valid) and flag preprocessing biases."
 ---
 
 # Purpose
@@ -10,8 +10,8 @@ This skill helps analyze the statistical outputs of the STM32Cube preprocessing 
 The input to this skill is typically:
 
 - Console outputs from:
-  - `test_stats_issues_v2.py`
-  - `test_stats_files_v2.py`
+  - `pipeline/evaluation/test_stats_issues_v2.py`
+  - `pipeline/evaluation/test_stats_files_v2.py`
 - Or small JSON/text snippets with distributions of:
   - `layer`, `severity`, `issue_kind`
   - `file_type`, `board`, `component`, `is_valid`, etc.
@@ -23,13 +23,13 @@ When this skill is invoked, it must:
 
 1. Parse the textual statistics provided by the user.
 2. Produce a concise analysis with:
-   - 2–4 bullet points summarizing the main observations.
+   - 2-4 bullet points summarizing the main observations.
    - Optional remarks about potential issues or biases in the preprocessing (e.g., too many `severity=high`, almost no `Middleware` layer, etc.).
 3. Stay grounded in the STM32Cube preprocessing context (do not generalize to unrelated projects).
 4. When the user provides test outputs, help interpret them in terms of preprocessing quality and potential improvements.
 5. When relevant, suggest improvements to the preprocessing heuristics or test scripts based on the statistical analysis (e.g., if `is_valid` is mostly false for a certain board, maybe the validation rules are too strict for that board).
 6. Always provide structured, actionable insights that can be directly used to update documentation or guide preprocessing improvements.
-7. When the user provides statistical outputs from test scripts (e.g. test_stats_issues_v2.py, test_stats_files_v2.py), you should use the `analyzestats` skill to summarize the main observations and point out potential biases or anomalies in the preprocessing.
+7. When the user provides statistical outputs from test scripts (e.g. `pipeline/evaluation/test_stats_issues_v2.py`, `pipeline/evaluation/test_stats_files_v2.py`), use `analyze-stats` to summarize main observations and point out biases or anomalies in preprocessing.
 
 # Example
 **User input:**

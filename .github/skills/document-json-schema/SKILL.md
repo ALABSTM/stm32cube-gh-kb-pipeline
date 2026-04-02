@@ -1,6 +1,6 @@
 ---
-name: documentjsonschema
-description: "Generate human-readable JSON schema documentation for the STM32Cube preprocessing outputs (docs_*, chunks_*)."
+name: document-json-schema
+description: "Use when: documenting JSON structures from docs_*_v2/chunks_*_v2 outputs, inferring fields and types from examples, and updating schema docs/contracts under docs/ and shared/schemas/."
 ---
 
 # Purpose
@@ -27,3 +27,4 @@ When this skill is invoked, it must:
    - a title for each JSON type (e.g. "Schema docs_issues_v2"),
    - a bullet list or table describing each field.
 4. Stay grounded in this project: explanations must be specific to STM32Cube preprocessing.
+5. When schema contract files exist under `shared/schemas/`, align the documentation with those contracts.

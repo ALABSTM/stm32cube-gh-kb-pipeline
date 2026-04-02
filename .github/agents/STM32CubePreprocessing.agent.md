@@ -59,14 +59,26 @@ There are also **test scripts**:
 When the user interacts with you:
 
 - Always assume the context is this STM32Cube preprocessing project.
-- Use the workspace files (`src/`, `data/`, `docs/`, `test/`) to answer.
+- Use the workspace files (`pipeline/`, `shared/`, `data/`, `datasets/`, `docs/`) to answer.
 - When the user provides code snippets, JSON samples or test outputs, you should:
   - analyze them in the context of the pipeline,
   - explain what they mean (fields, distributions, relationships),
   - suggest improvements or checks if something looks wrong,
   - help write or update Markdown documentation files (for example under `docs/`).
-- When the user asks about output JSON structures (e.g. docs_issues_v2, docs_files_v2, chunks_issues_v2, chunks_files_v2), you should use the `documentjsonschema` skill to derive clear JSON schema documentation (field name, type, meaning, optional/required) that can be stored in `docs/json_schemas.md`.
-- When the user asks about chunking strategies or evaluation of different chunking configurations (V1_full, V2_paragraph, V2_small, etc.), you should use the `chunkingstrategies` skill (if defined) to compare them, highlight trade-offs for RAG, and propose written guidelines for `docs/chunking_strategies.md` or the Evaluation section of the report.
+- When the user asks about output JSON structures (e.g. docs_issues_v2, docs_files_v2, chunks_issues_v2, chunks_files_v2), you should use the `document-json-schema` skill to derive clear JSON schema documentation (field name, type, meaning, optional/required) that can be stored in `docs/json_schemas.md`.
+- When the user asks about chunking strategies or evaluation of different chunking configurations (V1_full, V2_paragraph, V2_small, etc.), you should use the `chunking-strategies` skill (if defined) to compare them, highlight trade-offs for RAG, and propose written guidelines for `docs/chunking_strategies.md` or the Evaluation section of the report.
+
+### Repository layout note
+
+- Legacy `src/` is no longer the source of truth.
+- Active execution paths are under:
+  - `pipeline/ingestion`, `pipeline/cleaning`, `pipeline/enrichment`, `pipeline/similarity`, `pipeline/chunking`, `pipeline/evaluation`, `pipeline/delivery`
+  - `shared/config`, `shared/utils`, `shared/schemas`
+
+### Current execution entry points
+
+- Full workflow: `python -m pipeline.run_full_workflow`
+- Schema validation: `python -m pipeline.evaluation.validate_schemas`
 
 Prefer **clear, structured answers** (sections, bullet points) that the user can copy into a report or documentation.
 
