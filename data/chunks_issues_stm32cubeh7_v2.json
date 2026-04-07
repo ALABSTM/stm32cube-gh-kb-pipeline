@@ -2,7 +2,7 @@
   {
     "id": "stm32cubeh7-issue-339-0",
     "text": "Title: [Bug]: USART with a single line\n\nBody:\n### Bug Summary\n\nIn CubeMx, the assignment of pins when trying to use a UART with a single data line is not OK\n\n### Detailed Description\n\nWhen setting a USART to Asynchronous and then setting Advanced Parameters->Data direction to Receive only or Transmit only, both pins stay selected and there's no way of unassigning one. For instance, if I set it to Receive only, I would expect the TX pin to be unassigned.\n\n### Expected Behavior\n\nIf I set it to Receive only, I would expect the TX pin to be unassigned.\n\n### Actual Behavior\n\nboth pins stay assigned and cannot be unassigned\n\n### Environment\n\nCubeMx 6.16.1\n\n### Severity\n\nNone\n\nComments:\n[KRASTM - 2026-03-26T16:17:01Z]\nST Internal Reference: CDM0061073",
-    "metadata": {
+    "Metadata": {
       "id": "stm32cubeh7-issue-339",
       "source_kind": "issue",
       "repo": "STM32CubeH7",

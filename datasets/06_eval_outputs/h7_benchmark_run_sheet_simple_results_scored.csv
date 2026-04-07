@@ -1,0 +1,21 @@
+benchmark_id,dataset_label,is_expected_issue_match_0_or_1,is_topical_match_0_or_1,technical_precision_0_to_2,hallucination_risk_0_to_2,actionability_0_to_2,total_0_to_7,notes
+Q1,B,1,1,2,2,1,6,Correct known CubeMX bug explanation with version context.
+Q1,D,1,1,2,2,1,6,Correct and precise; includes internal reference and expected behavior.
+Q2,B,1,1,2,2,2,7,Technically exact ADC DMA mode constraints and clear steps.
+Q2,D,1,1,2,2,2,7,Same correctness with strong practical guidance.
+Q3,B,1,1,2,2,2,7,Comprehensive dual-core synchronization playbook with debug setup.
+Q3,D,1,1,2,2,2,7,Strong structured flow aligned with validated standby reference sequence.
+Q4,B,1,1,2,2,2,7,Good root-cause list including timing and low-power preparation.
+Q4,D,1,1,2,2,2,7,Accurate HSEM chain diagnosis with concrete configuration order.
+Q5,B,1,1,2,2,1,6,Balanced and realistic about generated code constraints.
+Q5,D,1,1,2,1,2,6,Actionable but somewhat optimistic for maintainability in generated files.
+Q6,B,1,1,2,2,1,6,Correct COM1 to USART3 mapping statement.
+Q6,D,1,1,2,2,1,6,Correct and concise board-level alias explanation.
+Q7,B,1,1,2,2,2,7,Directly addresses FR_NOT_READY root cause and fix path.
+Q7,D,1,1,2,2,2,7,On-topic and actionable with correct MDMA handling guidance.
+Q8,B,1,1,2,2,2,7,Accurate datasheet-bound ADC clock and BOOST rules.
+Q8,D,1,1,2,2,2,7,Correct constraints and production-oriented validation reminder.
+Q9,B,1,1,2,2,2,7,Strong debug plan with option bytes and RTC/EXTI checks.
+Q9,D,1,1,2,2,2,7,Technically solid sequence-focused standby wakeup debugging guidance.
+Q10,B,1,1,2,2,2,7,Correct one-time LL calibration recommendation and API usage.
+Q10,D,1,1,2,2,2,7,Correct and aligned with Activate_ADC initialization pattern.

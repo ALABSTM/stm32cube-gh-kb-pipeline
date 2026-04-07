@@ -1,0 +1,579 @@
+query_id,query_text,dataset_id,dataset_label,answer_summary,source_ids_or_titles,top1_correct_0_or_1,technical_precision_0_to_2,source_relevance_0_to_2,hallucination_risk_0_to_2,actionability_0_to_2,total_0_to_9,reviewer_notes
+Q1,Why does CubeMX keep both TX and RX pins assigned when USART is set to receive-only on STM32H7?,A,raw_issues_h7,"CubeMX keeps both TX and RX pins assigned for a USART configured as �Receive only� on STM32H7 because of a bug in CubeMX (v6.16.1) for the STM32H7 series: even when you set the data direction to Receive only in Advanced Parameters, the TX pin remains assigned and cannot be unassigned.[*]
+
+Sources:
+st_ready_issues_stm32cubeh7.json",,,,,,,,
+Q1,Why does CubeMX keep both TX and RX pins assigned when USART is set to receive-only on STM32H7?,B,docs_issues_h7_v2,"CubeMX currently keeps both TX and RX pins assigned for a USART configured as **receive-only** on STM32H7 because of a **bug in the tool**:  
+
+When you set a USART in asynchronous mode and change the advanced parameter **�Data direction�** to **�Receive only�**, CubeMX 6.16.1 still assigns **both TX and RX pins**, and there is **no option to unassign the TX pin**. This behavior has been reported and is considered an issue in CubeMX, not the intended or correct behavior.",,,,,,,,
+Q1,Why does CubeMX keep both TX and RX pins assigned when USART is set to receive-only on STM32H7?,C,st_ready_issues_h7,"CubeMX keeps both TX and RX pins assigned for a USART configured as �Receive only� on STM32H7 because of a **bug in CubeMX (v6.16.1) for the STM32H7 series**: even when you set the data direction to *Receive only* in Advanced Parameters, the TX pin remains assigned and cannot be unassigned.",,,,,,,,
+Q2,How to handle ADC DMA conversion data management modes on STM32H743 in CubeMX?,A,raw_issues_h7,"For ADC with DMA on **STM32H743** in **CubeMX**, you need to pay special attention to the **Conversion Data Management Mode**:
+
+- When **DMA is enabled** for the ADC, the **only valid data management modes** are:  
+  - `ADC_CONVERSIONDATA_DMA_ONESHOT`  
+  - `ADC_CONVERSIONDATA_DMA_CIRCULAR`
+
+- The following modes are **not valid when DMA is enabled** and can lead to **unusable or broken code** if selected:
+  - `ADC_CONVERSIONDATA_DR`
+  - `ADC_CONVERSIONDATA_DFSDM`
+
+**Practical guidance in CubeMX:**
+
+1. Enable **ADC** and then enable **DMA** for it.
+2. In the ADC configuration, locate **Conversion Data Management Mode**.
+3. Make sure you select **only**:
+   - `ADC_CONVERSIONDATA_DMA_ONESHOT` if you want a finite sequence of samples transferred once.
+   - `ADC_CONVERSIONDATA_DMA_CIRCULAR` if you want continuous sampling into a buffer that wraps around (typical for real-time acquisition).
+4. Avoid selecting `DR` or `DFSDM` modes when DMA is active, even if CubeMX does not block them, because the generated code may not work correctly.
+
+It is suggested that CubeMX should ideally **disable or flag non-DMA modes whenever DMA is enabled** to prevent these configuration errors.",,,,,,,,
+Q2,How to handle ADC DMA conversion data management modes on STM32H743 in CubeMX?,B,docs_issues_h7_v2,"For ADC with DMA on STM32H743 in CubeMX, you must pay attention to the **Conversion Data Management mode**:
+
+- When **DMA is enabled** for the ADC, the **only valid modes** are:  
+  - `ADC_CONVERSIONDATA_DMA_ONESHOT`  
+  - `ADC_CONVERSIONDATA_DMA_CIRCULAR`  
+
+- If you (incorrectly) select:
+  - `ADC_CONVERSIONDATA_DR` or  
+  - `ADC_CONVERSIONDATA_DFSDM`  
+  **while DMA is enabled**, CubeMX will generate **unusable code** for DMA operation.
+
+**Practical rule in CubeMX for STM32H743:**
+
+- Using ADC **with DMA** ? set **Conversion Data Management** to  
+  - **�DMA one shot�** (`ADC_CONVERSIONDATA_DMA_ONESHOT`) or  
+  - **�DMA circular�** (`ADC_CONVERSIONDATA_DMA_CIRCULAR`).  
+- Avoid `DR` or `DFSDM` options whenever DMA is enabled, as they are **not compatible** and will break the DMA-based acquisition code generation.",,,,,,,,
+Q2,How to handle ADC DMA conversion data management modes on STM32H743 in CubeMX?,C,st_ready_issues_h7,"When using ADC with DMA on STM32H743 in CubeMX, you must set the **Conversion Data Management Mode** correctly, otherwise the generated code may be unusable.
+
+For an ADC with DMA enabled:
+
+- **Valid modes (DMA will work):**
+  - `ADC_CONVERSIONDATA_DMA_ONESHOT`
+  - `ADC_CONVERSIONDATA_DMA_CIRCULAR`  
+  With these settings, **DMA requests are actually generated** and the ADC data is transferred by DMA as expected.
+
+- **Invalid modes when DMA is enabled (DMA will *not* work):**
+  - `ADC_CONVERSIONDATA_DR`
+  - `ADC_CONVERSIONDATA_DFSDM`  
+  These modes are **not compatible with DMA**; if you select them while having DMA enabled, CubeMX may still generate code, but it will not function properly for DMA-based transfers.
+
+The configuration constraint is:
+
+- *�When DMA is enabled on an ADC, DMA requests will only be issued if ConversionDataManagement is set to either ADC_CONVERSIONDATA_DMA_ONESHOT or ADC_CONVERSIONDATA_DMA_CIRCULAR. The modes ADC_CONVERSIONDATA_DR and ADC_CONVERSIONDATA_DFSDM are invalid when DMA is enabled.�*
+
+So in CubeMX for STM32H743:
+
+1. Enable **DMA** for the ADC.
+2. In ADC settings, set **Conversion Data Management** to:
+   - `DMA One Shot` (for single buffer fills), or  
+   - `DMA Circular` (for continuous acquisition into a circular buffer).
+3. Avoid selecting `DR` or `DFSDM` modes when DMA is enabled.",,,,,,,,
+Q3,How to resolve dual-core CM7/CM4 synchronization issues on STM32H747 eval boards?,A,raw_issues_h7,"To resolve CM7/CM4 synchronization issues on STM32H747 eval boards, align your design with the official dual?core templates and pay attention to how the cores coordinate boot and low?power transitions:
+
+### 1. Use the official dual?core templates as a baseline
+
+Start from the **`BootCM4_CM7`** template for STM32H747I?EVAL rather than building everything from scratch. This example already implements a working synchronization scheme between CM7 and CM4 using **hardware semaphores (HSEM)** and **RCC flags** for the D2 domain clock readiness.
+
+If you have an older project, consider generating a **new dual?core project with the latest CubeIDE and STM32CubeH7 package** and then porting your application code into that structure.
+
+### 2. Implement robust boot and STOP-mode synchronization
+
+Most issues come from how the cores wait for each other during:
+
+- Initial boot
+- Entry to STOP/STANDBY
+- Wakeup from low?power modes
+
+Key mechanisms and checks:
+
+- **HSEM usage:** Use HSEM to signal between CM7 and CM4 when one core has completed a step (e.g., entered STOP, finished clock configuration, etc.). Both cores should follow the patterns shown in the dual?core templates.
+- **RCC flags:** On CM7, check flags such as `RCC_FLAG_D2CKRDY` to ensure the D2 domain (where CM4 resides) is in the expected state before proceeding.
+
+In the `BootCM4_CM7` example there are **two while?loops on CM7**:
+
+1. Wait until CM4 has entered STOP.
+2. Wait until CM4 has woken up.
+
+Make sure your code keeps the same logic and ordering. If you add delays or NOPs, do so carefully and only for debugging; the original timeout and condition logic is considered correct and doesn�t need changing unless you deviated from the template.
+
+### 3. Keep the timeout / error handling pattern from the template
+
+There was discussion about whether the timeout decrement and comparison in the synchronization loop are wrong, but the conclusion is that **the supplied code is correct**. If you see hangs, first compare your implementation against the **unmodified template loops and error handling** � inconsistencies there are frequent root causes.
+
+### 4. Programming and option bytes
+
+- If you haven�t modified **option bytes**, they typically aren�t the source of the sync problems, but you can verify/reset them as a sanity check.
+- When flashing, it�s good practice to use **STM32CubeProgrammer** to ensure **both core images** are properly programmed and that the boot configuration matches the reference examples.
+
+### 5. Recommended debug workflow
+
+For stubborn synchronization or boot issues, follow this debug approach:
+
+1. **Start the CM7 debug session first** so it loads both CM7 and CM4 images (as configured in the dual?core project).
+2. Once CM7 is running, **attach** the CM4 debug session instead of starting a second �fresh� debug launch. This avoids re?initialization sequences that can disturb synchronization.
+3. Refer to the **application note on dual?core debugging** (listed in the APPLICATION NOTES section on st.com for STM32H7) which describes in detail how to use STLINK GDB server / OpenOCD for dual?core debug flows.
+
+### 6. General best practices
+
+- Always work with the **latest STM32CubeH7 firmware and examples**.
+- **Do not change** the core?to?core handshake logic (HSEM usage, RCC flag checks, boot ordering) from the provided templates unless you clearly understand all implications.
+- If synchronization fails, first **diff your project** against the official `BootCM4_CM7` example to find any divergence in:
+  - HSEM configuration or usage
+  - RCC / clock domain checks
+  - Low?power entry/exit sequences
+  - Timeout loops and error handlers
+
+Following the reference template logic for HSEM/RCC synchronization, using the recommended debug sequence, and baselining against a fresh dual?core CubeIDE project resolves most CM7/CM4 synchronization issues seen on STM32H747 eval boards.",,,,,,,,
+Q3,How to resolve dual-core CM7/CM4 synchronization issues on STM32H747 eval boards?,B,docs_issues_h7_v2,"To resolve CM7/CM4 synchronization issues on STM32H747 eval boards, focus on three main areas: **inter-core signaling, boot/wakeup configuration, and debugging setup**.
+
+### 1. Use HSEM correctly for CM7?CM4 synchronization  
+- Use **hardware semaphores (HSEM)** as the primary signaling mechanism between CM7 and CM4.  
+- Typical sequence:  
+  - CM4 **configures HSEM**, then goes to **STOP mode** and waits for notification from CM7.  
+  - CM7 **configures HSEM**, then uses it to **wake CM4** once initialization is done.  
+- If CM4 does not wake or inter-core interrupts don�t fire, verify that:  
+  - The **HSEM notification** is correctly configured.  
+  - The selected **wakeup source** (e.g. EXTI or SEV) associated with HSEM is enabled and routed properly.
+
+### 2. Check option bytes and reset/standby behavior  
+- Incorrect **option byte configuration** can break dual-core startup (e.g. one core not starting or not exiting from standby/reset as expected).  
+- Review and set option bytes according to ST�s dual-core boot recommendations to ensure both cores start and reset in a coordinated way.
+
+### 3. Debugging dual-core apps in STM32CubeIDE  
+Misconfigured debug sessions often look like �synchronization problems�. Recommended practice:  
+
+- Create **separate debug configurations** for CM7 and CM4.  
+- For CM7:  
+  - Use the configuration that **loads both binaries** (CM7 + CM4) into flash.  
+- For CM4:  
+  - Create a second debug configuration that **attaches to CM4 without loading its binary**.  
+  - Use a **different GDB port** than CM7 and set **reset type = none**.  
+- This allows you to set breakpoints on both cores and **control execution independently**, which is crucial for diagnosing timing/sync issues.
+
+### 4. Verify vector table and runtime configuration  
+- If interrupts used for inter-core signaling or wakeup are not firing, check:  
+  - **Vector table relocation** in the startup code for each core.  
+  - That each core�s vector table base address matches its actual memory location.  
+- Wrong vector base addresses can prevent proper interrupt handling and look like sync problems between cores.
+
+### 5. Use latest STM32CubeH7 and reference examples  
+- Ensure you are on the **latest STM32CubeH7** release, as it contains fixes related to dual-core handling (including interrupt issues such as RTC on dual-core parts).  
+- Compare your project with ST�s **dual-core example projects** (for STM32H747), which demonstrate correct HSEM usage, boot flow, and interrupt configuration.",,,,,,,,
+Q3,How to resolve dual-core CM7/CM4 synchronization issues on STM32H747 eval boards?,C,st_ready_issues_h7,"To resolve CM7/CM4 synchronization issues on STM32H747 eval boards, focus on the **HSEM setup, STOP mode handling, and vector table configuration**:
+
+1. **Configure CM4 before it enters STOP**
+   - Enable the **HSEM clock** on CM4.
+   - Configure the **HSEM interrupt/notification** for the semaphore ID you use.
+   - Enable the **HSEM IRQ in the NVIC** on CM4, with suitable priority.
+   - Only then call `HAL_PWREx_EnterSTOPMode(...)` (or LL equivalent) so CM4 can be woken by the HSEM event.
+
+2. **Configure CM7 to wake CM4**
+   - Enable HSEM and configure the same semaphore.
+   - When CM7 needs to wake CM4, **release or trigger the HSEM** so that the configured notification on CM4 generates an interrupt/event.
+
+3. **Check vector table and memory mapping**
+   - If HSEM interrupts are not taken on CM4 even though CM7 releases the semaphore, verify that **CM4�s vector table is correctly located and mapped**.
+   - In particular, ensure the vector table base uses the proper **D2 SRAM base (e.g. `D2_AXISRAM_BASE` rather than `D2_AHBSRAM_BASE`)** so the HSEM IRQ handler address is correct.
+
+4. **Compare with dual?core boot/synchronization examples**
+   - Use the **dual?core boot?up / HSEM synchronization examples** as a reference and align:
+     - HSEM clock enable,
+     - HSEM notification and NVIC configuration on CM4,
+     - STOP entry/exit sequence on CM4,
+     - Wake?up sequence and HSEM usage on CM7.
+
+By ensuring correct HSEM configuration on both cores, proper STOP mode sequencing, and a valid CM4 vector table location, most CM7/CM4 synchronization issues on STM32H747 eval boards can be resolved.",,,,,,,,
+Q4,Why can CM4 fail to wake from STOP mode when using HSEM notification on H7 dual-core?,A,raw_issues_h7,"CM4 can fail to wake from STOP mode on an H7 dual?core (e.g., STM32H747) when using HSEM notification mainly due to **timing, EXTI/interrupt configuration, and option?byte settings**:
+
+1. **Race between CM7 and CM4 entering STOP**  
+   - If **CM7 runs faster** and its code **times out or proceeds before CM4 has actually entered deep sleep**, CM4 may never get the intended HSEM wakeup event.  
+   - The result is that CM4 remains stuck and does not resume from STOP as expected when CM7 signals via HSEM.
+
+2. **EXTI / interrupt misconfiguration**  
+   - Any **enabled EXTI lines** that are not properly masked or cleared can interfere with STOP/wakeup behavior.  
+   - Recommended actions:  
+     - **Mask all configurable EXTI lines** if they are not used for wakeup.  
+     - **Clear all pending EXTI flags** before entering STOP/STANDBY.
+
+3. **Power and clock configuration before STOP**  
+   To improve reliability of CM4 entering and exiting STOP:  
+   - Set **voltage scaling to level 3**.  
+   - Call **`HAL_Deinit()`** before entering STANDBY/STOP to clean up peripheral state.  
+   - **Disable Debug MCU** and **any clocks that remain enabled in sleep mode** if they are not necessary, since they can disturb low?power and wakeup behavior.
+
+4. **Critical option?byte settings (D2 reset behavior)**  
+   - The **NRST\_STOP\_D2** and **NRST\_STBY\_D2** option bytes are crucial.  
+   - It was observed that **when these bits were unchecked, CM4 could not resume from STOP/STANDBY**.  
+   - **Checking/enabling** these option bytes resolved the issue and allowed CM4 to properly wake up from STOP on HSEM notification.
+
+5. **Debug configuration side effects**  
+   - For debugging dual?core STOP/wakeup issues, ensure in your debugger configuration that **�Halt all cores�** is enabled; otherwise, one core being halted while the other runs can disrupt the synchronization and wakeup sequence.  
+   - Follow the recommended dual?core debug sequence (start CM7 session that loads both images, then attach CM4, instead of re?starting cores independently). This avoids introducing artificial timing problems while debugging the HSEM wakeup flow.
+
+In practice, CM4 failing to wake from STOP on HSEM is usually fixed by:
+
+- Ensuring correct **NRST\_STOP\_D2 / NRST\_STBY\_D2** option bytes,  
+- Cleaning up **EXTI and clocks** before STOP,  
+- Using robust **core?to?core timing/synchronization**, and  
+- Avoiding debug configurations that disturb the low?power sequence.",,,,,,,,
+Q4,Why can CM4 fail to wake from STOP mode when using HSEM notification on H7 dual-core?,B,docs_issues_h7_v2,"CM4 can fail to wake from STOP mode via HSEM notification on H7 dual?core mainly due to **improper low?power entry and wakeup configuration**, not HSEM itself.
+
+From reported cases:  
+
+- **CM7 runs ahead of CM4**  
+  CM7 may reach the �notify CM4 via HSEM� point while CM4 has **not yet properly entered STOP/standby**, so the wakeup event is effectively lost and CM4 appears �stuck�.
+
+- **System not really in STOP/standby**  
+  Incorrect preparation for low?power mode (especially on CM4 side) prevents the core from entering deep sleep correctly, so wakeup behavior is undefined. Steps that were required to make it work include:
+  - Clearing **pending EXTI** lines  
+  - **Masking all configurable EXTI** lines before standby  
+  - Setting **voltage scaling to level 3**  
+  - Calling **`HAL_DeInit()`** just before entering standby  
+  - Disabling **Debug MCU** and any **clocks left enabled in sleep mode**
+
+Once EXTI, voltage scaling, clocks, debug and de?init are handled correctly, and CM4 truly enters STOP/standby, the **HSEM notification wakes CM4 as expected** and current consumption matches the low?power target.",,,,,,,,
+Q4,Why can CM4 fail to wake from STOP mode when using HSEM notification on H7 dual-core?,C,st_ready_issues_h7,"CM4 can fail to wake from STOP mode with an HSEM notification on H7 dual?core if the **HSEM interrupt/notification path is not fully configured on CM4 before it enters STOP**. Specifically, you must ensure on CM4 that:
+
+1. **HSEM clock is enabled**  
+   If the HSEM peripheral clock is not enabled, the semaphore release on CM7 will not generate the expected event/interrupt for CM4.
+
+2. **HSEM notification is activated on CM4 before STOP**  
+   CM4 must:
+   - Configure the **HSEM notification** for the semaphore used.
+   - Enable the **HSEM interrupt** in the NVIC.
+   - Only then enter **STOP mode** and wait for the notification.  
+
+   If CM4 enters STOP before activating notification or enabling the NVIC interrupt, the semaphore release from CM7 will not wake it.
+
+3. **NVIC configuration is correct on CM4**  
+   The **HSEM interrupt must be enabled and correctly prioritized** in CM4�s NVIC. Wrong IRQ line or disabled/low?priority configuration can prevent the wakeup even though CM7 releases the semaphore.
+
+The referenced description emphasizes checking all of the above on CM4: enable HSEM clock, configure/activate HSEM notification, and configure/enable the NVIC interrupt **before** CM4 enters STOP mode. If any of these steps are missing or mis?ordered, CM4 may remain stuck in STOP and appear not to wake on HSEM notification.",,,,,,,,
+Q5,How to fix -Wcast-align warnings in STM32CubeH7 HAL UART and ethernetif code?,A,raw_issues_h7,"To fix `-Wcast-align` warnings in STM32CubeH7 HAL UART and `ethernetif` code, you need to address pointer casts that increase the required alignment (e.g. `uint8_t *` ? `uint16_t *`) in those files:
+
+- The warnings are triggered by code patterns in:
+  - `stm32h7xx_hal_uart.c`
+  - `stm32h7xx_hal_uart_ex.c`
+  - `ethernetif.c`  
+  where a `uint8_t *` buffer pointer is cast to a more strictly aligned type (`uint16_t *`, etc.), which may not be correctly aligned in memory.
+
+Suggested approaches to eliminate the warnings while keeping `-Wcast-align` enabled are:
+
+1. **Relax function argument types**  
+   Change function parameters from `const uint8_t *` to `const void *` where appropriate, so that internal casting and alignment assumptions are clearer and can be handled more safely within the function implementation rather than at the call site.
+
+2. **Use `__builtin_assume_aligned` when you *know* alignment is safe**  
+   If you can guarantee (e.g. by linker script or buffer declaration) that a buffer is properly aligned for `uint16_t`/`uint32_t`, you can wrap accesses with `__builtin_assume_aligned(ptr, alignment)` to tell the compiler the alignment and silence `-Wcast-align` on those casts.
+
+3. **Use a union to perform safe conversions**  
+   Introduce a union that contains both `uint8_t *` and `uint16_t *` (or other needed pointer types). Accessing the pointer through the union can avoid suspicious direct casts and make the intent explicit.
+
+Because these files are **auto?generated by STM32CubeMX**, direct modification is fragile (changes will be overwritten). Therefore, in practice you may need to:
+
+- Apply the above techniques **in your application code** where you interface with HAL/UART or `ethernetif`, or
+- Maintain local patches to the generated files and re?apply them after code generation, or
+- Request that ST update the HAL / middleware so these `-Wcast-align` issues are fixed upstream.
+
+These are the documented workarounds to keep `-Wcast-align` while avoiding the warnings in STM32CubeH7 UART and Ethernet support code.",,,,,,,,
+Q5,How to fix -Wcast-align warnings in STM32CubeH7 HAL UART and ethernetif code?,B,docs_issues_h7_v2,"`-Wcast-align` warnings in STM32CubeH7 appear in **UART HAL** and **LwIP ethernetif** code when GCC detects casts from `uint8_t*` to types that require stricter alignment (e.g. `uint16_t*`). This affects functions such as `HAL_UART_Transmit`, `HAL_UART_Receive`, `UART_TxISR_16BIT*`, `UART_RxISR_16BIT*`, `HAL_UARTEx_ReceiveToIdle`, and `HAL_ETH_RxLinkCallback` in `stm32h7xx_hal_uart.c`, `stm32h7xx_hal_uart_ex.c`, and `ethernetif.c`.
+
+Because these files are **CubeMX?generated** and not meant to be user?edited, you generally cannot fix the warnings by directly changing the HAL or `ethernetif.c` in a persistent way. The options described in the discussion are:
+
+1. **In principle, ways to make casts safe/aligned** (for your own code)
+   - Change function arguments from `const uint8_t*` to `const void*` and handle alignment internally before casting.
+   - Use compiler intrinsics such as `__builtin_assume_aligned()` to assert alignment before performing a cast.
+   - Use a **union** to manage access to differently typed pointers while respecting alignment rules.
+
+   These techniques can help in **your own source files**, but are not straightforward to apply to CubeMX?generated HAL sources without them being overwritten.
+
+2. **For CubeMX?generated HAL / ethernetif code**
+   - Directly editing `stm32h7xx_hal_uart*.c` or `ethernetif.c` is not recommended because the changes will be lost on regeneration.
+   - The maintainers explicitly recommend that **issues related to CubeMX?generated code be reported via the ST Community**, rather than expecting a GitHub?side fix in the HAL repositories.
+
+3. **Practical implication**
+   - If you must keep `-Wcast-align` enabled, you can:
+     - Apply local suppressions/workarounds in your own files using the approaches above, and/or
+     - Temporarily relax or selectively disable `-Wcast-align` just for the affected HAL / middleware units via compiler pragmas or per?file flags in your build system (not described in detail in the report, but consistent with the underlying problem).
+   - For a long?term fix in the official Cube/HAL code, the advised path is to **open an issue on ST Community describing the warnings and affected functions/files**, so it can be addressed in future CubeH7 releases.",,,,,,,,
+Q5,How to fix -Wcast-align warnings in STM32CubeH7 HAL UART and ethernetif code?,C,st_ready_issues_h7,"To fix `-Wcast-align` warnings in STM32CubeH7 HAL UART and `ethernetif.c` without disabling the flag, you can use any of these approaches:
+
+1. **Cast to `const void *` instead of `const uint8_t *`**
+
+   Where functions accept a pointer you later re-cast internally, pass it as `const void *` so you don�t appear to increase alignment via a cast.
+
+2. **Use `__builtin_assume_aligned` before casting**
+
+   Example for 16?bit access:
+
+   ```c
+   pdata16bits = (uint16_t *)__builtin_assume_aligned(pData, 2);
+   ```
+
+   Similarly for 32?bit accesses, use an alignment of 4. This tells the compiler the pointer is suitably aligned and prevents `-Wcast-align` warnings.
+
+3. **Use a union to manage differently aligned pointer views**
+
+   ```c
+   typedef union {
+     uint8_t  *puc;
+     uint16_t *pu16;
+   } pDataTypeDef;
+
+   pDataTypeDef pDataUnion;
+   pDataUnion.puc = pData;
+   /* Use pDataUnion.pu16 for 16?bit access */
+   ```
+
+These methods are suggested specifically for the warnings seen in `stm32h7xx_hal_uart.c`, `stm32h7xx_hal_uart_ex.c`, and `ethernetif.c` when compiled with `-Wcast-align`, and are compatible with code produced by STM32CubeMX.",,,,,,,,
+Q6,Is COM1 mapping to USART3 on NUCLEO-H753ZI expected behavior?,A,raw_issues_h7,"Yes, this is expected behavior.
+
+On **NUCLEO?H753ZI**, the board support package defines **COM1 as using USART3**. In `stm32h7xx_nucleo.h`, `COM1_RX_AF` and `COM1_TX_AF` are both set to `GPIO_AF7_USART3`, so calling:
+
+```c
+BSP_COM_Init(COM1, &BspCOMInit);
+```
+
+actually initializes **USART3**, even though it is referred to as **COM1**. This mapping is intentional and considered correct by ST.",,,,,,,,
+Q6,Is COM1 mapping to USART3 on NUCLEO-H753ZI expected behavior?,B,docs_issues_h7_v2,"Yes, this is expected.
+
+On the NUCLEO?H753ZI, **COM1 is intentionally mapped to USART3** as defined in the board support header `stm32h7xx_nucleo.h`:
+
+- `COM1_RX_AF` = `GPIO_AF7_USART3`  
+- `COM1_TX_AF` = `GPIO_AF7_USART3`  
+
+So using **COM1 ? USART3** for serial communication on this board is the correct and intended configuration.",,,,,,,,
+Q6,Is COM1 mapping to USART3 on NUCLEO-H753ZI expected behavior?,C,st_ready_issues_h7,"Yes, that is the expected behavior.
+
+On the NUCLEO?H753ZI, **COM1 is intentionally mapped to USART3**. In `stm32h7xx_nucleo.h` you have definitions such as:
+
+- `#define COM1_RX_AF GPIO_AF7_USART3`  
+- `#define COM1_TX_AF GPIO_AF7_USART3`  
+
+So when examples or BSP code use **COM1**, they are in fact using **USART3** on this board by design. There is no issue with generated or example code referring to COM1 instead of directly using USART3; COM1 is simply the board?level alias for USART3 on NUCLEO?H753ZI.",,,,,,,,
+Q7,How to diagnose FR_NOT_READY with SDMMC1 + MDMA + FatFs + FreeRTOS on STM32H7?,A,raw_issues_h7,"`FR_NOT_READY` with **SDMMC1 + MDMA + FatFs + FreeRTOS on STM32H7** has been traced to how **CubeMX configures MDMA for FatFs**:
+
+- CubeMX was **force?enabling the �DMA template� option in FatFs**, tying FatFs� low?level disk I/O to a specific DMA/MDMA setup.
+- Even with SDMMC1, MDMA, and FatFs apparently configured correctly, the **SDMMC initialization failed**, and FatFs `f_mount`/disk init returned **`FR_NOT_READY` (code 3)**.
+
+**Diagnose / fix approach:**
+
+1. **Suspect MDMA interaction first**  
+   If SDMMC1 + FatFs + FreeRTOS works **without MDMA**, but `FR_NOT_READY` appears once MDMA is enabled, the problem is likely this CubeMX?driven MDMA/DMA?template configuration.
+
+2. **Disable MDMA in your configuration**  
+   The reported resolution was simple:  
+   - **Disable MDMA** (and the explicit MDMA usage for SDMMC/FatFs) in CubeMX.  
+   - Let **CubeMX manage the required DMA/MDMA internally** instead of manually forcing the MDMA + DMA template combination.  
+   After doing this, **SD card initialization and FatFs mount succeeded**, and `FR_NOT_READY` disappeared.
+
+So, the primary diagnostic step is to **turn off MDMA and any manually enabled FatFs DMA template**, regenerate code, and re?test. If the error vanishes, the root cause is that CubeMX MDMA/FatFs/DMA?template interaction, and the recommended fix is to **let CubeMX handle MDMA automatically rather than forcing it in your project settings**.",,,,,,,,
+Q7,How to diagnose FR_NOT_READY with SDMMC1 + MDMA + FatFs + FreeRTOS on STM32H7?,B,docs_issues_h7_v2,"To diagnose and resolve `FR_NOT_READY` with **SDMMC1 + MDMA + FatFs + FreeRTOS on STM32H7**, focus on the MDMA/FatFs integration generated by CubeMX:
+
+1. **Suspect MDMA configuration first**  
+   A reported case showed that even with apparently correct FatFs, MDMA, and SDMMC1 setup, SD card initialization failed with `FR_NOT_READY` (FatFs return code 3). CubeMX was **force?enabling the FatFs DMA template option**, and the MDMA + SDMMC1 combo did not work as expected.
+
+2. **Key diagnostic step**  
+   - Disable your **explicit MDMA configuration** and **let CubeMX manage MDMA internally** for the SDMMC/FatFs path.  
+   - Regenerate the code and test again.
+
+3. **Observed fix**  
+   When MDMA was disabled on the user side and CubeMX�s internal handling was used instead, the **SD card initialization started working and `FR_NOT_READY` disappeared**.
+
+So, if you see `FR_NOT_READY` with SDMMC1 + MDMA + FatFs + FreeRTOS on STM32H7, a primary troubleshooting step is to **remove the manual MDMA configuration and rely on CubeMX�s generated MDMA setup** for the SD interface.",,,,,,,,
+Q7,How to diagnose FR_NOT_READY with SDMMC1 + MDMA + FatFs + FreeRTOS on STM32H7?,C,st_ready_issues_h7,"To stay within STM32H723 datasheet limits for the ADC clock and BOOST:
+
+- **Maximum ADC clock**: 50 MHz for STM32H723ZG.  
+- **BOOST setting at 50 MHz**: must be configured to **`11` (binary)** to be compliant at the maximum ADC clock frequency.  
+
+Issue seen in an example:
+
+- In the **NUCLEO?H723ZG `ADC_AnalogWatchdog` example**, the ADC clock is configured as:  
+  `ADC clock = 520 MHz / 4 / 2 = 65 MHz`  
+  which **exceeds** the 50 MHz maximum and **BOOST is not set to `11`**, so this example is not respecting the datasheet limits.  
+
+**So in CubeMX / your project for STM32H723:**
+
+1. Configure the ADC clock tree so that **ADC clock ? 50 MHz**.  
+2. When using **50 MHz ADC clock**, set **BOOST = `11` (binary)** in the ADC configuration.",,,,,,,,
+Q8,How to configure ADC clock and BOOST correctly on STM32H723 to stay within datasheet limits?,A,raw_issues_h7,"To stay within the STM32H723 datasheet limits when configuring the ADC clock and BOOST:
+
+- The **maximum ADC clock frequency is 50?MHz** according to the STM32H723ZG datasheet (Table 79).  
+- **If you run the ADC at 50?MHz**, the **BOOST setting must be configured to `11` (binary)** to comply with the datasheet.
+
+In contrast, the **NUCLEO?H723ZG `ADC_AnalogWatchdog` example** in STM32CubeH7 sets the ADC clock to **65?MHz** and does **not** set BOOST to `11`, which **violates the datasheet requirements**.
+
+**Practical guidance when using CubeMX / STM32CubeH7 for STM32H723:**
+
+1. **Ensure ADC clock ? 50?MHz** (by adjusting the ADC prescaler and source clock).
+2. **If you set ADC clock to 50?MHz**, explicitly set **BOOST = `11`**.
+3. Do **not** follow the higher ADC clock (65?MHz) configuration from the `ADC_AnalogWatchdog` example, as it is not datasheet?compliant for STM32H723.",,,,,,,,
+Q8,How to configure ADC clock and BOOST correctly on STM32H723 to stay within datasheet limits?,B,docs_issues_h7_v2,"To keep the ADC configuration on **STM32H723** within datasheet limits, you must respect the ADC clock and BOOST constraints from the datasheet (Table 79):
+
+1. **Limit ADC clock to ? 50 MHz**  
+   - The **maximum allowed ADC clock frequency is 50 MHz**.  
+   - Some ST examples (e.g. **NUCLEO?H723ZG ADC_AnalogWatchdog**) incorrectly configure the ADC clock at **65 MHz**, which violates the datasheet limit and should be considered wrong for production use.  
+   - In CubeMX, adjust the ADC clock source and prescalers so that the **effective ADC clock** (after all dividers) is **? 50 MHz**.
+
+2. **Configure BOOST correctly when at 50 MHz**  
+   - When the ADC clock is set to the **maximum 50 MHz**, the **BOOST setting must be `11` (binary)** according to the datasheet requirement.  
+   - In CubeMX, locate the ADC advanced settings and set **BOOST = 11** if you operate the ADC at 50 MHz.  
+   - If you run the ADC at **lower than 50 MHz**, you are not forced to use BOOST=11; follow the datasheet�s BOOST vs. frequency recommendations.
+
+3. **Do not copy the wrong example values**  
+   - The NUCLEO?H723ZG example that uses **65 MHz** ADC clock and does **not** set BOOST to 11 is inconsistent with the datasheet and should not be used as a reference for correct limits.  
+
+**Practical CubeMX checklist for STM32H723 ADC:**
+
+- Ensure **ADC clock ? 50 MHz**.  
+- If **ADC clock = 50 MHz**, set **BOOST = 11 (binary)** in ADC advanced settings.  
+- Avoid configurations like the 65 MHz example, as they exceed datasheet specs.",,,,,,,,
+Q8,How to configure ADC clock and BOOST correctly on STM32H723 to stay within datasheet limits?,C,st_ready_issues_h7,"To stay within STM32H723 datasheet limits for the ADC clock and BOOST:
+
+- **Maximum ADC clock**: 50 MHz for STM32H723ZG.  
+- **BOOST setting at 50 MHz**: must be configured to **`11` (binary)** to be compliant at the maximum ADC clock frequency.  
+
+Issue seen in an example:
+
+- In the **NUCLEO?H723ZG `ADC_AnalogWatchdog` example**, the ADC clock is configured as:  
+  `ADC clock = 520 MHz / 4 / 2 = 65 MHz`  
+  which **exceeds** the 50 MHz maximum and **BOOST is not set to `11`**, so this example is not respecting the datasheet limits.  
+
+**So in CubeMX / your project for STM32H723:**
+
+1. Configure the ADC clock tree so that **ADC clock ? 50 MHz**.  
+2. When using **50 MHz ADC clock**, set **BOOST = `11` (binary)** in the ADC configuration.",,,,,,,,
+Q9,How to debug standby wakeup behavior on H747 when CM7 continues execution unexpectedly?,A,raw_issues_h7,"To debug standby?wakeup when **CM7 keeps executing instead of resetting** on STM32H747, focus on option bytes, real power mode, and EXTI/RTC configuration:
+
+### 1. Verify option bytes (reset on STANDBY)
+
+1. Connect with **STM32CubeProgrammer**.
+2. Read **FLASH option bytes** and check:
+   - **`NRST_STBY_D1` must be enabled** (box checked).  
+     If it is not set, CM7 will **not reset** on exit from STANDBY and will **continue execution after `HAL_PWREx_EnterSTANDBYMode()`**, which matches the behavior you see.
+3. Program the correct value, power?cycle, and re?test.
+
+As a temporary workaround during bring?up, some users add a `NVIC_SystemReset()` after STANDBY to force a reset, but the proper fix is the correct option byte configuration.
+
+### 2. Confirm the device really enters STANDBY (not STOP)
+
+If the device only reaches STOP instead of STANDBY, **no reset occurs on wakeup**, and current consumption is closer to STOP than STANDBY.
+
+To ensure true STANDBY:
+
+- **Mask all EXTI lines** that are not intended as wakeup sources.
+- **Clear all pending EXTI flags** before entering low?power.
+- Set **voltage scaling to level 3**.
+- Consider calling **`HAL_Deinit()`** before `HAL_PWREx_EnterSTANDBYMode()` to clean up peripherals.
+- **Disable Debug MCU** and unnecessary clocks in sleep mode; debug clocks can prevent proper entry into STANDBY.
+
+Measure supply current or use a debugger register view to confirm STANDBY is actually reached.
+
+### 3. Check RTC/EXTI configuration on dual?core H747
+
+On dual?core H7, a fix was added in **STM32CubeH7 v1.10.0** to correctly configure **RTC interrupts at EXTI level** for these devices. Without this fix, wakeup and reset behavior from STANDBY can be wrong or inconsistent.
+
+Actions:
+
+- Make sure you�re using **CubeH7 v1.10.0 or later**, or
+- Patch your project with the RTC/EXTI configuration from that version if you�re on older firmware.
+
+### 4. Recommended debug steps
+
+1. **Check and fix `NRST_STBY_D1` option byte** (and re?test).
+2. Verify that **current consumption** and registers match STANDBY, not STOP.
+3. Ensure **all non?used EXTI lines are masked and cleared**, voltage scaling = 3, `HAL_Deinit()` called, and debug/clocks minimized before STANDBY.
+4. Update to **CubeH7 ? 1.10.0** or backport the **RTC/EXTI fix** for dual?core.
+5. If needed for confirmation, temporarily add `NVIC_SystemReset()` right after STANDBY return to see whether the core is in fact resuming instead of resetting, then remove once option bytes and entry to STANDBY are correct.",,,,,,,,
+Q9,How to debug standby wakeup behavior on H747 when CM7 continues execution unexpectedly?,B,docs_issues_h7_v2,"To debug a case on **STM32H747** where **CM7 unexpectedly continues execution after standby wakeup** instead of resetting, focus on these points:
+
+### 1. Check and fix Flash option bytes (reset behavior on standby exit)
+
+Use **STM32CubeProgrammer** to inspect the **option bits**, in particular the one that controls reset on exiting standby for D1 (e.g. `NRST_STBY_D1`).  
+
+- If this bit is **not configured to generate a reset on standby exit**, CM7 can **resume from the instruction after `HAL_PWREx_EnterSTANDBYMode(PWR_D1_DOMAIN)`**, which matches the �continues execution� symptom.  
+- Configure the option byte so that **leaving D1 standby causes a reset**, then retest the wakeup flow.
+
+### 2. Clean up EXTI and low-power configuration before entering standby
+
+Misconfigured EXTI or low?power setup can also lead to unexpected behavior on wakeup. Recommended checks on the CM7 path before calling `HAL_PWREx_EnterSTANDBYMode(PWR_D1_DOMAIN)`:
+
+- **Mask all configurable EXTI lines** that are not needed as wakeup sources.  
+- **Clear all pending EXTI flags** to avoid spurious wakeups.  
+- **Set voltage scaling to level 3** as required before entering deep low?power modes.  
+- Call **`HAL_DeInit()`** to deinitialize peripherals and clocks.  
+- Disable **Debug MCU** and any **clocks kept enabled in sleep mode** so the device truly reaches standby and wakeup behavior is deterministic.
+
+### 3. Verify RTC + EXTI configuration for wakeup
+
+Since the wakeup is via **RTC**, ensure the **RTC wakeup interrupt and EXTI line (e.g. `EXTI_LINE19`)** are configured correctly:
+
+- RTC wakeup source enabled and routed to the correct EXTI line.
+- Corresponding EXTI interrupt configuration aligned with the dual?core fixes introduced in recent **STM32CubeH7** versions (which addressed RTC/EXTI behavior on dual?core parts).
+
+### 4. Understand and (if needed) use a workaround
+
+If, after checking option bytes and low?power/EXTI configuration, CM7 still resumes instead of resetting:
+
+- A **workaround** used in practice is to call **`NVIC_SystemReset()`** after the standby entry call, ensuring CM7 resets on wakeup.  
+- This is **not ideal for power consumption**, but it confirms that the reset path solves the functional issue and points back to option?byte/reset configuration as the root cause to fix properly.
+
+In summary, for CM7 �continuing execution� after RTC standby wakeup on H747, the prime suspects are **option bytes (reset-on-standby-exit)** and **incomplete EXTI/low?power de?init**; correcting those should restore the expected reset behavior on wakeup.",,,,,,,,
+Q9,How to debug standby wakeup behavior on H747 when CM7 continues execution unexpectedly?,C,st_ready_issues_h7,"For STM32H747 where CM7 unexpectedly continues execution after:
+
+```c
+HAL_PWREx_EnterSTANDBYMode(PWR_D1_DOMAIN);
+```
+
+instead of resetting on RTC wakeup, the available guidance is:
+
+- This behavior has been observed on a **minimal application based on the STM32H747I?DISCO `PWR_STANDBY_RTC` example**, with:
+  - CM7 doing system init and booting CM4  
+  - CM4 configuring HSEM and entering STOP  
+  - Then **both cores entering STANDBY**  
+  - After **RTC wakeup**, **CM4 resets as expected**, but **CM7 resumes execution after the STANDBY call** instead of starting from reset.
+
+Given this context, the recommended debugging focus is:
+
+1. **Check low?power configuration for each core**  
+   - Carefully review the **standby mode and wakeup source configuration** for CM7 vs CM4.  
+   - Confirm that CM7 is really placed in **D1 domain standby** and that corresponding reset behavior/options for wakeup are correctly configured in CubeMX.
+
+2. **Review CubeMX?generated low?power code for dual?core H7**  
+   - Compare your project with the reference `PWR_STANDBY_RTC` example: make sure the **power domain, RTC, and low?power management code** (PWR, RCC, EXTI, RTC) generated by CubeMX matches the reference behavior, especially in dual?core handling paths.
+
+3. **Inspect Flash/option bytes and domain configuration**  
+   - The issue description suggests this behavior might be related to **Flash option or other low?power domain settings**, so verify your **option bytes and domain reset/wakeup configuration** against the example and RM settings for standby/wakeup on dual?core H7 devices.
+
+In short, debugging should concentrate on confirming that CM7�s standby and wakeup configuration (power domain, reset behavior, and CubeMX?generated low?power code) is fully aligned with the known working `PWR_STANDBY_RTC` example for STM32H747.",,,,,,,,
+Q10,What is the recommended way to initialize ADC calibration in H7 LL examples?,A,raw_issues_h7,"The recommended way in the H7 LL examples is to:
+
+- **Run ADC calibration only once during hardware initialization**, not every time the ADC is enabled or used.
+- For example (STM32H723ZG LL code), call:
+
+  ```c
+  LL_ADC_StartCalibration(ADC1, LL_ADC_CALIB_OFFSET_LINEARITY, LL_ADC_SINGLE_ENDED);
+  ```
+
+  inside the ADC activation/initialization function (e.g. `Activate_ADC()`), which is itself called **only once from `main`** during startup.
+
+This aligns with datasheet/reference?manual guidance: calibration is optional (user�s choice) but, if used, should be done **only during the dedicated hardware calibration phase**, not before every ADC use or reactivation.",,,,,,,,
+Q10,What is the recommended way to initialize ADC calibration in H7 LL examples?,B,docs_issues_h7_v2,"The recommended way in STM32H7 **LL ADC examples** is to explicitly start calibration during ADC initialization, **after configuring the ADC and before starting any conversions**.
+
+Concretely, the example calls:
+
+```c
+LL_ADC_StartCalibration(ADC1, LL_ADC_CALIB_OFFSET_LINEARITY, LL_ADC_SINGLE_ENDED);
+```
+
+This is done once in the ADC activation/initialization phase (e.g. in `Activate_ADC()` called from `main()`), to calibrate **offset and linearity** for **single?ended** inputs before regular conversions are started.",,,,,,,,
+Q10,What is the recommended way to initialize ADC calibration in H7 LL examples?,C,st_ready_issues_h7,"The recommended way to initialize ADC calibration in STM32H7 LL examples is:
+
+- Call **`LL_ADC_StartCalibration`** once during initialization (not repeatedly), typically from `main()`, as part of the ADC hardware calibration step.  
+- Use the following parameters for single?ended channels with linearity/offset calibration:
+
+```c
+LL_ADC_StartCalibration(ADC1, LL_ADC_CALIB_OFFSET_LINEARITY, LL_ADC_SINGLE_ENDED);
+```
+
+This sequence matches the corrected STM32H7 LL example guidance and ensures proper ADC operation.",,,,,,,,
