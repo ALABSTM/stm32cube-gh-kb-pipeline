@@ -1,0 +1,401 @@
+run_id,dataset_label,question_id,question_group,question_text,expected_primary_source_hint,answer_summary,is_expected_source_match_0_or_1,is_topical_match_0_or_1,technical_precision_0_to_2,hallucination_risk_0_to_2,actionability_0_to_2,total_0_to_7,notes
+A,issues_only,Q01,issues,Pourquoi CubeMX garde TX et RX assignes quand USART est en receive-only sur STM32H7 ?,issue:stm32cubeh7-issue-339,"Parce que c’est un bug connu de CubeMX, référencé en interne sous CDM0061073?:
+en mode USART Asynchronous avec Data direction = Receive only / Transmit only, CubeMX continue à réserver les deux broches TX et RX et ne permet pas d’en libérer une, alors que ce n’est pas requis par le hardware.[*]",,,,,,,
+B,issues_plus_files,Q01,issues,Pourquoi CubeMX garde TX et RX assignes quand USART est en receive-only sur STM32H7 ?,issue:stm32cubeh7-issue-339,"CubeMX garde TX et RX assignés en mode USART **receive-only** sur STM32H7 à cause d’un **bug connu de CubeMX**, et non parce que le hardware l’exige.  
+
+Lorsque tu configures un USART en mode Asynchronous et que tu mets **Advanced Parameters ? Data direction** à *Receive only* (ou *Transmit only*), **les deux broches TX et RX restent affectées et il est impossible d’en désaffecter une dans CubeMX**, alors que l’on s’attendrait à ce que seule la broche utile soit réservée.  
+
+Ce comportement est référencé en interne sous **CDM0061073** et reproduit au moins avec **CubeMX 6.16.1**.",,,,,,,
+A,issues_only,Q02,issues,Comment configurer correctement Conversion Data Management pour ADC + DMA sur STM32H743 ?,issue:stm32cubeh7-issue-338," Avec DMA activé, seuls deux modes sont valides?:[*]
+
+ADC_CONVERSIONDATA_DMA_ONESHOT
+ADC_CONVERSIONDATA_DMA_CIRCULAR
+Il ne faut pas utiliser, avec DMA?:
+
+ADC_CONVERSIONDATA_DR
+ADC_CONVERSIONDATA_DFSDM
+Sinon, l’ADC n’émettra pas de requêtes DMA malgré la configuration, et le code généré par CubeMX est inutilisable.[*]",,,,,,,
+B,issues_plus_files,Q02,issues,Comment configurer correctement Conversion Data Management pour ADC + DMA sur STM32H743 ?,issue:stm32cubeh7-issue-338," Pour STM32H743 avec **ADC + DMA**, la configuration correcte de **Conversion Data Management** est?:
+
+- Avec **DMA activé**, il faut impérativement choisir **l’un de ces deux modes** :
+  - `ADC_CONVERSIONDATA_DMA_ONESHOT`
+  - `ADC_CONVERSIONDATA_DMA_CIRCULAR`
+
+  Ce sont les seuls modes où l’ADC émettra des requêtes DMA et où les transferts DMA fonctionneront correctement.
+
+- Il ne faut **pas** utiliser, avec DMA activé :
+  - `ADC_CONVERSIONDATA_DR`
+  - `ADC_CONVERSIONDATA_DFSDM`
+
+  Si tu sélectionnes `DR` ou `DFSDM` tout en activant le DMA, CubeMX peut générer un code **inutilisable**?: l’ADC ne déclenchera pas le DMA malgré une configuration apparemment correcte.",,,,,,,
+A,issues_only,Q03,issues,Quelles causes probables expliquent un echec de synchronisation CM7/CM4 sur H747 ?,issue:stm32cubeh7-issue-34,"Dans le flux basé sur STM32H747I?DISCO PWR_STANDBY_RTC, on observe que?:[*]
+
+CM7 initialise le système, boote CM4, puis finit par appeler
+HAL_PWREx_EnterSTANDBYMode(PWR_D1_DOMAIN) après config RTC/EXTI.
+Après réveil RTC, CM4 redémarre comme prévu, mais CM7 continue l’exécution après l’appel Standby au lieu d’être reset, ce qui casse la synchronisation.
+La cause probable est une mauvaise configuration des option bytes, notamment NRST_STBY_D1?: si ce bit n’est pas positionné pour forcer un reset de CM7 à la sortie de STANDBY, le cœur reprend simplement l’exécution là où il s’était arrêté.[*]",,,,,,,
+B,issues_plus_files,Q03,issues,Quelles causes probables expliquent un echec de synchronisation CM7/CM4 sur H747 ?,issue:stm32cubeh7-issue-34,"Les cas observés sur H747 montrent?:
+
+Après réveil RTC, CM4 se réveille et se comporte correctement, mais CM7 continue l’exécution après
+c
+HAL_PWREx_EnterSTANDBYMode(PWR_D1_DOMAIN);
+au lieu de repartir de zéro (reset).[*]
+Une cause probable est une mauvaise configuration des option bytes Flash, en particulier le bit NRST_STBY_D1?: s’il n’est pas configuré comme attendu, CM7 ne reset pas à la sortie de STANDBY et la synchro CM7/CM4 est rompue.[*]",,,,,,,
+A,issues_only,Q04,issues,Pourquoi CM4 peut ne pas sortir de STOP avec notification HSEM sur dual-core H7 ?,issue:stm32cubeh7-issue-34,"Parce qu’une ou plusieurs étapes de la chaîne HSEM côté CM4 ne sont pas correctement configurées?:[*]
+
+Horloge HSEM non activée pour CM4.
+IRQ HSEM non configurée / non activée dans le NVIC de CM4.
+Notification HSEM non activée sur le bon index avant l’entrée en STOP.
+Ou séquence de nettoyage après réveil incorrecte (perturbant les cycles suivants).
+Dans le flot de référence, CM4 doit configurer HSEM, activer la notif sur un sémaphore donné, entrer en STOP, puis CM7 notifie par ce même sémaphore?; si un maillon manque, CM4 ne sort pas de STOP.",,,,,,,
+B,issues_plus_files,Q04,issues,Pourquoi CM4 peut ne pas sortir de STOP avec notification HSEM sur dual-core H7 ?,issue:stm32cubeh7-issue-34,"Parce qu’une des étapes suivantes est manquante ou mal faite côté CM4?:[*]
+
+Horloge HSEM non activée pour CM4 (__HAL_RCC_HSEM_CLK_ENABLE() absent).
+IRQ HSEM non configurée dans le NVIC pour CM4
+(ex. HAL_NVIC_SetPriority(HSEM2_IRQn, 0, 0) + HAL_NVIC_EnableIRQ(HSEM2_IRQn) manquants).
+Notification HSEM non activée sur le bon index avant l’entrée en STOP
+(ex. HAL_HSEM_ActivateNotification(__HAL_HSEM_SEMID_TO_MASK(HSEM_ID_0))).
+Séquence incomplète après réveil (non?nettoyage des événements, non?désactivation de la notif, etc.).
+Si l’un de ces maillons manque, la notification HSEM envoyée par CM7 ne réveille pas CM4 du STOP.",,,,,,,
+A,issues_only,Q05,issues,Comment traiter proprement les warnings -Wcast-align dans HAL UART / ethernetif sur H7 ?,issue:stm32cubeh7-issue-335," Les warnings proviennent de casts de pointeurs vers des types plus fortement alignés (ex. uint16_t *) dans stm32h7xx_hal_uart.c, stm32h7xx_hal_uart_ex.c et ethernetif.c.[*]
+
+Pistes proposées sans désactiver -Wcast-align?:[*]
+
+Utiliser void * / const void * pour les arguments de buffer plutôt que uint8_t * afin de limiter les casts «?renforçant?» l’alignement.
+Quand l’alignement est garanti, utiliser
+c
+pdata16bits = (uint16_t *)__builtin_assume_aligned(pData, 2);
+Introduire un union de pointeurs pour manipuler les mêmes données en 8/16 bits sans cast direct.",,,,,,,
+B,issues_plus_files,Q05,issues,Comment traiter proprement les warnings -Wcast-align dans HAL UART / ethernetif sur H7 ?,issue:stm32cubeh7-issue-335," Les warnings viennent de casts qui augmentent l’alignement requis (pointeurs en uint16_t*) dans
+stm32h7xx_hal_uart.c, stm32h7xx_hal_uart_ex.c et ethernetif.c (fonctions HAL_UART_Transmit, HAL_UART_Receive, UART_TxISR_16BIT*, UART_RxISR_16BIT*, etc.).[*]
+
+Pistes proposées sans enlever -Wcast-align?:[*]
+
+Casts vers const void * plutôt que const uint8_t * pour les buffers passés aux fonctions.
+Utiliser __builtin_assume_aligned, par ex.?:
+c
+pdata16bits = (uint16_t *)__builtin_assume_aligned(pData, 2);
+Utiliser un union de pointeurs pour gérer les vues 8/16 bits?:
+c
+typedef union {
+  uint8_t  *puc;
+  uint16_t *pu16;
+} pDataTypeDef;",,,,,,,
+A,issues_only,Q06,issues,COM1 mappe sur USART3 sur NUCLEO-H753ZI: bug ou comportement attendu ?,issue:stm32cubeh7-issue-330," C’est un comportement attendu de la BSP NUCLEO?H753ZI?:
+dans stm32h7xx_nucleo.h, COM1 est associé à USART3 via les macros d’AF (GPIO_AF7_USART3). Lorsque l’on appelle BSP_COM_Init(COM1, ...), c’est bien USART3 qui est initialisé pour la liaison série de la carte.[*]",,,,,,,
+B,issues_plus_files,Q06,issues,COM1 mappe sur USART3 sur NUCLEO-H753ZI: bug ou comportement attendu ?,issue:stm32cubeh7-issue-330," C’est un comportement attendu. Dans stm32h7xx_nucleo.h, la carte NUCLEO?H753ZI définit?:[*]
+
+COM1_RX_AF = GPIO_AF7_USART3
+COM1_TX_AF = GPIO_AF7_USART3
+Donc BSP_COM_Init(COM1, &BspCOMInit) initialise USART3 via l’API COM1, conformément au design de la BSP.",,,,,,,
+A,issues_only,Q07,issues,Comment diagnostiquer FR_NOT_READY avec SDMMC1 + MDMA + FatFs + FreeRTOS sur H7 ?,issue:stm32cubeh7-issue-328," Un cas signalé montre que?:[*]
+
+Avec SDMMC1 + MDMA + FatFs + FreeRTOS, CubeMX force l’utilisation du template DMA de FatFs.
+L’initialisation de la carte SD échoue alors avec FR_NOT_READY (code 3), malgré une configuration apparemment correcte de SDMMC1, MDMA et FatFs.
+Piste prioritaire?:
+
+Désactiver MDMA dans ta configuration utilisateur et
+Laisser CubeMX gérer automatiquement le DMA côté FatFs.
+Cette modification a permis de résoudre FR_NOT_READY dans ce contexte sur STM32H7, à vérifier sur ta version CubeMX/CubeH7 et ta board.",,,,,,,
+B,issues_plus_files,Q07,issues,Comment diagnostiquer FR_NOT_READY avec SDMMC1 + MDMA + FatFs + FreeRTOS sur H7 ?,issue:stm32cubeh7-issue-328," Un cas documenté montre?:[*]
+
+CubeMX force l’option “DMA template” dans FatFs lorsqu’on utilise FreeRTOS.
+Même avec SDMMC1, MDMA et FatFs configurés, l’init SD échoue avec FR_NOT_READY (code 3).
+Piste prioritaire?:
+
+Désactiver MDMA dans ta config utilisateur et laisser CubeMX gérer le DMA FatFs en interne.
+Cette modification a permis de faire passer l’init SD de FR_NOT_READY à OK, dans la config SDMMC1 + MDMA + FatFs + FreeRTOS, sous réserve de validation sur ta version CubeMX/CubeH7 et ta carte.[*]",,,,,,,
+A,issues_only,Q08,issues,Comment respecter les limites datasheet pour ADC clock + BOOST sur STM32H723 ?,issue:stm32cubeh7-issue-191," Pour STM32H723ZG?:[*]
+
+La fréquence d’horloge ADC max = 50?MHz.
+À 50?MHz, il faut configurer BOOST = 11 (binaire) dans les paramètres ADC.
+Un exemple Cube (NUCLEO?H723ZG ADC_AnalogWatchdog) utilise 65?MHz et ne met pas BOOST=11 ? configuration hors spécification.
+
+Bonne pratique?:
+
+Configurer l’arbre d’horloge pour avoir f_ADC ? 50?MHz.
+Si f_ADC = 50?MHz, régler BOOST = 11.",,,,,,,
+B,issues_plus_files,Q08,issues,Comment respecter les limites datasheet pour ADC clock + BOOST sur STM32H723 ?,issue:stm32cubeh7-issue-191," Pour STM32H723ZG?:[*]
+
+Le f_ADC max = 50?MHz (Table 79 du datasheet).
+Si l’ADC est cadencé à 50?MHz, il faut régler BOOST = 11 (binaire).
+Un exemple Cube (NUCLEO?H723ZG ADC_AnalogWatchdog) utilise 65?MHz (520?MHz / 4 / 2) sans BOOST=11 ? hors spec.
+Conclusion pour ta config?:
+
+S’assurer que l’horloge ADC ? 50?MHz.
+Si tu es à 50?MHz, régler BOOST = 11.",,,,,,,
+A,issues_only,Q09,issues,Comment debugger un wakeup standby H747 ou CM7 continue l'execution au lieu de reset ?,issue:stm32cubeh7-issue-125,"Sur un minimal app basé sur STM32H747I?DISCO PWR_STANDBY_RTC, on observe que?:[*]
+
+Le timer RTC réveille le MCU.
+CM4 repart correctement.
+CM7 sort de HAL_PWREx_EnterSTANDBYMode(PWR_D1_DOMAIN) et continue au lieu de repartir de Reset_Handler.
+Axes de debug?:
+
+Lire les Flash option bytes avec STM32CubeProgrammer et vérifier surtout NRST_STBY_D1.
+Si ce bit n’est pas configuré pour provoquer un reset de CM7 à la sortie de STANDBY, le cœur reprendra juste l’exécution après l’appel Standby.
+Le correctif consiste à aligner les option bytes avec ceux attendus par l’exemple PWR_STANDBY_RTC pour la H747I?DISCO.",,,,,,,
+B,issues_plus_files,Q09,issues,Comment debugger un wakeup standby H747 ou CM7 continue l'execution au lieu de reset ?,issue:stm32cubeh7-issue-125,"
+Collapse
+Fetched information from KB (ST GitHub Analyzer_Unstructured)
+Fetched information from KB (ST GitHub Analyzer_Unstructured)
+Fetched information from KB (ST GitHub Analyzer_Unstructured)
+Fetched information from KB (ST GitHub Analyzer_Unstructured)
+Fetched information from KB (ST GitHub Analyzer_Unstructured)
+Fetched information from KB (ST GitHub Analyzer_Unstructured)
+Fetched information from KB (ST GitHub Analyzer_Unstructured)
+Fetched information from KB (ST GitHub Analyzer_Unstructured)
+Q03. Quelles causes probables expliquent un échec de synchronisation CM7/CM4 sur H747 ?
+Les cas observés sur H747 montrent?:
+
+Après réveil RTC, CM4 se réveille et se comporte correctement, mais CM7 continue l’exécution après
+c
+HAL_PWREx_EnterSTANDBYMode(PWR_D1_DOMAIN);
+au lieu de repartir de zéro (reset).[*]
+Une cause probable est une mauvaise configuration des option bytes Flash, en particulier le bit NRST_STBY_D1?: s’il n’est pas configuré comme attendu, CM7 ne reset pas à la sortie de STANDBY et la synchro CM7/CM4 est rompue.[*]
+Q04. Pourquoi CM4 peut ne pas sortir de STOP avec notification HSEM sur dual?core H7 ?
+
+Parce qu’une des étapes suivantes est manquante ou mal faite côté CM4?:[*]
+
+Horloge HSEM non activée pour CM4 (__HAL_RCC_HSEM_CLK_ENABLE() absent).
+IRQ HSEM non configurée dans le NVIC pour CM4
+(ex. HAL_NVIC_SetPriority(HSEM2_IRQn, 0, 0) + HAL_NVIC_EnableIRQ(HSEM2_IRQn) manquants).
+Notification HSEM non activée sur le bon index avant l’entrée en STOP
+(ex. HAL_HSEM_ActivateNotification(__HAL_HSEM_SEMID_TO_MASK(HSEM_ID_0))).
+Séquence incomplète après réveil (non?nettoyage des événements, non?désactivation de la notif, etc.).
+Si l’un de ces maillons manque, la notification HSEM envoyée par CM7 ne réveille pas CM4 du STOP.
+
+Q05. Comment traiter proprement les warnings -Wcast-align dans HAL UART / ethernetif sur H7 ?
+
+Les warnings viennent de casts qui augmentent l’alignement requis (pointeurs en uint16_t*) dans
+stm32h7xx_hal_uart.c, stm32h7xx_hal_uart_ex.c et ethernetif.c (fonctions HAL_UART_Transmit, HAL_UART_Receive, UART_TxISR_16BIT*, UART_RxISR_16BIT*, etc.).[*]
+
+Pistes proposées sans enlever -Wcast-align?:[*]
+
+Casts vers const void * plutôt que const uint8_t * pour les buffers passés aux fonctions.
+Utiliser __builtin_assume_aligned, par ex.?:
+c
+pdata16bits = (uint16_t *)__builtin_assume_aligned(pData, 2);
+Utiliser un union de pointeurs pour gérer les vues 8/16 bits?:
+c
+typedef union {
+  uint8_t  *puc;
+  uint16_t *pu16;
+} pDataTypeDef;
+Q06. COM1 mappe sur USART3 sur NUCLEO?H753ZI : bug ou comportement attendu ?
+
+C’est un comportement attendu. Dans stm32h7xx_nucleo.h, la carte NUCLEO?H753ZI définit?:[*]
+
+COM1_RX_AF = GPIO_AF7_USART3
+COM1_TX_AF = GPIO_AF7_USART3
+Donc BSP_COM_Init(COM1, &BspCOMInit) initialise USART3 via l’API COM1, conformément au design de la BSP.
+
+Q07. Comment diagnostiquer FR_NOT_READY avec SDMMC1 + MDMA + FatFs + FreeRTOS sur H7 ?
+
+Un cas documenté montre?:[*]
+
+CubeMX force l’option “DMA template” dans FatFs lorsqu’on utilise FreeRTOS.
+Même avec SDMMC1, MDMA et FatFs configurés, l’init SD échoue avec FR_NOT_READY (code 3).
+Piste prioritaire?:
+
+Désactiver MDMA dans ta config utilisateur et laisser CubeMX gérer le DMA FatFs en interne.
+Cette modification a permis de faire passer l’init SD de FR_NOT_READY à OK, dans la config SDMMC1 + MDMA + FatFs + FreeRTOS, sous réserve de validation sur ta version CubeMX/CubeH7 et ta carte.[*]
+Q08. Comment respecter les limites datasheet pour ADC clock + BOOST sur STM32H723 ?
+
+Pour STM32H723ZG?:[*]
+
+Le f_ADC max = 50?MHz (Table 79 du datasheet).
+Si l’ADC est cadencé à 50?MHz, il faut régler BOOST = 11 (binaire).
+Un exemple Cube (NUCLEO?H723ZG ADC_AnalogWatchdog) utilise 65?MHz (520?MHz / 4 / 2) sans BOOST=11 ? hors spec.
+Conclusion pour ta config?:
+
+S’assurer que l’horloge ADC ? 50?MHz.
+Si tu es à 50?MHz, régler BOOST = 11.
+Q09. Comment debugger un wakeup standby H747 où CM7 continue l’exécution au lieu de reset ?
+
+Sur STM32H747I?DISCO PWR_STANDBY_RTC, on observe?:[*]
+
+Le timer RTC réveille le MCU.
+CM4 redémarre correctement.
+CM7 sort de HAL_PWREx_EnterSTANDBYMode(PWR_D1_DOMAIN) et continue au lieu de repartir de Reset_Handler.
+Piste principale?:
+
+Vérifier les Flash option bytes avec CubeProgrammer, en particulier NRST_STBY_D1.
+Si NRST_STBY_D1 n’est pas positionné comme attendu, CM7 ne sera pas réinitialisé à la sortie de STANDBY, d’où la poursuite d’exécution.[*]",,,,,,,
+A,issues_only,Q10,issues,Quelle sequence d'initialisation LL est recommandee pour la calibration ADC sur H7 ?,issue:stm32cubeh7-issue-191," Dans les exemples LL STM32H7, la calibration ADC est réalisée une seule fois dans la fonction d’activation de l’ADC (Activate_ADC)?:[*]
+
+c
+LL_ADC_StartCalibration(ADC1,
+                        LL_ADC_CALIB_OFFSET_LINEARITY,
+                        LL_ADC_SINGLE_ENDED);
+Activate_ADC est appelée une fois depuis main, ce qui lance l’auto?calibration en mode single?ended avec LL_ADC_CALIB_OFFSET_LINEARITY avant la première utilisation de l’ADC.",,,,,,,
+B,issues_plus_files,Q10,issues,Quelle sequence d'initialisation LL est recommandee pour la calibration ADC sur H7 ?,issue:stm32cubeh7-issue-191," Dans l’exemple LL H7, la recommandation est?:[*]
+
+Appeler la calibration une seule fois dans la fonction d’activation de l’ADC (Activate_ADC)?:
+c
+LL_ADC_StartCalibration(ADC1,
+                        LL_ADC_CALIB_OFFSET_LINEARITY,
+                        LL_ADC_SINGLE_ENDED);
+Activate_ADC est appelée une fois depuis main, ce qui lance correctement l’auto?calibration en mode single?ended avec LL_ADC_CALIB_OFFSET_LINEARITY.",,,,,,,
+A,issues_only,Q11,files,Dans le README STM32CubeH7 quelle est la bonne commande pour cloner avec tous les submodules ?,file:README.md, git clone --recursive --depth 1 --branch vX.Y.Z,,,,,,,
+B,issues_plus_files,Q11,files,Dans le README STM32CubeH7 quelle est la bonne commande pour cloner avec tous les submodules ?,file:README.md,"Selon le README STM32CubeH7, la commande pour cloner le dépôt avec tous les submodules est?:
+
+bash
+git clone --recursive https://github.com/STMicroelectronics/STM32CubeH7.git",,,,,,,
+A,issues_only,Q12,files,Comment recuperer les dernieres mises a jour du repo deja clone selon le README ?,file:README.md,I DON'T KNOW,,,,,,,
+B,issues_plus_files,Q12,files,Comment recuperer les dernieres mises a jour du repo deja clone selon le README ?,file:README.md,"Pour récupérer les dernières mises à jour d’un dépôt STM32CubeH7 déjà cloné, le README indique d’exécuter, depuis le répertoire du dépôt?:
+
+```bash
+git pull
+git submodule update --init --recursive
+```
+
+Cela met à jour à la fois le dépôt principal et tous les submodules associés.",,,,,,,
+A,issues_only,Q13,files,D'apres le README comment se placer sur une version firmware precise vX.Y.Z ?,file:README.md,I DON'T KNOW,,,,,,,
+B,issues_plus_files,Q13,files,D'apres le README comment se placer sur une version firmware precise vX.Y.Z ?,file:README.md,"D’après le README, pour se placer directement sur une version firmware précise vX.Y.Z (alignée avec celle de st.com), il faut cloner cette branche spécifique?:
+
+bash
+git clone --recursive --depth 1 --branch vX.Y.Z https://github.com/STMicroelectronics/STM32CubeH7.git
+où vX.Y.Z est la version ciblée. Le --depth 1 n’est pas obligatoire mais permet d’éviter de télécharger tout l’historique des commits.[*]",,,,,,,
+A,issues_only,Q14,files,Quels middlewares ne sont pas inclus dans le repo GitHub et ou les trouver ?,file:README.md,I DON'T KNOW,,,,,,,
+B,issues_plus_files,Q14,files,Quels middlewares ne sont pas inclus dans le repo GitHub et ou les trouver ?,file:README.md,"Le README indique que certains middlewares ne sont pas inclus dans le dépôt GitHub en raison de licences plus restrictives, notamment?:
+
+STM32_Audio
+STemWin
+TouchGFX
+Ces middlewares, ainsi que les projets qui les utilisent, sont disponibles dans le package complet du firmware téléchargeable sur st.com, ce qui peut nécessiter une connexion ou un enregistrement.[*]",,,,,,,
+A,issues_only,Q15,files,Le README indique-t-il une difference possible entre la version GitHub et la version st.com ?,file:README.md,I DON'T KNOW,,,,,,,
+B,issues_plus_files,Q15,files,Le README indique-t-il une difference possible entre la version GitHub et la version st.com ?,file:README.md,"Oui. Le README indique qu’il peut y avoir une différence entre la version GitHub et le package complet disponible sur st.com?:
+
+Sur GitHub : projets limités, absence de certains middlewares (STemWin, TouchGFX, STM32_Audio, etc.) et de tous les exemples/applications/démos qui en dépendent, en raison de licences plus restrictives.
+Sur st.com : package complet contenant tous les types de projets (exemples, applications, démonstrations) pour chaque carte, ainsi que tous les middlewares nécessaires, sous réserve d’acceptation de licence.[*]",,,,,,,
+A,issues_only,Q16,files,Quelle est la liste des principaux types de projets fournis dans STM32CubeH7 examples applications demos ?,file:README.md,I DON'T KNOW,,,,,,,
+B,issues_plus_files,Q16,files,Quelle est la liste des principaux types de projets fournis dans STM32CubeH7 examples applications demos ?,file:README.md,"Le README précise que STM32CubeH7 fournit, pour chaque carte supportée, trois grands types de projets?:
+
+Examples (exemples)
+Applications
+Demonstrations (démos)
+Le package complet sur st.com regroupe l’ensemble de ces projets (examples / applications / demonstrations) pour chaque board, y compris ceux utilisant des middlewares propriétaires.[*]",,,,,,,
+A,issues_only,Q17,files,Ou trouver les notes de version de STM32CubeH7 a partir de la documentation du repo ?,file:README.md,I DON'T KNOW,,,,,,,
+B,issues_plus_files,Q17,files,Ou trouver les notes de version de STM32CubeH7 a partir de la documentation du repo ?,file:README.md,Le README indique que les notes de version (release notes) de STM32CubeH7 sont disponibles dans le dépôt STM32CubeH7 lui?même et via des liens fournis dans la documentation du repo.[*],,,,,,,
+A,issues_only,Q18,files,Quelles cartes NUCLEO EVAL DK sont mentionnees dans la section Boards available du README H7 ?,file:README.md,I DON'T KNOW,,,,,,,
+B,issues_plus_files,Q18,files,Quelles cartes NUCLEO EVAL DK sont mentionnees dans la section Boards available du README H7 ?,file:README.md,"Dans la section Boards available mentionnée dans le README STM32CubeH7, les cartes NUCLEO suivantes sont citées?:
+
+NUCLEO-H7A3ZI-Q
+NUCLEO-H723ZG
+NUCLEO-H743ZI
+NUCLEO-H743ZI2
+NUCLEO-H753ZI
+NUCLEO-H753ZI2
+Ce sont les cartes NUCLEO explicitement listées dans l’extrait disponible.[*]",,,,,,,
+A,issues_only,Q19,files,Quelle est la recommandation du README si on utilise Download ZIP au lieu de git clone ?,file:README.md,I DON'T KNOW,,,,,,,
+B,issues_plus_files,Q19,files,Quelle est la recommandation du README si on utilise Download ZIP au lieu de git clone ?,file:README.md,"Le README précise que si l’on utilise Download ZIP au lieu de git clone, il faut récupérer et ajouter manuellement tous les submodules qui ne sont alors pas téléchargés automatiquement.[*",,,,,,,
+A,issues_only,Q20,files,Quelle est la difference d'usage entre git clone recursive et git clone recursive depth 1 branch vX.Y.Z ?,file:README.md,I DON'T KNOW,,,,,,,
+B,issues_plus_files,Q20,files,Quelle est la difference d'usage entre git clone recursive et git clone recursive depth 1 branch vX.Y.Z ?,file:README.md,"D’après le README?:
+
+git clone --recursive https://github.com/STMicroelectronics/STM32CubeH7.git
+
+Clone toute l’historique du dépôt principal.
+Récupère tous les submodules à leurs révisions par défaut.
+git clone --recursive --depth 1 --branch vX.Y.Z https://github.com/STMicroelectronics/STM32CubeH7.git
+
+Clone uniquement la branche / version spécifique vX.Y.Z, correspondant à une version de firmware donnée (alignable avec la version st.com).
+L’option --depth 1 fait un clone superficiel (shallow clone) et évite de télécharger les commits plus anciens, ce qui réduit la taille et le temps de clonage.
+Les submodules sont également récupérés, mais seulement pour cette révision spécifique.
+L’option --depth 1 est indiquée comme non obligatoire, mais utile pour ne pas rapatrier l’historique complet.[*]",,,,,,,
+A,issues_only,Q21,mixed,Je veux corriger un bug CubeMX USART single-line sur H7 quelle verification issue faire et quelle version tag firmware utiliser pour reproduire proprement ?,issue:stm32cubeh7-issue-339,"I DON'T KNOW
+(Le contexte ne contient que : problème de mappage USART3?COM1 sur NUCLEO?H753ZI et bug de typo USART1 corrigé dans un commit ultérieur, sans indication de tag/firmware à utiliser pour une repro propre.[*])",,,,,,,
+B,issues_plus_files,Q21,mixed,Je veux corriger un bug CubeMX USART single-line sur H7 quelle verification issue faire et quelle version tag firmware utiliser pour reproduire proprement ?,issue:stm32cubeh7-issue-339,"Pour corriger un bug CubeMX USART «?single-line?» sur H7, la vérification prioritaire à faire côté GitHub est de se baser sur les tickets qui traitent déjà des erreurs de compilation USART sur STM32H743 (typos dans les macros / mauvais appel de fonctions HAL) et de vérifier que la correction proposée respecte bien l’API HAL décrite dans ces issues (noms de macros et fonctions).[*]
+Pour une reproduction propre, utilisez une version clairement identifiée de STM32CubeH7, par exemple un tag de release officiel mentionné dans le package (la première release officielle documentée est V1.0.0 du 21?avril?2017) et suivez les release notes associées.[*]",,,,,,,
+A,issues_only,Q22,mixed,Pour un probleme ADC DMA sur H743 quelle regle de config issue appliquer et quel chemin projet README suivre pour tester sur une board H7 ?,issue:stm32cubeh7-issue-338,"I DON'T KNOW
+(Aucun élément trouvé sur un problème ADC + DMA sur H743 dans le contexte actuel.)",,,,,,,
+B,issues_plus_files,Q22,mixed,Pour un probleme ADC DMA sur H743 quelle regle de config issue appliquer et quel chemin projet README suivre pour tester sur une board H7 ?,issue:stm32cubeh7-issue-338,"Pour un problème ADC + DMA sur H743, la règle de configuration tirée des issues est que certains blocages de configuration ADC/clock viennent d’un bug de génération CubeMX (v6.5) et non du firmware STM32CubeH7 lui?même ; la «?correction?» consiste donc à traiter le point côté CubeMX (via la communauté STM32CubeMX) plutôt qu’à modifier les drivers HAL.[*]
+Pour tester sur une board H7, suivez dans le README du firmware STM32CubeH7 les sections qui listent les projets/exemples pour cartes STM32H743 (Nucleo/EVAL) et utilisez ces projets comme base validée (structure de projet, drivers, clocks) avant d’y intégrer votre configuration ADC+DMA.[*]",,,,,,,
+A,issues_only,Q23,mixed,J'ai un cas FR_NOT_READY SDMMC1 quelle piste issue prioritaire verifier et quelle documentation de release consulter pour valider les changements ?,issue:stm32cubeh7-issue-328,"I DON'T KNOW
+(Aucun contenu disponible sur FR_NOT_READY ni sur SDMMC1 dans le contexte actuel.)",,,,,,,
+B,issues_plus_files,Q23,mixed,J'ai un cas FR_NOT_READY SDMMC1 quelle piste issue prioritaire verifier et quelle documentation de release consulter pour valider les changements ?,issue:stm32cubeh7-issue-328,"La situation **FR_NOT_READY sur SDMMC1** est reliée à un cas documenté dans les issues STM32CubeH7?:
+
+- **Piste issue prioritaire à vérifier**  
+  Un problème connu apparaît avec **SDMMC1 + FatFs + FreeRTOS** sur H7?:  
+  - CubeMX **force l’option “DMA template” dans FatFs** lorsque FreeRTOS est utilisé.  
+  - Même avec une configuration apparemment correcte de **FatFs, MDMA et SDMMC1**, l’initialisation SDMMC peut échouer avec le code de retour `3` (**FR_NOT_READY**).  
+  - La résolution donnée dans l’issue est de **désactiver le MDMA** et de laisser **CubeMX le gérer en interne**, ce qui supprime le `FR_NOT_READY` dans ce contexte.  
+
+- **Documentation de release à consulter pour valider les changements**  
+  -I DON'T KNOW-",,,,,,,
+A,issues_only,Q24,mixed,Pour un wakeup standby dual-core instable quels checks techniques issus des tickets et quelles precautions de version firmware du README faut-il combiner ?,issue:stm32cubeh7-issue-125,"Pour un wakeup standby dual?core instable sur STM32H747 :
+
+Checks techniques issus des tickets :
+
+Un ticket décrit qu’après wakeup from standby avec RTC, le cœur CM7 continue l’exécution au lieu de repartir sur un reset complet. Le cas est basé sur l’exemple PWR_STANDBY_RTC de la STM32H747I?DISCO.[*]
+Il faut donc vérifier :
+Les conditions et la séquence d’entrée en standby (configuration PWR/RTC) par rapport à cet exemple.
+Le comportement au wakeup : le flux d’exécution de CM7 reprend?il là où il s’était arrêté, ou un reset complet est?il bien exécuté comme attendu par la référence d’exemple ?[*]
+Précautions de version firmware (README) :
+
+Le contexte fourni ne contient malheureusement aucune indication de versions ou de tags de firmware dans les README. Je ne peux donc pas préciser quelles précautions de version prendre.
+Ce qui dépasse ces points :
+-I DON'T KNOW-",,,,,,,
+B,issues_plus_files,Q24,mixed,Pour un wakeup standby dual-core instable quels checks techniques issus des tickets et quelles precautions de version firmware du README faut-il combiner ?,issue:stm32cubeh7-issue-125,"Pour un wakeup/standby instable, la seule piste explicitement couverte dans les issues est liée au middleware USB?: si le remote wakeup est activé alors que le matériel ne le supporte pas, le système peut se bloquer. La vérification recommandée est donc de contrôler explicitement le support matériel du wakeup avant d’activer la fonction de remote wakeup dans le middleware USB.[*]
+Concernant le cas «?dual?core?» et les précautions de version firmware dans le README, je n’ai pas d’information spécifique.",,,,,,,
+A,issues_only,Q25,mixed,En presence de warnings -Wcast-align quelle strategie de correction issue recommander et comment aligner cela avec les contraintes de code genere STM32Cube ?,issue:stm32cubeh7-issue-335,"I DON'T KNOW
+(Aucune information trouvée sur les warnings -Wcast-align ou leur traitement dans les issues ou docs associées.)",,,,,,,
+B,issues_plus_files,Q25,mixed,En presence de warnings -Wcast-align quelle strategie de correction issue recommander et comment aligner cela avec les contraintes de code genere STM32Cube ?,issue:stm32cubeh7-issue-335,"La stratégie recommandée dans les issues pour les warnings `-Wcast-align` sur STM32CubeH7 est la suivante?:
+
+1. **Ne pas supprimer `-Wcast-align` ni patcher brutalement le HAL généré**  
+   Les warnings viennent de casts du type `uint8_t *` ? `uint16_t *` dans des fonctions comme `HAL_UART_Transmit`, `HAL_UART_Receive`, `UART_TxISR_16BIT`, etc. (fichiers `stm32h7xx_hal_uart.c`, `stm32h7xx_hal_uart_ex.c`, `ethernetif.c`). Ces casts augmentent l’alignement requis et peuvent conduire à des accès non alignés.  
+   Les corrections proposées dans les tickets insistent sur le fait qu’il est difficile/risqué de modifier directement le code généré ST, et qu’il faut conserver la compatibilité avec les versions CubeMX/CubeH7 utilisées.
+
+2. **Stratégies techniques proposées dans les issues** (sans enlever `-Wcast-align`)?:
+   - **Changer le type d’argument** : faire accepter à vos propres fonctions un `const void *` plutôt qu’un `const uint8_t *`, de manière à éviter des casts d’alignement douteux en interne.  
+   - **Utiliser les built-ins d’alignement** : remplacer les casts directs par quelque chose comme  
+     ```c
+     pdata16bits = (uint16_t *)__builtin_assume_aligned(pData, 2);
+     ```  
+     plutôt que  
+     ```c
+     pdata16bits = (const uint16_t *)pData;
+     ```
+   - **Passer par une union** : déclarer une union contenant à la fois `uint8_t *` et `uint16_t *`, affecter le pointeur 8 bits puis lire via le membre 16 bits, ce qui rend explicite votre hypothèse d’alignement dans votre propre code.
+
+3. **Aligner cela avec les contraintes du code généré STM32Cube**  
+   - **Éviter de modifier directement les fichiers générés ST** (HAL, drivers, middleware) car ils seront régénérés/écrasés par CubeMX. Les issues suggèrent que ces stratégies doivent préférentiellement être appliquées **dans votre couche d’abstraction ou vos wrappers** autour des appels HAL, de façon à ne pas dépendre d’un patch local du code généré.  
+   - **Valider systématiquement** chaque contournement par rapport à **votre MCU/board et votre version CubeMX/CubeH7** avant de l’adopter, car le comportement réel dépend de la cible et de la version du package.  
+
+En résumé?: conserver `-Wcast-align`, éviter de patcher le HAL généré, encapsuler les accès sensibles (types plus génériques, `__builtin_assume_aligned`, unions), et tester le tout sur votre configuration et version de CubeH7 spécifiquement, comme recommandé dans les issues.",,,,,,,
+A,issues_only,Q26,mixed,Je dois reproduire un bug H7 rapporte sur GitHub quelle methode de checkout version depuis README et quels elements de contexte issue dois-je conserver ?,file:README.md,"I DON'T KNOW
+(Le contexte ne donne aucune méthode de checkout/version dans un README ni d’éléments précis à conserver pour reproduire un bug H7 rapporté sur GitHub.)",,,,,,,
+B,issues_plus_files,Q26,mixed,Je dois reproduire un bug H7 rapporte sur GitHub quelle methode de checkout version depuis README et quels elements de contexte issue dois-je conserver ?,file:README.md,"Pour reproduire un bug H7 rapporté sur GitHub?:
+
+Méthode de version/checkout : appuyez?vous sur le README et les release notes du package STM32CubeH7 pour choisir une version/tag de firmware officiel (par exemple V1.0.0 mentionné comme première release) et vous assurer que le code utilisé correspond bien à un état de référence documenté.[*]
+Conserver le contexte depuis l’issue : gardez dans votre description de repro tous les éléments techniques déjà cités dans les tickets existants?:
+macros concernées (ex. macros du NUCLEO?H753ZI, duplications/définitions contradictoires),
+mappage COM?USART (par ex. USART3 ? COM1 tel que défini dans le fichier d’en?tête de la board),
+fonctions HAL réellement appelées et leur signature exacte,
+mention que toute modification côté code généré doit se faire via l’IOC + STM32CubeMX, car les changements manuels sont écrasés à la régénération.[*]",,,,,,,
+A,issues_only,Q27,mixed,Pour un diagnostic UART USART sur NUCLEO-H753ZI quelle info board du README et quelle info de mapping issue relier dans la reponse ?,issue:stm32cubeh7-issue-330,"I DON'T KNOW
+(Le contexte ne donne aucune méthode de checkout/version dans un README ni d’éléments précis à conserver pour reproduire un bug H7 rapporté sur GitHub.)",,,,,,,
+B,issues_plus_files,Q27,mixed,Pour un diagnostic UART USART sur NUCLEO-H753ZI quelle info board du README et quelle info de mapping issue relier dans la reponse ?,issue:stm32cubeh7-issue-330,"Pour un diagnostic UART/USART sur NUCLEO?H753ZI, l’information à croiser est?:
+
+Info board côté «?README/contenu package?» : la famille STM32H7 dispose d’exemples, applications et templates spécifiques par carte (dont les NUCLEO/EVAL H7) dans le package STM32CubeH7, décrits dans les listes de projets et release notes.[*]
+Info de mapping côté issue : un ticket explicite que sur NUCLEO?H753ZI, le port série COM1 du ST?Link est mappé sur USART3, comme indiqué dans le fichier d’en?tête de la carte ; le problème portait aussi sur des macros en double et la nécessité de laisser STM32CubeMX gérer l’IOC car toute modification manuelle est écrasée.[*]
+Ta réponse doit donc relier «?COM1 du NUCLEO?H753ZI?» ? «?USART3?» en s’appuyant sur le ticket, et utiliser la structure de projet/documentation du package comme référence.",,,,,,,
+A,issues_only,Q28,mixed,Si une reponse propose une correction comment verifier qu'elle est coherente a la fois avec un ticket H7 et avec les instructions d'usage du repo ?,issue:any_related_h7_ticket,"I DON'T KNOW
+(Il n’y a pas assez d’éléments dans le contexte pour décrire une méthode générale de vérification de cohérence entre une correction proposée, un ticket H7 donné et les instructions d’usage du dépôt.)",,,,,,,
+B,issues_plus_files,Q28,mixed,Si une reponse propose une correction comment verifier qu'elle est coherente a la fois avec un ticket H7 et avec les instructions d'usage du repo ?,issue:any_related_h7_ticket,"Pour vérifier qu’une correction proposée est cohérente à la fois avec un ticket H7 et avec les instructions d’usage du repo?:
+
+Côté issue (H7)?: contrôler que la correction traite bien la cause racine décrite (ex. mauvais nom de macro, mapping USART/COM erroné, problème identifié comme généré par CubeMX et non par le HAL). L’issue mentionne par exemple que les erreurs USART provenaient de macros/fonctions mal référencées et qu’il faut se conformer à l’API HAL officielle.[*]
+Côté usage du repo/README?: vérifier que la solution respecte les règles de génération de code (notamment?: pour NUCLEO?H753ZI, modifier l’IOC dans STM32CubeMX et régénérer plutôt que patcher directement les fichiers générés, car ils sont écrasés ; suivre la structure d’exemples et les versions de firmware décrites dans les release notes).[*][*]",,,,,,,
+A,issues_only,Q29,mixed,Comment construire une procedure de debug robuste qui cite une source issue technique et une source file documentaire sans contradiction ?,issue:any_related_h7_ticket,"I DON'T KNOW
+(Le contexte ne fournit pas de méthode structurée de construction d’une procédure de debug qui cite à la fois une issue technique et un fichier documentaire en évitant les contradictions.)",,,,,,,
+B,issues_plus_files,Q29,mixed,Comment construire une procedure de debug robuste qui cite une source issue technique et une source file documentaire sans contradiction ?,issue:any_related_h7_ticket,"Pour construire une procédure de debug robuste qui cite une source issue et une source documentaire sans contradiction?:
+
+Base technique depuis une issue : par exemple, partir d’un ticket décrivant un problème concret sur NUCLEO?H753ZI (macros dupliquées, mauvais COM?USART, conseils de passer par CubeMX pour régénérer). Ces informations donnent la réalité terrain (symptômes, fichiers impactés, solution validée par les mainteneurs).[*]
+Cadre officiel depuis un fichier/README : articuler chaque étape avec ce que dit la documentation du package?: quelles cartes sont supportées, quels drivers sont fournis, quelles versions (release notes), quels exemples servir de référence (structure projet, configuration clock, etc.).[*]
+La procédure de debug doit être écrite de façon à ce que chaque action critique soit traçable à l’un ou l’autre?: «?Étape X?: conformément au ticket Y…?» et «?Étape Z?: conforme au README / release notes de la version V…?».",,,,,,,
+A,issues_only,Q30,mixed,Pour reduire les hallucinations quelle bonne pratique de reponse impose de croiser evidence issue cas concret et evidence file guide officiel ?,issue:any_related_h7_ticket,"I DON'T KNOW
+(Aucune bonne pratique explicite n’est décrite dans le contexte sur la manière de croiser evidence d’issue (cas concret) et evidence de fichier (guide officiel) pour réduire les hallucinations.)",,,,,,,
+B,issues_plus_files,Q30,mixed,Pour reduire les hallucinations quelle bonne pratique de reponse impose de croiser evidence issue cas concret et evidence file guide officiel ?,issue:any_related_h7_ticket,"Pour réduire les hallucinations, la bonne pratique de réponse consiste à croiser systématiquement :
+
+une evidence issue (cas concret)?: par ex. un ticket qui explique qu’un bug ADC vient d’un problème de génération CubeMX et renvoie vers la communauté CubeMX plutôt que de modifier le HAL,[*]
+avec une evidence file (guide officiel)?: par ex. le README/release notes STM32CubeH7 qui documentent les versions, les exemples disponibles et la portée officielle du firmware (drivers fournis, cartes supportées).[*]
+Une réponse «?non?hallucinée?» doit donc toujours être ancrée simultanément dans un ticket concret (symptômes + fix réel) et un document de référence (README, release notes, liste de projets), en restant strictement dans ce que ces sources indiquent explicitement.",,,,,,,

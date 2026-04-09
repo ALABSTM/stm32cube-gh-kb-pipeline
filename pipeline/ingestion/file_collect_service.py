@@ -1,9 +1,16 @@
 import json
 from pathlib import Path
 from typing import Dict, Iterable, List
+from urllib.parse import quote
 
 
 DOC_EXTENSIONS = {".md", ".txt", ".htm", ".html"}
+
+
+def build_github_blob_url(owner: str, repo_name: str, rel_path: str, ref: str = "master") -> str:
+    path_norm = (rel_path or "").replace("\\", "/").lstrip("/")
+    path_escaped = quote(path_norm, safe="/")
+    return f"https://github.com/{owner}/{repo_name}/blob/{ref}/{path_escaped}"
 
 
 def is_projects_readme(rel_path: Path) -> bool:
@@ -68,7 +75,7 @@ def read_file_content(path: Path) -> str:
             return ""
 
 
-def collect_repo_docs(repo_name: str, repo_root: Path) -> list[dict]:
+def collect_repo_docs(repo_name: str, repo_root: Path, owner: str = "STMicroelectronics") -> list[dict]:
     if not repo_root.exists():
         raise FileNotFoundError(
             f"Repository folder does not exist: {repo_root}. "
@@ -91,6 +98,11 @@ def collect_repo_docs(repo_name: str, repo_root: Path) -> list[dict]:
                 "path": str(rel_path).replace("\\", "/"),
                 "content": content,
                 "encoding": "utf-8",
+                "github_url": build_github_blob_url(
+                    owner=owner,
+                    repo_name=repo_name,
+                    rel_path=str(rel_path).replace("\\", "/"),
+                ),
             }
         )
 

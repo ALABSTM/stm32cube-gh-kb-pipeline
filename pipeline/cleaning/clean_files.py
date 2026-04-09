@@ -47,6 +47,7 @@ def clean_files_for_repo(repo: str) -> None:
         path = f.get("path") or ""
         content = f.get("content") or ""
         encoding = f.get("encoding") or "utf-8"
+        github_url = f.get("github_url")
 
         clean_text = clean_content(content)
         file_type = detect_file_type(path)
@@ -58,6 +59,7 @@ def clean_files_for_repo(repo: str) -> None:
                 "clean_text": clean_text,
                 "file_type": file_type,
                 "encoding": encoding,
+                "github_url": github_url,
             }
         )
 

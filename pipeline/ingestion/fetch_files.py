@@ -11,6 +11,7 @@ def load_config() -> dict:
 
 def main() -> None:
     cfg = load_config()
+    owner = cfg.get("owner", "STMicroelectronics")
     repos = cfg["repos"]
     data_dir = DATA_DIR
     data_dir.mkdir(parents=True, exist_ok=True)
@@ -26,7 +27,7 @@ def main() -> None:
             continue
 
         try:
-            raw_files = collect_repo_docs(repo_name, repo_root)
+            raw_files = collect_repo_docs(repo_name, repo_root, owner=owner)
         except Exception as exc:
             print(f"[ERROR] Scan failed for {repo_name}: {exc}")
             continue

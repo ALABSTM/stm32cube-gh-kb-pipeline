@@ -1,5 +1,6 @@
 import re
 from typing import Any
+from urllib.parse import quote
 
 from pipeline.chunking.chunk_service import mcu_series_from_repo
 from pipeline.enrichment.stm32cube_preprocessing_heuristics import detect_layer, detect_severity
@@ -61,6 +62,14 @@ def detect_component(text: str) -> str | None:
             if kw in txt_lower:
                 return component
     return None
+
+
+def build_file_github_url(repo: str | None, path: str | None, owner: str = "STMicroelectronics") -> str | None:
+    if not repo or not path:
+        return None
+    path_norm = path.replace("\\", "/").lstrip("/")
+    path_escaped = quote(path_norm, safe="/")
+    return f"https://github.com/{owner}/{repo}/blob/master/{path_escaped}"
 
 
 class PreprocessingConfig:
@@ -161,7 +170,7 @@ class PreprocessingModelFilesV2:
             "type": "file",
             "path": path,
             "file_type": file_type,
-            "github_url": None,
+            "github_url": file_obj.get("github_url") or build_file_github_url(repo=repo, path=path),
             "board": None,
             "category": None,
             "component": None,
