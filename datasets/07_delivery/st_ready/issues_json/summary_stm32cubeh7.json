@@ -6,5 +6,6 @@
   "exported_docs": 221,
   "include_invalid": false,
   "comments_chars": 1200,
-  "format": "json"
+  "format": "json",
+  "root_tag_path": "issues"
 }

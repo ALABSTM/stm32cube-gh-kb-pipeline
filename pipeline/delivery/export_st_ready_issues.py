@@ -252,6 +252,10 @@ def export_repo_json(repo: str, include_invalid: bool, comments_chars: int) -> t
     out_root = PROJECT_ROOT / "datasets" / "07_delivery" / "st_ready" / "issues_json"
     out_root.mkdir(parents=True, exist_ok=True)
 
+    cfg = load_config()
+    owner = cfg.get("owner", "STMicroelectronics")
+    url_base = f"https://github.com/{owner}/"
+
     docs = json.loads(in_path.read_text(encoding="utf-8"))
     total = len(docs)
 
@@ -263,7 +267,9 @@ def export_repo_json(repo: str, include_invalid: bool, comments_chars: int) -> t
         payload_docs.append(
             {
                 "id": doc.get("id"),
+                "url_base": url_base,
                 "repo": doc.get("repo"),
+                "root_path": "issues",
                 "mcu_series": doc.get("mcu_series"),
                 "issue_number": doc.get("issue_number"),
                 "issue_title": doc.get("issue_title"),
@@ -281,8 +287,12 @@ def export_repo_json(repo: str, include_invalid: bool, comments_chars: int) -> t
             }
         )
 
+    export_payload = {
+        "issues": payload_docs,
+    }
+
     out_file = out_root / f"st_ready_issues_{repo.lower()}.json"
-    out_file.write_text(json.dumps(payload_docs, ensure_ascii=False, indent=2), encoding="utf-8")
+    out_file.write_text(json.dumps(export_payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
     summary = {
         "repo": repo,
@@ -293,6 +303,7 @@ def export_repo_json(repo: str, include_invalid: bool, comments_chars: int) -> t
         "include_invalid": include_invalid,
         "comments_chars": comments_chars,
         "format": "json",
+        "root_tag_path": "issues",
     }
     (out_root / f"summary_{repo.lower()}.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
 

@@ -58,7 +58,7 @@ def detect_severity(text: str, labels: List[str] | None = None) -> str:
         "comment typo",
         "example description",
         "minor issue",
-        "cosmetic",
+        
     ]
     low_labels = ["documentation", "doc", "typo"]
 
