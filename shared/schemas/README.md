@@ -8,6 +8,9 @@ This folder contains JSON Schema contracts for STM32Cube preprocessing outputs.
 - docs_files_v2.schema.json: schema for data/docs_files_*_v2.json
 - chunks_issues_v2.schema.json: schema for data/chunks_issues_*_v2.json
 - chunks_files_v2.schema.json: schema for data/chunks_files_*_v2.json
+- raw_prs.schema.json: schema for data/raw_prs_*.json
+- raw_commits.schema.json: schema for data/raw_commits_*.json
+- issue_pr_commit_links.schema.json: schema for data/issue_pr_commit_links_*.json
 
 ## Why validate
 

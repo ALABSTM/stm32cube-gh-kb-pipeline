@@ -1,8 +1,12 @@
 {
   "owner": "STMicroelectronics",
-  "repos": ["STM32CubeH7", "STM32CubeH5"],
+  "repos": [
+    "STM32CubeH7",
+    "stm32h7xx-hal-driver"
+  ],
   "data_dir": "data",
   "repos_dir": "GitHub_repos",
+  "commit_pr_scope": "linked_or_merged",
   "github_token_env": "GITHUB_TOKEN",
   "rate_limits": {
     "issues_sleep": 0.2,

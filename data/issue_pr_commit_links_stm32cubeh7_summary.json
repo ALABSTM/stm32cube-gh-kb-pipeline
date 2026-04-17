@@ -1,0 +1,19 @@
+{
+  "repo": "STM32CubeH7",
+  "generated_at": "2026-04-17T15:45:38.707593+00:00",
+  "issues_total": 296,
+  "linked_issues": 4,
+  "unlinked_issues": 292,
+  "link_rate": 0.0135,
+  "resolution_status_counts": {
+    "merged_fix": 0,
+    "candidate_fix": 4,
+    "reference_only": 0
+  },
+  "top_linked_issue_numbers": [
+    316,
+    181,
+    43,
+    231
+  ]
+}

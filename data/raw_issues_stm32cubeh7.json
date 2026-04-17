@@ -1,11 +1,72 @@
 [
   {
     "repo": "STM32CubeH7",
+    "issue_number": 343,
+    "title": "[Bug]: HAL_CRYP_Decrypt_DMA fails when transfer size is > 65535 bytes",
+    "state": "open",
+    "labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "cryp"
+    ],
+    "created_at": "2026-04-11T17:26:39Z",
+    "closed_at": null,
+    "body": "### Bug Summary\n\nHAL_CRYP_Decrypt_DMA fails when transfer size is > 65535 bytes\n\n### Detailed Description\n\nWith CRYP set up with word-sized transfers (`CRYP_DATAWIDTHUNIT_WORD`), it should be able to process 65535 words, or up to 262140 bytes. Internal to HAL, the `Size` field is set to the number of bytes in the operation, not the number of words, which causes an overflow in the `uint16_t` value.\nhttps://github.com/STMicroelectronics/stm32h7xx-hal-driver/blob/a1996eed9172b59887bafaaa0ea1816ea14d48b5/Src/stm32h7xx_hal_cryp.c#L1587\n```\n    /*  Calculate Size parameter in Byte*/\n    if (hcryp->Init.DataWidthUnit == CRYP_DATAWIDTHUNIT_WORD)\n    {\n      hcryp->Size = Size * 4U;\n    }\n    else\n    {\n      hcryp->Size = Size;\n    }\n```\n\nThe comments say that `Size` is the number of bytes or the number of words, depending on `DataWidthUnit`. However, the code sets it to the number of bytes regardless of the `DataWidthUnit` setting.\nhttps://github.com/STMicroelectronics/stm32h7xx-hal-driver/blob/a1996eed9172b59887bafaaa0ea1816ea14d48b5/Inc/stm32h7xx_hal_cryp.h#L111\n```\n  uint16_t                          Size;           /*!< length of input data in word or in byte, according to DataWidthUnit */\n```\n\nIt looks like many of the DMA functions are passed `Size / 4`.\n\nThe same issue is present within HAL_CRYP_Encrypt_DMA and possibly others.\n\nCommunity post:\nhttps://community.st.com/t5/stm32-mcus-security/unexpected-behavior-of-the-stm32-cryp-module/m-p/891638#M9633\n\n### Expected Behavior\n\nHAL_CRYP_Decrypt_DMA functions correctly for operations on <= 65535 words when set to CRYP_DATAWIDTHUNIT_WORD\n\n### Actual Behavior\n\nThe transfer size is truncated due to the number of bytes being stored as a uint16_t\n\n### Environment\n\n_No response_\n\n### Severity\n\nNormal",
+    "comments": [
+      {
+        "author": "MKISTM",
+        "created_at": "2026-04-14T10:51:10Z",
+        "body": "Hello @timkostka,\n\nThank you for your report, it seems that point makes sense and will be tracked internally.\nI'll keep you informed about last update and our decision about this point.\n\nBR,\nMohamed Chaker."
+      },
+      {
+        "author": "MKISTM",
+        "created_at": "2026-04-14T10:51:41Z",
+        "body": "ST Internal Reference: CDM0061687"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/343"
+  },
+  {
+    "repo": "STM32CubeH7",
+    "issue_number": 340,
+    "title": "[Bug]: DSP Lib has disappeared in version 1.13.0",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "wontfix",
+      "cmsis"
+    ],
+    "created_at": "2026-04-01T03:46:22Z",
+    "closed_at": "2026-04-06T08:58:25Z",
+    "body": "### Bug Summary\n\nDSP Lib has disappeared in version 1.13.0\n\n### Detailed Description\n\nWhen I update STM32CubeH7 MCU Firmware Package to version 1.13.0, I find that Drivers/CMSIS/DSP/Lib folder has disappeared.\n\n### Expected Behavior\n\n_No response_\n\n### Actual Behavior\n\n_No response_\n\n### Environment\n\nCubeMX 6.17.0, STM32H723VGTx\n\n### Severity\n\nNone",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2026-04-06T08:57:38Z",
+        "body": "Hi @Charleshzh,\n\nThis is following a change at Arm's repository level. Please have a look at [this](https://github.com/STMicroelectronics/cmsis-core/issues/5#issuecomment-1983649277) comment for more details.\n\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2026-04-06T08:58:12Z",
+        "body": "See also [cmsis-core#5](https://github.com/STMicroelectronics/cmsis-core/issues/5)"
+      },
+      {
+        "author": "Charleshzh",
+        "created_at": "2026-04-06T17:04:54Z",
+        "body": "Thank you for the reply @ALABSTM."
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/340"
+  },
+  {
+    "repo": "STM32CubeH7",
     "issue_number": 339,
     "title": "[Bug]: USART with a single line",
     "state": "open",
     "labels": [
       "bug",
+      "internal bug tracker",
       "cube mx",
       "usart"
     ],
@@ -431,6 +492,11 @@
         "author": "MKISTM",
         "created_at": "2026-03-31T14:39:21Z",
         "body": "Hello @khevessy,\n\nSorry for later reply.  The valid point has been published since last release **V1.13.0**\n\nLet's explain the analyze result of last point **(4)** step by step:\n\n**4.a** is valid:\nThe current use of + 6 is wrong: it falls inside the page header and does not point to the virtual address field of an EEPROM element.\nThe offset must be derived dynamically, based on the element index (VarIdx) and the element size, as shown in the Gerrit link.\n\n**4.b** is not valid:\nIn EE_ReadVariable(), the search start address is computed as:\n\n/* Get the valid Page end Address */\nAddress = (uint32_t)((EEPROM_START_ADDRESS - 32) + (uint32_t)((1 + ValidPage) * PAGE_SIZE));\n\nGiven the layout:\n\n- Each EEPROM element = 64 bytes\n\n- For the last element in the page, this Address points to the last virtual address field.\n- The page header uses:\n  - First 32 bytes: page status\n  - Second 32 bytes: left erased and never used (skipped when the first element is written).\n\nThe function scans backwards in steps of 64 bytes, always landing on virtual address locations of elements. When we eventually reach the first element’s virtual address, subtracting 64 bytes from there brings us to:\n\nPageStartAddress + 32\n\nwhich corresponds exactly to the end of the header area.\n\n**4.c** isn't valid: \n- In EE_VerifyPageFullWriteVariable(), starting from the page base \n  \n  Address = EEPROM_START_ADDRESS + ValidPage * PAGE_SIZE;\n   \nis intentional. The function scans the page in 64-byte steps, and each EEPROM element is 64 bytes. Beginning at the page base keeps all Address = Address + 64; steps aligned with element boundaries.\n\n- The page header word is never 0xFFFFFFFF`:\n  - The header state is stored in the LSB 16 bits (0xFFFF for ERASED),\n  - The MSB 16 bits are 0x0000, so the word is 0x0000FFFF, not 0xFFFFFFFF.  \n  Therefore, the header cannot be mistaken for a free 32‑byte block, and there is no risk it will be reused or erased by this logic.\n\n- If you shifted the start to + PAGE_HEADER_SIZE, all subsequent +64 increments could be misaligned with the real 64-byte elements, and the free space detection would no longer work correctly.\n\nSo, the current start address at the page beginning is correct and must be kept.\n\nKind regards,\nMohamed."
+      },
+      {
+        "author": "khevessy",
+        "created_at": "2026-04-01T10:55:50Z",
+        "body": "Hello,\n\n\nI checked the new release.\n\n1. You just removed all occurrences to I-Cache enable / disable and left all cache maintenance to the user, understood.\n\n2. You skipped this point altogether. `EE_VerifyPageFullyErased()` still increments by 4 bytes while dereferencing `uint16_t`, so it only checks every other 16-bit word instead of all words in the page.\n\n3. You also ignored this point. `EE_VerifyPageFullWriteVariable()` checks only `(*(__IO uint32_t*)Address) == 0xFFFFFFFF` (the first 4 bytes) instead of  verifying all 16 32-bit words (64 bytes total) that will be written by the two `FLASH_TYPEPROGRAM_FLASHWORD` operations.\n\n4a. Fixed, thanks for this.\n\n4b. I agree that the original code was not broken, I had confused myself regarding the `>` vs `>=` condition. My change was not incorrect, but it was addressing something that was not actually broken. Sorry about that.\n\n4c. \n   - yes, the header shouldn't ever contain `0xFFFF` at the start of a valid page \n   - due to some cache coherency issues (missing D-cache invalidation), we sometimes observed stale page header values in `EE_FindValidPage()` - particularly both headers appearing as `0x0000` (page valid), which led to incorrect page selection for write and consequent header corruption\n   - treating the header area as a candidate write location seems not robust (even if the header is never expected to be erased)\n   - about the misalignment: my proposed `PAGE_HEADER_SIZE` referred to the full 64-byte reserved region before the first EEPROM element, not just the first 32-byte page-status flashword. Under that definition, starting the allocation scan at page_base + `PAGE_HEADER_SIZE` preserves 64-byte alignment. The misalignment concern applies only if `PAGE_HEADER_SIZE` is interpreted as 32 bytes\n\nBest regards,\nKarel"
       }
     ],
     "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/327"

@@ -11,6 +11,9 @@ def load_config() -> dict:
 def detect_file_type(path: str) -> str:
     p = path.replace("\\", "/").lower()
 
+    if p.startswith("documentation/") and p.endswith(".pdf"):
+        return "documentation_pdf"
+
     if "release_notes" in p or "releasenotes" in p:
         return "release_notes"
 
@@ -48,6 +51,11 @@ def clean_files_for_repo(repo: str) -> None:
         content = f.get("content") or ""
         encoding = f.get("encoding") or "utf-8"
         github_url = f.get("github_url")
+        media_urls = f.get("media_urls") or []
+        image_records = f.get("image_records") or []
+        images_count = f.get("images_count") or len(image_records)
+        content_extractor = f.get("content_extractor") or "text"
+        pdf_task_file = f.get("pdf_task_file")
 
         clean_text = clean_content(content)
         file_type = detect_file_type(path)
@@ -60,6 +68,11 @@ def clean_files_for_repo(repo: str) -> None:
                 "file_type": file_type,
                 "encoding": encoding,
                 "github_url": github_url,
+                "media_urls": media_urls,
+                "image_records": image_records,
+                "images_count": images_count,
+                "content_extractor": content_extractor,
+                "pdf_task_file": pdf_task_file,
             }
         )
 

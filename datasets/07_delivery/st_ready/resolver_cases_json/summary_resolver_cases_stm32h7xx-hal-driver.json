@@ -1,0 +1,15 @@
+{
+  "repo": "stm32h7xx-hal-driver",
+  "input_file": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\data\\issue_pr_commit_links_stm32h7xx-hal-driver_linked_only.json",
+  "output_file": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\resolver_cases_json\\st_ready_resolver_cases_stm32h7xx-hal-driver.json",
+  "total_cases_in_input": 3,
+  "exported_cases": 3,
+  "include_reference_only": false,
+  "format": "json",
+  "root_tag_path": "resolver_cases",
+  "status_breakdown": {
+    "merged_fix": 0,
+    "candidate_fix": 3,
+    "reference_only": 0
+  }
+}

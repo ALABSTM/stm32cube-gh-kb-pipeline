@@ -157,6 +157,8 @@ class PreprocessingModelFilesV2:
         path = file_obj.get("path") or ""
         clean_text: str = file_obj.get("clean_text") or ""
         file_type: str = file_obj.get("file_type") or "other"
+        media_urls: list[str] = file_obj.get("media_urls") or []
+        image_records: list[dict[str, Any]] = file_obj.get("image_records") or []
 
         doc_id = f"{(repo or '').lower()}-file-{abs(hash(path))}"
         is_valid = len(clean_text) >= 100
@@ -177,6 +179,11 @@ class PreprocessingModelFilesV2:
             "example_name": None,
             "ingest_version": self.config.version,
             "clean_text": clean_text,
+            "image_urls": media_urls,
+            "image_records": image_records,
+            "images_count": file_obj.get("images_count") or len(image_records),
+            "content_extractor": file_obj.get("content_extractor") or "text",
+            "pdf_task_file": file_obj.get("pdf_task_file"),
             "is_valid": is_valid,
         }
 

@@ -1,10 +1,19 @@
 import json
 from pathlib import Path
-from typing import Dict, Iterable, List
+from typing import Iterable
 from urllib.parse import quote
+
+from shared.utils.paths import DATA_DIR
+from pipeline.ingestion.pdf_figure_service import extract_pdf_multimodal
+
+try:
+    from pypdf import PdfReader  # type: ignore[import-not-found]
+except Exception:
+    PdfReader = None
 
 
 DOC_EXTENSIONS = {".md", ".txt", ".htm", ".html"}
+PDF_EXTENSION = ".pdf"
 
 
 def build_github_blob_url(owner: str, repo_name: str, rel_path: str, ref: str = "master") -> str:
@@ -24,8 +33,7 @@ def is_projects_readme(rel_path: Path) -> bool:
     if not filename.startswith("readme"):
         return False
 
-    ext = rel_path.suffix.lower()
-    return ext in DOC_EXTENSIONS
+    return rel_path.suffix.lower() in DOC_EXTENSIONS
 
 
 def is_release_notes(rel_path: Path) -> bool:
@@ -45,9 +53,16 @@ def is_top_level_readme(rel_path: Path) -> bool:
     parts = rel_path.parts
     if len(parts) == 1:
         return True
-    if parts[0].lower() == "documentation":
-        return True
     return False
+
+
+def is_documentation_pdf(rel_path: Path) -> bool:
+    parts = rel_path.parts
+    if not parts:
+        return False
+    if parts[0].lower() != "documentation":
+        return False
+    return rel_path.suffix.lower() == PDF_EXTENSION
 
 
 def should_include_file(repo_root: Path, path: Path) -> bool:
@@ -55,7 +70,12 @@ def should_include_file(repo_root: Path, path: Path) -> bool:
         return False
 
     rel_path = path.relative_to(repo_root)
-    return is_projects_readme(rel_path) or is_release_notes(rel_path) or is_top_level_readme(rel_path)
+    return (
+        is_projects_readme(rel_path)
+        or is_release_notes(rel_path)
+        or is_top_level_readme(rel_path)
+        or is_documentation_pdf(rel_path)
+    )
 
 
 def iter_repo_files(repo_root: Path) -> Iterable[Path]:
@@ -64,15 +84,31 @@ def iter_repo_files(repo_root: Path) -> Iterable[Path]:
             yield p
 
 
-def read_file_content(path: Path) -> str:
+def extract_pdf_text(path: Path) -> str:
+    if PdfReader is None:
+        print(f"[WARN] pypdf not installed; cannot read PDF {path}. Install with: pip install pypdf")
+        return ""
+
     try:
-        return path.read_text(encoding="utf-8")
+        reader = PdfReader(str(path))
+        pages_text: list[str] = []
+        for page in reader.pages:
+            pages_text.append(page.extract_text() or "")
+        return "\n".join(t for t in pages_text if t).strip()
+    except Exception as exc:
+        print(f"[WARN] Cannot extract PDF text from {path}: {exc}")
+        return ""
+
+
+def read_text_file_content(path: Path) -> tuple[str, str]:
+    try:
+        return path.read_text(encoding="utf-8"), "text"
     except UnicodeDecodeError:
         try:
-            return path.read_text(encoding="latin-1")
+            return path.read_text(encoding="latin-1"), "text"
         except Exception as exc:
             print(f"[WARN] Cannot read {path}: {exc}")
-            return ""
+            return "", "none"
 
 
 def collect_repo_docs(repo_name: str, repo_root: Path, owner: str = "STMicroelectronics") -> list[dict]:
@@ -89,20 +125,57 @@ def collect_repo_docs(repo_name: str, repo_root: Path, owner: str = "STMicroelec
     for file_path in iter_repo_files(repo_root):
         count += 1
         rel_path = file_path.relative_to(repo_root)
+        rel_path_str = str(rel_path).replace("\\", "/")
         print(f"  [{count}] Reading file: {rel_path}")
 
-        content = read_file_content(file_path)
+        github_url = build_github_blob_url(
+            owner=owner,
+            repo_name=repo_name,
+            rel_path=rel_path_str,
+        )
+
+        content = ""
+        extractor = "none"
+        figure_records = []
+        media_urls = []
+        images_count = 0
+        pdf_task_file = None
+
+        if file_path.suffix.lower() == PDF_EXTENSION:
+            try:
+                result = extract_pdf_multimodal(
+                    pdf_path=file_path,
+                    repo_name=repo_name,
+                    rel_path=rel_path_str,
+                    source_pdf_url=github_url,
+                    data_dir=DATA_DIR,
+                )
+                content = result.get("content", "")
+                figure_records = result.get("figure_records", [])
+                images_count = result.get("figures_count", 0)
+                extractor = result.get("content_extractor", "pypdf+render+opencv")
+                pdf_task_file = result.get("task_file")
+            except Exception as exc:
+                print(f"[WARN] Multimodal PDF extraction failed for {file_path}: {exc}")
+                content = extract_pdf_text(file_path)
+                extractor = "pypdf_fallback"
+                figure_records = []
+                images_count = 0
+        else:
+            content, extractor = read_text_file_content(file_path)
+
         raw_files.append(
             {
                 "repo": repo_name,
-                "path": str(rel_path).replace("\\", "/"),
+                "path": rel_path_str,
                 "content": content,
                 "encoding": "utf-8",
-                "github_url": build_github_blob_url(
-                    owner=owner,
-                    repo_name=repo_name,
-                    rel_path=str(rel_path).replace("\\", "/"),
-                ),
+                "github_url": github_url,
+                "media_urls": media_urls,
+                "image_records": figure_records,
+                "images_count": images_count,
+                "content_extractor": extractor,
+                "pdf_task_file": pdf_task_file,
             }
         )
 

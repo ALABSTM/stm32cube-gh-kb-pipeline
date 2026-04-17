@@ -1,0 +1,162 @@
+{
+  "resolver_cases": [
+    {
+      "id": "resolver::STM32CubeH7::issue::43",
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "STM32CubeH7",
+      "issue_root_path": "issues",
+      "pr_root_path": "pull",
+      "commit_root_path": "commit",
+      "issue_number": 43,
+      "issue_title": "USART fails to compile",
+      "issue_labels": [
+        "bug",
+        "spotted before customer",
+        "hal"
+      ],
+      "issue_state": "closed",
+      "issue_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/43",
+      "linked_pr_numbers": [
+        44
+      ],
+      "linked_commit_shas": [
+        "4741000fca0eaaf3e7ef439cf42b476504621f6b"
+      ],
+      "primary_pr_number": 44,
+      "primary_commit_sha": "4741000fca0eaaf3e7ef439cf42b476504621f6b",
+      "linked_pr_urls": [
+        "https://github.com/STMicroelectronics/STM32CubeH7/pull/44"
+      ],
+      "linked_commit_urls": [
+        "https://github.com/STMicroelectronics/STM32CubeH7/commit/4741000fca0eaaf3e7ef439cf42b476504621f6b"
+      ],
+      "resolution_status": "candidate_fix",
+      "link_confidence": "medium",
+      "link_score": 0.8,
+      "delivery_template": "st_v1_resolver_case",
+      "resolver_card_text": "Problem: Issue #43 - USART fails to compile\nContext: repo=STM32CubeH7, labels=bug, spotted before customer, hal, issue_state=closed\nResolver signal: resolution_status=candidate_fix, confidence=medium, score=0.8\nAssessment: Potential fix identified, but integration status is uncertain.\nCandidate PRs: Fix issue #43 USART typo\nCommit evidence: Fix issue #43 USART typo In several places USART was typed as UART.\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying."
+    },
+    {
+      "id": "resolver::STM32CubeH7::issue::181",
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "STM32CubeH7",
+      "issue_root_path": "issues",
+      "pr_root_path": "pull",
+      "commit_root_path": "commit",
+      "issue_number": 181,
+      "issue_title": "Oversensitive up/down touchscreen controls in BSP audio playback example",
+      "issue_labels": [
+        "duplicate",
+        "projects"
+      ],
+      "issue_state": "closed",
+      "issue_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/181",
+      "linked_pr_numbers": [
+        182
+      ],
+      "linked_commit_shas": [
+        "4e79d4987d2bad3c82a33e5c0176da43ac41791d",
+        "bee0ed19ee164e9fcea9d3321da299030d970421"
+      ],
+      "primary_pr_number": 182,
+      "primary_commit_sha": "4e79d4987d2bad3c82a33e5c0176da43ac41791d",
+      "linked_pr_urls": [
+        "https://github.com/STMicroelectronics/STM32CubeH7/pull/182"
+      ],
+      "linked_commit_urls": [
+        "https://github.com/STMicroelectronics/STM32CubeH7/commit/4e79d4987d2bad3c82a33e5c0176da43ac41791d",
+        "https://github.com/STMicroelectronics/STM32CubeH7/commit/bee0ed19ee164e9fcea9d3321da299030d970421"
+      ],
+      "resolution_status": "candidate_fix",
+      "link_confidence": "medium",
+      "link_score": 0.8,
+      "delivery_template": "st_v1_resolver_case",
+      "resolver_card_text": "Problem: Issue #181 - Oversensitive up/down touchscreen controls in BSP audio playback example\nContext: repo=STM32CubeH7, labels=duplicate, projects, issue_state=closed\nResolver signal: resolution_status=candidate_fix, confidence=medium, score=0.8\nAssessment: Potential fix identified, but integration status is uncertain.\nCandidate PRs: Fixes #181 by ignoring duplicate touches\nCommit evidence: Update audio_play. | Ignore duplicate touches Update audio_play.\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying."
+    },
+    {
+      "id": "resolver::STM32CubeH7::issue::231",
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "STM32CubeH7",
+      "issue_root_path": "issues",
+      "pr_root_path": "pull",
+      "commit_root_path": "commit",
+      "issue_number": 231,
+      "issue_title": "ethernetif.c issues",
+      "issue_labels": [
+        "bug",
+        "internal bug tracker",
+        "mw",
+        "eth"
+      ],
+      "issue_state": "closed",
+      "issue_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/231",
+      "linked_pr_numbers": [
+        232
+      ],
+      "linked_commit_shas": [
+        "dc696e42d1f20ea87f41022993bc75904c349224"
+      ],
+      "primary_pr_number": 232,
+      "primary_commit_sha": "dc696e42d1f20ea87f41022993bc75904c349224",
+      "linked_pr_urls": [
+        "https://github.com/STMicroelectronics/STM32CubeH7/pull/232"
+      ],
+      "linked_commit_urls": [
+        "https://github.com/STMicroelectronics/STM32CubeH7/commit/dc696e42d1f20ea87f41022993bc75904c349224"
+      ],
+      "resolution_status": "candidate_fix",
+      "link_confidence": "medium",
+      "link_score": 0.8,
+      "delivery_template": "st_v1_resolver_case",
+      "resolver_card_text": "Problem: Issue #231 - ethernetif.c issues\nContext: repo=STM32CubeH7, labels=bug, internal bug tracker, mw, eth, issue_state=closed\nResolver signal: resolution_status=candidate_fix, confidence=medium, score=0.8\nAssessment: Potential fix identified, but integration status is uncertain.\nCandidate PRs: Issue #231: improvements on ethernet regarding stability and deadlocks\nCommit evidence: Issue #231: improvements on ethernet regarding stability and deadlocks https://github.\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying."
+    },
+    {
+      "id": "resolver::STM32CubeH7::issue::316",
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "STM32CubeH7",
+      "issue_root_path": "issues",
+      "pr_root_path": "pull",
+      "commit_root_path": "commit",
+      "issue_number": 316,
+      "issue_title": "Add CMake Support",
+      "issue_labels": [
+        "enhancement",
+        "wontfix",
+        "projects"
+      ],
+      "issue_state": "closed",
+      "issue_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/316",
+      "linked_pr_numbers": [
+        317
+      ],
+      "linked_commit_shas": [
+        "34ec350d95e23cc7556238a50d0488f580ec4b98",
+        "392b90fdedf85fbbca8490d2c260220291235c81",
+        "5d08855c3f149c731ca6f07c7e8e635d360e8f0d",
+        "617b110944cba6ea6debc8135c98a8d673e907a3",
+        "b29fa559d838778f71d7f362e0b6ad964c1d8190",
+        "f0bd1afcc095c2ba5a3a668bfb9c0fba2f89660e",
+        "fb620de4c77838a7a4ff319a8211625e953ea8ac"
+      ],
+      "primary_pr_number": 317,
+      "primary_commit_sha": "34ec350d95e23cc7556238a50d0488f580ec4b98",
+      "linked_pr_urls": [
+        "https://github.com/STMicroelectronics/STM32CubeH7/pull/317"
+      ],
+      "linked_commit_urls": [
+        "https://github.com/STMicroelectronics/STM32CubeH7/commit/34ec350d95e23cc7556238a50d0488f580ec4b98",
+        "https://github.com/STMicroelectronics/STM32CubeH7/commit/392b90fdedf85fbbca8490d2c260220291235c81",
+        "https://github.com/STMicroelectronics/STM32CubeH7/commit/5d08855c3f149c731ca6f07c7e8e635d360e8f0d",
+        "https://github.com/STMicroelectronics/STM32CubeH7/commit/617b110944cba6ea6debc8135c98a8d673e907a3",
+        "https://github.com/STMicroelectronics/STM32CubeH7/commit/b29fa559d838778f71d7f362e0b6ad964c1d8190",
+        "https://github.com/STMicroelectronics/STM32CubeH7/commit/f0bd1afcc095c2ba5a3a668bfb9c0fba2f89660e",
+        "https://github.com/STMicroelectronics/STM32CubeH7/commit/fb620de4c77838a7a4ff319a8211625e953ea8ac"
+      ],
+      "resolution_status": "candidate_fix",
+      "link_confidence": "medium",
+      "link_score": 0.8,
+      "delivery_template": "st_v1_resolver_case",
+      "resolver_card_text": "Problem: Issue #316 - Add CMake Support\nContext: repo=STM32CubeH7, labels=enhancement, wontfix, projects, issue_state=closed\nResolver signal: resolution_status=candidate_fix, confidence=medium, score=0.8\nAssessment: Potential fix identified, but integration status is uncertain.\nCandidate PRs: Add CMake Support for STM32CubeH7\nCommit evidence: Added a Script to Fetch the STM32CubeH7 Package - Since this test is located in the package already, this script points to the location of the package instead of cloning the reposi | Updated README Files | Test Project Runs - Modified the test project to run on an STM32H750B-DK. | Updated README Files - Updated README files to explain the available CMake support and its usage.\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying."
+    }
+  ]
+}

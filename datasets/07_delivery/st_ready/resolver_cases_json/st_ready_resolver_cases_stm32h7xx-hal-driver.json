@@ -1,0 +1,115 @@
+{
+  "resolver_cases": [
+    {
+      "id": "resolver::stm32h7xx-hal-driver::issue::3",
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "stm32h7xx-hal-driver",
+      "issue_root_path": "issues",
+      "pr_root_path": "pull",
+      "commit_root_path": "commit",
+      "issue_number": 3,
+      "issue_title": "HAL_FDCAN_GetRxMessage() evaluates GetIndex value for Rx FIFO overwrite scenario.",
+      "issue_labels": [
+        "bug",
+        "internal bug tracker",
+        "spotted before customer",
+        "hal"
+      ],
+      "issue_state": "closed",
+      "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/3",
+      "linked_pr_numbers": [
+        91
+      ],
+      "linked_commit_shas": [
+        "be9c8f73842d0cc398cca735ab2a8d48dc09f52c"
+      ],
+      "primary_pr_number": 91,
+      "primary_commit_sha": "be9c8f73842d0cc398cca735ab2a8d48dc09f52c",
+      "linked_pr_urls": [
+        "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/pull/91"
+      ],
+      "linked_commit_urls": [
+        "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/commit/be9c8f73842d0cc398cca735ab2a8d48dc09f52c"
+      ],
+      "resolution_status": "candidate_fix",
+      "link_confidence": "medium",
+      "link_score": 0.8,
+      "delivery_template": "st_v1_resolver_case",
+      "resolver_card_text": "Problem: Issue #3 - HAL_FDCAN_GetRxMessage() evaluates GetIndex value for Rx FIFO overwrite scenario.\nContext: repo=stm32h7xx-hal-driver, labels=bug, internal bug tracker, spotted before customer, hal, issue_state=closed\nResolver signal: resolution_status=candidate_fix, confidence=medium, score=0.8\nAssessment: Potential fix identified, but integration status is uncertain.\nCandidate PRs: Fix HAL_FDCAN_GetRxMessage GetIndex computation overflow in overwrite mode\nCommit evidence: Fix buffer overflow in HAL_FDCAN_GetRxMessage when FIFO overwrite mode is active\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying."
+    },
+    {
+      "id": "resolver::stm32h7xx-hal-driver::issue::47",
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "stm32h7xx-hal-driver",
+      "issue_root_path": "issues",
+      "pr_root_path": "pull",
+      "commit_root_path": "commit",
+      "issue_number": 47,
+      "issue_title": "Upgrading the hal library from 1.11.0 to 1.11.1 will cause the SPI master transmission to time out for no reason.",
+      "issue_labels": [
+        "bug",
+        "documentation"
+      ],
+      "issue_state": "closed",
+      "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/47",
+      "linked_pr_numbers": [
+        48
+      ],
+      "linked_commit_shas": [
+        "61994139b7643fc8f57127b3d84915ad5363cb80"
+      ],
+      "primary_pr_number": 48,
+      "primary_commit_sha": "61994139b7643fc8f57127b3d84915ad5363cb80",
+      "linked_pr_urls": [
+        "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/pull/48"
+      ],
+      "linked_commit_urls": [
+        "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/commit/61994139b7643fc8f57127b3d84915ad5363cb80"
+      ],
+      "resolution_status": "candidate_fix",
+      "link_confidence": "medium",
+      "link_score": 0.8,
+      "delivery_template": "st_v1_resolver_case",
+      "resolver_card_text": "Problem: Issue #47 - Upgrading the hal library from 1.11.0 to 1.11.1 will cause the SPI master transmission to time out for no reason.\nContext: repo=stm32h7xx-hal-driver, labels=bug, documentation, issue_state=closed\nResolver signal: resolution_status=candidate_fix, confidence=medium, score=0.8\nAssessment: Potential fix identified, but integration status is uncertain.\nCandidate PRs: fix the bug that the spi suspend flag is not cleared\nCommit evidence: fix the bug that the spi suspend flag is not cleared\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying."
+    },
+    {
+      "id": "resolver::stm32h7xx-hal-driver::issue::76",
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "stm32h7xx-hal-driver",
+      "issue_root_path": "issues",
+      "pr_root_path": "pull",
+      "commit_root_path": "commit",
+      "issue_number": 76,
+      "issue_title": "DMA HAL enables FIFO Error interrupt even if the FIFO is not enabled",
+      "issue_labels": [
+        "bug",
+        "invalid",
+        "internal bug tracker",
+        "st community",
+        "hal",
+        "dma"
+      ],
+      "issue_state": "closed",
+      "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/76",
+      "linked_pr_numbers": [
+        78
+      ],
+      "linked_commit_shas": [
+        "19fe437fe48c70d890f8d3e0a016ea8168ee96d9"
+      ],
+      "primary_pr_number": 78,
+      "primary_commit_sha": "19fe437fe48c70d890f8d3e0a016ea8168ee96d9",
+      "linked_pr_urls": [
+        "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/pull/78"
+      ],
+      "linked_commit_urls": [
+        "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/commit/19fe437fe48c70d890f8d3e0a016ea8168ee96d9"
+      ],
+      "resolution_status": "candidate_fix",
+      "link_confidence": "medium",
+      "link_score": 0.8,
+      "delivery_template": "st_v1_resolver_case",
+      "resolver_card_text": "Problem: Issue #76 - DMA HAL enables FIFO Error interrupt even if the FIFO is not enabled\nContext: repo=stm32h7xx-hal-driver, labels=bug, invalid, internal bug tracker, st community, hal, dma, issue_state=closed\nResolver signal: resolution_status=candidate_fix, confidence=medium, score=0.8\nAssessment: Potential fix identified, but integration status is uncertain.\nCandidate PRs: Fix DMA HAL enabling FIFO Error interrupt even if FIFO is not enabled\nCommit evidence: Fix DMA HAL enabling FIFO Error interrupt even if FIFO is not enabled Related to #76 Add condition to enable FIFO Error interrupt only if FIFO is enabled.\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying."
+    }
+  ]
+}
