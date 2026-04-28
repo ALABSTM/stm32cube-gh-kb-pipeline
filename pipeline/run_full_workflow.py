@@ -14,6 +14,7 @@ from pipeline.ingestion.fetch_commits import main as fetch_commits_main
 from pipeline.ingestion.fetch_files import main as fetch_files_main
 from pipeline.ingestion.fetch_issues import main as fetch_issues_main
 from pipeline.ingestion.fetch_prs import main as fetch_prs_main
+from pipeline.ingestion.repo_sync_service import main as sync_local_repos_main
 from pipeline.similarity.compute_issue_similarity_v2 import main as similarity_main
 
 
@@ -22,6 +23,7 @@ STEPS = [
     ("Ingestion pull requests", fetch_prs_main),
     ("Ingestion commits", fetch_commits_main),
     ("Ingestion issue-pr-commit links", fetch_issue_pr_commit_links_main),
+    ("Ingestion sync local repos", sync_local_repos_main),
     ("Ingestion files", fetch_files_main),
     ("Cleaning issues", clean_issues_main),
     ("Cleaning files", clean_files_main),

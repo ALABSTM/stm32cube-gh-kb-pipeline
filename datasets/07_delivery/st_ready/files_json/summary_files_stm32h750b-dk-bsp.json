@@ -1,0 +1,10 @@
+{
+  "repo": "stm32h750b-dk-bsp",
+  "input_file": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\data\\docs_files_stm32h750b-dk-bsp_v2.json",
+  "output_file": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\files_json\\st_ready_files_stm32h750b-dk-bsp.json",
+  "total_docs": 24,
+  "exported_docs": 24,
+  "include_invalid": false,
+  "format": "json",
+  "root_tag_path": "files"
+}

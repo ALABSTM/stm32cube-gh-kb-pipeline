@@ -39,3 +39,4 @@ Q10,A,raw_issues_h7,1,2,2,2,2,9,Correct LL calibration sequence and timing.
 Q10,B,docs_issues_h7_v2,1,2,2,2,2,9,Correct and clear.
 Q10,C,st_ready_issues_h7,1,2,2,2,2,9,Correct and concise.
 Q10,D,st_ready_issues_Fixed_h7,1,2,2,2,2,9,Correct and concise.
+Tu as un troisième problème “policy answer”: Q45 montre que “incertitude” est correcte en esprit, mais sans pointer issue/release notes, la note reste faible.

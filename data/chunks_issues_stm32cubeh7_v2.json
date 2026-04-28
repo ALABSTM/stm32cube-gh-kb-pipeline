@@ -1,8 +1,88 @@
 [
   {
+    "id": "stm32cubeh7-issue-343-0",
+    "text": "Title: [Bug]: HAL_CRYP_Decrypt_DMA fails when transfer size is > 65535 bytes\n\nBody:\n### Bug Summary\n\nHAL_CRYP_Decrypt_DMA fails when transfer size is > 65535 bytes\n\n### Detailed Description\n\nWith CRYP set up with word-sized transfers (CRYP_DATAWIDTHUNIT_WORD), it should be able to process 65535 words, or up to 262140 bytes. Internal to HAL, the Size field is set to the number of bytes in the operation, not the number of words, which causes an overflow in the uint16_t value.\nhttps://github.com/STMicroelectronics/stm32h7xx-hal-driver/blob/a1996eed9172b59887bafaaa0ea1816ea14d48b5/Src/stm32h7xx_hal_cryp.c#L1587\n\n/*  Calculate Size parameter in Byte*/\n    if (hcryp->Init.DataWidthUnit == CRYP_DATAWIDTHUNIT_WORD)\n    {\n      hcryp->Size = Size * 4U;\n    }\n    else\n    {\n      hcryp->Size = Size;\n    }\n\nThe comments say that Size is the number of bytes or the number of words, depending on DataWidthUnit. However, the code sets it to the number of bytes regardless of the DataWidthUnit setting.\nhttps://github.com/STMicroelectronics/stm32h7xx-hal-driver/blob/a1996eed9172b59887bafaaa0ea1816ea14d48b5/Inc/stm32h7xx_hal_cryp.h#L111",
+    "metadata": {
+      "id": "stm32cubeh7-issue-343",
+      "source_kind": "issue",
+      "repo": "STM32CubeH7",
+      "mcu_package": "STM32CubeH7",
+      "mcu_series": "H7",
+      "type": "issue",
+      "path": null,
+      "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/343",
+      "board": "STM32H7XX",
+      "category": null,
+      "component": "DMA",
+      "example_name": null,
+      "issue_number": 343,
+      "issue_title": "[Bug]: HAL_CRYP_Decrypt_DMA fails when transfer size is > 65535 bytes",
+      "state": "open",
+      "labels": [
+        "bug",
+        "internal bug tracker",
+        "hal",
+        "cryp"
+      ],
+      "is_confirmed_bug": true,
+      "created_at": "2026-04-11T17:26:39Z",
+      "closed_at": null,
+      "ingest_version": "v2.0",
+      "image_urls": [],
+      "images_count": 0,
+      "is_valid": true,
+      "layer": "HAL",
+      "severity": "medium",
+      "issue_kind": "bug_report",
+      "related_issue_ids": [],
+      "chunk_index": 0,
+      "chunk_count": 2
+    }
+  },
+  {
+    "id": "stm32cubeh7-issue-343-1",
+    "text": "uint16_t                          Size;           /*!< length of input data in word or in byte, according to DataWidthUnit */\n\nIt looks like many of the DMA functions are passed Size / 4.\n\nThe same issue is present within HAL_CRYP_Encrypt_DMA and possibly others.\n\nCommunity post:\nhttps://community.st.com/t5/stm32-mcus-security/unexpected-behavior-of-the-stm32-cryp-module/m-p/891638#M9633\n\n### Expected Behavior\n\nHAL_CRYP_Decrypt_DMA functions correctly for operations on <= 65535 words when set to CRYP_DATAWIDTHUNIT_WORD\n\n### Actual Behavior\n\nThe transfer size is truncated due to the number of bytes being stored as a uint16_t\n\n### Environment\n\n_No response_\n\n### Severity\n\nNormal\n\nComments:\n[MKISTM - 2026-04-14T10:51:10Z]\nHello @timkostka,\n\nThank you for your report, it seems that point makes sense and will be tracked internally.\nI'll keep you informed about last update and our decision about this point.\n\nBR,\nMohamed Chaker.\n\n[MKISTM - 2026-04-14T10:51:41Z]\nST Internal Reference: CDM0061687",
+    "metadata": {
+      "id": "stm32cubeh7-issue-343",
+      "source_kind": "issue",
+      "repo": "STM32CubeH7",
+      "mcu_package": "STM32CubeH7",
+      "mcu_series": "H7",
+      "type": "issue",
+      "path": null,
+      "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/343",
+      "board": "STM32H7XX",
+      "category": null,
+      "component": "DMA",
+      "example_name": null,
+      "issue_number": 343,
+      "issue_title": "[Bug]: HAL_CRYP_Decrypt_DMA fails when transfer size is > 65535 bytes",
+      "state": "open",
+      "labels": [
+        "bug",
+        "internal bug tracker",
+        "hal",
+        "cryp"
+      ],
+      "is_confirmed_bug": true,
+      "created_at": "2026-04-11T17:26:39Z",
+      "closed_at": null,
+      "ingest_version": "v2.0",
+      "image_urls": [],
+      "images_count": 0,
+      "is_valid": true,
+      "layer": "HAL",
+      "severity": "medium",
+      "issue_kind": "bug_report",
+      "related_issue_ids": [],
+      "chunk_index": 1,
+      "chunk_count": 2
+    }
+  },
+  {
     "id": "stm32cubeh7-issue-339-0",
     "text": "Title: [Bug]: USART with a single line\n\nBody:\n### Bug Summary\n\nIn CubeMx, the assignment of pins when trying to use a UART with a single data line is not OK\n\n### Detailed Description\n\nWhen setting a USART to Asynchronous and then setting Advanced Parameters->Data direction to Receive only or Transmit only, both pins stay selected and there's no way of unassigning one. For instance, if I set it to Receive only, I would expect the TX pin to be unassigned.\n\n### Expected Behavior\n\nIf I set it to Receive only, I would expect the TX pin to be unassigned.\n\n### Actual Behavior\n\nboth pins stay assigned and cannot be unassigned\n\n### Environment\n\nCubeMx 6.16.1\n\n### Severity\n\nNone\n\nComments:\n[KRASTM - 2026-03-26T16:17:01Z]\nST Internal Reference: CDM0061073",
-    "Metadata": {
+    "metadata": {
       "id": "stm32cubeh7-issue-339",
       "source_kind": "issue",
       "repo": "STM32CubeH7",
@@ -20,6 +100,7 @@
       "state": "open",
       "labels": [
         "bug",
+        "internal bug tracker",
         "cube mx",
         "usart"
       ],
@@ -2099,14 +2180,13 @@
       "images_count": 0,
       "is_valid": true,
       "layer": "Other",
-      "severity": "medium",
+      "severity": "high",
       "issue_kind": "bug_report",
       "related_issue_ids": [
-        "stm32cubeh7-issue-228",
-        "stm32cubeh7-issue-174"
+        "stm32cubeh7-issue-228"
       ],
       "chunk_index": 0,
-      "chunk_count": 8
+      "chunk_count": 10
     }
   },
   {
@@ -2141,14 +2221,13 @@
       "images_count": 0,
       "is_valid": true,
       "layer": "Other",
-      "severity": "medium",
+      "severity": "high",
       "issue_kind": "bug_report",
       "related_issue_ids": [
-        "stm32cubeh7-issue-228",
-        "stm32cubeh7-issue-174"
+        "stm32cubeh7-issue-228"
       ],
       "chunk_index": 1,
-      "chunk_count": 8
+      "chunk_count": 10
     }
   },
   {
@@ -2183,14 +2262,13 @@
       "images_count": 0,
       "is_valid": true,
       "layer": "Other",
-      "severity": "medium",
+      "severity": "high",
       "issue_kind": "bug_report",
       "related_issue_ids": [
-        "stm32cubeh7-issue-228",
-        "stm32cubeh7-issue-174"
+        "stm32cubeh7-issue-228"
       ],
       "chunk_index": 2,
-      "chunk_count": 8
+      "chunk_count": 10
     }
   },
   {
@@ -2225,14 +2303,13 @@
       "images_count": 0,
       "is_valid": true,
       "layer": "Other",
-      "severity": "medium",
+      "severity": "high",
       "issue_kind": "bug_report",
       "related_issue_ids": [
-        "stm32cubeh7-issue-228",
-        "stm32cubeh7-issue-174"
+        "stm32cubeh7-issue-228"
       ],
       "chunk_index": 3,
-      "chunk_count": 8
+      "chunk_count": 10
     }
   },
   {
@@ -2267,14 +2344,13 @@
       "images_count": 0,
       "is_valid": true,
       "layer": "Other",
-      "severity": "medium",
+      "severity": "high",
       "issue_kind": "bug_report",
       "related_issue_ids": [
-        "stm32cubeh7-issue-228",
-        "stm32cubeh7-issue-174"
+        "stm32cubeh7-issue-228"
       ],
       "chunk_index": 4,
-      "chunk_count": 8
+      "chunk_count": 10
     }
   },
   {
@@ -2309,14 +2385,13 @@
       "images_count": 0,
       "is_valid": true,
       "layer": "Other",
-      "severity": "medium",
+      "severity": "high",
       "issue_kind": "bug_report",
       "related_issue_ids": [
-        "stm32cubeh7-issue-228",
-        "stm32cubeh7-issue-174"
+        "stm32cubeh7-issue-228"
       ],
       "chunk_index": 5,
-      "chunk_count": 8
+      "chunk_count": 10
     }
   },
   {
@@ -2351,19 +2426,18 @@
       "images_count": 0,
       "is_valid": true,
       "layer": "Other",
-      "severity": "medium",
+      "severity": "high",
       "issue_kind": "bug_report",
       "related_issue_ids": [
-        "stm32cubeh7-issue-228",
-        "stm32cubeh7-issue-174"
+        "stm32cubeh7-issue-228"
       ],
       "chunk_index": 6,
-      "chunk_count": 8
+      "chunk_count": 10
     }
   },
   {
     "id": "stm32cubeh7-issue-327-7",
-    "text": "- The page header word is never 0xFFFFFFFF:\n  - The header state is stored in the LSB 16 bits (0xFFFF for ERASED),\n  - The MSB 16 bits are 0x0000, so the word is 0x0000FFFF, not 0xFFFFFFFF.  \n  Therefore, the header cannot be mistaken for a free 32‑byte block, and there is no risk it will be reused or erased by this logic.\n\n- If you shifted the start to + PAGE_HEADER_SIZE, all subsequent +64 increments could be misaligned with the real 64-byte elements, and the free space detection would no longer work correctly.\n\nSo, the current start address at the page beginning is correct and must be kept.\n\nKind regards,\nMohamed.",
+    "text": "- The page header word is never 0xFFFFFFFF:\n  - The header state is stored in the LSB 16 bits (0xFFFF for ERASED),\n  - The MSB 16 bits are 0x0000, so the word is 0x0000FFFF, not 0xFFFFFFFF.  \n  Therefore, the header cannot be mistaken for a free 32‑byte block, and there is no risk it will be reused or erased by this logic.\n\n- If you shifted the start to + PAGE_HEADER_SIZE, all subsequent +64 increments could be misaligned with the real 64-byte elements, and the free space detection would no longer work correctly.\n\nSo, the current start address at the page beginning is correct and must be kept.\n\nKind regards,\nMohamed.\n\n[khevessy - 2026-04-01T10:55:50Z]\nHello,\n\nI checked the new release.\n\n1. You just removed all occurrences to I-Cache enable / disable and left all cache maintenance to the user, understood.\n\n2. You skipped this point altogether. EE_VerifyPageFullyErased() still increments by 4 bytes while dereferencing uint16_t, so it only checks every other 16-bit word instead of all words in the page.",
     "metadata": {
       "id": "stm32cubeh7-issue-327",
       "source_kind": "issue",
@@ -2393,14 +2467,95 @@
       "images_count": 0,
       "is_valid": true,
       "layer": "Other",
-      "severity": "medium",
+      "severity": "high",
       "issue_kind": "bug_report",
       "related_issue_ids": [
-        "stm32cubeh7-issue-228",
-        "stm32cubeh7-issue-174"
+        "stm32cubeh7-issue-228"
       ],
       "chunk_index": 7,
-      "chunk_count": 8
+      "chunk_count": 10
+    }
+  },
+  {
+    "id": "stm32cubeh7-issue-327-8",
+    "text": "3. You also ignored this point. EE_VerifyPageFullWriteVariable() checks only (*(__IO uint32_t*)Address) == 0xFFFFFFFF (the first 4 bytes) instead of  verifying all 16 32-bit words (64 bytes total) that will be written by the two FLASH_TYPEPROGRAM_FLASHWORD operations.\n\n4a. Fixed, thanks for this.\n\n4b. I agree that the original code was not broken, I had confused myself regarding the > vs >= condition. My change was not incorrect, but it was addressing something that was not actually broken. Sorry about that.",
+    "metadata": {
+      "id": "stm32cubeh7-issue-327",
+      "source_kind": "issue",
+      "repo": "STM32CubeH7",
+      "mcu_package": "STM32CubeH7",
+      "mcu_series": "H7",
+      "type": "issue",
+      "path": null,
+      "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/327",
+      "board": "NUCLEO-H743ZI",
+      "category": null,
+      "component": null,
+      "example_name": null,
+      "issue_number": 327,
+      "issue_title": "EEPROM emulation example - bugs",
+      "state": "closed",
+      "labels": [
+        "bug",
+        "internal bug tracker",
+        "projects"
+      ],
+      "is_confirmed_bug": true,
+      "created_at": "2025-10-02T08:15:10Z",
+      "closed_at": "2026-03-31T14:39:21Z",
+      "ingest_version": "v2.0",
+      "image_urls": [],
+      "images_count": 0,
+      "is_valid": true,
+      "layer": "Other",
+      "severity": "high",
+      "issue_kind": "bug_report",
+      "related_issue_ids": [
+        "stm32cubeh7-issue-228"
+      ],
+      "chunk_index": 8,
+      "chunk_count": 10
+    }
+  },
+  {
+    "id": "stm32cubeh7-issue-327-9",
+    "text": "4c. \n   - yes, the header shouldn't ever contain 0xFFFF at the start of a valid page \n   - due to some cache coherency issues (missing D-cache invalidation), we sometimes observed stale page header values in EE_FindValidPage() - particularly both headers appearing as 0x0000 (page valid), which led to incorrect page selection for write and consequent header corruption\n   - treating the header area as a candidate write location seems not robust (even if the header is never expected to be erased)\n   - about the misalignment: my proposed PAGE_HEADER_SIZE referred to the full 64-byte reserved region before the first EEPROM element, not just the first 32-byte page-status flashword. Under that definition, starting the allocation scan at page_base + PAGE_HEADER_SIZE preserves 64-byte alignment. The misalignment concern applies only if PAGE_HEADER_SIZE is interpreted as 32 bytes\n\nBest regards,\nKarel",
+    "metadata": {
+      "id": "stm32cubeh7-issue-327",
+      "source_kind": "issue",
+      "repo": "STM32CubeH7",
+      "mcu_package": "STM32CubeH7",
+      "mcu_series": "H7",
+      "type": "issue",
+      "path": null,
+      "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/327",
+      "board": "NUCLEO-H743ZI",
+      "category": null,
+      "component": null,
+      "example_name": null,
+      "issue_number": 327,
+      "issue_title": "EEPROM emulation example - bugs",
+      "state": "closed",
+      "labels": [
+        "bug",
+        "internal bug tracker",
+        "projects"
+      ],
+      "is_confirmed_bug": true,
+      "created_at": "2025-10-02T08:15:10Z",
+      "closed_at": "2026-03-31T14:39:21Z",
+      "ingest_version": "v2.0",
+      "image_urls": [],
+      "images_count": 0,
+      "is_valid": true,
+      "layer": "Other",
+      "severity": "high",
+      "issue_kind": "bug_report",
+      "related_issue_ids": [
+        "stm32cubeh7-issue-228"
+      ],
+      "chunk_index": 9,
+      "chunk_count": 10
     }
   },
   {
@@ -12599,7 +12754,6 @@
       "issue_kind": "bug_report",
       "related_issue_ids": [
         "stm32cubeh7-issue-228",
-        "stm32cubeh7-issue-327",
         "stm32cubeh7-issue-309"
       ],
       "chunk_index": 0,
@@ -12643,7 +12797,6 @@
       "issue_kind": "bug_report",
       "related_issue_ids": [
         "stm32cubeh7-issue-228",
-        "stm32cubeh7-issue-327",
         "stm32cubeh7-issue-309"
       ],
       "chunk_index": 1,
@@ -12687,7 +12840,6 @@
       "issue_kind": "bug_report",
       "related_issue_ids": [
         "stm32cubeh7-issue-228",
-        "stm32cubeh7-issue-327",
         "stm32cubeh7-issue-309"
       ],
       "chunk_index": 2,

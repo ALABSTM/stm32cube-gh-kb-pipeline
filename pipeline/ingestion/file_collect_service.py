@@ -13,7 +13,57 @@ except Exception:
 
 
 DOC_EXTENSIONS = {".md", ".txt", ".htm", ".html"}
+TECHNICAL_TEXT_EXTENSIONS = {
+    ".c",
+    ".h",
+    ".hpp",
+    ".hh",
+    ".s",
+    ".asm",
+    ".ld",
+    ".mk",
+    ".cmake",
+    ".dox",
+    ".rst",
+    ".xml",
+    ".json",
+    ".yml",
+    ".yaml",
+    ".ini",
+    ".cfg",
+    ".conf",
+    ".csv",
+}
 PDF_EXTENSION = ".pdf"
+
+TOP_LEVEL_METADATA_FILES = {
+    ".deliveryignore",
+    ".gitmodules",
+    "code_of_conduct.md",
+    "contributing.md",
+    "license.md",
+    "security.md",
+    "sw_security_level.md",
+    "package.xml",
+    "sbom_cdx.json",
+}
+
+TECHNICAL_SOURCE_ROOTS = {
+    "drivers",
+    "middlewares",
+    "utilities",
+    "components",
+    "include",
+    "source",
+    "inc",
+    "src",
+}
+
+
+def is_board_bsp_root(root: str) -> bool:
+    if not root.startswith("stm32"):
+        return False
+    return any(tag in root for tag in ("-dk", "-eval", "-disco", "nucleo"))
 
 
 def build_github_blob_url(owner: str, repo_name: str, rel_path: str, ref: str = "master") -> str:
@@ -65,6 +115,50 @@ def is_documentation_pdf(rel_path: Path) -> bool:
     return rel_path.suffix.lower() == PDF_EXTENSION
 
 
+def is_top_level_metadata_file(rel_path: Path) -> bool:
+    if len(rel_path.parts) != 1:
+        return False
+
+    filename = rel_path.name.lower()
+    if filename in TOP_LEVEL_METADATA_FILES:
+        return True
+
+    if filename.startswith("readme") and rel_path.suffix.lower() in DOC_EXTENSIONS:
+        return True
+
+    if filename.startswith("release_notes") and rel_path.suffix.lower() in DOC_EXTENSIONS:
+        return True
+
+    return False
+
+
+def is_technical_source_file(rel_path: Path) -> bool:
+    parts = rel_path.parts
+    if not parts:
+        return False
+
+    filename = rel_path.name.lower()
+    suffix = rel_path.suffix.lower()
+
+    if filename.startswith("readme") or filename.startswith("release_notes"):
+        return True
+
+    if suffix not in DOC_EXTENSIONS and suffix not in TECHNICAL_TEXT_EXTENSIONS:
+        return False
+
+    if len(parts) == 1:
+        return True
+
+    root = parts[0].lower()
+    if root in TECHNICAL_SOURCE_ROOTS:
+        return True
+
+    if is_board_bsp_root(root):
+        return True
+
+    return False
+
+
 def should_include_file(repo_root: Path, path: Path) -> bool:
     if not path.is_file():
         return False
@@ -75,6 +169,8 @@ def should_include_file(repo_root: Path, path: Path) -> bool:
         or is_release_notes(rel_path)
         or is_top_level_readme(rel_path)
         or is_documentation_pdf(rel_path)
+        or is_top_level_metadata_file(rel_path)
+        or is_technical_source_file(rel_path)
     )
 
 

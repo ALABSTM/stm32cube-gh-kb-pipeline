@@ -8,6 +8,10 @@ from urllib.parse import quote
 from shared.utils.paths import DATA_DIR, PROJECT_ROOT, get_config_path
 
 
+DEFAULT_SUMMARY_MAX_CHARS = 360
+DEFAULT_TECHNICAL_MAX_CHARS = 20000
+
+
 def load_config() -> dict[str, Any]:
     return json.loads(get_config_path().read_text(encoding="utf-8"))
 
@@ -24,6 +28,15 @@ def first_sentence(text: str, max_chars: int = 320) -> str:
     if match and match.end() <= max_chars:
         return s[: match.end()].strip()
     return s[:max_chars].strip()
+
+
+def truncate_text(text: str, max_chars: int) -> tuple[str, bool]:
+    if max_chars <= 0:
+        return "", bool(text)
+    if len(text) <= max_chars:
+        return text, False
+    clipped = text[:max_chars].rstrip()
+    return clipped, True
 
 
 def build_github_url(doc: dict[str, Any], url_base: str, root_path: str) -> str | None:
@@ -55,9 +68,21 @@ def split_root_path(root_path: str) -> tuple[str, str]:
     return left or "blob", right or "master"
 
 
-def compose_st_ready_text(doc: dict[str, Any]) -> str:
+def compose_st_ready_text(
+    doc: dict[str, Any],
+    summary_max_chars: int,
+    technical_max_chars: int,
+) -> str:
     clean = normalize_whitespace(doc.get("clean_text") or "")
-    snippet = first_sentence(clean, max_chars=360)
+    snippet = first_sentence(clean, max_chars=summary_max_chars)
+    technical_details, was_truncated = truncate_text(clean, technical_max_chars)
+
+    if was_truncated:
+        technical_details = (
+            f"{technical_details} "
+            f"[technical_details_truncated original_chars={len(clean)} kept_chars={len(technical_details)}]"
+        )
+
     images_count = int(doc.get("images_count") or 0)
     content_extractor = doc.get("content_extractor") or "text"
 
@@ -83,12 +108,17 @@ def compose_st_ready_text(doc: dict[str, Any]) -> str:
         "Constraints: Validate against exact STM32 series/board and firmware package before applying.",
         "",
         "Technical details:",
-        clean,
+        technical_details,
     ]
     return "\n".join(lines).strip()
 
 
-def export_repo_json(repo: str, include_invalid: bool) -> tuple[int, int, Path]:
+def export_repo_json(
+    repo: str,
+    include_invalid: bool,
+    summary_max_chars: int,
+    technical_max_chars: int,
+) -> tuple[int, int, Path]:
     in_path = DATA_DIR / f"docs_files_{repo.lower()}_v2.json"
     if not in_path.exists():
         raise FileNotFoundError(f"Input file not found: {in_path}")
@@ -134,7 +164,11 @@ def export_repo_json(repo: str, include_invalid: bool) -> tuple[int, int, Path]:
                 "pdf_task_file": doc.get("pdf_task_file"),
                 "is_valid": doc.get("is_valid"),
                 "delivery_template": "st_v2_structured_file_card",
-                "st_ready_text": compose_st_ready_text(doc),
+                "st_ready_text": compose_st_ready_text(
+                    doc,
+                    summary_max_chars=summary_max_chars,
+                    technical_max_chars=technical_max_chars,
+                ),
             }
         )
 
@@ -154,6 +188,8 @@ def export_repo_json(repo: str, include_invalid: bool) -> tuple[int, int, Path]:
         "include_invalid": include_invalid,
         "format": "json",
         "root_tag_path": "files",
+        "summary_max_chars": summary_max_chars,
+        "technical_max_chars": technical_max_chars,
     }
     (out_root / f"summary_files_{repo.lower()}.json").write_text(
         json.dumps(summary, indent=2), encoding="utf-8"
@@ -166,7 +202,26 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Export docs_files_v2 into ST-ready JSON file cards.")
     parser.add_argument("--repo", action="append", help="Repo name, e.g., STM32CubeH7. Can be repeated.")
     parser.add_argument("--include-invalid", action="store_true", help="Include is_valid=false docs.")
+    parser.add_argument(
+        "--summary-max-chars",
+        type=int,
+        default=DEFAULT_SUMMARY_MAX_CHARS,
+        help=f"Maximum characters for the summary sentence (default: {DEFAULT_SUMMARY_MAX_CHARS})",
+    )
+    parser.add_argument(
+        "--technical-max-chars",
+        type=int,
+        default=DEFAULT_TECHNICAL_MAX_CHARS,
+        help=f"Maximum characters for technical details per document (default: {DEFAULT_TECHNICAL_MAX_CHARS})",
+    )
     args = parser.parse_args()
+
+    if args.summary_max_chars <= 0:
+        raise ValueError("--summary-max-chars must be > 0")
+    if args.technical_max_chars <= 0:
+        raise ValueError("--technical-max-chars must be > 0")
+    if args.technical_max_chars < args.summary_max_chars:
+        raise ValueError("--technical-max-chars must be >= --summary-max-chars")
 
     cfg = load_config()
     repos = args.repo or cfg.get("repos", [])
@@ -175,7 +230,12 @@ def main() -> None:
         raise ValueError("No repos provided and no repos found in config.")
 
     for repo in repos:
-        total, exported, out_root = export_repo_json(repo=repo, include_invalid=args.include_invalid)
+        total, exported, out_root = export_repo_json(
+            repo=repo,
+            include_invalid=args.include_invalid,
+            summary_max_chars=args.summary_max_chars,
+            technical_max_chars=args.technical_max_chars,
+        )
         print(f"[ST-READY:json:files] {repo}: exported {exported}/{total} -> {out_root}")
 
 

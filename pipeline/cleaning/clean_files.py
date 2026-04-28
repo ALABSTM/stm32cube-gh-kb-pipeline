@@ -8,6 +8,13 @@ def load_config() -> dict:
     return json.loads(cfg_path.read_text(encoding="utf-8"))
 
 
+def is_bsp_board_root(path: str) -> bool:
+    root = path.split("/", 1)[0]
+    if not root.startswith("stm32"):
+        return False
+    return any(tag in root for tag in ("-dk", "-eval", "-disco", "nucleo"))
+
+
 def detect_file_type(path: str) -> str:
     p = path.replace("\\", "/").lower()
 
@@ -24,6 +31,43 @@ def detect_file_type(path: str) -> str:
         if "/documentation/" in p:
             return "doc_readme"
         return "root_readme"
+
+    if p in {
+        "code_of_conduct.md",
+        "contributing.md",
+        "license.md",
+        "security.md",
+        "sw_security_level.md",
+        "package.xml",
+        "sbom_cdx.json",
+        ".deliveryignore",
+        ".gitmodules",
+    }:
+        return "repo_metadata"
+
+    if p.startswith("drivers/"):
+        return "driver_source"
+
+    if p.startswith("src/") or p.startswith("inc/"):
+        return "hal_driver_source"
+
+    if p.startswith("middlewares/"):
+        return "middleware_source"
+
+    if p.startswith("utilities/"):
+        return "utilities_content"
+
+    if p.startswith("components/"):
+        return "bsp_component_source"
+
+    if p.startswith("include/") or p.startswith("source/"):
+        return "cmsis_source"
+
+    if is_bsp_board_root(p):
+        return "bsp_board_source"
+
+    if "/" not in p and p.startswith("stm32") and p.endswith((".c", ".h", ".hpp", ".s", ".asm")):
+        return "bsp_board_source"
 
     return "other"
 

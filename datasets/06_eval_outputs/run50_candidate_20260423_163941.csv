@@ -1,0 +1,295 @@
+﻿"QID";"Question";"GoldAnswer";"Tags";"AssistantAnswer";"Mode";"ExitCode"
+"Q01";"Q01. How to configure STM32H7 SYSCLK at 480 MHz safely";"Set voltage scaling and Flash latency first, configure PLL1 from HSE or HSI with valid multipliers, keep AHB and APB prescalers within limits, then switch SYSCLK to PLL1 and verify final clocks.";"Serie H7";"-I DON'T KNOW-";"candidate";"0"
+"Q02";"Q02. What happens if HSE fails at runtime on H7";"With CSS enabled, HSE failure is detected and system must switch to a fallback clock like HSI, then reconfigure PLL-dependent clocks and revalidate time-critical peripherals.";"Serie H7";"-I DON'T KNOW-";"candidate";"0"
+"Q03";"Q03. Why timer frequency is doubled when APB prescaler is not 1";"On H7, when APB prescaler is greater than 1, timer kernel clock is APB clock multiplied by 2, so timer frequency appears doubled versus APB bus frequency.";"Serie H7";"On STM32H7, when the APB prescaler for a timerÆs bus (APB1 or APB2) is **not equal to 1**, the timer kernel clock is automatically **doubled** with respect to the APB clock.
+
+For example, with APB2 prescaler = 2:
+- PCLK2 = HCLK / 2  
+- Timer clock (e.g. HRTIM1CLK) = 2 ╫ PCLK2 = HCLK  
+
+This ô╫2ö factor is a documented behavior of the STM32H7 timer clocking when the APB prescaler is not 1, and explains why the effective timer frequency appears doubled compared to the plain APB frequency.<sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 project_readme - Projects/STM32H743I-EVAL/Examples/HRTIM/HRTIM_Arbitrary_Waveform/readme.txt"" />[*]</sup><sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 project_readme - Projects/STM32H743I-EVAL/Examples/HRTIM/HRTIM_PWM_DifferentFrequencies/readme.txt"" />[*]</sup><sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 project_readme - Projects/NUCLEO-H743ZI/Examples/HRTIM/HRTIM_PWM_DifferentFrequencies/readme.txt"" />[*]</sup>";"candidate";"0"
+"Q04";"Q04. Why application crashes after enabling I-Cache and D-Cache";"Most crashes come from wrong MPU/cache attributes for shared or DMA memory; use non-cacheable regions for DMA buffers or apply clean/invalidate cache maintenance correctly.";"Serie H7";"[RUNNER_EXCEPTION] Traceback (most recent call last):";"candidate";"-1"
+"Q05";"Q05. What must be reconfigured after STOP mode wake-up on H7";"Restore PLL and bus clock tree, update SystemCoreClock, and reinitialize peripherals whose kernel clocks were stopped or whose state was lost.";"Serie H7";"After STOP mode wake-up on STM32H7, you must at least reconfigure:
+
+1. **System clock tree (SYSCLK and sources)**  
+   - After exiting STOP, the system clock source automatically falls back to **HSI**.  
+   - You must reconfigure the oscillator and system clock to your desired configuration (e.g. HSE, PLL, bus dividers).  
+   - In CubeH7 examples this is done via a function like `SYSCLKConfig_STOP()` which restores the previous clock setup.<sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 project_readme - Projects/STM32H7B3I-EVAL/Examples/PWR/PWR_STOP2_RTC/readme.txt"" />[*]</sup>
+
+2. **Voltage scaling**  
+   - When exiting STOP, the **voltage scale** is reset to a default value (e.g. scale 0 in some examples).  
+   - You must reapply the voltage scaling appropriate to your performance/power target (e.g. re-call `HAL_PWREx_ControlVoltageScaling()` with the desired scale).<sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 project_readme - Projects/STM32H747I-DISCO/Examples/PWR/PWR_Hold_Mechanism/readme.txt"" />[*]</sup>
+
+These steps restore the intended performance, power, and timing behavior after STOP mode on STM32H7 devices.<sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 release_notes - Projects/Release_Notes.html"" />[*]</sup>";"candidate";"0"
+"Q06";"Q06. DMA works once then data becomes stale on H7";"This is usually cache coherency: clean cache before DMA TX, invalidate after DMA RX, and use aligned buffers in coherent memory policy.";"Serie H7";"[RUNNER_EXCEPTION] Traceback (most recent call last):";"candidate";"-1"
+"Q07";"Q07. ADC DMA circular mode gives inconsistent values";"Common causes are insufficient sampling time, overrun, or cache incoherency; increase sampling time, verify trigger rate, and handle DMA buffer cache maintenance.";"Serie H7";"[RUNNER_EXCEPTION] Traceback (most recent call last):";"candidate";"-1"
+"Q08";"Q08. Best way to receive variable UART frames with DMA";"Use ReceiveToIdle DMA pattern: run continuous RX DMA, detect end of frame on idle event, process received length, and continue reception without blocking.";"Serie H7";"[RUNNER_EXCEPTION] Traceback (most recent call last):";"candidate";"-1"
+"Q09";"Q09. SPI DMA transfers sometimes corrupt data";"Typical causes are cache incoherency, chip-select timing, or buffer alignment mismatch; fix cache operations, ensure stable CS framing, and verify data width configuration.";"Serie H7";"[RUNNER_EXCEPTION] Traceback (most recent call last):";"candidate";"-1"
+"Q10";"Q10. When to use MDMA instead of DMA on H7";"Use MDMA for large memory-to-memory or chained transfers and data reformatting; use peripheral DMA for direct peripheral streaming paths.";"Serie H7";"**Diagnosis**
+
+On STM32H7, **MDMA** is preferable over the standard DMA when you need more advanced, flexible, or CPU-centric memory operations, especially involving TCM memories or complex memory-to-memory patterns.<sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 project_readme - Projects/STM32H745I-DISCO/Examples/MDMA/MDMA_RepeatBlock_ZoomOut/readme.txt"" />[*]</sup>
+
+---
+
+### When to use **MDMA** instead of **DMA**
+
+Use **MDMA** in these situations:
+
+1. **Advanced memory-to-memory transfers**
+   - Complex patterns such as **repeat block transfers**, image zoom-out, or multi-block operations that go beyond simple linear transfers supported by standard DMA.<sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 project_readme - Projects/STM32H745I-DISCO/Examples/MDMA/MDMA_RepeatBlock_ZoomOut/readme.txt"" />[*]</sup>
+
+2. **Access to TCM memories (ITCM/DTCM)**
+   - ITCM/DTCM are **not cacheable** and are only accessible by the **Cortex-M7 and MDMA**.
+   - Using MDMA with TCM avoids any cache maintenance issues since these memories are not cacheable.<sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 project_readme - Projects/STM32H7B3I-DK/Examples/OSPI/OSPI_NOR_ReadWrite_DMA/readme.txt"" />[*]</sup>
+
+3. **Event-driven, flexible memory ops**
+   - When transfers must be **triggered by specific events** or require more flexible configuration than classic DMA provides (e.g., sophisticated 2D/image-like moves).<sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 project_readme - Projects/STM32H745I-DISCO/Examples/MDMA/MDMA_RepeatBlock_ZoomOut/readme.txt"" />[*]</sup>
+
+4. **Cacheable vs non-cacheable regions and coherence**
+   - For shared buffers in cacheable SRAM used by CPU and other masters, you must handle **cache coherence** (clean/invalidate) for DMA, DMA2D, LTDC, MDMA, etc.
+   - If you instead place critical buffers in **ITCM/DTCM (with MDMA)**, you avoid cache maintenance because TCM is non-cacheable.<sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 project_readme - Projects/STM32H7B3I-DK/Examples/OSPI/OSPI_NOR_ReadWrite_DMA/readme.txt"" />[*]</sup>
+
+---
+
+### When to keep using **DMA**
+
+Use standard **DMA** when:
+
+- You need **peripheral-to-memory or memory-to-peripheral** transfers (SPI, UART, I2C, etc.).
+- Transfers are relatively simple and performance is acceptable with normal AXI SRAM.
+- YouÆre already handling **cache maintenance** for shared buffers in non-TCM SRAM (e.g. D1 AXI-SRAM at `0x24000000`), with proper **32-byte alignment** to L1 cache line size.<sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 project_readme - Projects/STM32H7B3I-DK/Examples/OSPI/OSPI_NOR_ReadWrite_DMA/readme.txt"" />[*]</sup>
+
+---
+
+### Action
+
+- Prefer **MDMA** for:
+  - Memory-to-memory intensive operations  
+  - Operations involving ITCM/DTCM  
+  - Complex 2D/image/zoom block moves  
+- Use **DMA** for:
+  - Classic peripheral data streaming  
+  - Simple memory moves where standard DMA suffices and cache coherence is already managed  
+
+**Confidence:** High, based on STM32CubeH7 MDMA, OSPI, and JPEG DMA example readmes.<sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 project_readme - Projects/STM32H745I-DISCO/Examples/MDMA/MDMA_RepeatBlock_ZoomOut/readme.txt"" />[*]</sup><sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 project_readme - Projects/STM32H7B3I-DK/Examples/OSPI/OSPI_NOR_ReadWrite_DMA/readme.txt"" />[*]</sup><sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 project_readme - Projects/STM32H743I-EVAL/Examples/JPEG/JPEG_DecodingFromFLASH_DMA/readme.txt"" />[*]</sup>";"candidate";"0"
+"Q11";"Q11. I2C 400 kHz timing not stable on H7";"Recompute TIMINGR for the real kernel clock and verify physical pull-ups and rise time; electrical bus constraints often break nominal 400 kHz operation.";"Serie H7";"-I DON'T KNOW-";"candidate";"0"
+"Q12";"Q12. I2C bus stuck low after error";"Disable I2C, perform SCL toggling for bus recovery, generate STOP, clear error flags, then reinitialize and restart communication.";"Serie H7";"-I DON'T KNOW-";"candidate";"0"
+"Q13";"Q13. USART overrun errors under high load";"RX path is too slow; switch to DMA plus idle detection, reduce ISR latency, and validate baud/clock accuracy to avoid overrun.";"Serie H7";"**Diagnosis**
+
+For STM32H7 using STM32CubeH7, there is a known limitation in the UART/USART HAL driver under high load when using **blocking receive** (e.g. `HAL_UART_Receive`). RX **overrun errors are not handled** in this mode. If an overrun occurs, the HAL code keeps polling `RXNE` but this flag is no longer set, so the call can **block indefinitely** and communication appears stuck under heavy traffic.<sup class=""chatgpt-doc-sup""><span title=""stm32h7xx-hal-driver issue #17 - UART HAL driver - handle RX overrun condition"" />[*]</sup>
+
+**Evidence**
+
+- In CubeH7 HAL, `HAL_UART_Receive()` in **blocking mode** does _not_ check or clear the overrun condition.
+- Under overrun, `RXNE` isnÆt set, so the blocking loop never exits, causing the application to stall even though data is still coming in.<sup class=""chatgpt-doc-sup""><span title=""stm32h7xx-hal-driver issue #17 - UART HAL driver - handle RX overrun condition"" />[*]</sup>
+
+**Action**
+
+To make USART robust under high load on STM32H7:
+
+1. **Avoid blocking RX for high-throughput use-cases**
+   - Prefer **interrupt** (`HAL_UART_Receive_IT`) or **DMA** (`HAL_UART_Receive_DMA`) modes.
+   - These non-blocking modes have **error callbacks** that can handle overrun and other errors properly.<sup class=""chatgpt-doc-sup""><span title=""stm32h7xx-hal-driver issue #17 - UART HAL driver - handle RX overrun condition"" />[*]</sup>
+
+2. **Implement error handling in callbacks**
+   - In `HAL_UART_ErrorCallback()`, check for `HAL_UART_ERROR_ORE` and:
+     - Clear the overrun flag (by reading SR/DR or via HAL if provided).
+     - Optionally reset or restart the receive sequence.
+
+3. **Use buffering and flow control**
+   - For sustained high data rates, combine:
+     - **DMA circular reception** into a ring buffer.
+     - Optional **hardware flow control** (RTS/CTS) to avoid overruns at the electrical/protocol level.
+
+**Confidence**
+
+- The behavior and recommendation to **use non-blocking UART modes to correctly handle overrun** are explicitly derived from a documented STM32H7 HAL issue about RX overrun handling in blocking mode.<sup class=""chatgpt-doc-sup""><span title=""stm32h7xx-hal-driver issue #17 - UART HAL driver - handle RX overrun condition"" />[*]</sup>";"candidate";"0"
+"Q14";"Q14. RS485 DE timing wrong with UART";"Check DE polarity and DE assertion and deassertion timing configuration, then verify transceiver enable pin mapping and driver enable delays.";"Serie H7";"-I DON'T KNOW-";"candidate";"0"
+"Q15";"Q15. USB FS device not enumerating";"Verify 48 MHz USB clock source, descriptors validity, endpoint initialization, and physical pull-up behavior on D+ line.";"Serie H7";"**Diagnosis**
+
+For STM32H7, a common cause of USB FS device not enumerating (especially with Mass Storage Class) is that the media (e.g., SD card) is not ready or not present, and the middleware does not correctly handle this ôdisk not readyö case. This can prevent the host (e.g., Windows) from enumerating the device at all. Another critical cause is an incorrect 48 MHz clock configuration for the USB FS PHY (PLL3 source / configuration).<sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 issue #12 - USB MSC Stack: Can't enumerate when disk is not ready"" />[*]</sup>
+
+**Evidence**
+
+- On STM32H747I-EVAL running an MSC device application, when the SD card was removed or not ready, Windows failed to enumerate the USB device. The root cause was a missing/incorrect handling of the return value in `SCSI_ProcessCmd` when the disk was not ready. This was corrected in the device library v2.6.0.<sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 issue #12 - USB MSC Stack: Can't enumerate when disk is not ready"" />[*]</sup>  
+- Reference USB Device examples (e.g., HID-CM4 / MSC-CM7 on STM32H747I-EVAL) highlight the need for correct SD/media availability and board configuration (cables, jumpers like JP2) and a proper 48 MHz clock derived from PLL3 for USB FS_PHY to operate correctly.<sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 project_readme - Projects/STM32H747I-EVAL/Applications/USB_Device/HID-CM4_MSC-CM7/readme.txt"" />[*]</sup>
+
+**Action**
+
+1. **Check media readiness (for MSC configurations)**  
+   - Ensure SD card / NAND / external storage is inserted and properly initialized before USB is started.  
+   - If using an older STM32CubeH7 device library than v2.6.0, compare your `SCSI_ProcessCmd` implementation with the updated one and ensure that the ôdisk not readyö return value is handled correctly so that the stack reports the proper sense code to the host instead of stalling enumeration.<sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 issue #12 - USB MSC Stack: Can't enumerate when disk is not ready"" />[*]</sup>
+
+2. **Verify USB FS clock (48 MHz) configuration**  
+   - Confirm that 48 MHz for USB FS PHY comes from PLL3 and that PLL3 is enabled and stable before USB is initialized.  
+   - Ensure the system clock and all required domains are fully initialized and that the ôclock readyö flag for the USB domain is set before starting USB middleware.<sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 project_readme - Projects/STM32H747I-EVAL/Applications/USB_Device/HID-CM4_MSC-CM7/readme.txt"" />[*]</sup>
+
+3. **Board/hardware checks**  
+   - Use the correct USB connector (FS vs HS) and a data-capable cable.  
+   - Set any board jumpers (e.g., JP2 on STM32H747I-EVAL) according to the reference USB Device example you are following.<sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 project_readme - Projects/STM32H747I-EVAL/Applications/USB_Device/HID-CM4_MSC-CM7/readme.txt"" />[*]</sup>
+
+4. **Validate against reference example and library version**  
+   - Compare your project with the matching STM32H7 USB Device example for your board/MCU (clock tree, GPIO, middleware configuration).  
+   - Align to at least the device library version where the MSC ôdisk not readyö fix is present (v2.6.0 or later), and re-test enumeration.<sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 issue #12 - USB MSC Stack: Can't enumerate when disk is not ready"" />[*]</sup>
+
+**Confidence**
+
+Mediumûhigh, based on a documented STM32H7 MSC enumeration issue and the official H7 USB Device example guidance.<sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 issue #12 - USB MSC Stack: Can't enumerate when disk is not ready"" />[*]</sup><sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 project_readme - Projects/STM32H747I-EVAL/Applications/USB_Device/HID-CM4_MSC-CM7/readme.txt"" />[*]</sup>";"candidate";"0"
+"Q16";"Q16. USB HS with ULPI does not start";"Check ULPI clock presence, PHY reset and power sequence, pin mux, and host or device stack initialization order.";"Serie H7";"[RUNNER_EXCEPTION] Traceback (most recent call last):";"candidate";"-1"
+"Q17";"Q17. CDC plus RTOS has random blocking writes";"Use queue-based non-blocking TX, single ownership of USB TX path, and back-pressure handling to avoid task contention and deadlock.";"Serie H7";"[RUNNER_EXCEPTION] Traceback (most recent call last):";"candidate";"-1"
+"Q18";"Q18. Ethernet lwIP link up but no traffic";"Likely PHY negotiation mismatch, descriptor or buffer placement issue, cache coherency bug, or netif not fully brought up in lwIP.";"Serie H7";"[RUNNER_EXCEPTION] Traceback (most recent call last):";"candidate";"-1"
+"Q19";"Q19. Ethernet throughput is too low on H7";"Improve with checksum offload, tuned pbuf strategy, descriptor ring sizing, and strict cache-coherent memory handling for RX and TX buffers.";"Serie H7";"[RUNNER_EXCEPTION] Traceback (most recent call last):";"candidate";"-1"
+"Q20";"Q20. How to handle Ethernet link up and down correctly";"Use PHY state monitoring, call netif link up and down APIs properly, and restart DHCP and ARP flows on link transitions.";"Serie H7";"[RUNNER_EXCEPTION] Traceback (most recent call last):";"candidate";"-1"
+"Q21";"Q21. ADC readings are wrong with high-impedance source";"Sampling capacitor does not settle; increase sampling time and reduce source impedance or add a buffer stage.";"Serie H7";"-I DON'T KNOW-";"candidate";"0"
+"Q22";"Q22. Can injected and regular ADC groups run together";"Yes, but trigger and priority interactions affect timing; validate latency and conversion order for both groups under real load.";"Serie H7";"[RUNNER_EXCEPTION] Traceback (most recent call last):";"candidate";"-1"
+"Q23";"Q23. Complementary PWM dead-time configuration on H7";"Use advanced timer complementary outputs, configure dead-time according to power stage requirements, and verify break and polarity settings.";"Serie H7";"[RUNNER_EXCEPTION] Traceback (most recent call last):";"candidate";"-1"
+"Q24";"Q24. Encoder interface misses counts at high speed";"Adjust timer input filter and prescaler, increase timer clock margin, and improve signal quality to reduce missed edges.";"Serie H7";"[RUNNER_EXCEPTION] Traceback (most recent call last):";"candidate";"-1"
+"Q25";"Q25. FDCAN does not receive any frame";"Check global and specific filter configuration, message RAM layout, nominal and data bit timings, and transceiver wiring.";"Serie H7";"[RUNNER_EXCEPTION] Traceback (most recent call last):";"candidate";"-1"
+"Q26";"Q26. FDCAN enters bus-off and never recovers";"Implement bus-off recovery sequence, clear persistent error causes, and re-enable controller only after recovery conditions are met.";"Serie H7";"-I DON'T KNOW-";"candidate";"0"
+"Q27";"Q27. SDMMC plus FatFS corrupted files with DMA";"Main cause is cache and alignment mismatch; use sector-aligned buffers and clean/invalidate cache around DMA accesses.";"Serie H7";"[RUNNER_EXCEPTION] Traceback (most recent call last):";"candidate";"-1"
+"Q28";"Q28. QSPI memory-mapped read gives sporadic faults";"Usually MPU or cache attributes are wrong for mapped region, or command timing is invalid; validate both memory map and timing setup.";"Serie H7";"[RUNNER_EXCEPTION] Traceback (most recent call last):";"candidate";"-1"
+"Q29";"Q29. OctoSPI DTR mode unstable";"DTR mode is timing-sensitive; tune delay and sampling parameters and verify board-level signal integrity at target frequency.";"Serie H7";"-I DON'T KNOW-";"candidate";"0"
+"Q30";"Q30. FMC SDRAM random crashes after boot";"Recheck full SDRAM init sequence, timing registers, CAS latency, and refresh settings against memory datasheet and clock rate.";"Serie H7";"**Diagnosis**
+
+Random crashes after boot when using FMC SDRAM on STM32H7 are typically caused by the CPU accessing SDRAM **before** it has been fully configured and enabled by the boot/system initialization code. During system initialization in the boot project, FMC-SDRAM is **intentionally stopped** to avoid CPU speculation on external SDRAM while it is not properly configured; accessing SDRAM earlier can therefore lead to unpredictable behavior or crashes.<sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 release_notes - Release_Notes.html"" />[*]</sup>
+
+**Evidence**
+
+- The STM32H7 release notes explicitly state that FMC-SDRAM is stopped during system initialization in the boot project to prevent CPU speculation on external SDRAM before proper configuration, and that the boot project will later initialize FMC-SDRAM with the correct configuration as needed.<sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 release_notes - Release_Notes.html"" />[*]</sup>
+
+**Action**
+
+1. Ensure **no code, data, or stack** is placed in SDRAM that might be accessed:
+   - Before the boot project (or early startup code) has fully configured FMC and SDRAM.
+   - Before caches and MPU are properly set up for the SDRAM region, if used.
+
+2. In your startup/boot sequence:
+   - Configure FMC SDRAM (timings, mode register, refresh, etc.).
+   - Enable the SDRAM bank.
+   - Only then relocate or access any code/data that resides in SDRAM.
+
+3. Verify linker script and startup code:
+   - Confirm that any sections mapped to SDRAM are **not** used by the reset handler or early initialization functions until SDRAM init is complete.
+
+**Confidence**
+
+- Mediumûhigh: behavior and recommendation are directly aligned with the STM32CubeH7 release notes guidance on FMC-SDRAM handling during boot.<sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 release_notes - Release_Notes.html"" />[*]</sup>";"candidate";"0"
+"Q31";"Q31. How to place DMA buffers with MPU on H7";"Place DMA buffers in non-cacheable MPU regions or enforce strict cache maintenance policy with alignment and ownership rules.";"Serie H7";"Diagnosis  
+On STM32H7 with MPU and data cache enabled, DMA buffers must be placed in a memory region configured appropriately in the MPU (attributes) and linker (placement), otherwise you risk cache incoherency or unexpected behavior.
+
+Evidence  
+A recommended approach is to create a dedicated section for DMA buffers (e.g. `.dma_buffer`) and map it to a specific RAM area (such as D2 SRAM at 0x3000_0000) with MPU attributes tuned for DMA use: cacheable but not bufferable, and non-shareable. This is documented in an STM32CubeH7 discussion about SPI DMA with cache/MPU on H7 devices.<sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 issue #153 - SPI example using DMA: Add cache maintenance operation or separate dma_buffer section"" />[*]</sup>
+
+Action  
+
+1. **Define an MPU region for DMA buffers** (example for D2 SRAM at 0x30000000, 1 KB):
+   ```c
+   MPU_Region_InitTypeDef MPU_InitStruct;
+
+   MPU_InitStruct.Enable           = MPU_REGION_ENABLE;
+   MPU_InitStruct.BaseAddress      = 0x30000000;                 // Start of DMA buffer area
+   MPU_InitStruct.Size             = MPU_REGION_SIZE_1KB;        // Adjust to your need
+   MPU_InitStruct.AccessPermission = MPU_REGION_FULL_ACCESS;
+   MPU_InitStruct.IsBufferable     = MPU_ACCESS_NOT_BUFFERABLE;
+   MPU_InitStruct.IsCacheable      = MPU_ACCESS_CACHEABLE;
+   MPU_InitStruct.IsShareable      = MPU_ACCESS_NOT_SHAREABLE;
+   MPU_InitStruct.Number           = MPU_REGION_NUMBER1;
+   MPU_InitStruct.TypeExtField     = MPU_TEX_LEVEL0;
+   MPU_InitStruct.SubRegionDisable = 0x00;
+   MPU_InitStruct.DisableExec      = MPU_INSTRUCTION_ACCESS_ENABLE;
+
+   HAL_MPU_ConfigRegion(&MPU_InitStruct);
+   ```
+
+   This region is:
+   - **Cacheable**: improves CPU performance.
+   - **Not bufferable**: avoids write-buffer side effects for DMA.
+   - **Not shareable**: typical for internal SRAM used only by CPU and DMA on H7.
+
+2. **Create a dedicated linker section for DMA buffers**  
+   In your linker script, define something like:
+   ```ld
+   .dma_buffer (NOLOAD) :
+   {
+     *(.dma_buffer)
+   } >RAM_D2  /* or the RAM region at 0x30000000 */
+   ```
+   Adjust the memory region (`RAM_D2`) and size to match your memory map.
+
+3. **Place DMA buffers into the .dma_buffer section**  
+   In your C code:
+   ```c
+   __attribute__((section("".dma_buffer""))) uint8_t dma_tx_buffer[1024];
+   __attribute__((section("".dma_buffer""))) uint8_t dma_rx_buffer[1024];
+   ```
+   Or use your IDEÆs ôsectionö/ôplacementö attributes to map these variables into `.dma_buffer`.
+
+4. **Use these buffers for all DMA transfers**  
+   Configure your DMA (SPI, UART, SDMMC, etc.) to use only buffers residing in `.dma_buffer`. This way, all DMA-accessed memory follows the MPU rules you set.
+
+5. **(Optional) Cache maintenance**  
+   Even with a dedicated region, you may still need explicit cache maintenance depending on attributes and access patterns (e.g., `SCB_CleanDCache_by_Addr` before DMA TX, `SCB_InvalidateDCache_by_Addr` after DMA RX). The referenced discussion emphasizes using either:
+   - A DMA-safe MPU region, and/or  
+   - Proper cache clean/invalidate calls around DMA operations.<sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 issue #153 - SPI example using DMA: Add cache maintenance operation or separate dma_buffer section"" />[*]</sup>
+
+Confidence  
+High, based on a concrete STM32CubeH7 issue describing MPU configuration, memory placement at 0x30000000, and the use of a `.dma_buffer` section for DMA buffers on STM32H7 devices.<sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 issue #153 - SPI example using DMA: Add cache maintenance operation or separate dma_buffer section"" />[*]</sup>";"candidate";"0"
+"Q32";"Q32. HardFault analysis on H7";"Capture stacked registers and fault status registers CFSR HFSR MMFAR BFAR, then map faulting PC to source to identify root cause.";"Serie H7";"I DON'T KNOW";"candidate";"0"
+"Q33";"Q33. HAL_CRYP_Decrypt_DMA fails above 65535 bytes";"Root cause is size-unit mismatch: in word mode code stores byte count in a uint16 field, causing overflow and truncated DMA length.";"Serie H7";"[RUNNER_EXCEPTION] Traceback (most recent call last):";"candidate";"-1"
+"Q34";"Q34. Is HAL_CRYP_Encrypt_DMA affected by the same issue";"Likely yes if the same internal size handling path is reused, so overflow risk extends beyond decrypt DMA path.";"Serie H7";"Yes.  
+
+According to the referenced issue analysis, the same bug that affects `HAL_CRYP_Decrypt_DMA` for transfer sizes > 65535 bytes also affects `HAL_CRYP_Encrypt_DMA` (and possibly other related CRYP DMA APIs). The problem is that the `Size` field is incorrectly set to the **number of bytes** instead of the **number of words**, which overflows the `uint16_t` size field for large word-sized transfers.<sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 issue #343 - [Bug]: HAL_CRYP_Decrypt_DMA fails when transfer size is > 65535 bytes"" />[*]</sup>";"candidate";"0"
+"Q35";"Q35. Suggested workaround before official CRYP fix";"Split large operations into smaller chunks below overflow threshold and preserve crypto context correctly between chunks.";"Serie H7";"-I DON'T KNOW-";"candidate";"0"
+"Q36";"Q36. Is there a confirmed official merged fix for CRYP issue";"From public issue context this is acknowledged and tracked, but merged official fix status must be confirmed from latest release notes and issue updates.";"Serie H7";"I DON'T KNOW";"candidate";"0"
+"Q37";"Q37. H745 dual-core boot sequencing best practice";"Start CM7 first, initialize shared resources and synchronization primitives, then release CM4 with explicit handshake.";"Serie H7";"[RUNNER_EXCEPTION] Traceback (most recent call last):";"candidate";"-1"
+"Q38";"Q38. Inter-core signaling on H7 dual-core";"Use HSEM or mailbox style signaling with clear ownership, timeout handling, and deterministic state transitions.";"Serie H7";"[RUNNER_EXCEPTION] Traceback (most recent call last):";"candidate";"-1"
+"Q39";"Q39. Shared memory corruption between CM7 and CM4";"Usually caused by cache incoherency and missing ownership protocol; enforce memory barriers, cache policy, and producer-consumer contract.";"Serie H7";"[RUNNER_EXCEPTION] Traceback (most recent call last):";"candidate";"-1"
+"Q40";"Q40. FreeRTOS on both cores guidance";"It is feasible with strict partitioning of peripherals and responsibilities, minimal IPC, and explicit shared-memory rules.";"Serie H7";"[RUNNER_EXCEPTION] Traceback (most recent call last):";"candidate";"-1"
+"Q41";"Q41. CubeMX regeneration removed my edits";"Keep custom code only inside USER CODE sections or separate user files outside generated tree to survive regeneration.";"Serie H7";"[RUNNER_EXCEPTION] Traceback (most recent call last):";"candidate";"-1"
+"Q42";"Q42. Is mixing HAL and LL acceptable on H7";"Yes, if boundaries are clear and register ownership is controlled so HAL and LL changes do not conflict.";"Serie H7";"[RUNNER_EXCEPTION] Traceback (most recent call last):";"candidate";"-1"
+"Q43";"Q43. How to handle regressions after CubeH7 upgrade";"Review release notes, compare changed modules, run focused regression tests on clock DMA cache and communication paths first.";"Serie H7";"[RUNNER_EXCEPTION] Traceback (most recent call last):";"candidate";"-1"
+"Q44";"Q44. Open issue with no linked PR: what should assistant answer";"It should provide diagnosis and practical workaround while explicitly stating that no confirmed merged fix is available yet.";"Serie H7";"-I DON'T KNOW-";"candidate";"0"
+"Q45";"Q45. User asks exact date of upstream fix release";"Answer with uncertainty unless officially published; never invent timeline and point to tracked issue plus release notes.";"Serie H7";"-I DON'T KNOW-";"candidate";"0"
+"Q46";"Q46. User asks a non-H7 peripheral question";"Assistant should request target series clarification and avoid giving H7-specific guidance without confirmed scope.";"Serie H7";"-I DON'T KNOW-";"candidate";"0"
+"Q47";"Q47. User gives contradictory board and MCU details";"Request exact part number board and firmware package version before suggesting a fix.";"Serie H7";"When a user gives contradictory board and MCU details, the STM32H7 support assistant must first request clarification before giving any technical guidance.
+
+**Diagnosis**  
+The information about the hardware setup is inconsistent (e.g. board type does not match the MCU), so any analysis based on it would be unreliable.
+
+**Evidence**  
+In a similar situation, the assistant explicitly asked the user to clarify their request and provide precise setup details, including board reference and toolchain information, before proceeding with troubleshooting or recommendations.<sup class=""chatgpt-doc-sup""><span title=""stm32h7xx-hal-driver issue #64 - stm32h7b0 and at070tn94"" />[*]</sup>
+
+**Action**  
+The correct behavior is to pause technical analysis and ask the user to:
+- Confirm the exact **MCU part number** (e.g. STM32H743VITx).  
+- Confirm the exact **board reference** (e.g. NUCLEO-H743ZI2, custom board, etc.).  
+- Provide relevant **toolchain/IDE version** if needed.
+
+Only after consistent, non-contradictory details are provided should further STM32H7-specific support be given.
+
+**Confidence**  
+High, based on prior documented handling of contradictory setup information in STM32H7-related support.<sup class=""chatgpt-doc-sup""><span title=""stm32h7xx-hal-driver issue #64 - stm32h7b0 and at070tn94"" />[*]</sup>";"candidate";"0"
+"Q48";"Q48. User asks for code-level evidence links in answer";"Provide issue, PR, and commit links explicitly and separate confirmed facts from assumptions.";"Serie H7";"-I DON'T KNOW-";"candidate";"0"
+"Q49";"Q49. Short query cryp dma uint16 overflow";"Correct retrieval should map to CRYP size-overflow issue and return root cause plus safe workaround.";"Serie H7";"[RUNNER_EXCEPTION] Traceback (most recent call last):";"candidate";"-1"
+"Q50";"Q50. User asks final recommendation to patch locally now";"Recommend minimal-risk local patch strategy, full validation matrix, and rollback path before deployment.";"Serie H7";"To patch locally now:
+
+- Locate the definition of `D1CorePrescTable` (in the RCC HAL source for STM32H7, e.g. `stm32h7xx_hal_rcc.c`).
+- Replace the existing array:
+
+```c
+static const uint8_t D1CorePrescTable[16] =
+{0, 0, 0, 0, 1, 2, 3, 4, 1, 2, 3, 4, 6, 7, 8, 9};
+```
+
+- With the corrected version:
+
+```c
+static const uint8_t D1CorePrescTable[16] =
+{0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 6, 7, 8, 9};
+```
+
+**Why:** This fixes the wrong shift count used when computing `PCLK2`, which otherwise leads to incorrect USART baud rates and abnormal RCC behavior on STM32H7 devices.<sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 issue #301 - D1CorePrescTable[16] causes the RCC module to work abnormally."" />[*]</sup>
+
+**Action:**  
+- Apply this change in your local CubeH7/HAL tree.  
+- Rebuild your project and verify peripheral clocks (especially USART baud rate) with a scope or protocol analyzer to confirm correctness in your specific MCU/board setup.<sup class=""chatgpt-doc-sup""><span title=""STM32CubeH7 issue #301 - D1CorePrescTable[16] causes the RCC module to work abnormally."" />[*]</sup>";"candidate";"0"

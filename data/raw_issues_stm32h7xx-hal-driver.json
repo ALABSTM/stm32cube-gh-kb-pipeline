@@ -23,6 +23,11 @@
         "author": "M-Bab",
         "created_at": "2026-04-07T10:57:07Z",
         "body": "Okay well some additional context might be needed to run in this error case. The use case is a (regular simulteneous) multi-mode multi-buffer ADC measurement. Unfortunately the HAL does not provide this feature right away but it must be \"hacked\" somehow.\n\nInspired by this implementations (https://github.com/deividAlfa/STM32F429-Discovery-Oscilloscope/blob/main/Core/Src/adc.c#L192) we also do the trick of:\n\n1. Start the Multimode ADC DMA configuration\n2. Immediately DMA Abort\n3. Copy the callbacks which are otherwise not accessible (because static for some controller HALs)\n4. Restart the DMA in multibuffer configuration\n\nHere we fail on Step 2 DMA Abort with higher optimization (with an STM32 H7 (M4 core)). A delay between Step 1 and Step 2 does not resolve the situation. But the very short delay of a single NOP within `HAL_DMA_Abort` does the trick."
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2026-04-22T09:07:10Z",
+        "body": "Hello @M-Bab,\n\nRegarding the issue, and in line with the supported HAL flow implemented in **HAL_ADCEx_MultiModeStop_DMA()**, the ADC multimode conversion is stopped first, the driver waits until both master and slave ADC conversions are no longer ongoing, and only then is the DMA aborted.\n\nIn your workaround, **HAL_DMA_Abort()** is called immediately after HAL_ADCEx_MultiModeStart_DMA(), while the ADC multimode path is still active. This is not the supported stop sequence and can lead to timing-sensitive behavior, which is consistent with the optimization dependency you observed.\n\nThat said, if the single NOP inside `HAL_DMA_Abort()` works well for your application, you may of course continue to use it as part of your solution. Otherwise, you can submit a post on our [Community](https://community.st.com/) forum for further support.\n\nPlease, allow me to close this thread. Thank you for your understanding.\n\nWith regards,"
       }
     ],
     "github_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/110"

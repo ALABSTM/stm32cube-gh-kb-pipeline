@@ -1,6 +1,7 @@
 import json
 
 from pipeline.ingestion.file_collect_service import collect_repo_docs, write_raw_files_json
+from pipeline.ingestion.repo_sync_service import ensure_local_repos
 from shared.utils.paths import DATA_DIR, get_config_path, get_repos_root
 
 
@@ -15,6 +16,9 @@ def main() -> None:
     repos = cfg["repos"]
     data_dir = DATA_DIR
     data_dir.mkdir(parents=True, exist_ok=True)
+
+    if cfg.get("auto_clone_missing_repos", True):
+        ensure_local_repos(cfg)
 
     repos_root = get_repos_root(cfg.get("repos_dir", "GitHub_repos"))
 

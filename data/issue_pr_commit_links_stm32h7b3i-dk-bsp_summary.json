@@ -1,0 +1,14 @@
+{
+  "repo": "stm32h7b3i-dk-bsp",
+  "generated_at": "2026-04-27T09:01:00.893101+00:00",
+  "issues_total": 0,
+  "linked_issues": 0,
+  "unlinked_issues": 0,
+  "link_rate": 0.0,
+  "resolution_status_counts": {
+    "merged_fix": 0,
+    "candidate_fix": 0,
+    "reference_only": 0
+  },
+  "top_linked_issue_numbers": []
+}

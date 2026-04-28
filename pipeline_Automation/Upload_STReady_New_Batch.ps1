@@ -1,0 +1,370 @@
+param(
+    [Parameter(Mandatory = $true)]
+    [string]$RemoteUser,
+
+    [string]$PythonExe = "python",
+    [ValidateSet("add", "new")]
+    [string]$Operation = "add",
+    [ValidateSet("", "add", "new")]
+    [string]$FilesOperation = "",
+    [int]$KbId = 793,
+    [int]$IssuesDatasourceId = 19896,
+    [int]$FilesDatasourceId = 19922,
+    [int]$ResolverDatasourceId = 20403,
+    [string]$IssuesDatasourceName = "",
+    [string]$FilesDatasourceName = "",
+    [string]$ResolverDatasourceName = "",
+    [string]$DatasourceClassification = "PUBLIC",
+    [string]$DatasourceTags = "",
+    [string]$Service = "kb",
+    [string]$RequestTypes = "",
+    [string]$PayloadModes = "flat",
+    [string]$TimestampModes = "s",
+    [string]$RequestPartNames = "request,body,payload",
+    [int]$JsonSplitSize = 0,
+    [double]$JsonSplitMinMb = 2.0,
+    [switch]$DeleteFilesBeforeAdd,
+    [string]$ApiKey = "",
+    [string]$ClientAppName = "",
+    [string]$RootDir = "datasets/07_delivery/st_ready",
+    [switch]$VerifySsl,
+    [switch]$UseLegacyProxy,
+    [switch]$VerboseUpload
+)
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = "Stop"
+
+$repoRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
+Set-Location $repoRoot
+
+$uploader = Join-Path $repoRoot "pipeline_Automation/Add_Data_Source_Files.py"
+if (-not (Test-Path -LiteralPath $uploader)) {
+    throw "Uploader script not found: $uploader"
+}
+
+$filesDir = Join-Path $repoRoot (Join-Path $RootDir "files_json")
+$resolverDir = Join-Path $repoRoot (Join-Path $RootDir "resolver_cases_json")
+$issuesDir = Join-Path $repoRoot (Join-Path $RootDir "issues_json")
+
+if (-not (Test-Path -LiteralPath $filesDir)) {
+    throw "Files directory not found: $filesDir"
+}
+if (-not (Test-Path -LiteralPath $resolverDir)) {
+    throw "Resolver directory not found: $resolverDir"
+}
+if (-not (Test-Path -LiteralPath $issuesDir)) {
+    throw "Issues directory not found: $issuesDir"
+}
+
+$filesJson = @(Get-ChildItem -LiteralPath $filesDir -Filter "st_ready_files_*.json" -File | Sort-Object Name)
+$resolverJson = @(Get-ChildItem -LiteralPath $resolverDir -Filter "st_ready_resolver_cases_*.json" -File | Sort-Object Name)
+$issuesJson = @(Get-ChildItem -LiteralPath $issuesDir -Filter "st_ready_issues_*.json" -File | Sort-Object Name)
+
+if ($filesJson.Count -eq 0) {
+    throw "No st_ready_files_*.json found in $filesDir"
+}
+if ($resolverJson.Count -eq 0) {
+    throw "No st_ready_resolver_cases_*.json found in $resolverDir"
+}
+if ($issuesJson.Count -eq 0) {
+    throw "No st_ready_issues_*.json found in $issuesDir"
+}
+
+Write-Host "KB: $KbId"
+Write-Host "Operation: $Operation"
+$issuesOperation = $Operation
+$filesOperationRequested = if ($FilesOperation) { $FilesOperation } else { $Operation }
+$resolverOperation = $Operation
+$filesDatasourceIdForDelete = $FilesDatasourceId
+$recreateFilesDatasourceAfterDelete = $DeleteFilesBeforeAdd -and ($filesOperationRequested -eq "add")
+$filesOperationResolved = if ($recreateFilesDatasourceAfterDelete) { "new" } else { $filesOperationRequested }
+
+Write-Host "Issues operation: $issuesOperation"
+Write-Host "Files operation: $filesOperationResolved"
+Write-Host "Resolver operation: $resolverOperation"
+
+if ($recreateFilesDatasourceAfterDelete) {
+    Write-Warning (
+        "Delete API marks datasource as deleted in this backend. " +
+        "Files upload will create a new datasource instead of reusing ID $filesDatasourceIdForDelete."
+    )
+}
+
+if ($issuesOperation -eq "add") {
+    Write-Host "Issues datasource: $IssuesDatasourceId"
+}
+if ($filesOperationResolved -eq "add") {
+    Write-Host "Files datasource: $FilesDatasourceId"
+}
+if ($DeleteFilesBeforeAdd) {
+    Write-Host "Files datasource to delete: $filesDatasourceIdForDelete"
+}
+if ($resolverOperation -eq "add") {
+    Write-Host "Resolver datasource: $ResolverDatasourceId"
+}
+if ($DeleteFilesBeforeAdd) {
+    Write-Host "Delete files before files upload: enabled"
+}
+Write-Host "Service: $Service"
+if ($RequestTypes) {
+    Write-Host "Request types: $RequestTypes"
+}
+Write-Host "Payload modes: $PayloadModes"
+Write-Host "Timestamp modes: $TimestampModes"
+Write-Host "Request part names: $RequestPartNames"
+if ($JsonSplitSize -gt 0) {
+    Write-Host "JSON split size: $JsonSplitSize"
+    if ($JsonSplitMinMb -gt 0) {
+        Write-Host "JSON split min size (MB): $JsonSplitMinMb"
+    }
+}
+if ($ClientAppName) {
+    Write-Host "Client app name: $ClientAppName"
+}
+if ($ApiKey) {
+    Write-Host "API key: provided via parameter"
+}
+if ($ApiKey -and @("TA_VRAIE_API_KEY", "TA_CLE_REELLE", "MA_CLE_API", "VRAIE_CLE_API", "YOUR_API_KEY", "REPLACE_ME", "API_KEY_HERE") -contains $ApiKey.ToUpperInvariant()) {
+    throw "ApiKey parameter looks like a placeholder. Replace it with your real ST API key."
+}
+if ($ClientAppName -eq "stm32-cube-kb-client-app") {
+    Write-Warning "ClientAppName 'stm32-cube-kb-client-app' is often rejected. Use your persona app name or omit -ClientAppName to use script auto-resolution."
+}
+if ($RemoteUser -notmatch '^[^@\s]+@[^@\s]+\.[^@\s]+$') {
+    throw "RemoteUser must be a valid email with a single '@' (example: first.last@st.com)."
+}
+if ($DeleteFilesBeforeAdd -and $filesDatasourceIdForDelete -le 0) {
+    throw "-DeleteFilesBeforeAdd requires -FilesDatasourceId > 0."
+}
+Write-Host "Remote user: $RemoteUser"
+Write-Host "Found issues_json: $($issuesJson.Count)"
+Write-Host "Found files_json: $($filesJson.Count)"
+Write-Host "Found resolver_cases_json: $($resolverJson.Count)"
+
+if (($issuesOperation -eq "new") -or ($filesOperationResolved -eq "new") -or ($resolverOperation -eq "new")) {
+    $stamp = Get-Date -Format "yyyyMMdd_HHmmss"
+    if (($issuesOperation -eq "new") -and (-not $IssuesDatasourceName)) {
+        $IssuesDatasourceName = "DB_STready_Issues_$stamp"
+    }
+    if (($filesOperationResolved -eq "new") -and (-not $FilesDatasourceName)) {
+        $FilesDatasourceName = "DB_STready_Files_$stamp"
+    }
+    if (($resolverOperation -eq "new") -and (-not $ResolverDatasourceName)) {
+        $ResolverDatasourceName = "DB_STready_Resolver_$stamp"
+    }
+
+    if ($issuesOperation -eq "new") {
+        Write-Host "Issues datasource name: $IssuesDatasourceName"
+    }
+    if ($filesOperationResolved -eq "new") {
+        Write-Host "Files datasource name: $FilesDatasourceName"
+    }
+    if ($resolverOperation -eq "new") {
+        Write-Host "Resolver datasource name: $ResolverDatasourceName"
+    }
+    Write-Host "Datasource classification: $DatasourceClassification"
+    if ($DatasourceTags) {
+        Write-Host "Datasource tags: $DatasourceTags"
+    }
+}
+
+$commonArgs = @(
+    $uploader,
+    "--kb", $KbId,
+    "--remote-user", $RemoteUser,
+    "--service", $Service,
+    "--payload-modes", $PayloadModes,
+    "--timestamp-modes", $TimestampModes,
+    "--request-part-names", $RequestPartNames,
+    "--processor", "JSON",
+    "--empty-json-policy", "skip",
+    "--skip-auth-precheck",
+    "--max-retries", 3,
+    "--timeout", 120
+)
+
+if ($RequestTypes) {
+    $commonArgs += @("--request-types", $RequestTypes)
+}
+if ($ApiKey) {
+    $commonArgs += @("--api-key", $ApiKey)
+}
+if ($ClientAppName) {
+    $commonArgs += @("--client-app-name", $ClientAppName)
+}
+
+if ($VerifySsl) {
+    $commonArgs += "--verify-ssl"
+}
+if ($UseLegacyProxy) {
+    $commonArgs += "--use-legacy-proxy"
+}
+if ($VerboseUpload) {
+    $commonArgs += "--verbose"
+}
+
+$issuesCommonArgs = $commonArgs + @("--operation", $issuesOperation)
+$filesCommonArgs = $commonArgs + @("--operation", $filesOperationResolved)
+$resolverCommonArgs = $commonArgs + @("--operation", $resolverOperation)
+
+$filesDeleteArgs = @(
+    $uploader,
+    "--kb", $KbId,
+    "--operation", "delete",
+    "--datasource-id", $filesDatasourceIdForDelete,
+    "--delete-not-found-policy", "ignore",
+    "--remote-user", $RemoteUser,
+    "--service", $Service,
+    "--payload-modes", $PayloadModes,
+    "--timestamp-modes", $TimestampModes,
+    "--request-part-names", $RequestPartNames,
+    "--skip-auth-precheck",
+    "--max-retries", 3,
+    "--timeout", 120
+)
+
+if ($ApiKey) {
+    $filesDeleteArgs += @("--api-key", $ApiKey)
+}
+if ($ClientAppName) {
+    $filesDeleteArgs += @("--client-app-name", $ClientAppName)
+}
+if ($VerifySsl) {
+    $filesDeleteArgs += "--verify-ssl"
+}
+if ($UseLegacyProxy) {
+    $filesDeleteArgs += "--use-legacy-proxy"
+}
+if ($VerboseUpload) {
+    $filesDeleteArgs += "--verbose"
+}
+
+$filesSplitArgs = @()
+if ($JsonSplitSize -gt 0) {
+    $filesSplitArgs += @("--json-split-size", $JsonSplitSize)
+    if ($JsonSplitMinMb -gt 0) {
+        $filesSplitArgs += @("--json-split-min-mb", $JsonSplitMinMb)
+    }
+}
+
+if ($issuesOperation -eq "add") {
+    $issuesTargetArgs = @("--datasource-id", $IssuesDatasourceId)
+} else {
+    $issuesTargetArgs = @(
+        "--datasource-name", $IssuesDatasourceName,
+        "--datasource-classification", $DatasourceClassification
+    )
+    if ($DatasourceTags) {
+        $issuesTargetArgs += @("--datasource-tags", $DatasourceTags)
+    }
+}
+
+if ($filesOperationResolved -eq "add") {
+    $filesTargetArgs = @("--datasource-id", $FilesDatasourceId)
+} else {
+    $filesTargetArgs = @(
+        "--datasource-name", $FilesDatasourceName,
+        "--datasource-classification", $DatasourceClassification
+    )
+    if ($DatasourceTags) {
+        $filesTargetArgs += @("--datasource-tags", $DatasourceTags)
+    }
+}
+
+if ($resolverOperation -eq "add") {
+    $resolverTargetArgs = @("--datasource-id", $ResolverDatasourceId)
+} else {
+    $resolverTargetArgs = @(
+        "--datasource-name", $ResolverDatasourceName,
+        "--datasource-classification", $DatasourceClassification
+    )
+    if ($DatasourceTags) {
+        $resolverTargetArgs += @("--datasource-tags", $DatasourceTags)
+    }
+}
+
+Write-Host "`n[0/3] Authentication precheck (kb-list)"
+$precheckArgs = @(
+    $uploader,
+    "--kb", $KbId,
+    "--operation", $Operation,
+    "--remote-user", $RemoteUser,
+    "--service", $Service,
+    "--auth-check-only",
+    "--timeout", 120
+)
+
+if ($ApiKey) {
+    $precheckArgs += @("--api-key", $ApiKey)
+}
+if ($ClientAppName) {
+    $precheckArgs += @("--client-app-name", $ClientAppName)
+}
+if ($VerifySsl) {
+    $precheckArgs += "--verify-ssl"
+}
+if ($UseLegacyProxy) {
+    $precheckArgs += "--use-legacy-proxy"
+}
+if ($VerboseUpload) {
+    $precheckArgs += "--verbose"
+}
+
+& $PythonExe @precheckArgs
+if ($LASTEXITCODE -ne 0) {
+    throw "Authentication precheck failed with exit code $LASTEXITCODE"
+}
+
+$issuesArgs = @("--files") + ($issuesJson | ForEach-Object { $_.FullName }) + $issuesTargetArgs
+
+if ($issuesOperation -eq "add") {
+    Write-Host "\n[1/3] Upload issues_json -> datasource $IssuesDatasourceId"
+} else {
+    Write-Host "\n[1/3] Create datasource + upload issues_json -> $IssuesDatasourceName"
+}
+& $PythonExe @issuesCommonArgs @issuesArgs
+if ($LASTEXITCODE -ne 0) {
+    throw "Upload to issues datasource failed with exit code $LASTEXITCODE"
+}
+
+if ($DeleteFilesBeforeAdd) {
+    Write-Host "\n[1.5/3] Delete existing files in files datasource $filesDatasourceIdForDelete"
+    & $PythonExe @filesDeleteArgs
+    if ($LASTEXITCODE -ne 0) {
+        if ($recreateFilesDatasourceAfterDelete) {
+            Write-Warning (
+                "Delete step failed, continuing because files upload is configured in create mode. " +
+                "The old files datasource may already be deleted or inaccessible."
+            )
+        } else {
+            throw "Delete files in files datasource failed with exit code $LASTEXITCODE"
+        }
+    }
+}
+
+if ($filesOperationResolved -eq "add") {
+    Write-Host "\n[2/3] Upload files_json -> datasource $FilesDatasourceId"
+} else {
+    Write-Host "\n[2/3] Create datasource + upload files_json -> $FilesDatasourceName"
+}
+$filesArgs = @("--files") + ($filesJson | ForEach-Object { $_.FullName }) + $filesSplitArgs + $filesTargetArgs
+
+& $PythonExe @filesCommonArgs @filesArgs
+if ($LASTEXITCODE -ne 0) {
+    throw "Upload to files datasource failed with exit code $LASTEXITCODE"
+}
+
+if ($resolverOperation -eq "add") {
+    Write-Host "\n[3/3] Upload resolver_cases_json -> datasource $ResolverDatasourceId"
+} else {
+    Write-Host "\n[3/3] Create datasource + upload resolver_cases_json -> $ResolverDatasourceName"
+}
+$resolverArgs = @("--files") + ($resolverJson | ForEach-Object { $_.FullName }) + $resolverTargetArgs
+
+& $PythonExe @resolverCommonArgs @resolverArgs
+if ($LASTEXITCODE -ne 0) {
+    throw "Upload to resolver datasource failed with exit code $LASTEXITCODE"
+}
+
+Write-Host "\nDone: batch upload completed successfully."
