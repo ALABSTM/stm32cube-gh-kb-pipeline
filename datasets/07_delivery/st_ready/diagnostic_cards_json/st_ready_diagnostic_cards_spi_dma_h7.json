@@ -1,0 +1,94 @@
+{
+  "repo_scope": "STM32CubeH7",
+  "delivery_template": "st_v1_diagnostic_card",
+  "target_series": [
+    "STM32H7"
+  ],
+  "diagnostic_cards": [
+    {
+      "card_id": "spi_dma_small_transfer_looks_blocking_h7",
+      "title": "HAL_SPI_Transmit_DMA seems blocking for small transfer (2 bytes)",
+      "target_series": [
+        "STM32H7"
+      ],
+      "category": "technical_diagnosis",
+      "peripheral_tags": [
+        "SPI",
+        "DMA"
+      ],
+      "technical_pattern_tags": [
+        "small_transfer",
+        "callback_not_reached",
+        "state_stuck_busy",
+        "completion_path",
+        "version_regression"
+      ],
+      "api_family_tags": [
+        "HAL_SPI_Transmit_DMA",
+        "HAL_SPI_Receive_DMA",
+        "HAL_SPI_TransmitReceive_DMA"
+      ],
+      "symptom_summary": "HAL_SPI_Transmit_DMA behaves like a blocking function when transmitting a very small amount of data (for example 2 bytes).",
+      "affected_context": "STM32H7 SPI with DMA where transfer completion callback is not observed or HAL SPI state remains BUSY for the next transfer.",
+      "likely_causes": [
+        "Very small DMA transfers can expose completion timing assumptions and appear blocking from application perspective",
+        "HAL completion callback path is not reached in the tested flow",
+        "SPI state is not returned to READY after transfer completion in the observed sequence",
+        "Project uses a HAL version or integration path where behavior differs from reference example"
+      ],
+      "confirmed_facts": [
+        "A documented H7 issue reports HAL_SPI_Transmit_DMA completion callback not reached and state stuck BUSY in user scenario",
+        "ST response indicates the official example can behave correctly under expected wiring and setup",
+        "The symptom is highly configuration-dependent and must be validated on exact board and firmware version"
+      ],
+      "plausible_diagnosis": [
+        "Application observes blocking behavior because callback completion path is not reached",
+        "State machine remains BUSY so next DMA call fails or waits, which is perceived as blocking",
+        "Small payload (2 bytes) increases visibility of sequencing or timing defects"
+      ],
+      "debug_checks": [
+        "Log entry and exit timestamps around HAL_SPI_Transmit_DMA call and completion callback",
+        "Verify HAL_SPI_TxCpltCallback, HAL_SPI_RxCpltCallback, and HAL_SPI_TxRxCpltCallback are linked and hit",
+        "Check hspi State transitions READY -> BUSY -> READY on each transfer",
+        "Compare behavior with official SPI_FullDuplex_ComDMA reference on same board family",
+        "Validate SPI wiring, clock polarity/phase, and DMA stream/channel configuration"
+      ],
+      "possible_workarounds": [
+        "For tiny payloads, test interrupt mode or polling mode to isolate DMA completion path",
+        "Batch small payloads when possible to reduce tiny-transfer edge effects",
+        "Pin exact Cube/HAL version known to behave correctly in your project"
+      ],
+      "constraints_or_limits": [
+        "No universal fix can be asserted without exact MCU board firmware version and wiring context",
+        "Issue thread includes conflicting evidence between user report and reference example"
+      ],
+      "evidence_refs": [
+        {
+          "type": "issue",
+          "title": "SPI and DMA is broken (no completion callback and stuck BUSY)",
+          "url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/115",
+          "confidence": "medium",
+          "note": "User reports callback path and BUSY state problem on H7"
+        },
+        {
+          "type": "issue",
+          "title": "Upgrading HAL library causes SPI master timeout",
+          "url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/47",
+          "confidence": "medium",
+          "note": "SPI behavior differs across HAL versions and call patterns"
+        }
+      ],
+      "keywords": [
+        "HAL_SPI_Transmit_DMA",
+        "blocking function",
+        "small amount of data",
+        "2 bytes",
+        "SPI_DMATransmitCplt",
+        "HAL_SPI_TxCpltCallback",
+        "HAL_SPI_STATE_BUSY",
+        "STM32H7 SPI DMA"
+      ],
+      "st_ready_text": "Problem: HAL_SPI_Transmit_DMA behaves as a blocking function when transmitting a small amount of data (for example 2 bytes). | Context: STM32H7 SPI with DMA, completion callback not observed or state remains BUSY after transfer. | Symptoms: tiny transfer appears blocking, completion callback not reached, next transfer fails or waits due to BUSY state. | Likely causes: completion path mismatch, state transition issue, version-dependent HAL behavior, configuration-sensitive tiny-transfer timing. | Confirmed facts: issue #115 reports stuck BUSY and callback path concerns; reference example can still work under expected setup; behavior depends on board and integration details. | Debug actions: instrument callbacks and state transitions, validate DMA and SPI wiring/config, compare with SPI_FullDuplex_ComDMA reference, test alternate mode for tiny payloads. | Workaround: use IT or polling for tiny payloads, batch small frames, pin known-good HAL version. | Constraints: requires exact board firmware and wiring confirmation for reliable closure. | Evidence links: https://github.com/STMicroelectronics/STM32CubeH7/issues/115 and https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/47 | Keywords: HAL_SPI_Transmit_DMA blocking function small amount of data 2 bytes HAL_SPI_STATE_BUSY callback not reached"
+    }
+  ]
+}

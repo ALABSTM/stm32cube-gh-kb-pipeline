@@ -27,6 +27,48 @@ def has_invalid_label(labels: list[str]) -> bool:
     return any(lbl in ("invalid", "duplicate", "wontfix") for lbl in labels_lower)
 
 
+RESCUE_SIGNAL_PATTERNS = [
+    r"\bHAL_[A-Za-z0-9_]+\b",
+    r"\bLL_[A-Za-z0-9_]+\b",
+    r"\bDMA\b",
+    r"\bstuck\s+busy\b",
+    r"\bblocking\b",
+    r"\bdeadlock\b",
+    r"\btimeout\b",
+    r"\bhardfault\b|\bhard\s+fault\b",
+    r"\bcallback\b",
+    r"\breproduc(e|ible|tion)\b",
+]
+
+
+def detect_rescue_signals(text: str) -> list[str]:
+    txt = text or ""
+    found: list[str] = []
+    for pattern in RESCUE_SIGNAL_PATTERNS:
+        if re.search(pattern, txt, flags=re.IGNORECASE):
+            found.append(pattern)
+    return found
+
+
+def compute_issue_evidence_strength(
+    clean_text: str,
+    is_confirmed_bug: bool,
+    rescue_signal_count: int,
+    is_valid: bool,
+) -> str:
+    if not is_valid:
+        return "low"
+
+    anchor_matches = re.findall(r"\b([A-Z]{2,}[A-Z0-9_\-]{1,}|[A-Za-z]+_[A-Za-z0-9_]+)\b", clean_text or "")
+    anchor_count = len(anchor_matches)
+
+    if is_confirmed_bug and (anchor_count >= 2 or rescue_signal_count >= 2):
+        return "high"
+    if rescue_signal_count >= 2 or anchor_count >= 2:
+        return "medium"
+    return "low"
+
+
 BOARD_REGEXES = [
     r"NUCLEO-[A-Z0-9]+",
     r"STM32H7[0-9A-Z]+",
@@ -96,11 +138,28 @@ class PreprocessingModelIssuesV2:
         is_confirmed_bug = any(lbl in ("bug", "internal bug tracker") for lbl in labels_lower)
 
         is_valid = True
+        invalid_reasons: list[str] = []
         if self.config.enable_filtering:
             if len(clean_text) < 100:
                 is_valid = False
+                invalid_reasons.append("short_text")
             if has_invalid_label(labels):
                 is_valid = False
+                invalid_reasons.append("invalid_label")
+
+        rescue_signals = detect_rescue_signals(clean_text)
+        rescue_applied = False
+        if not is_valid and rescue_signals and len(clean_text) >= 120:
+            # Rescue likely technical false negatives (e.g., mislabeled but reproducible HAL/DMA regressions).
+            is_valid = True
+            rescue_applied = True
+
+        evidence_strength = compute_issue_evidence_strength(
+            clean_text=clean_text,
+            is_confirmed_bug=is_confirmed_bug,
+            rescue_signal_count=len(rescue_signals),
+            is_valid=is_valid,
+        )
 
         doc: dict[str, Any] = {
             "id": f"{(repo or '').lower()}-issue-{issue_number}",
@@ -127,6 +186,10 @@ class PreprocessingModelIssuesV2:
             "image_urls": issue.get("image_urls") or [],
             "images_count": issue.get("images_count") or 0,
             "is_valid": is_valid,
+            "rescue_applied": rescue_applied,
+            "rescue_signal_count": len(rescue_signals),
+            "evidence_strength": evidence_strength,
+            "filter_invalid_reasons": invalid_reasons,
         }
 
         doc["layer"] = detect_layer(clean_text)

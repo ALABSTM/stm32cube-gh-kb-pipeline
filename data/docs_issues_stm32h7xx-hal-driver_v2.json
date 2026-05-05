@@ -29,6 +29,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 3,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -64,6 +68,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 2,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -98,6 +106,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 3,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "low",
     "issue_kind": "bug_report"
@@ -132,6 +144,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "LL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -165,6 +181,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "medium",
+    "filter_invalid_reasons": [],
     "layer": "Other",
     "severity": "low",
     "issue_kind": "usage_question"
@@ -198,6 +218,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 4,
+    "evidence_strength": "medium",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "usage_question"
@@ -232,6 +256,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "Other",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -266,6 +294,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 2,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "low",
     "issue_kind": "bug_report"
@@ -300,7 +332,13 @@
       "https://github.com/user-attachments/assets/716a5782-ffa8-494d-9a79-a15da8b3fddc"
     ],
     "images_count": 1,
-    "is_valid": false,
+    "is_valid": true,
+    "rescue_applied": true,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "Other",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -335,6 +373,12 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": false,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "low",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "LL",
     "severity": "high",
     "issue_kind": "other"
@@ -368,6 +412,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 4,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -401,6 +449,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 3,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -435,6 +487,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "Other",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -469,6 +525,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 2,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -503,6 +563,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 2,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -537,6 +601,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 2,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "low",
     "issue_kind": "bug_report"
@@ -570,6 +638,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "medium",
+    "filter_invalid_reasons": [],
     "layer": "Other",
     "severity": "high",
     "issue_kind": "other"
@@ -603,7 +675,13 @@
     "clean_text": "Title: DFSDM is not working properly in One-Shot mode with DMA\n\nBody:\n**Caution**\nThe Issues are strictly limited for the reporting of problem encountered with the software provided in this project.\nFor any other problem related to the STM32 product, the performance, the hardware characteristics and boards, the tools the environment in general, please post a topic in the [ST Community/STM32 MCUs forum](https://community.st.com/s/group/0F90X000000AXsASAW/stm32-mcus) \n\n**Describe the set-up**\n * Custom-Board but also not working on NUCLEO-H753ZI\n * STMCubeIDE 1.19.0\n * Latest Firmware-Version V1.12.1\n\n**Describe the bug**\nI would like to use a Sigma Delta modulator on the DFSDM input of the STM32H753. This works so far, but if I set a single shot with DMA as configuration, the conversion complete method is only called once. After that the DFSDM does not work anymore because it gets stuck in the state ‘HAL_DFSDM_FILTER_STATE_REG’. This is reproducible.\n\nI think that there might be something missing in the conversion complete method of the DFSDM HAL driver.\nI have added the following code to see if it works afterwards. My inserted code fixes the problem, but I am not sure if this is correct at this point or if something is missing.\n\nThe hardware driver specialists should take another look at this error and fix it if this is possible.\n\n**How To Reproduce**\nThis problem is very easy to reproduce:\n1.) First configure a DFSDM Filter, below you can see me code:\n void MX_DFSDM1_Init(void)\n{\n\n  /* USER CODE BEGIN DFSDM1_Init 0 */\n\n  /* USER CODE END DFSDM1_Init 0 */\n\n  /* USER CODE BEGIN DFSDM1_Init 1 */\n\n  /* USER CODE END DFSDM1_Init 1 */\n  hdfsdm1_filter0.Instance = DFSDM1_Filter0;\n  hdfsdm1_filter0.Init.RegularParam.Trigger = DFSDM_FILTER_SW_TRIGGER;\n  hdfsdm1_filter0.Init.RegularParam.FastMode = DISABLE;\n  hdfsdm1_filter0.Init.RegularParam.DmaMode = ENABLE;\n  hdfsdm1_filter0.Init.FilterParam.SincOrder = DFSDM_FILTER_SINC3_ORDER;\n  hdfsdm1_filter0.Init.FilterParam.Oversampling = 256;\n  hdfsdm1_filter0.Init.FilterParam.IntOversampling = 1;\n  if (HAL_DFSDM_FilterInit(&hdfsdm1_filter0) != HAL_OK)\n  {\n    Error_Handler();\n  }\n  hdfsdm1_channel3.Instance = DFSDM1_Channel3;\n  hdfsdm1_channel3.Init.OutputClock.Activation = ENABLE;\n  hdfsdm1_channel3.Init.OutputClock.Selection = DFSDM_CHANNEL_OUTPUT_CLOCK_SYSTEM;\n  hdfsdm1_channel3.Init.OutputClock.Divider = 5;\n  hdfsdm1_channel3.Init.Input.Multiplexer = DFSDM_CHANNEL_EXTERNAL_INPUTS;\n  hdfsdm1_channel3.Init.Input.DataPacking = DFSDM_CHANNEL_STANDARD_MODE;\n  hdfsdm1_channel3.Init.Input.Pins = DFSDM_CHANNEL_SAME_CHANNEL_PINS;\n  hdfsdm1_channel3.Init.SerialInterface.Type = DFSDM_CHANNEL_SPI_RISING;\n  hdfsdm1_channel3.Init.SerialInterface.SpiClock = DFSDM_CHANNEL_SPI_CLOCK_INTERNAL;\n  hdfsdm1_channel3.Init.Awd.FilterOrder = DFSDM_CHANNEL_FASTSINC_ORDER;\n  hdfsdm1_channel3.Init.Awd.Oversampling = 1;\n  hdfsdm1_channel3.Init.Offset = 0;\n  hdfsdm1_channel3.Init.RightBitShift = 0x08;\n  if (HAL_DFSDM_ChannelInit(&hdfsdm1_channel3) != HAL_OK)\n  {\n    Error_Handler();\n  }\n  if (HAL_DFSDM_FilterConfigRegChannel(&hdfsdm1_filter0, DFSDM_CHANNEL_3, DFSDM_CONTINUOUS_CONV_OFF) != HAL_OK)\n  {\n    Error_Handler();\n  }\n  /* USER CODE BEGIN DFSDM1_Init 2 */\n\n  /* USER CODE END DFSDM1_Init 2 */\n\n} \n\n2. You have only to call: HAL_DFSDM_FilterRegularStart_DMA(&DFSDM_Filter0Handle, &DFSDM_RawOutput, 1); \n3. Check the ConversionComplete Callback, for example with a break point.\n4. Call: HAL_DFSDM_FilterRegularStart_DMA(&DFSDM_Filter0Handle, &DFSDM_RawOutput, 1); again and you will not get into the callback again.\n\n**Additional context**\nI have modified the function static void DFSDM_DMARegularConvCplt(DMA_HandleTypeDef *hdma) in stm32h7xx_hal_dfsdm.c as you will see below. This fixes my problem, but as is already said, i am not sure if this is correct, or if the HAL driver specialist have another solution.\nstatic void DFSDM_DMARegularConvCplt(DMA_HandleTypeDef *hdma)\n{\n  /* Get DFSDM filter handle */\n  DFSDM_Filter_HandleTypeDef *hdfsdm_filter = (DFSDM_Filter_HandleTypeDef*) ((DMA_HandleTypeDef*)hdma)->Parent;\n\n  /* Call regular conversion complete callback */\n#if (USE_HAL_DFSDM_REGISTER_CALLBACKS == 1)\n  hdfsdm_filter->RegConvCpltCallback(hdfsdm_filter);\n#else\n  HAL_DFSDM_FilterRegConvCpltCallback(hdfsdm_filter);\n#endif\n\n  /* End of conversion if mode is not continuous and software trigger */\n  if((hdfsdm_filter->RegularContMode == DFSDM_CONTINUOUS_CONV_OFF) && \\\n      (hdfsdm_filter->RegularTrigger == DFSDM_FILTER_SW_TRIGGER))\n  {\n    /* Disable interrupts for regular conversions */\n    hdfsdm_filter->Instance->FLTCR2 &= ~(DFSDM_FLTCR2_REOCIE);\n\n    /* Update DFSDM filter state */\n    hdfsdm_filter->State = (hdfsdm_filter->State == HAL_DFSDM_FILTER_STATE_REG) ? \\\n                           HAL_DFSDM_FILTER_STATE_READY : HAL_DFSDM_FILTER_STATE_INJ;\n  }\n}\n\nIf you need any further information, feel fre to ask and i will deliver you the missing information.\n\nBest regards,\n\nMarkus\n\nComments:\n[RJMSTM - 2025-08-05T10:19:05Z]\nHello @mwswt,\n\nFirst thanks for your contribution,i am unable to reproduce your issue. Could you please share your project so that I can try to reproduce it?\n\nRegards\n\n[RJMSTM - 2025-08-21T15:41:46Z]\nHello,\n\nCould you please provide any updates to help me resolve your issue?\n\n[mwswt - 2025-08-22T06:30:33Z]\nSorry for my late response. I will build up you a code with the Eval Board, because we have it just in our project and i can not share this code with you. But i build the same example code for you to check this problem. Give a a little time for that.\n\n[mwswt - 2025-08-22T11:17:43Z]\nSo here you can find my repository with the version which is working: [https://github.com/mwswt/STM32_DFSDM_Test](https://github.com/mwswt/STM32_DFSDM_Test).\n\nTo get it not working you just have to comment the following lines:\n\n    /* todo This is a bug from ST and it was reported via GitHub */\n    /* End of conversion if mode is not continuous and software trigger */\n    if((hdfsdm_filter->RegularContMode == DFSDM_CONTINUOUS_CONV_OFF) && \\\n        (hdfsdm_filter->RegularTrigger == DFSDM_FILTER_SW_TRIGGER))\n    {\n      /* Disable interrupts for regular conversions */\n      hdfsdm_filter->Instance->FLTCR2 &= ~(DFSDM_FLTCR2_REOCIE);\n\n      /* Update DFSDM filter state */\n      hdfsdm_filter->State = (hdfsdm_filter->State == HAL_DFSDM_FILTER_STATE_REG) ? \\\n                             HAL_DFSDM_FILTER_STATE_READY : HAL_DFSDM_FILTER_STATE_INJ;\n    }\n\n in the function: void HAL_DFSDM_FilterRegConvCpltCallback(DFSDM_Filter_HandleTypeDef *hdfsdm_filter)\n\nIf you need more information, feel free to contact me again.\n\n[MKISTM - 2025-10-31T14:37:33Z]\nHello @mwswt,\n\nI still have some confusion, if you want to continue the conversion why did you disable Continuous mode \"DFSDM_CONTINUOUS_CONV_OFF\"?\nWhen you configure the conversion as no-continuous this behavior is expected, you just need to configure RegularContMode as DFSDM_CONTINUOUS_CONV_ON\n\nBR,\nMohamed.\n\n[MKISTM - 2025-11-06T11:10:11Z]\nHello @mwswt,\n\nCould you please share with me any updates?\n\n[MKISTM - 2025-11-24T09:51:43Z]\nHello @mwswt,\n\nI'll proceed with closing this issue. We appreciate your feedback, thank you for your understanding.\nPlease let us know if you encounter any specific unexpected behavior or errors, and we will be happy to assist further.\n\nBR,\nMohamed Chaker.",
     "image_urls": [],
     "images_count": 0,
-    "is_valid": false,
+    "is_valid": true,
+    "rescue_applied": true,
+    "rescue_signal_count": 4,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -640,6 +718,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 2,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -672,7 +754,13 @@
     "clean_text": "Title: HAL_I2C_Mem_Read_DMA should call I2C_Enable_IRQ with flag I2C_XFER_RX_IT instead of I2C_XFER_TX_IT\n\nBody:\n**Describe the set-up**\n * Board: F7 nucleo board\n\n**Describe the bug**\nBug comes when there is a HAL_I2C_Mem_Read_DMA followed by HAL_I2C_Mem_Write. \n\n1. When I2C_Enable_IRQ is called with flag I2C_XFER_TX_IT, after DMA read is done, TXIS is still enabled.\n2. Later call of blocking write function HAL_I2C_Mem_Write will trigger the I2Cx_EV_IRQHandler, while XferISR will be NULL, so again TXIS will not get cleared, and the  I2Cx_EV_IRQHandler will be entered/exit infinitely. This makes other lower priority interrupts and application codes will not get executed.\n\n**How To Reproduce**\n1. Call HAL_I2C_Mem_Read_DMA\n2. call HAL_I2C_Mem_Write\n3. check if I2Cx_EV_IRQHandler is executed infinitely.\n\nComments:\n[KRASTM - 2025-06-05T10:14:21Z]\nHello @xiankunxu,\n\nThank you for the report.\n\nRegarding the issue, you should check whether the device is ready after the first operation HAL_I2C_Mem_Read_DMA and before executing another operation such as HAL_I2C_Mem_Write, because there is a risk of an error occurring (e.g. a Busy error), which was the result of testing your scenario.\n\nYou can refer to our example for more details. it's under STM32CubeH7\\Projects\\STM32H743I-EVAL\\Examples\\I2C\\I2C_EEPROM_fast_mode_plus.\n\nWith regards,\n\n[KRASTM - 2025-06-13T09:54:56Z]\nHello @xiankunxu,\n\nPlease, allow me to close this issue, but if you have more information to share, please reopen it or post another ticket.\n\nWith regards,",
     "image_urls": [],
     "images_count": 0,
-    "is_valid": false,
+    "is_valid": true,
+    "rescue_applied": true,
+    "rescue_signal_count": 4,
+    "evidence_strength": "medium",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "usage_question"
@@ -708,6 +796,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 2,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -741,7 +833,13 @@
     "clean_text": "Title: USART transmit with DMA works only once\n\nBody:\n**Describe the bug**\nWhen using USART transmit with DMA, it works only once\n\n**How To Reproduce**\n1. Enable USART transmit\n\n2. Enable DMA and set to the Normal mode\n\n3. Call HAL_UART_Transmit_DMA more than once\n\n\n**Additional context**\nIn function HAL_UART_Transmit_DMA from stm32h7xx_hal_uart.c HAL sets huart's gState to HAL_USART_STATE_BUSY_TX\n\nhttps://github.com/STMicroelectronics/stm32h7xx-hal-driver/blob/85d65b023f9621e417177a87553d25b7b387239f/Src/stm32h7xx_hal_uart.c#L1418\n\nBut in UART_DMATransmitCplt it doesn't reset\n\nhttps://github.com/STMicroelectronics/stm32h7xx-hal-driver/blob/85d65b023f9621e417177a87553d25b7b387239f/Src/stm32h7xx_hal_uart.c#L3680-L3690\n\nComments:\n[Deyzer2566 - 2025-05-26T12:40:00Z]\nI turned on USART's interrupt and it started working",
     "image_urls": [],
     "images_count": 0,
-    "is_valid": false,
+    "is_valid": true,
+    "rescue_applied": true,
+    "rescue_signal_count": 3,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -776,6 +874,13 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": false,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "low",
+    "filter_invalid_reasons": [
+      "short_text",
+      "invalid_label"
+    ],
     "layer": "HAL",
     "severity": "low",
     "issue_kind": "bug_report"
@@ -810,6 +915,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "low",
     "issue_kind": "bug_report"
@@ -845,6 +954,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 2,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -879,6 +992,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "low",
     "issue_kind": "bug_report"
@@ -913,6 +1030,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -947,6 +1068,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -980,7 +1105,13 @@
     "clean_text": "Title: ospi: driver is more restrictive than necessary\n\nBody:\nAccording to my tests the the OSPI supports not only instruction phase only, but also data phase only. However, the HAL driver does not allow this configuration.\n\nI guess that the focus at the OSPI was on flash devices, where a single data phase is not intended, But there are other use cases.\n\nI kindly ask for allowing single data phase instead of throwing an error. This won't break any software, but allows a broader usage of the OSPI. I am aware that this is an undocumented feature.\n\nI can submit a pull request if you agree.\n\nhttps://github.com/STMicroelectronics/stm32h7xx-hal-driver/blob/6f5e35e30ac09ba7bf44139a97b289d3df53cf9c/Src/stm32h7xx_hal_ospi.c#L3076C1-L3079C1\n\n\n+      if (cmd->DataMode != HAL_OSPI_DATA_NONE)\n+      {\n+        /* ---- Command with data ---- */\n+\n+        /* Configure the CCR register with all communication parameters */\n+        MODIFY_REG((*ccr_reg), (OCTOSPI_CCR_DMODE  | OCTOSPI_CCR_DDTR),\n+                   (cmd->DataMode | cmd->DataDtrMode));\n+      }\n+      else\n+      {\n+        /* ---- invalid command configuration (no instruction, no address, no data) ---- */\n+\n+        status = HAL_ERROR;\n+        hospi->ErrorCode = HAL_OSPI_ERROR_INVALID_PARAM;\n+      }\n+      /* MODIFIED */\n+\n       /* ---- Invalid command configuration (no instruction, no address) ---- */\n-      status = HAL_ERROR;\n-      hospi->ErrorCode = HAL_OSPI_ERROR_INVALID_PARAM;\n\nComments:\n[KRASTM - 2024-11-01T16:19:46Z]\nHello @sageve,\n\nThank you for the report.\n\nAs you said and according to the RM0468, for single phase command, the only case supported is instruction phase Any of these phases can be configured to be skipped but, in case of single-phase command, the only use case supported is instruction-phase-only. \n\nHowever, I will share your proposal with our team in order to confirm it, and I will keep you informed.\n\nWith regards,\n\n[KRASTM - 2024-11-20T13:04:58Z]\nHello @sageve,\n\nI checked with our team, and unfortunately, they rejected the proposal because it does not align with the RM. however, there are other IP such as SPI or PSSI that support data phase only, or you can make the change that suits your application.\n\nPlease, allow me to close the issue.\n\nThank you in advance for your comprehension.\n\nWith regards,\n\n[sageve - 2024-11-21T09:47:54Z]\nHi\n\nThanks for your investigation. Actually, neither SPI nor PSSI support 4bit data lane. It's a pitty that there is no possibility with the STM32H7 to just send 4bit data using your HAL. Also you won't be able to provide a MSPI (multi bit SPI) driver in zephyr, altough OSPI supports it. In case the restriction is arbitrary, the RM should be changed. \n\nIf you persist to the decision, feel free to close the issue.\n\nBest regards",
     "image_urls": [],
     "images_count": 0,
-    "is_valid": false,
+    "is_valid": true,
+    "rescue_applied": true,
+    "rescue_signal_count": 1,
+    "evidence_strength": "medium",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "configuration_help"
@@ -1016,7 +1147,13 @@
     "clean_text": "Title: DMA HAL enables FIFO Error interrupt even if the FIFO is not enabled\n\nBody:\n**Describe the set-up**\n * NUCLEO_H743ZI2\n * arm-none-eabi-gcc 13.2.1\n\n**Describe the bug**\nWorking on the mbed-ce/mbed-os DMA SPI code for STM32H7, I observed that my code was going into the DMA error ISR handler during DMA transfers.  This happened intermittently and for no apparent reason, and the error bit was the FIFO error flag.  Eventually I found [this forum thread](https://community.st.com/t5/stm32-mcus-touchgfx-and-gui/spi-dma-error-is-occurred-when-the-other-dma-memory-to-memory-is/td-p/191590) that described the issue and the fix well.  Basically, the FIFO error flag can set under \"nominal\" conditions just due to the DMA controller having issues acquiring the MCU internal bus.  \n\nWhile this can indicate that perhaps you need to enable the FIFO or reduce bus contention in your project, it is not an error that should fail the DMA transfer, I believe.  For my application, I simply turned off the error flag and saw perfect behavior.  (it probably helps that the SPI peripheral has its own FIFO so data won't be immediately lost of this happens\n\n**How To Reproduce**\nUnfortunately I don't have an easy way to reproduce this one, but me and that person on the forum both had it occur during \"normal\" application operation.  In my case, it was happening when I was doing DMA SPI transfers with a pretty standard configuration (DMA controller in direct mode).\n\n**Additional context**\nIn my application, I fixed it by changing [this line](https://github.com/STMicroelectronics/stm32h7xx_hal_driver/blob/ceda3ceeca2ee77a76d2de2ee6b560ad87c90a48/Src/stm32h7xx_hal_dma_ex.c#L292) to:\ncpp\n      // Only enable FIFO error if FIFO is enabled (direct mode disabled).\n      // In direct mode this flag can set spuriously due to bus contention.\n      if(((DMA_Stream_TypeDef *)hdma->Instance)->FCR & DMA_SxFCR_DMDIS)\n      {\n        ((DMA_Stream_TypeDef *)hdma->Instance)->FCR |= DMA_IT_FE;\n      }\n\nThis way the FE flag will not generate an error interrupt if the DMA\n\nComments:\n[ALABSTM - 2024-10-04T09:57:31Z]\nST Internal Reference: 192903\n\n[ALABSTM - 2024-10-04T09:58:28Z]\nHi @multiplemonomials,\n\nThank you for your report. The point looks relevant. It has been reported to our development teams. Let's wait for their feedback.\n\nWith regards,\n\n[TOUNSTM - 2025-05-08T10:25:14Z]\nHello @multiplemonomials,\n\nI hope you are doing well. We have finally received feedback from our development teams. The DMA FIFO error is a known issue and should be ignored by applications when users do not use HAL drivers. The HAL PPP drivers (SPI/I2C/SAI/DCMI) are equipped to manage this DMA error, ensuring that no callback is triggered in the event of a DMA FIFO error. Therefore, it is recommended that users employ HAL drivers provided by STMicroelectronics.\n\nThe following code snippet illustrates how the HAL SPI driver handles DMA errors, specifically by ignoring FIFO errors:\n\nstatic void SPI_DMAError(DMA_HandleTypeDef *hdma)\n{\n  SPI_HandleTypeDef *hspi = (SPI_HandleTypeDef *)((DMA_HandleTypeDef *)hdma)->Parent;\n \n  /* if DMA error is FIFO error ignore it */\n  if (HAL_DMA_GetError(hdma) != HAL_DMA_ERROR_FE)\n  {\n    /* Call SPI standard close procedure */\n    SPI_CloseTransfer(hspi);\n \n    SET_BIT(hspi->ErrorCode, HAL_SPI_ERROR_DMA);\n    hspi->State = HAL_SPI_STATE_READY;\n#if (USE_HAL_SPI_REGISTER_CALLBACKS == 1UL)\n    hspi->ErrorCallback(hspi);\n#else\n    HAL_SPI_ErrorCallback(hspi);\n#endif /* USE_HAL_SPI_REGISTER_CALLBACKS */\n  }\n}\n\n\n### Note:\nIn **memory-to-memory mode**, the DMA manages requests and transfers internally, so FIFO overrun conditions are not detected. This simplifies the error handling process for such operations.\n\nI hope this explanation provides clarity on the situation. Please allow me to close this issue.\n\nKind regards,",
     "image_urls": [],
     "images_count": 0,
-    "is_valid": false,
+    "is_valid": true,
+    "rescue_applied": true,
+    "rescue_signal_count": 4,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -1051,6 +1188,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -1088,7 +1229,13 @@
       "https://github.com/user-attachments/assets/faf55c9a-fb48-4d15-936a-39c478426e69"
     ],
     "images_count": 3,
-    "is_valid": false,
+    "is_valid": true,
+    "rescue_applied": true,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -1122,6 +1269,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 2,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -1156,6 +1307,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -1190,6 +1345,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -1223,6 +1382,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 2,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -1257,6 +1420,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -1290,6 +1457,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -1323,6 +1494,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -1357,6 +1532,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "low",
     "issue_kind": "bug_report"
@@ -1390,7 +1569,13 @@
     "clean_text": "Title: Ethernet tail pointer setup is incorrect, and tail pointer management does not work with timestamping enabled\n\nBody:\n**Describe the set-up**\nAny Stm32H7\n\n**Describe the bug**\nThe RX tail pointer is set in both ETH_UpdateDescriptor() (called on init by HAL_ETH_Start_IT()) and ETH_DMARxDescListInit() (called by HAL_ETH_Init()). \n\nThe updating of the tail pointer in  ETH_UpdateDescriptor() is a runtime update, and the tail pointer will be set to the last descriptor processed by the app. When the descriptors are initially built (from the call in HAL_ETH_Start_IT()), the tail pointer will be set to 1. This is not the correct value for it to be set to on init, and this would mean that only 1 descriptor would be available. ST was clearly trying to init this tail pointer to the correct value in ETH_DMARxDescListInit(), but this function call happens **before* the call to build the descriptors via ETH_UpdateDescriptor() from the call to HAL_ETH_Start_IT() so the tail pointer is effectively initialized incorrectly. \n\nIF timestamping is enabled, at least 2 descriptors will be needed by the very first packet which arrives. This will cause an RBU.\n\n**How To Reproduce**\n1. Indicate the global behavior of your application project\nRBU because only one descriptor is available. \n\n3. The modules that you suspect to be the cause of the problem (Driver, BSP, MW ...)\nEth\n\n4. The use case that generates the problem\nAny use where more than one single descriptor is needed in the first packet\n\n6. How we can reproduce the problem\nLook at the code, confirm that the tail pointer is being initialized to the incorrect value during init building after it was supposed to have been set to the right value.\n\nComments:\n[Florian-Fischer-InMach - 2024-07-17T11:50:47Z]\nSeems i am not the only one stumbling over the tailpointer\nhttps://github.com/STMicroelectronics/stm32h7xx_hal_driver/issues/61\n\n[ASEHSTM - 2024-07-19T15:16:57Z]\nHello @chris1seto,\n\nThank you for your detailed report. I would like to clarify that the ETH_DMARxDescListInit() function first initializes the RX descriptors and sets the RX tail pointer (DMACRXDTPR) to the address of the last descriptor. ETH_UpdateDescriptor(), on the other hand, updates the RX tail pointer based on the index of the descriptor being processed.\n\nIf I understand correctly, you want us to change the calculation of the tail pointer so that it points to the last built/updated descriptor, rather than the next descriptor. Is this correct?\n\nWith Regards,\n\n[chris1seto - 2024-07-19T16:11:22Z]\n@ASEHSTM I'd like for ST for do the analysis and refer to their internal design information regarding the Ethernet MAC IP block to fix the ethernet driver so it works correctly. \n\nWhat I posted here is, what I believe to be, an obvious implementation error (ie, that the tail pointer on init, points to the very first descriptor, not the last descriptor).\n\nI believe this should mean that if the first packet to arrive uses up more than one descriptor or if the application doesn't process the descriptor before any more than one descriptor is used, then there will be an RBU thrown. I don't know for sure if I am correct in that description, but I do know there is *some kind* of issue in the tailpointer code.\n\nI'm at the point where I don't really entirely trust the reference manual section on the ethernet mac. It lacks a lot of plain verbose description of how the tail pointer/dma/timestamping works. I am asking ST to step in and implement the correct fix based on their internal knowledge of how the tail pointer works. \n\nPerhaps you can start by answering a straightforward question:\n1. IF there are 10 (0 through 9) descriptors in the ring, at init, which descriptor should the tailpointer point to? If the answer isn't 1, then this code is wrong.\n2. During *runtime*, after processing n descriptors (lets say, starting at and including descriptor 0), where should the tail pointer point?\n\n[ASEHSTM - 2024-07-23T15:18:14Z]\nST Internal Reference: 187268\n\n[ASEHSTM - 2024-08-02T09:53:14Z]\nDuplicate of #61\n\n[chris1seto - 2024-08-13T15:06:19Z]\nThis issue is not entirely a duplicate of the issue which was closed. Please read the full text of my description. The tail pointer is not set correctly as the driver is initialized. \n\n@ASEHSTM\n\n[ASEHSTM - 2024-08-14T10:42:02Z]\nHello @chris1seto,\n\nDuring initialization, the tail pointer must point to the last available descriptor. For example, in the case of four descriptors, it should point to the descriptor at index 3. This is necessary because the DMACRDTPR indicates to the DMA the address of the last receive descriptor. We have verified that the initialization is correct and that the tail pointer indeed points to the last available descriptor. \nWe have modified the calculation of the tail pointer so that it points to the previous descriptor, which ensures that it points to the last available descriptor and allows the DMA to use all available descriptors.\n\nWith Regards,\n\n[chris1seto - 2024-08-14T14:48:09Z]\n@ASEHSTM You mentioned that you verified that the initialization is correct. Did you verify that the initialization of the tail pointer is correct after HAL_ETH_Start_IT() is called when the driver is started? The tail pointer is hard coded to start as the descriptor count - 1 when HAL_ETH_Init is called which is correct, but then HAL_ETH_Start_IT() will modify it as it calls ETH_DMARxDescListInit to rebuild the full descriptor list. After HAL_ETH_Start_IT is called, is the tail pointer value still correctly pointing to the last index - 1?\n\nThanks,",
     "image_urls": [],
     "images_count": 0,
-    "is_valid": false,
+    "is_valid": true,
+    "rescue_applied": true,
+    "rescue_signal_count": 3,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -1424,6 +1609,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "medium",
+    "filter_invalid_reasons": [],
     "layer": "Other",
     "severity": "medium",
     "issue_kind": "usage_question"
@@ -1458,6 +1647,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 3,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -1492,6 +1685,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 4,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -1526,6 +1723,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 2,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -1560,7 +1761,13 @@
     "clean_text": "Title: SDMMC MMC HighSpeed/DDR ClockDiv too high at 52MHz\n\nBody:\n**Describe the set-up**\n * The board (either ST RPN reference or your custom board)\nSTM32H743\n\nUsing STM32CubeIDE 1.15.0 with latest board package.\n\n**Describe the bug**\nWhen running the SDMMC peripheral at 104MHz (Required for DDR), and switching the Bus speed to 52MHz DDR. The Clockdiv calculation is off by 1, causing the MMC Clock to run at 26MHz.\n\n**How To Reproduce**\n1. Indicate the global behavior of your application project\n\n2. The modules that you suspect to be the cause of the problem (Driver, BSP, MW ...)\nThe stm32h7xx_hal_mmc.c, line 4046: Init.ClockDiv = (sdmmc_clk / (2U * MMC_HIGH_SPEED_FREQ)) + 1U;\n\n3. The use case that generates the problem\nWhen running the clock slightly below 52MHz, the clockdiv is set correctly, but at 52MHz precisely, it is set too high.\n\n4. How we can reproduce the problem\nAs described above.\n\n**Additional context**\nA possible fix could be to add 1 to the divider, so the 52MHz would be rounded down: Init.ClockDiv = (sdmmc_clk / (2U * MMC_HIGH_SPEED_FREQ + 1U)) + 1U;\n52MHz will then get rounded down, and the clock div gets correctly set to 1.\n\nComments:\n[KRASTM - 2024-06-19T16:38:04Z]\nHello @royb3,\n\nThank you for the report.\n\nI agree that when SDMMC peripheral at 104MHz and switching to MMC high-speed causing the MMC Clock to run at 26MHz.\n\nBut I don't know what you mean in the third point: **When running the clock slightly below 52MHz**, did you mean, rather to work with 104MHz, you choose a clock below 52MHz?\n\nCould you explain or share more details, so we can confirm the issue.\n\nWith regards.\n\n[royb3 - 2024-06-19T16:46:23Z]\nHi @KRASTM \n\nWhen I set the sdmmc clock at 103.999 MHz, the clockdiv is correctly being set to 1, causing the MMC clock to run at 52MHz. This is the workaround I now use for getting 52MHz HighSpeed / DDR.\n\n[KRASTM - 2024-06-20T14:06:42Z]\nST Internal reference: 184656\n\n[KRASTM - 2024-10-14T13:59:19Z]\nFixed in commit https://github.com/STMicroelectronics/stm32h7xx_hal_driver/commit/6f5e35e30ac09ba7bf44139a97b289d3df53cf9c\n\n[royb3 - 2024-10-14T14:37:09Z]\n@KRASTM Thank, this fix would work for me since I will set the clock to 104, but if I now would set the clock to something between 52 and 104, this would lead now lead to an invalid clock div of 0.\n\n[KRASTM - 2024-11-26T10:09:02Z]\nHello @royb3,\n\nAfter additional testing, the fix exhibited unwanted side effects, so our team decided to revert it. However, you can make the change that best suits your application.\n\nWe apologize for the inconvenience and thank you in advance for your understanding.\n\nWith regards,\n\n[royb3 - 2024-11-26T14:14:48Z]\nHi @KRASTM, I think this fix would not have the unwanted side effects:\nc\nInit.ClockDiv = (sdmmc_clk / (2U * MMC_HIGH_SPEED_FREQ + 1U)) + 1U;",
     "image_urls": [],
     "images_count": 0,
-    "is_valid": false,
+    "is_valid": true,
+    "rescue_applied": true,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -1594,6 +1801,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -1627,7 +1838,13 @@
     "clean_text": "Title:  Release v1.11.3 breaks symbols compatibility for PTP between H and FSoC families\n\nBody:\n**Describe the set-up**\n * nucleo h563zi\n * VS Code, arm-zephyt-eabi-gcc\n\n**Describe the bug**\n * After the update to v1.11.3 symbol HAL_ETH_PTP_CONFIGURATED has been changed to HAL_ETH_PTP_CONFIGURED but only for H7 and H5. F7 and F4 still have the  HAL_ETH_PTP_CONFIGURATED symbol.\n\n**How To Reproduce**\n1. Indicate the global behavior of your application project\nApplication using PTP timestaming is zephyr are not compiling\n\n3. The modules that you suspect to be the cause of the problem (Driver, BSP, MW ...)\nBSP\n\n4. The use case that generates the problem\nApplication using PTP timestaming is zephyr are not compiling\n\n5. How we can reproduce the problem\nsee https://github.com/zephyrproject-rtos/zephyr/pull/73713\nand compilation error https://github.com/zephyrproject-rtos/zephyr/actions/runs/9381862609/job/25833126954?pr=73713\n\n**Additional context**\nThere are few options how to fix the issue:\n- provide symbol translation in stm32h7xx_hal_eth.h and stm32h5xx_hal_eth.h\n- revert change and bring back the symbol in mentioned file\n- provide symbol translation in zephyr driver\n- change symbols in HAL for F7 and F4\n\n**Screenshots**\nIf applicable, add screenshots to help explain your problem.\n\nComments:\n[awojasinski - 2024-06-12T13:24:39Z]\nIt has been fixed in zephyr with https://github.com/zephyrproject-rtos/zephyr/pull/73770\n\n[ASEHSTM - 2024-06-12T14:50:00Z]\nHello @awojasinski,\n\nThank you for your report. The change of this symbol has already been implemented in the F7 in HAL version v1.3.1 and will be implemented in the F4 soon. \nAdditionally, Zephyr should preferably align with our latest version. Therefore, please allow me to close this issue.\n\nWith Regards,",
     "image_urls": [],
     "images_count": 0,
-    "is_valid": false,
+    "is_valid": true,
+    "rescue_applied": true,
+    "rescue_signal_count": 2,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -1662,7 +1879,13 @@
     "clean_text": "Title: ll_delayblock is available when hal qspi module is enable instead of ospi\n\nBody:\n**Describe the set-up**\nSeedstudio Wio Lite AI (based on STM32H725AEIX )\nVSCode with  GCC\n\n**Describe the bug**\n\nstm32h7xx_ll_delayblock.c has the following code :\n\n#if defined(HAL_SD_MODULE_ENABLED) || defined(HAL_QSPI_MODULE_ENABLED)\n\nthat made it unusable for OSPI when HAL_OSPI_MODULE_ENABLED is 1\n\n**How To Reproduce**\nNot applicable\n\n**Additional context**\nThere is only 4 DLYB_TypeDef in stm32h725xx.h 2 for OSPI, 2 for SDMMC so my guess is that the correct #if defined in stm32h7xx_ll_delayblock.c should be #if defined(HAL_SD_MODULE_ENABLED) || defined(HAL_OSPI_MODULE_ENABLED)\n\nComments:\n[KRASTM - 2024-05-27T15:48:43Z]\nST Internal Reference: 182460\n\n[KRASTM - 2024-07-23T14:14:42Z]\nFixed in commit https://github.com/STMicroelectronics/stm32h7xx_hal_driver/commit/b2b4c45001f1b6b72ae449713607896fd6ca4c6b\n\n[KRASTM - 2024-11-26T10:09:57Z]\nHello @clementfumey,\n\nAfter additional testing, the fix exhibited unwanted side effects, so our team decided to revert it. However, you can make the change that best suits your application.\n\nWe apologize for the inconvenience and thank you in advance for your understanding.\n\nWith regards,",
     "image_urls": [],
     "images_count": 0,
-    "is_valid": false,
+    "is_valid": true,
+    "rescue_applied": true,
+    "rescue_signal_count": 3,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -1697,6 +1920,12 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": false,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "low",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "LL",
     "severity": "medium",
     "issue_kind": "other"
@@ -1730,6 +1959,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -1762,6 +1995,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 4,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "low",
     "issue_kind": "bug_report"
@@ -1795,6 +2032,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -1828,6 +2069,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -1860,7 +2105,13 @@
     "clean_text": "Title: HAL_DMA_Abort_IT leaves handle in aborted state\n\nBody:\nThere seems to be an inconsistency in the HAL_DMA_Abort_IT() function:\n\n- if you abort a DMA1 or DMA2 transfer then the handle gets left in the HAL_DMA_STATE_ABORT state and the abort callback is not called. The handle is not usable without reinitialising.\n- if you are using a BDMA instance then the handle state gets left in HAL_DMA_STATE_READY, the abort callback is called. The handle is immediately reusable.\n\nIt almost looks like the tail end of the function has been included in the else block for the BDMA by mistake.\n\nhttps://github.com/STMicroelectronics/stm32h7xx_hal_driver/blob/35582f63f1ab507e9d3e44e8e0db074fdb67752f/Src/stm32h7xx_hal_dma.c#L954C7-L954C7\n\nComments:\n[drdott - 2024-01-22T10:24:57Z]\nI think this was a misunderstanding on my part and is not a bug after all.\n\nI see now that disabling the DMA stream as part of the HAL_DMA_Abort_IT() call causes the Transfer Complete flag to be set in the Status Register. This then causes the DMA stream interrupt and the behaviour of HAL_DMA_IRQHandler() checks for the HAL_DMA_STATE_ABORT state in the handle and performs the appropriate cleanup (call abort callback, sets handle to HAL_DMA_STATE_READY, and unlocks the handle).\n\nSorry for wasting your time with this. Please feel free to close this issue.\n\n[TOUNSTM - 2024-01-22T17:09:41Z]\nHello @drdott,\n\nThank you for your contribution. Regarding the point for which you opened the issue, as it is resolved, please allow me to close the issue.\n\nWith regards,",
     "image_urls": [],
     "images_count": 0,
-    "is_valid": false,
+    "is_valid": true,
+    "rescue_applied": true,
+    "rescue_signal_count": 3,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -1894,6 +2145,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -1928,6 +2183,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -1959,7 +2218,13 @@
     "clean_text": "Title: The type of DMA_HandleTypeDef.Instance may be incorrect.\n\nBody:\n**Describe the set-up**\n\n- STM32H743\n- CubeIDE 1.13.0\n\n**Describe the bug**\n\nHi.\n\nWhen I programming USART communication using DMA, I encountered a compile error when attempting to retrieve the write address of the DMA buffer. I found that the type of the DMA_HandleTypeDef.Instance defined in stm32h7xx_hal_dma.h, is set to void*. I suspect that the correct type would be DMA_Channel_TypeDef*.\n\nhttps://github.com/STMicroelectronics/stm32h7xx_hal_driver/blob/dca6b63d9cce505f2801107f514c491d850a6cbb/Inc/stm32h7xx_hal_dma.h#L138C75-L138C75\n\nPlease look into this matter and confirm if my assumption is correct.\nThank you.\n\nComments:\n[pic-man749 - 2023-12-13T13:16:14Z]\nDear,\n\nI have come to the realization that the issue I raised regarding a potential bug was, in fact, a result of an error in my own code.\n\nI tried to use   huart2.hdmarx->Instance->NDTR to get write address of the DMA buffer, but it was a mistake. I made a mistake because I had used this code in the past to similar calculations on an STM32F4 board. In STM32F7,  I was able to calculate this by using the __HAL_DMA_GET_COUNTER() macro.\n\nI appreciate your time and attention to the matter. Please consider this issue resolved, and feel free to close it at your earliest convenience.\n\nThank you for your dedication to maintaining this library, and I am grateful for the excellent work you and the team do in supporting the community.\n\n[TOUNSTM - 2023-12-15T09:39:58Z]\nHello @pic-man749,\n\nThank you for your contribution. Regarding the point for which you opened the issue, as it has been resolved, please allow me to close the issue.\nThank you again for your report. We are looking forward to reading from you again.\n\nWith regards,",
     "image_urls": [],
     "images_count": 0,
-    "is_valid": false,
+    "is_valid": true,
+    "rescue_applied": true,
+    "rescue_signal_count": 1,
+    "evidence_strength": "medium",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "other"
@@ -1992,7 +2257,13 @@
     "clean_text": "Title: Need for HAL_SPI_TransmitFollowedByReceive function\n\nBody:\nWhen working with SPI slave devices, a quite common scenario is reading some data from the slave.\nThis iks usually done by a single SPI transaction made by:\n- sending data to the slave (i.e., specifying which data master wants to read)\n- reading data from the slave\nwhile the NSS pin stays asserted.\nAs an example  see the following screenshot:\n![immagine](https://github.com/STMicroelectronics/stm32h7xx_hal_driver/assets/22594460/42fbd903-954d-42ea-8ed6-e577a3299d2f)\n\nFrom the programmer side, I usually have:\n- data to be written already filled in a buffer tx_buf of size tx_size\n- a buffer rx_buf of size rx_size to be filled with the data read from the slave\n\nWith HAL SPI, if I want to use a HAL_SPI_Transmit() followed by a HAL_SPI_Receive() I must use NSS pin driven by software, otherwise it's deasserted at the end of HAL_SPI_Transmit() and re-asserted before HAL_SPI_Receive().\nBut this is not what the slave needs (NSS must stay asserted).\nHandling it by software (driving the GPIO pin high or low) works, but it requires time between tx and rx, and this decreases the \"real\" baud rate.\n\nIf I want to use HAL_SPI_TransmitReceive(), it requires two buffers (pTxData and pRxData) and both of them must have size tx_size + rx_size.\nProbably I can use a single buffer passing it to pTxData and pRxData input parameters, but it must have a size of tx_size + rx_size, and from the application side it's not so common.\nAs I wrote above, there is one tx_buf of size tx_size and onther rx_buf of size rx_size.\n\nI don't know if this is a good idea, but I think that a new function with the following prototype\n\nHAL_StatusTypeDef HAL_SPI_TransmitFollowedByReceive(SPI_HandleTypeDef *hspi, const uint8_t *pTxData, uint16_t txSize,\n                                          uint8_t *pRxData, uint16_t rxSize, uint32_t Timeout);\n\nwould be ok.\nAnd it would be responsible to assert NSS before starting tx and deasserting it after the end of rx, if NSS is driven by hardware.\n\nDoes this suggestion sound good?\nOr is there a simpler way to do this?\n\nComments:\n[HBOSTM - 2023-09-06T09:54:32Z]\nHello @escherstair,\n\nThank you for this contribution.\nI can't reproduce the problem from my side. So could you please give us more details about how you got this issue? And share the steps you have followed to reproduce this problem.\n\nBest Regards,\n\n[ALABSTM - 2023-11-29T16:55:01Z]\nHi @escherstair,\n\nI hope you are fine. Any feedback please?\n\nThanks,\n\n[escherstair - 2023-11-30T07:33:13Z]\nHi @ALABSTM,\nhi @HBOSTM \n\nI try to describe the issue with different words:\n\n- I need to transmit N bytes (contained in a const* buffer tx_buf) and read M bytes (to be received in buffer rx_buf)\n- NSS pin must stay asserted from the transmission to the receive (i.e., no deassertion in the middle)\n- NSS pin must be \"hardware\" asserted (.e., not toggled as a standard general-purpose output)\nThis is the typical situation when you have to read samples from a MEMS, as an example.\n\nAs far as I understand, none of the existing functions (HAL_SPI_Transmit(), HAL_SPI_Transmit(), HAL_SPI_TransmitReceive()) can be used in this scenario- every of them for a different reason.\nAm I right?\nFor this reason I suggested the addition of HAL_SPI_TransmitFollowedByReceive() or something like that.\n\nIf there is already available a HAL function to do what I describe, please point me to the relevant documentation.\nThanks in advance.\n\n[huoxingdawang - 2024-02-24T04:02:37Z]\nIn my project, we have a samilar requirement. We implement this by using \nc\nHAL_SPI_Transmit(&hspi1,val,num,2000);\nHAL_SPI_Receive(&hspi1,val2,num2,2000);\n \nand control NSS by software. \n\nActually, ours is probably a little more complicated like the following\nc\nNSS=0\nHAL_SPI_Transmit\nHAL_SPI_Receive\nHAL_SPI_Transmit\nHAL_SPI_Receive\nHAL_SPI_Transmit\nHAL_SPI_Receive\nHAL_SPI_Transmit\nHAL_SPI_Receive\nNSS=1\n\n\nBut we recently found that HAL_SPI_Receive would cause a TIME_OUT and HAL_SPI_TransmitReceive would work properly, details are in the #47 .\n\n[KRASTM - 2024-03-25T11:14:15Z]\nHello @escherstair,\n\nBack to you about this point. Our development teams acknowledged your proposal and its relevance. However, they reported there is no plan to support such enhancement for the moment.\nFor your case, I think you can use HAL_SPI_TransmitReceive() (with dummy Bytes).\n\nPlease allow me to close this ticket. Thank you for your comprehension.\n\nWith regards.",
     "image_urls": [],
     "images_count": 0,
-    "is_valid": false,
+    "is_valid": true,
+    "rescue_applied": true,
+    "rescue_signal_count": 3,
+    "evidence_strength": "medium",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "HAL",
     "severity": "low",
     "issue_kind": "other"
@@ -2025,6 +2296,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -2059,6 +2334,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -2094,7 +2373,13 @@
     "clean_text": "Title: CRYP api upgrade\n\nBody:\nAs far as I can tell the current HAL_CRYP_Encrypt (decrypt as well) provides an all-in-one solution for encryption.\nThis is fine but my use case requires an API that can be initialized and then fed with multiple blocks of data, i.e. something like\nInit -> Encrypt Block 1 -> Encrypt Block 2 -> ... -> Finalize\n\nSome other HAL implementations, e.g. STM32L4, provide functionality to do this.\nI've had a look in stm32h7xx_hal_cryp.c and it seems all the required functions are already present but have internal linkage.\nPlease consider making those functions public.\n\nRegards,\nManuel\n\nComments:\n[TOUNSTM - 2023-06-02T13:54:28Z]\nHello @fermentedfly,\n\nThank you for this report. We will get back to you as soon as we analyze it further. This may take some time. Thank you for your comprehension.\n\nWith regards,\n\n[HBOSTM - 2023-08-04T08:29:57Z]\nHello @fermentedfly,\n\nThank you for this contribution.\nCould you please give me more details about this issue, I need to know what internally linked functions you are talking about?\n\nBest Regards,\n\n[fermentedfly - 2023-08-07T09:48:31Z]\nHello @HBOSTM ,\n\nI had a deeper look in stm32h7xx_hal_cryp.c and my initial estimate was a bit optimistic.\nI use AES CBC & GCM.\nFor CBC, making static void CRYP_AES_ProcessData(CRYP_HandleTypeDef *hcryp, uint32_t Timeout) public is enough although a separate Init() would be very convenient.\n\nFor GCM, static HAL_StatusTypeDef CRYP_AESGCM_Process(CRYP_HandleTypeDef *hcryp, uint32_t Timeout) needs refactoring, i.e. the function needs to be split in it's three phases (header, data, finalize) in order to feed data multiple times.\n\nFor reference, please have a look in stm32l4xx_hal_cryp.c & stm32l4xx_hal_cryp_ex.c.\nIt got my use case (both CBC & GCM) to work while using\n- HAL_StatusTypeDef HAL_CRYP_Init(CRYP_HandleTypeDef *hcryp)\n- HAL_StatusTypeDef HAL_CRYPEx_AES(CRYP_HandleTypeDef *hcryp, uint8_t *pInputData, uint16_t Size, uint8_t *pOutputData, uint32_t Timeout)\n- HAL_StatusTypeDef HAL_CRYPEx_AES_Auth(CRYP_HandleTypeDef *hcryp, uint8_t *pInputData, uint64_t Size, uint8_t *pOutputData, uint32_t Timeout) (GCM only)\n\nIt would be superb if you can provide a similar API for STM32H7.\n\nRegards,\nManuel\n\n[ALABSTM - 2024-09-13T11:59:49Z]\nST Internal Reference: 191062\n\n[ALABSTM - 2024-09-13T12:00:40Z]\nHi @fermentedfly,\n\nYour proposal has been forwarded to our development teams. I will get back to you once I have their feedback.\n\nWith regards,\n\n[ALABSTM - 2024-10-25T10:52:41Z]\nHi @fermentedfly,\n\nAccording to our development teams, both **STM32L4** and **STM32H7** HAL CRYP drivers offer the **same** features. There is just a difference in the exposed API names.\n\nIndeed, from the **STM32H7** HAL CRYP driver perspective, the exposed APIs are:\n* HAL_CRYP_Init() for initalization and configuration step,\n* HAL_CRYP_Encrypt() for encryption and for HAL_CRYP_Decrypt() decryption steps,\n* HAL_CRYPEx_AESGCM_GenerateAuthTAG() and HAL_CRYPEx_AESCCM_GenerateAuthTAG() (depending on the authentication mode used, **i.e.**, GCM or CCM) for the authentication or \"finalization\" step.\n\n-------------------------------------------\n\nNow particularly regarding HAL_CRYP_Encrypt() and HAL_CRYP_Decrypt(), you may have noticed that each API handles different algorithms, as you can see from the code snippet below:\n\nhttps://github.com/STMicroelectronics/stm32h7xx-hal-driver/blob/6f5e35e30ac09ba7bf44139a97b289d3df53cf9c/Src/stm32h7xx_hal_cryp.c#L947-L955\n\nThis means that, instead of having multiple APIs exposed as done for the **STM32L4** HAL CRYP driver, like shown below, you just have two. This is easier to handle from a user perspective.\n\nc\nHAL_StatusTypeDef     HAL_CRYP_AESECB_Encrypt(CRYP_HandleTypeDef *hcryp, uint8_t *pPlainData, uint16_t Size, uint8_t *pCypherData, uint32_t Timeout);\nHAL_StatusTypeDef     HAL_CRYP_AESECB_Decrypt(CRYP_HandleTypeDef *hcryp, uint8_t *pCypherData, uint16_t Size, uint8_t *pPlainData, uint32_t Timeout);\nHAL_StatusTypeDef     HAL_CRYP_AESCBC_Encrypt(CRYP_HandleTypeDef *hcryp, uint8_t *pPlainData, uint16_t Size, uint8_t *pCypherData, uint32_t Timeout);\nHAL_StatusTypeDef     HAL_CRYP_AESCBC_Decrypt(CRYP_HandleTypeDef *hcryp, uint8_t *pCypherData, uint16_t Size, uint8_t *pPlainData, uint32_t Timeout);\nHAL_StatusTypeDef     HAL_CRYP_AESCTR_Encrypt(CRYP_HandleTypeDef *hcryp, uint8_t *pPlainData, uint16_t Size, uint8_t *pCypherData, uint32_t Timeout);\nHAL_StatusTypeDef     HAL_CRYP_AESCTR_Decrypt(CRYP_HandleTypeDef *hcryp, uint8_t *pCypherData, uint16_t Size, uint8_t *pPlainData, uint32_t Timeout);\n\n\nNote that, to select an algorithm, you simply have to use a simple assignment in your application, as the one shown below (extract from the code snippet provided at the end of this message):\n\nc\nhcryp.Init.Algorithm       = CRYP_AES_GCM;\n\n-------------------------------------------\n\nLast, but not least, the use case you mentioned is already possible using the **STM32H7** HAL CRYP driver, as indicated in the  ##### How to use this driver ##### section (extract below):\n\nhttps://github.com/STMicroelectronics/stm32h7xx-hal-driver/blob/6f5e35e30ac09ba7bf44139a97b289d3df53cf9c/Src/stm32h7xx_hal_cryp.c#L81-L85\n\nThe code snippet below illustrates how to do this in your application.\n\nc\nCRYP_HandleTypeDef hcryp;\n\nuint32_t timeout            = 10;\n\nuint32_t aes128key[4]       = {0xfeffe992,0x8665731c,0x6d6a8f94,0x67308308};\nuint32_t initVector[4]      = {0xcafebabe,0xfacedbad,0xdecaf888,0x00000002};\nuint32_t headerMessage[5]   = {0xfeedface,0xdeadbeef,0xfeedface,0xdeadbeef,0xabaddad2};\n\nuint32_t plainText[15]      = {0xd9313225,0xf88406e5,0xa55909c5,0xaff5269a,\n                               0x86a7a953,0x1534f7da,0x2e4c303d,0x8a318a72,\n                               0x1c3c0c95,0x95680953,0x2fcf0e24,0x49a6b525,\n                               0xb16aedf5,0xaa0de657,0xba637b39};\nuint32_t encryptedText[16]  = {0};\nuint32_t computedAuthTag[4] = {0};\n\n/* Set the CRYP parameters */\nhcryp.Instance             = CRYP;\nhcryp.Init.Header          = headerMessage;\nhcryp.Init.HeaderSize      = 5;\nhcryp.Init.DataType        = CRYP_DATATYPE_32B;\nhcryp.Init.DataWidthUnit   = CRYP_DATAWIDTHUNIT_WORD;\nhcryp.Init.pKey            = aes128key;\nhcryp.Init.pInitVect       = initVector;\nhcryp.Init.KeySize         = CRYP_KEYSIZE_128B;\nhcryp.Init.KeyIVConfigSkip = CRYP_KEYIVCONFIG_ONCE;\nhcryp.Init.Algorithm       = CRYP_AES_GCM;\n\n/* Initialize and configure the CRYP peripheral */\nif (HAL_CRYP_Init(&hcryp) != HAL_OK)\n{\n  Error_Handler();\n}\n\n/*  Encrypt the plain text through multiple runs */\nif (HAL_CRYP_Encrypt(&hcryp, plainText,    8, encryptedText,    timeout) != HAL_OK)\n{\n  Error_Handler();\n}\nif (HAL_CRYP_Encrypt(&hcryp, plainText+8,  4, encryptedText+8,  timeout) != HAL_OK)\n{\n  Error_Handler();\n}\nif (HAL_CRYP_Encrypt(&hcryp, plainText+12, 3, encryptedText+12, timeout) != HAL_OK)\n{\n  Error_Handler();\n}\n\n/* Compute the authentication TAG */\nif (HAL_CRYPEx_AESGCM_GenerateAuthTAG(&hcryp, computedAuthTag, timeout) != HAL_OK)\n{\n  Error_Handler();\n}\n\n\nI hope this makes things clearer and addresses your needs. Please allow me to close this thread. Thank you for your comprehension and thank you again for having tackled the subject.\n\nWith regards,",
     "image_urls": [],
     "images_count": 0,
-    "is_valid": false,
+    "is_valid": true,
+    "rescue_applied": true,
+    "rescue_signal_count": 2,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -2127,7 +2412,13 @@
     "clean_text": "Title: SPI Extra clock pulse generated when CFG2 registers is written without AFCNTR bit set\n\nBody:\n**Describe the set-up**\nnucle- h723zg board + SPI LCD connected to SPI1\n\n**Describe the bug**\nSPI is reconfigured between LCD and touch screen usages (16MHz and 1MHz).\nBoth use Mode0 so there should be no changes on clock line during transition\nsince MasterKeepIOState is set to SPI_MASTER_KEEP_IO_STATE_ENABLE all the time.\nBelow lines causes the SCK line to go high\nhttps://github.com/STMicroelectronics/stm32h7xx_hal_driver/blob/733af5f9315c077ad1965a5a2743d1aace779818/Src/stm32h7xx_hal_spi.c#L394-L399\nLater SCK line is corrected after execution of:\nhttps://github.com/STMicroelectronics/stm32h7xx_hal_driver/blob/733af5f9315c077ad1965a5a2743d1aace779818/Src/stm32h7xx_hal_spi.c#L461-L465\n...where CFG register is corrected.\nBut in the meantime extra SCK pulse is generated resulting in invalid transmission.\n\n**How To Reproduce**\nI suspect that simply calling HAL_SPI_Init() twice can result in this behavior, as it seems\nthat CFG2 register bit that should have AFCNTR bit set whole the time, but is cleared for\nbrief period of time.\n\n**Additional context**\nIt looks like having SPI_CFG2_AFCNTR set in first write to CFG2 solves the problem.\n\n**Screenshots**\n![stm32h7_spi_bug](https://user-images.githubusercontent.com/23063648/219673858-44be78ff-bc89-4d5b-90de-fe77ebb2b97f.png)\n\nComments:\n[HBOSTM - 2023-06-13T10:32:57Z]\nHello @kasjer,\n\nThank you for this contribution, from my side there is no problem in HAL_SPI_Init Configuration, Would you please give us more details about how you got this issue? And share the code you have used to reproduce this issue.\n\nBest Regards,\n\n[kasjer - 2023-06-13T19:12:33Z]\nProblem was visible when nucleo board was communicating with SPI display with SPI touch screen controller.\nOriginal project runs on mynewt OS with hal driver from ST.\nLet me check if I can prepare simple code that can be tested in STM32CubeIDE.\n\nbest regards.\n\n[kasjer - 2023-06-16T13:14:47Z]\nHi, I can not reproduce this behavior any more event with mynewt code.\nMaybe something else played a role in what I have seen before.\nThank you for your attention and I apologize for making a problem.",
     "image_urls": [],
     "images_count": 0,
-    "is_valid": false,
+    "is_valid": true,
+    "rescue_applied": true,
+    "rescue_signal_count": 2,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -2159,7 +2450,13 @@
     "clean_text": "Title: stm32h7xx_hal_ospi.c does not compile when assert_param actually evaluates \"expr\"\n\nBody:\n**Describe the set-up**\nSTM32H7B3\nGCC 12.2.0\nHAL Driver Git Tag: v1.11.1 \n\n**Describe the bug**\nstm32h7xx_hal_ospi.c does not compile when the assert_param macro actually evaluates expr\n\nThe offending lines are stm32h7xx_hal_ospi.c:1654 & 1732\nassert_param(IS_OSPI_STATUS_BYTES_SIZE(dlr_reg+1U)); -> variable dlr_reg does not exist\n\n**How To Reproduce**\n\nstm32h7xx_hal_conf.h\nEnable OSPI \n#define HAL_OSPI_MODULE_ENABLED\nSet a custom assert_param macro, e.g.\n\nextern void vConfigAssertHook();\n#define assert_param(expr) ((expr) ? (void)0U : vConfigAssertHook())\n\nComments:\n[HBOSTM - 2023-06-09T09:48:04Z]\nHello @fermentedfly,\n\n\nThank you for this contribution. There is no problem from my side.\nIf USE_FULL_ASSERT is defined:\nThis [check](https://github.com/STMicroelectronics/stm32h7xx_hal_driver/blob/706522e36cdd89b73dabaa575c279a87bab5d25b/Inc/stm32h7xx_hal_conf_template.h#L498) will be executed. In this case '[dlr_reg](https://github.com/STMicroelectronics/stm32h7xx_hal_driver/blob/706522e36cdd89b73dabaa575c279a87bab5d25b/Src/stm32h7xx_hal_ospi.c#LL1647C43-L1647C43)' is defined.\nelse\nThis [check](https://github.com/STMicroelectronics/stm32h7xx_hal_driver/blob/706522e36cdd89b73dabaa575c279a87bab5d25b/Inc/stm32h7xx_hal_conf_template.h#L502) will be executed, in this case 'expr' is not used, and assert_param returns 0.\nSo, please allow me to close this issue. Thank you again for your comprehension.\n\nBest Regards,",
     "image_urls": [],
     "images_count": 0,
-    "is_valid": false,
+    "is_valid": true,
+    "rescue_applied": true,
+    "rescue_signal_count": 2,
+    "evidence_strength": "medium",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "usage_question"
@@ -2193,6 +2490,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 2,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -2225,6 +2526,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "low",
     "issue_kind": "bug_report"
@@ -2256,6 +2561,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 2,
+    "evidence_strength": "medium",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "other"
@@ -2287,7 +2596,13 @@
     "clean_text": "Title: SDMMC stuck with HAL_SD_ERROR_DATA_TIMEOUT\n\nBody:\n**Describe the set-up**\nSD card socket connected without external pull-ups (only internal ones) to a NUCLEO-H723ZG board. This made the data lines instable. Adding an external logic analyzer for example brought the lines to a working level. Switching from the non-working variant after HAL_SD_ERROR_DATA_TIMEOUT online to the a working variant failed while being stuck with HAL_SD_ERROR_DATA_TIMEOUT.\n\n**Describe the bug**\nI have observed cases like above where HAL_SD_ERROR_DATA_TIMEOUT was set via SDMMC_FLAG_DTIMEOUT and HAL_SD_Abort() + HAL_SD_Init() could not recover from this.\n\n**How To Reproduce**\n1. Provoke a HAL_SD_ERROR_DATA_TIMEOUT error.\n\n2. Correct the hardware setup online (i.e. by adding pull-ups without a system reset).\n\n3. Use HAL_SD_Abort(), HAL_SD_DeInit() and HAL_SD_Init() to re-initialize the device.\n\n4. Initialization fails and the error remains.\n\n**Additional context**\nI suggest to call SDMMC_CmdStopTransfer() unconditionally within HAL_SD_Abort() to allow proper error recovery. This issue may be also present in other STM32 series HAL like STM32F7.\n\nComments:\n[KRASTM - 2024-06-05T08:26:21Z]\nHello @daniel-starke,\n\nSorry for the very late response, I hope you are well.\nI want to know if you still got this problem even after the update of the firmware during this time.\n\nWith regards.\n\n[daniel-starke - 2024-06-05T13:44:43Z]\nI do not have the test setup anymore so it is hard for me to try out at the point. Would you like me to do a code review instead?\n\n[KRASTM - 2024-06-05T16:43:23Z]\nHello @daniel-starke,\n\nSince you do not have the setup anymore, I would like to share some information related to the issue.\n\nUsually, it's recommended to use external Pull up to get a better and stable operation, already other board equipped by SD Card contain Pull ups on the lines.\nI shared your proposal with our development team, they don't accept it because we use HAL_SD_Abort() only when something is ongoing, and the state is busy. So, the call of **SDMMC_CmdStopTransfer()** must be conditionally within **HAL_SD_Abort()**.\n\nFinally, please allow me to close this issue, thank you for your comprehension.\n\nWith regards.\n\n[daniel-starke - 2024-06-05T16:57:49Z]\nHello @KRASTM,\n\nThe issue is that in case of a HAL_SD_ERROR_DATA_TIMEOUT error (the missing pull-up was just an easy example on how to reproduce it) the HAL layer goes out of sync with the PHY. HAL falsely assumes that the PHY has finished. As is has not and HAL performs no appropriate reset the PHY remains in the error state until system reset. Feel free to use another mechanism to recover from that state. Calling SDMMC_CmdStopTransfer() unconditionally within HAL_SD_Abort() was an easy workaround which worked for me.\n\n[KRASTM - 2024-06-06T10:26:58Z]\nHello @daniel-starke,\n\nThank you for the explanation and the report, at least we have a trace on the topic. I will share this with our team in order to enhance or to find a solution for that case (maybe your workaround in another way).\n\nWith regards.",
     "image_urls": [],
     "images_count": 0,
-    "is_valid": false,
+    "is_valid": true,
+    "rescue_applied": true,
+    "rescue_signal_count": 2,
+    "evidence_strength": "medium",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "usage_question"
@@ -2321,6 +2636,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 2,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -2353,6 +2672,12 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": false,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "low",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "Other",
     "severity": "high",
     "issue_kind": "other"
@@ -2384,7 +2709,13 @@
     "clean_text": "Title: Padding warnings that need fix\n\nBody:\nWhen the source code is comèpiled with armclang with all the warnbings enabled, some padding warnings are shown.\nI think that \"zero compiler warnings\" with very strict compilation flags is an ambitious, but really appreciated target from the user point of view.\n\nHere are some of these needed paddings:\n.../STM32H7xx_HAL_Driver/Inc\\stm32h7xx_hal_uart.h(234): warning: padding struct 'struct __UART_HandleTypeDef' with 2 bytes to align 'FifoMode' [-Wpadded]\nSo\nuint16_t                 padding;\nis needed just before\nhttps://github.com/STMicroelectronics/stm32h7xx_hal_driver/blob/8e7eb8dba8bee5e4c260c6fc724437502e98fc76/Inc/stm32h7xx_hal_uart.h#L233-L234\n\n.../STM32H7xx_HAL_Driver/Inc\\stm32h7xx_hal_uart.h(253): warning: padding struct 'struct __UART_HandleTypeDef' with 3 bytes to align 'gState' [-Wpadded]\nSo\nuint8_t                 padding_bytes[3];\nshould be needed just before\nhttps://github.com/STMicroelectronics/stm32h7xx_hal_driver/blob/8e7eb8dba8bee5e4c260c6fc724437502e98fc76/Inc/stm32h7xx_hal_uart.h#L252-L254\nBut I think that this depends on the behavior of the compiler, because HAL_LockTypeDef is an enum and so every compiler can set its size to different values.\nMaybe an union to a fixed size value is the best option?\n\nComments:\n[wovano - 2023-07-11T13:37:18Z]\nI generally agree with the wish to support warning-free compilation, but in this case it simply means that [you've turned on too many warnings](https://stackoverflow.com/questions/20184259/what-does-the-padding-class-tester-with-4-bytes-warning-mean#comment30091914_20184259) (see also [here](https://stackoverflow.com/questions/40662265/warning-for-struct-padding-in-clang)). This is not a compiler warning that indicates a (possible) problem with the code, but simply an extra diagnostic that is disabled by default (and even when using -Wall).\n\nManually adding padding bytes will only obfuscate the code and does not solve any problem (other than suppressing this warning that you specifically enabled).\n\nThe point of this compiler warning is to be aware of memory wasted due to struct padding. Manually added dummy variables will waste the same amount of memory but hide it from the compiler. The real solution would be to reorder the struct members from large to small so the amount of padding bytes is actually minimized. This would reduce the struct size from 144 to 140 bytes (or from 200 to 196 bytes if callbacks are enabled), which is quite insignificant. If memory constraints are that important, the low-level HAL would probably be a better match. For the HAL, readability/understandability and maintainability are more important and I doubt this proposal would really benefit anyone.\n\nMy 2 cents.\n\n[KRASTM - 2024-06-06T15:14:13Z]\nHello @escherstair,\n\nSorry for the very late response, thank you for the report.\n\nAbout your issue, this is a known limitation mentioned in the release note for the firmware package: \nOnly template projects migrated to Arm Compiler 6 with MDK-ARM 5.29 or upper version (“AC5-like Warnings” mode).\nCurrently we don't support the option **\"All warning enabled\"**, just **“AC5-like Warnings”** as discussed.\n\nWith regards,\n\n[KRASTM - 2024-06-10T08:46:38Z]\nHello @escherstair,\n\nPlease, allow me to close this thread, thank you for your comprehension.\n\nWith regards.",
     "image_urls": [],
     "images_count": 0,
-    "is_valid": false,
+    "is_valid": true,
+    "rescue_applied": true,
+    "rescue_signal_count": 1,
+    "evidence_strength": "medium",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "other"
@@ -2417,6 +2748,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -2446,6 +2781,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 2,
+    "evidence_strength": "medium",
+    "filter_invalid_reasons": [],
     "layer": "LL",
     "severity": "medium",
     "issue_kind": "usage_question"
@@ -2475,6 +2814,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 2,
+    "evidence_strength": "medium",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "usage_question"
@@ -2508,6 +2851,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -2542,6 +2889,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -2576,6 +2927,12 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": false,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "low",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "Other",
     "severity": "low",
     "issue_kind": "bug_report"
@@ -2609,6 +2966,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -2642,6 +3003,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 2,
+    "evidence_strength": "medium",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "other"
@@ -2674,6 +3039,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "medium",
+    "filter_invalid_reasons": [],
     "layer": "Other",
     "severity": "medium",
     "issue_kind": "usage_question"
@@ -2705,6 +3074,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 4,
+    "evidence_strength": "medium",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "low",
     "issue_kind": "other"
@@ -2739,6 +3112,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 2,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -2771,6 +3148,12 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": false,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "low",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "other"
@@ -2803,6 +3186,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 3,
+    "evidence_strength": "medium",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "usage_question"
@@ -2835,6 +3222,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 3,
+    "evidence_strength": "medium",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "usage_question"
@@ -2868,6 +3259,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -2901,6 +3296,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -2934,6 +3333,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -2967,6 +3370,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 1,
+    "evidence_strength": "medium",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "other"
@@ -2999,7 +3406,13 @@
     "clean_text": "Title: Bug in stm32h7xx_hal_rcc_ex.c - wrong #define for HRTIM1 (versions 1.7, 1.8)\n\nBody:\nIn file stm32h7xx_hal_rcc_ex.c  function HAL_RCCEx_PeriphCLKConfig\n\nhttps://github.com/STMicroelectronics/stm32h7xx_hal_driver/blob/b1c3ba014904de02274c7ff901f0226ad6f20238/Src/stm32h7xx_hal_rcc_ex.c#L1474\n\nInstead of #if defined(**HRTIM**) should be #if defined(**HRTIM1**) \n\nResult: HRTIM1 is configured incorrectly.\n\n[Reported on the STM32 forum](https://community.st.com/s/question/0D53W0000080rkUSAQ/problem-with-hrtim-nucleoh743zi2frequency-of-timer-should-be-480-mhz-but-it-is-still-240mhz)  by [AndiAndi\n](https://community.st.com/s/profile/0050X000007SCuxQAG)\n\nComments:\n[ALABSTM - 2020-07-01T13:12:12Z]\nDuplicate of issue [STM32CubeH7/#46](https://github.com/STMicroelectronics/STM32CubeH7/issues/46).\n\n[ALABSTM - 2020-07-01T15:28:32Z]\nHi @pavel-a,\n\nThank you once again for all your reports. This point has been transmitted to our development teams. I will get to you once I have their answer.\n\nKind regards,",
     "image_urls": [],
     "images_count": 0,
-    "is_valid": false,
+    "is_valid": true,
+    "rescue_applied": true,
+    "rescue_signal_count": 1,
+    "evidence_strength": "medium",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "configuration_help"
@@ -3034,7 +3447,13 @@
     "clean_text": "Title: Most pointer inputs arguemnts to HAL Drivers functions do not treat the data they are pointing to as a constant data.\n\nBody:\nHi @ALABSTM , @ASELSTM ,\n\nIn order to prevent unwanted modifications to output data to be sent out on any port, I usually prefer to typecast the used pointer and the variable to constant. U am observing that I cannot pass such constant data pointing pointers and constant data to any HAL Driver function:\n\nExample:\n\n\t#pragma pack(1)\n\n\t\ttypedef struct\n\t\t{\n\t\t\tuint16_t\tu16MajorNumber;\n\t\t\tuint16_t\tu16MinorNumber;\n\t\t\tuint16_t\tu16PatchNumber;\n\t\t\tuint8_t\tucReleaseType;\n\t\t} goPSCIsAliveResponse;\n\n\t\tconst goPSCIsAliveResponse\toPSCIsAliveResponse =\n\t\t{\n\t\t\t.u16MajorNumber\t= VERSION_MAJOR,\n\t\t\t.u16MinorNumber\t= VERSION_MINOR,\n\t\t\t.u16PatchNumber\t= VERSION_PATCH,\n\t\t\t.ucReleaseType\t= VERSION_EXTRA[0]\n\t\t};\n\n\t#pragma pack()\n\t\tStatus = HAL_FDCAN_AddMessageToTxFifoQ(phfdcan, &oPSCIsAliveResponseTxHeader, &oPSCIsAliveResponse);\n\nThe Keil compiler throws:\n\n../Src/main.c(778): error: embedded position-independent lowering of oPSCIsAliveResponse made it non-const, other translation units will access it incorrectly [-Werror,-Wembedded-pi]\n                const goPSCIsAliveResponse      oPSCIsAliveResponse =\n                                                ^\n../Src/main.c(1331): error: incompatible pointer types passing 'const goPSCIsAliveResponse *' to parameter of type 'uint8_t *' (aka 'unsigned char *') [-Werror,-Wincompatible-pointer-types]\n                Status = HAL_FDCAN_AddMessageToTxFifoQ(phfdcan, &oPSCIsAliveResponseTxHeader, &oPSCIsAliveResponse);\n                                                                                              ^~~~~~~~~~~~~~~~~~~~\n../Drivers/STM32H7xx_HAL_Driver/Inc\\stm32h7xx_hal_fdcan.h(2021): note: passing argument to parameter 'pTxData' here\nHAL_StatusTypeDef HAL_FDCAN_AddMessageToTxFifoQ(FDCAN_HandleTypeDef *hfdcan, FDCAN_TxHeaderTypeDef *pTxHeader, uint8_t *pTxData);\n                                                                                                                        ^\n\nI therefore request ST team to modify the HAL Driver APIs and function calls so as to allow directly passing:\n1. Pointer to constant data\n2. Constant Pointer to constant data.\n\nExample:\nIt will be helpful if the current function declaration\n\nHAL_StatusTypeDef HAL_FDCAN_AddMessageToTxFifoQ(FDCAN_HandleTypeDef *hfdcan, FDCAN_TxHeaderTypeDef *pTxHeader, uint8_t *pTxData)\n\nis changed to:\n\nHAL_StatusTypeDef HAL_FDCAN_AddMessageToTxFifoQ(FDCAN_HandleTypeDef * const hfdcan, const FDCAN_TxHeaderTypeDef * const pTxHeader, const uint8_t * const pTxData)\n\nPlease share your views.\n\nThanks,\nRajeev\n\nComments:\n[rxa1031 - 2020-05-02T14:41:34Z]\nIf I change the call to below:\n\n\t\tStatus = HAL_FDCAN_AddMessageToTxFifoQ(phfdcan, &oPSCIsAliveResponseTxHeader, (uint8_t *)&oPSCIsAliveResponse);\n\nwherein I am typecasting the oPSCIsAliveResponse when passing it to the function, the Keil throws below Error:\n\n\n../Src/main.c(778): error: embedded position-independent lowering of oPSCIsAliveResponse made it non-const, other translation units will access it incorrectly [-Werror,-Wembedded-pi]\n                const goPSCIsAliveResponse      oPSCIsAliveResponse =\n\n\nI would have loved to call the function as shown below:\n\n// Variables used in my code:\n\tconst FDCAN_TxHeaderTypeDef oPSCIsAliveResponseTxHeader;\n\tconst goPSCIsAliveResponse\toPSCIsAliveResponse;\n\n// Arguments that I would pass to function:\nFDCAN_HandleTypeDef * const phfdcan = (FDCAN_HandleTypeDef * const) &hfdcan1;\nconst FDCAN_TxHeaderTypeDef * const pTxHeader = (const FDCAN_TxHeaderTypeDef * cons)&oPSCIsAliveResponseTxHeader;\nconst uint8_t *const pTxData = (const uint8_t * const)&oPSCIsAliveResponse;\n\n// Function Call\nStatus = HAL_FDCAN_AddMessageToTxFifoQ(phfdcan, pTxHeader , pTxData);\n\n[ALABSTM - 2020-05-04T12:56:36Z]\nHi @rxa1031,\n\nThank you for this detailed report. This issue has also been previously reported by other users ([link](https://github.com/STMicroelectronics/STM32CubeF4/issues/10)).\n\nThis is one of the main points in the tasks queue of our development teams. We cannot share a date regarding its deployment and publication. We count on your patience and comprehension.\n\nThank you again for this report. Take care and stay safe.\n\nWith regards,\n\n[rxa1031 - 2021-04-14T16:17:13Z]\nHello @RKOUSTM\n\nWill there be a new release shortly with fix available for the reported issue?\n\nThanks,\nRajeev\n\n[escherstair - 2021-07-09T13:02:46Z]\nHello @ALABSTM \nI've just found this issue and so I'm not opening a duplicate.\nI'd like saying that a fix should be necessary soon, otherwise there are a lot of warning when transmit functions (as an example HAL_SPI_Transmit) are called under the hood from platform_write implemented as requested by STMems_Standard_C_drivers.\nAs an example\nhttps://github.com/STMicroelectronics/STMems_Standard_C_drivers/blob/928331ce8eaa61ed9b5df91c632d6733bb4bf52f/iis3dwb_STdC/examples/iis3dwb_self_test.c#L117-L118\n\nA dirty workaround implemented in some source code is to cast-away the const-ness of the input parameter, but this is definitively bad practise and should be avoided.\nMoreover modern C++ compilers would threat this as warnings, and this could be a potential major issue in project that needs some kind of certifications.\n\n[ALABSTM - 2023-05-11T09:14:39Z]\nST Internal Reference: 98091\n\n[ALABSTM - 2023-05-11T09:19:16Z]\nHi everyone,\n\nThe deployment of the const keyword is being deployed slowly but surely as said before. Below the example of the HAL and the LL I²C drivers, fixed in commit https://github.com/STMicroelectronics/stm32h7xx_hal_driver/commit/ab5b9a231a4866ea98f621127219b903af8a220c. In the meanwhile, please allow me to close this issue. This topic will be tracked through our internal trackers till it is fully deployed.\n\nhttps://github.com/STMicroelectronics/stm32h7xx_hal_driver/blob/8d27047ce061c1d164b8a1f9a3d7ea71a11c2649/Inc/stm32h7xx_hal_i2c.h#L712-L714\n\nWith regards,",
     "image_urls": [],
     "images_count": 0,
-    "is_valid": false,
+    "is_valid": true,
+    "rescue_applied": true,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -3066,6 +3485,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 2,
+    "evidence_strength": "medium",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "other"
@@ -3099,7 +3522,13 @@
     "clean_text": "Title: Incorrect value assigned to ProtocolStatus->Activity inside HAL_FDCAN_GetProtocolStatus() in file STM32Cube_FW_H7_V1.7.0\\Drivers\\STM32H7xx_HAL_Driver\\Src\\stm32h7xx_hal_fdcan.c\n\nBody:\nDear Developer,\n\nIncorrect value is assigned to ProtocolStatus->Activity inside HAL_FDCAN_GetProtocolStatus() in file STM32Cube_FW_H7_V1.7.0\\Drivers\\STM32H7xx_HAL_Driver\\Src\\stm32h7xx_hal_fdcan.c\n\nPlease change:\n\n ProtocolStatus->Activity = (StatusReg & FDCAN_PSR_ACT);\n\nTo:\n\n ProtocolStatus->Activity = ((StatusReg & FDCAN_PSR_ACT) >> FDCAN_PSR_ACT_Pos);\n\nRegards,\nRajeev\n\nComments:\n[rxa1031 - 2020-04-16T12:32:18Z]\nI had sent an email about this issue to Luca and Saurabh (from ST). One of them could have probably raised the internal request for fix.\n\n[ALABSTM - 2020-04-29T12:01:46Z]\nHi @rxa1031,\n\nThank you for this other report. I confirm this issue has been logged into our internal bug tracking system as this was the case of the other two.\n\nYour reports will always be the welcome. May I just ask you to avoid sending the same report through more than one support channel? Thank you for your comprehension.\n\nTake care and stay safe.\n\nWith regards,\n\n[ALABSTM - 2020-04-29T12:02:47Z]\nST Internal Reference: 84743\n\n[ALABSTM - 2020-04-29T12:15:26Z]\nHi @rxa1031,\n\nOur development teams checked your report and indicated **there is no issue**. Here are the details of their answer:\n\n\"Activity is a uint32_t in the structure FDCAN_ProtocolStatusTypeDef. It can be one of the following values:\nhttps://github.com/STMicroelectronics/stm32h7xx_hal_driver/blob/b1c3ba014904de02274c7ff901f0226ad6f20238/Inc/stm32h7xx_hal_fdcan.h#L1192-L1195\nAs you may notice those values are shifted by default. So there is no need to shift them again.\"\n\nWith regards,",
     "image_urls": [],
     "images_count": 0,
-    "is_valid": false,
+    "is_valid": true,
+    "rescue_applied": true,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -3134,6 +3563,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -3167,7 +3600,13 @@
     "clean_text": "Title: HAL_FDCAN_IRQHandler() : Concern with regards to value assigned to FDCAN_CCU->IR and FDCAN_CCU\n\nBody:\nDear Developer,\n\nFile: STM32h7xx_hal_fdcan.C\n\nI am concerned about the values assigned to variables TxEventFifoITs, RxFifo0Its, and RxFifo1Its.\n\nI am concerned about the values assigned to registers FDCAN_CCU->IR and FDCAN_CCU->IE.\n\n**Observations:**\n\nAs per the STM32H743 / STM32H753 Reference manual, the bit numbers 30 and 31 of **FDCAN_IR** is RESERVED. Similarly the bit numbers 30 and 31 of **FDCAN_IE** are also reserved.\n\n Also the **CCU_IE** register bits 2 through 31 are reserved.\n \n\n**Concerns:**\n\nPlease refer to below declaration for CAN and the shared code parts.\n\nI want to understand why one would call FDCAN_CCU->IE |= (((__INTERRUPT__) & CCU_IR_MASK) >> 30); when the passed __INTERRUPT__ will always have unknown value for bit 30 and bit 31?\n\nWhen HAL_FDCAN_IRQHandler() function executes, a value gets  assigned to variables out of TxEventFifoITs, RxFifo0Its, and RxFifo1Its.\n\n**My concern is that when both FDCAN_IR and FDCAN_IE have reserved bit numbers 30 and 31, then why do we want to use these bits by first copying their information to the variables and later using the values with the variables for assigning the two bits of FDCAN_CCU_IR and FDCAN_CCU_IE?**\n\nI also observe that RxFifo1Its >> 4 is actually the value that coder will have to use inside HAL_FDCAN_RxFifo1Callback().\n\nAnd that TxEventFifoITs >> 8 is actually the value that coder will have to use inside HAL_FDCAN_TxEventFifoCallback()\n\n**MACROS:**\n\n#define FDCAN_IR_MASK ((uint32_t)0x3FCFFFFFU) /*!< FDCAN interrupts mask */\n#define CCU_IR_MASK   ((uint32_t)0xC0000000U) /*!< CCU interrupts mask   */\n\n#define __HAL_FDCAN_CLEAR_FLAG(__HANDLE__, __FLAG__)             \\\ndo{                                                              \\\n    ((__HANDLE__)->Instance->IR) = ((__FLAG__) & FDCAN_IR_MASK); \\\n    FDCAN_CCU->IR = (((__FLAG__) & CCU_IR_MASK) >> 30);          \\\n  }while(0)\n\n#define __HAL_FDCAN_ENABLE_IT(__HANDLE__, __INTERRUPT__)             \\\n  do{                                                                \\\n    (__HANDLE__)->Instance->IE |= ((__INTERRUPT__) & FDCAN_IR_MASK); \\\n    FDCAN_CCU->IE |= (((__INTERRUPT__) & CCU_IR_MASK) >> 30);        \\\n  }while(0)\n\n\n**Code part:**\nI observe following code part present within HAL_FDCAN_IRQHandler() function’s body:\n\n  TxEventFifoITs = hfdcan->Instance->IR & FDCAN_TX_EVENT_FIFO_MASK;\n  TxEventFifoITs &= hfdcan->Instance->IE;\n  RxFifo0ITs = hfdcan->Instance->IR & FDCAN_RX_FIFO0_MASK;\n  RxFifo0ITs &= hfdcan->Instance->IE;\n  RxFifo1ITs = hfdcan->Instance->IR & FDCAN_RX_FIFO1_MASK;\n  RxFifo1ITs &= hfdcan->Instance->IE;\n…\n  /* Tx event FIFO interrupts management **************************************/\n  if (TxEventFifoITs != 0U)\n  {\n    /* Clear the Tx Event FIFO flags */\n    __HAL_FDCAN_CLEAR_FLAG(hfdcan, TxEventFifoITs);\n\n    /* Tx Event FIFO Callback */\n    HAL_FDCAN_TxEventFifoCallback(hfdcan, TxEventFifoITs);\n  }\n\n  /* Rx FIFO 0 interrupts management ******************************************/\n  if (RxFifo0ITs != 0U)\n  {\n    /* Clear the Rx FIFO 0 flags */\n    __HAL_FDCAN_CLEAR_FLAG(hfdcan, RxFifo0ITs);\n\n    /* Rx FIFO 0 Callback */\n    HAL_FDCAN_RxFifo0Callback(hfdcan, RxFifo0ITs);\n  }\n\n  /* Rx FIFO 1 interrupts management ******************************************/\n  if (RxFifo1ITs != 0U)\n  {\n    /* Clear the Rx FIFO 1 flags */\n    __HAL_FDCAN_CLEAR_FLAG(hfdcan, RxFifo1ITs);\n\n    /* Rx FIFO 1 Callback */\n    HAL_FDCAN_RxFifo1Callback(hfdcan, RxFifo1ITs);\n  }\n\nPlease share your views.\n\nThanks,\nRajeev\n\nComments:\n[rxa1031 - 2020-04-16T12:31:49Z]\nI had sent an email about this issue to Luca (from ST). He would have probably raised the internal request for fix.\n\n[ALABSTM - 2020-04-16T13:43:26Z]\nHi @rxa1031,\n\nThank you for this last comment. Indeed, the issue has been forwarded to our development teams and is currently under analysis. I will let you updated as soon as I have feedback on it.\n\nThank you once again for having reported this concern. Take care and stay safe.\n\nWith regards,\n\n[ALABSTM - 2020-04-16T13:44:18Z]\nST Internal Reference: 83674\n\n[rxa1031 - 2020-04-19T14:15:13Z]\nI have following additional information to share:\n\nAfter reviewing the inputs that I've received, I had a quick glance at the STM32G4 Series Reference manual, April 2020, RM0440, Rev 3. I tried searching for FDCAN_CCU_IR or its alias CCU_IR, but I was unable to find it. Hence, my conclusion is that ONLY STM32G4XX code does not have to use the FDCAN_IR_MASK (as it helps break down value parts that is to be written to FDCAN_IR and FDCAN_CCU_IR).\n\nI understand writing 1 to a bit of FDCAN_CCU_IR and FDCAN_IR will only clear them. Writing 0 to any bit does not have any impact. However, this is not the case with FDCAN_CCU_IE and FDCAN_IE\n\nHence, I request that all four macros namely __HAL_FDCAN_ENABLE_IT(),  __HAL_FDCAN_DISABLE_IT(), __HAL_FDCAN_CLEAR_IT() and __HAL_FDCAN_CLEAR_FLAG() be modified, so as to have different macros which independently take care of FDCAN_CCU_IX (where X = E or R) and FDCAN_IX (where X = E or R).\n\nAs on day the bits [31:30] of FDCAN_IX are unused, hence the coder is left shifting the FDCAN_CCU_IX bits (where X = E or R) by 30 before passing as a value to the existing macros.\n\nWhat if these reserved bits [31:30] of FDCAN_IX are used for some interrupt in future, then the current implementation will become a BAD Implementation. Hence it will be good if either 8 bytes (i.e. 4 for FDCAN_IX and 4 for FDCAN_CCU_IX) or structure variable is passed to the macros so that there is not any adverse impact while making changes to the register values.\n\n[rxa1031 - 2020-04-19T14:24:16Z]\nBasically one should be able to update FDCAN_CCU_IE and FDCAN_IE mutually exclusively.\n\n[ALABSTM - 2020-12-14T13:04:16Z]\nHi @rxa1031,\n\nI hope you are doing well. As for your concerns:\n* As for the macro __HAL_FDCAN_CLEAR_FLAG() (the same applies to the macro __HAL_FDCAN_ENABLE_IT), it has been defined to handle **both** registers FDCAN_IR and FDCANCCU_IR using **one signle** parameter __FLAG__:\n  * As you pointed out, register FDCAN_IR has **2** reserved bits (30 and 31), while register FDCANCCU_IR has only **2** used bits (0 and 1).\n  * The idea is that parameter __FLAG__ is made up of two parts:\n    * bits 0 to 29 holding data to be written in register FDCAN_IR.\n    * bits 30 and 31 holding data to be written in register FDCANCCU_IR.\n  * The two parts of the __FLAG__ parameters are extracted thanks to the masks  FDCAN_IR_MASK and CCU_IR_MASK as shown in the code snippets below. Notice also the **shift** to the right before the storage in the FDCANCCU_IR register.\n  * I agree with you that if one day bits 30 and 31 of register are to be used, the code implementation has to be changed. However, this can be made in a way **totally transparent** to the user and with **preserving** backward compatibility.\n\nhttps://github.com/STMicroelectronics/stm32h7xx_hal_driver/blob/d8461b980b59b1625207d8c4f2ce0a9c2a7a3b04/Inc/stm32h7xx_hal_fdcan.h#L1528-L1529\nhttps://github.com/STMicroelectronics/stm32h7xx_hal_driver/blob/d8461b980b59b1625207d8c4f2ce0a9c2a7a3b04/Inc/stm32h7xx_hal_fdcan.h#L1855-L1859\n\n* As for the variables TxEventFifoITs, RxFifo0Its, and RxFifo1Its, and their use within the callbacks, this is up to the user to decide of the way they see it best appropriate to use them. This includes shifting their content by 4 or by 8.\nRegarding the shifting itself, I am tempted to think it can be avoided:\n  * Indeed, within each one of the above mentioned variables, bit positions are preserved thanks to the masks used, as shown in the code snippets below.\n  * These masks being defined using the **CMSIS bits** definitions, we could think about using them directly as suggested at the end of this comment.\n\nhttps://github.com/STMicroelectronics/stm32h7xx_hal_driver/blob/d8461b980b59b1625207d8c4f2ce0a9c2a7a3b04/Src/stm32h7xx_hal_fdcan.c#L210\nhttps://github.com/STMicroelectronics/stm32h7xx_hal_driver/blob/d8461b980b59b1625207d8c4f2ce0a9c2a7a3b04/Src/stm32h7xx_hal_fdcan.c#L5273-L5274\n\nc\nvoid HAL_FDCAN_RxFifo1Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo1ITs)\n{\n\n  ...\n\n  if ((RxFifo1ITs & FDCAN_IR_RF0L) != 0U)\n  {\n    /* Treatment in case of FDCAN_IR_RF0L interrupt */\n  }\n\n  ...\n}\n\n\nI hope this answers your questions. Thank you again for having shared your concerns. Please allow me to close this issue now.\n\nWith regards,",
     "image_urls": [],
     "images_count": 0,
-    "is_valid": false,
+    "is_valid": true,
+    "rescue_applied": true,
+    "rescue_signal_count": 2,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -3201,6 +3640,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 2,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "bug_report"

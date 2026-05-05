@@ -124,6 +124,8 @@ def compose_st_ready_text(doc: dict[str, Any], comments_chars: int) -> str:
             f"layer={doc.get('layer')}",
             f"issue_kind={doc.get('issue_kind')}",
             f"severity={doc.get('severity')}",
+            f"evidence_strength={doc.get('evidence_strength')}",
+            f"rescue_applied={doc.get('rescue_applied')}",
             f"state={doc.get('state')}",
             f"issue_number={doc.get('issue_number')}",
         ]
@@ -205,6 +207,8 @@ def export_repo(repo: str, include_invalid: bool, comments_chars: int) -> tuple[
                 "issue_kind": doc.get("issue_kind"),
                 "severity": doc.get("severity"),
                 "is_valid": doc.get("is_valid"),
+                "evidence_strength": doc.get("evidence_strength"),
+                "rescue_applied": doc.get("rescue_applied"),
                 "output_file": file_name,
                 "output_chars": len(payload),
             }
@@ -223,6 +227,8 @@ def export_repo(repo: str, include_invalid: bool, comments_chars: int) -> tuple[
             "issue_kind",
             "severity",
             "is_valid",
+            "evidence_strength",
+            "rescue_applied",
             "output_file",
             "output_chars",
         ])
@@ -282,6 +288,8 @@ def export_repo_json(repo: str, include_invalid: bool, comments_chars: int) -> t
                 "labels": doc.get("labels") or [],
                 "github_url": doc.get("github_url"),
                 "is_valid": doc.get("is_valid"),
+                "evidence_strength": doc.get("evidence_strength"),
+                "rescue_applied": doc.get("rescue_applied"),
                 "delivery_template": "st_v2_structured_issue_card",
                 "st_ready_text": compose_st_ready_text(doc, comments_chars=comments_chars),
             }

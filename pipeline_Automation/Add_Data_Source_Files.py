@@ -5,6 +5,7 @@ import mimetypes
 import os
 import random
 import re
+import runpy
 import shutil
 import tempfile
 import time
@@ -74,7 +75,13 @@ def _load_legacy_value(attr_name: str) -> Any:
 
         return legacy_vars.get(attr_name)
     except Exception:
-        return None
+        # Fallback when launched from repo root where direct module import may fail.
+        try:
+            legacy_path = Path(__file__).resolve().parent / "Get_Persona_KBs.py"
+            legacy_vars = runpy.run_path(str(legacy_path))
+            return legacy_vars.get(attr_name)
+        except Exception:
+            return None
 
 
 def looks_like_placeholder_api_key(value: str) -> bool:
@@ -369,6 +376,43 @@ def flatten_json_root_array_file(source_path: Path, target_dir: Path, verbose: b
             if verbose:
                 print(f"Auto-flattened JSON root for {source_path.name}: key '{key}' -> array")
             return target_path, True, len(value) == 0
+
+    if isinstance(payload, dict) and len(payload) > 1:
+        list_keys = [str(k) for k, v in payload.items() if isinstance(v, list)]
+        preferred_keys = [
+            "diagnostic_cards",
+            "diagnosticCards",
+            "resolver_cases",
+            "issues",
+            "files",
+            "cards",
+            "documents",
+            "items",
+            "data",
+        ]
+
+        selected_key: str | None = None
+        for key in preferred_keys:
+            if key in list_keys:
+                selected_key = key
+                break
+
+        if selected_key is None and len(list_keys) == 1:
+            selected_key = list_keys[0]
+
+        if selected_key is not None:
+            value = payload.get(selected_key)
+            if isinstance(value, list):
+                target_path = (target_dir / source_path.name).resolve()
+                serialized = json.dumps(value, ensure_ascii=False)
+                target_path.write_text(serialized, encoding="utf-8")
+                if verbose:
+                    print(
+                        "Auto-flattened JSON root for "
+                        f"{source_path.name}: key '{selected_key}' -> array "
+                        f"(dict keys={list(payload.keys())})"
+                    )
+                return target_path, True, len(value) == 0
 
     if isinstance(payload, dict):
         keys = ", ".join(str(k) for k in payload.keys())

@@ -28,6 +28,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "Other",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -62,6 +66,12 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": false,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "low",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "Other",
     "severity": "high",
     "issue_kind": "configuration_help"
@@ -95,6 +105,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "LL",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -127,6 +141,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 2,
+    "evidence_strength": "medium",
+    "filter_invalid_reasons": [],
     "layer": "HAL",
     "severity": "high",
     "issue_kind": "configuration_help"

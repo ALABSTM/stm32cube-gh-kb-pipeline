@@ -2,6 +2,17 @@
   "resolver_cases": [
     {
       "id": "resolver::STM32CubeH7::issue::43",
+      "title": "USART fails to compile",
+      "label": "USART fails to compile",
+      "externalURL": "https://github.com/STMicroelectronics/STM32CubeH7/issues/43",
+      "rootTagPath": "resolver_cases",
+      "evidence_refs": [
+        {
+          "type": "issue",
+          "id": 43,
+          "url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/43"
+        }
+      ],
       "url_base": "https://github.com/STMicroelectronics/",
       "repo": "STM32CubeH7",
       "issue_root_path": "issues",
@@ -34,10 +45,77 @@
       "link_confidence": "medium",
       "link_score": 0.8,
       "delivery_template": "st_v1_resolver_case",
-      "resolver_card_text": "Problem: Issue #43 - USART fails to compile\nContext: repo=STM32CubeH7, labels=bug, spotted before customer, hal, issue_state=closed\nResolver signal: resolution_status=candidate_fix, confidence=medium, score=0.8\nAssessment: Potential fix identified, but integration status is uncertain.\nCandidate PRs: Fix issue #43 USART typo\nCommit evidence: Fix issue #43 USART typo In several places USART was typed as UART.\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying."
+      "resolver_card_text": "Problem: Issue #43 - USART fails to compile\nContext: repo=STM32CubeH7, labels=bug, spotted before customer, hal, issue_state=closed\nResolver signal: resolution_status=candidate_fix, confidence=medium, score=0.8\nAssessment: Potential fix identified, but integration status is uncertain.\nCandidate PRs: Fix issue #43 USART typo\nCommit evidence: Fix issue #43 USART typo In several places USART was typed as UART.\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying.",
+      "linked_file_ids": [],
+      "linked_file_paths": [],
+      "files_evidence": {
+        "changed_files_total": 1,
+        "matched_docs_files_count": 0,
+        "unmatched_files_count": 1,
+        "match_rate": 0.0,
+        "files": [
+          {
+            "path": "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c",
+            "status": "modified",
+            "additions": 13,
+            "deletions": 13,
+            "changes": 26,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "4741000fca0eaaf3e7ef439cf42b476504621f6b"
+            ],
+            "module": "HAL_Driver",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c",
+            "score": 26.0
+          }
+        ]
+      },
+      "impacted_modules": [
+        "HAL_Driver"
+      ],
+      "impacted_components": [],
+      "impacted_boards": [],
+      "impacted_file_types": [],
+      "primary_changed_file": {
+        "path": "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c",
+        "status": "modified",
+        "additions": 13,
+        "deletions": 13,
+        "changes": 26,
+        "touched_by_commits": 1,
+        "commit_shas": [
+          "4741000fca0eaaf3e7ef439cf42b476504621f6b"
+        ],
+        "module": "HAL_Driver",
+        "file_doc_id": null,
+        "file_type": null,
+        "component": null,
+        "board": null,
+        "example_name": null,
+        "source_match": "commit_only",
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c",
+        "score": 26.0
+      }
     },
     {
       "id": "resolver::STM32CubeH7::issue::181",
+      "title": "Oversensitive up/down touchscreen controls in BSP audio playback example",
+      "label": "Oversensitive up/down touchscreen controls in BSP audio playback example",
+      "externalURL": "https://github.com/STMicroelectronics/STM32CubeH7/issues/181",
+      "rootTagPath": "resolver_cases",
+      "evidence_refs": [
+        {
+          "type": "issue",
+          "id": 181,
+          "url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/181"
+        }
+      ],
       "url_base": "https://github.com/STMicroelectronics/",
       "repo": "STM32CubeH7",
       "issue_root_path": "issues",
@@ -71,10 +149,79 @@
       "link_confidence": "medium",
       "link_score": 0.8,
       "delivery_template": "st_v1_resolver_case",
-      "resolver_card_text": "Problem: Issue #181 - Oversensitive up/down touchscreen controls in BSP audio playback example\nContext: repo=STM32CubeH7, labels=duplicate, projects, issue_state=closed\nResolver signal: resolution_status=candidate_fix, confidence=medium, score=0.8\nAssessment: Potential fix identified, but integration status is uncertain.\nCandidate PRs: Fixes #181 by ignoring duplicate touches\nCommit evidence: Update audio_play. | Ignore duplicate touches Update audio_play.\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying."
+      "resolver_card_text": "Problem: Issue #181 - Oversensitive up/down touchscreen controls in BSP audio playback example\nContext: repo=STM32CubeH7, labels=duplicate, projects, issue_state=closed\nResolver signal: resolution_status=candidate_fix, confidence=medium, score=0.8\nAssessment: Potential fix identified, but integration status is uncertain.\nCandidate PRs: Fixes #181 by ignoring duplicate touches\nCommit evidence: Update audio_play. | Ignore duplicate touches Update audio_play.\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying.",
+      "linked_file_ids": [],
+      "linked_file_paths": [],
+      "files_evidence": {
+        "changed_files_total": 1,
+        "matched_docs_files_count": 0,
+        "unmatched_files_count": 1,
+        "match_rate": 0.0,
+        "files": [
+          {
+            "path": "Projects/STM32H735G-DK/Examples/BSP/Src/audio_play.c",
+            "status": "modified",
+            "additions": 7,
+            "deletions": 1,
+            "changes": 8,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "4e79d4987d2bad3c82a33e5c0176da43ac41791d",
+              "bee0ed19ee164e9fcea9d3321da299030d970421"
+            ],
+            "module": "Projects",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/Projects/STM32H735G-DK/Examples/BSP/Src/audio_play.c",
+            "score": 8.0
+          }
+        ]
+      },
+      "impacted_modules": [
+        "Projects"
+      ],
+      "impacted_components": [],
+      "impacted_boards": [],
+      "impacted_file_types": [],
+      "primary_changed_file": {
+        "path": "Projects/STM32H735G-DK/Examples/BSP/Src/audio_play.c",
+        "status": "modified",
+        "additions": 7,
+        "deletions": 1,
+        "changes": 8,
+        "touched_by_commits": 2,
+        "commit_shas": [
+          "4e79d4987d2bad3c82a33e5c0176da43ac41791d",
+          "bee0ed19ee164e9fcea9d3321da299030d970421"
+        ],
+        "module": "Projects",
+        "file_doc_id": null,
+        "file_type": null,
+        "component": null,
+        "board": null,
+        "example_name": null,
+        "source_match": "commit_only",
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/Projects/STM32H735G-DK/Examples/BSP/Src/audio_play.c",
+        "score": 8.0
+      }
     },
     {
       "id": "resolver::STM32CubeH7::issue::231",
+      "title": "ethernetif.c issues",
+      "label": "ethernetif.c issues",
+      "externalURL": "https://github.com/STMicroelectronics/STM32CubeH7/issues/231",
+      "rootTagPath": "resolver_cases",
+      "evidence_refs": [
+        {
+          "type": "issue",
+          "id": 231,
+          "url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/231"
+        }
+      ],
       "url_base": "https://github.com/STMicroelectronics/",
       "repo": "STM32CubeH7",
       "issue_root_path": "issues",
@@ -108,10 +255,119 @@
       "link_confidence": "medium",
       "link_score": 0.8,
       "delivery_template": "st_v1_resolver_case",
-      "resolver_card_text": "Problem: Issue #231 - ethernetif.c issues\nContext: repo=STM32CubeH7, labels=bug, internal bug tracker, mw, eth, issue_state=closed\nResolver signal: resolution_status=candidate_fix, confidence=medium, score=0.8\nAssessment: Potential fix identified, but integration status is uncertain.\nCandidate PRs: Issue #231: improvements on ethernet regarding stability and deadlocks\nCommit evidence: Issue #231: improvements on ethernet regarding stability and deadlocks https://github.\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying."
+      "resolver_card_text": "Problem: Issue #231 - ethernetif.c issues\nContext: repo=STM32CubeH7, labels=bug, internal bug tracker, mw, eth, issue_state=closed\nResolver signal: resolution_status=candidate_fix, confidence=medium, score=0.8\nAssessment: Potential fix identified, but integration status is uncertain.\nCandidate PRs: Issue #231: improvements on ethernet regarding stability and deadlocks\nCommit evidence: Issue #231: improvements on ethernet regarding stability and deadlocks https://github.\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying.",
+      "linked_file_ids": [],
+      "linked_file_paths": [],
+      "files_evidence": {
+        "changed_files_total": 3,
+        "matched_docs_files_count": 0,
+        "unmatched_files_count": 3,
+        "match_rate": 0.0,
+        "files": [
+          {
+            "path": "Projects/NUCLEO-H743ZI/Applications/LwIP/LwIP_HTTP_Server_Netconn_RTOS/Src/ethernetif.c",
+            "status": "modified",
+            "additions": 137,
+            "deletions": 47,
+            "changes": 184,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "dc696e42d1f20ea87f41022993bc75904c349224"
+            ],
+            "module": "Projects",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/Projects/NUCLEO-H743ZI/Applications/LwIP/LwIP_HTTP_Server_Netconn_RTOS/Src/ethernetif.c",
+            "score": 184.0
+          },
+          {
+            "path": "Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_eth.c",
+            "status": "modified",
+            "additions": 9,
+            "deletions": 4,
+            "changes": 13,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "dc696e42d1f20ea87f41022993bc75904c349224"
+            ],
+            "module": "HAL_Driver",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_eth.c",
+            "score": 13.0
+          },
+          {
+            "path": "Drivers/BSP/Components/lan8742/lan8742.c",
+            "status": "modified",
+            "additions": 0,
+            "deletions": 6,
+            "changes": 6,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "dc696e42d1f20ea87f41022993bc75904c349224"
+            ],
+            "module": "Drivers",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/Drivers/BSP/Components/lan8742/lan8742.c",
+            "score": 6.0
+          }
+        ]
+      },
+      "impacted_modules": [
+        "Drivers",
+        "HAL_Driver",
+        "Projects"
+      ],
+      "impacted_components": [],
+      "impacted_boards": [],
+      "impacted_file_types": [],
+      "primary_changed_file": {
+        "path": "Projects/NUCLEO-H743ZI/Applications/LwIP/LwIP_HTTP_Server_Netconn_RTOS/Src/ethernetif.c",
+        "status": "modified",
+        "additions": 137,
+        "deletions": 47,
+        "changes": 184,
+        "touched_by_commits": 1,
+        "commit_shas": [
+          "dc696e42d1f20ea87f41022993bc75904c349224"
+        ],
+        "module": "Projects",
+        "file_doc_id": null,
+        "file_type": null,
+        "component": null,
+        "board": null,
+        "example_name": null,
+        "source_match": "commit_only",
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/Projects/NUCLEO-H743ZI/Applications/LwIP/LwIP_HTTP_Server_Netconn_RTOS/Src/ethernetif.c",
+        "score": 184.0
+      }
     },
     {
       "id": "resolver::STM32CubeH7::issue::316",
+      "title": "Add CMake Support",
+      "label": "Add CMake Support",
+      "externalURL": "https://github.com/STMicroelectronics/STM32CubeH7/issues/316",
+      "rootTagPath": "resolver_cases",
+      "evidence_refs": [
+        {
+          "type": "issue",
+          "id": 316,
+          "url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/316"
+        }
+      ],
       "url_base": "https://github.com/STMicroelectronics/",
       "repo": "STM32CubeH7",
       "issue_root_path": "issues",
@@ -156,7 +412,506 @@
       "link_confidence": "medium",
       "link_score": 0.8,
       "delivery_template": "st_v1_resolver_case",
-      "resolver_card_text": "Problem: Issue #316 - Add CMake Support\nContext: repo=STM32CubeH7, labels=enhancement, wontfix, projects, issue_state=closed\nResolver signal: resolution_status=candidate_fix, confidence=medium, score=0.8\nAssessment: Potential fix identified, but integration status is uncertain.\nCandidate PRs: Add CMake Support for STM32CubeH7\nCommit evidence: Added a Script to Fetch the STM32CubeH7 Package - Since this test is located in the package already, this script points to the location of the package instead of cloning the reposi | Updated README Files | Test Project Runs - Modified the test project to run on an STM32H750B-DK. | Updated README Files - Updated README files to explain the available CMake support and its usage.\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying."
+      "resolver_card_text": "Problem: Issue #316 - Add CMake Support\nContext: repo=STM32CubeH7, labels=enhancement, wontfix, projects, issue_state=closed\nResolver signal: resolution_status=candidate_fix, confidence=medium, score=0.8\nAssessment: Potential fix identified, but integration status is uncertain.\nCandidate PRs: Add CMake Support for STM32CubeH7\nCommit evidence: Added a Script to Fetch the STM32CubeH7 Package - Since this test is located in the package already, this script points to the location of the package instead of cloning the reposi | Updated README Files | Test Project Runs - Modified the test project to run on an STM32H750B-DK. | Updated README Files - Updated README files to explain the available CMake support and its usage.\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying.",
+      "linked_file_ids": [
+        "stm32cubeh7-file-41118461753268871"
+      ],
+      "linked_file_paths": [
+        "README.md"
+      ],
+      "files_evidence": {
+        "changed_files_total": 22,
+        "matched_docs_files_count": 1,
+        "unmatched_files_count": 21,
+        "match_rate": 0.0455,
+        "files": [
+          {
+            "path": "cmake/tests/test_app_gcc/cfg/stm32h7xx_hal_conf.h",
+            "status": "added",
+            "additions": 433,
+            "deletions": 0,
+            "changes": 433,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "b29fa559d838778f71d7f362e0b6ad964c1d8190"
+            ],
+            "module": "cmake",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/cmake/tests/test_app_gcc/cfg/stm32h7xx_hal_conf.h",
+            "score": 433.0
+          },
+          {
+            "path": "cmake/tests/test_app_gcc/main.c",
+            "status": "added",
+            "additions": 201,
+            "deletions": 0,
+            "changes": 201,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "5d08855c3f149c731ca6f07c7e8e635d360e8f0d",
+              "b29fa559d838778f71d7f362e0b6ad964c1d8190"
+            ],
+            "module": "cmake",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/cmake/tests/test_app_gcc/main.c",
+            "score": 201.0
+          },
+          {
+            "path": "cmake/README.md",
+            "status": "modified",
+            "additions": 192,
+            "deletions": 1,
+            "changes": 193,
+            "touched_by_commits": 3,
+            "commit_shas": [
+              "392b90fdedf85fbbca8490d2c260220291235c81",
+              "617b110944cba6ea6debc8135c98a8d673e907a3",
+              "fb620de4c77838a7a4ff319a8211625e953ea8ac"
+            ],
+            "module": "cmake",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/cmake/README.md",
+            "score": 193.0
+          },
+          {
+            "path": "Drivers/cmake/cmsis_components/device.cmake",
+            "status": "added",
+            "additions": 151,
+            "deletions": 20,
+            "changes": 171,
+            "touched_by_commits": 3,
+            "commit_shas": [
+              "617b110944cba6ea6debc8135c98a8d673e907a3",
+              "b29fa559d838778f71d7f362e0b6ad964c1d8190",
+              "f0bd1afcc095c2ba5a3a668bfb9c0fba2f89660e"
+            ],
+            "module": "CMSIS",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/Drivers/cmake/cmsis_components/device.cmake",
+            "score": 171.0
+          },
+          {
+            "path": "Drivers/cmake/hal.cmake",
+            "status": "added",
+            "additions": 81,
+            "deletions": 9,
+            "changes": 90,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "b29fa559d838778f71d7f362e0b6ad964c1d8190",
+              "f0bd1afcc095c2ba5a3a668bfb9c0fba2f89660e"
+            ],
+            "module": "Drivers",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/Drivers/cmake/hal.cmake",
+            "score": 90.0
+          },
+          {
+            "path": "cmake/tests/test_app_gcc/CMakeLists.txt",
+            "status": "added",
+            "additions": 79,
+            "deletions": 1,
+            "changes": 80,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "5d08855c3f149c731ca6f07c7e8e635d360e8f0d",
+              "b29fa559d838778f71d7f362e0b6ad964c1d8190"
+            ],
+            "module": "cmake",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/cmake/tests/test_app_gcc/CMakeLists.txt",
+            "score": 80.0
+          },
+          {
+            "path": "cmake/FindSTM32CubeH7.cmake",
+            "status": "added",
+            "additions": 78,
+            "deletions": 0,
+            "changes": 78,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "f0bd1afcc095c2ba5a3a668bfb9c0fba2f89660e"
+            ],
+            "module": "cmake",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/cmake/FindSTM32CubeH7.cmake",
+            "score": 78.0
+          },
+          {
+            "path": "cmake/tests/test_app_gcc/cfg/linker.ld",
+            "status": "added",
+            "additions": 72,
+            "deletions": 1,
+            "changes": 73,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "5d08855c3f149c731ca6f07c7e8e635d360e8f0d",
+              "b29fa559d838778f71d7f362e0b6ad964c1d8190"
+            ],
+            "module": "cmake",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/cmake/tests/test_app_gcc/cfg/linker.ld",
+            "score": 73.0
+          },
+          {
+            "path": "cmake/tests/scripts/download_toolchains.cmake",
+            "status": "added",
+            "additions": 42,
+            "deletions": 0,
+            "changes": 42,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "b29fa559d838778f71d7f362e0b6ad964c1d8190"
+            ],
+            "module": "cmake",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/cmake/tests/scripts/download_toolchains.cmake",
+            "score": 42.0
+          },
+          {
+            "path": "cmake/tests/CMakePresets.json",
+            "status": "added",
+            "additions": 29,
+            "deletions": 1,
+            "changes": 30,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "617b110944cba6ea6debc8135c98a8d673e907a3",
+              "b29fa559d838778f71d7f362e0b6ad964c1d8190"
+            ],
+            "module": "cmake",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/cmake/tests/CMakePresets.json",
+            "score": 30.0
+          },
+          {
+            "path": "cmake/tests/scripts/find_toolchain_program.cmake",
+            "status": "added",
+            "additions": 26,
+            "deletions": 0,
+            "changes": 26,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "b29fa559d838778f71d7f362e0b6ad964c1d8190"
+            ],
+            "module": "cmake",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/cmake/tests/scripts/find_toolchain_program.cmake",
+            "score": 26.0
+          },
+          {
+            "path": "Drivers/cmake/cmsis_components/core.cmake",
+            "status": "added",
+            "additions": 14,
+            "deletions": 0,
+            "changes": 14,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "f0bd1afcc095c2ba5a3a668bfb9c0fba2f89660e"
+            ],
+            "module": "CMSIS",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/Drivers/cmake/cmsis_components/core.cmake",
+            "score": 14.0
+          },
+          {
+            "path": "cmake/tests/CMakeLists.txt",
+            "status": "added",
+            "additions": 11,
+            "deletions": 1,
+            "changes": 12,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "617b110944cba6ea6debc8135c98a8d673e907a3",
+              "b29fa559d838778f71d7f362e0b6ad964c1d8190"
+            ],
+            "module": "cmake",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/cmake/tests/CMakeLists.txt",
+            "score": 12.0
+          },
+          {
+            "path": "cmake/tests/toolchain_files/arm_gcc.cmake",
+            "status": "added",
+            "additions": 12,
+            "deletions": 0,
+            "changes": 12,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "b29fa559d838778f71d7f362e0b6ad964c1d8190"
+            ],
+            "module": "cmake",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/cmake/tests/toolchain_files/arm_gcc.cmake",
+            "score": 12.0
+          },
+          {
+            "path": "cmake/tests/dependencies.cmake",
+            "status": "added",
+            "additions": 10,
+            "deletions": 0,
+            "changes": 10,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "34ec350d95e23cc7556238a50d0488f580ec4b98"
+            ],
+            "module": "cmake",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/cmake/tests/dependencies.cmake",
+            "score": 10.0
+          },
+          {
+            "path": "README.md",
+            "status": "modified",
+            "additions": 9,
+            "deletions": 0,
+            "changes": 9,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "fb620de4c77838a7a4ff319a8211625e953ea8ac"
+            ],
+            "module": "readme.md",
+            "file_doc_id": "stm32cubeh7-file-41118461753268871",
+            "file_type": "root_readme",
+            "component": "USB",
+            "board": "NUCLEO-H7A3ZI",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/README.md",
+            "score": 29.0
+          },
+          {
+            "path": "Drivers/cmake/cmsis.cmake",
+            "status": "added",
+            "additions": 7,
+            "deletions": 0,
+            "changes": 7,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "f0bd1afcc095c2ba5a3a668bfb9c0fba2f89660e"
+            ],
+            "module": "CMSIS",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/Drivers/cmake/cmsis.cmake",
+            "score": 7.0
+          },
+          {
+            "path": "cmake/.gitignore",
+            "status": "added",
+            "additions": 5,
+            "deletions": 0,
+            "changes": 5,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "b29fa559d838778f71d7f362e0b6ad964c1d8190"
+            ],
+            "module": "cmake",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/cmake/.gitignore",
+            "score": 5.0
+          },
+          {
+            "path": "cmake/tests/stm32h750b-dk-test-app-gcc/CMakeLists.txt",
+            "status": "renamed",
+            "additions": 2,
+            "deletions": 2,
+            "changes": 4,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "617b110944cba6ea6debc8135c98a8d673e907a3"
+            ],
+            "module": "cmake",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/cmake/tests/stm32h750b-dk-test-app-gcc/CMakeLists.txt",
+            "score": 4.0
+          },
+          {
+            "path": "cmake/tests/stm32h750b-dk-test-app-gcc/cfg/linker.ld",
+            "status": "renamed",
+            "additions": 0,
+            "deletions": 0,
+            "changes": 0,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "617b110944cba6ea6debc8135c98a8d673e907a3"
+            ],
+            "module": "cmake",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/cmake/tests/stm32h750b-dk-test-app-gcc/cfg/linker.ld",
+            "score": 0.0
+          },
+          {
+            "path": "cmake/tests/stm32h750b-dk-test-app-gcc/cfg/stm32h7xx_hal_conf.h",
+            "status": "renamed",
+            "additions": 0,
+            "deletions": 0,
+            "changes": 0,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "617b110944cba6ea6debc8135c98a8d673e907a3"
+            ],
+            "module": "cmake",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/cmake/tests/stm32h750b-dk-test-app-gcc/cfg/stm32h7xx_hal_conf.h",
+            "score": 0.0
+          },
+          {
+            "path": "cmake/tests/stm32h750b-dk-test-app-gcc/main.c",
+            "status": "renamed",
+            "additions": 0,
+            "deletions": 0,
+            "changes": 0,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "617b110944cba6ea6debc8135c98a8d673e907a3"
+            ],
+            "module": "cmake",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/cmake/tests/stm32h750b-dk-test-app-gcc/main.c",
+            "score": 0.0
+          }
+        ]
+      },
+      "impacted_modules": [
+        "CMSIS",
+        "Drivers",
+        "cmake",
+        "readme.md"
+      ],
+      "impacted_components": [
+        "USB"
+      ],
+      "impacted_boards": [
+        "NUCLEO-H7A3ZI"
+      ],
+      "impacted_file_types": [
+        "root_readme"
+      ],
+      "primary_changed_file": {
+        "path": "cmake/tests/test_app_gcc/cfg/stm32h7xx_hal_conf.h",
+        "status": "added",
+        "additions": 433,
+        "deletions": 0,
+        "changes": 433,
+        "touched_by_commits": 1,
+        "commit_shas": [
+          "b29fa559d838778f71d7f362e0b6ad964c1d8190"
+        ],
+        "module": "cmake",
+        "file_doc_id": null,
+        "file_type": null,
+        "component": null,
+        "board": null,
+        "example_name": null,
+        "source_match": "commit_only",
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/blob/master/cmake/tests/test_app_gcc/cfg/stm32h7xx_hal_conf.h",
+        "score": 433.0
+      }
     }
   ]
 }

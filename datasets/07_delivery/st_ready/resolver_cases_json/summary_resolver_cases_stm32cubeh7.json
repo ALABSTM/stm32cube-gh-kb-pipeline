@@ -4,7 +4,7 @@
   "output_file": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\resolver_cases_json\\st_ready_resolver_cases_stm32cubeh7.json",
   "total_cases_in_input": 4,
   "exported_cases": 4,
-  "include_reference_only": false,
+  "include_reference_only": true,
   "format": "json",
   "root_tag_path": "resolver_cases",
   "status_breakdown": {

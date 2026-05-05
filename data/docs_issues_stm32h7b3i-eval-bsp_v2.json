@@ -27,6 +27,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "Other",
     "severity": "medium",
     "issue_kind": "bug_report"

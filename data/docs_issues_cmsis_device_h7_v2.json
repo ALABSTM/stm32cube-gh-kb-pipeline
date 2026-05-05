@@ -28,6 +28,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "Other",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -65,7 +69,13 @@
       "https://github.com/user-attachments/assets/5eb06d0d-6bae-471e-804b-512f7eb3173d"
     ],
     "images_count": 2,
-    "is_valid": false,
+    "is_valid": true,
+    "rescue_applied": true,
+    "rescue_signal_count": 2,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "HAL",
     "severity": "low",
     "issue_kind": "bug_report"
@@ -99,6 +109,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "Other",
     "severity": "low",
     "issue_kind": "bug_report"
@@ -133,6 +147,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "Other",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -165,6 +183,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "medium",
+    "filter_invalid_reasons": [],
     "layer": "Other",
     "severity": "high",
     "issue_kind": "usage_question"
@@ -198,6 +220,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "Other",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -232,6 +258,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "Other",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -267,6 +297,10 @@
     ],
     "images_count": 1,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "Other",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -300,6 +334,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "Other",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -334,6 +372,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 1,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "Other",
     "severity": "low",
     "issue_kind": "bug_report"
@@ -366,7 +408,13 @@
     "clean_text": "Title: Missing linker files for GCC & ARM\n\nBody:\n**Describe the set-up**\n * The board: Nucleo-H723ZG\n * IDE: GCC (with cmake)\n\n**Describe the bug**\n\nIn the folder \"[Source/Templates](https://github.com/STMicroelectronics/cmsis_device_h7/tree/master/Source/Templates)\" there are folders for each compiler.  Within these are linker files for those compilers.  In the [IAR linker folder](https://github.com/STMicroelectronics/cmsis_device_h7/tree/master/Source/Templates/iar/linker), there are linker files for a whole host of microcontrollers, including the STM32H723.  In the [GCC](https://github.com/STMicroelectronics/cmsis_device_h7/tree/master/Source/Templates/gcc/linker) and [ARM](https://github.com/STMicroelectronics/cmsis_device_h7/tree/master/Source/Templates/arm/linker) linker folders, there are far fewer and the STM32H723 is one of the ones missing.\n\nThe [startup code for GCC for the H723](https://github.com/STMicroelectronics/cmsis_device_h7/blob/master/Source/Templates/gcc/startup_stm32h723xx.s) is present [in the folder above](https://github.com/STMicroelectronics/cmsis_device_h7/tree/master/Source/Templates/gcc), so it seems strange that a corresponding linker file would not be included (or instructions on how to convert the provided IAR ICF linker file to GCC format).\n\n**How To Reproduce**\n1. Go to repository\n\n2. Look for the GCC linker file for an STM32H723ZG\n\nComments:\n[TOUNSTM - 2024-06-13T14:16:23Z]\nHello @abudden,\n\nThank you for your contribution. GCC linker files can now be created using the CubeIDE project generator. You can also found them under STM32CubeIDE projects.\nUnfortunately, our development teams have no plan to add new GCC linker files.\n\nPlease allow me to close this issue now. Thank you once again for your contribution and thank you for your comprehension.\n\nWith Regards,",
     "image_urls": [],
     "images_count": 0,
-    "is_valid": false,
+    "is_valid": true,
+    "rescue_applied": true,
+    "rescue_signal_count": 1,
+    "evidence_strength": "medium",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "Other",
     "severity": "medium",
     "issue_kind": "usage_question"
@@ -400,6 +448,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "Other",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -435,6 +487,12 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": false,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "low",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "Other",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -468,6 +526,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "Other",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -501,6 +563,12 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": false,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "low",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "Other",
     "severity": "low",
     "issue_kind": "bug_report"
@@ -535,6 +603,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "Other",
     "severity": "low",
     "issue_kind": "bug_report"
@@ -568,6 +640,12 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": false,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "low",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "Other",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -601,6 +679,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "Other",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -634,6 +716,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "Other",
     "severity": "high",
     "issue_kind": "bug_report"
@@ -667,6 +753,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "Other",
     "severity": "low",
     "issue_kind": "bug_report"
@@ -699,6 +789,12 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": false,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "low",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "LL",
     "severity": "low",
     "issue_kind": "other"

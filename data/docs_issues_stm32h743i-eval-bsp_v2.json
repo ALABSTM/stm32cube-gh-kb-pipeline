@@ -28,6 +28,12 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": false,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "low",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "CubeMX",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -62,6 +68,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "Other",
     "severity": "medium",
     "issue_kind": "bug_report"
@@ -93,6 +103,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "medium",
+    "filter_invalid_reasons": [],
     "layer": "Middleware",
     "severity": "medium",
     "issue_kind": "usage_question"
@@ -124,6 +138,12 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": false,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "low",
+    "filter_invalid_reasons": [
+      "invalid_label"
+    ],
     "layer": "Other",
     "severity": "medium",
     "issue_kind": "other"
@@ -157,6 +177,10 @@
     "image_urls": [],
     "images_count": 0,
     "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
     "layer": "Other",
     "severity": "medium",
     "issue_kind": "bug_report"

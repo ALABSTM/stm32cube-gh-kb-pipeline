@@ -9,10 +9,12 @@ param(
     [string]$FilesOperation = "",
     [int]$KbId = 793,
     [int]$IssuesDatasourceId = 19896,
-    [int]$FilesDatasourceId = 19922,
+    [int]$FilesDatasourceId = 21824,
+    [int]$DiagnosticDatasourceId = 23768,
     [int]$ResolverDatasourceId = 20403,
     [string]$IssuesDatasourceName = "",
     [string]$FilesDatasourceName = "",
+    [string]$DiagnosticDatasourceName = "",
     [string]$ResolverDatasourceName = "",
     [string]$DatasourceClassification = "PUBLIC",
     [string]$DatasourceTags = "",
@@ -44,11 +46,15 @@ if (-not (Test-Path -LiteralPath $uploader)) {
 }
 
 $filesDir = Join-Path $repoRoot (Join-Path $RootDir "files_json")
+$diagnosticDir = Join-Path $repoRoot (Join-Path $RootDir "diagnostic_cards_json")
 $resolverDir = Join-Path $repoRoot (Join-Path $RootDir "resolver_cases_json")
 $issuesDir = Join-Path $repoRoot (Join-Path $RootDir "issues_json")
 
 if (-not (Test-Path -LiteralPath $filesDir)) {
     throw "Files directory not found: $filesDir"
+}
+if (-not (Test-Path -LiteralPath $diagnosticDir)) {
+    throw "Diagnostic cards directory not found: $diagnosticDir"
 }
 if (-not (Test-Path -LiteralPath $resolverDir)) {
     throw "Resolver directory not found: $resolverDir"
@@ -58,11 +64,15 @@ if (-not (Test-Path -LiteralPath $issuesDir)) {
 }
 
 $filesJson = @(Get-ChildItem -LiteralPath $filesDir -Filter "st_ready_files_*.json" -File | Sort-Object Name)
+$diagnosticJson = @(Get-ChildItem -LiteralPath $diagnosticDir -Filter "st_ready_diagnostic_cards_*.json" -File | Sort-Object Name)
 $resolverJson = @(Get-ChildItem -LiteralPath $resolverDir -Filter "st_ready_resolver_cases_*.json" -File | Sort-Object Name)
 $issuesJson = @(Get-ChildItem -LiteralPath $issuesDir -Filter "st_ready_issues_*.json" -File | Sort-Object Name)
 
 if ($filesJson.Count -eq 0) {
     throw "No st_ready_files_*.json found in $filesDir"
+}
+if ($diagnosticJson.Count -eq 0) {
+    throw "No st_ready_diagnostic_cards_*.json found in $diagnosticDir"
 }
 if ($resolverJson.Count -eq 0) {
     throw "No st_ready_resolver_cases_*.json found in $resolverDir"
@@ -75,6 +85,7 @@ Write-Host "KB: $KbId"
 Write-Host "Operation: $Operation"
 $issuesOperation = $Operation
 $filesOperationRequested = if ($FilesOperation) { $FilesOperation } else { $Operation }
+$diagnosticOperation = $Operation
 $resolverOperation = $Operation
 $filesDatasourceIdForDelete = $FilesDatasourceId
 $recreateFilesDatasourceAfterDelete = $DeleteFilesBeforeAdd -and ($filesOperationRequested -eq "add")
@@ -82,6 +93,7 @@ $filesOperationResolved = if ($recreateFilesDatasourceAfterDelete) { "new" } els
 
 Write-Host "Issues operation: $issuesOperation"
 Write-Host "Files operation: $filesOperationResolved"
+Write-Host "Diagnostic operation: $diagnosticOperation"
 Write-Host "Resolver operation: $resolverOperation"
 
 if ($recreateFilesDatasourceAfterDelete) {
@@ -99,6 +111,9 @@ if ($filesOperationResolved -eq "add") {
 }
 if ($DeleteFilesBeforeAdd) {
     Write-Host "Files datasource to delete: $filesDatasourceIdForDelete"
+}
+if ($diagnosticOperation -eq "add") {
+    Write-Host "Diagnostic datasource: $DiagnosticDatasourceId"
 }
 if ($resolverOperation -eq "add") {
     Write-Host "Resolver datasource: $ResolverDatasourceId"
@@ -140,15 +155,19 @@ if ($DeleteFilesBeforeAdd -and $filesDatasourceIdForDelete -le 0) {
 Write-Host "Remote user: $RemoteUser"
 Write-Host "Found issues_json: $($issuesJson.Count)"
 Write-Host "Found files_json: $($filesJson.Count)"
+Write-Host "Found diagnostic_cards_json: $($diagnosticJson.Count)"
 Write-Host "Found resolver_cases_json: $($resolverJson.Count)"
 
-if (($issuesOperation -eq "new") -or ($filesOperationResolved -eq "new") -or ($resolverOperation -eq "new")) {
+if (($issuesOperation -eq "new") -or ($filesOperationResolved -eq "new") -or ($diagnosticOperation -eq "new") -or ($resolverOperation -eq "new")) {
     $stamp = Get-Date -Format "yyyyMMdd_HHmmss"
     if (($issuesOperation -eq "new") -and (-not $IssuesDatasourceName)) {
         $IssuesDatasourceName = "DB_STready_Issues_$stamp"
     }
     if (($filesOperationResolved -eq "new") -and (-not $FilesDatasourceName)) {
         $FilesDatasourceName = "DB_STready_Files_$stamp"
+    }
+    if (($diagnosticOperation -eq "new") -and (-not $DiagnosticDatasourceName)) {
+        $DiagnosticDatasourceName = "DB_STready_Diagnostic_$stamp"
     }
     if (($resolverOperation -eq "new") -and (-not $ResolverDatasourceName)) {
         $ResolverDatasourceName = "DB_STready_Resolver_$stamp"
@@ -159,6 +178,9 @@ if (($issuesOperation -eq "new") -or ($filesOperationResolved -eq "new") -or ($r
     }
     if ($filesOperationResolved -eq "new") {
         Write-Host "Files datasource name: $FilesDatasourceName"
+    }
+    if ($diagnosticOperation -eq "new") {
+        Write-Host "Diagnostic datasource name: $DiagnosticDatasourceName"
     }
     if ($resolverOperation -eq "new") {
         Write-Host "Resolver datasource name: $ResolverDatasourceName"
@@ -206,6 +228,7 @@ if ($VerboseUpload) {
 
 $issuesCommonArgs = $commonArgs + @("--operation", $issuesOperation)
 $filesCommonArgs = $commonArgs + @("--operation", $filesOperationResolved)
+$diagnosticCommonArgs = $commonArgs + @("--operation", $diagnosticOperation)
 $resolverCommonArgs = $commonArgs + @("--operation", $resolverOperation)
 
 $filesDeleteArgs = @(
@@ -272,6 +295,18 @@ if ($filesOperationResolved -eq "add") {
     }
 }
 
+if ($diagnosticOperation -eq "add") {
+    $diagnosticTargetArgs = @("--datasource-id", $DiagnosticDatasourceId)
+} else {
+    $diagnosticTargetArgs = @(
+        "--datasource-name", $DiagnosticDatasourceName,
+        "--datasource-classification", $DatasourceClassification
+    )
+    if ($DatasourceTags) {
+        $diagnosticTargetArgs += @("--datasource-tags", $DatasourceTags)
+    }
+}
+
 if ($resolverOperation -eq "add") {
     $resolverTargetArgs = @("--datasource-id", $ResolverDatasourceId)
 } else {
@@ -284,7 +319,7 @@ if ($resolverOperation -eq "add") {
     }
 }
 
-Write-Host "`n[0/3] Authentication precheck (kb-list)"
+Write-Host "`n[0/4] Authentication precheck (kb-list)"
 $precheckArgs = @(
     $uploader,
     "--kb", $KbId,
@@ -319,9 +354,9 @@ if ($LASTEXITCODE -ne 0) {
 $issuesArgs = @("--files") + ($issuesJson | ForEach-Object { $_.FullName }) + $issuesTargetArgs
 
 if ($issuesOperation -eq "add") {
-    Write-Host "\n[1/3] Upload issues_json -> datasource $IssuesDatasourceId"
+    Write-Host "\n[1/4] Upload issues_json -> datasource $IssuesDatasourceId"
 } else {
-    Write-Host "\n[1/3] Create datasource + upload issues_json -> $IssuesDatasourceName"
+    Write-Host "\n[1/4] Create datasource + upload issues_json -> $IssuesDatasourceName"
 }
 & $PythonExe @issuesCommonArgs @issuesArgs
 if ($LASTEXITCODE -ne 0) {
@@ -344,9 +379,9 @@ if ($DeleteFilesBeforeAdd) {
 }
 
 if ($filesOperationResolved -eq "add") {
-    Write-Host "\n[2/3] Upload files_json -> datasource $FilesDatasourceId"
+    Write-Host "\n[2/4] Upload files_json -> datasource $FilesDatasourceId"
 } else {
-    Write-Host "\n[2/3] Create datasource + upload files_json -> $FilesDatasourceName"
+    Write-Host "\n[2/4] Create datasource + upload files_json -> $FilesDatasourceName"
 }
 $filesArgs = @("--files") + ($filesJson | ForEach-Object { $_.FullName }) + $filesSplitArgs + $filesTargetArgs
 
@@ -355,10 +390,22 @@ if ($LASTEXITCODE -ne 0) {
     throw "Upload to files datasource failed with exit code $LASTEXITCODE"
 }
 
-if ($resolverOperation -eq "add") {
-    Write-Host "\n[3/3] Upload resolver_cases_json -> datasource $ResolverDatasourceId"
+if ($diagnosticOperation -eq "add") {
+    Write-Host "\n[3/4] Upload diagnostic_cards_json -> datasource $DiagnosticDatasourceId"
 } else {
-    Write-Host "\n[3/3] Create datasource + upload resolver_cases_json -> $ResolverDatasourceName"
+    Write-Host "\n[3/4] Create datasource + upload diagnostic_cards_json -> $DiagnosticDatasourceName"
+}
+$diagnosticArgs = @("--files") + ($diagnosticJson | ForEach-Object { $_.FullName }) + $diagnosticTargetArgs
+
+& $PythonExe @diagnosticCommonArgs @diagnosticArgs
+if ($LASTEXITCODE -ne 0) {
+    throw "Upload to diagnostic datasource failed with exit code $LASTEXITCODE"
+}
+
+if ($resolverOperation -eq "add") {
+    Write-Host "\n[4/4] Upload resolver_cases_json -> datasource $ResolverDatasourceId"
+} else {
+    Write-Host "\n[4/4] Create datasource + upload resolver_cases_json -> $ResolverDatasourceName"
 }
 $resolverArgs = @("--files") + ($resolverJson | ForEach-Object { $_.FullName }) + $resolverTargetArgs
 
