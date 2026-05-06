@@ -25,6 +25,22 @@ param(
     [string]$RequestPartNames = "request,body,payload",
     [int]$JsonSplitSize = 0,
     [double]$JsonSplitMinMb = 2.0,
+    [string]$IssuesRootTagPath = "issues",
+    [string]$FilesRootTagPath = "files",
+    [string]$DiagnosticRootTagPath = "diagnostic_cards",
+    [string]$ResolverRootTagPath = "resolver_cases",
+    [string]$IssuesLinkUrlTemplate = "https://github.com/STMicroelectronics/{{repo}}/issues/{{issue_number}}",
+    [string]$FilesLinkUrlTemplate = "https://github.com/STMicroelectronics/{{repo}}/{{root_path}}/{{path}}",
+    [string]$DiagnosticLinkUrlTemplate = "{{externalURL}}",
+    [string]$ResolverLinkUrlTemplate = "{{externalURL}}",
+    [string]$IssuesLinkLabelTemplate = "{{repo}} issue #{{issue_number}} - {{issue_title}}",
+    [string]$FilesLinkLabelTemplate = "{{repo}} {{file_type}} - {{path}}",
+    [string]$DiagnosticLinkLabelTemplate = "{{repo}} diagnostic #{{issue_number}} - {{title}}",
+    [string]$ResolverLinkLabelTemplate = "{{repo}} resolver #{{issue_number}} - {{issue_title}}",
+    [string]$IssuesFiles = "",
+    [string]$FilesFiles = "",
+    [string]$DiagnosticFiles = "",
+    [string]$ResolverFiles = "",
     [switch]$DeleteFilesBeforeAdd,
     [string]$ApiKey = "",
     [string]$ClientAppName = "",
@@ -36,6 +52,91 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
+
+function New-ProcessorParamsJson {
+    param(
+        [string]$RootTagPath,
+        [string]$LinkUrlTemplate,
+        [string]$LinkLabelTemplate
+    )
+
+    $processorParams = @{}
+
+    if ($RootTagPath) {
+        $processorParams["rootTagPath"] = $RootTagPath
+    }
+    if ($LinkUrlTemplate) {
+        $processorParams["externalURL"] = $LinkUrlTemplate
+    }
+    if ($LinkLabelTemplate) {
+        $processorParams["label"] = $LinkLabelTemplate
+    }
+
+    if ($processorParams.Count -eq 0) {
+        return ""
+    }
+
+    return ($processorParams | ConvertTo-Json -Compress)
+}
+
+function Encode-ProcessorParamsArg {
+    param(
+        [string]$ProcessorParamsJson
+    )
+
+    if (-not $ProcessorParamsJson) {
+        return ""
+    }
+
+    $bytes = [System.Text.Encoding]::UTF8.GetBytes($ProcessorParamsJson)
+    $encoded = [System.Convert]::ToBase64String($bytes)
+    return "base64:$encoded"
+}
+
+function Resolve-JsonFiles {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Directory,
+        [Parameter(Mandatory = $true)]
+        [string]$DefaultPattern,
+        [string]$ExplicitFilesCsv,
+        [string]$Label
+    )
+
+    $resolved = @()
+
+    if ($ExplicitFilesCsv) {
+        $entries = @(
+            $ExplicitFilesCsv -split "," |
+            ForEach-Object { $_.Trim() } |
+            Where-Object { $_ }
+        )
+
+        foreach ($entry in $entries) {
+            $candidate = if ([System.IO.Path]::IsPathRooted($entry)) {
+                $entry
+            } else {
+                Join-Path $Directory $entry
+            }
+
+            if (-not (Test-Path -LiteralPath $candidate)) {
+                throw "$Label file not found: $candidate"
+            }
+
+            $resolved += Get-Item -LiteralPath $candidate
+        }
+    } else {
+        $resolved = @(Get-ChildItem -LiteralPath $Directory -Filter $DefaultPattern -File)
+    }
+
+    $resolved = @($resolved | Sort-Object Name)
+
+    if ($resolved.Count -eq 0) {
+        throw "No $DefaultPattern found in $Directory"
+    }
+
+    return $resolved
+}
 
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
 Set-Location $repoRoot
@@ -63,23 +164,10 @@ if (-not (Test-Path -LiteralPath $issuesDir)) {
     throw "Issues directory not found: $issuesDir"
 }
 
-$filesJson = @(Get-ChildItem -LiteralPath $filesDir -Filter "st_ready_files_*.json" -File | Sort-Object Name)
-$diagnosticJson = @(Get-ChildItem -LiteralPath $diagnosticDir -Filter "st_ready_diagnostic_cards_*.json" -File | Sort-Object Name)
-$resolverJson = @(Get-ChildItem -LiteralPath $resolverDir -Filter "st_ready_resolver_cases_*.json" -File | Sort-Object Name)
-$issuesJson = @(Get-ChildItem -LiteralPath $issuesDir -Filter "st_ready_issues_*.json" -File | Sort-Object Name)
-
-if ($filesJson.Count -eq 0) {
-    throw "No st_ready_files_*.json found in $filesDir"
-}
-if ($diagnosticJson.Count -eq 0) {
-    throw "No st_ready_diagnostic_cards_*.json found in $diagnosticDir"
-}
-if ($resolverJson.Count -eq 0) {
-    throw "No st_ready_resolver_cases_*.json found in $resolverDir"
-}
-if ($issuesJson.Count -eq 0) {
-    throw "No st_ready_issues_*.json found in $issuesDir"
-}
+$filesJson = @(Resolve-JsonFiles -Directory $filesDir -DefaultPattern "st_ready_files_*.json" -ExplicitFilesCsv $FilesFiles -Label "files")
+$diagnosticJson = @(Resolve-JsonFiles -Directory $diagnosticDir -DefaultPattern "st_ready_diagnostic_cards_*.json" -ExplicitFilesCsv $DiagnosticFiles -Label "diagnostic")
+$resolverJson = @(Resolve-JsonFiles -Directory $resolverDir -DefaultPattern "st_ready_resolver_cases_*.json" -ExplicitFilesCsv $ResolverFiles -Label "resolver")
+$issuesJson = @(Resolve-JsonFiles -Directory $issuesDir -DefaultPattern "st_ready_issues_*.json" -ExplicitFilesCsv $IssuesFiles -Label "issues")
 
 Write-Host "KB: $KbId"
 Write-Host "Operation: $Operation"
@@ -191,6 +279,29 @@ if (($issuesOperation -eq "new") -or ($filesOperationResolved -eq "new") -or ($d
     }
 }
 
+$issuesProcessorParams = New-ProcessorParamsJson -RootTagPath $IssuesRootTagPath -LinkUrlTemplate $IssuesLinkUrlTemplate -LinkLabelTemplate $IssuesLinkLabelTemplate
+$filesProcessorParams = New-ProcessorParamsJson -RootTagPath $FilesRootTagPath -LinkUrlTemplate $FilesLinkUrlTemplate -LinkLabelTemplate $FilesLinkLabelTemplate
+$diagnosticProcessorParams = New-ProcessorParamsJson -RootTagPath $DiagnosticRootTagPath -LinkUrlTemplate $DiagnosticLinkUrlTemplate -LinkLabelTemplate $DiagnosticLinkLabelTemplate
+$resolverProcessorParams = New-ProcessorParamsJson -RootTagPath $ResolverRootTagPath -LinkUrlTemplate $ResolverLinkUrlTemplate -LinkLabelTemplate $ResolverLinkLabelTemplate
+
+$issuesProcessorParamsArg = Encode-ProcessorParamsArg -ProcessorParamsJson $issuesProcessorParams
+$filesProcessorParamsArg = Encode-ProcessorParamsArg -ProcessorParamsJson $filesProcessorParams
+$diagnosticProcessorParamsArg = Encode-ProcessorParamsArg -ProcessorParamsJson $diagnosticProcessorParams
+$resolverProcessorParamsArg = Encode-ProcessorParamsArg -ProcessorParamsJson $resolverProcessorParams
+
+if ($issuesProcessorParams) {
+    Write-Host "Issues processor params: $issuesProcessorParams"
+}
+if ($filesProcessorParams) {
+    Write-Host "Files processor params: $filesProcessorParams"
+}
+if ($diagnosticProcessorParams) {
+    Write-Host "Diagnostic processor params: $diagnosticProcessorParams"
+}
+if ($resolverProcessorParams) {
+    Write-Host "Resolver processor params: $resolverProcessorParams"
+}
+
 $commonArgs = @(
     $uploader,
     "--kb", $KbId,
@@ -200,6 +311,7 @@ $commonArgs = @(
     "--timestamp-modes", $TimestampModes,
     "--request-part-names", $RequestPartNames,
     "--processor", "JSON",
+    "--json-root-mode", "auto",
     "--empty-json-policy", "skip",
     "--skip-auth-precheck",
     "--max-retries", 3,
@@ -230,6 +342,19 @@ $issuesCommonArgs = $commonArgs + @("--operation", $issuesOperation)
 $filesCommonArgs = $commonArgs + @("--operation", $filesOperationResolved)
 $diagnosticCommonArgs = $commonArgs + @("--operation", $diagnosticOperation)
 $resolverCommonArgs = $commonArgs + @("--operation", $resolverOperation)
+
+if (($issuesOperation -eq "new") -and $issuesProcessorParamsArg) {
+    $issuesCommonArgs += @("--processor-params", $issuesProcessorParamsArg)
+}
+if (($filesOperationResolved -eq "new") -and $filesProcessorParamsArg) {
+    $filesCommonArgs += @("--processor-params", $filesProcessorParamsArg)
+}
+if (($diagnosticOperation -eq "new") -and $diagnosticProcessorParamsArg) {
+    $diagnosticCommonArgs += @("--processor-params", $diagnosticProcessorParamsArg)
+}
+if (($resolverOperation -eq "new") -and $resolverProcessorParamsArg) {
+    $resolverCommonArgs += @("--processor-params", $resolverProcessorParamsArg)
+}
 
 $filesDeleteArgs = @(
     $uploader,

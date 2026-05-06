@@ -1,0 +1,237 @@
+[
+  {
+    "id": "diag::stm32h7xx-hal-driver::issue::3",
+    "card_id": "diag_stm32h7xx-hal-driver_3",
+    "rootTagPath": "diagnostic_cards",
+    "delivery_template": "st_v1_diagnostic_card",
+    "repo_scope": "stm32h7xx-hal-driver",
+    "repo": "stm32h7xx-hal-driver",
+    "title": "HAL_FDCAN_GetRxMessage() evaluates GetIndex value for Rx FIFO overwrite scenario.",
+    "label": "HAL_FDCAN_GetRxMessage() evaluates GetIndex value for Rx FIFO overwrite scenario.",
+    "externalURL": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/3",
+    "issue_number": 3,
+    "issue_title": "HAL_FDCAN_GetRxMessage() evaluates GetIndex value for Rx FIFO overwrite scenario.",
+    "issue_state": "closed",
+    "issue_kind": null,
+    "severity": null,
+    "component": null,
+    "board": null,
+    "target_series": [
+      "STM32H7"
+    ],
+    "category": "technical_diagnosis",
+    "source_types": [
+      "resolver_case"
+    ],
+    "evidence_strength": "medium",
+    "rescue_applied": false,
+    "resolution_status": "candidate_fix",
+    "peripheral_tags": [],
+    "technical_pattern_tags": [
+      "version_regression",
+      "cache_dma"
+    ],
+    "api_family_tags": [
+      "HAL_FDCAN_GetRxMessage"
+    ],
+    "symptom_summary": "HAL_FDCAN_GetRxMessage() evaluates GetIndex value for Rx FIFO overwrite scenario.",
+    "affected_context": "repo=stm32h7xx-hal-driver, labels=bug, internal bug tracker, spotted before customer, hal, issue_state=closed",
+    "likely_causes": [
+      "Potential fix identified, but integration status is uncertain.",
+      "resolution_status=candidate_fix, confidence=medium, score=0."
+    ],
+    "confirmed_facts": [
+      "Resolver linkage status is candidate_fix with confidence medium",
+      "A linked commit or pull request exists for this issue path"
+    ],
+    "plausible_diagnosis": [
+      "A candidate fix exists, suggesting the problem may already be understood upstream",
+      "Behavior may depend on the exact Cube or HAL version in use"
+    ],
+    "debug_checks": [
+      "Reproduce on a minimal project using the same board, Cube package, and middleware settings"
+    ],
+    "possible_workarounds": [
+      "Test the candidate fix path or PR on an isolated branch before merging locally",
+      "Pin a known-good firmware package version while validating the issue scope"
+    ],
+    "constraints_or_limits": [
+      "Linked fix evidence is not strong enough to assume universal applicability",
+      "Validate against the exact MCU series, board, package version, and local integration path"
+    ],
+    "evidence_refs": [
+      {
+        "type": "pull_request",
+        "url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/pull/91",
+        "confidence": "medium"
+      },
+      {
+        "type": "commit",
+        "url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/commit/be9c8f73842d0cc398cca735ab2a8d48dc09f52c",
+        "confidence": "medium"
+      }
+    ],
+    "keywords": [
+      "Other",
+      "CAN",
+      "candidate_fix",
+      "HAL_FDCAN_GetRxMessage"
+    ],
+    "st_ready_text": "Problem: HAL_FDCAN_GetRxMessage() evaluates GetIndex value for Rx FIFO overwrite scenario.\nContext: repo=stm32h7xx-hal-driver, issue_number=3, target_series=STM32H7, source_types=resolver_case\nSymptoms: HAL_FDCAN_GetRxMessage() evaluates GetIndex value for Rx FIFO overwrite scenario.\nLikely causes: Potential fix identified, but integration status is uncertain. | resolution_status=candidate_fix, confidence=medium, score=0.\nConfirmed facts: Resolver linkage status is candidate_fix with confidence medium | A linked commit or pull request exists for this issue path\nPlausible diagnosis: A candidate fix exists, suggesting the problem may already be understood upstream | Behavior may depend on the exact Cube or HAL version in use\nDebug actions: Reproduce on a minimal project using the same board, Cube package, and middleware settings\nWorkaround: Test the candidate fix path or PR on an isolated branch before merging locally | Pin a known-good firmware package version while validating the issue scope\nConstraints: Linked fix evidence is not strong enough to assume universal applicability | Validate against the exact MCU series, board, package version, and local integration path\nEvidence links: https://github.com/STMicroelectronics/stm32h7xx-hal-driver/pull/91 | https://github.com/STMicroelectronics/stm32h7xx-hal-driver/commit/be9c8f73842d0cc398cca735ab2a8d48dc09f52c\nKeywords: Other CAN candidate_fix HAL_FDCAN_GetRxMessage"
+  },
+  {
+    "id": "diag::stm32h7xx-hal-driver::issue::47",
+    "card_id": "diag_stm32h7xx-hal-driver_47",
+    "rootTagPath": "diagnostic_cards",
+    "delivery_template": "st_v1_diagnostic_card",
+    "repo_scope": "stm32h7xx-hal-driver",
+    "repo": "stm32h7xx-hal-driver",
+    "title": "Upgrading the hal library from 1.11.0 to 1.11.1 will cause the SPI master transmission to time out for no reason.",
+    "label": "Upgrading the hal library from 1.11.0 to 1.11.1 will cause the SPI master transmission to time out for no reason.",
+    "externalURL": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/47",
+    "issue_number": 47,
+    "issue_title": "Upgrading the hal library from 1.11.0 to 1.11.1 will cause the SPI master transmission to time out for no reason.",
+    "issue_state": "closed",
+    "issue_kind": null,
+    "severity": null,
+    "component": null,
+    "board": null,
+    "target_series": [
+      "STM32H7"
+    ],
+    "category": "technical_diagnosis",
+    "source_types": [
+      "resolver_case"
+    ],
+    "evidence_strength": "medium",
+    "rescue_applied": false,
+    "resolution_status": "candidate_fix",
+    "peripheral_tags": [],
+    "technical_pattern_tags": [
+      "version_regression"
+    ],
+    "api_family_tags": [],
+    "symptom_summary": "Upgrading the hal library from 1.",
+    "affected_context": "repo=stm32h7xx-hal-driver, labels=bug, documentation, issue_state=closed",
+    "likely_causes": [
+      "Potential fix identified, but integration status is uncertain.",
+      "resolution_status=candidate_fix, confidence=medium, score=0."
+    ],
+    "confirmed_facts": [
+      "Resolver linkage status is candidate_fix with confidence medium",
+      "A linked commit or pull request exists for this issue path"
+    ],
+    "plausible_diagnosis": [
+      "A candidate fix exists, suggesting the problem may already be understood upstream",
+      "Behavior may depend on the exact Cube or HAL version in use"
+    ],
+    "debug_checks": [
+      "Reproduce on a minimal project using the same board, Cube package, and middleware settings"
+    ],
+    "possible_workarounds": [
+      "Test the candidate fix path or PR on an isolated branch before merging locally",
+      "Pin a known-good firmware package version while validating the issue scope"
+    ],
+    "constraints_or_limits": [
+      "Linked fix evidence is not strong enough to assume universal applicability",
+      "Validate against the exact MCU series, board, package version, and local integration path"
+    ],
+    "evidence_refs": [
+      {
+        "type": "pull_request",
+        "url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/pull/48",
+        "confidence": "medium"
+      },
+      {
+        "type": "commit",
+        "url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/commit/61994139b7643fc8f57127b3d84915ad5363cb80",
+        "confidence": "medium"
+      }
+    ],
+    "keywords": [
+      "Other",
+      "DMA",
+      "candidate_fix"
+    ],
+    "st_ready_text": "Problem: Upgrading the hal library from 1.11.0 to 1.11.1 will cause the SPI master transmission to time out for no reason.\nContext: repo=stm32h7xx-hal-driver, issue_number=47, target_series=STM32H7, source_types=resolver_case\nSymptoms: Upgrading the hal library from 1.\nLikely causes: Potential fix identified, but integration status is uncertain. | resolution_status=candidate_fix, confidence=medium, score=0.\nConfirmed facts: Resolver linkage status is candidate_fix with confidence medium | A linked commit or pull request exists for this issue path\nPlausible diagnosis: A candidate fix exists, suggesting the problem may already be understood upstream | Behavior may depend on the exact Cube or HAL version in use\nDebug actions: Reproduce on a minimal project using the same board, Cube package, and middleware settings\nWorkaround: Test the candidate fix path or PR on an isolated branch before merging locally | Pin a known-good firmware package version while validating the issue scope\nConstraints: Linked fix evidence is not strong enough to assume universal applicability | Validate against the exact MCU series, board, package version, and local integration path\nEvidence links: https://github.com/STMicroelectronics/stm32h7xx-hal-driver/pull/48 | https://github.com/STMicroelectronics/stm32h7xx-hal-driver/commit/61994139b7643fc8f57127b3d84915ad5363cb80\nKeywords: Other DMA candidate_fix"
+  },
+  {
+    "id": "diag::stm32h7xx-hal-driver::issue::76",
+    "card_id": "diag_stm32h7xx-hal-driver_76",
+    "rootTagPath": "diagnostic_cards",
+    "delivery_template": "st_v1_diagnostic_card",
+    "repo_scope": "stm32h7xx-hal-driver",
+    "repo": "stm32h7xx-hal-driver",
+    "title": "DMA HAL enables FIFO Error interrupt even if the FIFO is not enabled",
+    "label": "DMA HAL enables FIFO Error interrupt even if the FIFO is not enabled",
+    "externalURL": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/76",
+    "issue_number": 76,
+    "issue_title": "DMA HAL enables FIFO Error interrupt even if the FIFO is not enabled",
+    "issue_state": "closed",
+    "issue_kind": null,
+    "severity": null,
+    "component": null,
+    "board": null,
+    "target_series": [
+      "STM32H7"
+    ],
+    "category": "technical_diagnosis",
+    "source_types": [
+      "resolver_case"
+    ],
+    "evidence_strength": "medium",
+    "rescue_applied": false,
+    "resolution_status": "candidate_fix",
+    "peripheral_tags": [],
+    "technical_pattern_tags": [
+      "dma_path",
+      "version_regression",
+      "interrupt_path"
+    ],
+    "api_family_tags": [],
+    "symptom_summary": "DMA HAL enables FIFO Error interrupt even if the FIFO is not enabled",
+    "affected_context": "repo=stm32h7xx-hal-driver, labels=bug, invalid, internal bug tracker, st community, hal, dma, issue_state=closed",
+    "likely_causes": [
+      "Potential fix identified, but integration status is uncertain.",
+      "resolution_status=candidate_fix, confidence=medium, score=0."
+    ],
+    "confirmed_facts": [
+      "Resolver linkage status is candidate_fix with confidence medium",
+      "A linked commit or pull request exists for this issue path"
+    ],
+    "plausible_diagnosis": [
+      "A candidate fix exists, suggesting the problem may already be understood upstream",
+      "Behavior may depend on the exact Cube or HAL version in use"
+    ],
+    "debug_checks": [
+      "Reproduce on a minimal project using the same board, Cube package, and middleware settings"
+    ],
+    "possible_workarounds": [
+      "Test the candidate fix path or PR on an isolated branch before merging locally",
+      "Try an alternate transfer mode on a minimal case to isolate DMA-specific behavior",
+      "Pin a known-good firmware package version while validating the issue scope"
+    ],
+    "constraints_or_limits": [
+      "Linked fix evidence is not strong enough to assume universal applicability",
+      "Validate against the exact MCU series, board, package version, and local integration path"
+    ],
+    "evidence_refs": [
+      {
+        "type": "pull_request",
+        "url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/pull/78",
+        "confidence": "medium"
+      },
+      {
+        "type": "commit",
+        "url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/commit/19fe437fe48c70d890f8d3e0a016ea8168ee96d9",
+        "confidence": "medium"
+      }
+    ],
+    "keywords": [
+      "Other",
+      "DMA",
+      "candidate_fix"
+    ],
+    "st_ready_text": "Problem: DMA HAL enables FIFO Error interrupt even if the FIFO is not enabled\nContext: repo=stm32h7xx-hal-driver, issue_number=76, target_series=STM32H7, source_types=resolver_case\nSymptoms: DMA HAL enables FIFO Error interrupt even if the FIFO is not enabled\nLikely causes: Potential fix identified, but integration status is uncertain. | resolution_status=candidate_fix, confidence=medium, score=0.\nConfirmed facts: Resolver linkage status is candidate_fix with confidence medium | A linked commit or pull request exists for this issue path\nPlausible diagnosis: A candidate fix exists, suggesting the problem may already be understood upstream | Behavior may depend on the exact Cube or HAL version in use\nDebug actions: Reproduce on a minimal project using the same board, Cube package, and middleware settings\nWorkaround: Test the candidate fix path or PR on an isolated branch before merging locally | Try an alternate transfer mode on a minimal case to isolate DMA-specific behavior | Pin a known-good firmware package version while validating the issue scope\nConstraints: Linked fix evidence is not strong enough to assume universal applicability | Validate against the exact MCU series, board, package version, and local integration path\nEvidence links: https://github.com/STMicroelectronics/stm32h7xx-hal-driver/pull/78 | https://github.com/STMicroelectronics/stm32h7xx-hal-driver/commit/19fe437fe48c70d890f8d3e0a016ea8168ee96d9\nKeywords: Other DMA candidate_fix"
+  }
+]

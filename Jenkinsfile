@@ -46,6 +46,9 @@ pipeline {
           if (params.CONTINUE_ON_ERROR) {
             cmd = cmd + ' --continue-on-error'
           }
+          if (params.EXPORT_ST_READY) {
+            cmd = cmd + ' --export-st-ready'
+          }
           bat cmd
         }
       }
@@ -54,16 +57,6 @@ pipeline {
     stage('Schema Validation Gate') {
       steps {
         bat '.venv\\Scripts\\python -m pipeline.evaluation.validate_schemas'
-      }
-    }
-
-    stage('Export ST-ready') {
-      when {
-        expression { return params.EXPORT_ST_READY }
-      }
-      steps {
-        bat ".venv\\Scripts\\python -m pipeline.delivery.export_st_ready_issues --repo ${params.TARGET_REPO} --output-format json"
-        bat ".venv\\Scripts\\python -m pipeline.delivery.export_st_ready_files --repo ${params.TARGET_REPO}"
       }
     }
 

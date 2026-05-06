@@ -1,4 +1,5 @@
 import argparse
+import base64
 import hashlib
 import json
 import mimetypes
@@ -59,6 +60,7 @@ def default_search_dirs() -> list[Path]:
     return [
         root / "datasets" / "07_delivery" / "st_ready" / "issues_json",
         root / "datasets" / "07_delivery" / "st_ready" / "files_json",
+        root / "datasets" / "07_delivery" / "st_ready" / "diagnostic_cards_json",
         root / "datasets" / "07_delivery" / "st_ready" / "resolver_cases_json",
         root / "data",
     ]
@@ -170,15 +172,157 @@ def parse_processor_params(raw: str | None) -> dict[str, Any] | None:
     if not raw:
         return None
 
+    if raw.lower().startswith("base64:"):
+        encoded = raw.split(":", 1)[1].strip()
+        if not encoded:
+            raise ValueError("--processor-params base64 payload is empty")
+        try:
+            decoded_bytes = base64.b64decode(encoded)
+            raw = decoded_bytes.decode("utf-8")
+        except Exception as exc:
+            raise ValueError(f"Invalid base64 in --processor-params: {exc}") from exc
+        raw = raw.strip()
+        if not raw:
+            return None
+
     try:
         value = json.loads(raw)
     except json.JSONDecodeError as exc:
-        raise ValueError(f"Invalid JSON in --processor-params: {exc}") from exc
+        relaxed_value = parse_processor_params_relaxed(raw)
+        if relaxed_value is not None:
+            return relaxed_value
+        raw_preview = raw if len(raw) <= 240 else f"{raw[:240]}..."
+        raise ValueError(
+            "Invalid JSON in --processor-params: "
+            f"{exc}. Raw preview: {raw_preview}"
+        ) from exc
 
     if not isinstance(value, dict):
         raise ValueError("--processor-params must be a JSON object")
 
     return value
+
+
+def parse_processor_params_relaxed(raw: str) -> dict[str, Any] | None:
+    """Best-effort parser for PowerShell-stripped JSON object arguments.
+
+    Example accepted input:
+    {label:{{repo}} issue #{{issue_number}},rootTagPath:issues,externalURL:https://...}
+    """
+    text = raw.strip()
+
+    if (text.startswith('"') and text.endswith('"') and len(text) >= 2) or (
+        text.startswith("'") and text.endswith("'") and len(text) >= 2
+    ):
+        text = text[1:-1].strip()
+
+    if text.startswith("@"):
+        text = text[1:].strip()
+
+    if not (text.startswith("{") and text.endswith("}")):
+        return None
+
+    inner = text[1:-1].strip()
+    if not inner:
+        return {}
+
+    parts: list[str] = []
+    current: list[str] = []
+    quote_char = ""
+    escape = False
+
+    for char in inner:
+        if escape:
+            current.append(char)
+            escape = False
+            continue
+
+        if char == "\\":
+            current.append(char)
+            escape = True
+            continue
+
+        if quote_char:
+            current.append(char)
+            if char == quote_char:
+                quote_char = ""
+            continue
+
+        if char in ('"', "'"):
+            quote_char = char
+            current.append(char)
+            continue
+
+        if char in (",", ";"):
+            token = "".join(current).strip()
+            if token:
+                parts.append(token)
+            current = []
+            continue
+
+        current.append(char)
+
+    token = "".join(current).strip()
+    if token:
+        parts.append(token)
+
+    if not parts:
+        return {}
+
+    parsed: dict[str, Any] = {}
+    for part in parts:
+        key_raw = ""
+        value_raw = ""
+
+        delimiter_index = -1
+        quote_mode = ""
+        escape_mode = False
+        for idx, char in enumerate(part):
+            if escape_mode:
+                escape_mode = False
+                continue
+            if char == "\\":
+                escape_mode = True
+                continue
+            if quote_mode:
+                if char == quote_mode:
+                    quote_mode = ""
+                continue
+            if char in ('"', "'"):
+                quote_mode = char
+                continue
+            if char in (":", "="):
+                delimiter_index = idx
+                break
+
+        if delimiter_index <= 0:
+            return None
+
+        key_raw = part[:delimiter_index]
+        value_raw = part[delimiter_index + 1 :]
+        key = key_raw.strip().strip("\"").strip("'")
+        if not key:
+            return None
+
+        value_text = value_raw.strip()
+        if (value_text.startswith('"') and value_text.endswith('"') and len(value_text) >= 2) or (
+            value_text.startswith("'") and value_text.endswith("'") and len(value_text) >= 2
+        ):
+            value: Any = value_text[1:-1]
+        else:
+            lower_value = value_text.lower()
+            if lower_value == "true":
+                value = True
+            elif lower_value == "false":
+                value = False
+            elif lower_value == "null":
+                value = None
+            else:
+                value = value_text
+
+        parsed[key] = value
+
+    return parsed
 
 
 def parse_csv_items(raw: str | None) -> list[str]:
@@ -283,6 +427,8 @@ def is_non_retryable_api_rejection(error_code: int | None, message: str) -> bool
         "datasource must be a number",
         "could not find any entity of type \"kbdatasourceentity\"",
         "cannot upload files to deleted datasource",
+        "datasource with name",
+        "already exists",
         "invalid application name",
         "invalid auth token",
         "invalid timestamp",
@@ -298,6 +444,124 @@ def is_existing_file_conflict(error_code: int | None, message: str) -> bool:
         return False
     normalized = (message or "").strip().lower()
     return "cannot upload existing file" in normalized
+
+
+def is_existing_datasource_name_conflict(error_code: int | None, message: str) -> bool:
+    if error_code != 1000:
+        return False
+    normalized = (message or "").strip().lower()
+    return "datasource with name" in normalized and "already exists" in normalized
+
+
+def extract_existing_datasource_name(message: str) -> str | None:
+    match = re.search(r'datasource with name\s+"([^"]+)"\s+already exists', message or "", flags=re.IGNORECASE)
+    if not match:
+        return None
+    return match.group(1).strip()
+
+
+def find_datasource_id_by_name_from_kb_list(
+    kb_list_response: dict[str, Any],
+    kb_id: int,
+    datasource_name: str,
+) -> int | None:
+    if not isinstance(kb_list_response, dict):
+        return None
+
+    kbs = kb_list_response.get("kbs")
+    if not isinstance(kbs, list):
+        return None
+
+    selected_kb: dict[str, Any] | None = None
+    for kb in kbs:
+        if not isinstance(kb, dict):
+            continue
+        try:
+            if int(kb.get("id")) == int(kb_id):
+                selected_kb = kb
+                break
+        except Exception:
+            continue
+
+    if selected_kb is None and len(kbs) == 1 and isinstance(kbs[0], dict):
+        selected_kb = kbs[0]
+
+    if not isinstance(selected_kb, dict):
+        return None
+
+    data_sources = (
+        selected_kb.get("dataSources")
+        or selected_kb.get("datasources")
+        or selected_kb.get("data_sources")
+        or []
+    )
+    if not isinstance(data_sources, list):
+        return None
+
+    wanted_exact = datasource_name.strip()
+    wanted_lower = wanted_exact.lower()
+
+    for ds in data_sources:
+        if not isinstance(ds, dict):
+            continue
+        ds_name = str(ds.get("name") or "").strip()
+        if ds_name != wanted_exact:
+            continue
+        try:
+            return int(ds.get("id"))
+        except Exception:
+            continue
+
+    for ds in data_sources:
+        if not isinstance(ds, dict):
+            continue
+        ds_name = str(ds.get("name") or "").strip()
+        if ds_name.lower() != wanted_lower:
+            continue
+        try:
+            return int(ds.get("id"))
+        except Exception:
+            continue
+
+    return None
+
+
+def resolve_existing_datasource_id_by_name(
+    endpoint: str,
+    api_key: str,
+    client_app_name: str,
+    service_name: str,
+    kb_id: int,
+    datasource_name: str,
+    timeout_seconds: int,
+    verify_ssl: bool,
+    proxies: dict[str, str] | None,
+    verbose: bool,
+) -> int | None:
+    try:
+        kb_list_response = run_auth_precheck(
+            endpoint=endpoint,
+            api_key=api_key,
+            client_app_name=client_app_name,
+            service_name=service_name,
+            timeout_seconds=timeout_seconds,
+            verify_ssl=verify_ssl,
+            proxies=proxies,
+            verbose=verbose,
+        )
+    except Exception as exc:
+        if verbose:
+            print(
+                "Failed to resolve datasource ID from kb-list after name conflict: "
+                f"{exc}"
+            )
+        return None
+
+    return find_datasource_id_by_name_from_kb_list(
+        kb_list_response=kb_list_response,
+        kb_id=kb_id,
+        datasource_name=datasource_name,
+    )
 
 
 def extract_existing_filename(message: str) -> str | None:
@@ -1377,84 +1641,4 @@ def main() -> None:
             }
             print("Datasource response:")
             print(json.dumps(response_json, ensure_ascii=True, indent=2))
-            return
-        raise ValueError(
-            "All selected files are empty JSON arrays; nothing to upload for --operation new. "
-            "Use --empty-json-policy upload to force upload."
-        )
-
-    try:
-        if args.operation == "add" and not args.fail_on_existing_files:
-            response_json = run_add_request_skip_existing_files(
-                endpoint=args.endpoint,
-                api_key=api_key,
-                client_app_name=client_app_name,
-                service_name=args.service,
-                remote_user=remote_user,
-                kb_id=args.kb,
-                datasource_payload=datasource_payload,
-                file_paths=prepared_file_paths,
-                request_types=request_types,
-                request_part_names=request_part_names,
-                payload_modes=payload_modes,
-                timestamp_modes=timestamp_modes,
-                max_retries=max(1, args.max_retries),
-                timeout_seconds=max(5, args.timeout),
-                verify_ssl=args.verify_ssl,
-                proxies=proxies,
-                verbose=args.verbose,
-            )
-        elif args.operation == "new" and len(prepared_file_paths) > 1:
-            response_json = run_new_request_with_followup_add(
-                endpoint=args.endpoint,
-                api_key=api_key,
-                client_app_name=client_app_name,
-                service_name=args.service,
-                remote_user=remote_user,
-                kb_id=args.kb,
-                datasource_payload=datasource_payload,
-                file_paths=prepared_file_paths,
-                request_types=request_types,
-                request_part_names=request_part_names,
-                payload_modes=payload_modes,
-                timestamp_modes=timestamp_modes,
-                max_retries=max(1, args.max_retries),
-                timeout_seconds=max(5, args.timeout),
-                verify_ssl=args.verify_ssl,
-                proxies=proxies,
-                verbose=args.verbose,
-            )
-        else:
-            response_json = run_datasource_request(
-                endpoint=args.endpoint,
-                api_key=api_key,
-                client_app_name=client_app_name,
-                service_name=args.service,
-                remote_user=remote_user,
-                kb_id=args.kb,
-                datasource_payload=datasource_payload,
-                file_paths=prepared_file_paths,
-                request_types=request_types,
-                request_part_names=request_part_names,
-                payload_modes=payload_modes,
-                timestamp_modes=timestamp_modes,
-                max_retries=max(1, args.max_retries),
-                timeout_seconds=max(5, args.timeout),
-                verify_ssl=args.verify_ssl,
-                proxies=proxies,
-                verbose=args.verbose,
-            )
-    finally:
-        if temp_dir_for_upload is not None:
-            shutil.rmtree(temp_dir_for_upload, ignore_errors=True)
-
-    print("Datasource response:")
-    print(json.dumps(response_json, ensure_ascii=True, indent=2))
-
-    datasource = response_json.get("datasource") if isinstance(response_json, dict) else None
-    if datasource is not None:
-        print(f"\nDatasource ID returned: {datasource}")
-
-
-if __name__ == "__main__":
-    main()
+  

@@ -4,6 +4,10 @@ from pipeline.chunking.docs_to_chunks_files_v2 import main as chunks_files_v2_ma
 from pipeline.chunking.docs_to_chunks_issues_v2 import main as chunks_issues_v2_main
 from pipeline.cleaning.clean_files import main as clean_files_main
 from pipeline.cleaning.clean_issues import main as clean_issues_main
+from pipeline.delivery.export_st_ready_diagnostic_cards import export_repo_json as export_diagnostic_cards_repo_json
+from pipeline.delivery.export_st_ready_files import export_repo_json as export_files_repo_json
+from pipeline.delivery.export_st_ready_issues import export_repo_json as export_issues_repo_json
+from pipeline.delivery.export_st_ready_resolver_cases import export_repo_json as export_resolver_cases_repo_json
 from pipeline.enrichment.files_to_docs_v2 import main as files_to_docs_v2_main
 from pipeline.enrichment.issues_to_docs_v2 import main as issues_to_docs_v2_main
 from pipeline.evaluation.test_stats_files_v2 import main as stats_files_main
@@ -16,6 +20,48 @@ from pipeline.ingestion.fetch_issues import main as fetch_issues_main
 from pipeline.ingestion.fetch_prs import main as fetch_prs_main
 from pipeline.ingestion.repo_sync_service import main as sync_local_repos_main
 from pipeline.similarity.compute_issue_similarity_v2 import main as similarity_main
+from shared.utils.paths import get_config_path
+
+
+def load_config() -> dict:
+    return __import__("json").loads(get_config_path().read_text(encoding="utf-8"))
+
+
+def export_st_ready_issues_all() -> None:
+    repos = load_config().get("repos", [])
+    for repo in repos:
+        total, exported, out_root = export_issues_repo_json(repo=repo, include_invalid=False, comments_chars=1200)
+        print(f"[ST-READY:json:issues] {repo}: exported {exported}/{total} -> {out_root}")
+
+
+def export_st_ready_files_all() -> None:
+    repos = load_config().get("repos", [])
+    for repo in repos:
+        total, exported, out_root = export_files_repo_json(
+            repo=repo,
+            include_invalid=False,
+            summary_max_chars=240,
+            technical_max_chars=4000,
+        )
+        print(f"[ST-READY:json:files] {repo}: exported {exported}/{total} -> {out_root}")
+
+
+def export_st_ready_resolver_cases_all() -> None:
+    repos = load_config().get("repos", [])
+    for repo in repos:
+        total, exported, out_root = export_resolver_cases_repo_json(repo=repo, include_reference_only=False)
+        print(f"[ST-READY:json:resolver_cases] {repo}: exported {exported}/{total} -> {out_root}")
+
+
+def export_st_ready_diagnostic_cards_all() -> None:
+    repos = load_config().get("repos", [])
+    for repo in repos:
+        try:
+            total, exported, out_root = export_diagnostic_cards_repo_json(repo=repo, include_all_issues=False)
+        except FileNotFoundError as exc:
+            print(f"[ST-READY:json:diagnostic_cards] {repo}: skipped ({exc})")
+            continue
+        print(f"[ST-READY:json:diagnostic_cards] {repo}: exported {exported}/{total} -> {out_root}")
 
 
 STEPS = [
@@ -38,10 +84,17 @@ STEPS = [
 ]
 
 
-def main(skip_ingestion: bool = False, continue_on_error: bool = False) -> None:
+def main(skip_ingestion: bool = False, continue_on_error: bool = False, export_st_ready: bool = False) -> None:
     steps = STEPS
     if skip_ingestion:
         steps = [step for step in STEPS if not step[0].startswith("Ingestion")]
+    if export_st_ready:
+        steps = steps + [
+            ("Delivery ST-ready issues", export_st_ready_issues_all),
+            ("Delivery ST-ready files", export_st_ready_files_all),
+            ("Delivery ST-ready resolver cases", export_st_ready_resolver_cases_all),
+            ("Delivery ST-ready diagnostic cards", export_st_ready_diagnostic_cards_all),
+        ]
 
     for idx, (label, fn) in enumerate(steps, start=1):
         print(f"\n[{idx}/{len(steps)}] {label}...")
@@ -67,5 +120,14 @@ if __name__ == "__main__":
         action="store_true",
         help="Continue running next steps when one step fails.",
     )
+    parser.add_argument(
+        "--export-st-ready",
+        action="store_true",
+        help="Run ST-ready delivery exports after preprocessing and validation.",
+    )
     args = parser.parse_args()
-    main(skip_ingestion=args.skip_ingestion, continue_on_error=args.continue_on_error)
+    main(
+        skip_ingestion=args.skip_ingestion,
+        continue_on_error=args.continue_on_error,
+        export_st_ready=args.export_st_ready,
+    )
