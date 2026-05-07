@@ -342,3 +342,14 @@ Nous avons ajouté trois niveaux complémentaires de valeur:
 3. ST-ready exports: garantir une ingestion robuste, cohérente et traçable.
 
 Si tu veux, je peux te préparer une version slide par slide en format 6 diapositives avec texte court oral-ready.
+_________________________________________
+Overview of the ST solution of AI persona
+Overview of the knowledge base construction process
+Short demo
+Status of the work
+Objective of the project
+Current progress
+What is still to do
+Q&A and discussion 
+______________________
+Oui, une vue sommaire et comment cela t'a servi à mieux comprendre comment fonctionne la solution ST
