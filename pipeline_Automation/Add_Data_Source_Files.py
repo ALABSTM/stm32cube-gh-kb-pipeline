@@ -691,9 +691,81 @@ def flatten_json_root_array_file(source_path: Path, target_dir: Path, verbose: b
     )
 
 
+def extract_docs_array(payload: Any, root_tag_path: str | None) -> list[Any] | None:
+    if root_tag_path:
+        if not isinstance(payload, dict):
+            return None
+
+        value = payload.get(root_tag_path)
+        if isinstance(value, list):
+            return value
+
+        for key, item in payload.items():
+            if str(key).lower() == root_tag_path.lower() and isinstance(item, list):
+                return item
+
+        return None
+
+    if isinstance(payload, list):
+        return payload
+
+    return None
+
+
+def normalize_json_for_upload(
+    source_path: Path,
+    target_dir: Path,
+    root_tag_path: str | None,
+    verbose: bool,
+) -> tuple[Path, bool, bool]:
+    payload = load_json_payload(source_path)
+
+    if root_tag_path:
+        docs_array = extract_docs_array(payload, root_tag_path)
+        if docs_array is not None:
+            if isinstance(payload, dict) and root_tag_path in payload:
+                return source_path, False, len(docs_array) == 0
+
+            target_path = (target_dir / source_path.name).resolve()
+            wrapped = {root_tag_path: docs_array}
+            target_path.write_text(json.dumps(wrapped, ensure_ascii=False), encoding="utf-8")
+            if verbose:
+                print(
+                    "Normalized JSON root for "
+                    f"{source_path.name}: wrapped array under key '{root_tag_path}'"
+                )
+            return target_path, True, len(docs_array) == 0
+
+        if isinstance(payload, list):
+            target_path = (target_dir / source_path.name).resolve()
+            wrapped = {root_tag_path: payload}
+            target_path.write_text(json.dumps(wrapped, ensure_ascii=False), encoding="utf-8")
+            if verbose:
+                print(
+                    "Normalized JSON root for "
+                    f"{source_path.name}: array -> key '{root_tag_path}'"
+                )
+            return target_path, True, len(payload) == 0
+
+        if isinstance(payload, dict):
+            keys = ", ".join(str(k) for k in payload.keys())
+            raise ValueError(
+                "Unsupported JSON root for processor JSON in file "
+                f"{source_path.name}. Expected key '{root_tag_path}' with array, got keys: [{keys}]"
+            )
+
+        raise ValueError(
+            "Unsupported JSON root for processor JSON in file "
+            f"{source_path.name}. Expected object with key '{root_tag_path}'."
+        )
+
+    return flatten_json_root_array_file(source_path, target_dir, verbose)
+
+
 def prepare_file_paths_for_upload(
     file_paths: list[Path],
     processor: str | None,
+    processor_params: dict[str, Any] | None,
     json_root_mode: str,
     empty_json_policy: str,
     json_split_size: int,
@@ -708,9 +780,20 @@ def prepare_file_paths_for_upload(
     skipped_empty_files: list[str] = []
     transformed_count = 0
     split_parts_count = 0
+    root_tag_path: str | None = None
+
+    if isinstance(processor_params, dict):
+        root_value = processor_params.get("rootTagPath")
+        if isinstance(root_value, str) and root_value.strip():
+            root_tag_path = root_value.strip()
 
     for source_path in file_paths:
-        prepared_path, transformed, is_empty_array = flatten_json_root_array_file(source_path, temp_dir, verbose)
+        prepared_path, transformed, is_empty_array = normalize_json_for_upload(
+            source_path=source_path,
+            target_dir=temp_dir,
+            root_tag_path=root_tag_path,
+            verbose=verbose,
+        )
 
         if is_empty_array:
             if empty_json_policy == "skip":
@@ -726,7 +809,8 @@ def prepare_file_paths_for_upload(
 
         if json_split_size > 0:
             payload_for_split = load_json_payload(prepared_path)
-            if isinstance(payload_for_split, list) and len(payload_for_split) > json_split_size:
+            docs_for_split = extract_docs_array(payload_for_split, root_tag_path)
+            if docs_for_split is not None and len(docs_for_split) > json_split_size:
                 file_size_bytes = prepared_path.stat().st_size
                 split_min_bytes = int(json_split_min_mb * BYTES_PER_MB)
 
@@ -745,8 +829,12 @@ def prepare_file_paths_for_upload(
 
                 part_paths: list[Path] = []
                 part_index = 1
-                for start_idx in range(0, len(payload_for_split), json_split_size):
-                    part_payload = payload_for_split[start_idx : start_idx + json_split_size]
+                for start_idx in range(0, len(docs_for_split), json_split_size):
+                    part_docs = docs_for_split[start_idx : start_idx + json_split_size]
+                    if root_tag_path:
+                        part_payload: Any = {root_tag_path: part_docs}
+                    else:
+                        part_payload = part_docs
                     part_path = (temp_dir / f"{source_path.stem}__part{part_index:03d}.json").resolve()
                     part_path.write_text(
                         json.dumps(part_payload, ensure_ascii=False),
@@ -778,9 +866,10 @@ def prepare_file_paths_for_upload(
         return prepared_paths, None, skipped_empty_files
 
     if verbose:
+        root_note = f" (rootTagPath={root_tag_path})" if root_tag_path else ""
         print(
-            "Prepared JSON files for upload with array root: "
-            f"{transformed_count}/{len(file_paths)} transformed"
+            "Prepared JSON files for upload with normalized JSON root"
+            f"{root_note}: {transformed_count}/{len(file_paths)} transformed"
         )
         if skipped_empty_files:
             print(f"Skipped empty JSON payload files: {len(skipped_empty_files)}")
@@ -1286,28 +1375,132 @@ def run_new_request_with_followup_add(
     if not file_paths:
         raise ValueError("At least one file is required for --operation new")
 
+    datasource_name = str(datasource_payload.get("name") or "").strip()
+    requested_processor = datasource_payload.get("processor") if isinstance(datasource_payload, dict) else None
+    requested_processor_params = (
+        datasource_payload.get("processorParams") if isinstance(datasource_payload, dict) else None
+    )
+    created_datasource_name_used = datasource_name
+
     # Create the datasource with the first file, then add remaining files one by one.
     # This avoids oversized multipart requests for large split sets.
     first_path = file_paths[0]
-    create_response = run_datasource_request(
-        endpoint=endpoint,
-        api_key=api_key,
-        client_app_name=client_app_name,
-        service_name=service_name,
-        remote_user=remote_user,
-        kb_id=kb_id,
-        datasource_payload=datasource_payload,
-        file_paths=[first_path],
-        request_types=request_types,
-        request_part_names=request_part_names,
-        payload_modes=payload_modes,
-        timestamp_modes=timestamp_modes,
-        max_retries=max_retries,
-        timeout_seconds=timeout_seconds,
-        verify_ssl=verify_ssl,
-        proxies=proxies,
-        verbose=verbose,
-    )
+    try:
+        create_response = run_datasource_request(
+            endpoint=endpoint,
+            api_key=api_key,
+            client_app_name=client_app_name,
+            service_name=service_name,
+            remote_user=remote_user,
+            kb_id=kb_id,
+            datasource_payload=datasource_payload,
+            file_paths=[first_path],
+            request_types=request_types,
+            request_part_names=request_part_names,
+            payload_modes=payload_modes,
+            timestamp_modes=timestamp_modes,
+            max_retries=max_retries,
+            timeout_seconds=timeout_seconds,
+            verify_ssl=verify_ssl,
+            proxies=proxies,
+            verbose=verbose,
+        )
+    except ApiRejectedError as exc:
+        if not is_existing_datasource_name_conflict(exc.error_code, exc.api_message):
+            raise
+
+        conflict_name = extract_existing_datasource_name(exc.api_message) or datasource_name
+        if not conflict_name:
+            raise
+
+        existing_datasource_id = resolve_existing_datasource_id_by_name(
+            endpoint=endpoint,
+            api_key=api_key,
+            client_app_name=client_app_name,
+            service_name=service_name,
+            kb_id=kb_id,
+            datasource_name=conflict_name,
+            timeout_seconds=timeout_seconds,
+            verify_ssl=verify_ssl,
+            proxies=proxies,
+            verbose=verbose,
+        )
+
+        if existing_datasource_id is None:
+            timestamp_suffix = int(time.time())
+            auto_name = f"{conflict_name}_{timestamp_suffix}"
+            retry_payload = dict(datasource_payload)
+            retry_payload["name"] = auto_name
+
+            if verbose:
+                print(
+                    "Datasource exists but ID could not be resolved from kb-list; "
+                    f"retrying creation with auto name '{auto_name}'."
+                )
+
+            create_response = run_datasource_request(
+                endpoint=endpoint,
+                api_key=api_key,
+                client_app_name=client_app_name,
+                service_name=service_name,
+                remote_user=remote_user,
+                kb_id=kb_id,
+                datasource_payload=retry_payload,
+                file_paths=[first_path],
+                request_types=request_types,
+                request_part_names=request_part_names,
+                payload_modes=payload_modes,
+                timestamp_modes=timestamp_modes,
+                max_retries=max_retries,
+                timeout_seconds=timeout_seconds,
+                verify_ssl=verify_ssl,
+                proxies=proxies,
+                verbose=verbose,
+            )
+            created_datasource_name_used = auto_name
+        else:
+            if verbose:
+                print(
+                    "Datasource already exists by name; switching to add mode on existing ID "
+                    f"{existing_datasource_id}."
+                )
+
+            add_datasource_payload: dict[str, Any] = {"id": existing_datasource_id}
+            if requested_processor:
+                add_datasource_payload["processor"] = requested_processor
+            if requested_processor_params:
+                add_datasource_payload["processorParams"] = requested_processor_params
+
+            add_response = run_add_request_skip_existing_files(
+                endpoint=endpoint,
+                api_key=api_key,
+                client_app_name=client_app_name,
+                service_name=service_name,
+                remote_user=remote_user,
+                kb_id=kb_id,
+                datasource_payload=add_datasource_payload,
+                file_paths=file_paths,
+                request_types=[DEFAULT_TYPE_ADD],
+                request_part_names=request_part_names,
+                payload_modes=payload_modes,
+                timestamp_modes=timestamp_modes,
+                max_retries=max_retries,
+                timeout_seconds=timeout_seconds,
+                verify_ssl=verify_ssl,
+                proxies=proxies,
+                verbose=verbose,
+            )
+
+            final_existing = dict(add_response)
+            final_existing["datasource"] = existing_datasource_id
+            final_existing.setdefault(
+                "message",
+                (
+                    f'Datasource "{conflict_name}" already existed; files were uploaded '
+                    "with add mode to the existing datasource."
+                ),
+            )
+            return final_existing
 
     datasource_id_raw = create_response.get("datasource") if isinstance(create_response, dict) else None
     try:
@@ -1324,6 +1517,12 @@ def run_new_request_with_followup_add(
 
     remaining_paths = file_paths[1:]
     if remaining_paths:
+        add_datasource_payload: dict[str, Any] = {"id": datasource_id}
+        if requested_processor:
+            add_datasource_payload["processor"] = requested_processor
+        if requested_processor_params:
+            add_datasource_payload["processorParams"] = requested_processor_params
+
         add_response = run_add_request_skip_existing_files(
             endpoint=endpoint,
             api_key=api_key,
@@ -1331,7 +1530,7 @@ def run_new_request_with_followup_add(
             service_name=service_name,
             remote_user=remote_user,
             kb_id=kb_id,
-            datasource_payload={"id": datasource_id},
+            datasource_payload=add_datasource_payload,
             file_paths=remaining_paths,
             request_types=[DEFAULT_TYPE_ADD],
             request_part_names=request_part_names,
@@ -1349,6 +1548,8 @@ def run_new_request_with_followup_add(
 
     final_response["datasource"] = datasource_id
     final_response["uploaded_files"] = uploaded_files
+    if created_datasource_name_used:
+        final_response["datasource_name_used"] = created_datasource_name_used
     if skipped_existing_files:
         final_response["skipped_existing_files"] = skipped_existing_files
 
@@ -1616,6 +1817,7 @@ def main() -> None:
     prepared_file_paths, temp_dir_for_upload, skipped_empty_files = prepare_file_paths_for_upload(
         file_paths=file_paths,
         processor=args.processor,
+        processor_params=processor_params,
         json_root_mode=args.json_root_mode,
         empty_json_policy=args.empty_json_policy,
         json_split_size=args.json_split_size,
@@ -1641,4 +1843,84 @@ def main() -> None:
             }
             print("Datasource response:")
             print(json.dumps(response_json, ensure_ascii=True, indent=2))
-  
+            return
+        raise ValueError(
+            "All selected files are empty JSON arrays; nothing to upload for --operation new. "
+            "Use --empty-json-policy upload to force upload."
+        )
+
+    try:
+        if args.operation == "add" and not args.fail_on_existing_files:
+            response_json = run_add_request_skip_existing_files(
+                endpoint=args.endpoint,
+                api_key=api_key,
+                client_app_name=client_app_name,
+                service_name=args.service,
+                remote_user=remote_user,
+                kb_id=args.kb,
+                datasource_payload=datasource_payload,
+                file_paths=prepared_file_paths,
+                request_types=request_types,
+                request_part_names=request_part_names,
+                payload_modes=payload_modes,
+                timestamp_modes=timestamp_modes,
+                max_retries=max(1, args.max_retries),
+                timeout_seconds=max(5, args.timeout),
+                verify_ssl=args.verify_ssl,
+                proxies=proxies,
+                verbose=args.verbose,
+            )
+        elif args.operation == "new" and len(prepared_file_paths) > 1:
+            response_json = run_new_request_with_followup_add(
+                endpoint=args.endpoint,
+                api_key=api_key,
+                client_app_name=client_app_name,
+                service_name=args.service,
+                remote_user=remote_user,
+                kb_id=args.kb,
+                datasource_payload=datasource_payload,
+                file_paths=prepared_file_paths,
+                request_types=request_types,
+                request_part_names=request_part_names,
+                payload_modes=payload_modes,
+                timestamp_modes=timestamp_modes,
+                max_retries=max(1, args.max_retries),
+                timeout_seconds=max(5, args.timeout),
+                verify_ssl=args.verify_ssl,
+                proxies=proxies,
+                verbose=args.verbose,
+            )
+        else:
+            response_json = run_datasource_request(
+                endpoint=args.endpoint,
+                api_key=api_key,
+                client_app_name=client_app_name,
+                service_name=args.service,
+                remote_user=remote_user,
+                kb_id=args.kb,
+                datasource_payload=datasource_payload,
+                file_paths=prepared_file_paths,
+                request_types=request_types,
+                request_part_names=request_part_names,
+                payload_modes=payload_modes,
+                timestamp_modes=timestamp_modes,
+                max_retries=max(1, args.max_retries),
+                timeout_seconds=max(5, args.timeout),
+                verify_ssl=args.verify_ssl,
+                proxies=proxies,
+                verbose=args.verbose,
+            )
+    finally:
+        if temp_dir_for_upload is not None:
+            shutil.rmtree(temp_dir_for_upload, ignore_errors=True)
+
+    print("Datasource response:")
+    print(json.dumps(response_json, ensure_ascii=True, indent=2))
+
+    datasource = response_json.get("datasource") if isinstance(response_json, dict) else None
+    if datasource is not None:
+        print(f"\nDatasource ID returned: {datasource}")
+
+
+if __name__ == "__main__":
+    main()
