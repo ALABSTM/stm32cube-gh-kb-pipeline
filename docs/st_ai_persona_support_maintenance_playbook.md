@@ -6,6 +6,18 @@ Audience: Support and Maintenance team, project stakeholders, and technical revi
 
 Scope: End-to-end STM32Cube preprocessing workflow, ST-ready delivery exports, upload operations, and quality governance in a black-box retrieval environment.
 
+Académique :
+Conception et évaluation d’une chaîne de prétraitement STM32Cube pour l’alimentation d’un assistant IA technique
+
+Impact métier :
+Amélioration de la qualité des réponses d’une IA support STM32 par structuration et livraison ST-ready des données techniques
+
+Orienté architecture :
+De GitHub à la knowledge base : architecture de prétraitement STM32Cube pour un assistant IA de support et maintenance
+
+Orienté qualité :
+Prétraitement intelligent STM32Cube et gouvernance qualité (30Q/50Q) pour une IA de support industriel
+
 ---
 
 ## 1. Executive Summary
