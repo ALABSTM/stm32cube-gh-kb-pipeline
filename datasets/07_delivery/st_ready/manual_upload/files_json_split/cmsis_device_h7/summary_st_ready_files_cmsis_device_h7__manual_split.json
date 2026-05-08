@@ -1,0 +1,128 @@
+{
+  "created_at_utc": "2026-05-08T08:04:42+00:00",
+  "source_file": "st_ready_files_cmsis_device_h7.json",
+  "source_path": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\files_json\\st_ready_files_cmsis_device_h7.json",
+  "root_tag_path": "files",
+  "source_docs": 121,
+  "source_size_kb": 839.07,
+  "split_rules": {
+    "max_docs_per_part": 8,
+    "max_payload_kb": 220,
+    "min_source_size_kb": 350.0
+  },
+  "parts_count": 16,
+  "parts": [
+    {
+      "part_index": 1,
+      "file_name": "st_ready_files_cmsis_device_h7__part001.json",
+      "docs": 8,
+      "estimated_payload_kb": 42.61,
+      "st_ready_text_chars": 37847
+    },
+    {
+      "part_index": 2,
+      "file_name": "st_ready_files_cmsis_device_h7__part002.json",
+      "docs": 8,
+      "estimated_payload_kb": 56.69,
+      "st_ready_text_chars": 52268
+    },
+    {
+      "part_index": 3,
+      "file_name": "st_ready_files_cmsis_device_h7__part003.json",
+      "docs": 8,
+      "estimated_payload_kb": 56.69,
+      "st_ready_text_chars": 52268
+    },
+    {
+      "part_index": 4,
+      "file_name": "st_ready_files_cmsis_device_h7__part004.json",
+      "docs": 8,
+      "estimated_payload_kb": 53.25,
+      "st_ready_text_chars": 48554
+    },
+    {
+      "part_index": 5,
+      "file_name": "st_ready_files_cmsis_device_h7__part005.json",
+      "docs": 8,
+      "estimated_payload_kb": 57.8,
+      "st_ready_text_chars": 52794
+    },
+    {
+      "part_index": 6,
+      "file_name": "st_ready_files_cmsis_device_h7__part006.json",
+      "docs": 8,
+      "estimated_payload_kb": 57.58,
+      "st_ready_text_chars": 52692
+    },
+    {
+      "part_index": 7,
+      "file_name": "st_ready_files_cmsis_device_h7__part007.json",
+      "docs": 8,
+      "estimated_payload_kb": 57.6,
+      "st_ready_text_chars": 52703
+    },
+    {
+      "part_index": 8,
+      "file_name": "st_ready_files_cmsis_device_h7__part008.json",
+      "docs": 8,
+      "estimated_payload_kb": 57.58,
+      "st_ready_text_chars": 52656
+    },
+    {
+      "part_index": 9,
+      "file_name": "st_ready_files_cmsis_device_h7__part009.json",
+      "docs": 8,
+      "estimated_payload_kb": 57.56,
+      "st_ready_text_chars": 52645
+    },
+    {
+      "part_index": 10,
+      "file_name": "st_ready_files_cmsis_device_h7__part010.json",
+      "docs": 8,
+      "estimated_payload_kb": 57.59,
+      "st_ready_text_chars": 52666
+    },
+    {
+      "part_index": 11,
+      "file_name": "st_ready_files_cmsis_device_h7__part011.json",
+      "docs": 8,
+      "estimated_payload_kb": 57.61,
+      "st_ready_text_chars": 52707
+    },
+    {
+      "part_index": 12,
+      "file_name": "st_ready_files_cmsis_device_h7__part012.json",
+      "docs": 8,
+      "estimated_payload_kb": 57.6,
+      "st_ready_text_chars": 52696
+    },
+    {
+      "part_index": 13,
+      "file_name": "st_ready_files_cmsis_device_h7__part013.json",
+      "docs": 8,
+      "estimated_payload_kb": 52.85,
+      "st_ready_text_chars": 47744
+    },
+    {
+      "part_index": 14,
+      "file_name": "st_ready_files_cmsis_device_h7__part014.json",
+      "docs": 8,
+      "estimated_payload_kb": 45.16,
+      "st_ready_text_chars": 39742
+    },
+    {
+      "part_index": 15,
+      "file_name": "st_ready_files_cmsis_device_h7__part015.json",
+      "docs": 8,
+      "estimated_payload_kb": 45.02,
+      "st_ready_text_chars": 39599
+    },
+    {
+      "part_index": 16,
+      "file_name": "st_ready_files_cmsis_device_h7__part016.json",
+      "docs": 1,
+      "estimated_payload_kb": 5.61,
+      "st_ready_text_chars": 4922
+    }
+  ]
+}

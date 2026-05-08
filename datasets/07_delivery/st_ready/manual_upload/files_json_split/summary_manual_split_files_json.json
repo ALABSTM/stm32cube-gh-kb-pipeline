@@ -1,0 +1,135 @@
+{
+  "created_at_utc": "2026-05-08T08:05:04+00:00",
+  "input_dir": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\files_json",
+  "requested_output_dir": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\manual_upload\\files_json_split",
+  "output_dir": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\manual_upload\\files_json_split",
+  "used_fallback_output_dir": false,
+  "pattern": "st_ready_files_*.json",
+  "root_tag_path": "files",
+  "rules": {
+    "split_all": false,
+    "min_source_size_kb": 350.0,
+    "max_docs_per_part": 8,
+    "max_payload_kb": 220
+  },
+  "clean_output_locked_entries": [],
+  "processed_sources": [
+    {
+      "repo": "cmsis_device_h7",
+      "source_file": "st_ready_files_cmsis_device_h7.json",
+      "source_docs": 121,
+      "source_size_kb": 839.07,
+      "parts_count": 16,
+      "output_dir": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\manual_upload\\files_json_split\\cmsis_device_h7",
+      "summary_file": "summary_st_ready_files_cmsis_device_h7__manual_split.json"
+    },
+    {
+      "repo": "stm32cubeh7",
+      "source_file": "st_ready_files_stm32cubeh7.json",
+      "source_docs": 4707,
+      "source_size_kb": 57619.81,
+      "parts_count": 622,
+      "output_dir": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\manual_upload\\files_json_split\\stm32cubeh7",
+      "summary_file": "summary_st_ready_files_stm32cubeh7__manual_split.json"
+    },
+    {
+      "repo": "stm32h735g-dk-bsp",
+      "source_file": "st_ready_files_stm32h735g-dk-bsp.json",
+      "source_docs": 22,
+      "source_size_kb": 408.21,
+      "parts_count": 3,
+      "output_dir": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\manual_upload\\files_json_split\\stm32h735g-dk-bsp",
+      "summary_file": "summary_st_ready_files_stm32h735g-dk-bsp__manual_split.json"
+    },
+    {
+      "repo": "stm32h743i-eval-bsp",
+      "source_file": "st_ready_files_stm32h743i-eval-bsp.json",
+      "source_docs": 32,
+      "source_size_kb": 488.51,
+      "parts_count": 4,
+      "output_dir": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\manual_upload\\files_json_split\\stm32h743i-eval-bsp",
+      "summary_file": "summary_st_ready_files_stm32h743i-eval-bsp__manual_split.json"
+    },
+    {
+      "repo": "stm32h745i-disco-bsp",
+      "source_file": "st_ready_files_stm32h745i-disco-bsp.json",
+      "source_docs": 24,
+      "source_size_kb": 339.71,
+      "parts_count": 3,
+      "output_dir": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\manual_upload\\files_json_split\\stm32h745i-disco-bsp",
+      "summary_file": "summary_st_ready_files_stm32h745i-disco-bsp__manual_split.json"
+    },
+    {
+      "repo": "stm32h747i-disco-bsp",
+      "source_file": "st_ready_files_stm32h747i-disco-bsp.json",
+      "source_docs": 26,
+      "source_size_kb": 434.45,
+      "parts_count": 4,
+      "output_dir": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\manual_upload\\files_json_split\\stm32h747i-disco-bsp",
+      "summary_file": "summary_st_ready_files_stm32h747i-disco-bsp__manual_split.json"
+    },
+    {
+      "repo": "stm32h747i-eval-bsp",
+      "source_file": "st_ready_files_stm32h747i-eval-bsp.json",
+      "source_docs": 32,
+      "source_size_kb": 505.37,
+      "parts_count": 4,
+      "output_dir": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\manual_upload\\files_json_split\\stm32h747i-eval-bsp",
+      "summary_file": "summary_st_ready_files_stm32h747i-eval-bsp__manual_split.json"
+    },
+    {
+      "repo": "stm32h750b-dk-bsp",
+      "source_file": "st_ready_files_stm32h750b-dk-bsp.json",
+      "source_docs": 24,
+      "source_size_kb": 337.34,
+      "parts_count": 3,
+      "output_dir": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\manual_upload\\files_json_split\\stm32h750b-dk-bsp",
+      "summary_file": "summary_st_ready_files_stm32h750b-dk-bsp__manual_split.json"
+    },
+    {
+      "repo": "stm32h7b3i-dk-bsp",
+      "source_file": "st_ready_files_stm32h7b3i-dk-bsp.json",
+      "source_docs": 28,
+      "source_size_kb": 489.92,
+      "parts_count": 4,
+      "output_dir": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\manual_upload\\files_json_split\\stm32h7b3i-dk-bsp",
+      "summary_file": "summary_st_ready_files_stm32h7b3i-dk-bsp__manual_split.json"
+    },
+    {
+      "repo": "stm32h7b3i-eval-bsp",
+      "source_file": "st_ready_files_stm32h7b3i-eval-bsp.json",
+      "source_docs": 34,
+      "source_size_kb": 583.74,
+      "parts_count": 5,
+      "output_dir": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\manual_upload\\files_json_split\\stm32h7b3i-eval-bsp",
+      "summary_file": "summary_st_ready_files_stm32h7b3i-eval-bsp__manual_split.json"
+    },
+    {
+      "repo": "stm32h7xx-hal-driver",
+      "source_file": "st_ready_files_stm32h7xx-hal-driver.json",
+      "source_docs": 269,
+      "source_size_kb": 13146.93,
+      "parts_count": 72,
+      "output_dir": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\manual_upload\\files_json_split\\stm32h7xx-hal-driver",
+      "summary_file": "summary_st_ready_files_stm32h7xx-hal-driver__manual_split.json"
+    },
+    {
+      "repo": "stm32h7xx-nucleo-bsp",
+      "source_file": "st_ready_files_stm32h7xx-nucleo-bsp.json",
+      "source_docs": 10,
+      "source_size_kb": 56.65,
+      "parts_count": 2,
+      "output_dir": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\manual_upload\\files_json_split\\stm32h7xx-nucleo-bsp",
+      "summary_file": "summary_st_ready_files_stm32h7xx-nucleo-bsp__manual_split.json"
+    }
+  ],
+  "skipped_sources": [],
+  "errors": [],
+  "totals": {
+    "sources_found": 12,
+    "sources_processed": 12,
+    "sources_skipped": 0,
+    "sources_errors": 0,
+    "parts_created": 742
+  }
+}

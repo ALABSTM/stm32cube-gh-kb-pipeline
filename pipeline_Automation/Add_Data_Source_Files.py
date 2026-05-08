@@ -460,11 +460,7 @@ def extract_existing_datasource_name(message: str) -> str | None:
     return match.group(1).strip()
 
 
-def find_datasource_id_by_name_from_kb_list(
-    kb_list_response: dict[str, Any],
-    kb_id: int,
-    datasource_name: str,
-) -> int | None:
+def find_kb_entry_from_kb_list(kb_list_response: dict[str, Any], kb_id: int) -> dict[str, Any] | None:
     if not isinstance(kb_list_response, dict):
         return None
 
@@ -472,58 +468,180 @@ def find_datasource_id_by_name_from_kb_list(
     if not isinstance(kbs, list):
         return None
 
-    selected_kb: dict[str, Any] | None = None
     for kb in kbs:
         if not isinstance(kb, dict):
             continue
         try:
             if int(kb.get("id")) == int(kb_id):
-                selected_kb = kb
-                break
+                return kb
         except Exception:
             continue
 
-    if selected_kb is None and len(kbs) == 1 and isinstance(kbs[0], dict):
-        selected_kb = kbs[0]
+    if len(kbs) == 1 and isinstance(kbs[0], dict):
+        return kbs[0]
 
-    if not isinstance(selected_kb, dict):
-        return None
+    return None
+
+
+def list_datasource_entries_from_kb_entry(kb_entry: dict[str, Any] | None) -> list[dict[str, Any]]:
+    if not isinstance(kb_entry, dict):
+        return []
 
     data_sources = (
-        selected_kb.get("dataSources")
-        or selected_kb.get("datasources")
-        or selected_kb.get("data_sources")
+        kb_entry.get("dataSources")
+        or kb_entry.get("datasources")
+        or kb_entry.get("data_sources")
         or []
     )
     if not isinstance(data_sources, list):
+        return []
+
+    return [item for item in data_sources if isinstance(item, dict)]
+
+
+def find_datasource_entry_from_kb_list(
+    kb_list_response: dict[str, Any],
+    kb_id: int,
+    datasource_id: int | None,
+    datasource_name: str | None,
+) -> dict[str, Any] | None:
+    kb_entry = find_kb_entry_from_kb_list(kb_list_response, kb_id)
+    data_sources = list_datasource_entries_from_kb_entry(kb_entry)
+    if not data_sources:
         return None
 
-    wanted_exact = datasource_name.strip()
-    wanted_lower = wanted_exact.lower()
+    if datasource_id is not None:
+        for ds in data_sources:
+            try:
+                if int(ds.get("id")) == int(datasource_id):
+                    return ds
+            except Exception:
+                continue
 
-    for ds in data_sources:
-        if not isinstance(ds, dict):
-            continue
-        ds_name = str(ds.get("name") or "").strip()
-        if ds_name != wanted_exact:
-            continue
-        try:
-            return int(ds.get("id"))
-        except Exception:
-            continue
+    if datasource_name and datasource_name.strip():
+        wanted_exact = datasource_name.strip()
+        wanted_lower = wanted_exact.lower()
 
-    for ds in data_sources:
-        if not isinstance(ds, dict):
-            continue
-        ds_name = str(ds.get("name") or "").strip()
-        if ds_name.lower() != wanted_lower:
-            continue
-        try:
-            return int(ds.get("id"))
-        except Exception:
-            continue
+        for ds in data_sources:
+            ds_name = str(ds.get("name") or "").strip()
+            if ds_name == wanted_exact:
+                return ds
+
+        for ds in data_sources:
+            ds_name = str(ds.get("name") or "").strip()
+            if ds_name.lower() == wanted_lower:
+                return ds
 
     return None
+
+
+def parse_json_object_like(value: Any) -> dict[str, Any] | None:
+    if isinstance(value, dict):
+        return dict(value)
+
+    if isinstance(value, str):
+        text = value.strip()
+        if text.startswith("{") and text.endswith("}"):
+            try:
+                parsed = json.loads(text)
+            except Exception:
+                return None
+            if isinstance(parsed, dict):
+                return parsed
+
+    return None
+
+
+def extract_datasource_processor_config(
+    datasource_entry: dict[str, Any] | None,
+) -> tuple[str | None, dict[str, Any] | None]:
+    if not isinstance(datasource_entry, dict):
+        return None, None
+
+    processor_keys = (
+        "processor",
+        "parser",
+        "processorType",
+        "processingType",
+    )
+    processor_params_keys = (
+        "processorParams",
+        "processor_params",
+        "parserParams",
+        "parser_params",
+        "processorParameters",
+        "parserParameters",
+    )
+
+    def pick_processor(container: dict[str, Any]) -> str | None:
+        for key in processor_keys:
+            raw = container.get(key)
+            if not isinstance(raw, str):
+                continue
+            value = raw.strip()
+            if not value:
+                continue
+            upper = value.upper()
+            if upper in {"PDF", "JSON", "CSV", "STANDARD"}:
+                return upper
+            return value
+        return None
+
+    def pick_processor_params(container: dict[str, Any]) -> dict[str, Any] | None:
+        for key in processor_params_keys:
+            parsed = parse_json_object_like(container.get(key))
+            if parsed is not None:
+                return parsed
+        return None
+
+    processor = pick_processor(datasource_entry)
+    processor_params = pick_processor_params(datasource_entry)
+
+    for nested_key in ("config", "configuration", "settings", "options"):
+        nested = datasource_entry.get(nested_key)
+        if not isinstance(nested, dict):
+            continue
+        if processor is None:
+            processor = pick_processor(nested)
+        if processor_params is None:
+            processor_params = pick_processor_params(nested)
+
+    return processor, processor_params
+
+
+def resolve_datasource_processor_config_from_kb_list(
+    kb_list_response: dict[str, Any],
+    kb_id: int,
+    datasource_id: int | None,
+    datasource_name: str | None,
+) -> tuple[str | None, dict[str, Any] | None]:
+    datasource_entry = find_datasource_entry_from_kb_list(
+        kb_list_response=kb_list_response,
+        kb_id=kb_id,
+        datasource_id=datasource_id,
+        datasource_name=datasource_name,
+    )
+    return extract_datasource_processor_config(datasource_entry)
+
+
+def find_datasource_id_by_name_from_kb_list(
+    kb_list_response: dict[str, Any],
+    kb_id: int,
+    datasource_name: str,
+) -> int | None:
+    datasource_entry = find_datasource_entry_from_kb_list(
+        kb_list_response=kb_list_response,
+        kb_id=kb_id,
+        datasource_id=None,
+        datasource_name=datasource_name,
+    )
+    if not isinstance(datasource_entry, dict):
+        return None
+
+    try:
+        return int(datasource_entry.get("id"))
+    except Exception:
+        return None
 
 
 def resolve_existing_datasource_id_by_name(
@@ -623,6 +741,94 @@ def load_json_payload(path: Path) -> Any:
         return json.loads(content)
     except json.JSONDecodeError as exc:
         raise ValueError(f"Invalid JSON file for upload: {path.name}: {exc}") from exc
+
+
+def detect_named_array_roots(payload: Any) -> list[str]:
+    if not isinstance(payload, dict):
+        return []
+
+    keys: list[str] = []
+    for key, value in payload.items():
+        if isinstance(value, list):
+            keys.append(str(key))
+    return keys
+
+
+def ensure_add_processor_compatibility(
+    operation: str,
+    datasource_id: int | None,
+    processor: str | None,
+    processor_params: dict[str, Any] | None,
+    file_paths: list[Path],
+) -> None:
+    if operation != "add":
+        return
+
+    if not file_paths:
+        return
+
+    candidate_path: Path | None = None
+    for path in file_paths:
+        if path.suffix.lower() == ".json":
+            candidate_path = path
+            break
+
+    if candidate_path is None:
+        return
+
+    try:
+        payload = load_json_payload(candidate_path)
+    except Exception:
+        return
+
+    root_keys = detect_named_array_roots(payload)
+    if not root_keys:
+        return
+
+    root_keys_lower = {key.lower() for key in root_keys}
+    processor_upper = (processor or "").strip().upper()
+    keys_preview = ", ".join(root_keys) if root_keys else "<none>"
+
+    if processor_upper == "STANDARD":
+        raise ValueError(
+            "Upload blocked before API call: target datasource appears configured with processor STANDARD "
+            f"(id={datasource_id}), but JSON file {candidate_path.name} has object-root array key(s): [{keys_preview}]. "
+            "This backend path expects array root for STANDARD processor. "
+            "Use a datasource configured with processor JSON and processorParams rootTagPath='files', "
+            "or delete/recreate this datasource with JSON configuration."
+        )
+
+    if processor_upper == "JSON":
+        root_tag_path = None
+        if isinstance(processor_params, dict):
+            root_raw = processor_params.get("rootTagPath")
+            if isinstance(root_raw, str) and root_raw.strip():
+                root_tag_path = root_raw.strip()
+
+        if not root_tag_path:
+            raise ValueError(
+                "Upload blocked before API call: processor JSON is selected for add upload, "
+                f"but --processor-params rootTagPath is missing while JSON root keys are [{keys_preview}]. "
+                "Set --processor-params with rootTagPath matching the payload key (for files use rootTagPath='files')."
+            )
+
+        if root_tag_path.lower() not in root_keys_lower:
+            raise ValueError(
+                "Upload blocked before API call: processor JSON rootTagPath does not match payload keys. "
+                f"rootTagPath='{root_tag_path}', payload array key(s)=[{keys_preview}] in {candidate_path.name}."
+            )
+        return
+
+    if processor_upper:
+        return
+
+    raise ValueError(
+        "Upload blocked before API call: processor configuration is unknown for add upload "
+        f"(datasource id={datasource_id}), and JSON file {candidate_path.name} has object-root key(s): [{keys_preview}]. "
+        "This often ends with 'JSON root element is not an array' if datasource defaults to STANDARD. "
+        "Use explicit --processor JSON with --processor-params rootTagPath, "
+        "or upload to a datasource already configured as JSON."
+    )
 
 
 def flatten_json_root_array_file(source_path: Path, target_dir: Path, verbose: bool) -> tuple[Path, bool, bool]:
@@ -1266,6 +1472,11 @@ def run_datasource_request(
             hint = " Hint: this datasource ID is deleted; upload with --operation new to create a fresh datasource."
         elif "no documents found" in normalized_message:
             hint = " Hint: JSON file contains no records; use --empty-json-policy skip to ignore empty files."
+        elif last_api_error_code == 1000 and "invalid type" in normalized_message:
+            hint = (
+                " Hint: remove --request-types add_datasource_file and use the default add type "
+                f"'{DEFAULT_TYPE_ADD}', or pass --request-types {DEFAULT_TYPE_ADD}."
+            )
         elif last_api_error_code == 1000 and "unexpected field" in normalized_message:
             hint = " Hint: use --payload-modes flat for this endpoint."
         elif last_api_error_code == 3000 and "cannot upload existing file" in normalized_message:
@@ -1593,6 +1804,22 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--processor", choices=["PDF", "JSON", "CSV", "STANDARD"], help="Optional datasource processor")
     parser.add_argument("--processor-params", help="Optional processor params as JSON object")
     parser.add_argument(
+        "--inherit-datasource-processor",
+        dest="inherit_datasource_processor",
+        action="store_true",
+        default=True,
+        help=(
+            "In add mode, inherit missing processor/processorParams from existing datasource via kb-list "
+            "(default: enabled)"
+        ),
+    )
+    parser.add_argument(
+        "--no-inherit-datasource-processor",
+        dest="inherit_datasource_processor",
+        action="store_false",
+        help="Disable datasource processor inheritance in add mode",
+    )
+    parser.add_argument(
         "--json-root-mode",
         choices=["auto", "raw"],
         default="auto",
@@ -1703,8 +1930,11 @@ def main() -> None:
     api_key = resolve_api_key(args.api_key)
     client_app_name = resolve_client_app_name(args.client_app_name)
     processor_params = parse_processor_params(args.processor_params)
+    effective_processor = args.processor
+    effective_processor_params = processor_params
     file_paths = ensure_files_exist(args.files) if args.files else []
     temp_dir_for_upload: Path | None = None
+    kb_list_response: dict[str, Any] | None = None
 
     if args.operation in ("add", "delete") and args.datasource_id is None and not args.auth_check_only:
         raise ValueError(f"--datasource-id is required when --operation {args.operation}")
@@ -1733,6 +1963,14 @@ def main() -> None:
     if args.json_split_min_mb < 0:
         raise ValueError("--json-split-min-mb must be >= 0")
 
+    needs_datasource_processor_inheritance = (
+        not args.auth_check_only
+        and args.operation == "add"
+        and args.datasource_id is not None
+        and args.inherit_datasource_processor
+        and (not effective_processor or effective_processor_params is None)
+    )
+
     if args.auth_check_only:
         datasource_payload: dict[str, Any] = {}
     else:
@@ -1742,8 +1980,8 @@ def main() -> None:
             datasource_name=args.datasource_name,
             datasource_classification=args.datasource_classification,
             datasource_tags=datasource_tags,
-            processor=args.processor,
-            processor_params=processor_params,
+            processor=effective_processor,
+            processor_params=effective_processor_params,
         )
 
     request_part_names = [part.strip() for part in args.request_part_names.split(",") if part.strip()]
@@ -1752,8 +1990,14 @@ def main() -> None:
 
     proxies = resolve_proxies(args.use_legacy_proxy)
 
-    if not args.skip_auth_precheck:
-        run_auth_precheck(
+    if not args.skip_auth_precheck or needs_datasource_processor_inheritance:
+        if args.skip_auth_precheck and needs_datasource_processor_inheritance and args.verbose:
+            print(
+                "skip-auth-precheck is set, but datasource processor inheritance requires kb-list; "
+                "running kb-list once for metadata lookup."
+            )
+
+        kb_list_response = run_auth_precheck(
             endpoint=args.endpoint,
             api_key=api_key,
             client_app_name=client_app_name,
@@ -1767,6 +2011,45 @@ def main() -> None:
     if args.auth_check_only:
         print("Auth precheck completed successfully.")
         return
+
+    if needs_datasource_processor_inheritance:
+        inherited_processor, inherited_params = resolve_datasource_processor_config_from_kb_list(
+            kb_list_response=kb_list_response or {},
+            kb_id=args.kb,
+            datasource_id=args.datasource_id,
+            datasource_name=None,
+        )
+
+        inherited_any = False
+        if not effective_processor and inherited_processor:
+            effective_processor = inherited_processor
+            inherited_any = True
+
+        if effective_processor_params is None and inherited_params is not None:
+            effective_processor_params = inherited_params
+            inherited_any = True
+
+        if inherited_any and isinstance(datasource_payload, dict):
+            if effective_processor:
+                datasource_payload["processor"] = effective_processor
+            if isinstance(effective_processor_params, dict):
+                datasource_payload["processorParams"] = effective_processor_params
+
+            if args.verbose:
+                root_tag = None
+                if isinstance(effective_processor_params, dict):
+                    root_raw = effective_processor_params.get("rootTagPath")
+                    if isinstance(root_raw, str) and root_raw.strip():
+                        root_tag = root_raw.strip()
+                print(
+                    "Inherited datasource processor config from kb-list: "
+                    f"processor={effective_processor}, rootTagPath={root_tag or '<none>'}"
+                )
+        elif args.verbose:
+            print(
+                "No datasource processor config inherited from kb-list; "
+                "continuing with explicit CLI values only."
+            )
 
     if args.operation == "delete":
         try:
@@ -1814,10 +2097,18 @@ def main() -> None:
         print(json.dumps(response_json, ensure_ascii=True, indent=2))
         return
 
+    ensure_add_processor_compatibility(
+        operation=args.operation,
+        datasource_id=args.datasource_id,
+        processor=effective_processor,
+        processor_params=effective_processor_params,
+        file_paths=file_paths,
+    )
+
     prepared_file_paths, temp_dir_for_upload, skipped_empty_files = prepare_file_paths_for_upload(
         file_paths=file_paths,
-        processor=args.processor,
-        processor_params=processor_params,
+        processor=effective_processor,
+        processor_params=effective_processor_params,
         json_root_mode=args.json_root_mode,
         empty_json_policy=args.empty_json_policy,
         json_split_size=args.json_split_size,

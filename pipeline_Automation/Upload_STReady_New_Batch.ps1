@@ -343,16 +343,16 @@ $filesCommonArgs = $commonArgs + @("--operation", $filesOperationResolved)
 $diagnosticCommonArgs = $commonArgs + @("--operation", $diagnosticOperation)
 $resolverCommonArgs = $commonArgs + @("--operation", $resolverOperation)
 
-if (($issuesOperation -eq "new") -and $issuesProcessorParamsArg) {
+if (($issuesOperation -in @("add", "new")) -and $issuesProcessorParamsArg) {
     $issuesCommonArgs += @("--processor-params", $issuesProcessorParamsArg)
 }
-if (($filesOperationResolved -eq "new") -and $filesProcessorParamsArg) {
+if (($filesOperationResolved -in @("add", "new")) -and $filesProcessorParamsArg) {
     $filesCommonArgs += @("--processor-params", $filesProcessorParamsArg)
 }
-if (($diagnosticOperation -eq "new") -and $diagnosticProcessorParamsArg) {
+if (($diagnosticOperation -in @("add", "new")) -and $diagnosticProcessorParamsArg) {
     $diagnosticCommonArgs += @("--processor-params", $diagnosticProcessorParamsArg)
 }
-if (($resolverOperation -eq "new") -and $resolverProcessorParamsArg) {
+if (($resolverOperation -in @("add", "new")) -and $resolverProcessorParamsArg) {
     $resolverCommonArgs += @("--processor-params", $resolverProcessorParamsArg)
 }
 

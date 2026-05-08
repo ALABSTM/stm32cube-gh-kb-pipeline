@@ -1,0 +1,44 @@
+{
+  "created_at_utc": "2026-05-08T08:05:00+00:00",
+  "source_file": "st_ready_files_stm32h7b3i-dk-bsp.json",
+  "source_path": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\files_json\\st_ready_files_stm32h7b3i-dk-bsp.json",
+  "root_tag_path": "files",
+  "source_docs": 28,
+  "source_size_kb": 489.92,
+  "split_rules": {
+    "max_docs_per_part": 8,
+    "max_payload_kb": 220,
+    "min_source_size_kb": 350.0
+  },
+  "parts_count": 4,
+  "parts": [
+    {
+      "part_index": 1,
+      "file_name": "st_ready_files_stm32h7b3i-dk-bsp__part001.json",
+      "docs": 8,
+      "estimated_payload_kb": 49.77,
+      "st_ready_text_chars": 45050
+    },
+    {
+      "part_index": 2,
+      "file_name": "st_ready_files_stm32h7b3i-dk-bsp__part002.json",
+      "docs": 4,
+      "estimated_payload_kb": 191.68,
+      "st_ready_text_chars": 193221
+    },
+    {
+      "part_index": 3,
+      "file_name": "st_ready_files_stm32h7b3i-dk-bsp__part003.json",
+      "docs": 8,
+      "estimated_payload_kb": 125.23,
+      "st_ready_text_chars": 122156
+    },
+    {
+      "part_index": 4,
+      "file_name": "st_ready_files_stm32h7b3i-dk-bsp__part004.json",
+      "docs": 8,
+      "estimated_payload_kb": 118.54,
+      "st_ready_text_chars": 115371
+    }
+  ]
+}
