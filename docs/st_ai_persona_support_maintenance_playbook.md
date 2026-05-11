@@ -934,3 +934,168 @@ none sinon
 Tu peux mettre en slide:
 Score = force des preuves de lien issue↔PR↔commit, avec priorité aux PR explicites, bonus si PR mergée, et validation technique par commits non-merge.
 --------------------------------
+Slide: Diagnostic Confidence dans Diagnostic Cards
+
+Il n existe pas de fonction dediee nommee diagnosis_confidence.
+
+La confiance de la carte vient du champ evidence_strength, avec fallback sur link_confidence.
+
+Assignation dans la carte: export_st_ready_diagnostic_cards.py:500
+
+Logique exacte: evidence_strength = issue_doc.evidence_strength sinon resolver_doc.link_confidence
+
+Source prioritaire cote issue:
+
+Calcul dans preprocessing_model.py:53
+Injection dans le doc issue: preprocessing_model.py:191
+Regles:
+issue invalide => low
+confirmed bug + signaux techniques suffisants => high
+sinon, signaux techniques suffisants => medium
+sinon => low
+Source fallback cote resolver:
+
+Calcul via score_and_confidence dans fetch_issue_pr_commit_links.py:31
+Commits significatifs seulement, merge-like filtres via fetch_issue_pr_commit_links.py:18
+𝑠
+𝑐
+𝑜
+𝑟
+𝑒
+=
+min
+⁡
+(
+1.0
+,
+ 
+0.5
+⋅
+1
+𝑃
+𝑅
+ 
+𝑒
+𝑥
+𝑝
+𝑙
+𝑖
+𝑐
+𝑖
+𝑡
+𝑒
++
+0.3
+⋅
+1
+𝑃
+𝑅
+ 
+𝑚
+𝑒
+𝑟
+𝑔
+𝑒
++
+0.1
+⋅
+1
+𝑃
+𝑅
+ 
+𝑒
+𝑥
+𝑝
+𝑙
+𝑖
+𝑐
+𝑖
+𝑡
+𝑒
+ 
+∧
+ 
+𝑝
+𝑎
+𝑠
+ 
+𝑚
+𝑒
+𝑟
+𝑔
+𝑒
++
+0.2
+⋅
+1
+𝑐
+𝑜
+𝑚
+𝑚
+𝑖
+𝑡
+ 
+𝑠
+𝑖
+𝑔
+𝑛
+𝑖
+𝑓
+𝑖
+𝑐
+𝑎
+𝑡
+𝑖
+𝑓
+)
+score=min(1.0, 0.5⋅1 
+PR explicite
+​
+ +0.3⋅1 
+PR merge
+​
+ +0.1⋅1 
+PR explicite ∧ pas merge
+​
+ +0.2⋅1 
+commit significatif
+​
+ )
+Mapping:
+
+high si 
+𝑠
+𝑐
+𝑜
+𝑟
+𝑒
+≥
+0.9
+score≥0.9
+medium si 
+𝑠
+𝑐
+𝑜
+𝑟
+𝑒
+≥
+0.5
+score≥0.5
+low si 
+𝑠
+𝑐
+𝑜
+𝑟
+𝑒
+>
+0
+score>0
+none sinon
+Impact dans la carte:
+
+confidence reprise dans evidence_refs (issue/PR/commit): export_st_ready_diagnostic_cards.py:365
+si link_confidence est low ou medium, ajout d une contrainte de prudence: export_st_ready_diagnostic_cards.py:311
+Script oral (20-30 sec):
+
+Dans notre pipeline, la confidence de diagnostic n est pas recalculee dans les Diagnostic Cards. On reutilise d abord evidence_strength venant du preprocessing issue, et seulement en fallback link_confidence venant du resolver. Donc la qualite de confiance depend de deux etages amont: robustesse des signaux techniques issue et robustesse du chainage issue PR commit.
+GPT-5.3-Codex • 1x
