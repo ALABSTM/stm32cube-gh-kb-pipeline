@@ -17,10 +17,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -41,10 +46,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -65,10 +75,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -92,10 +107,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -118,10 +138,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"

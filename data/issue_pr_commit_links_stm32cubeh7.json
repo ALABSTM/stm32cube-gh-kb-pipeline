@@ -15,10 +15,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -41,10 +46,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -67,10 +77,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -91,10 +106,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -117,10 +137,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -143,10 +168,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -170,10 +200,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -196,10 +231,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -223,10 +263,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -250,10 +295,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -277,10 +327,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -302,10 +357,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -328,10 +388,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -354,10 +419,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -380,10 +450,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -405,10 +480,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -431,10 +511,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -457,10 +542,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -483,10 +573,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -511,10 +606,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -536,10 +636,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -563,10 +668,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -589,10 +699,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -614,10 +729,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -638,10 +758,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -664,10 +789,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -688,10 +818,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -714,10 +849,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -741,10 +881,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -767,10 +912,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -793,10 +943,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -822,10 +977,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -850,10 +1010,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -877,10 +1042,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -903,10 +1073,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -929,10 +1104,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -954,10 +1134,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1013,12 +1198,17 @@
       "explicit_commit_shas": [
         "4741000fca0eaaf3e7ef439cf42b476504621f6b"
       ],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [
         "4741000fca0eaaf3e7ef439cf42b476504621f6b"
       ],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.8,
     "link_confidence": "medium",
     "resolution_status": "candidate_fix"
@@ -1039,10 +1229,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1065,10 +1260,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1090,10 +1290,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1115,10 +1320,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1140,10 +1350,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1164,10 +1379,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1188,10 +1408,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1214,10 +1439,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1239,10 +1469,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1268,10 +1503,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1293,10 +1533,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1319,10 +1564,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1343,10 +1593,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1369,10 +1624,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1394,10 +1654,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1419,10 +1684,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1445,10 +1715,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1469,10 +1744,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1493,10 +1773,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1518,10 +1803,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1544,10 +1834,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1568,10 +1863,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1596,10 +1896,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1621,10 +1926,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1646,10 +1956,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1673,10 +1988,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1697,10 +2017,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1724,10 +2049,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1751,10 +2081,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1778,10 +2113,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1805,10 +2145,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1832,10 +2177,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1858,10 +2208,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1885,10 +2240,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1912,10 +2272,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1939,10 +2304,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1966,10 +2336,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -1993,10 +2368,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2015,10 +2395,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2039,10 +2424,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2065,10 +2455,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2091,10 +2486,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2117,10 +2517,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2143,10 +2548,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2169,10 +2579,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2191,10 +2606,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2217,10 +2637,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2244,10 +2669,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2270,10 +2700,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2298,10 +2733,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2324,10 +2764,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2351,10 +2796,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2377,10 +2827,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2402,10 +2857,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2427,10 +2887,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2454,10 +2919,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2481,10 +2951,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2506,10 +2981,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2532,10 +3012,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2557,10 +3042,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2582,10 +3072,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2607,10 +3102,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2632,10 +3132,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2659,10 +3164,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2685,10 +3195,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2710,10 +3225,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2734,10 +3254,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2759,10 +3284,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2784,10 +3314,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2808,10 +3343,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2832,10 +3372,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2856,10 +3401,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2881,10 +3431,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2907,10 +3462,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2931,10 +3491,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2956,10 +3521,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -2980,10 +3550,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3004,10 +3579,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3031,10 +3611,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3057,10 +3642,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3083,10 +3673,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3112,10 +3707,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3138,10 +3738,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3163,10 +3768,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3187,10 +3797,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3214,10 +3829,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3240,10 +3860,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3264,10 +3889,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3286,10 +3916,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3312,10 +3947,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3338,10 +3978,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3364,10 +4009,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3390,10 +4040,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3415,10 +4070,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3442,10 +4102,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3468,10 +4133,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3492,10 +4162,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3517,10 +4192,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3544,10 +4224,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3568,10 +4253,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3594,10 +4284,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3620,10 +4315,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3642,10 +4342,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3666,10 +4371,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3691,10 +4401,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3717,10 +4432,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3744,10 +4464,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3769,10 +4494,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3795,10 +4525,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3821,10 +4556,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3847,10 +4587,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3871,10 +4616,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3895,10 +4645,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3921,10 +4676,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3950,10 +4710,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3975,10 +4740,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -3999,10 +4769,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4026,10 +4801,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4048,10 +4828,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4075,10 +4860,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4100,10 +4890,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4129,10 +4924,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4204,6 +5004,7 @@
         "4e79d4987d2bad3c82a33e5c0176da43ac41791d",
         "bee0ed19ee164e9fcea9d3321da299030d970421"
       ],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [
         "44bd546ffc3f5285bfae39e2c332a8c8876f9917",
         "4e79d4987d2bad3c82a33e5c0176da43ac41791d",
@@ -4212,8 +5013,12 @@
       "merge_like_commit_shas": [
         "44bd546ffc3f5285bfae39e2c332a8c8876f9917"
       ],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.8,
     "link_confidence": "medium",
     "resolution_status": "candidate_fix"
@@ -4236,10 +5041,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4260,10 +5070,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4286,10 +5101,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4313,10 +5133,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4339,10 +5164,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4365,10 +5195,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4392,10 +5227,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4416,10 +5256,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4441,10 +5286,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4468,10 +5318,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4495,10 +5350,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4521,10 +5381,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4547,10 +5412,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4572,10 +5442,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4597,10 +5472,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4623,10 +5503,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4648,10 +5533,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4673,10 +5563,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4698,10 +5593,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4725,10 +5625,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4749,10 +5654,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4775,10 +5685,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4797,10 +5712,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4822,10 +5742,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4846,10 +5771,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4872,10 +5802,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4897,10 +5832,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4922,10 +5862,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4948,10 +5893,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4972,10 +5922,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -4998,10 +5953,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5024,10 +5984,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5050,10 +6015,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5075,10 +6045,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5101,10 +6076,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5126,10 +6106,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5151,10 +6136,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5211,12 +6201,17 @@
       "explicit_commit_shas": [
         "dc696e42d1f20ea87f41022993bc75904c349224"
       ],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [
         "dc696e42d1f20ea87f41022993bc75904c349224"
       ],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.8,
     "link_confidence": "medium",
     "resolution_status": "candidate_fix"
@@ -5238,10 +6233,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5263,10 +6263,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5289,10 +6294,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5316,10 +6326,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5338,10 +6353,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5365,10 +6385,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5391,10 +6416,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5416,10 +6446,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5442,10 +6477,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5468,10 +6508,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5493,10 +6538,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5515,10 +6565,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5537,10 +6592,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5563,10 +6623,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5588,10 +6653,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5615,10 +6685,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5641,10 +6716,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5668,10 +6748,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5693,10 +6778,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5718,10 +6808,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5744,10 +6839,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5769,10 +6869,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5794,10 +6899,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5820,10 +6930,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5847,10 +6962,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5872,10 +6992,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5898,10 +7023,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5926,10 +7056,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5951,10 +7086,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -5979,10 +7119,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6006,10 +7151,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6032,10 +7182,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6056,10 +7211,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6083,10 +7243,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6109,10 +7274,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6134,10 +7304,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6156,10 +7331,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6183,10 +7363,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6207,10 +7392,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6233,10 +7423,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6259,10 +7454,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6284,10 +7484,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6311,10 +7516,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6337,10 +7547,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6364,10 +7579,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6391,10 +7611,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6418,10 +7643,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6445,10 +7675,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6472,10 +7707,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6498,10 +7738,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6525,10 +7770,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6552,10 +7802,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6579,10 +7834,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6604,10 +7864,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6631,10 +7896,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6657,10 +7927,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6685,10 +7960,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6713,10 +7993,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6740,10 +8025,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6766,10 +8056,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6793,10 +8088,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6819,10 +8119,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6846,10 +8151,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6873,10 +8183,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6900,10 +8215,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6926,10 +8246,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6952,10 +8277,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -6980,10 +8310,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -7007,10 +8342,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -7034,10 +8374,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -7061,10 +8406,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -7088,10 +8438,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -7243,6 +8598,7 @@
         "f0bd1afcc095c2ba5a3a668bfb9c0fba2f89660e",
         "fb620de4c77838a7a4ff319a8211625e953ea8ac"
       ],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [
         "34ec350d95e23cc7556238a50d0488f580ec4b98",
         "392b90fdedf85fbbca8490d2c260220291235c81",
@@ -7253,8 +8609,12 @@
         "fb620de4c77838a7a4ff319a8211625e953ea8ac"
       ],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.8,
     "link_confidence": "medium",
     "resolution_status": "candidate_fix"
@@ -7277,10 +8637,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -7305,10 +8670,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -7330,10 +8700,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -7356,10 +8731,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -7383,10 +8763,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -7409,10 +8794,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -7437,10 +8827,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -7465,10 +8860,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -7492,10 +8892,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -7518,10 +8923,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -7543,10 +8953,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -7570,10 +8985,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -7597,10 +9017,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -7623,10 +9048,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -7650,10 +9080,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -7677,10 +9112,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -7704,10 +9144,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -7730,10 +9175,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -7756,10 +9206,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -7782,10 +9237,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -7809,10 +9269,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -7836,10 +9301,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -7862,10 +9332,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"
@@ -7889,10 +9364,15 @@
     "evidence": {
       "explicit_pr_numbers": [],
       "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
       "commits_via_linked_prs": [],
       "merge_like_commit_shas": [],
-      "merged_pr_count": 0
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
     },
+    "merged_pr_with_file_evidence": false,
     "link_score": 0.0,
     "link_confidence": "none",
     "resolution_status": "unlinked"

@@ -165,7 +165,63 @@ def build_pattern_tags(*texts: str) -> list[str]:
     return out[:8]
 
 
-def build_query_aliases(issue_doc: dict[str, Any] | None, pattern_tags: list[str], api_tags: list[str]) -> list[str]:
+def extract_version_tags(*texts: str) -> list[str]:
+    joined = " ".join([text or "" for text in texts])
+    tags: list[str] = []
+
+    for repo_name, version in re.findall(r"\b(stm32cube[a-z0-9_-]*)\s*v(?:ersion)?\s*(\d+\.\d+\.\d+)\b", joined, re.IGNORECASE):
+        tags.append(f"{repo_name.upper()} v{version}")
+    for tool_name, version in re.findall(r"\b(cubemx|cubeide)\s*v?(\d+\.\d+(?:\.\d+)?)\b", joined, re.IGNORECASE):
+        tags.append(f"{tool_name.upper()} v{version}")
+    for stack_name, version in re.findall(r"\b(hal|ll|cmsis)\s*v?(\d+\.\d+(?:\.\d+)?)\b", joined, re.IGNORECASE):
+        tags.append(f"{stack_name.upper()} v{version}")
+
+    return dedupe(tags, limit=8)
+
+
+def build_query_alias_fallbacks(
+    issue_doc: dict[str, Any] | None,
+    pattern_tags: list[str],
+    api_tags: list[str],
+    version_tags: list[str],
+    title: str,
+) -> list[str]:
+    aliases: list[str] = []
+    component = normalize_whitespace((issue_doc or {}).get("component") or "")
+    board = normalize_whitespace((issue_doc or {}).get("board") or "")
+
+    if component:
+        aliases.append(f"{component} issue")
+    if component and "compile_error" in pattern_tags:
+        aliases.append(f"{component} compile error")
+    if component and "timeout" in pattern_tags:
+        aliases.append(f"{component} timeout")
+    if component and "dma_path" in pattern_tags:
+        aliases.append(f"{component} DMA issue")
+    if board and component:
+        aliases.append(f"{board} {component}")
+
+    for api in api_tags[:4]:
+        aliases.append(api)
+        aliases.append(f"{api} issue")
+
+    for version_tag in version_tags[:3]:
+        aliases.append(f"version regression {version_tag}")
+
+    title_alias = first_sentence(title, max_chars=120)
+    if title_alias:
+        aliases.append(title_alias)
+
+    return dedupe(aliases, limit=12)
+
+
+def build_query_aliases(
+    issue_doc: dict[str, Any] | None,
+    pattern_tags: list[str],
+    api_tags: list[str],
+    version_tags: list[str],
+    title: str,
+) -> list[str]:
     aliases: list[str] = []
     issue_text = (issue_doc or {}).get("st_ready_text") or ""
     body = extract_issue_body(issue_text)
@@ -202,7 +258,20 @@ def build_query_aliases(issue_doc: dict[str, Any] | None, pattern_tags: list[str
     for size in size_matches[:3]:
         aliases.append(f"{size} bytes")
 
-    return dedupe(aliases, limit=12)
+    aliases.extend(
+        build_query_alias_fallbacks(
+            issue_doc=issue_doc,
+            pattern_tags=pattern_tags,
+            api_tags=api_tags,
+            version_tags=version_tags,
+            title=title,
+        )
+    )
+
+    if version_tags and "version_regression" in pattern_tags:
+        aliases.extend([f"upgrade issue {tag}" for tag in version_tags[:2]])
+
+    return dedupe(aliases, limit=16)
 
 
 def dedupe(items: list[str], limit: int = 12) -> list[str]:
@@ -254,6 +323,34 @@ def build_debug_checks(
     return dedupe(checks, limit=5)
 
 
+def build_clarification_questions(
+    issue_doc: dict[str, Any] | None,
+    pattern_tags: list[str],
+    api_tags: list[str],
+    version_tags: list[str],
+) -> list[str]:
+    questions: list[str] = []
+    component = normalize_whitespace((issue_doc or {}).get("component") or "")
+    board = normalize_whitespace((issue_doc or {}).get("board") or "")
+    series = normalize_whitespace((issue_doc or {}).get("mcu_series") or "")
+
+    questions.append("Which exact MCU part number and board are you using?")
+    if series:
+        questions.append(f"Can you confirm whether your target is {series} and not a close variant?")
+    if version_tags:
+        questions.append("Which exact Cube/CubeMX/CubeIDE package versions are installed in your project?")
+    if component:
+        questions.append(f"Can you share the {component} configuration and initialization sequence?")
+    if "dma_path" in pattern_tags or "cache_dma" in pattern_tags:
+        questions.append("Are DMA buffers cache-coherent and are clean/invalidate operations applied correctly?")
+    if "interrupt_path" in pattern_tags or "callback_not_reached" in pattern_tags:
+        questions.append("Do interrupts/callbacks trigger as expected with the current NVIC priorities?")
+    if api_tags:
+        questions.append(f"Can you provide a minimal reproducer around {api_tags[0]} with expected vs observed behavior?")
+
+    return dedupe(questions, limit=6)
+
+
 def build_workarounds(
     issue_fields: dict[str, str],
     resolver_fields: dict[str, str],
@@ -291,6 +388,8 @@ def build_confirmed_facts(
         )
     if resolver_doc and resolver_doc.get("linked_commit_shas"):
         facts.append("A linked commit or pull request exists for this issue path")
+    if resolver_doc and resolver_doc.get("merged_pr_with_file_evidence"):
+        facts.append("A merged PR with changed-file evidence exists even if commit history is merge-heavy")
     root_cause = clean_signal_sentence(issue_fields.get("Root cause"), max_chars=180)
     if root_cause:
         facts.append(root_cause)
@@ -333,6 +432,8 @@ def build_plausible_diagnosis(
         out.append("A mainline fix likely exists, so local package drift is a plausible cause")
     elif resolver_doc and resolver_doc.get("resolution_status") == "candidate_fix":
         out.append("A candidate fix exists, suggesting the problem may already be understood upstream")
+    elif resolver_doc and resolver_doc.get("resolution_status") == "commit_only_candidate":
+        out.append("Commit-level evidence suggests an upstream fix candidate, but PR traceability is incomplete")
     if "version_regression" in pattern_tags:
         out.append("Behavior may depend on the exact Cube or HAL version in use")
     if "blocking_behavior" in pattern_tags or "state_stuck_busy" in pattern_tags:
@@ -352,6 +453,11 @@ def build_likely_causes(issue_fields: dict[str, str], resolver_fields: dict[str,
     if resolver_signal:
         causes.append(resolver_signal)
     return ensure_list(causes, "Root cause is not explicit; use the issue thread and linked changes for triage")
+
+
+def build_hypotheses(likely_causes: list[str], plausible_diagnosis: list[str]) -> list[str]:
+    merged = dedupe(plausible_diagnosis + likely_causes, limit=8)
+    return ensure_list(merged, "No strong hypothesis yet; prioritize targeted checks and reproduction")
 
 
 def build_evidence_refs(issue_doc: dict[str, Any] | None, resolver_doc: dict[str, Any] | None) -> list[dict[str, Any]]:
@@ -378,6 +484,8 @@ def build_keywords(
     resolver_doc: dict[str, Any] | None,
     issue_fields: dict[str, str],
     api_tags: list[str],
+    pattern_tags: list[str],
+    version_tags: list[str],
 ) -> list[str]:
     keywords: list[str] = []
     if issue_doc:
@@ -393,17 +501,29 @@ def build_keywords(
         status = normalize_whitespace(resolver_doc.get("resolution_status") or "")
         if status:
             keywords.append(status)
+    keywords.extend(pattern_tags)
+    keywords.extend(version_tags)
     keywords.extend(api_tags)
     return dedupe(keywords, limit=14)
 
 
 def build_st_ready_text(card: dict[str, Any]) -> str:
     evidence_links = [ref.get("url") for ref in card.get("evidence_refs") or [] if ref.get("url")]
+    response_blocks = card.get("response_blocks") or {}
+    facts_block = response_blocks.get("facts_confirmed") or card.get("confirmed_facts") or []
+    hypotheses_block = response_blocks.get("hypotheses") or card.get("plausible_diagnosis") or []
+    checks_block = response_blocks.get("checks") or card.get("debug_checks") or []
+    clarification_questions = card.get("clarification_questions") or []
     lines = [
         f"Problem: {card.get('title')}",
         f"Context: repo={card.get('repo')}, issue_number={card.get('issue_number')}, target_series={', '.join(card.get('target_series') or []) or 'unknown'}, source_types={', '.join(card.get('source_types') or [])}",
         f"Symptoms: {card.get('symptom_summary')}",
         f"Query aliases: {' | '.join(card.get('query_aliases') or [])}",
+        f"Response format: facts_confirmed -> hypotheses -> checks",
+        f"Facts confirmed: {' | '.join(facts_block)}",
+        f"Hypotheses: {' | '.join(hypotheses_block)}",
+        f"Checks: {' | '.join(checks_block)}",
+        f"Clarification questions (required): {' | '.join(clarification_questions)}",
         f"Likely causes: {' | '.join(card.get('likely_causes') or [])}",
         f"Confirmed facts: {' | '.join(card.get('confirmed_facts') or [])}",
         f"Plausible diagnosis: {' | '.join(card.get('plausible_diagnosis') or [])}",
@@ -451,7 +571,15 @@ def build_diagnostic_card(
         (issue_doc or {}).get("st_ready_text") or "",
         (resolver_doc or {}).get("resolver_card_text") or "",
     )
-    query_aliases = build_query_aliases(issue_doc, pattern_tags, api_tags)
+    version_tags = extract_version_tags(
+        title,
+        issue_body,
+        issue_fields.get("Context", ""),
+        issue_fields.get("Fix", ""),
+        (issue_doc or {}).get("st_ready_text") or "",
+        (resolver_doc or {}).get("resolver_card_text") or "",
+    )
+    query_aliases = build_query_aliases(issue_doc, pattern_tags, api_tags, version_tags, title)
     symptom_summary = clean_signal_sentence(issue_fields.get("Fix"), max_chars=220)
     if not symptom_summary:
         symptom_summary = clean_signal_sentence(title, max_chars=220) or title
@@ -462,11 +590,14 @@ def build_diagnostic_card(
     confirmed_facts = build_confirmed_facts(issue_doc, resolver_doc, issue_fields)
     plausible_diagnosis = build_plausible_diagnosis(issue_doc, resolver_doc, pattern_tags)
     debug_checks = build_debug_checks(issue_doc, resolver_doc, pattern_tags)
+    clarification_questions = build_clarification_questions(issue_doc, pattern_tags, api_tags, version_tags)
+    hypotheses = build_hypotheses(likely_causes, plausible_diagnosis)
     possible_workarounds = build_workarounds(issue_fields, resolver_fields, pattern_tags)
     constraints = build_constraints(issue_fields, issue_doc, resolver_doc)
     evidence_refs = build_evidence_refs(issue_doc, resolver_doc)
-    keywords = build_keywords(issue_doc, resolver_doc, issue_fields, api_tags)
+    keywords = build_keywords(issue_doc, resolver_doc, issue_fields, api_tags, pattern_tags, version_tags)
     keywords = dedupe(query_aliases + keywords, limit=24)
+    query_anchor_tags = dedupe(query_aliases + api_tags + pattern_tags + version_tags, limit=24)
     component = normalize_whitespace((issue_doc or {}).get("component") or "")
     peripheral_tags = dedupe([component] if component else [], limit=4)
     source_types = [
@@ -503,12 +634,22 @@ def build_diagnostic_card(
         "peripheral_tags": peripheral_tags,
         "technical_pattern_tags": pattern_tags,
         "api_family_tags": api_tags,
+        "version_tags": version_tags,
+        "query_anchor_tags": query_anchor_tags,
         "query_aliases": query_aliases,
+        "clarification_questions_required": True,
+        "clarification_questions": clarification_questions,
         "symptom_summary": symptom_summary,
         "affected_context": affected_context,
         "likely_causes": likely_causes,
         "confirmed_facts": confirmed_facts,
         "plausible_diagnosis": plausible_diagnosis,
+        "response_blocks": {
+            "facts_confirmed": confirmed_facts,
+            "hypotheses": hypotheses,
+            "checks": debug_checks,
+        },
+        "response_format": "facts_hypotheses_checks_with_clarifications",
         "debug_checks": debug_checks,
         "possible_workarounds": possible_workarounds,
         "constraints_or_limits": constraints,

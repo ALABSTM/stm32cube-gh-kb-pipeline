@@ -1,9 +1,19 @@
 import json
+import re
 from datetime import datetime, timezone
 from collections import defaultdict
 from typing import Any
 
 from shared.utils.paths import DATA_DIR, get_config_path
+
+
+COMMIT_ISSUE_SIGNAL_RE = re.compile(
+    r"\b(fix(?:e[sd])?|close[sd]?|resolve[sd]?|reference[sd]?|refs?|issue[s]?)\b",
+    re.IGNORECASE,
+)
+COMMIT_ISSUE_NUMBER_RE = re.compile(r"#(\d+)")
+COMMIT_ISSUE_WORD_NUMBER_RE = re.compile(r"\bissue[s]?\s*#?(\d+)\b", re.IGNORECASE)
+COMMIT_ISSUE_URL_RE = re.compile(r"/issues/(\d+)\b", re.IGNORECASE)
 
 
 def load_config() -> dict:
@@ -28,10 +38,39 @@ def is_merge_like_commit(commit: dict[str, Any]) -> bool:
     return message.startswith("merge branch") or message.startswith("merge pull request")
 
 
+def extract_issue_numbers_from_commit_message(message: str | None) -> list[int]:
+    """Extract issue references from commit text for commit-only linkage fallback."""
+    text = (message or "").strip()
+    if not text:
+        return []
+
+    has_signal = bool(COMMIT_ISSUE_SIGNAL_RE.search(text))
+    has_issue_context = bool(COMMIT_ISSUE_WORD_NUMBER_RE.search(text) or COMMIT_ISSUE_URL_RE.search(text))
+
+    out: list[int] = []
+    seen: set[int] = set()
+
+    # Explicit "issue <id>" or issue URLs are strong anchors even without fix/close verbs.
+    for regex in (COMMIT_ISSUE_WORD_NUMBER_RE, COMMIT_ISSUE_URL_RE, COMMIT_ISSUE_NUMBER_RE):
+        for match in regex.findall(text):
+            value = int(match)
+            if value <= 0 or value in seen:
+                continue
+            seen.add(value)
+            out.append(value)
+
+    # Guardrail: bare "#123" without resolver verbs or issue context is often PR noise.
+    if out and not has_signal and not has_issue_context:
+        return []
+
+    return out
+
+
 def score_and_confidence(
     explicit_pr_count: int,
     merged_pr_count: int,
     meaningful_commit_count: int,
+    merged_pr_with_file_evidence: bool,
 ) -> tuple[float, str]:
     score = 0.0
     if explicit_pr_count > 0:
@@ -42,6 +81,15 @@ def score_and_confidence(
         score += 0.1
     if meaningful_commit_count > 0:
         score += 0.2
+
+    # Commit-only linkage is weaker than PR linkage but better than unlinked.
+    if explicit_pr_count == 0 and meaningful_commit_count > 0:
+        score += 0.15
+
+    # Prevent merge-heavy PR histories from being under-scored when files changed.
+    if merged_pr_count > 0 and merged_pr_with_file_evidence and meaningful_commit_count == 0:
+        score += 0.08
+
     score = min(score, 1.0)
 
     if score >= 0.9:
@@ -59,11 +107,14 @@ def derive_resolution_status(
     explicit_pr_count: int,
     merged_pr_count: int,
     meaningful_commit_count: int,
+    merged_pr_with_file_evidence: bool,
 ) -> str:
-    if merged_pr_count > 0 and meaningful_commit_count > 0:
+    if merged_pr_count > 0 and (meaningful_commit_count > 0 or merged_pr_with_file_evidence):
         return "merged_fix"
     if explicit_pr_count > 0 and meaningful_commit_count > 0:
         return "candidate_fix"
+    if meaningful_commit_count > 0:
+        return "commit_only_candidate"
     if explicit_pr_count > 0:
         return "reference_only"
     return "unlinked"
@@ -87,13 +138,21 @@ def build_links_for_repo(
             if isinstance(issue_number, int):
                 pr_by_issue[issue_number].append(pull_request)
 
-    commit_by_issue: dict[int, list[dict[str, Any]]] = defaultdict(list)
+    commit_by_issue_explicit: dict[int, list[dict[str, Any]]] = defaultdict(list)
+    commit_by_issue_message: dict[int, list[dict[str, Any]]] = defaultdict(list)
     commits_by_pr: dict[int, list[dict[str, Any]]] = defaultdict(list)
 
     for commit in commits:
-        commit_issue_numbers = [num for num in (commit.get("linked_issue_numbers") or []) if isinstance(num, int)]
-        for issue_number in commit_issue_numbers:
-            commit_by_issue[issue_number].append(commit)
+        explicit_issue_numbers = [num for num in (commit.get("linked_issue_numbers") or []) if isinstance(num, int)]
+        inferred_issue_numbers = extract_issue_numbers_from_commit_message(commit.get("message"))
+
+        explicit_set = set(explicit_issue_numbers)
+        for issue_number in explicit_issue_numbers:
+            commit_by_issue_explicit[issue_number].append(commit)
+        for issue_number in inferred_issue_numbers:
+            if issue_number in explicit_set:
+                continue
+            commit_by_issue_message[issue_number].append(commit)
 
         for pr_number in commit.get("pr_numbers") or []:
             if isinstance(pr_number, int):
@@ -110,9 +169,13 @@ def build_links_for_repo(
             [pr["pr_number"] for pr in explicit_prs if isinstance(pr.get("pr_number"), int)]
         )
 
-        explicit_commits = commit_by_issue.get(issue_number, [])
+        explicit_commits = commit_by_issue_explicit.get(issue_number, [])
+        message_inferred_commits = commit_by_issue_message.get(issue_number, [])
         explicit_commit_shas = sorted(
             [c["sha"] for c in explicit_commits if isinstance(c.get("sha"), str)]
+        )
+        message_inferred_commit_shas = sorted(
+            [c["sha"] for c in message_inferred_commits if isinstance(c.get("sha"), str)]
         )
 
         pr_linked_commit_shas: set[str] = set()
@@ -122,7 +185,7 @@ def build_links_for_repo(
                 if isinstance(sha, str):
                     pr_linked_commit_shas.add(sha)
 
-        all_commit_shas = sorted(set(explicit_commit_shas) | pr_linked_commit_shas)
+        all_commit_shas = sorted(set(explicit_commit_shas) | set(message_inferred_commit_shas) | pr_linked_commit_shas)
         linked_prs = [pr_by_number[pn] for pn in explicit_pr_numbers if pn in pr_by_number]
         all_linked_commits: list[dict[str, Any]] = []
         commit_by_sha = {c.get("sha"): c for c in commits if isinstance(c.get("sha"), str)}
@@ -141,17 +204,29 @@ def build_links_for_repo(
             [c["sha"] for c in merge_like_commits if isinstance(c.get("sha"), str)]
         )
 
-        merged_pr_count = len([pr for pr in linked_prs if pr.get("merged")])
+        merged_prs = [pr for pr in linked_prs if pr.get("merged")]
+        merged_pr_count = len(merged_prs)
+        merged_pr_with_file_evidence_pr_numbers = sorted(
+            [
+                int(pr.get("pr_number"))
+                for pr in merged_prs
+                if isinstance(pr.get("pr_number"), int) and int(pr.get("changed_files_count") or 0) > 0
+            ]
+        )
+        merged_pr_with_file_evidence = bool(merged_pr_with_file_evidence_pr_numbers)
+        merged_pr_changed_files_total = sum(int(pr.get("changed_files_count") or 0) for pr in merged_prs)
 
         score, confidence = score_and_confidence(
             explicit_pr_count=len(explicit_pr_numbers),
             merged_pr_count=merged_pr_count,
             meaningful_commit_count=len(linked_commit_shas),
+            merged_pr_with_file_evidence=merged_pr_with_file_evidence,
         )
         resolution_status = derive_resolution_status(
             explicit_pr_count=len(explicit_pr_numbers),
             merged_pr_count=merged_pr_count,
             meaningful_commit_count=len(linked_commit_shas),
+            merged_pr_with_file_evidence=merged_pr_with_file_evidence,
         )
 
         links.append(
@@ -190,10 +265,15 @@ def build_links_for_repo(
                 "evidence": {
                     "explicit_pr_numbers": explicit_pr_numbers,
                     "explicit_commit_shas": explicit_commit_shas,
+                    "message_inferred_commit_shas": message_inferred_commit_shas,
                     "commits_via_linked_prs": sorted(pr_linked_commit_shas),
                     "merge_like_commit_shas": merge_like_commit_shas,
                     "merged_pr_count": merged_pr_count,
+                    "merged_pr_with_file_evidence": merged_pr_with_file_evidence,
+                    "merged_pr_with_file_evidence_pr_numbers": merged_pr_with_file_evidence_pr_numbers,
+                    "merged_pr_changed_files_total": merged_pr_changed_files_total,
                 },
+                "merged_pr_with_file_evidence": merged_pr_with_file_evidence,
                 "link_score": round(score, 2),
                 "link_confidence": confidence,
                 "resolution_status": resolution_status,
@@ -241,8 +321,14 @@ def main() -> None:
             "resolution_status_counts": {
                 "merged_fix": len([x for x in linked_only if x.get("resolution_status") == "merged_fix"]),
                 "candidate_fix": len([x for x in linked_only if x.get("resolution_status") == "candidate_fix"]),
+                "commit_only_candidate": len(
+                    [x for x in linked_only if x.get("resolution_status") == "commit_only_candidate"]
+                ),
                 "reference_only": len([x for x in linked_only if x.get("resolution_status") == "reference_only"]),
             },
+            "merged_pr_with_file_evidence_cases": len(
+                [x for x in linked_only if x.get("merged_pr_with_file_evidence")]
+            ),
             "top_linked_issue_numbers": [
                 item.get("issue_number")
                 for item in sorted(

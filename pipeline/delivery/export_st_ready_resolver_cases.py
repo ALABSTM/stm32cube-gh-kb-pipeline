@@ -175,6 +175,7 @@ def build_resolver_card_text(case: dict[str, Any]) -> str:
     resolution_hint = {
         "merged_fix": "Fix likely integrated in mainline; prefer this as primary recommendation.",
         "candidate_fix": "Potential fix identified, but integration status is uncertain.",
+        "commit_only_candidate": "Commit-level evidence exists, but PR linkage is incomplete.",
         "reference_only": "Reference link exists without enough technical fix evidence.",
         "unlinked": "No actionable fix linkage detected.",
     }.get(status, "Potential fix linkage requires validation.")
@@ -190,6 +191,8 @@ def build_resolver_card_text(case: dict[str, Any]) -> str:
         lines.append(f"Candidate PRs: {' | '.join(pr_titles)}")
     if commit_hints:
         lines.append(f"Commit evidence: {' | '.join(commit_hints)}")
+    if case.get("merged_pr_with_file_evidence"):
+        lines.append("File evidence: merged PR modifies files even when commit log is merge-heavy")
 
     lines.append("Constraints: Validate against exact MCU series, board, firmware package version, and local project config before applying.")
     return "\n".join(lines).strip()
@@ -287,6 +290,14 @@ def to_st_ready_case(
         "linked_pr_urls": pr_urls,
         "linked_commit_urls": commit_urls,
         "resolution_status": case.get("resolution_status"),
+        "merged_pr_with_file_evidence": bool(
+            case.get("merged_pr_with_file_evidence")
+            or (case.get("evidence") or {}).get("merged_pr_with_file_evidence")
+        ),
+        "merged_pr_with_file_evidence_pr_numbers": (
+            (case.get("evidence") or {}).get("merged_pr_with_file_evidence_pr_numbers") or []
+        ),
+        "merged_pr_changed_files_total": int((case.get("evidence") or {}).get("merged_pr_changed_files_total") or 0),
         "link_confidence": case.get("link_confidence"),
         "link_score": case.get("link_score"),
         "delivery_template": "st_v1_resolver_case",
@@ -360,8 +371,14 @@ def export_repo_json(repo: str, include_reference_only: bool) -> tuple[int, int,
         "status_breakdown": {
             "merged_fix": len([c for c in selected if c.get("resolution_status") == "merged_fix"]),
             "candidate_fix": len([c for c in selected if c.get("resolution_status") == "candidate_fix"]),
+            "commit_only_candidate": len(
+                [c for c in selected if c.get("resolution_status") == "commit_only_candidate"]
+            ),
             "reference_only": len([c for c in selected if c.get("resolution_status") == "reference_only"]),
         },
+        "merged_pr_with_file_evidence_cases": len(
+            [c for c in selected if c.get("merged_pr_with_file_evidence")]
+        ),
     }
     (out_root / f"summary_resolver_cases_{repo.lower()}.json").write_text(
         json.dumps(summary, ensure_ascii=False, indent=2),

@@ -65,7 +65,7 @@
       },
       "resolution_status": {
         "type": "string",
-        "enum": ["merged_fix", "candidate_fix", "reference_only", "unlinked"]
+        "enum": ["merged_fix", "candidate_fix", "commit_only_candidate", "reference_only", "unlinked"]
       }
     },
     "additionalProperties": true

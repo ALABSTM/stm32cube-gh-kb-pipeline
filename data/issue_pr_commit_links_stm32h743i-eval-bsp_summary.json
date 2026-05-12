@@ -1,6 +1,6 @@
 {
   "repo": "stm32h743i-eval-bsp",
-  "generated_at": "2026-04-27T09:01:00.797431+00:00",
+  "generated_at": "2026-05-12T16:04:27.620939+00:00",
   "issues_total": 5,
   "linked_issues": 0,
   "unlinked_issues": 5,
@@ -8,7 +8,9 @@
   "resolution_status_counts": {
     "merged_fix": 0,
     "candidate_fix": 0,
+    "commit_only_candidate": 0,
     "reference_only": 0
   },
+  "merged_pr_with_file_evidence_cases": 0,
   "top_linked_issue_numbers": []
 }

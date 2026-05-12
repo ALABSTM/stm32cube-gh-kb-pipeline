@@ -10,6 +10,8 @@
   "status_breakdown": {
     "merged_fix": 0,
     "candidate_fix": 4,
+    "commit_only_candidate": 0,
     "reference_only": 0
-  }
+  },
+  "merged_pr_with_file_evidence_cases": 0
 }

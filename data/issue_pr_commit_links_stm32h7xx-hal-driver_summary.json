@@ -1,6 +1,6 @@
 {
   "repo": "stm32h7xx-hal-driver",
-  "generated_at": "2026-04-27T09:01:00.693266+00:00",
+  "generated_at": "2026-05-12T16:04:27.431351+00:00",
   "issues_total": 96,
   "linked_issues": 3,
   "unlinked_issues": 93,
@@ -8,8 +8,10 @@
   "resolution_status_counts": {
     "merged_fix": 0,
     "candidate_fix": 3,
+    "commit_only_candidate": 0,
     "reference_only": 0
   },
+  "merged_pr_with_file_evidence_cases": 0,
   "top_linked_issue_numbers": [
     3,
     47,

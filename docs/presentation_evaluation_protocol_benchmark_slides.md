@@ -1,5 +1,85 @@
 # Evaluation Protocol & Benchmark Results - Slides Ready
 
+## Slide 0 - End-to-End Project Overview (Opening)
+
+Title:
+- Vue d'ensemble du projet: de la preprocessing a l'evaluation dans l'outil ST
+
+Context to say at the beginning:
+- Nous construisons une base de connaissance STM32Cube pour le support technique.
+- La knowledge base est encore en cours de construction et d'amelioration.
+
+End-to-end flow (what this work covers):
+1) Preprocessing pipeline:
+- ingestion -> cleaning -> enrichment -> similarity -> chunking
+2) ST-ready delivery:
+- export issues/files/resolver cases/diagnostic cards au format ST-ready JSON
+3) Upload and live behavior:
+- upload dans l'outil ST, execution du persona, observation des reponses et erreurs runtime
+4) Evaluation:
+- benchmark offline (30Q scores, comparaison A/B par blocs)
+- benchmark online/live (run 50Q + ST Quality Index)
+
+Current reality to make explicit:
+- Des cas hors domaine ST ou a contexte faible apparaissent encore en live.
+- C'est normal a ce stade du POC et suivi via des boucles de correction.
+
+Roadmap message:
+- L'objectif n'est pas seulement de monter les scores, mais d'obtenir un comportement stable, explicable et industrialisable.
+
+Speaker note:
+- "La presentation suit le meme ordre que le pipeline reel: preprocesser, packager, uploader, evaluer, puis corriger en iteration."
+
+---
+
+## Slide 0bis - Master Overview Blocks (Template to Keep Updated)
+
+Use this as the stable opening map, then deep-dive each block in next slides.
+
+Block 1 - PC hors domaine ST (R&D Lab)
+- Role: preprocessing experiments, parent-child chunking tests, retrieval benchmark.
+- Outputs: preprocessing recommendations, chunk stats, retrieval metrics.
+- Status field: [NOT STARTED | IN PROGRESS | DONE]
+- Last update: [YYYY-MM-DD]
+
+Block 2 - STM32Cube Preprocessing Pipeline
+- Flow: ingestion -> cleaning -> enrichment -> similarity -> chunking.
+- Output contract: docs/chunks ready for ST-ready export.
+- Status field: [NOT STARTED | IN PROGRESS | DONE]
+- Last update: [YYYY-MM-DD]
+
+Block 3 - PC ST (ST-ready Packaging)
+- Role: export ST-ready issues/files/resolver cases/diagnostic cards.
+- Gate: schema + stats + smoke checks before upload.
+- Status field: [NOT STARTED | IN PROGRESS | DONE]
+- Last update: [YYYY-MM-DD]
+
+Block 4 - ST Tool
+- Upload + RAG indexing in background.
+- Live answers during persona run.
+- Possible live outcomes:
+  - Useful answer
+  - Generic answer
+  - Runtime exception
+  - Out-of-scope ST case (expected abstention)
+- Status field: [NOT STARTED | IN PROGRESS | DONE]
+- Last update: [YYYY-MM-DD]
+
+Block 5 - Evaluation
+- Offline evaluation: 30Q A/B by blocks (issues/files/mixed).
+- Online evaluation: 50Q live run + Quality Index.
+- Status field: [NOT STARTED | IN PROGRESS | DONE]
+- Last update: [YYYY-MM-DD]
+
+Block 6 - Continuous Improvement Loop
+- Evaluation findings -> pipeline fixes -> new export -> new upload -> rerun.
+- Decision: promote only if regression risk is controlled.
+- Status field: [NOT STARTED | IN PROGRESS | DONE]
+- Last update: [YYYY-MM-DD]
+
+Narration line (opening):
+- "This map is our project tracking view: each block has owner, status, and last update; we review it first, then detail each part."
+
 ## Slide 1 - Why Evaluation in this PFE
 
 Title:
@@ -164,6 +244,32 @@ Run quality snapshot:
 
 Interpretation:
 - Main bottleneck is runtime robustness (exceptions), not only retrieval precision.
+
+---
+
+## Slide 8bis - Offline vs Online Quality Index Difference
+
+ST Quality Index online behavior:
+- Upload spreadsheet with Question + Expected Answer + Tag
+- Platform returns per-question score (/100)
+- Includes details section and reason text (example: QUESTION #1 DETAILS -> 70)
+
+Offline benchmark behavior in repository:
+- Manual rubric scoring (/7 or /9) for controlled protocols
+- Useful for deterministic A/B analysis by blocks
+
+How we make scores comparable:
+- Normalize offline /7 into /100
+- offline_norm = (offline_total_0_to_7 / 7) * 100
+- Compare with online score:
+  - delta = online_score - offline_norm
+
+Automation used:
+- pipeline/evaluation/compare_offline_online_quality.py
+
+Output:
+- A/B summary by block (issues, files, mixed)
+- global delta offline vs online
 
 ---
 

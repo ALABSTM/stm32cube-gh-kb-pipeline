@@ -656,6 +656,54 @@ Current corrective plan target:
 - Bi-weekly 50Q for stabilized phases.
 - Mandatory 50Q before major datasource refresh.
 
+### 13.7 Offline vs Online (ST Quality Index) difference
+
+The ST Quality Index online tool evaluates question quality from an uploaded spreadsheet and returns per-question details.
+
+Typical online input columns:
+
+- Question
+- Expected Answer
+- Tag
+
+Typical online output behavior:
+
+- score per question (for example 70/100)
+- QUESTION #N DETAILS
+- textual reason and quality remarks
+
+Important distinction:
+
+- Offline benchmark in this repo uses manual scoring grids (/7 or /9 depending on protocol).
+- Online ST Quality Index returns platform scores (/100) with explanation text.
+
+To compare both worlds on the same scale:
+
+- offline_norm_0_to_100 = (offline_total_0_to_7 / 7) * 100
+- delta_online_minus_offline = online_score_0_to_100 - offline_norm_0_to_100
+
+Automation script available:
+
+- [pipeline/evaluation/compare_offline_online_quality.py](../pipeline/evaluation/compare_offline_online_quality.py)
+
+Run:
+
+```bash
+python -m pipeline.evaluation.compare_offline_online_quality
+```
+
+Generated artifacts:
+
+- [datasets/06_eval_outputs/quality_index_30q_online_scores_template.csv](../datasets/06_eval_outputs/quality_index_30q_online_scores_template.csv)
+- [datasets/06_eval_outputs/offline_online_30q_summary.csv](../datasets/06_eval_outputs/offline_online_30q_summary.csv)
+- [datasets/06_eval_outputs/offline_online_30q_summary.md](../datasets/06_eval_outputs/offline_online_30q_summary.md)
+
+Interpretation policy for A/B by block:
+
+- Compare A vs B in issues/files/mixed blocks independently.
+- Track both offline gain and online gain.
+- Promote a change only when online gain confirms offline gain or explains justified divergence.
+
 ---
 
 ## 14. Correcting in a Black-Box Tool: Practical Strategy

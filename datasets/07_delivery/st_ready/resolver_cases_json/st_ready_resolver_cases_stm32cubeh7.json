@@ -42,6 +42,9 @@
         "https://github.com/STMicroelectronics/STM32CubeH7/commit/4741000fca0eaaf3e7ef439cf42b476504621f6b"
       ],
       "resolution_status": "candidate_fix",
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0,
       "link_confidence": "medium",
       "link_score": 0.8,
       "delivery_template": "st_v1_resolver_case",
@@ -146,6 +149,9 @@
         "https://github.com/STMicroelectronics/STM32CubeH7/commit/bee0ed19ee164e9fcea9d3321da299030d970421"
       ],
       "resolution_status": "candidate_fix",
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0,
       "link_confidence": "medium",
       "link_score": 0.8,
       "delivery_template": "st_v1_resolver_case",
@@ -252,6 +258,9 @@
         "https://github.com/STMicroelectronics/STM32CubeH7/commit/dc696e42d1f20ea87f41022993bc75904c349224"
       ],
       "resolution_status": "candidate_fix",
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0,
       "link_confidence": "medium",
       "link_score": 0.8,
       "delivery_template": "st_v1_resolver_case",
@@ -409,6 +418,9 @@
         "https://github.com/STMicroelectronics/STM32CubeH7/commit/fb620de4c77838a7a4ff319a8211625e953ea8ac"
       ],
       "resolution_status": "candidate_fix",
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0,
       "link_confidence": "medium",
       "link_score": 0.8,
       "delivery_template": "st_v1_resolver_case",
