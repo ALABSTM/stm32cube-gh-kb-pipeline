@@ -34,6 +34,39 @@ Speaker note:
 
 ---
 
+## Slide 0a - General Project Context: Where We Started, What We Are Doing, Why
+
+Objective:
+- Put the audience in context in 60 seconds before technical details.
+
+Where we started:
+- STM32 support knowledge was scattered across GitHub issues, PRs, commits, files, and PDF figures.
+- Raw data was noisy and heterogeneous (different formats, weak links, uneven technical quality).
+- Without structuring this data, retrieval quality and answer consistency were unstable.
+
+What we are doing now:
+- Build an end-to-end preprocessing pipeline that turns raw GitHub signals into reliable support evidence.
+- Generate support intelligence artifacts:
+  - resolver cases (fix traceability from issue/PR/commit evidence)
+  - diagnostic cards (structured troubleshooting logic for the assistant)
+- Export ST-ready contracts so the ST tool can ingest the knowledge safely.
+- Evaluate continuously (offline + online) and regenerate artifacts after each quality gap.
+
+Why this project matters:
+- Reduce generic and unhelpful answers in real support conversations.
+- Increase technical traceability (every answer can be linked to evidence).
+- Make behavior more stable, explainable, and production-ready.
+- Shorten the improvement loop: detect gaps, fix generators, re-export, re-evaluate.
+
+Current phase (today):
+- The KB is operational but still improving through iterative quality cycles.
+- Priority is not just score increase; priority is robust, auditable, and reproducible support behavior.
+
+Speaker note (simple story):
+- "We started from fragmented raw signals. We are now converting them into structured support knowledge and ST-ready artifacts. The goal is simple: more reliable answers, with clear evidence, and faster improvement at each iteration."
+
+---
+
 ## Slide 0bis - Project Map: Blocks and Ownership
 
 Objective:
