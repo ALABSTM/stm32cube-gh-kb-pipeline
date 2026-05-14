@@ -1,62 +1,72 @@
 # Evaluation Protocol & Benchmark Results - Slides Ready
 
-## Slide 0 - End-to-End Project Overview (Opening)
+## Slide 0 - Big Picture: From Raw Data to Reliable Answers
 
 Title:
-- Vue d'ensemble du projet: de la preprocessing a l'evaluation dans l'outil ST
+- From Raw STM32 Signals to Reliable Support Answers
 
-Context to say at the beginning:
-- Nous construisons une base de connaissance STM32Cube pour le support technique.
-- La knowledge base est encore en cours de construction et d'amelioration.
+Objective:
+- Align everyone on the full journey before technical deep dive.
+
+Opening context:
+- We are building a STM32Cube support knowledge base.
+- The knowledge base is still under construction and improves through iterative cycles.
 
 End-to-end flow (what this work covers):
-1) Preprocessing pipeline:
-- ingestion -> cleaning -> enrichment -> similarity -> chunking
-2) ST-ready delivery:
-- export issues/files/resolver cases/diagnostic cards au format ST-ready JSON
-3) Upload and live behavior:
-- upload dans l'outil ST, execution du persona, observation des reponses et erreurs runtime
-4) Evaluation:
-- benchmark offline (30Q scores, comparaison A/B par blocs)
-- benchmark online/live (run 50Q + ST Quality Index)
+1) Data preparation:
+- ingestion -> cleaning -> enrichment -> similarity
+2) Support content generation:
+- generate resolver cases and diagnostic cards from prepared evidence
+3) Delivery for ST tool:
+- package outputs into ST-ready JSON contracts
+4) Runtime and evaluation:
+- upload, live runs, offline and online quality checks, improvement loop
 
 Current reality to make explicit:
-- Des cas hors domaine ST ou a contexte faible apparaissent encore en live.
-- C'est normal a ce stade du POC et suivi via des boucles de correction.
+- Out-of-scope or weak-context cases still appear in live behavior.
+- This is expected at current maturity and handled through corrective iterations.
 
 Roadmap message:
-- L'objectif n'est pas seulement de monter les scores, mais d'obtenir un comportement stable, explicable et industrialisable.
+- Target is not only higher scores, but stable, explainable, and production-ready behavior.
 
 Speaker note:
-- "La presentation suit le meme ordre que le pipeline reel: preprocesser, packager, uploader, evaluer, puis corriger en iteration."
+- "First we build trustworthy support content, then we package it for ST, then we validate and improve."
 
 ---
 
-## Slide 0bis - Master Overview Blocks (Template to Keep Updated)
+## Slide 0bis - Project Map: Blocks and Ownership
 
-Use this as the stable opening map, then deep-dive each block in next slides.
+Objective:
+- Show who does what, where, and what is produced.
 
-Block 1 - PC hors domaine ST (R&D Lab)
-- Role: preprocessing experiments, parent-child chunking tests, retrieval benchmark.
-- Outputs: preprocessing recommendations, chunk stats, retrieval metrics.
+Block 1 - Off-domain R&D Lab (PC)
+- Mission: test retrieval behavior and chunking strategies offline.
+- Outputs: benchmark evidence and preprocessing recommendations.
 - Status field: [NOT STARTED | IN PROGRESS | DONE]
 - Last update: [YYYY-MM-DD]
 
-Block 2 - STM32Cube Preprocessing Pipeline
-- Flow: ingestion -> cleaning -> enrichment -> similarity -> chunking.
-- Output contract: docs/chunks ready for ST-ready export.
+Block 2 - Data Preparation Pipeline
+- Mission: normalize and enrich raw sources into reliable evidence.
+- Flow: ingestion -> cleaning -> enrichment -> similarity.
+- Outputs: docs_v2, docs_v2_sim, issue_pr_commit_links.
 - Status field: [NOT STARTED | IN PROGRESS | DONE]
 - Last update: [YYYY-MM-DD]
 
-Block 3 - PC ST (ST-ready Packaging)
-- Role: export ST-ready issues/files/resolver cases/diagnostic cards.
-- Gate: schema + stats + smoke checks before upload.
+Block 3 - Support Content Generation
+- Mission: generate resolver cases and diagnostic cards from prepared evidence.
+- Outputs: support content with confidence, facts, hypotheses, and checks.
 - Status field: [NOT STARTED | IN PROGRESS | DONE]
 - Last update: [YYYY-MM-DD]
 
-Block 4 - ST Tool
+Block 4 - Delivery for ST Tool
+- Mission: package generated content into ST-acceptable files.
+- Outputs: ST-ready JSON files + summary files.
+- Gate: schema, count coherence, traceability before upload.
+- Status field: [NOT STARTED | IN PROGRESS | DONE]
+- Last update: [YYYY-MM-DD]
+
+Block 5 - ST Tool Runtime
 - Upload + RAG indexing in background.
-- Live answers during persona run.
 - Possible live outcomes:
   - Useful answer
   - Generic answer
@@ -65,20 +75,219 @@ Block 4 - ST Tool
 - Status field: [NOT STARTED | IN PROGRESS | DONE]
 - Last update: [YYYY-MM-DD]
 
-Block 5 - Evaluation
-- Offline evaluation: 30Q A/B by blocks (issues/files/mixed).
-- Online evaluation: 50Q live run + Quality Index.
-- Status field: [NOT STARTED | IN PROGRESS | DONE]
-- Last update: [YYYY-MM-DD]
-
-Block 6 - Continuous Improvement Loop
-- Evaluation findings -> pipeline fixes -> new export -> new upload -> rerun.
-- Decision: promote only if regression risk is controlled.
+Block 6 - Evaluation and Improvement Loop
+- Offline: controlled benchmark by block.
+- Online: live runs and quality index.
+- Decision: fix pipeline and regenerate when regressions appear.
 - Status field: [NOT STARTED | IN PROGRESS | DONE]
 - Last update: [YYYY-MM-DD]
 
 Narration line (opening):
-- "This map is our project tracking view: each block has owner, status, and last update; we review it first, then detail each part."
+- "This map is our tracking dashboard: owner, status, last update, and next move for each block."
+
+---
+
+## Slide 0ter - Why These Agents Matter
+
+Objective:
+- Explain the real business need behind each agent in one slide.
+
+Agent 1 - STM32Cube Preprocessing Agent
+- Real need: prevent noisy or weak evidence from entering support content.
+- Role: quality and traceability co-pilot for the pipeline.
+- Core actions:
+  - analyze data flow, JSON outputs, benchmark signals
+  - document schemas, test outcomes, delivery behavior
+  - compare preprocessing and retrieval strategies
+- Value:
+  - cleaner input to generation and delivery
+  - faster quality fixes between iterations
+
+Agent 2 - STM32Cube PDF Vision Agent
+- Real need: turn diagram-only PDF knowledge into searchable technical evidence.
+- Role: figure and diagram understanding co-pilot.
+- Core actions:
+  - read pdf_image_tasks_<repo>.jsonl
+  - analyze extracted figures and diagrams
+  - produce injectable technical descriptions for the KB
+- Value:
+  - keeps hidden PDF knowledge usable by the AI
+  - reduces information loss from image-only documents
+
+Traceability fields to keep updated in presentation:
+- Owner
+- Input source
+- Output artifacts
+- Current status (NOT STARTED | IN PROGRESS | DONE)
+- Last update (YYYY-MM-DD)
+- Next action
+- Main KPI
+
+---
+
+## Slide 0quater - Critical Split: Data Generation vs Delivery
+
+Objective:
+- Make the boundary explicit and avoid scope confusion.
+
+Part A - Data Generation (Resolver + Diagnostic Intelligence)
+- Goal: generate support reasoning content from prepared evidence.
+- Inputs:
+  - data/docs_*_v2.json and data/docs_*_v2_sim.json
+  - data/issue_pr_commit_links_*.json
+- Produces:
+  - resolver logic (status, confidence, file evidence, actions)
+  - diagnostic logic (symptoms, likely causes, confirmed facts, checks)
+- Quality focus: evidence strength, technical relevance, traceability.
+
+Part B - Delivery (ST Contract Packaging)
+- Goal: package generated content into files accepted by the ST tool.
+- Produces:
+  - datasets/07_delivery/st_ready/*/st_ready_*.json
+  - datasets/07_delivery/st_ready/*/summary_*.json
+- Quality focus:
+  - accepted by the ST tool without upload rejection
+  - correct required fields and root structure
+  - summary counts exactly match exported payloads
+  - traceable links to source evidence are preserved
+
+Key difference to say clearly:
+- Data Generation answers: what support knowledge should be delivered.
+- Delivery answers: how that knowledge must be formatted for the ST platform.
+- ST tool applies its own chunking at runtime; local chunking is only for offline evaluation.
+
+Concrete example - Issue 343 from docs_v2 to st_ready_issues:
+
+Before (docs_v2 source):
+- File: data/docs_issues_stm32cubeh7_v2.json
+- Record id: stm32cubeh7-issue-343
+- Core raw evidence fields:
+  - issue_title: [Bug]: HAL_CRYP_Decrypt_DMA fails when transfer size is > 65535 bytes
+  - clean_text: bug summary + detailed description + expected/actual behavior + comments
+  - metadata: board=STM32H7XX, component=DMA, layer=HAL, issue_kind=bug_report, severity=medium
+
+After (ST upload contract):
+- File: datasets/07_delivery/st_ready/issues_json/st_ready_issues_stm32cubeh7.json
+- Same record id: stm32cubeh7-issue-343
+- delivery_template: st_v2_structured_issue_card
+- st_ready_text: normalized structure consumed by the RAG engine.
+
+Structure: st_ready_text (issues) - fields exposed to the moteur RAG
+- Problem
+- Context
+- Constraints
+- Root cause
+- Fix
+- Keywords
+- Technical details
+- Key comments
+
+Example st_ready_text excerpt (Issue 343):
+```text
+Problem: [Bug]: HAL_CRYP_Decrypt_DMA fails when transfer size is > 65535 bytes
+Context: repo=STM32CubeH7, mcu_series=H7, board=STM32H7XX, component=DMA, layer=HAL, issue_kind=bug_report, severity=medium, evidence_strength=high, rescue_applied=False, state=open, issue_number=343
+Constraints: Validate against exact MCU/board configuration and CubeMX/CubeH7 version before applying.
+Root cause: Maintainer confirmed the point and tracked it internally (ST Internal Reference: CDM0061687).
+Fix: Clarify/adjust DMA size handling when DataWidthUnit=WORD to prevent uint16_t overflow and transfer truncation.
+Keywords: H7, STM32H7XX, HAL, DMA, cryp, HAL_CRYP_Decrypt_DMA, CRYP_DATAWIDTHUNIT_WORD, HAL_CRYP_Encrypt_DMA
+Technical details: Includes code-level references and behavior evidence from stm32h7xx_hal_cryp.c and stm32h7xx_hal_cryp.h.
+Key comments: Maintainer acknowledgement plus internal tracking decision.
+```
+
+Takeaway for this slide:
+- docs_v2 keeps rich raw evidence.
+- st_ready_issues converts that evidence into a stable, upload-compatible, and retrieval-friendly contract for the ST tool.
+
+---
+
+## Slide 0quinquies - Resolver Cases vs Diagnostic Cards: Inputs, Outputs, Value
+
+Objective:
+- Clarify what each artifact consumes, what it produces, and why it creates high operational value.
+
+Resolver Cases - Inputs:
+- issue_pr_commit_links_<repo>.json or issue_pr_commit_links_<repo>_linked_only.json
+- raw_commits_<repo>.json (changed files and commit-level evidence)
+- st_ready_files_<repo>.json (optional file-document enrichment when paths match)
+
+Resolver Cases - Outputs:
+- st_ready_resolver_cases_<repo>.json
+- One card per linked issue with:
+  - resolution_status (merged_fix / candidate_fix / commit_only_candidate / reference_only)
+  - link_confidence and link_score
+  - linked PRs and commits
+  - files_evidence (changed files, match_rate with docs files, impacted modules/components)
+  - resolver_card_text (Problem, Context, Resolver signal, Assessment, Constraints)
+
+Diagnostic Cards - Inputs:
+- st_ready_issues_<repo>.json (rescued issues by default, or all issues with --include-all-issues)
+- st_ready_resolver_cases_<repo>.json (if available)
+
+Diagnostic Cards - Outputs:
+- st_ready_diagnostic_cards_<repo>.json
+- One diagnostic card per issue key from issues/resolver union with:
+  - query_aliases and query_anchor_tags
+  - symptom_summary, likely_causes, confirmed_facts, plausible_diagnosis
+  - response_blocks (facts_confirmed -> hypotheses -> checks)
+  - clarification_questions (required)
+  - debug_checks, possible_workarounds, constraints_or_limits
+  - evidence_refs and st_ready_text for RAG consumption
+
+Why this is important (high value):
+- Resolver cases convert raw GitHub links into fix traceability signals for support teams.
+- Diagnostic cards convert noisy issue text into structured troubleshooting logic the assistant can follow.
+- Together, they reduce generic answers by improving both retrieval anchors and response structure.
+- They make support behavior auditable: each answer can point back to issue/PR/commit evidence.
+- They accelerate iteration: weak cards can be regenerated from pipeline rules instead of manual rewriting.
+
+Concrete value snapshot (STM32CubeH7 current export):
+- Resolver cases exported: 4/4 linked cases (candidate_fix=4).
+- Diagnostic cards exported: 45 cards from 42 rescued issues + 4 resolver-linked entries.
+- Net effect: broader troubleshooting coverage than resolver-only evidence, while keeping traceability to source artifacts.
+
+---
+
+## Slide 0sexies - Explication Facile (FR): Commit, Diff, et Linkage Fichiers
+
+Objectif:
+- Expliquer simplement ce que le pipeline fait aujourd'hui avec les commits et les fichiers modifies.
+
+Q1) On prend le commit diff ou juste le message ?
+- Les deux sont collectes.
+- En pratique aujourd'hui, le linkage s'appuie surtout sur:
+- le message de commit (references issue/fix/close),
+- et des signaux de diff legers (fichiers modifies, additions, deletions, changes, PR mergee ou non).
+- Le patch n'est pas encore exploite en analyse semantique profonde ligne par ligne.
+
+Q2) "Actuellement", ca veut dire quoi concretement ?
+- Le pipeline classe le lien en:
+- merged_fix / candidate_fix / commit_only_candidate / reference_only.
+- Cette decision vient d'un score base sur:
+- PR explicites,
+- commits significatifs,
+- et evidence de fichiers modifies dans des PR mergees.
+
+Q3) D'ou viennent les "diffs legers" ?
+- Depuis l'API GitHub PR files: filename, status, additions, deletions, changes.
+- Depuis l'API GitHub commit detail: files_changed + patch.
+- Ces donnees sont stockees dans les fichiers bruts:
+- data/raw_prs_<repo>.json
+- data/raw_commits_<repo>.json
+
+Q4) Comment se fait le linkage des fichiers modifies (depuis les donnees brutes) ?
+1) Lier issue <-> PR via linked_issue_numbers.
+2) Lier issue <-> commit via references explicites + inference depuis message.
+3) Recuperer files_changed des commits lies.
+4) Agreger par chemin normalise (path), cumuler additions/deletions/changes.
+5) Tenter un match exact avec st_ready_files_<repo>.json.
+6) Si match: enrichir (file_doc_id, component, board, file_type).
+7) Sinon: garder source_match=commit_only.
+8) Calculer match_rate et impacted_modules pour la carte resolver.
+
+Takeaway simple:
+- Oui, le linkage utilise des donnees brutes GitHub.
+- Oui, il utilise des indices de diff.
+- Non, il ne valide pas encore la correction par lecture technique complete du patch.
 
 ## Slide 1 - Why Evaluation in this PFE
 
