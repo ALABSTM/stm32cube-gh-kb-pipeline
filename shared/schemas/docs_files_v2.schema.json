@@ -28,7 +28,7 @@
       "path": { "type": "string" },
       "file_type": {
         "type": "string",
-        "enum": ["project_readme", "release_notes", "root_readme", "doc_readme", "other"]
+        "enum": ["project_readme", "release_notes", "root_readme", "doc_readme", "driver_source", "other"]
       },
       "github_url": { "type": ["string", "null"] },
       "board": { "type": ["string", "null"] },
