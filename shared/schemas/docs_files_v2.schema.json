@@ -27,9 +27,8 @@
       "type": { "type": "string", "const": "file" },
       "path": { "type": "string" },
       "file_type": {
-        "type": "string",
-        "enum": ["project_readme", "release_notes", "root_readme", "doc_readme", "driver_source", "other"]
-      },
+      "type": "string",
+      "enum": ["project_readme", "release_notes", "root_readme", "doc_readme", "documentation_pdf", "repo_metadata", "driver_source", "hal_driver_source", "middleware_source", "utilities_content", "bsp_component_source", "cmsis_source", "bsp_board_source", "other"]      },
       "github_url": { "type": ["string", "null"] },
       "board": { "type": ["string", "null"] },
       "category": { "type": ["string", "null"] },
