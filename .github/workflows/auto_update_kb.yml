@@ -122,11 +122,9 @@ jobs:
             shared
 
       - name: Verify Python
-        shell: pwsh
         run: python --version
 
       - name: Install requests
-        shell: pwsh
         run: pip install requests
 
       - name: Download delivery artifacts
@@ -136,7 +134,7 @@ jobs:
           path: st-ready/
 
       - name: Upload all series to KB
-        shell: pwsh
+        
         run: |
           $series = "${{ needs.pipeline.outputs.series }}" -split ","
           $DS_ISSUES = @{ f4=28099; h5=28158; h7=19896; u5=28167; wl=28171 }
@@ -177,7 +175,7 @@ jobs:
           }
 
       - name: Upload summary
-        shell: pwsh
+        
         run: |
           "## KB Upload Complete" >> $env:GITHUB_STEP_SUMMARY
           "| Series | ${{ needs.pipeline.outputs.series }} |" >> $env:GITHUB_STEP_SUMMARY
