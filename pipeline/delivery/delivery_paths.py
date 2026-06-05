@@ -51,6 +51,13 @@ for _r in [
 ]:
     _REPO_TO_SERIES[_r] = "stm32cubewl"
 
+# C0 sub-repos
+for _r in [
+    "stm32c0xx-hal-driver", "cmsis_device_c0",
+    "stm32c0xx-nucleo-bsp",
+]:
+    _REPO_TO_SERIES[_r] = "stm32cubec0"
+
 
 def repo_slug(repo: str) -> str:
     return str(repo).strip().lower()
