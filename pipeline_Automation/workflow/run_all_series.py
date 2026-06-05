@@ -88,9 +88,9 @@ def main():
     parser.add_argument(
         "--series",
         nargs="+",
-        choices=["f4", "h5", "u5", "wl", "h7"],
+        choices=list(SERIES_CONFIGS.keys()),
         required=True,
-        help="Series to process (e.g. --series f4 h5 u5 wl)",
+        help="Series to process (e.g. --series f4 h5 u5 wl c0)",
     )
     parser.add_argument("--skip-ingestion", action="store_true")
     parser.add_argument("--skip-chunking", action="store_true", help="Skip local chunking (platform handles it).")
