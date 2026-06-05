@@ -5,6 +5,10 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import quote
 
+from pipeline.delivery.delivery_paths import (
+    get_legacy_artifact_file,
+    get_repo_artifact_dir,
+)
 from shared.utils.paths import DATA_DIR, PROJECT_ROOT, get_config_path
 
 
@@ -123,7 +127,7 @@ def export_repo_json(
     if not in_path.exists():
         raise FileNotFoundError(f"Input file not found: {in_path}")
 
-    out_root = PROJECT_ROOT / "datasets" / "07_delivery" / "st_ready" / "files_json"
+    out_root = get_repo_artifact_dir(repo, "files_json")
     out_root.mkdir(parents=True, exist_ok=True)
 
     cfg = load_config()
@@ -176,8 +180,14 @@ def export_repo_json(
         "files": payload_docs,
     }
 
-    out_file = out_root / f"st_ready_files_{repo.lower()}.json"
+    out_file_name = f"st_ready_files_{repo.lower()}.json"
+    out_file = out_root / out_file_name
     out_file.write_text(json.dumps(export_payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    # Backward-compatible mirror in legacy flat folder.
+    legacy_out_file = get_legacy_artifact_file("files_json", out_file_name)
+    legacy_out_file.parent.mkdir(parents=True, exist_ok=True)
+    legacy_out_file.write_text(json.dumps(export_payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
     summary = {
         "repo": repo,
@@ -191,9 +201,14 @@ def export_repo_json(
         "summary_max_chars": summary_max_chars,
         "technical_max_chars": technical_max_chars,
     }
-    (out_root / f"summary_files_{repo.lower()}.json").write_text(
+    summary_file_name = f"summary_files_{repo.lower()}.json"
+    (out_root / summary_file_name).write_text(
         json.dumps(summary, indent=2), encoding="utf-8"
     )
+
+    legacy_summary_file = get_legacy_artifact_file("files_json", summary_file_name)
+    legacy_summary_file.parent.mkdir(parents=True, exist_ok=True)
+    legacy_summary_file.write_text(json.dumps(summary, indent=2), encoding="utf-8")
 
     return total, len(payload_docs), out_root
 

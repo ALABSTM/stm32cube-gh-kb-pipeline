@@ -1,0 +1,322 @@
+{
+  "resolver_cases": [
+    {
+      "id": "resolver::STM32CubeF4::issue::65",
+      "title": "STM32F4 1.26 Vector table position can not be defined by compiler define",
+      "label": "STM32F4 1.26 Vector table position can not be defined by compiler define",
+      "externalURL": "https://github.com/STMicroelectronics/STM32CubeF4/issues/65",
+      "rootTagPath": "resolver_cases",
+      "evidence_refs": [
+        {
+          "type": "issue",
+          "id": 65,
+          "url": "https://github.com/STMicroelectronics/STM32CubeF4/issues/65"
+        }
+      ],
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "STM32CubeF4",
+      "issue_root_path": "issues",
+      "pr_root_path": "pull",
+      "commit_root_path": "commit",
+      "issue_number": 65,
+      "issue_title": "STM32F4 1.26 Vector table position can not be defined by compiler define",
+      "issue_labels": [
+        "enhancement",
+        "internal bug tracker",
+        "cmsis"
+      ],
+      "issue_state": "closed",
+      "issue_url": "https://github.com/STMicroelectronics/STM32CubeF4/issues/65",
+      "linked_pr_numbers": [
+        146
+      ],
+      "linked_commit_shas": [
+        "45f2a0e0a75595a5b39949d0b63dcfa00fac1ae6"
+      ],
+      "primary_pr_number": 146,
+      "primary_commit_sha": "45f2a0e0a75595a5b39949d0b63dcfa00fac1ae6",
+      "linked_pr_urls": [
+        "https://github.com/STMicroelectronics/STM32CubeF4/pull/146"
+      ],
+      "linked_commit_urls": [
+        "https://github.com/STMicroelectronics/STM32CubeF4/commit/45f2a0e0a75595a5b39949d0b63dcfa00fac1ae6"
+      ],
+      "resolution_status": "candidate_fix",
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0,
+      "link_confidence": "medium",
+      "link_score": 0.8,
+      "delivery_template": "st_v1_resolver_case",
+      "resolver_card_text": "Problem: Issue #65 - STM32F4 1.26 Vector table position can not be defined by compiler define\nContext: repo=STM32CubeF4, labels=enhancement, internal bug tracker, cmsis, issue_state=closed\nResolver signal: resolution_status=candidate_fix, confidence=medium, score=0.8\nAssessment: Potential fix identified, but integration status is uncertain.\nCandidate PRs: Allow VECT_TAB_OFFSET to be overridden externally (IDE or Makefile)\nCommit evidence: Allow VECT_TAB_OFFSET to be overridden externally (IDE or Makefile)\nPR #146 description: ## IMPORTANT INFORMATION\r\n\r\n### Contributor License Agreement (CLA)\r\n* The Pull Request feature will be considered by STMicroelectronics after the signature of a **Contributor License Agreement (CLA)** by the submitter.\r\n* If you did not sign such agreement, please follow the steps mentioned in the [CONTRIBUTING.md](https://github.com/STMicroelectronics/STM32CubeF4/blob/master/CONTRIBUTING.md) file.\r\n\r\n\r\nThis topic is longstanding and has been discussed but not solved so far:\r\nhttps://github.com/STMicroelectronics/STM32CubeF4/issues/65\r\n\r\nThis small thing was needed, however I wish you can revert the need for USER_VECT_TAB_ADDRESS because this is absolutely pointless.\r\n\r\nRegards. Adib.\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying.",
+      "linked_file_ids": [],
+      "linked_file_paths": [],
+      "files_evidence": {
+        "changed_files_total": 1,
+        "matched_docs_files_count": 0,
+        "unmatched_files_count": 1,
+        "match_rate": 0.0,
+        "files": [
+          {
+            "path": "Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c",
+            "status": "modified",
+            "additions": 4,
+            "deletions": 0,
+            "changes": 4,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "45f2a0e0a75595a5b39949d0b63dcfa00fac1ae6"
+            ],
+            "module": "CMSIS",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF4/blob/master/Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c",
+            "score": 4.0
+          }
+        ]
+      },
+      "impacted_modules": [
+        "CMSIS"
+      ],
+      "impacted_components": [],
+      "impacted_boards": [],
+      "impacted_file_types": [],
+      "primary_changed_file": {
+        "path": "Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c",
+        "status": "modified",
+        "additions": 4,
+        "deletions": 0,
+        "changes": 4,
+        "touched_by_commits": 1,
+        "commit_shas": [
+          "45f2a0e0a75595a5b39949d0b63dcfa00fac1ae6"
+        ],
+        "module": "CMSIS",
+        "file_doc_id": null,
+        "file_type": null,
+        "component": null,
+        "board": null,
+        "example_name": null,
+        "source_match": "commit_only",
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeF4/blob/master/Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c",
+        "score": 4.0
+      }
+    },
+    {
+      "id": "resolver::STM32CubeF4::issue::110",
+      "title": "FatFS driver diskio is_initialized is always set to true",
+      "label": "FatFS driver diskio is_initialized is always set to true",
+      "externalURL": "https://github.com/STMicroelectronics/STM32CubeF4/issues/110",
+      "rootTagPath": "resolver_cases",
+      "evidence_refs": [
+        {
+          "type": "issue",
+          "id": 110,
+          "url": "https://github.com/STMicroelectronics/STM32CubeF4/issues/110"
+        }
+      ],
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "STM32CubeF4",
+      "issue_root_path": "issues",
+      "pr_root_path": "pull",
+      "commit_root_path": "commit",
+      "issue_number": 110,
+      "issue_title": "FatFS driver diskio is_initialized is always set to true",
+      "issue_labels": [
+        "bug",
+        "st community",
+        "mw",
+        "fs"
+      ],
+      "issue_state": "closed",
+      "issue_url": "https://github.com/STMicroelectronics/STM32CubeF4/issues/110",
+      "linked_pr_numbers": [
+        111
+      ],
+      "linked_commit_shas": [
+        "c00ef07518436ce13c109ffbb6329a35845fa4c8"
+      ],
+      "primary_pr_number": 111,
+      "primary_commit_sha": "c00ef07518436ce13c109ffbb6329a35845fa4c8",
+      "linked_pr_urls": [
+        "https://github.com/STMicroelectronics/STM32CubeF4/pull/111"
+      ],
+      "linked_commit_urls": [
+        "https://github.com/STMicroelectronics/STM32CubeF4/commit/c00ef07518436ce13c109ffbb6329a35845fa4c8"
+      ],
+      "resolution_status": "candidate_fix",
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0,
+      "link_confidence": "medium",
+      "link_score": 0.8,
+      "delivery_template": "st_v1_resolver_case",
+      "resolver_card_text": "Problem: Issue #110 - FatFS driver diskio is_initialized is always set to true\nContext: repo=STM32CubeF4, labels=bug, st community, mw, fs, issue_state=closed\nResolver signal: resolution_status=candidate_fix, confidence=medium, score=0.8\nAssessment: Potential fix identified, but integration status is uncertain.\nCandidate PRs: Update diskio.c\nCommit evidence: Update diskio.\nPR #111 description: Fix #110 falsely setting is_initialized to 1 regardless of driver return value\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying.",
+      "linked_file_ids": [],
+      "linked_file_paths": [],
+      "files_evidence": {
+        "changed_files_total": 1,
+        "matched_docs_files_count": 0,
+        "unmatched_files_count": 1,
+        "match_rate": 0.0,
+        "files": [
+          {
+            "path": "Middlewares/Third_Party/FatFS/src/diskio.c",
+            "status": "modified",
+            "additions": 4,
+            "deletions": 1,
+            "changes": 5,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "c00ef07518436ce13c109ffbb6329a35845fa4c8"
+            ],
+            "module": "Middlewares",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF4/blob/master/Middlewares/Third_Party/FatFS/src/diskio.c",
+            "score": 5.0
+          }
+        ]
+      },
+      "impacted_modules": [
+        "Middlewares"
+      ],
+      "impacted_components": [],
+      "impacted_boards": [],
+      "impacted_file_types": [],
+      "primary_changed_file": {
+        "path": "Middlewares/Third_Party/FatFS/src/diskio.c",
+        "status": "modified",
+        "additions": 4,
+        "deletions": 1,
+        "changes": 5,
+        "touched_by_commits": 1,
+        "commit_shas": [
+          "c00ef07518436ce13c109ffbb6329a35845fa4c8"
+        ],
+        "module": "Middlewares",
+        "file_doc_id": null,
+        "file_type": null,
+        "component": null,
+        "board": null,
+        "example_name": null,
+        "source_match": "commit_only",
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeF4/blob/master/Middlewares/Third_Party/FatFS/src/diskio.c",
+        "score": 5.0
+      }
+    },
+    {
+      "id": "resolver::STM32CubeF4::issue::147",
+      "title": "Check value of pllm in function HAL_RCC_GetSysClockFreq of stm32f4xx_hal_rcc.c:911",
+      "label": "Check value of pllm in function HAL_RCC_GetSysClockFreq of stm32f4xx_hal_rcc.c:911",
+      "externalURL": "https://github.com/STMicroelectronics/STM32CubeF4/issues/147",
+      "rootTagPath": "resolver_cases",
+      "evidence_refs": [
+        {
+          "type": "issue",
+          "id": 147,
+          "url": "https://github.com/STMicroelectronics/STM32CubeF4/issues/147"
+        }
+      ],
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "STM32CubeF4",
+      "issue_root_path": "issues",
+      "pr_root_path": "pull",
+      "commit_root_path": "commit",
+      "issue_number": 147,
+      "issue_title": "Check value of pllm in function HAL_RCC_GetSysClockFreq of stm32f4xx_hal_rcc.c:911",
+      "issue_labels": [
+        "internal bug tracker",
+        "hal"
+      ],
+      "issue_state": "closed",
+      "issue_url": "https://github.com/STMicroelectronics/STM32CubeF4/issues/147",
+      "linked_pr_numbers": [
+        154
+      ],
+      "linked_commit_shas": [
+        "043197bd401d777ad3d05d97772b8dab5686bd67"
+      ],
+      "primary_pr_number": 154,
+      "primary_commit_sha": "043197bd401d777ad3d05d97772b8dab5686bd67",
+      "linked_pr_urls": [
+        "https://github.com/STMicroelectronics/STM32CubeF4/pull/154"
+      ],
+      "linked_commit_urls": [
+        "https://github.com/STMicroelectronics/STM32CubeF4/commit/043197bd401d777ad3d05d97772b8dab5686bd67"
+      ],
+      "resolution_status": "candidate_fix",
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0,
+      "link_confidence": "medium",
+      "link_score": 0.8,
+      "delivery_template": "st_v1_resolver_case",
+      "resolver_card_text": "Problem: Issue #147 - Check value of pllm in function HAL_RCC_GetSysClockFreq of stm32f4xx_hal_rcc.c:911\nContext: repo=STM32CubeF4, labels=internal bug tracker, hal, issue_state=closed\nResolver signal: resolution_status=candidate_fix, confidence=medium, score=0.8\nAssessment: Potential fix identified, but integration status is uncertain.\nCandidate PRs: HAL_RCC_GetSysClockFreq: Add conditional check for the value of pllm\nCommit evidence: HAL_RCC_GetSysClockFreq: Add conditional check for the value of pllm\nPR #154 description: ## Check value of pllm in function HAL_RCC_GetSysClockFreq of stm32f4xx_hal_rcc.c:911\r\n\r\nThis is a pull request pertaining to the issue raised [here](https://github.com/STMicroelectronics/STM32CubeF4/issues/147). Feel free to review it and merge it.\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying.",
+      "linked_file_ids": [],
+      "linked_file_paths": [],
+      "files_evidence": {
+        "changed_files_total": 1,
+        "matched_docs_files_count": 0,
+        "unmatched_files_count": 1,
+        "match_rate": 0.0,
+        "files": [
+          {
+            "path": "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c",
+            "status": "modified",
+            "additions": 5,
+            "deletions": 0,
+            "changes": 5,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "043197bd401d777ad3d05d97772b8dab5686bd67"
+            ],
+            "module": "HAL_Driver",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF4/blob/master/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c",
+            "score": 5.0
+          }
+        ]
+      },
+      "impacted_modules": [
+        "HAL_Driver"
+      ],
+      "impacted_components": [],
+      "impacted_boards": [],
+      "impacted_file_types": [],
+      "primary_changed_file": {
+        "path": "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c",
+        "status": "modified",
+        "additions": 5,
+        "deletions": 0,
+        "changes": 5,
+        "touched_by_commits": 1,
+        "commit_shas": [
+          "043197bd401d777ad3d05d97772b8dab5686bd67"
+        ],
+        "module": "HAL_Driver",
+        "file_doc_id": null,
+        "file_type": null,
+        "component": null,
+        "board": null,
+        "example_name": null,
+        "source_match": "commit_only",
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeF4/blob/master/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c",
+        "score": 5.0
+      }
+    }
+  ]
+}

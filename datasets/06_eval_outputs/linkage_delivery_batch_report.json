@@ -1,0 +1,155 @@
+{
+  "generated_at": "2026-05-20T10:19:36.467206+00:00",
+  "repos": [
+    "STM32CubeH7"
+  ],
+  "exports_executed": true,
+  "export_results": [
+    {
+      "repo": "STM32CubeH7",
+      "resolver_status": "ok",
+      "diagnostic_status": "ok",
+      "resolver_error": null,
+      "diagnostic_error": null
+    }
+  ],
+  "schema_validation": [
+    {
+      "repo": "STM32CubeH7",
+      "data_file": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\data\\issue_pr_commit_links_stm32cubeh7.json",
+      "status": "ok",
+      "error": null
+    }
+  ],
+  "summary_coherence": [
+    {
+      "repo": "STM32CubeH7",
+      "status": "ok",
+      "problems": []
+    }
+  ],
+  "unlinked_audit": {
+    "repo": "STM32CubeH7",
+    "generated_at": "2026-05-20T10:19:36.460848+00:00",
+    "input_file": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\data\\issue_pr_commit_links_stm32cubeh7.json",
+    "issues_total": 296,
+    "unlinked_issues": 292,
+    "unlinked_rate": 0.9865,
+    "reason_breakdown": {
+      "no_pr_no_commit_signal": 292
+    },
+    "reason_samples": {
+      "no_pr_no_commit_signal": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        12,
+        13,
+        14,
+        15,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        28,
+        30
+      ]
+    },
+    "top_unlinked_labels": [
+      {
+        "label": "bug",
+        "count": 118
+      },
+      {
+        "label": "internal bug tracker",
+        "count": 117
+      },
+      {
+        "label": "hal",
+        "count": 87
+      },
+      {
+        "label": "projects",
+        "count": 52
+      },
+      {
+        "label": "cube mx",
+        "count": 51
+      },
+      {
+        "label": "question",
+        "count": 44
+      },
+      {
+        "label": "mw",
+        "count": 41
+      },
+      {
+        "label": "invalid",
+        "count": 40
+      },
+      {
+        "label": "enhancement",
+        "count": 35
+      },
+      {
+        "label": "usb",
+        "count": 28
+      },
+      {
+        "label": "cmsis",
+        "count": 23
+      },
+      {
+        "label": "wontfix",
+        "count": 21
+      },
+      {
+        "label": "spotted before customer",
+        "count": 19
+      },
+      {
+        "label": "eth",
+        "count": 18
+      },
+      {
+        "label": "st community",
+        "count": 17
+      },
+      {
+        "label": "rtos",
+        "count": 16
+      },
+      {
+        "label": "bsp",
+        "count": 12
+      },
+      {
+        "label": "duplicate",
+        "count": 12
+      },
+      {
+        "label": "needs clarification",
+        "count": 10
+      },
+      {
+        "label": "help wanted",
+        "count": 7
+      }
+    ],
+    "json_output": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\06_eval_outputs\\unlinked_audit_stm32cubeh7.json",
+    "md_output": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\06_eval_outputs\\unlinked_audit_stm32cubeh7.md"
+  }
+}

@@ -1,0 +1,474 @@
+{
+  "resolver_cases": [
+    {
+      "id": "resolver::stm32h5xx-hal-driver::issue::10",
+      "title": "Wrong RCC_PERIPHCLK_RTC setup in HAL",
+      "label": "Wrong RCC_PERIPHCLK_RTC setup in HAL",
+      "externalURL": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/10",
+      "rootTagPath": "resolver_cases",
+      "evidence_refs": [
+        {
+          "type": "issue",
+          "id": 10,
+          "url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/10"
+        }
+      ],
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "stm32h5xx-hal-driver",
+      "issue_root_path": "issues",
+      "pr_root_path": "pull",
+      "commit_root_path": "commit",
+      "issue_number": 10,
+      "issue_title": "Wrong RCC_PERIPHCLK_RTC setup in HAL",
+      "issue_labels": [
+        "bug",
+        "hal",
+        "internal bug tracker",
+        "rcc"
+      ],
+      "issue_state": "closed",
+      "issue_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/10",
+      "linked_pr_numbers": [
+        12
+      ],
+      "linked_commit_shas": [
+        "146ae59c5912b5787dcd31cab885329223ddce63"
+      ],
+      "primary_pr_number": 12,
+      "primary_commit_sha": "146ae59c5912b5787dcd31cab885329223ddce63",
+      "linked_pr_urls": [
+        "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/pull/12"
+      ],
+      "linked_commit_urls": [
+        "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/commit/146ae59c5912b5787dcd31cab885329223ddce63"
+      ],
+      "resolution_status": "merged_fix",
+      "merged_pr_with_file_evidence": true,
+      "merged_pr_with_file_evidence_pr_numbers": [
+        12
+      ],
+      "merged_pr_changed_files_total": 1,
+      "link_confidence": "high",
+      "link_score": 1.0,
+      "delivery_template": "st_v1_resolver_case",
+      "resolver_card_text": "Problem: Issue #10 - Wrong RCC_PERIPHCLK_RTC setup in HAL\nContext: repo=stm32h5xx-hal-driver, labels=bug, hal, internal bug tracker, rcc, issue_state=closed\nResolver signal: resolution_status=merged_fix, confidence=high, score=1.0\nAssessment: Fix likely integrated in mainline; prefer this as primary recommendation.\nCandidate PRs: rcc_ex: fix RTC clk sel with HSE div\nCommit evidence: rcc_ex: fix RTC clk sel with HSE div Signed-off-by: Jiri Novotny <jiri.\nFile evidence: merged PR modifies files even when commit log is merge-heavy\nPR #12 description: Fix Issue #10\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying.",
+      "linked_file_ids": [
+        "stm32h5xx-hal-driver-file-2555232517438371377"
+      ],
+      "linked_file_paths": [
+        "Src/stm32h5xx_hal_rcc_ex.c"
+      ],
+      "files_evidence": {
+        "changed_files_total": 1,
+        "matched_docs_files_count": 1,
+        "unmatched_files_count": 0,
+        "match_rate": 1.0,
+        "files": [
+          {
+            "path": "Src/stm32h5xx_hal_rcc_ex.c",
+            "status": "modified",
+            "additions": 1,
+            "deletions": 1,
+            "changes": 2,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "146ae59c5912b5787dcd31cab885329223ddce63"
+            ],
+            "module": "src",
+            "file_doc_id": "stm32h5xx-hal-driver-file-2555232517438371377",
+            "file_type": "hal_driver_source",
+            "component": "ETH",
+            "board": null,
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/blob/master/Src/stm32h5xx_hal_rcc_ex.c",
+            "score": 22.0
+          }
+        ]
+      },
+      "impacted_modules": [
+        "src"
+      ],
+      "impacted_components": [
+        "ETH"
+      ],
+      "impacted_boards": [],
+      "impacted_file_types": [
+        "hal_driver_source"
+      ],
+      "primary_changed_file": {
+        "path": "Src/stm32h5xx_hal_rcc_ex.c",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "changes": 2,
+        "touched_by_commits": 1,
+        "commit_shas": [
+          "146ae59c5912b5787dcd31cab885329223ddce63"
+        ],
+        "module": "src",
+        "file_doc_id": "stm32h5xx-hal-driver-file-2555232517438371377",
+        "file_type": "hal_driver_source",
+        "component": "ETH",
+        "board": null,
+        "example_name": null,
+        "source_match": "docs_files_exact",
+        "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/blob/master/Src/stm32h5xx_hal_rcc_ex.c",
+        "score": 22.0
+      }
+    },
+    {
+      "id": "resolver::stm32h5xx-hal-driver::issue::14",
+      "title": "Warning due to extraneous parentheses stm32h5xx_hal_rcc_ex.c",
+      "label": "Warning due to extraneous parentheses stm32h5xx_hal_rcc_ex.c",
+      "externalURL": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/14",
+      "rootTagPath": "resolver_cases",
+      "evidence_refs": [
+        {
+          "type": "issue",
+          "id": 14,
+          "url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/14"
+        }
+      ],
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "stm32h5xx-hal-driver",
+      "issue_root_path": "issues",
+      "pr_root_path": "pull",
+      "commit_root_path": "commit",
+      "issue_number": 14,
+      "issue_title": "Warning due to extraneous parentheses stm32h5xx_hal_rcc_ex.c",
+      "issue_labels": [
+        "bug",
+        "hal",
+        "internal bug tracker",
+        "rcc"
+      ],
+      "issue_state": "closed",
+      "issue_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/14",
+      "linked_pr_numbers": [
+        15
+      ],
+      "linked_commit_shas": [
+        "9de1e8b3a283f011a46c76ccbb092d7d6caf87b3"
+      ],
+      "primary_pr_number": 15,
+      "primary_commit_sha": "9de1e8b3a283f011a46c76ccbb092d7d6caf87b3",
+      "linked_pr_urls": [
+        "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/pull/15"
+      ],
+      "linked_commit_urls": [
+        "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/commit/9de1e8b3a283f011a46c76ccbb092d7d6caf87b3"
+      ],
+      "resolution_status": "merged_fix",
+      "merged_pr_with_file_evidence": true,
+      "merged_pr_with_file_evidence_pr_numbers": [
+        15
+      ],
+      "merged_pr_changed_files_total": 1,
+      "link_confidence": "high",
+      "link_score": 1.0,
+      "delivery_template": "st_v1_resolver_case",
+      "resolver_card_text": "Problem: Issue #14 - Warning due to extraneous parentheses stm32h5xx_hal_rcc_ex.c\nContext: repo=stm32h5xx-hal-driver, labels=bug, hal, internal bug tracker, rcc, issue_state=closed\nResolver signal: resolution_status=merged_fix, confidence=high, score=1.0\nAssessment: Fix likely integrated in mainline; prefer this as primary recommendation.\nCandidate PRs: [HAL][RCC] Remove extraneous parentheses\nCommit evidence: [HAL][RCC] Remove extraneous parentheses\nFile evidence: merged PR modifies files even when commit log is merge-heavy\nPR #15 description: Fixes #14\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying.",
+      "linked_file_ids": [
+        "stm32h5xx-hal-driver-file-2555232517438371377"
+      ],
+      "linked_file_paths": [
+        "Src/stm32h5xx_hal_rcc_ex.c"
+      ],
+      "files_evidence": {
+        "changed_files_total": 1,
+        "matched_docs_files_count": 1,
+        "unmatched_files_count": 0,
+        "match_rate": 1.0,
+        "files": [
+          {
+            "path": "Src/stm32h5xx_hal_rcc_ex.c",
+            "status": "modified",
+            "additions": 1,
+            "deletions": 1,
+            "changes": 2,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "9de1e8b3a283f011a46c76ccbb092d7d6caf87b3"
+            ],
+            "module": "src",
+            "file_doc_id": "stm32h5xx-hal-driver-file-2555232517438371377",
+            "file_type": "hal_driver_source",
+            "component": "ETH",
+            "board": null,
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/blob/master/Src/stm32h5xx_hal_rcc_ex.c",
+            "score": 22.0
+          }
+        ]
+      },
+      "impacted_modules": [
+        "src"
+      ],
+      "impacted_components": [
+        "ETH"
+      ],
+      "impacted_boards": [],
+      "impacted_file_types": [
+        "hal_driver_source"
+      ],
+      "primary_changed_file": {
+        "path": "Src/stm32h5xx_hal_rcc_ex.c",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "changes": 2,
+        "touched_by_commits": 1,
+        "commit_shas": [
+          "9de1e8b3a283f011a46c76ccbb092d7d6caf87b3"
+        ],
+        "module": "src",
+        "file_doc_id": "stm32h5xx-hal-driver-file-2555232517438371377",
+        "file_type": "hal_driver_source",
+        "component": "ETH",
+        "board": null,
+        "example_name": null,
+        "source_match": "docs_files_exact",
+        "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/blob/master/Src/stm32h5xx_hal_rcc_ex.c",
+        "score": 22.0
+      }
+    },
+    {
+      "id": "resolver::stm32h5xx-hal-driver::issue::20",
+      "title": "Add workaround for building HAL with GCC 11/12",
+      "label": "Add workaround for building HAL with GCC 11/12",
+      "externalURL": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/20",
+      "rootTagPath": "resolver_cases",
+      "evidence_refs": [
+        {
+          "type": "issue",
+          "id": 20,
+          "url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/20"
+        }
+      ],
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "stm32h5xx-hal-driver",
+      "issue_root_path": "issues",
+      "pr_root_path": "pull",
+      "commit_root_path": "commit",
+      "issue_number": 20,
+      "issue_title": "Add workaround for building HAL with GCC 11/12",
+      "issue_labels": [
+        "enhancement",
+        "invalid",
+        "hal",
+        "internal bug tracker",
+        "dma"
+      ],
+      "issue_state": "closed",
+      "issue_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/20",
+      "linked_pr_numbers": [
+        21,
+        22
+      ],
+      "linked_commit_shas": [
+        "1035b544dde06db95bfcdc732510fb547157798b"
+      ],
+      "primary_pr_number": 21,
+      "primary_commit_sha": "1035b544dde06db95bfcdc732510fb547157798b",
+      "linked_pr_urls": [
+        "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/pull/21",
+        "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/pull/22"
+      ],
+      "linked_commit_urls": [
+        "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/commit/1035b544dde06db95bfcdc732510fb547157798b"
+      ],
+      "resolution_status": "candidate_fix",
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0,
+      "link_confidence": "medium",
+      "link_score": 0.8,
+      "delivery_template": "st_v1_resolver_case",
+      "resolver_card_text": "Problem: Issue #20 - Add workaround for building HAL with GCC 11/12\nContext: repo=stm32h5xx-hal-driver, labels=enhancement, invalid, hal, internal bug tracker, dma, issue_state=closed\nResolver signal: resolution_status=candidate_fix, confidence=medium, score=0.8\nAssessment: Potential fix identified, but integration status is uncertain.\nCandidate PRs: [HAL][DMA] Fix internal compiler error with GCC 11 and 12 | [HAL][DMA] Fix internal compiler error with GCC 11 and 12\nCommit evidence: [HAL][DMA] Fix internal compiler error with GCC 11 and 12\nPR #21 description: Fixes https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/20\nPR #22 description: Fixes https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/20\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying.",
+      "linked_file_ids": [
+        "stm32h5xx-hal-driver-file-2900242780314454348"
+      ],
+      "linked_file_paths": [
+        "Src/stm32h5xx_hal_dma_ex.c"
+      ],
+      "files_evidence": {
+        "changed_files_total": 1,
+        "matched_docs_files_count": 1,
+        "unmatched_files_count": 0,
+        "match_rate": 1.0,
+        "files": [
+          {
+            "path": "Src/stm32h5xx_hal_dma_ex.c",
+            "status": "modified",
+            "additions": 8,
+            "deletions": 0,
+            "changes": 8,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "1035b544dde06db95bfcdc732510fb547157798b"
+            ],
+            "module": "src",
+            "file_doc_id": "stm32h5xx-hal-driver-file-2900242780314454348",
+            "file_type": "hal_driver_source",
+            "component": "DMA",
+            "board": null,
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/blob/master/Src/stm32h5xx_hal_dma_ex.c",
+            "score": 28.0
+          }
+        ]
+      },
+      "impacted_modules": [
+        "src"
+      ],
+      "impacted_components": [
+        "DMA"
+      ],
+      "impacted_boards": [],
+      "impacted_file_types": [
+        "hal_driver_source"
+      ],
+      "primary_changed_file": {
+        "path": "Src/stm32h5xx_hal_dma_ex.c",
+        "status": "modified",
+        "additions": 8,
+        "deletions": 0,
+        "changes": 8,
+        "touched_by_commits": 1,
+        "commit_shas": [
+          "1035b544dde06db95bfcdc732510fb547157798b"
+        ],
+        "module": "src",
+        "file_doc_id": "stm32h5xx-hal-driver-file-2900242780314454348",
+        "file_type": "hal_driver_source",
+        "component": "DMA",
+        "board": null,
+        "example_name": null,
+        "source_match": "docs_files_exact",
+        "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/blob/master/Src/stm32h5xx_hal_dma_ex.c",
+        "score": 28.0
+      }
+    },
+    {
+      "id": "resolver::stm32h5xx-hal-driver::issue::32",
+      "title": "[Bug]: NetX Ethernet PTP Transmit Timestamps not Captured",
+      "label": "[Bug]: NetX Ethernet PTP Transmit Timestamps not Captured",
+      "externalURL": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/32",
+      "rootTagPath": "resolver_cases",
+      "evidence_refs": [
+        {
+          "type": "issue",
+          "id": 32,
+          "url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/32"
+        }
+      ],
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "stm32h5xx-hal-driver",
+      "issue_root_path": "issues",
+      "pr_root_path": "pull",
+      "commit_root_path": "commit",
+      "issue_number": 32,
+      "issue_title": "[Bug]: NetX Ethernet PTP Transmit Timestamps not Captured",
+      "issue_labels": [
+        "bug",
+        "hal",
+        "eth"
+      ],
+      "issue_state": "open",
+      "issue_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/32",
+      "linked_pr_numbers": [
+        23,
+        24
+      ],
+      "linked_commit_shas": [
+        "2d0fe1ef4ee60e313c45f6717e5a35960f25302a"
+      ],
+      "primary_pr_number": 23,
+      "primary_commit_sha": "2d0fe1ef4ee60e313c45f6717e5a35960f25302a",
+      "linked_pr_urls": [
+        "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/pull/23",
+        "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/pull/24"
+      ],
+      "linked_commit_urls": [
+        "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/commit/2d0fe1ef4ee60e313c45f6717e5a35960f25302a"
+      ],
+      "resolution_status": "merged_fix",
+      "merged_pr_with_file_evidence": true,
+      "merged_pr_with_file_evidence_pr_numbers": [
+        24
+      ],
+      "merged_pr_changed_files_total": 1,
+      "link_confidence": "high",
+      "link_score": 1.0,
+      "delivery_template": "st_v1_resolver_case",
+      "resolver_card_text": "Problem: Issue #32 - [Bug]: NetX Ethernet PTP Transmit Timestamps not Captured\nContext: repo=stm32h5xx-hal-driver, labels=bug, hal, eth, issue_state=open\nResolver signal: resolution_status=merged_fix, confidence=high, score=1.0\nAssessment: Fix likely integrated in mainline; prefer this as primary recommendation.\nCandidate PRs: stm32h5xx_hal_mdf.h: Moves the cpp guard outside of MDF1 | stm32h5xx_hal_mdf.h: Moves the cpp guard outside of MDF1\nCommit evidence: stm32h5xx_hal_mdf.\nFile evidence: merged PR modifies files even when commit log is merge-heavy\nPR #23 description: Fixes [Issue 32](https://github.com/STMicroelectronics/STM32CubeH5/issues/32)\r\n\r\nMoves the cpp guard outside MDF1.\nPR #24 description: Fixes [Issue 32](https://github.com/STMicroelectronics/STM32CubeH5/issues/32)\r\n\r\nMoves the cpp guard outside MDF1.\r\n\r\nThis is a resubmit of a [previous PR ](https://github.com/STMicroelectronics/stm32h5xx-hal-driver/pull/23)after signing the Contribution License Agreement.\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying.",
+      "linked_file_ids": [
+        "stm32h5xx-hal-driver-file-3955115184297096518"
+      ],
+      "linked_file_paths": [
+        "Inc/stm32h5xx_hal_mdf.h"
+      ],
+      "files_evidence": {
+        "changed_files_total": 1,
+        "matched_docs_files_count": 1,
+        "unmatched_files_count": 0,
+        "match_rate": 1.0,
+        "files": [
+          {
+            "path": "Inc/stm32h5xx_hal_mdf.h",
+            "status": "modified",
+            "additions": 2,
+            "deletions": 2,
+            "changes": 4,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "2d0fe1ef4ee60e313c45f6717e5a35960f25302a"
+            ],
+            "module": "inc",
+            "file_doc_id": "stm32h5xx-hal-driver-file-3955115184297096518",
+            "file_type": "hal_driver_source",
+            "component": "ADC",
+            "board": null,
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/blob/master/Inc/stm32h5xx_hal_mdf.h",
+            "score": 24.0
+          }
+        ]
+      },
+      "impacted_modules": [
+        "inc"
+      ],
+      "impacted_components": [
+        "ADC"
+      ],
+      "impacted_boards": [],
+      "impacted_file_types": [
+        "hal_driver_source"
+      ],
+      "primary_changed_file": {
+        "path": "Inc/stm32h5xx_hal_mdf.h",
+        "status": "modified",
+        "additions": 2,
+        "deletions": 2,
+        "changes": 4,
+        "touched_by_commits": 1,
+        "commit_shas": [
+          "2d0fe1ef4ee60e313c45f6717e5a35960f25302a"
+        ],
+        "module": "inc",
+        "file_doc_id": "stm32h5xx-hal-driver-file-3955115184297096518",
+        "file_type": "hal_driver_source",
+        "component": "ADC",
+        "board": null,
+        "example_name": null,
+        "source_match": "docs_files_exact",
+        "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/blob/master/Inc/stm32h5xx_hal_mdf.h",
+        "score": 24.0
+      }
+    }
+  ]
+}

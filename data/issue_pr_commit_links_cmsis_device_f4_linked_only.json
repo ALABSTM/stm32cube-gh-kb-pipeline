@@ -1,0 +1,105 @@
+[
+  {
+    "repo": "cmsis_device_f4",
+    "issue_number": 3,
+    "issue_title": "Using '__IOM' for peripheral register definitions",
+    "issue_labels": [
+      "enhancement",
+      "wontfix",
+      "internal bug tracker",
+      "cmsis"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/cmsis-device-f4/issues/3",
+    "linked_pr_numbers": [
+      4,
+      5
+    ],
+    "linked_commit_shas": [
+      "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+      "fb0d972f320747948f0ff812c80e24f48e2e5a66"
+    ],
+    "linked_prs": [
+      {
+        "pr_number": 4,
+        "title": "Using '__IOM' for peripheral register definitions",
+        "state": "closed",
+        "merged": false,
+        "github_url": "https://github.com/STMicroelectronics/cmsis-device-f4/pull/4",
+        "changed_files_count": 23,
+        "merge_commit_sha": null
+      },
+      {
+        "pr_number": 5,
+        "title": "Using '__IOM' for peripheral register definitions",
+        "state": "closed",
+        "merged": false,
+        "github_url": "https://github.com/STMicroelectronics/cmsis-device-f4/pull/5",
+        "changed_files_count": 23,
+        "merge_commit_sha": "4ea79bb825e0aac055f5aa04ae06515475762410"
+      }
+    ],
+    "linked_commits": [
+      {
+        "sha": "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+        "message": "Using '__IOM' for peripheral register definitions",
+        "committed_at": "2021-05-07T07:35:25Z",
+        "github_url": "https://github.com/STMicroelectronics/cmsis-device-f4/commit/dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+        "pr_numbers": [
+          4,
+          5
+        ],
+        "stats": {
+          "additions": 8200,
+          "deletions": 8200,
+          "total": 16400
+        }
+      },
+      {
+        "sha": "fb0d972f320747948f0ff812c80e24f48e2e5a66",
+        "message": "Using '__IOM' for peripheral register definitions\n\nRebased to current version",
+        "committed_at": "2022-09-14T10:58:44Z",
+        "github_url": "https://github.com/STMicroelectronics/cmsis-device-f4/commit/fb0d972f320747948f0ff812c80e24f48e2e5a66",
+        "pr_numbers": [
+          5
+        ],
+        "stats": {
+          "additions": 8200,
+          "deletions": 8200,
+          "total": 16400
+        }
+      }
+    ],
+    "evidence": {
+      "explicit_pr_numbers": [
+        4,
+        5
+      ],
+      "explicit_commit_shas": [
+        "22215f2ef4cda7a2af0ec62fea3704f3eb132460",
+        "932d9e1bcbf63ea96d22f4f23c71d1581fb743bb",
+        "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+        "fb0d972f320747948f0ff812c80e24f48e2e5a66"
+      ],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [
+        "22215f2ef4cda7a2af0ec62fea3704f3eb132460",
+        "932d9e1bcbf63ea96d22f4f23c71d1581fb743bb",
+        "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+        "fb0d972f320747948f0ff812c80e24f48e2e5a66"
+      ],
+      "merge_like_commit_shas": [
+        "22215f2ef4cda7a2af0ec62fea3704f3eb132460",
+        "932d9e1bcbf63ea96d22f4f23c71d1581fb743bb"
+      ],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.8,
+    "link_confidence": "medium",
+    "resolution_status": "candidate_fix"
+  }
+]

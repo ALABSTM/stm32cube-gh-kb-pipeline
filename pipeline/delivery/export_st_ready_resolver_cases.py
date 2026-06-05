@@ -4,6 +4,11 @@ import re
 from pathlib import Path
 from typing import Any
 
+from pipeline.delivery.delivery_paths import (
+    get_existing_repo_artifact_file,
+    get_legacy_artifact_file,
+    get_repo_artifact_dir,
+)
 from shared.utils.paths import DATA_DIR, PROJECT_ROOT, get_config_path
 
 
@@ -70,14 +75,44 @@ def load_raw_commits_index(repo: str) -> dict[str, dict[str, Any]]:
     return out
 
 
+def load_raw_prs_index(repo: str) -> dict[int, dict[str, Any]]:
+    """Load raw PRs and index by pr_number for body lookup."""
+    path = DATA_DIR / f"raw_prs_{repo.lower()}.json"
+    if not path.exists():
+        return {}
+    prs = json.loads(path.read_text(encoding="utf-8"))
+    out: dict[int, dict[str, Any]] = {}
+    for pr in prs:
+        pr_num = pr.get("pr_number")
+        if isinstance(pr_num, int):
+            out[pr_num] = pr
+    return out
+
+
+_MARKDOWN_IMAGE_RE = re.compile(r"!\[[^\]]*\]\([^)]+\)")
+_HTML_IMAGE_RE = re.compile(r"<img\b[^>]*>", flags=re.IGNORECASE)
+
+
+def clean_pr_body_for_card(body: str | None, max_chars: int = 1500) -> str:
+    """Clean PR body: replace images with [IMAGE ATTACHED], trim to max_chars."""
+    if not body:
+        return ""
+    text = body.strip()
+    text = _MARKDOWN_IMAGE_RE.sub("[IMAGE ATTACHED]", text)
+    text = _HTML_IMAGE_RE.sub("[IMAGE ATTACHED]", text)
+    # Collapse multiple blank lines
+    text = re.sub(r"\n{3,}", "\n\n", text)
+    text = text.strip()
+    if len(text) > max_chars:
+        text = text[:max_chars].rsplit(" ", 1)[0] + " [truncated]"
+    return text
+
+
 def load_files_lookup(repo: str) -> dict[str, dict[str, Any]]:
-    files_path = (
-        PROJECT_ROOT
-        / "datasets"
-        / "07_delivery"
-        / "st_ready"
-        / "files_json"
-        / f"st_ready_files_{repo.lower()}.json"
+    files_path = get_existing_repo_artifact_file(
+        repo=repo,
+        artifact_dir="files_json",
+        file_name=f"st_ready_files_{repo.lower()}.json",
     )
     if not files_path.exists():
         return {}
@@ -155,7 +190,7 @@ def build_github_file_url(repo: str, path: str | None) -> str | None:
     return f"https://github.com/STMicroelectronics/{repo}/blob/master/{normalized}"
 
 
-def build_resolver_card_text(case: dict[str, Any]) -> str:
+def build_resolver_card_text(case: dict[str, Any], raw_prs_index: dict[int, dict[str, Any]] | None = None) -> str:
     issue_title = normalize_whitespace(case.get("issue_title") or "")
     issue_number = case.get("issue_number")
     labels = ", ".join(case.get("issue_labels") or [])
@@ -194,6 +229,16 @@ def build_resolver_card_text(case: dict[str, Any]) -> str:
     if case.get("merged_pr_with_file_evidence"):
         lines.append("File evidence: merged PR modifies files even when commit log is merge-heavy")
 
+    # Inject PR body content for linked PRs
+    if raw_prs_index:
+        pr_numbers = case.get("linked_pr_numbers") or []
+        for pr_num in pr_numbers[:2]:  # max 2 PR bodies
+            raw_pr = raw_prs_index.get(pr_num)
+            if raw_pr:
+                pr_body = clean_pr_body_for_card(raw_pr.get("body"))
+                if pr_body:
+                    lines.append(f"PR #{pr_num} description: {pr_body}")
+
     lines.append("Constraints: Validate against exact MCU series, board, firmware package version, and local project config before applying.")
     return "\n".join(lines).strip()
 
@@ -202,6 +247,7 @@ def to_st_ready_case(
     case: dict[str, Any],
     files_lookup: dict[str, dict[str, Any]],
     raw_commits_index: dict[str, dict[str, Any]],
+    raw_prs_index: dict[int, dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     linked_prs = case.get("linked_prs") or []
     linked_commits = case.get("linked_commits") or []
@@ -301,7 +347,7 @@ def to_st_ready_case(
         "link_confidence": case.get("link_confidence"),
         "link_score": case.get("link_score"),
         "delivery_template": "st_v1_resolver_case",
-        "resolver_card_text": build_resolver_card_text(case),
+        "resolver_card_text": build_resolver_card_text(case, raw_prs_index=raw_prs_index),
         "linked_file_ids": sorted(set([x for x in linked_file_ids if x])),
         "linked_file_paths": sorted(set([x for x in linked_file_paths if x])),
         "files_evidence": {
@@ -329,12 +375,13 @@ def export_repo_json(repo: str, include_reference_only: bool) -> tuple[int, int,
             f"Input file not found: {linked_only_path} (or fallback {full_links_path})"
         )
 
-    out_root = PROJECT_ROOT / "datasets" / "07_delivery" / "st_ready" / "resolver_cases_json"
+    out_root = get_repo_artifact_dir(repo, "resolver_cases_json")
     out_root.mkdir(parents=True, exist_ok=True)
 
     cases = json.loads(in_path.read_text(encoding="utf-8"))
     files_lookup = load_files_lookup(repo)
     raw_commits_index = load_raw_commits_index(repo)
+    raw_prs_index = load_raw_prs_index(repo)
     total = len(cases)
 
     selected: list[dict[str, Any]] = []
@@ -349,6 +396,7 @@ def export_repo_json(repo: str, include_reference_only: bool) -> tuple[int, int,
                 case,
                 files_lookup=files_lookup,
                 raw_commits_index=raw_commits_index,
+                raw_prs_index=raw_prs_index,
             )
         )
 
@@ -356,8 +404,14 @@ def export_repo_json(repo: str, include_reference_only: bool) -> tuple[int, int,
         "resolver_cases": selected,
     }
 
-    out_file = out_root / f"st_ready_resolver_cases_{repo.lower()}.json"
+    out_file_name = f"st_ready_resolver_cases_{repo.lower()}.json"
+    out_file = out_root / out_file_name
     out_file.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    # Backward-compatible mirror in legacy flat folder.
+    legacy_out_file = get_legacy_artifact_file("resolver_cases_json", out_file_name)
+    legacy_out_file.parent.mkdir(parents=True, exist_ok=True)
+    legacy_out_file.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
     summary = {
         "repo": repo,
@@ -380,7 +434,15 @@ def export_repo_json(repo: str, include_reference_only: bool) -> tuple[int, int,
             [c for c in selected if c.get("merged_pr_with_file_evidence")]
         ),
     }
-    (out_root / f"summary_resolver_cases_{repo.lower()}.json").write_text(
+    summary_file_name = f"summary_resolver_cases_{repo.lower()}.json"
+    (out_root / summary_file_name).write_text(
+        json.dumps(summary, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+
+    legacy_summary_file = get_legacy_artifact_file("resolver_cases_json", summary_file_name)
+    legacy_summary_file.parent.mkdir(parents=True, exist_ok=True)
+    legacy_summary_file.write_text(
         json.dumps(summary, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )

@@ -13,9 +13,9 @@ from shared.utils.paths import PROJECT_ROOT
 
 BYTES_PER_KB = 1024
 
-DEFAULT_INPUT_DIR = PROJECT_ROOT / "datasets" / "07_delivery" / "st_ready" / "files_json"
+DEFAULT_INPUT_DIR = PROJECT_ROOT / "datasets" / "07_delivery" / "st_ready" / "by_series"
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "datasets" / "07_delivery" / "st_ready" / "manual_upload" / "files_json_split"
-DEFAULT_PATTERN = "st_ready_files_*.json"
+DEFAULT_PATTERN = "**/files_json/st_ready_files_*.json"
 DEFAULT_ROOT_TAG_PATH = "files"
 DEFAULT_MIN_SOURCE_SIZE_KB = 350.0
 DEFAULT_MAX_DOCS_PER_PART = 8

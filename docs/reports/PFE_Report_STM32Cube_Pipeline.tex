@@ -1,0 +1,490 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{tocloft}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{setspace}
+\onehalfspacing
+
+% Colors
+\definecolor{stblue}{RGB}{26,35,126}
+\definecolor{codebg}{RGB}{245,245,245}
+\definecolor{codeframe}{RGB}{200,200,200}
+
+% Code listing style
+\lstset{
+  backgroundcolor=\color{codebg},
+  frame=single,
+  rulecolor=\color{codeframe},
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  keywordstyle=\color{blue},
+  commentstyle=\color{gray},
+  stringstyle=\color{red!70!black},
+}
+
+% Headers
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\leftmark}
+\fancyhead[R]{PFE --- Chatbot STM32Cube}
+\fancyfoot[C]{\thepage}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=stblue,
+  urlcolor=blue!70!black,
+  citecolor=stblue,
+}
+
+\begin{document}
+
+%% ============================================================
+%% TITLE PAGE
+%% ============================================================
+\begin{titlepage}
+\centering
+\vspace*{1cm}
+
+{\Large \textbf{Université / École d'Ingénieur}}\\[0.3cm]
+{\large Département Informatique / Génie Logiciel}\\[2cm]
+
+{\Huge \textbf{Projet de Fin d'Études}}\\[0.5cm]
+{\LARGE Rapport de Stage}\\[1.5cm]
+
+\rule{\textwidth}{1pt}\\[0.5cm]
+{\huge \textbf{Conception et Implémentation d'un Pipeline\\de Prétraitement Intelligent pour la\\Base de Connaissances STM32Cube}}\\[0.5cm]
+\rule{\textwidth}{1pt}\\[2cm]
+
+\begin{minipage}{0.45\textwidth}
+\begin{flushleft}
+\textbf{Réalisé par :}\\
+Abir GHARBI
+\end{flushleft}
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\textwidth}
+\begin{flushright}
+\textbf{Encadrant entreprise :}\\
+[Nom du tuteur ST]\\[0.5cm]
+\textbf{Encadrant académique :}\\
+[Nom du tuteur académique]
+\end{flushright}
+\end{minipage}
+
+\vfill
+
+\textbf{Entreprise d'accueil :} STMicroelectronics\\
+\textbf{Division :} AI \& Digital Tools\\[0.5cm]
+\textbf{Année universitaire :} 2025--2026
+
+\end{titlepage}
+
+%% ============================================================
+\chapter*{Remerciements}
+\addcontentsline{toc}{chapter}{Remerciements}
+
+Je tiens à exprimer ma sincère gratitude envers toute l'équipe STMicroelectronics pour leur accueil, leur encadrement et leur soutien tout au long de ce stage. Je remercie particulièrement [nom du tuteur] pour sa disponibilité et ses conseils avisés.
+
+\newpage
+\tableofcontents
+\newpage
+\listoffigures
+\newpage
+
+%% ============================================================
+\chapter{Introduction Générale}
+%% ============================================================
+
+\section{Contexte}
+
+STMicroelectronics est un leader mondial dans la conception de semi-conducteurs. La famille STM32 représente plus de 1500 références de microcontrôleurs utilisés dans l'industrie, l'automobile, l'IoT et l'électronique grand public.
+
+Les dépôts GitHub publics de STMicroelectronics (\texttt{github.com/STMicroelectronics}) contiennent :
+\begin{itemize}
+  \item Des paquets logiciels complets (HAL, BSP, Middleware)
+  \item Des milliers d'issues et pull requests (retours utilisateurs, corrections de bugs)
+  \item De la documentation technique (Release Notes, exemples de code)
+\end{itemize}
+
+\section{Problématique}
+
+Les ingénieurs et clients rencontrant des problèmes avec les microcontrôleurs STM32 n'ont pas de moyen efficace d'exploiter la richesse de ces données GitHub. La recherche manuelle dans les issues et la documentation est :
+\begin{itemize}
+  \item \textbf{Lente} --- des milliers d'issues par série MCU
+  \item \textbf{Bruitée} --- contenu non structuré, images, discussions hors-sujet
+  \item \textbf{Fragmentée} --- corrélations entre issues/PRs/commits non visibles
+\end{itemize}
+
+\section{Objectifs du Projet}
+
+Concevoir et implémenter un pipeline automatisé de prétraitement qui :
+\begin{enumerate}
+  \item Ingère les données brutes depuis l'API GitHub
+  \item Nettoie, enrichit et structure les documents
+  \item Génère des artefacts RAG-ready pour une base de connaissances
+  \item Alimente un chatbot IA spécialisé STM32 via l'API ST AI Bridge
+\end{enumerate}
+
+\section{Plan du Rapport}
+
+\begin{itemize}
+  \item \textbf{Chapitre 2} --- État de l'art : RAG, NLP pour code, chatbots techniques
+  \item \textbf{Chapitre 3} --- Méthodologie et architecture du pipeline
+  \item \textbf{Chapitre 4} --- Implémentation détaillée
+  \item \textbf{Chapitre 5} --- Résultats et évaluation
+  \item \textbf{Chapitre 6} --- Conclusion et perspectives
+\end{itemize}
+
+%% ============================================================
+\chapter{État de l'Art}
+%% ============================================================
+
+\section{Retrieval-Augmented Generation (RAG)}
+
+Le paradigme RAG combine la recherche d'information avec la génération de texte par des LLMs \cite{lewis2020rag}. Au lieu de se fier uniquement aux connaissances paramétrisées du modèle, RAG :
+\begin{enumerate}
+  \item \textbf{Récupère} des documents pertinents depuis une base de connaissances
+  \item \textbf{Augmente} le contexte du prompt avec ces documents
+  \item \textbf{Génère} une réponse fondée sur des preuves factuelles
+\end{enumerate}
+
+\subsection{Avantages pour le domaine technique}
+\begin{itemize}
+  \item Réduction des hallucinations grâce aux sources vérifiables
+  \item Mise à jour continue de la KB sans ré-entraînement
+  \item Traçabilité des réponses vers les issues/PRs source
+\end{itemize}
+
+\section{Prétraitement pour Knowledge Bases}
+
+La qualité du RAG dépend directement de la qualité des documents indexés :
+
+\subsection{Chunking Strategies}
+\begin{itemize}
+  \item \textbf{Fixed-size} : simple mais coupe le contexte
+  \item \textbf{Paragraph-based} : respecte les frontières sémantiques
+  \item \textbf{Section-based} : adapté aux documents structurés
+  \item \textbf{Overlap} : assure la continuité contextuelle entre chunks
+\end{itemize}
+
+\subsection{Enrichissement Métadonnées}
+L'ajout de métadonnées structurées (composant, couche, sévérité) permet un filtrage précis lors de la recherche.
+
+\section{Traitement du Langage Naturel pour Code Source}
+
+\begin{itemize}
+  \item TF-IDF pour la similarité inter-issues
+  \item Heuristiques regex pour la détection de composants matériels
+  \item Classification supervisée vs. règles pour le type de problème
+\end{itemize}
+
+\section{Solutions Existantes}
+
+\begin{longtable}{p{4cm}p{5cm}p{4cm}}
+\toprule
+\textbf{Solution} & \textbf{Forces} & \textbf{Limites} \\
+\midrule
+GitHub Copilot & Code completion & Pas de KB custom \\
+Stack Overflow Search & Communauté large & Pas spécifique ST \\
+RAG générique & Flexible & Pas de prétraitement domain-aware \\
+\textbf{Notre approche} & Domain-specific + enrichi & Requiert pipeline custom \\
+\bottomrule
+\end{longtable}
+
+%% ============================================================
+\chapter{Méthodologie et Architecture}
+%% ============================================================
+
+\section{Approche Méthodologique}
+
+Le projet suit une approche itérative :
+\begin{enumerate}
+  \item \textbf{Phase 1} : Pipeline H7 (série pilote, 12 repos)
+  \item \textbf{Phase 2} : Extension multi-séries (F4, H5, U5, WL)
+  \item \textbf{Phase 3} : Enrichissement IA (Alfred Vision) et évaluation
+\end{enumerate}
+
+\section{Architecture Globale}
+
+Le système s'articule autour de 3 couches :
+
+\begin{enumerate}
+  \item \textbf{Couche Data} : ingestion et stockage structuré (JSON)
+  \item \textbf{Couche Processing} : pipeline Python en 7 étapes
+  \item \textbf{Couche Delivery} : export et upload vers la KB cloud
+\end{enumerate}
+
+\section{Choix Techniques}
+
+\begin{longtable}{p{4cm}p{9cm}}
+\toprule
+\textbf{Choix} & \textbf{Justification} \\
+\midrule
+Python 3.14 & Écosystème riche (requests, scikit-learn), déploiement simple \\
+JSON comme format pivot & Natif pour APIs REST, lisible, versionnable \\
+TF-IDF (scikit-learn) & Léger, rapide, suffisant pour la similarité textuelle \\
+Heuristiques vs ML & Déterministe, explicable, pas de données d'entraînement requises \\
+Architecture modulaire & Chaque étape est rejouable indépendamment \\
+\bottomrule
+\end{longtable}
+
+\section{Diagramme de Flux de Données}
+
+\textit{(Voir diagrammes draw.io en annexe : 01\_pipeline\_overview.drawio)}
+
+\begin{verbatim}
+GitHub API → 01_raw → 02_clean → 03_enriched → 04_similarity 
+         → 05_chunked → 06_evaluated → 07_delivery → KB #793
+\end{verbatim}
+
+%% ============================================================
+\chapter{Implémentation}
+%% ============================================================
+
+\section{Ingestion (Stage 1)}
+
+\subsection{Objectif}
+Récupérer exhaustivement les données des repositories GitHub configurés.
+
+\subsection{Mécanisme}
+\begin{itemize}
+  \item Pagination automatique (100 items/page)
+  \item Gestion du rate-limiting GitHub (5000 req/h avec token)
+  \item Retry exponentiel en cas d'erreur réseau
+  \item Fetch parallélisable par repository
+\end{itemize}
+
+\subsection{Données récupérées}
+Pour chaque repo : issues (avec commentaires), PRs, commits, liens croisés, et fichiers source.
+
+\section{Nettoyage (Stage 2)}
+
+\begin{itemize}
+  \item Suppression des issues bot/spam
+  \item Normalisation des labels GitHub
+  \item Extraction du texte utile (suppression des templates vides)
+  \item Déduplication par identifiant
+\end{itemize}
+
+\section{Enrichissement V2 (Stage 3)}
+
+\subsection{Heuristiques de Classification}
+
+Le module \texttt{stm32cube\_preprocessing\_heuristics.py} applique des règles basées sur :
+\begin{itemize}
+  \item \textbf{Regex patterns} : détection de séries MCU, composants, boards
+  \item \textbf{Analyse des labels} : mapping label→layer (bug→bug\_report, etc.)
+  \item \textbf{Scoring pondéré} : longueur du body, présence de code, de logs d'erreur
+\end{itemize}
+
+\subsection{Exemple de Classification}
+
+\begin{lstlisting}[language=json]
+{
+  "issue_number": 42,
+  "title": "HAL_SPI_TransmitReceive DMA fails on STM32F446",
+  "layer": "HAL",
+  "component": "SPI", 
+  "board": "NUCLEO-F446RE",
+  "issue_kind": "bug_report",
+  "severity": "high",
+  "evidence_strength": "high"
+}
+\end{lstlisting}
+
+\section{Similarité (Stage 4)}
+
+\subsection{Algorithme}
+\begin{enumerate}
+  \item Construction de la matrice TF-IDF sur le corpus (titre + body + commentaires)
+  \item Calcul de la similarité cosinus paire-à-paire
+  \item Sélection des top-5 voisins (seuil $> 0.3$)
+\end{enumerate}
+
+Formule de similarité cosinus :
+$$\text{sim}(A, B) = \frac{A \cdot B}{\|A\| \times \|B\|}$$
+
+\section{Chunking V2 (Stage 5)}
+
+Stratégie de découpage :
+\begin{itemize}
+  \item Issues : chunks par paragraphe, max 512 tokens, overlap 50 tokens
+  \item Files : chunks par section (README headers, fonctions C)
+\end{itemize}
+
+\section{Delivery (Stage 7)}
+
+\subsection{Resolver Cases}
+Générés à partir d'issues fermées avec PRs liées :
+\begin{enumerate}
+  \item Identification de la chaîne Issue → PR → Commits
+  \item Évaluation du \texttt{resolution\_status} (merged\_fix, candidate\_fix, reference\_only)
+  \item Construction du texte structuré : Problème → Signal → Évaluation → Preuves
+\end{enumerate}
+
+\subsection{Diagnostic Cards}
+Cartes de diagnostic structurées pour les problèmes récurrents :
+\begin{enumerate}
+  \item Sélection des issues à haute valeur diagnostique
+  \item Génération : Symptôme → Cause Racine → Résolution → Validation
+  \item Alias de requête pour améliorer la récupération
+\end{enumerate}
+
+%% ============================================================
+\chapter{Résultats et Évaluation}
+%% ============================================================
+
+\section{Couverture des Données}
+
+\begin{longtable}{lcccc}
+\toprule
+\textbf{Série} & \textbf{Repos} & \textbf{Issues} & \textbf{Files} & \textbf{Resolver Cases} \\
+\midrule
+STM32F4 & 16 & $\sim$800 & $\sim$5400 & $\sim$150 \\
+STM32H5 & 6 & $\sim$200 & $\sim$1200 & $\sim$40 \\
+STM32U5 & 8 & $\sim$350 & $\sim$2000 & $\sim$70 \\
+STM32WL & 5 & $\sim$150 & $\sim$800 & $\sim$30 \\
+STM32H7 & 12 & $\sim$500 & $\sim$3000 & $\sim$100 \\
+\midrule
+\textbf{Total} & \textbf{47} & $\sim$\textbf{2000} & $\sim$\textbf{12400} & $\sim$\textbf{390} \\
+\bottomrule
+\end{longtable}
+
+\section{Qualité de l'Enrichissement}
+
+Taux d'enrichissement réussi (champ non ``unknown'') :
+\begin{itemize}
+  \item \textbf{Layer} : $\sim$85\% des issues
+  \item \textbf{Component} : $\sim$70\% des issues
+  \item \textbf{Board} : $\sim$45\% (dépend de la mention explicite)
+  \item \textbf{Severity} : 100\% (toujours calculé)
+\end{itemize}
+
+\section{Performance de Recherche}
+
+Tests TF-IDF sur requêtes techniques :
+\begin{itemize}
+  \item Précision@5 : $\sim$0.72 (issues), $\sim$0.78 (files)
+  \item La recherche hybride (semantic + full-text) sur la KB améliore significativement vs. TF-IDF seul
+\end{itemize}
+
+\section{Test Suite Qualité (50 Questions)}
+
+Évaluation sur 50 questions réalistes couvrant les 4 séries (F4, H5, U5, WL) :
+\begin{itemize}
+  \item Questions formulées en langage naturel ``client''
+  \item Chaque question inclut contexte board + symptôme technique
+  \item Réponse attendue avec ancrage technique vérifiable
+\end{itemize}
+
+%% ============================================================
+\chapter{Conclusion et Perspectives}
+%% ============================================================
+
+\section{Bilan}
+
+Ce projet a permis de concevoir et déployer un pipeline de prétraitement complet qui :
+\begin{itemize}
+  \item Transforme des données GitHub brutes en connaissances structurées
+  \item Alimente un chatbot IA spécialisé STM32 en production
+  \item Couvre 5 séries MCU (47 repositories, $\sim$14400 documents)
+  \item Intègre l'enrichissement IA par vision (Alfred)
+\end{itemize}
+
+\section{Perspectives}
+
+\begin{enumerate}
+  \item \textbf{Extension à d'autres séries} : STM32L4, STM32G4, STM32MP
+  \item \textbf{Enrichissement sémantique} : embeddings pré-calculés pour la similarité
+  \item \textbf{CI/CD automatisé} : Jenkins pipeline pour mise à jour continue
+  \item \textbf{Évaluation automatique} : scoring RAG avec métriques (Faithfulness, Relevance)
+  \item \textbf{Multi-langue} : support des issues en chinois/japonais
+\end{enumerate}
+
+%% ============================================================
+\chapter*{Références}
+\addcontentsline{toc}{chapter}{Références}
+
+\begin{thebibliography}{9}
+\bibitem{lewis2020rag}
+Lewis, P. et al. (2020). \textit{Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks}. NeurIPS 2020.
+
+\bibitem{openai2023}
+OpenAI (2023). \textit{GPT-4 Technical Report}. arXiv:2303.08774.
+
+\bibitem{tfidf}
+Salton, G., Buckley, C. (1988). \textit{Term-weighting approaches in automatic text retrieval}. Information Processing \& Management.
+
+\bibitem{stm32}
+STMicroelectronics (2024). \textit{STM32Cube MCU \& MPU Packages}. \url{https://github.com/STMicroelectronics}
+\end{thebibliography}
+
+%% ============================================================
+\chapter*{Annexes}
+\addcontentsline{toc}{chapter}{Annexes}
+
+\section*{A. Liste des Diagrammes}
+
+\begin{itemize}
+  \item \texttt{docs/diagrams/presentation/01\_pipeline\_overview.drawio}
+  \item \texttt{docs/diagrams/presentation/02\_delivery\_kb\_upload.drawio}
+  \item \texttt{docs/diagrams/presentation/03\_data\_flow\_source\_to\_answer.drawio}
+  \item \texttt{docs/diagrams/technical/01\_ingestion\_detail.drawio}
+  \item \texttt{docs/diagrams/technical/02\_enrichment\_similarity\_detail.drawio}
+  \item \texttt{docs/diagrams/technical/03\_delivery\_resolver\_diagnostic.drawio}
+\end{itemize}
+
+\section*{B. Commandes d'Exécution}
+
+\begin{lstlisting}[language=bash]
+# Activer l'environnement
+.venv\Scripts\activate
+
+# Pipeline complet avec delivery
+python -m pipeline.run_full_workflow --export-st-ready
+
+# Validation des schemas
+python -m pipeline.evaluation.validate_schemas
+
+# Upload vers KB
+python Add_Data_Source_Files.py --operation add \
+  --ds-id 28099 --json-split-size 1000 \
+  --file "datasets/07_delivery/st_ready/.../issues.json"
+\end{lstlisting}
+
+\section*{C. Structure JSON --- Resolver Case (Extrait)}
+
+\begin{lstlisting}[language=json]
+{
+  "resolver_cases": [
+    {
+      "issue_number": 42,
+      "repo": "stm32cubef4",
+      "label": "SPI DMA TransmitReceive fails...",
+      "resolution_status": "merged_fix",
+      "link_confidence": "high",
+      "primary_pr_number": 87,
+      "primary_changed_file": "stm32f4xx_hal_spi.c",
+      "resolver_card_text": "Problem: ...",
+      "impacted_modules": ["SPI", "DMA"],
+      "impacted_boards": ["NUCLEO-F446RE"]
+    }
+  ]
+}
+\end{lstlisting}
+
+\end{document}

@@ -1,0 +1,200 @@
+[
+  {
+    "repo": "STM32CubeF4",
+    "issue_number": 65,
+    "issue_title": "STM32F4 1.26 Vector table position can not be defined by compiler define",
+    "issue_labels": [
+      "enhancement",
+      "internal bug tracker",
+      "cmsis"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF4/issues/65",
+    "linked_pr_numbers": [
+      146
+    ],
+    "linked_commit_shas": [
+      "45f2a0e0a75595a5b39949d0b63dcfa00fac1ae6"
+    ],
+    "linked_prs": [
+      {
+        "pr_number": 146,
+        "title": "Allow VECT_TAB_OFFSET to be overridden externally (IDE or Makefile)",
+        "state": "closed",
+        "merged": false,
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeF4/pull/146",
+        "changed_files_count": 1,
+        "merge_commit_sha": null
+      }
+    ],
+    "linked_commits": [
+      {
+        "sha": "45f2a0e0a75595a5b39949d0b63dcfa00fac1ae6",
+        "message": "Allow VECT_TAB_OFFSET to be overridden externally (IDE or Makefile)",
+        "committed_at": "2022-10-28T20:38:18Z",
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeF4/commit/45f2a0e0a75595a5b39949d0b63dcfa00fac1ae6",
+        "pr_numbers": [
+          146
+        ],
+        "stats": {
+          "additions": 4,
+          "deletions": 0,
+          "total": 4
+        }
+      }
+    ],
+    "evidence": {
+      "explicit_pr_numbers": [
+        146
+      ],
+      "explicit_commit_shas": [
+        "45f2a0e0a75595a5b39949d0b63dcfa00fac1ae6"
+      ],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [
+        "45f2a0e0a75595a5b39949d0b63dcfa00fac1ae6"
+      ],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.8,
+    "link_confidence": "medium",
+    "resolution_status": "candidate_fix"
+  },
+  {
+    "repo": "STM32CubeF4",
+    "issue_number": 110,
+    "issue_title": "FatFS driver diskio is_initialized is always set to true",
+    "issue_labels": [
+      "bug",
+      "st community",
+      "mw",
+      "fs"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF4/issues/110",
+    "linked_pr_numbers": [
+      111
+    ],
+    "linked_commit_shas": [
+      "c00ef07518436ce13c109ffbb6329a35845fa4c8"
+    ],
+    "linked_prs": [
+      {
+        "pr_number": 111,
+        "title": "Update diskio.c",
+        "state": "closed",
+        "merged": false,
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeF4/pull/111",
+        "changed_files_count": 1,
+        "merge_commit_sha": "f26bb7ad755d3fa025e01fab46b6f23320256373"
+      }
+    ],
+    "linked_commits": [
+      {
+        "sha": "c00ef07518436ce13c109ffbb6329a35845fa4c8",
+        "message": "Update diskio.c\n\nFix #110 falsely setting is_initialized to 1 regardless of driver return value",
+        "committed_at": "2022-02-13T15:54:20Z",
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeF4/commit/c00ef07518436ce13c109ffbb6329a35845fa4c8",
+        "pr_numbers": [
+          111
+        ],
+        "stats": {
+          "additions": 4,
+          "deletions": 1,
+          "total": 5
+        }
+      }
+    ],
+    "evidence": {
+      "explicit_pr_numbers": [
+        111
+      ],
+      "explicit_commit_shas": [
+        "c00ef07518436ce13c109ffbb6329a35845fa4c8"
+      ],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [
+        "c00ef07518436ce13c109ffbb6329a35845fa4c8"
+      ],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.8,
+    "link_confidence": "medium",
+    "resolution_status": "candidate_fix"
+  },
+  {
+    "repo": "STM32CubeF4",
+    "issue_number": 147,
+    "issue_title": "Check value of pllm in function HAL_RCC_GetSysClockFreq of stm32f4xx_hal_rcc.c:911",
+    "issue_labels": [
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF4/issues/147",
+    "linked_pr_numbers": [
+      154
+    ],
+    "linked_commit_shas": [
+      "043197bd401d777ad3d05d97772b8dab5686bd67"
+    ],
+    "linked_prs": [
+      {
+        "pr_number": 154,
+        "title": "HAL_RCC_GetSysClockFreq: Add conditional check for the value of pllm",
+        "state": "closed",
+        "merged": false,
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeF4/pull/154",
+        "changed_files_count": 1,
+        "merge_commit_sha": "1dd67173963034aec3a59687a02f2d0a99fe717e"
+      }
+    ],
+    "linked_commits": [
+      {
+        "sha": "043197bd401d777ad3d05d97772b8dab5686bd67",
+        "message": "HAL_RCC_GetSysClockFreq: Add conditional check for the value of pllm",
+        "committed_at": "2023-02-13T17:48:44Z",
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeF4/commit/043197bd401d777ad3d05d97772b8dab5686bd67",
+        "pr_numbers": [
+          154
+        ],
+        "stats": {
+          "additions": 5,
+          "deletions": 0,
+          "total": 5
+        }
+      }
+    ],
+    "evidence": {
+      "explicit_pr_numbers": [
+        154
+      ],
+      "explicit_commit_shas": [
+        "043197bd401d777ad3d05d97772b8dab5686bd67"
+      ],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [
+        "043197bd401d777ad3d05d97772b8dab5686bd67"
+      ],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.8,
+    "link_confidence": "medium",
+    "resolution_status": "candidate_fix"
+  }
+]

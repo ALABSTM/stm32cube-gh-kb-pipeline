@@ -1,0 +1,49 @@
+{
+  "owner": "STMicroelectronics",
+  "repos": [
+    "STM32CubeF4",
+    "stm32f4xx-hal-driver",
+    "cmsis_device_f4",
+    "stm32f4xx-nucleo-bsp",
+    "stm32f4xx-nucleo-144-bsp",
+    "stm32f4discovery-bsp",
+    "32f401cdiscovery-bsp",
+    "32f411ediscovery-bsp",
+    "32f412gdiscovery-bsp",
+    "32f413hdiscovery-bsp",
+    "32f429idiscovery-bsp",
+    "32f469idiscovery-bsp",
+    "stm324x9i-eval-bsp",
+    "stm324xg-eval-bsp",
+    "stm32446e-eval-bsp",
+    "stm32469i-eval-bsp"
+  ],
+  "data_dir": "data",
+  "repos_dir": "GitHub_repos",
+  "auto_clone_missing_repos": true,
+  "repo_clone_urls": {
+    "stm32f4xx-hal-driver": "https://github.com/STMicroelectronics/stm32f4xx_hal_driver.git",
+    "cmsis_device_f4": "https://github.com/STMicroelectronics/cmsis_device_f4.git",
+    "stm32f4xx-nucleo-bsp": "https://github.com/STMicroelectronics/stm32f4xx-nucleo-bsp.git",
+    "stm32f4xx-nucleo-144-bsp": "https://github.com/STMicroelectronics/stm32f4xx-nucleo-144-bsp.git",
+    "stm32f4discovery-bsp": "https://github.com/STMicroelectronics/stm32f4discovery-bsp.git",
+    "32f401cdiscovery-bsp": "https://github.com/STMicroelectronics/32f401cdiscovery-bsp.git",
+    "32f411ediscovery-bsp": "https://github.com/STMicroelectronics/32f411ediscovery-bsp.git",
+    "32f412gdiscovery-bsp": "https://github.com/STMicroelectronics/32f412gdiscovery-bsp.git",
+    "32f413hdiscovery-bsp": "https://github.com/STMicroelectronics/32f413hdiscovery-bsp.git",
+    "32f429idiscovery-bsp": "https://github.com/STMicroelectronics/32f429idiscovery-bsp.git",
+    "32f469idiscovery-bsp": "https://github.com/STMicroelectronics/32f469idiscovery-bsp.git",
+    "stm324x9i-eval-bsp": "https://github.com/STMicroelectronics/stm324x9i-eval-bsp.git",
+    "stm324xg-eval-bsp": "https://github.com/STMicroelectronics/stm324xg-eval-bsp.git",
+    "stm32446e-eval-bsp": "https://github.com/STMicroelectronics/stm32446e-eval-bsp.git",
+    "stm32469i-eval-bsp": "https://github.com/STMicroelectronics/stm32469i-eval-bsp.git"
+  },
+  "linked_repo_refs": {},
+  "commit_pr_scope": "linked_or_merged",
+  "github_token_env": "GITHUB_TOKEN",
+  "rate_limits": {
+    "issues_sleep": 0.2,
+    "comments_sleep": 0.1
+  },
+  "ingest_version": "v1.0"
+}

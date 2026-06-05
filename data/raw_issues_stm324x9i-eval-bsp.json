@@ -1,0 +1,34 @@
+[
+  {
+    "repo": "stm324x9i-eval-bsp",
+    "issue_number": 1,
+    "title": "FSC NOR Flash AccessTime",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "bsp",
+      "internal bug tracker"
+    ],
+    "created_at": "2023-03-27T13:39:51Z",
+    "closed_at": "2025-08-29T09:42:03Z",
+    "body": "I have an  issue with the access time of the 70ns NOR flash\r\n\r\nif I calculate the the access time with the two relevant times (AdressSetupTime + DataSetupTime) * HCLK\r\n(4+7)*5.95ns  = 65.4ns (@168MHz).\r\n\r\nThe result is less than the needed 70ns.\r\nThe used M29W128Gx might function, but this is not 100% assured.\r\n\r\n/* excerpt from stm324x9i_eval_nor.c */\r\n\r\n  /* NOR device configuration */  \r\n  Timing.AddressSetupTime      = 4;\r\n  Timing.AddressHoldTime       = 3;\r\n  Timing.DataSetupTime         = 7;\r\n  Timing.BusTurnAroundDuration = 1;\r\n  Timing.CLKDivision           = 2;\r\n  Timing.DataLatency           = 2;\r\n  Timing.AccessMode            = FMC_ACCESS_MODE_A;\r\n  \r\n![image](https://user-images.githubusercontent.com/129074383/227954988-1e3f1942-9b64-411a-80b4-46cc9a28a82a.png)\r\n",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2023-03-30T12:03:50Z",
+        "body": "Hi @UlfPGerlach,\r\n\r\nThank you for this report. We will get back to you as soon as we analyze it further. This may take some time. Thank you for your comprehension.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2024-07-03T13:54:32Z",
+        "body": "ST Internal Reference: 185672"
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2025-08-29T09:42:03Z",
+        "body": "Fixed in 310231180823d39bb74776bcc442c85f156a7f98"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm324x9i-eval-bsp/issues/1"
+  }
+]

@@ -1,12 +1,12 @@
 {
   "repo": "cmsis_device_h7",
   "input_file": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\data\\docs_files_cmsis_device_h7_v2.json",
-  "output_file": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\files_json\\st_ready_files_cmsis_device_h7.json",
+  "output_file": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\by_series\\stm32cubeh7\\drivers\\cmsis_device_h7\\files_json\\st_ready_files_cmsis_device_h7.json",
   "total_docs": 121,
   "exported_docs": 121,
   "include_invalid": false,
   "format": "json",
   "root_tag_path": "files",
-  "summary_max_chars": 220,
-  "technical_max_chars": 6000
+  "summary_max_chars": 240,
+  "technical_max_chars": 4000
 }

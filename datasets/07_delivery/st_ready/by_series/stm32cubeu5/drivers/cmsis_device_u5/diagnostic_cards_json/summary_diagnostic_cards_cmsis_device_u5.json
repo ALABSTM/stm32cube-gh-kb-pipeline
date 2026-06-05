@@ -1,0 +1,12 @@
+{
+  "repo": "cmsis_device_u5",
+  "issues_input": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\by_series\\stm32cubeu5\\drivers\\cmsis_device_u5\\issues_json\\st_ready_issues_cmsis_device_u5.json",
+  "resolver_input": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\by_series\\stm32cubeu5\\drivers\\cmsis_device_u5\\resolver_cases_json\\st_ready_resolver_cases_cmsis_device_u5.json",
+  "output_file": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\by_series\\stm32cubeu5\\drivers\\cmsis_device_u5\\diagnostic_cards_json\\st_ready_diagnostic_cards_cmsis_device_u5.json",
+  "rescued_issues_considered": 0,
+  "resolver_cases_considered": 0,
+  "exported_cards": 0,
+  "include_all_issues": false,
+  "format": "json-array",
+  "root_tag_path": "diagnostic_cards"
+}

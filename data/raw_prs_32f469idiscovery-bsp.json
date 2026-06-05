@@ -1,0 +1,122 @@
+[
+  {
+    "repo": "32f469idiscovery-bsp",
+    "pr_number": 5,
+    "title": "fix: correct ititialization → initialization typo in LCD comments (lines 173-177)",
+    "state": "closed",
+    "merged": false,
+    "draft": false,
+    "author": "Jah-yee",
+    "labels": [],
+    "created_at": "2026-05-17T22:50:41Z",
+    "updated_at": "2026-05-20T13:35:55Z",
+    "closed_at": "2026-05-17T22:50:45Z",
+    "merged_at": null,
+    "body": "## Summary\n\nCorrect spelling in LCD driver comments: \"ititialization\" → \"initialization\" (5 occurrences in lines 173-177).\n\n## Changes\n\n- Line 173: \"The ititialization is done as below\" → \"The initialization is done as below\"\n- Line 174: \"DSI PLL ititialization\" → \"DSI PLL initialization\"\n- Line 175: \"DSI ititialization\" → \"DSI initialization\"\n- Line 176: \"LTDC ititialization\" → \"LTDC initialization\"\n- Line 177: \"OTM8009A LCD Display IC Driver ititialization\" → \"OTM8009A LCD Display IC Driver initialization\"\n\n## Test\n\n- Comment-only change (no code logic change)\n- C syntax verified\n- Fixes issue #2",
+    "github_url": "https://github.com/STMicroelectronics/32f469idiscovery-bsp/pull/5",
+    "head_ref": "fix/ititialization-typo",
+    "base_ref": "main",
+    "merge_commit_sha": "508359002e60be6e3181ada1991a144c02da7bcf",
+    "commits_count": 1,
+    "review_comments_count": 0,
+    "comments_count": 2,
+    "changed_files_count": 1,
+    "additions": 5,
+    "deletions": 5,
+    "linked_issue_numbers": [
+      2
+    ],
+    "files_changed": [
+      {
+        "filename": "stm32469i_discovery_lcd.c",
+        "status": "modified",
+        "additions": 5,
+        "deletions": 5,
+        "changes": 10,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/32f469idiscovery-bsp/blob/0f7a63e33569220800475c0d4f0fb965873882fc/stm32469i_discovery_lcd.c",
+        "raw_url": "https://github.com/STMicroelectronics/32f469idiscovery-bsp/raw/0f7a63e33569220800475c0d4f0fb965873882fc/stm32469i_discovery_lcd.c"
+      }
+    ]
+  },
+  {
+    "repo": "32f469idiscovery-bsp",
+    "pr_number": 4,
+    "title": "fix: correct ititialization typo in LCD comments",
+    "state": "closed",
+    "merged": false,
+    "draft": false,
+    "author": "Jah-yee",
+    "labels": [],
+    "created_at": "2026-05-17T22:49:20Z",
+    "updated_at": "2026-05-17T22:49:24Z",
+    "closed_at": "2026-05-17T22:49:24Z",
+    "merged_at": null,
+    "body": "## Summary\n\nCorrect spelling typo in the LCD driver comments: \"ititialization\" -> \"initialization\" (5 occurrences in lines 173-177).\n\n## Fix\n\nChanged:\n- \"ititialization\" -> \"initialization\" (3 occurrences)\n\n## Test\n\n- C syntax verified (comment-only change, no code logic change)\n- Minimal change (5 lines)\n- Fixes issue #2",
+    "github_url": "https://github.com/STMicroelectronics/32f469idiscovery-bsp/pull/4",
+    "head_ref": "fix/ititialization-typo",
+    "base_ref": "main",
+    "merge_commit_sha": "42b71d96f595fae7cc04109dc1f7a83f68686bba",
+    "commits_count": 1,
+    "review_comments_count": 0,
+    "comments_count": 1,
+    "changed_files_count": 1,
+    "additions": 5,
+    "deletions": 5,
+    "linked_issue_numbers": [
+      2
+    ],
+    "files_changed": [
+      {
+        "filename": "stm32469i_discovery_lcd.c",
+        "status": "modified",
+        "additions": 5,
+        "deletions": 5,
+        "changes": 10,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/32f469idiscovery-bsp/blob/0f7a63e33569220800475c0d4f0fb965873882fc/stm32469i_discovery_lcd.c",
+        "raw_url": "https://github.com/STMicroelectronics/32f469idiscovery-bsp/raw/0f7a63e33569220800475c0d4f0fb965873882fc/stm32469i_discovery_lcd.c"
+      }
+    ]
+  },
+  {
+    "repo": "32f469idiscovery-bsp",
+    "pr_number": 3,
+    "title": "fix: correct misspelling 'ititilization' -> 'initialization' in LCD comments",
+    "state": "closed",
+    "merged": false,
+    "draft": false,
+    "author": "Jah-yee",
+    "labels": [],
+    "created_at": "2026-05-17T22:39:53Z",
+    "updated_at": "2026-05-17T22:39:57Z",
+    "closed_at": "2026-05-17T22:39:57Z",
+    "merged_at": null,
+    "body": "Fixes #2 - corrects multiple misspellings of 'initialization' (written as 'ititilization'/'ititialization') in BSP_LCD_Init comments",
+    "github_url": "https://github.com/STMicroelectronics/32f469idiscovery-bsp/pull/3",
+    "head_ref": "main",
+    "base_ref": "main",
+    "merge_commit_sha": "b8056e1db1bd960168bdde148fd26c0b89453db9",
+    "commits_count": 1,
+    "review_comments_count": 0,
+    "comments_count": 1,
+    "changed_files_count": 1,
+    "additions": 5,
+    "deletions": 5,
+    "linked_issue_numbers": [
+      2
+    ],
+    "files_changed": [
+      {
+        "filename": "stm32469i_discovery_lcd.c",
+        "status": "modified",
+        "additions": 5,
+        "deletions": 5,
+        "changes": 10,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/32f469idiscovery-bsp/blob/95da81753113d87afb09b3556e814ddc79361d7e/stm32469i_discovery_lcd.c",
+        "raw_url": "https://github.com/STMicroelectronics/32f469idiscovery-bsp/raw/95da81753113d87afb09b3556e814ddc79361d7e/stm32469i_discovery_lcd.c"
+      }
+    ]
+  }
+]

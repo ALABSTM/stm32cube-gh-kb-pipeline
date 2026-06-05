@@ -4,6 +4,11 @@ import re
 from pathlib import Path
 from typing import Any
 
+from pipeline.delivery.delivery_paths import (
+    get_existing_repo_artifact_file,
+    get_legacy_artifact_file,
+    get_repo_artifact_dir,
+)
 from shared.utils.paths import PROJECT_ROOT, get_config_path
 
 
@@ -661,8 +666,16 @@ def build_diagnostic_card(
 
 
 def export_repo_json(repo: str, include_all_issues: bool = False) -> tuple[int, int, Path]:
-    issues_path = PROJECT_ROOT / "datasets" / "07_delivery" / "st_ready" / "issues_json" / f"st_ready_issues_{repo.lower()}.json"
-    resolver_path = PROJECT_ROOT / "datasets" / "07_delivery" / "st_ready" / "resolver_cases_json" / f"st_ready_resolver_cases_{repo.lower()}.json"
+    issues_path = get_existing_repo_artifact_file(
+        repo=repo,
+        artifact_dir="issues_json",
+        file_name=f"st_ready_issues_{repo.lower()}.json",
+    )
+    resolver_path = get_existing_repo_artifact_file(
+        repo=repo,
+        artifact_dir="resolver_cases_json",
+        file_name=f"st_ready_resolver_cases_{repo.lower()}.json",
+    )
 
     issues = load_json_array(issues_path, preferred_key="issues") if issues_path.exists() else []
     resolver_cases = load_json_array(resolver_path, preferred_key="resolver_cases") if resolver_path.exists() else []
@@ -691,10 +704,16 @@ def export_repo_json(repo: str, include_all_issues: bool = False) -> tuple[int, 
     for key in all_keys:
         cards.append(build_diagnostic_card(repo, issue_index.get(key), resolver_index.get(key)))
 
-    out_root = PROJECT_ROOT / "datasets" / "07_delivery" / "st_ready" / "diagnostic_cards_json"
+    out_root = get_repo_artifact_dir(repo, "diagnostic_cards_json")
     out_root.mkdir(parents=True, exist_ok=True)
-    out_file = out_root / f"st_ready_diagnostic_cards_{repo.lower()}.json"
+    out_file_name = f"st_ready_diagnostic_cards_{repo.lower()}.json"
+    out_file = out_root / out_file_name
     out_file.write_text(json.dumps(cards, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    # Backward-compatible mirror in legacy flat folder.
+    legacy_out_file = get_legacy_artifact_file("diagnostic_cards_json", out_file_name)
+    legacy_out_file.parent.mkdir(parents=True, exist_ok=True)
+    legacy_out_file.write_text(json.dumps(cards, ensure_ascii=False, indent=2), encoding="utf-8")
 
     summary = {
         "repo": repo,
@@ -708,7 +727,15 @@ def export_repo_json(repo: str, include_all_issues: bool = False) -> tuple[int, 
         "format": "json-array",
         "root_tag_path": "diagnostic_cards",
     }
-    (out_root / f"summary_diagnostic_cards_{repo.lower()}.json").write_text(
+    summary_file_name = f"summary_diagnostic_cards_{repo.lower()}.json"
+    (out_root / summary_file_name).write_text(
+        json.dumps(summary, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+
+    legacy_summary_file = get_legacy_artifact_file("diagnostic_cards_json", summary_file_name)
+    legacy_summary_file.parent.mkdir(parents=True, exist_ok=True)
+    legacy_summary_file.write_text(
         json.dumps(summary, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )

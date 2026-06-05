@@ -1,10 +1,12 @@
 {
   "repo": "stm32h750b-dk-bsp",
   "input_file": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\data\\docs_files_stm32h750b-dk-bsp_v2.json",
-  "output_file": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\files_json\\st_ready_files_stm32h750b-dk-bsp.json",
+  "output_file": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\by_series\\stm32cubeh7\\drivers\\stm32h750b-dk-bsp\\files_json\\st_ready_files_stm32h750b-dk-bsp.json",
   "total_docs": 24,
   "exported_docs": 24,
   "include_invalid": false,
   "format": "json",
-  "root_tag_path": "files"
+  "root_tag_path": "files",
+  "summary_max_chars": 240,
+  "technical_max_chars": 4000
 }

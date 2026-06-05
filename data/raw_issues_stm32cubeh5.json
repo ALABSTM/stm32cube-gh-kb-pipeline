@@ -1,6 +1,128 @@
 [
   {
     "repo": "STM32CubeH5",
+    "issue_number": 36,
+    "title": "[Feature]: Update CMSIS packs",
+    "state": "open",
+    "labels": [
+      "enhancement",
+      "cmsis"
+    ],
+    "created_at": "2026-05-26T11:13:59Z",
+    "closed_at": null,
+    "body": "### Feature Summary\n\nUpdate CMSIS packs delivered inside STM32CubeH5\n\n### Detailed Description\n\nSTM32CubeH5 delivers the ARM CMSIS packs inside [Drivers/CMSIS](https://github.com/STMicroelectronics/STM32CubeH5/tree/main/Drivers/CMSIS).\nBut the release of these packs are really really old.\nSome of them are 7 years old.\nAnd 7 years mean bug, vulnerabilties, and so on...\nNot acceptable from the user side.\n\nI ask ST to keep this up-to-date, or (at least) align to the release delivered in [STM32CubeH7](https://github.com/STMicroelectronics/STM32CubeH7/tree/master/Drivers/CMSIS) package.\n\nAnother solution is that ST doens't deliver them anymore and offers a way to the customer to opt-in for a specific release from the upstream CMSIS repo.\nBut if ST delivers them, it's ST reponsilbity keeping them aligned to upstream.\n\n### Use Case\n\n_No response_",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2026-06-02T09:31:37Z",
+        "body": "Hello @escherstair,\n\nThank you for raising this concern. The CMSIS version included is decided by our team. A new release is expected soon, and it may include a CMSIS update or upgrade, depending on compatibility and stability. I will keep you posted. Meanwhile if you can share the exact CMSIS components and versions you believe should be updated.\n\nHowever, the CMSIS Core content for both the H5 and H7 series is very similar, with both based on `v5.9.0`, as reflected in the release notes.\n\nWith regards,"
+      },
+      {
+        "author": "escherstair",
+        "created_at": "2026-06-02T11:32:30Z",
+        "body": "Hello @KRASTM \nthank you for your update.\nKeeping libraries and components up to date, following their upstream development is a well known activity for every software developer.\nThis requires some effort, but it's mandatory IMHO.\nLooking to medium or long term period, freezing releases because the update would require some change is not a good decision.\n\nFor CMSIS core, v5.9.0 is the last release of CMSIS_5 project, but it has been releases on 2022 (see [here](https://github.com/ARM-software/CMSIS_5/releases/tag/5.9.0)). The repo itslef has been archived on Dec 18, 2025.\nThis is because the supported and developed release is [CMSIS_6](https://github.com/ARM-software/CMSIS_6). You can see releases of CMSIS_6 core from 2023. The most recent one is [v6.3.0](https://github.com/ARM-software/CMSIS_6/releases/tag/v6.3.0) and I hope STMicroelectronics team could include this update ASAP.\nLeveraging on an unsupported release is not what STM users expect from STM.\n\nBased on my needs, CMSIS-DSP is probably the most used library, and I hope STM could updtae it to the most recent release too ([v1.17.10](https://github.com/ARM-software/CMSIS-DSP) at the moment).\n\nIt's fine if STM would remove ARM packs from the firmware, but it must offer an easy way to include the needed release in STM32CubeMX software (+ cmake generation).\n\nI would really apprecaìiate any feedback from STM team on this topic."
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/36"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 35,
+    "title": "[Bug]: NetX Duo `_nx_tcp_socket_send_internal` corrupts retried packets — upstream fix exists, not yet bundled in STM32CubeH5",
+    "state": "open",
+    "labels": [
+      "bug",
+      "internal bug tracker",
+      "mw",
+      "eth",
+      "netxduo"
+    ],
+    "created_at": "2026-05-01T12:41:17Z",
+    "closed_at": null,
+    "body": "### Bug Summary\n\n`_nx_tcp_socket_send_internal` does not restore `nx_packet_prepend_ptr` and `nx_packet_length` after a retransmit-retry path that retains the packet for re-attempt. The next attempt reuses the packet with its prepend pointer offset by `sizeof(NX_TCP_HEADER) = 20`. The wire-level segment is malformed: TCP header bytes are consumed twice. The host-side TCP stack flags repeated malformed segments and resets the connection.\n\n### Detailed Description\n\n## Environment\n\n- **MCU**: STM32H563ZIT6\n- **Board**: NUCLEO-H563ZI (MB1404 Rev C-01)\n- **Firmware pack**: STM32CubeH5 FW.H5.1.6.0 (latest public release at filing)\n- **NetX Duo**: 6.4.0 (Dec 28 2023, bundled with FW.H5.1.6.0)\n- **Affected file**: `Middlewares/ST/netxduo/common/src/nx_tcp_socket_send_internal.c`\n- **Affected function**: `_nx_tcp_socket_send_internal`\n- **Latest tagged NetX Duo upstream**: 6.4.3 (Mar 18 2025) — also missing the fix\n- **Upstream fix**: <https://github.com/eclipse-threadx/netxduo/commit/778b383> (Jan 9 2026, on master)\n\n## Summary\n\n`_nx_tcp_socket_send_internal` does not restore `nx_packet_prepend_ptr` and `nx_packet_length` after a retransmit-retry path that retains the packet for re-attempt. The next attempt reuses the packet with its prepend pointer offset by `sizeof(NX_TCP_HEADER) = 20`. The wire-level segment is malformed: TCP header bytes are consumed twice. The host-side TCP stack flags repeated malformed segments and resets the connection.\n\nSymptoms only show under sustained TCP load with retransmits (packet loss, ACK delay, or a busy host). At low connection rate the bug is invisible because retransmits do not fire.\n\n## Reproduction steps\n\n1. Build and flash any TCP echo server on a NUCLEO-H563ZI bound to a static IP on the host's subnet (e.g. 192.168.100.1/24, host at 192.168.100.230).\n2. From the host:\n   ```python\n   import socket\n   for i in range(1000):\n       s = socket.socket()\n       s.settimeout(5)\n       s.connect((\"192.168.100.1\", 7))\n       s.sendall(b\"X\" * 1400)\n       rx = s.recv(2048)\n       s.close()\n   ```\n3. Observe successful round-trips for the first ~10 iterations, then `socket.timeout` on iteration ~12-20 and beyond. Subsequent connections also time out; the device is unresponsive on the listen port (ICMP still works).\n\n## Expected behavior\n\nAll 1000 iterations round-trip cleanly.\n\n## Actual behavior\n\nIterations 0-N succeed (N typically 10-20). Iteration N+1 times out. All subsequent iterations time out. Halt under SWD shows the TCP server thread blocked inside the receive call; no HardFault. `tcpdump` on the host shows malformed TCP segments and host-stack RST emitted at the failure boundary.\n\n## Root cause\n\n`_nx_tcp_socket_send_internal` line ~828 (NetX Duo 6.4.0):\n\n```c\n/* Release the packet when the sequence is changed. */\nif (send_packet != packet_ptr)\n{\n    _nx_packet_release(send_packet);\n}\n/* (no else branch — packet retained for retry, but its prepend pointer\n    is left offset by the TCP header size from the previous attempt) */\n\n/* Regain exclusive access to IP instance. */\ntx_mutex_get(&(ip_ptr -> nx_ip_protection), TX_WAIT_FOREVER);\ncontinue;\n```\n\nWhen the function takes the `else` (implicit) path — packet retained for retransmit — the prepend pointer and length are not restored to pre-attempt state. The retried packet's `nx_packet_prepend_ptr` is offset by `sizeof(NX_TCP_HEADER)` because the previous attempt consumed those header bytes. The retransmit therefore sends an additional 20 bytes of header-stripped payload on the wire.\n\n## Verification of root cause\n\nApplying the upstream fix from commit 778b383 to `Middlewares/ST/netxduo/common/src/nx_tcp_socket_send_internal.c` resolves the failure entirely:\n\n```c\nif (send_packet != packet_ptr)\n{\n    _nx_packet_release(send_packet);\n}\nelse\n{\n    send_packet -> nx_packet_prepend_ptr += sizeof(NX_TCP_HEADER);\n    send_packet -> nx_packet_length -= sizeof(NX_TCP_HEADER);\n}\n```\n\nPre/post stress test on the same hardware:\n\n| Test | Pre-fix | Post-fix |\n|---|---|---|\n| 1000 × 7-byte sequential | Fails ~iter 12 | 1000/1000 PASS, 153 conn/s |\n| 1000 × 1400-byte sustained | Fails ~iter 12 | 1000/1000 PASS, 117 conn/s, 160 KB/s |\n\nBench-verified May 1 2026 on NUCLEO-H563ZI with the cumulative project's TCP echo server.\n\n## Suggested upstream fix\n\nCherry-pick eclipse-threadx/netxduo@778b383 into the next FW.H5 release, or bump the bundled NetX Duo to a tagged release that includes the commit. The fix has been on upstream master for roughly four months at filing; no released NetX Duo tag (latest 6.4.3, March 2025) yet contains it.\n\nThe same NetX Duo source is used across the STM32 firmware packs (FW.H7, FW.U5, FW.WB1M, etc.); customers on those packs may be hitting the same bug whenever sustained TCP traffic triggers a retransmit retry path.\n\n### Expected Behavior\n\n_No response_\n\n### Actual Behavior\n\n_No response_\n\n### Environment\n\n_No response_\n\n### Severity\n\nNone",
+    "comments": [
+      {
+        "author": "ASAHSTM",
+        "created_at": "2026-05-07T15:58:21Z",
+        "body": "Hello @pbwarmu017,\n\nThank you for your report.\nThis issue has been tracked internally.\n\nWith Regards,"
+      },
+      {
+        "author": "ASAHSTM",
+        "created_at": "2026-05-07T15:58:41Z",
+        "body": "ST Internal Reference: CDM0062465"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/35"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 34,
+    "title": "[Bug]: Nx_TCP_Echo_Server reference example HardFaults on TCP payloads > 512 B (stack buffer overflow + direct-resend pattern)",
+    "state": "open",
+    "labels": [
+      "bug",
+      "projects",
+      "internal bug tracker",
+      "eth",
+      "netxduo"
+    ],
+    "created_at": "2026-05-01T12:26:45Z",
+    "closed_at": null,
+    "body": "### Bug Summary\n\nNx_TCP_Echo_Server reference example HardFaults on TCP payloads > 512 B (stack buffer overflow + direct-resend pattern)\n\n### Detailed Description\n\n## Summary\n\n`Projects/STM32H573I-DK/Applications/NetXDuo/Nx_TCP_Echo_Server/NetXDuo/App/app_netxduo.c` (and the equivalent NUCLEO-H563ZI version if/when it ships) has two bugs that together cause the reference TCP echo example to HardFault on any realistic TCP traffic. Either bug alone is sufficient to crash the example. Both are reproducible in under a minute.\n\nThese are example-code bugs, not silicon or NetX Duo HAL bugs. The fixes are surgical — under 10 lines total — but customers using the example as a starting point inherit both crashes.\n\n## Versions\n\n- STM32CubeH5 firmware pack: V1.6.0\n- NetX Duo: 6.4.0 (shipped in V1.6.0)\n- Hardware: NUCLEO-H563ZI (also reproducible on STM32H573I-DK per code path)\n- IDE: STM32CubeIDE 2.1.1, GCC 14.3.1 from gnu-tools-for-stm32\n- Host: macOS 25.4 / Linux / Windows — any host with Python 3 and a TCP socket\n\n## Bug #1 — Stack-buffer overflow on payloads > 512 bytes\n\n**File:** `app_netxduo.c`, function `App_TCP_Thread_Entry`, lines 349 + 423.\n\n```c\nstatic VOID App_TCP_Thread_Entry(ULONG thread_input)\n{\n  UINT ret;\n  UCHAR data_buffer[512];        // ← 512-byte buffer on thread stack\n  ...\n  while(1) {\n    ...\n    ret = nx_tcp_socket_receive(&TCPSocket, &data_packet, NX_WAIT_FOREVER);\n    if (ret == NX_SUCCESS) {\n      ...\n      nx_packet_data_retrieve(data_packet, data_buffer, &bytes_read);  // ← no bounds check\n      ...\n```\n\n`nx_packet_data_retrieve()` has no `buffer_size` parameter — it copies the entire packet's data into the buffer caller-provided. When the incoming TCP packet payload exceeds 512 bytes, `nx_packet_data_retrieve` writes past the end of `data_buffer`, corrupting the surrounding stack frame and triggering a UFSR.STKOF or BFAR-valid HardFault on the next thread context (depending on what got overwritten).\n\n### Reproducer\n\n1. Flash the example as-shipped to a NUCLEO-H563ZI / STM32H573I-DK with Ethernet wired to the host.\n2. From the host, run:\n   ```python\n   import socket\n   s = socket.socket()\n   s.connect((\"192.168.1.10\", 6000))   # whatever IP/port the example uses\n   s.sendall(b\"X\" * 600)               # any payload > 512 bytes\n   ```\n3. Observe: VCP output stops, the device stops responding to ping. Halting via SWD shows `PC` inside `HardFault_Handler` and `SCB->CFSR` with either `UFSR.STKOF` (bit 20) or `BFSR.PRECISERR | BFARVALID` (bits 1+7) set.\n\n### Suggested fix\n\nDeclare the buffer at packet-pool granularity and keep it off the stack:\n\n```c\nstatic UCHAR data_buffer[1536];   // matches DEFAULT_PAYLOAD_SIZE (NetX Duo standard packet payload)\n```\n\nOr, more defensively, check `nx_packet_length` before retrieving:\n\n```c\nif (data_packet->nx_packet_length > sizeof(data_buffer))\n{\n    nx_packet_release(data_packet);\n    continue;\n}\n```\n\n## Bug #2 — Direct-resend of received packet HardFaults the NetX stack on TCP\n\n**File:** `app_netxduo.c`, function `App_TCP_Thread_Entry`, line 429.\n\n```c\nret = nx_packet_data_retrieve(data_packet, data_buffer, &bytes_read);\n...\nret = nx_tcp_socket_send(&TCPSocket, data_packet, NX_IP_PERIODIC_RATE);  // ← passes received packet\n```\n\nThe pattern of receiving a packet via `nx_tcp_socket_receive()` and immediately sending it back via `nx_tcp_socket_send()` works for UDP but **HardFaults the NetX Duo stack on TCP** (NetX Duo 6.4.0; observed on H5 family). The TCP send path's internal handling of the received packet's prepend pointer corrupts state when the same `NX_PACKET *` is reused. (Independently filed in `eclipse-threadx/netxduo` issue tracker as a separate API/HAL concern.)\n\n### Suggested fix (canonical retrieve + release + allocate + append + send pattern)\n\n```c\nULONG bytes_copied;\n\nif (nx_packet_data_retrieve(data_packet, data_buffer, &bytes_copied) != NX_SUCCESS) {\n    nx_packet_release(data_packet);\n    continue;\n}\nnx_packet_release(data_packet);   // free the received packet immediately\n\nNX_PACKET *tx_packet;\nif (nx_packet_allocate(&NxAppPool, &tx_packet, NX_TCP_PACKET, NX_WAIT_FOREVER) != NX_SUCCESS)\n    continue;\nif (nx_packet_data_append(tx_packet, data_buffer, bytes_copied,\n                          &NxAppPool, NX_WAIT_FOREVER) != NX_SUCCESS) {\n    nx_packet_release(tx_packet);\n    continue;\n}\nif (nx_tcp_socket_send(&TCPSocket, tx_packet, NX_IP_PERIODIC_RATE) != NX_SUCCESS)\n    nx_packet_release(tx_packet);\n```\n\n## Combined verification (after both fixes)\n\nWith both fixes applied to a NUCLEO-H563ZI running the cumulative project + NetX Duo 6.4.0:\n\n- 1000 × 7-byte sequential connections: 1000/1000 PASS at ~150 conn/s\n- 1000 × ~1400-byte sustained connections: 1000/1000 PASS at ~117 conn/s, 160 KB/s\n- Payload sweep at 64 / 256 / 300 / 512 / 1024 / 1400 / 1500 B: 20/20 PASS at every size\n\nWithout the fixes, both reproducers crash within seconds.\n\n### Expected Behavior\n\n_No response_\n\n### Actual Behavior\n\n_No response_\n\n### Environment\n\n_No response_\n\n### Severity\n\nNone",
+    "comments": [
+      {
+        "author": "ASAHSTM",
+        "created_at": "2026-05-07T15:15:27Z",
+        "body": "Hello @pbwarmu017,\n\nThank you for your report.\nThis issue has been tracked internally.\n\nWith Regards,"
+      },
+      {
+        "author": "ASAHSTM",
+        "created_at": "2026-05-07T15:15:55Z",
+        "body": "ST Internal Reference: CDM0062458"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/34"
+  },
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 33,
+    "title": "[Bug]: I3C controller IT mode hangs: HAL ISRs don't drain Status FIFO",
+    "state": "open",
+    "labels": [
+      "bug",
+      "hal",
+      "internal bug tracker",
+      "i3c"
+    ],
+    "created_at": "2026-04-25T21:54:48Z",
+    "closed_at": null,
+    "body": "### Bug Summary\n\nI3C controller HAL DAA & TX ISRs do not drain Status FIFO — peripheral hangs after every frame\n\n### Detailed Description\n\n## Environment\n\n- **MCU**: STM32H563ZIT6\n- **Board**: NUCLEO-H563ZI (MB1404 Rev C-01) ×2 (one controller, one target)\n- **Firmware pack**: STM32CubeH5 FW.H5.1.6.0\n- **HAL file**: `Drivers/STM32H5xx_HAL_Driver/Src/stm32h5xx_hal_i3c.c` (Copyright 2023)\n- **Toolchain**: STM32CubeIDE (arm-none-eabi-gcc, -O0 -g3)\n- **Reproducer**: minimal two-board ENTDAA + private write between two NUCLEO-H563ZI\n\n## Summary\n\n`HAL_I3C_Ctrl_DynAddrAssign_IT()` and `HAL_I3C_Ctrl_Transmit_IT()` (controller-side, IT mode) cause the I3C peripheral to hang after the first wire-level frame. The completion callbacks (`HAL_I3C_CtrlDAACpltCallback`, `HAL_I3C_CtrlTxCpltCallback`) never fire, even though the wire-level protocol completes successfully (the target reports `EVENT_ID_DAU` and receives data correctly).\n\nRoot cause: the H5 I3C peripheral writes a per-frame status entry to the Status FIFO (SR) and **pauses indefinitely** until the application reads it. The HAL ISRs `I3C_Ctrl_DAA_ISR` and `I3C_Ctrl_TX_ISR` read the RX FIFO but never read SR, so the peripheral is permanently blocked.\n\n## Reproduction steps\n\n1. Configure two NUCLEO-H563ZI boards, both with `I3C1` on PB8/PB9 (`GPIO_AF3_I3C1`).\n2. Apply ES0565 §2.15.3 PB8/PB9 internal pull-up workaround on both boards (separately reported / acknowledged in errata).\n3. Add 4.7 kΩ external pull-ups on SDA, SCL to 3.3 V. Connect controller PB8↔target PB8, PB9↔PB9, GND↔GND.\n4. Configure controller bus characteristics: `SCLODLowDuration = 0xFF`, `SCLI2CHighDuration = 0xFF` (slow open-drain to give the bench wiring rise-time margin — does not affect the bug, just makes the bus reliable).\n5. Target firmware: `HAL_I3C_ActivateNotification(&hi3c1, NULL, HAL_I3C_IT_DAUPDIE);` at boot, no `HAL_I3C_Tgt_Receive_IT` until after `EVENT_ID_DAU` arrives.\n6. Controller firmware: call `HAL_I3C_Ctrl_DynAddrAssign_IT(&hi3c1, I3C_ONLY_ENTDAA);` then poll for `i3c_daa_done` (set by `HAL_I3C_CtrlDAACpltCallback`).\n\n## Expected behavior\n\n`HAL_I3C_CtrlDAACpltCallback` fires within ~1 ms of submit. `i3c_daa_done` flips to 1.\n\n## Actual behavior\n\n`i3c_daa_done` stays 0 forever (tested with 12 s wait). Diagnostic register reads after the wait show:\n\n```\nstate = HAL_I3C_STATE_BUSY_DAA (0x24)\nEVR   = 0x0000000B   (CFEF | TXFEF | SFNEF — Status FIFO has 1 unread entry)\nEVR.FCF = 0          (no Frame Complete event)\nSER   = 0            (no errors)\nIER   = 0x00000A14   (FCIE/CFNFIE/TXFNFIE/ERRIE all correctly enabled)\n```\n\nCallback fire counters confirm:\n- `HAL_I3C_TgtReqDynamicAddrCallback` fires at +0 ms (target's PID arrives, our SetDynAddr runs, target receives DA).\n- `HAL_I3C_CtrlDAACpltCallback` never fires.\n- `HAL_I3C_ErrorCallback` never fires.\n\nThe target side reports `EVENT_ID_DAU` and successfully receives its dynamic address, confirming the wire-level protocol completes through DA assignment.\n\n## Root cause\n\nThe H5 I3C peripheral writes one entry to the Status FIFO after the ENTDAA frame containing PID/BCR/DCR is processed. Per the H5 reference manual §49 the peripheral is designed to pause subsequent protocol steps until the application drains the Status FIFO — this is the `SFNEF` flag in `I3C_EVR`.\n\n`I3C_Ctrl_DAA_ISR` (line ~8201 of `stm32h5xx_hal_i3c.c`) reads from the RX FIFO via `LL_I3C_ReceiveData8` to extract PID, but never reads `I3C1->SR`. The Status FIFO entry sits unread → peripheral does not generate the trailing `Sr+0x7E+R` round → no NACK → no STOP → `FCF` never set → `HAL_I3C_CtrlDAACpltCallback` never invoked.\n\nSame defect in `I3C_Ctrl_TX_ISR` after a private write: `HAL_I3C_CtrlTxCpltCallback` never fires.\n\n## Verification of root cause\n\nAdding the following drain to the wait loop in application code resolves the issue completely:\n\n```c\nwhile (i3c_daa_done == 0 && (HAL_GetTick() - t0) < 1000) {\n    while ((I3C1->EVR & I3C_EVR_SFNEF) != 0) {\n        (void)I3C1->SR;\n    }\n}\n```\n\nWith the drain, `HAL_I3C_CtrlDAACpltCallback` fires within ~1 ms of submit (verified via tick timestamp captured inside the callback). The same drain pattern resolves the TX-complete callback after `HAL_I3C_Ctrl_Transmit_IT`. Bench-verified Apr 25 2026 with the two-NUCLEO setup; controller and target both report success and the slave receives the expected payload bytes.\n\nDiagnostic progression captured during root-cause analysis:\n\n| Test condition | DAA-cplt callback fires at | i3c_daa_done snap |\n|---|---|---|\n| 5 s wait, no SR drain | never (timed out) | 0 |\n| 10 s wait + 200 ms settle, no drain, `__WFI` in loop | +10200 ms (right at wait expiry — coincidence with diagnostic SR drain after the wait) | 0 |\n| 12 s polling loop (1 s steps), no SR drain | +12096 ms (right at loop exit, same coincidence) | 0 |\n| 12 s polling loop with SR drain inside each iteration | **+1001 ms** (right after first drain) | **1** |\n| 1 s tight wait with SR drain | **+0 ms** | **1** |\n\nThe progression is monotonic in \"amount of SR drain\": more drain → faster completion. With drain in the tight wait loop, the cycle completes in well under 2 ms (limit of `HAL_GetTick` resolution).\n\n## Suggested upstream fix\n\nAdd a Status FIFO drain inside the controller-side ISRs in `stm32h5xx_hal_i3c.c`:\n\n```c\n/* In I3C_Ctrl_DAA_ISR, after the existing TXFNFF/RXFNEF handling: */\nwhile (LL_I3C_IsActiveFlag_SFNE(hi3c->Instance) != 0U)\n{\n    (void)LL_I3C_GetRxStatus(hi3c->Instance);  /* or equivalent SR read */\n}\n```\n\nSame drain belongs in `I3C_Ctrl_TX_ISR` and likely the RX/CCC ISRs as well — wherever the controller's status FIFO can accumulate per-frame entries.\n\nAlternatively, enabling the SFNEIE interrupt for these IT modes and reading SR inside the ISR on each SFNE event would also work and be more event-driven.\n\n## Impact\n\nAny H5 I3C controller application using IT mode will hang on the first ENTDAA broadcast or first private transfer unless the application happens to read SR for unrelated reasons. The DMA mode path in `HAL_I3C_Ctrl_DynAddrAssign_DMA` may be similarly affected — not tested. The bug is silent: no error code is returned, the wire-level protocol completes correctly, only the HAL state machine never advances. This is exactly the failure mode that's hardest to diagnose because the obvious checks (verify ENTDAA returns OK, verify slave gets DA) all pass.\n\n## Workaround currently in use\n\nApplication-side SR drain in the wait loops (shown above). Works reliably; downside is that every consumer of the controller-side IT API must implement the drain themselves, which is non-obvious and not documented in the HAL header.\n\n\n### Expected Behavior\n\n_No response_\n\n### Actual Behavior\n\n_No response_\n\n### Environment\n\n_No response_\n\n### Severity\n\nNone",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2026-04-29T16:35:45Z",
+        "body": "Hello @pbwarmu017,\n\nThank you for the report.\n\nI will try to reproduce the issue and keep you posted. Meanwhile, if possible, could you please share `the Embedded Mastery Series — Volume 1 (NUCLEO-H563ZI) lab manual`.\n\nWith regards,"
+      },
+      {
+        "author": "pbwarmu017",
+        "created_at": "2026-04-30T20:00:24Z",
+        "body": "Apologies, I should not have placed the book in there as a reference. It is currently a manuscript and is not published. Removed. "
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2026-05-07T08:24:21Z",
+        "body": "Hello @pbwarmu017,\n\nAfter I enabled Controller **StatusFifo**, I was able to reproduce the issue on STM32503, it was reported Internally. I will keep you posted.\n\nThank you again,\nWith regards,"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2026-05-07T08:24:39Z",
+        "body": "ST Internal Reference: 63f6620cd4784fd896b4ab8d0bbc9950"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/33"
+  },
+  {
+    "repo": "STM32CubeH5",
     "issue_number": 32,
     "title": "[Bug]: STM32H5 missing } build failure with c++",
     "state": "closed",

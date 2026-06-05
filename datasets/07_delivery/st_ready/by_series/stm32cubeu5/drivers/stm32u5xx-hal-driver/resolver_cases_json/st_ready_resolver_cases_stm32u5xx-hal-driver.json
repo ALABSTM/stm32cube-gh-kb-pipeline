@@ -1,0 +1,419 @@
+{
+  "resolver_cases": [
+    {
+      "id": "resolver::stm32u5xx-hal-driver::issue::6",
+      "title": "header inclusion issues for STM32U545 series",
+      "label": "header inclusion issues for STM32U545 series",
+      "externalURL": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/6",
+      "rootTagPath": "resolver_cases",
+      "evidence_refs": [
+        {
+          "type": "issue",
+          "id": 6,
+          "url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/6"
+        }
+      ],
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "stm32u5xx-hal-driver",
+      "issue_root_path": "issues",
+      "pr_root_path": "pull",
+      "commit_root_path": "commit",
+      "issue_number": 6,
+      "issue_title": "header inclusion issues for STM32U545 series",
+      "issue_labels": [
+        "bug",
+        "hal",
+        "spotted before customer"
+      ],
+      "issue_state": "closed",
+      "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/6",
+      "linked_pr_numbers": [
+        7
+      ],
+      "linked_commit_shas": [
+        "de79acaa918c45df358faec1dfbb04b43ef4ab80"
+      ],
+      "primary_pr_number": 7,
+      "primary_commit_sha": "de79acaa918c45df358faec1dfbb04b43ef4ab80",
+      "linked_pr_urls": [
+        "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/pull/7"
+      ],
+      "linked_commit_urls": [
+        "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/commit/de79acaa918c45df358faec1dfbb04b43ef4ab80"
+      ],
+      "resolution_status": "merged_fix",
+      "merged_pr_with_file_evidence": true,
+      "merged_pr_with_file_evidence_pr_numbers": [
+        7
+      ],
+      "merged_pr_changed_files_total": 4,
+      "link_confidence": "high",
+      "link_score": 1.0,
+      "delivery_template": "st_v1_resolver_case",
+      "resolver_card_text": "Problem: Issue #6 - header inclusion issues for STM32U545 series\nContext: repo=stm32u5xx-hal-driver, labels=bug, hal, spotted before customer, issue_state=closed\nResolver signal: resolution_status=merged_fix, confidence=high, score=1.0\nAssessment: Fix likely integrated in mainline; prefer this as primary recommendation.\nCandidate PRs: fix header inclusion issues on STM32U545 series\nCommit evidence: fix header inclusion issues on STM32U545 series Resolves https://github.\nFile evidence: merged PR modifies files even when commit log is merge-heavy\nPR #7 description: Resolves https://github.com/STMicroelectronics/stm32u5xx_hal_driver/issues/6\r\n\r\nIn trying to get Zephyr RTOS working on the Nucleo U545RE-Q board, I discovered header inclusion issues building the HAL for the STM32U545 SoC.\r\n\r\nZephyr RTOS makes use of the \"stm32u5xx_hal_driver\" for some interactions with the ST hardware, and builds the HAL by copying the default \"stm32_hal_conf_template.h\" to \"stm32_hal_conf.h\", leaving all options enabled.\r\n\r\nHowever, some of the modules (specifically HAL_SRAM_MODULE_ENABLED, HAL_NAND_MODULE_ENABLED and HAL_NOR_MODULE_ENABLED) do not compile for the STM32U545. Based on recommendations from a engineer in the Zephyr forums, I modeled changes to four files ((stm32u5xx_hal_sram.h, stm32u5xx_hal_nor.h, stm32u5xx_hal_nand.h and stm32u5xx_ll_fmc.h) with appropriate \"#ifdef\" checks using the example for the \"stm32g4xx_hal_driver\", and this allows the code to build for the U545 series.\r\n\r\n## IMPORTANT INFORMATION\r\n\r\n### Contributor License Agreement (CLA)\r\n* The Pull Request feature will be considered by STMicroelectronics after the signature of a **Contributor License Agreement (CLA)** by the submitter.\r\n* If you did not sign such agreement, please follow the steps mentioned in the [CONTRIBUTING.md](https://github.com/STMicroelectronics/stm32u5xx_hal_driver/blob/main/CONTRIBUTING.md) file.\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying.",
+      "linked_file_ids": [
+        "stm32u5xx-hal-driver-file-196919632476962553",
+        "stm32u5xx-hal-driver-file-3683435145854016187",
+        "stm32u5xx-hal-driver-file-7435945100041081777",
+        "stm32u5xx-hal-driver-file-8389952311247408593"
+      ],
+      "linked_file_paths": [
+        "Inc/stm32u5xx_hal_nand.h",
+        "Inc/stm32u5xx_hal_nor.h",
+        "Inc/stm32u5xx_hal_sram.h",
+        "Inc/stm32u5xx_ll_fmc.h"
+      ],
+      "files_evidence": {
+        "changed_files_total": 4,
+        "matched_docs_files_count": 4,
+        "unmatched_files_count": 0,
+        "match_rate": 1.0,
+        "files": [
+          {
+            "path": "Inc/stm32u5xx_ll_fmc.h",
+            "status": "modified",
+            "additions": 41,
+            "deletions": 0,
+            "changes": 41,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "de79acaa918c45df358faec1dfbb04b43ef4ab80"
+            ],
+            "module": "inc",
+            "file_doc_id": "stm32u5xx-hal-driver-file-8389952311247408593",
+            "file_type": "hal_driver_source",
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/blob/master/Inc/stm32u5xx_ll_fmc.h",
+            "score": 61.0
+          },
+          {
+            "path": "Inc/stm32u5xx_hal_nand.h",
+            "status": "modified",
+            "additions": 2,
+            "deletions": 0,
+            "changes": 2,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "de79acaa918c45df358faec1dfbb04b43ef4ab80"
+            ],
+            "module": "inc",
+            "file_doc_id": "stm32u5xx-hal-driver-file-196919632476962553",
+            "file_type": "hal_driver_source",
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/blob/master/Inc/stm32u5xx_hal_nand.h",
+            "score": 22.0
+          },
+          {
+            "path": "Inc/stm32u5xx_hal_nor.h",
+            "status": "modified",
+            "additions": 2,
+            "deletions": 0,
+            "changes": 2,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "de79acaa918c45df358faec1dfbb04b43ef4ab80"
+            ],
+            "module": "inc",
+            "file_doc_id": "stm32u5xx-hal-driver-file-3683435145854016187",
+            "file_type": "hal_driver_source",
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/blob/master/Inc/stm32u5xx_hal_nor.h",
+            "score": 22.0
+          },
+          {
+            "path": "Inc/stm32u5xx_hal_sram.h",
+            "status": "modified",
+            "additions": 2,
+            "deletions": 0,
+            "changes": 2,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "de79acaa918c45df358faec1dfbb04b43ef4ab80"
+            ],
+            "module": "inc",
+            "file_doc_id": "stm32u5xx-hal-driver-file-7435945100041081777",
+            "file_type": "hal_driver_source",
+            "component": "DMA",
+            "board": null,
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/blob/master/Inc/stm32u5xx_hal_sram.h",
+            "score": 22.0
+          }
+        ]
+      },
+      "impacted_modules": [
+        "inc"
+      ],
+      "impacted_components": [
+        "DMA"
+      ],
+      "impacted_boards": [],
+      "impacted_file_types": [
+        "hal_driver_source"
+      ],
+      "primary_changed_file": {
+        "path": "Inc/stm32u5xx_ll_fmc.h",
+        "status": "modified",
+        "additions": 41,
+        "deletions": 0,
+        "changes": 41,
+        "touched_by_commits": 1,
+        "commit_shas": [
+          "de79acaa918c45df358faec1dfbb04b43ef4ab80"
+        ],
+        "module": "inc",
+        "file_doc_id": "stm32u5xx-hal-driver-file-8389952311247408593",
+        "file_type": "hal_driver_source",
+        "component": null,
+        "board": null,
+        "example_name": null,
+        "source_match": "docs_files_exact",
+        "github_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/blob/master/Inc/stm32u5xx_ll_fmc.h",
+        "score": 61.0
+      }
+    },
+    {
+      "id": "resolver::stm32u5xx-hal-driver::issue::23",
+      "title": "HAL_UART_Receive() blocks if rx Overrun Error occurs",
+      "label": "HAL_UART_Receive() blocks if rx Overrun Error occurs",
+      "externalURL": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/23",
+      "rootTagPath": "resolver_cases",
+      "evidence_refs": [
+        {
+          "type": "issue",
+          "id": 23,
+          "url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/23"
+        }
+      ],
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "stm32u5xx-hal-driver",
+      "issue_root_path": "issues",
+      "pr_root_path": "pull",
+      "commit_root_path": "commit",
+      "issue_number": 23,
+      "issue_title": "HAL_UART_Receive() blocks if rx Overrun Error occurs",
+      "issue_labels": [
+        "bug",
+        "invalid",
+        "internal bug tracker",
+        "hal",
+        "uart"
+      ],
+      "issue_state": "closed",
+      "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/23",
+      "linked_pr_numbers": [
+        24
+      ],
+      "linked_commit_shas": [
+        "327c620157df29bd107e8d68d6d6d089323a82bd"
+      ],
+      "primary_pr_number": 24,
+      "primary_commit_sha": "327c620157df29bd107e8d68d6d6d089323a82bd",
+      "linked_pr_urls": [
+        "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/pull/24"
+      ],
+      "linked_commit_urls": [
+        "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/commit/327c620157df29bd107e8d68d6d6d089323a82bd"
+      ],
+      "resolution_status": "candidate_fix",
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0,
+      "link_confidence": "medium",
+      "link_score": 0.8,
+      "delivery_template": "st_v1_resolver_case",
+      "resolver_card_text": "Problem: Issue #23 - HAL_UART_Receive() blocks if rx Overrun Error occurs\nContext: repo=stm32u5xx-hal-driver, labels=bug, invalid, internal bug tracker, hal, uart, issue_state=closed\nResolver signal: resolution_status=candidate_fix, confidence=medium, score=0.8\nAssessment: Potential fix identified, but integration status is uncertain.\nCandidate PRs: [HAL][UART] Fix HAL_UART_Receive() blocking on rx overrun when called…\nCommit evidence: [HAL][UART] Fix HAL_UART_Receive() blocking on rx overrun when called with Timeout = HAL_MAX_DELAY\nPR #24 description: … with Timeout = HAL_MAX_DELAY\r\n\r\nWhen called with Timeout = HAL_MAX_DELAY the function HAL_UART_Receive() blocks if rx Overrun Error occurs.\r\nThis PR fixes the issue and closes #23 \r\n\r\n\r\n## IMPORTANT INFORMATION\r\n\r\n### Contributor License Agreement (CLA)\r\n* The Pull Request feature will be considered by STMicroelectronics after the signature of a **Contributor License Agreement (CLA)** by the submitter.\r\n* If you did not sign such agreement, please follow the steps mentioned in the [CONTRIBUTING.md](https://github.com/STMicroelectronics/stm32u5xx_hal_driver/blob/main/CONTRIBUTING.md) file.\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying.",
+      "linked_file_ids": [
+        "stm32u5xx-hal-driver-file-1243546251016936217"
+      ],
+      "linked_file_paths": [
+        "Src/stm32u5xx_hal_uart.c"
+      ],
+      "files_evidence": {
+        "changed_files_total": 1,
+        "matched_docs_files_count": 1,
+        "unmatched_files_count": 0,
+        "match_rate": 1.0,
+        "files": [
+          {
+            "path": "Src/stm32u5xx_hal_uart.c",
+            "status": "modified",
+            "additions": 27,
+            "deletions": 27,
+            "changes": 54,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "327c620157df29bd107e8d68d6d6d089323a82bd"
+            ],
+            "module": "src",
+            "file_doc_id": "stm32u5xx-hal-driver-file-1243546251016936217",
+            "file_type": "hal_driver_source",
+            "component": "DMA",
+            "board": null,
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/blob/master/Src/stm32u5xx_hal_uart.c",
+            "score": 74.0
+          }
+        ]
+      },
+      "impacted_modules": [
+        "src"
+      ],
+      "impacted_components": [
+        "DMA"
+      ],
+      "impacted_boards": [],
+      "impacted_file_types": [
+        "hal_driver_source"
+      ],
+      "primary_changed_file": {
+        "path": "Src/stm32u5xx_hal_uart.c",
+        "status": "modified",
+        "additions": 27,
+        "deletions": 27,
+        "changes": 54,
+        "touched_by_commits": 1,
+        "commit_shas": [
+          "327c620157df29bd107e8d68d6d6d089323a82bd"
+        ],
+        "module": "src",
+        "file_doc_id": "stm32u5xx-hal-driver-file-1243546251016936217",
+        "file_type": "hal_driver_source",
+        "component": "DMA",
+        "board": null,
+        "example_name": null,
+        "source_match": "docs_files_exact",
+        "github_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/blob/master/Src/stm32u5xx_hal_uart.c",
+        "score": 74.0
+      }
+    },
+    {
+      "id": "resolver::stm32u5xx-hal-driver::issue::36",
+      "title": "STM32 HAL defines LL_PWR_STOP2_MODE instead of LL_PWR_MODE_STOP2 for U5 variant?",
+      "label": "STM32 HAL defines LL_PWR_STOP2_MODE instead of LL_PWR_MODE_STOP2 for U5 variant?",
+      "externalURL": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/36",
+      "rootTagPath": "resolver_cases",
+      "evidence_refs": [
+        {
+          "type": "issue",
+          "id": 36,
+          "url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/36"
+        }
+      ],
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "stm32u5xx-hal-driver",
+      "issue_root_path": "issues",
+      "pr_root_path": "pull",
+      "commit_root_path": "commit",
+      "issue_number": 36,
+      "issue_title": "STM32 HAL defines LL_PWR_STOP2_MODE instead of LL_PWR_MODE_STOP2 for U5 variant?",
+      "issue_labels": [
+        "enhancement",
+        "internal bug tracker",
+        "hal",
+        "pwr"
+      ],
+      "issue_state": "open",
+      "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/36",
+      "linked_pr_numbers": [
+        37,
+        38
+      ],
+      "linked_commit_shas": [
+        "4232fa0514c34ccdd00640dcfa4ca40c2085d8bc"
+      ],
+      "primary_pr_number": 37,
+      "primary_commit_sha": "4232fa0514c34ccdd00640dcfa4ca40c2085d8bc",
+      "linked_pr_urls": [
+        "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/pull/37",
+        "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/pull/38"
+      ],
+      "linked_commit_urls": [
+        "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/commit/4232fa0514c34ccdd00640dcfa4ca40c2085d8bc"
+      ],
+      "resolution_status": "candidate_fix",
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0,
+      "link_confidence": "medium",
+      "link_score": 0.8,
+      "delivery_template": "st_v1_resolver_case",
+      "resolver_card_text": "Problem: Issue #36 - STM32 HAL defines LL_PWR_STOP2_MODE instead of LL_PWR_MODE_STOP2 for U5 variant?\nContext: repo=stm32u5xx-hal-driver, labels=enhancement, internal bug tracker, hal, pwr, issue_state=open\nResolver signal: resolution_status=candidate_fix, confidence=medium, score=0.8\nAssessment: Potential fix identified, but integration status is uncertain.\nCandidate PRs: Define power mode aliases for low power mode selection | Define power mode aliases for low power mode selection\nCommit evidence: Define power mode aliases for low power mode selection Preserve backward compatibility, while bringing into alignment with the low power modes of the HALs of other variants.\nPR #37 description: Preserve backward compatibility, while bringing into alignment with the low power modes of the HALs of other variants.\r\n\r\nResolves #36 \r\n\r\n## IMPORTANT INFORMATION\r\n\r\n### Contributor License Agreement (CLA)\r\n* The Pull Request feature will be considered by STMicroelectronics after the signature of a **Contributor License Agreement (CLA)** by the submitter.\r\n* If you did not sign such agreement, please follow the steps mentioned in the [CONTRIBUTING.md](https://github.com/STMicroelectronics/stm32u5xx_hal_driver/blob/main/CONTRIBUTING.md) file.\nPR #38 description: Preserve backward compatibility, while bringing into alignment with the low power modes of the HALs of other variants.\r\n\r\nResolves #36, retries #37 \r\n\r\n## IMPORTANT INFORMATION\r\n\r\n### Contributor License Agreement (CLA)\r\n* The Pull Request feature will be considered by STMicroelectronics after the signature of a **Contributor License Agreement (CLA)** by the submitter.\r\n* If you did not sign such agreement, please follow the steps mentioned in the [CONTRIBUTING.md](https://github.com/STMicroelectronics/stm32u5xx_hal_driver/blob/main/CONTRIBUTING.md) file.\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying.",
+      "linked_file_ids": [
+        "stm32u5xx-hal-driver-file-942696005413285182"
+      ],
+      "linked_file_paths": [
+        "Inc/stm32u5xx_ll_pwr.h"
+      ],
+      "files_evidence": {
+        "changed_files_total": 1,
+        "matched_docs_files_count": 1,
+        "unmatched_files_count": 0,
+        "match_rate": 1.0,
+        "files": [
+          {
+            "path": "Inc/stm32u5xx_ll_pwr.h",
+            "status": "modified",
+            "additions": 6,
+            "deletions": 0,
+            "changes": 6,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "4232fa0514c34ccdd00640dcfa4ca40c2085d8bc"
+            ],
+            "module": "inc",
+            "file_doc_id": "stm32u5xx-hal-driver-file-942696005413285182",
+            "file_type": "hal_driver_source",
+            "component": "USB",
+            "board": null,
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/blob/master/Inc/stm32u5xx_ll_pwr.h",
+            "score": 26.0
+          }
+        ]
+      },
+      "impacted_modules": [
+        "inc"
+      ],
+      "impacted_components": [
+        "USB"
+      ],
+      "impacted_boards": [],
+      "impacted_file_types": [
+        "hal_driver_source"
+      ],
+      "primary_changed_file": {
+        "path": "Inc/stm32u5xx_ll_pwr.h",
+        "status": "modified",
+        "additions": 6,
+        "deletions": 0,
+        "changes": 6,
+        "touched_by_commits": 1,
+        "commit_shas": [
+          "4232fa0514c34ccdd00640dcfa4ca40c2085d8bc"
+        ],
+        "module": "inc",
+        "file_doc_id": "stm32u5xx-hal-driver-file-942696005413285182",
+        "file_type": "hal_driver_source",
+        "component": "USB",
+        "board": null,
+        "example_name": null,
+        "source_match": "docs_files_exact",
+        "github_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/blob/master/Inc/stm32u5xx_ll_pwr.h",
+        "score": 26.0
+      }
+    }
+  ]
+}

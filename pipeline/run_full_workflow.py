@@ -84,10 +84,12 @@ STEPS = [
 ]
 
 
-def main(skip_ingestion: bool = False, continue_on_error: bool = False, export_st_ready: bool = False) -> None:
+def main(skip_ingestion: bool = False, skip_chunking: bool = False, continue_on_error: bool = False, export_st_ready: bool = False) -> None:
     steps = STEPS
     if skip_ingestion:
-        steps = [step for step in STEPS if not step[0].startswith("Ingestion")]
+        steps = [step for step in steps if not step[0].startswith("Ingestion")]
+    if skip_chunking:
+        steps = [step for step in steps if not step[0].startswith("Chunking")]
     if export_st_ready:
         steps = steps + [
             ("Delivery ST-ready issues", export_st_ready_issues_all),
@@ -116,6 +118,11 @@ if __name__ == "__main__":
         help="Skip GitHub ingestion steps and use existing raw files.",
     )
     parser.add_argument(
+        "--skip-chunking",
+        action="store_true",
+        help="Skip local chunking (ST platform handles chunking at upload).",
+    )
+    parser.add_argument(
         "--continue-on-error",
         action="store_true",
         help="Continue running next steps when one step fails.",
@@ -128,6 +135,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     main(
         skip_ingestion=args.skip_ingestion,
+        skip_chunking=args.skip_chunking,
         continue_on_error=args.continue_on_error,
         export_st_ready=args.export_st_ready,
     )

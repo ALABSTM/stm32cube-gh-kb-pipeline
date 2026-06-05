@@ -1,0 +1,81 @@
+{
+  "issues": [
+    {
+      "id": "stm32h747i-disco-bsp-issue-9",
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "stm32h747i-disco-bsp",
+      "root_path": "issues",
+      "mcu_series": "H7",
+      "issue_number": 9,
+      "issue_title": "WM8994 will not do analog output to Green Jack if using SAI frequency less than 16kHz",
+      "state": "closed",
+      "layer": "Other",
+      "component": null,
+      "issue_kind": "bug_report",
+      "severity": "high",
+      "board": null,
+      "labels": [
+        "bug",
+        "needs clarification",
+        "bsp"
+      ],
+      "github_url": "https://github.com/STMicroelectronics/stm32h747i-disco-bsp/issues/9",
+      "is_valid": true,
+      "evidence_strength": "high",
+      "rescue_applied": false,
+      "delivery_template": "st_v2_structured_issue_card",
+      "st_ready_text": "Problem: WM8994 will not do analog output to Green Jack if using SAI frequency less than 16kHz\nContext: repo=stm32h747i-disco-bsp, mcu_series=H7, board=None, component=None, layer=Other, issue_kind=bug_report, severity=high, evidence_strength=high, rescue_applied=False, state=closed, issue_number=9\nRoot cause: To solve this, the plan for my project was for MCLK1 to be passed in as the input sample rate for Audio Interface 1 (AIF1).\nFix: SAI peripheral passes SAI1_MCLKA (PG7 on MB1248 p.\nConstraints: Validate against exact MCU/board configuration and CubeMX/CubeH7 version before applying.\nKeywords: H7, bug_report, high, bug, needs clarification, bsp, SAI, SAI1_MCLKA, PG7, MB1248, WM8994, GPIO\n\nTechnical details:\nSAI peripheral passes SAI1_MCLKA (PG7 on MB1248 p. 2) down to the WM8994 at GPIO MCLK1 which, by default, acts as the system clock for that codec. For the chip to work, a minimum frequency of $4.096MHz$ (WM8994_Rev4.6 p. 191) is required. SAI1_MCLKA will only reach that threshold if $F_{MCLK\\_A} \\ge 16kHz$, as indicated by $F_{MCLK\\_x} = 256 * F_{FS\\_x}$ (RM0399 p. 2402). If $F_{FS\\_x} \\lt 16kHz$ then $F_{MCLK\\_x} \\lt 4.096 MHz$ and WM8994 will not work as expected without going too much into the internals.\n\nKey comments:\nTo solve this, the plan for my project was for MCLK1 to be passed in as the input sample rate for Audio Interface 1 (AIF1). The SYSCLK would be multiplexed to use AIF2's Clock which would again be multiplexed to use FLL1 present on the WM8994 (diagram on WM8994_Rev4.6 p.192). An idea for implementation is that FLL1 over AIF2 could be the WM8994's system clock regardless of the frequency being used (I am not familiar with any boards that might use AIF2). As long as SYSCLK stays within $4.096-12.5MHz$ then things should run normally though (p.191). I would like to pull this down and make the change, but it seems like a little bit too big of an architectural change for someone not affiliated. Hello @DannyCato, Thank you for your report. If I understand you correctly, you need to configure the audio sample rate below 16 kHz. With the current SAI configuration (MCLK = 256 × FS), this would put the WM8994 outside its clock specification. Could you please clarify why you need an audio frequency below 16 kHz? Is there a specific application requirement or constraint behind this choice? Regarding your proposed solution (reorganizing the clocking scheme using SYSCLK / FLL1 / AIF1 / AIF2"
+    },
+    {
+      "id": "stm32h747i-disco-bsp-issue-4",
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "stm32h747i-disco-bsp",
+      "root_path": "issues",
+      "mcu_series": "H7",
+      "issue_number": 4,
+      "issue_title": "Wrong default for `LCD_LAYER_0_ADDRESS` and `LCD_LAYER_1_ADDRESS`",
+      "state": "closed",
+      "layer": "LL",
+      "component": null,
+      "issue_kind": "bug_report",
+      "severity": "high",
+      "board": "STM32H747I",
+      "labels": [
+        "bug",
+        "bsp",
+        "internal bug tracker"
+      ],
+      "github_url": "https://github.com/STMicroelectronics/stm32h747i-disco-bsp/issues/4",
+      "is_valid": true,
+      "evidence_strength": "high",
+      "rescue_applied": false,
+      "delivery_template": "st_v2_structured_issue_card",
+      "st_ready_text": "Problem: Wrong default for `LCD_LAYER_0_ADDRESS` and `LCD_LAYER_1_ADDRESS`\nContext: repo=stm32h747i-disco-bsp, mcu_series=H7, board=STM32H747I, component=None, layer=LL, issue_kind=bug_report, severity=high, evidence_strength=high, rescue_applied=False, state=closed, issue_number=4\nRoot cause: Hello @tronical, Thank you for your report.\nFix: **Describe the bug (skip if none)** The defaults for LCD_LAYER_0_ADDRESS and LCD_LAYER_1_ADDRESS in stm32h747i_discovery_conf_template.\nConstraints: Validate against exact MCU/board configuration and CubeMX/CubeH7 version before applying.\nKeywords: H7, STM32H747I, LL, bug_report, high, bug, bsp, internal bug tracker, LCD_LAYER_0_ADDRESS, LCD_LAYER_1_ADDRESS, SDRAM, RM0433\n\nTechnical details:\n**Describe the bug (skip if none)** The defaults for LCD_LAYER_0_ADDRESS and LCD_LAYER_1_ADDRESS in stm32h747i_discovery_conf_template.h are https://github.com/STMicroelectronics/stm32h747i-disco-bsp/blob/bb81c6532fcc301fc760a98f8a42acede46bea83/stm32h747i_discovery_conf_template.h#L39 0xC0000000U and 0xC0200000U. That's by default not a mapped memory region. The intention was most likely to default to the SDRAM region that's at 0xD0000000 as per https://github.com/STMicroelectronics/stm32h747i-disco-bsp/blob/bb81c6532fcc301fc760a98f8a42acede46bea83/stm32h747i_discovery_sdram.h#L63 This also matches RM0433 (2.3.2). The effect of these (IMO wrong) defaults is that out of the box the default layer initialised by BSP_LCD_Init/BSP_LCD_InitEx is at the wrong address and any layer access results in a memory fault. I'd be happy to make a PR to correct these, but I wanted to check first that I'm not missing anything :)\n\nKey comments:\nHello @tronical, Thank you for your report. We have not encountered any issues with these definitions in our examples. According to the reference manual, the 0xC0000000 region (SDRAM Bank 1) is valid for use. Could you please specify if you detected a problem with these LCD layer definitions during execution, or if it was identified through a visual check? Thank you in advance for your cooperation. With Regards. Hi, I encountered this problem during execution. The symptom is a memory fault. To reproduce: generate a new template with CubeMX for this board, add the BSP, call the LCD init functions, then try to write to the layer address. It crashes. While the current value may be valid _if_ something is mapped there, the BSP in this report defaults to mapping the SD-RAM to 0xD. Also note how _all_ examples that use the lcd functions of this BSP also end up with 0xD. Hello @tronical, Thank you for bringing this to our attention. You are right, this issue will be fixed soon. ST Internal Reference: 187832 Fixed in : 22c0c54"
+    },
+    {
+      "id": "stm32h747i-disco-bsp-issue-1",
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "stm32h747i-disco-bsp",
+      "root_path": "issues",
+      "mcu_series": "H7",
+      "issue_number": 1,
+      "issue_title": "Unable to configure I2C4 bus from IOC editor, MX_I2C4_Init() name conflict.",
+      "state": "closed",
+      "layer": "HAL",
+      "component": null,
+      "issue_kind": "configuration_help",
+      "severity": "high",
+      "board": "STM32H747I",
+      "labels": [
+        "cube mx",
+        "needs clarification"
+      ],
+      "github_url": "https://github.com/STMicroelectronics/stm32h747i-disco-bsp/issues/1",
+      "is_valid": true,
+      "evidence_strength": "medium",
+      "rescue_applied": false,
+      "delivery_template": "st_v2_structured_issue_card",
+      "st_ready_text": "Problem: Unable to configure I2C4 bus from IOC editor, MX_I2C4_Init() name conflict.\nContext: repo=stm32h747i-disco-bsp, mcu_series=H7, board=STM32H747I, component=None, layer=HAL, issue_kind=configuration_help, severity=high, evidence_strength=medium, rescue_applied=False, state=closed, issue_number=1\nRoot cause: Hello @HTD, Thank you for this contribution.\nFix: Board: STM32H747I-DISCO IDE: STM32CubeIDE 1.\nConstraints: Validate against exact MCU/board configuration and CubeMX/CubeH7 version before applying.\nKeywords: H7, STM32H747I, HAL, configuration_help, high, cube mx, needs clarification, STM32H747I-DISCO, IDE, PROBLEM, IOC, MX_I2C4_Init\n\nTechnical details:\nBoard: STM32H747I-DISCO IDE: STM32CubeIDE 1.9.0 **PROBLEM:** Configuring I2C4 in IOC editor generates the code that results in name conflict in function: c static void MX_I2C4_Init(void); That collides with BSP bus driver function: c HAL_StatusTypeDef MX_I2C4_Init(I2C_HandleTypeDef *phi2c, uint32_t timing); The project does not compile. **WORKAROUND:** Change the function signature: c HAL_StatusTypeDef MX_I2C4_Init(I2C_HandleTypeDef *phi2c, uint32_t timing); to c HAL_StatusTypeDef _MX_I2C4_Init(I2C_HandleTypeDef *phi2c, uint32_t timing); Update references in stm32h737i_discovery_bus.c file. After applying the workaround above the project compiles and works properly.\n\nKey comments:\nHello @HTD, Thank you for this contribution. There is no problem from my side. So could you please give us more details about how you got this issue? And share all the steps you took in the IOC editor to reproduce this issue. Hello @HTD , Please allow me to close this thread as no activity. You may reopen it at anytime if you have any details to share with us in order to help you to solve the issue. Thank you for your comprehension."
+    }
+  ]
+}

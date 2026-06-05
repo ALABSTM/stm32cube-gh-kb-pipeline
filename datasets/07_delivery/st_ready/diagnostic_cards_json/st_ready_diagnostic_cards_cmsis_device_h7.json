@@ -1,1 +1,240 @@
-[]
+[
+  {
+    "id": "diag::cmsis_device_h7::issue::14",
+    "card_id": "diag_cmsis_device_h7_14",
+    "rootTagPath": "diagnostic_cards",
+    "delivery_template": "st_v1_diagnostic_card",
+    "repo_scope": "cmsis_device_h7",
+    "repo": "cmsis_device_h7",
+    "title": "Missing linker files for GCC & ARM",
+    "label": "Missing linker files for GCC & ARM",
+    "externalURL": "https://github.com/STMicroelectronics/cmsis-device-h7/issues/14",
+    "issue_number": 14,
+    "issue_title": "Missing linker files for GCC & ARM",
+    "issue_state": "closed",
+    "issue_kind": "usage_question",
+    "severity": "medium",
+    "component": null,
+    "board": "NUCLEO-H723ZG",
+    "target_series": [
+      "STM32H7"
+    ],
+    "category": "technical_diagnosis",
+    "source_types": [
+      "rescued_issue"
+    ],
+    "evidence_strength": "medium",
+    "rescue_applied": true,
+    "resolution_status": null,
+    "peripheral_tags": [],
+    "technical_pattern_tags": [
+      "compile_error",
+      "version_regression"
+    ],
+    "api_family_tags": [],
+    "version_tags": [],
+    "query_anchor_tags": [
+      "Missing linker files for GCC & ARM",
+      "compile_error",
+      "version_regression"
+    ],
+    "query_aliases": [
+      "Missing linker files for GCC & ARM"
+    ],
+    "clarification_questions_required": true,
+    "clarification_questions": [
+      "Which exact MCU part number and board are you using?",
+      "Can you confirm whether your target is H7 and not a close variant?"
+    ],
+    "symptom_summary": "**Describe the set-up** * The board: Nucleo-H723ZG * IDE: GCC (with cmake) **Describe the bug** In the folder \"[Source/Templates](https://github. (Missing linker files for GCC & ARM).",
+    "affected_context": "repo=cmsis_device_h7, mcu_series=H7, board=NUCLEO-H723ZG, component=None, layer=Other, issue_kind=usage_question, severity=medium, evidence_strength=medium, rescue_applied=True, state=closed, issue_number=14",
+    "likely_causes": [
+      "Root cause is not explicit; use the issue thread and linked changes for triage"
+    ],
+    "confirmed_facts": [
+      "Issue evidence exists in cmsis_device_h7 issue #14",
+      "The issue was rescued by the preprocessing filter because technical signals were detected",
+      "Issue evidence strength is rated medium"
+    ],
+    "plausible_diagnosis": [
+      "Observed behavior aligns with Other, usage_question issue characteristics",
+      "Behavior may depend on the exact Cube or HAL version in use"
+    ],
+    "response_blocks": {
+      "facts_confirmed": [
+        "Issue evidence exists in cmsis_device_h7 issue #14",
+        "The issue was rescued by the preprocessing filter because technical signals were detected",
+        "Issue evidence strength is rated medium"
+      ],
+      "hypotheses": [
+        "Observed behavior aligns with Other, usage_question issue characteristics",
+        "Behavior may depend on the exact Cube or HAL version in use",
+        "Root cause is not explicit; use the issue thread and linked changes for triage"
+      ],
+      "checks": [
+        "Rebuild with the exact toolchain and package version referenced in the report",
+        "Reproduce on a minimal project using the same board, Cube package, and middleware settings"
+      ]
+    },
+    "response_format": "facts_hypotheses_checks_with_clarifications",
+    "debug_checks": [
+      "Rebuild with the exact toolchain and package version referenced in the report",
+      "Reproduce on a minimal project using the same board, Cube package, and middleware settings"
+    ],
+    "possible_workarounds": [
+      "**Describe the set-up** * The board: Nucleo-H723ZG * IDE: GCC (with cmake) **Describe the bug** In the folder \"[Source/Templates](https://github.",
+      "Pin a known-good firmware package version while validating the issue scope"
+    ],
+    "constraints_or_limits": [
+      "Validate against exact MCU/board configuration and CubeMX/CubeH7 version before applying.",
+      "This card is derived from a rescued issue and still requires board-level validation",
+      "Validate against the exact MCU series, board, package version, and local integration path"
+    ],
+    "evidence_refs": [
+      {
+        "type": "issue",
+        "id": 14,
+        "url": "https://github.com/STMicroelectronics/cmsis-device-h7/issues/14",
+        "confidence": "medium"
+      }
+    ],
+    "keywords": [
+      "Missing linker files for GCC & ARM",
+      "H7",
+      "NUCLEO-H723ZG",
+      "usage_question",
+      "medium",
+      "enhancement",
+      "wontfix",
+      "cmsis",
+      "IDE",
+      "GCC",
+      "cmsis_device_h7",
+      "IAR",
+      "STM32H723",
+      "compile_error",
+      "version_regression"
+    ],
+    "st_ready_text": "Problem: Missing linker files for GCC & ARM\nContext: repo=cmsis_device_h7, issue_number=14, target_series=STM32H7, source_types=rescued_issue\nSymptoms: **Describe the set-up** * The board: Nucleo-H723ZG * IDE: GCC (with cmake) **Describe the bug** In the folder \"[Source/Templates](https://github. (Missing linker files for GCC & ARM).\nQuery aliases: Missing linker files for GCC & ARM\nResponse format: facts_confirmed -> hypotheses -> checks\nFacts confirmed: Issue evidence exists in cmsis_device_h7 issue #14 | The issue was rescued by the preprocessing filter because technical signals were detected | Issue evidence strength is rated medium\nHypotheses: Observed behavior aligns with Other, usage_question issue characteristics | Behavior may depend on the exact Cube or HAL version in use | Root cause is not explicit; use the issue thread and linked changes for triage\nChecks: Rebuild with the exact toolchain and package version referenced in the report | Reproduce on a minimal project using the same board, Cube package, and middleware settings\nClarification questions (required): Which exact MCU part number and board are you using? | Can you confirm whether your target is H7 and not a close variant?\nLikely causes: Root cause is not explicit; use the issue thread and linked changes for triage\nConfirmed facts: Issue evidence exists in cmsis_device_h7 issue #14 | The issue was rescued by the preprocessing filter because technical signals were detected | Issue evidence strength is rated medium\nPlausible diagnosis: Observed behavior aligns with Other, usage_question issue characteristics | Behavior may depend on the exact Cube or HAL version in use\nDebug actions: Rebuild with the exact toolchain and package version referenced in the report | Reproduce on a minimal project using the same board, Cube package, and middleware settings\nWorkaround: **Describe the set-up** * The board: Nucleo-H723ZG * IDE: GCC (with cmake) **Describe the bug** In the folder \"[Source/Templates](https://github. | Pin a known-good firmware package version while validating the issue scope\nConstraints: Validate against exact MCU/board configuration and CubeMX/CubeH7 version before applying. | This card is derived from a rescued issue and still requires board-level validation | Validate against the exact MCU series, board, package version, and local integration path\nEvidence links: https://github.com/STMicroelectronics/cmsis-device-h7/issues/14\nKeywords: Missing linker files for GCC & ARM H7 NUCLEO-H723ZG usage_question medium enhancement wontfix cmsis IDE GCC cmsis_device_h7 IAR STM32H723 compile_error version_regression"
+  },
+  {
+    "id": "diag::cmsis_device_h7::issue::23",
+    "card_id": "diag_cmsis_device_h7_23",
+    "rootTagPath": "diagnostic_cards",
+    "delivery_template": "st_v1_diagnostic_card",
+    "repo_scope": "cmsis_device_h7",
+    "repo": "cmsis_device_h7",
+    "title": "Incorrect values in D1CorePrescTable",
+    "label": "Incorrect values in D1CorePrescTable",
+    "externalURL": "https://github.com/STMicroelectronics/cmsis-device-h7/issues/23",
+    "issue_number": 23,
+    "issue_title": "Incorrect values in D1CorePrescTable",
+    "issue_state": "closed",
+    "issue_kind": "bug_report",
+    "severity": "low",
+    "component": null,
+    "board": "NUCLEO-H745ZI",
+    "target_series": [
+      "STM32H7"
+    ],
+    "category": "technical_diagnosis",
+    "source_types": [
+      "rescued_issue"
+    ],
+    "evidence_strength": "high",
+    "rescue_applied": true,
+    "resolution_status": null,
+    "peripheral_tags": [],
+    "technical_pattern_tags": [
+      "version_regression",
+      "clocking",
+      "pinmux"
+    ],
+    "api_family_tags": [],
+    "version_tags": [],
+    "query_anchor_tags": [
+      "Incorrect values in D1CorePrescTable",
+      "version_regression",
+      "clocking",
+      "pinmux"
+    ],
+    "query_aliases": [
+      "Incorrect values in D1CorePrescTable"
+    ],
+    "clarification_questions_required": true,
+    "clarification_questions": [
+      "Which exact MCU part number and board are you using?",
+      "Can you confirm whether your target is H7 and not a close variant?"
+    ],
+    "symptom_summary": "**Describe the set-up** Stm32H7xx **Describe the bug** The D1CorePrescTable is incorrectly initialized to {0, 0, 0, 0, 1, 2, 3, 4, 1, 2, 3, 4, 6, 7, 8, 9} and used for both 3-bit and 4-bit prescalers. (Incorrect values in D1CorePrescTable).",
+    "affected_context": "repo=cmsis_device_h7, mcu_series=H7, board=NUCLEO-H745ZI, component=None, layer=HAL, issue_kind=bug_report, severity=low, evidence_strength=high, rescue_applied=True, state=closed, issue_number=23",
+    "likely_causes": [
+      "Duplicate of #12 Hello @radoslav06, Thank you for your report."
+    ],
+    "confirmed_facts": [
+      "Issue evidence exists in cmsis_device_h7 issue #23",
+      "The issue was rescued by the preprocessing filter because technical signals were detected",
+      "Issue evidence strength is rated high",
+      "Duplicate of #12 Hello @radoslav06, Thank you for your report."
+    ],
+    "plausible_diagnosis": [
+      "Observed behavior aligns with HAL, bug_report issue characteristics",
+      "Behavior may depend on the exact Cube or HAL version in use"
+    ],
+    "response_blocks": {
+      "facts_confirmed": [
+        "Issue evidence exists in cmsis_device_h7 issue #23",
+        "The issue was rescued by the preprocessing filter because technical signals were detected",
+        "Issue evidence strength is rated high",
+        "Duplicate of #12 Hello @radoslav06, Thank you for your report."
+      ],
+      "hypotheses": [
+        "Observed behavior aligns with HAL, bug_report issue characteristics",
+        "Behavior may depend on the exact Cube or HAL version in use",
+        "Duplicate of #12 Hello @radoslav06, Thank you for your report."
+      ],
+      "checks": [
+        "Reproduce on a minimal project using the same board, Cube package, and middleware settings"
+      ]
+    },
+    "response_format": "facts_hypotheses_checks_with_clarifications",
+    "debug_checks": [
+      "Reproduce on a minimal project using the same board, Cube package, and middleware settings"
+    ],
+    "possible_workarounds": [
+      "**Describe the set-up** Stm32H7xx **Describe the bug** The D1CorePrescTable is incorrectly initialized to {0, 0, 0, 0, 1, 2, 3, 4, 1, 2, 3, 4, 6, 7, 8, 9} and used for both 3-bit and 4-bit prescalers.",
+      "Pin a known-good firmware package version while validating the issue scope"
+    ],
+    "constraints_or_limits": [
+      "Validate against exact MCU/board configuration and CubeMX/CubeH7 version before applying.",
+      "This card is derived from a rescued issue and still requires board-level validation",
+      "Validate against the exact MCU series, board, package version, and local integration path"
+    ],
+    "evidence_refs": [
+      {
+        "type": "issue",
+        "id": 23,
+        "url": "https://github.com/STMicroelectronics/cmsis-device-h7/issues/23",
+        "confidence": "high"
+      }
+    ],
+    "keywords": [
+      "Incorrect values in D1CorePrescTable",
+      "H7",
+      "NUCLEO-H745ZI",
+      "HAL",
+      "bug_report",
+      "low",
+      "bug",
+      "duplicate",
+      "good first issue",
+      "invalid",
+      "cmsis",
+      "CANNOT",
+      "IMAGE",
+      "version_regression",
+      "clocking"
+    ],
+    "st_ready_text": "Problem: Incorrect values in D1CorePrescTable\nContext: repo=cmsis_device_h7, issue_number=23, target_series=STM32H7, source_types=rescued_issue\nSymptoms: **Describe the set-up** Stm32H7xx **Describe the bug** The D1CorePrescTable is incorrectly initialized to {0, 0, 0, 0, 1, 2, 3, 4, 1, 2, 3, 4, 6, 7, 8, 9} and used for both 3-bit and 4-bit prescalers. (Incorrect values in D1CorePrescTable).\nQuery aliases: Incorrect values in D1CorePrescTable\nResponse format: facts_confirmed -> hypotheses -> checks\nFacts confirmed: Issue evidence exists in cmsis_device_h7 issue #23 | The issue was rescued by the preprocessing filter because technical signals were detected | Issue evidence strength is rated high | Duplicate of #12 Hello @radoslav06, Thank you for your report.\nHypotheses: Observed behavior aligns with HAL, bug_report issue characteristics | Behavior may depend on the exact Cube or HAL version in use | Duplicate of #12 Hello @radoslav06, Thank you for your report.\nChecks: Reproduce on a minimal project using the same board, Cube package, and middleware settings\nClarification questions (required): Which exact MCU part number and board are you using? | Can you confirm whether your target is H7 and not a close variant?\nLikely causes: Duplicate of #12 Hello @radoslav06, Thank you for your report.\nConfirmed facts: Issue evidence exists in cmsis_device_h7 issue #23 | The issue was rescued by the preprocessing filter because technical signals were detected | Issue evidence strength is rated high | Duplicate of #12 Hello @radoslav06, Thank you for your report.\nPlausible diagnosis: Observed behavior aligns with HAL, bug_report issue characteristics | Behavior may depend on the exact Cube or HAL version in use\nDebug actions: Reproduce on a minimal project using the same board, Cube package, and middleware settings\nWorkaround: **Describe the set-up** Stm32H7xx **Describe the bug** The D1CorePrescTable is incorrectly initialized to {0, 0, 0, 0, 1, 2, 3, 4, 1, 2, 3, 4, 6, 7, 8, 9} and used for both 3-bit and 4-bit prescalers. | Pin a known-good firmware package version while validating the issue scope\nConstraints: Validate against exact MCU/board configuration and CubeMX/CubeH7 version before applying. | This card is derived from a rescued issue and still requires board-level validation | Validate against the exact MCU series, board, package version, and local integration path\nEvidence links: https://github.com/STMicroelectronics/cmsis-device-h7/issues/23\nKeywords: Incorrect values in D1CorePrescTable H7 NUCLEO-H745ZI HAL bug_report low bug duplicate good first issue invalid cmsis CANNOT IMAGE version_regression clocking"
+  }
+]

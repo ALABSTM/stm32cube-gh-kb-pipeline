@@ -1,0 +1,12 @@
+{
+  "repo": "stm32h743i-eval-bsp",
+  "issues_input": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\by_series\\stm32cubeh7\\drivers\\stm32h743i-eval-bsp\\issues_json\\st_ready_issues_stm32h743i-eval-bsp.json",
+  "resolver_input": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\by_series\\stm32cubeh7\\drivers\\stm32h743i-eval-bsp\\resolver_cases_json\\st_ready_resolver_cases_stm32h743i-eval-bsp.json",
+  "output_file": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\by_series\\stm32cubeh7\\drivers\\stm32h743i-eval-bsp\\diagnostic_cards_json\\st_ready_diagnostic_cards_stm32h743i-eval-bsp.json",
+  "rescued_issues_considered": 0,
+  "resolver_cases_considered": 0,
+  "exported_cards": 0,
+  "include_all_issues": false,
+  "format": "json-array",
+  "root_tag_path": "diagnostic_cards"
+}
