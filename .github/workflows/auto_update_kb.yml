@@ -12,7 +12,6 @@ name: Auto Update KB
 
 on:
   schedule:
-    # Every 2 weeks: 1st and 15th of each month at 03:00 UTC
     - cron: '0 3 1,15 * *'
   workflow_dispatch:
     inputs:
@@ -37,7 +36,7 @@ env:
 
 jobs:
   # ================================================================
-  # JOB 1: Pipeline (runs on GitHub cloud - no ST network needed)
+  # JOB 1: Pipeline (runs on GitHub cloud)
   # ================================================================
   pipeline:
     name: Ingestion + Preprocessing
@@ -75,24 +74,15 @@ jobs:
             echo "skip_upload=false" >> $GITHUB_OUTPUT
           fi
 
-      # ========================================
-      # STAGE 1: Ingestion + Preprocessing
-      # ========================================
       - name: Run pipeline (all series)
         run: |
           IFS=',' read -ra SERIES <<< "${{ steps.config.outputs.series }}"
-          
           ARGS="--series ${SERIES[*]} --export-st-ready --skip-chunking --continue-on-error"
-          
           if [ "${{ steps.config.outputs.skip_ingestion }}" = "true" ]; then
             ARGS="$ARGS --skip-ingestion"
           fi
-          
           python -m pipeline_Automation.workflow.run_all_series $ARGS
 
-      # ========================================
-      # Archive artifacts (passed to upload job)
-      # ========================================
       - name: Upload delivery artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -103,18 +93,14 @@ jobs:
       - name: Pipeline summary
         run: |
           echo "## Pipeline Completed" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Parameter | Value |" >> $GITHUB_STEP_SUMMARY
           echo "|-----------|-------|" >> $GITHUB_STEP_SUMMARY
           echo "| Series | ${{ steps.config.outputs.series }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Skip Ingestion | ${{ steps.config.outputs.skip_ingestion }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Run | #${{ github.run_number }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Date | $(date -u '+%Y-%m-%d %H:%M UTC') |" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Artifacts uploaded. Upload job will push to KB #793." >> $GITHUB_STEP_SUMMARY
 
   # ================================================================
-  # JOB 2: Upload to KB (runs on self-hosted runner with ST network)
+  # JOB 2: Upload to KB (self-hosted Windows runner with ST network)
   # ================================================================
   upload:
     name: Upload to KB #793
@@ -124,106 +110,76 @@ jobs:
     timeout-minutes: 60
 
     steps:
-      - name: Enable long paths (Windows)
+      - name: Enable long paths
+        shell: pwsh
         run: git config --system core.longpaths true
 
-      - name: Checkout repository
+      - name: Checkout (upload scripts only)
         uses: actions/checkout@v4
         with:
           sparse-checkout: |
             pipeline_Automation/upload
             shared
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Verify Python
+        shell: pwsh
+        run: python --version
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install requests
+      - name: Install requests
+        shell: pwsh
+        run: pip install requests
 
       - name: Download delivery artifacts
         uses: actions/download-artifact@v4
         with:
           name: st-ready-delivery-${{ github.run_number }}
-          path: datasets/07_delivery/st_ready/by_series/
+          path: st-ready/
 
       - name: Upload all series to KB
+        shell: pwsh
         run: |
-          IFS=',' read -ra SERIES <<< "${{ needs.pipeline.outputs.series }}"
-          
-          # Datasource ID registry
-          declare -A DS_ISSUES=( [f4]=28099 [h5]=28158 [h7]=19896 [u5]=28167 [wl]=28171 )
-          declare -A DS_FILES=(  [f4]=28103 [h5]=28163 [h7]=21824 [u5]=28168 [wl]=28172 )
-          declare -A DS_RESOLVER=( [f4]=28118 [h5]=28164 [h7]=20403 [u5]=28244 [wl]=28245 )
-          declare -A DS_DIAGNOSTIC=( [f4]=28122 [h5]=28165 [h7]=23768 [u5]=28170 [wl]=28173 )
-          
-          UPLOADER="pipeline_Automation/upload/Add_Data_Source_Files.py"
-          
-          for s in "${SERIES[@]}"; do
-            BASE="datasets/07_delivery/st_ready/by_series/stm32cube${s}"
-            
-            if [ -z "${DS_ISSUES[$s]:-}" ]; then
-              echo "=== Skipping ${s^^} (no datasource IDs registered) ==="
+          $series = "${{ needs.pipeline.outputs.series }}" -split ","
+          $DS_ISSUES = @{ f4=28099; h5=28158; h7=19896; u5=28167; wl=28171 }
+          $DS_FILES = @{ f4=28103; h5=28163; h7=21824; u5=28168; wl=28172 }
+          $DS_RESOLVER = @{ f4=28118; h5=28164; h7=20403; u5=28244; wl=28245 }
+          $DS_DIAGNOSTIC = @{ f4=28122; h5=28165; h7=23768; u5=28170; wl=28173 }
+
+          $uploader = "pipeline_Automation/upload/Add_Data_Source_Files.py"
+
+          foreach ($s in $series) {
+            $base = "st-ready/stm32cube$s"
+            if (-not $DS_ISSUES.ContainsKey($s)) {
+              Write-Host "=== Skipping $($s.ToUpper()) (no datasource IDs) ==="
               continue
-            fi
-            
-            echo "=== Uploading ${s^^} ==="
-            
+            }
+            Write-Host "=== Uploading $($s.ToUpper()) ==="
+
             # Issues
-            if ls ${BASE}/issues_json/st_ready_issues_*.json 1>/dev/null 2>&1; then
-              python $UPLOADER \
-                --kb 793 \
-                --operation add \
-                --datasource-id ${DS_ISSUES[$s]} \
-                --files ${BASE}/issues_json/st_ready_issues_stm32cube${s}.json \
-                --json-split-size 1000 \
-                --remote-user "$ST_REMOTE_USER"
-            fi
-            
+            $f = "$base/issues_json/st_ready_issues_stm32cube$s.json"
+            if (Test-Path $f) {
+              python $uploader --kb 793 --operation add --datasource-id $($DS_ISSUES[$s]) --files $f --json-split-size 1000 --remote-user $env:ST_REMOTE_USER
+            }
             # Files
-            if ls ${BASE}/files_json/st_ready_files_*.json 1>/dev/null 2>&1; then
-              python $UPLOADER \
-                --kb 793 \
-                --operation add \
-                --datasource-id ${DS_FILES[$s]} \
-                --files ${BASE}/files_json/st_ready_files_stm32cube${s}.json \
-                --json-split-size 1000 \
-                --remote-user "$ST_REMOTE_USER"
-            fi
-            
+            $f = "$base/files_json/st_ready_files_stm32cube$s.json"
+            if (Test-Path $f) {
+              python $uploader --kb 793 --operation add --datasource-id $($DS_FILES[$s]) --files $f --json-split-size 1000 --remote-user $env:ST_REMOTE_USER
+            }
             # Resolver Cases
-            if ls ${BASE}/resolver_cases_json/st_ready_resolver_cases_*.json 1>/dev/null 2>&1; then
-              python $UPLOADER \
-                --kb 793 \
-                --operation add \
-                --datasource-id ${DS_RESOLVER[$s]} \
-                --files ${BASE}/resolver_cases_json/st_ready_resolver_cases_stm32cube${s}.json \
-                --json-split-size 1000 \
-                --remote-user "$ST_REMOTE_USER"
-            fi
-            
+            $f = "$base/resolver_cases_json/st_ready_resolver_cases_stm32cube$s.json"
+            if (Test-Path $f) {
+              python $uploader --kb 793 --operation add --datasource-id $($DS_RESOLVER[$s]) --files $f --json-split-size 1000 --remote-user $env:ST_REMOTE_USER
+            }
             # Diagnostic Cards
-            if ls ${BASE}/diagnostic_cards_json/st_ready_diagnostic_cards_*.json 1>/dev/null 2>&1; then
-              python $UPLOADER \
-                --kb 793 \
-                --operation add \
-                --datasource-id ${DS_DIAGNOSTIC[$s]} \
-                --files ${BASE}/diagnostic_cards_json/st_ready_diagnostic_cards_stm32cube${s}.json \
-                --json-split-size 1000 \
-                --remote-user "$ST_REMOTE_USER"
-            fi
-          done
+            $f = "$base/diagnostic_cards_json/st_ready_diagnostic_cards_stm32cube$s.json"
+            if (Test-Path $f) {
+              python $uploader --kb 793 --operation add --datasource-id $($DS_DIAGNOSTIC[$s]) --files $f --json-split-size 1000 --remote-user $env:ST_REMOTE_USER
+            }
+          }
 
       - name: Upload summary
+        shell: pwsh
         run: |
-          echo "## KB Upload Summary" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Parameter | Value |" >> $GITHUB_STEP_SUMMARY
-          echo "|-----------|-------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Series | ${{ needs.pipeline.outputs.series }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| KB | #793 |" >> $GITHUB_STEP_SUMMARY
-          echo "| Run | #${{ github.run_number }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Date | $(date -u '+%Y-%m-%d %H:%M UTC') |" >> $GITHUB_STEP_SUMMARY
+          "## KB Upload Complete" >> $env:GITHUB_STEP_SUMMARY
+          "| Series | ${{ needs.pipeline.outputs.series }} |" >> $env:GITHUB_STEP_SUMMARY
+          "| KB | #793 |" >> $env:GITHUB_STEP_SUMMARY
+          "| Date | $(Get-Date -Format 'yyyy-MM-dd HH:mm') UTC |" >> $env:GITHUB_STEP_SUMMARY
