@@ -103,15 +103,21 @@ jobs:
           for s in "${SERIES[@]}"; do
             BASE="datasets/07_delivery/st_ready/by_series/stm32cube${s}"
             
+            # Skip if no datasource ID registered for this series
+            if [ -z "${DS_ISSUES[$s]:-}" ]; then
+              echo "=== Skipping ${s^^} (no datasource IDs registered) ==="
+              continue
+            fi
+            
             echo "=== Uploading ${s^^} ==="
             
             # Issues
             if ls ${BASE}/issues_json/st_ready_issues_*.json 1>/dev/null 2>&1; then
               python $UPLOADER \
-                --input "${BASE}/issues_json/st_ready_issues_stm32cube${s}.json" \
+                --kb 793 \
+                --operation add \
                 --datasource-id ${DS_ISSUES[$s]} \
-                --type kb-datasource-add \
-                --root-tag-path issues \
+                --files ${BASE}/issues_json/st_ready_issues_stm32cube${s}.json \
                 --json-split-size 1000 \
                 --remote-user "$ST_REMOTE_USER"
             fi
@@ -119,10 +125,10 @@ jobs:
             # Files
             if ls ${BASE}/files_json/st_ready_files_*.json 1>/dev/null 2>&1; then
               python $UPLOADER \
-                --input "${BASE}/files_json/st_ready_files_stm32cube${s}.json" \
+                --kb 793 \
+                --operation add \
                 --datasource-id ${DS_FILES[$s]} \
-                --type kb-datasource-add \
-                --root-tag-path files \
+                --files ${BASE}/files_json/st_ready_files_stm32cube${s}.json \
                 --json-split-size 1000 \
                 --remote-user "$ST_REMOTE_USER"
             fi
@@ -130,10 +136,10 @@ jobs:
             # Resolver Cases
             if ls ${BASE}/resolver_cases_json/st_ready_resolver_cases_*.json 1>/dev/null 2>&1; then
               python $UPLOADER \
-                --input "${BASE}/resolver_cases_json/st_ready_resolver_cases_stm32cube${s}.json" \
+                --kb 793 \
+                --operation add \
                 --datasource-id ${DS_RESOLVER[$s]} \
-                --type kb-datasource-add \
-                --root-tag-path resolver_cases \
+                --files ${BASE}/resolver_cases_json/st_ready_resolver_cases_stm32cube${s}.json \
                 --json-split-size 1000 \
                 --remote-user "$ST_REMOTE_USER"
             fi
@@ -141,10 +147,10 @@ jobs:
             # Diagnostic Cards
             if ls ${BASE}/diagnostic_cards_json/st_ready_diagnostic_cards_*.json 1>/dev/null 2>&1; then
               python $UPLOADER \
-                --input "${BASE}/diagnostic_cards_json/st_ready_diagnostic_cards_stm32cube${s}.json" \
+                --kb 793 \
+                --operation add \
                 --datasource-id ${DS_DIAGNOSTIC[$s]} \
-                --type kb-datasource-add \
-                --root-tag-path diagnostic_cards \
+                --files ${BASE}/diagnostic_cards_json/st_ready_diagnostic_cards_stm32cube${s}.json \
                 --json-split-size 1000 \
                 --remote-user "$ST_REMOTE_USER"
             fi
