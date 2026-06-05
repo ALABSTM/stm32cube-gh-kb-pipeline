@@ -1,0 +1,90 @@
+"""
+Upload Alfred-enriched issues JSON to existing issues datasources.
+
+These files contain image text descriptions from Alfred vision AI,
+providing richer context for KB retrieval.
+
+Usage:
+    python pipeline_Automation/upload_alfred_issues_all_series.py --dry-run
+    python pipeline_Automation/upload_alfred_issues_all_series.py --verbose
+"""
+
+import subprocess
+import sys
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+BY_SERIES = PROJECT_ROOT / "datasets" / "07_delivery" / "st_ready" / "by_series"
+ADD_SCRIPT = PROJECT_ROOT / "pipeline_Automation" / "Add_Data_Source_Files.py"
+
+KB_ID = 793
+
+PROCESSOR_PARAMS = '{"label": "{{repo}} issue #{{issue_number}} - {{issue_title}}", "externalURL": "https://github.com/STMicroelectronics/{{repo}}/issues/{{issue_number}}", "rootTagPath": "issues"}'
+
+# Datasource IDs for issues per series
+SERIES_DATASOURCES = {
+    "stm32cubef4": 28099,
+    "stm32cubeh5": 28158,
+    "stm32cubeu5": 28167,
+    "stm32cubewl": 28171,
+}
+
+
+def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="Upload Alfred issues to existing datasources")
+    parser.add_argument("--verbose", action="store_true")
+    parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--f4-id", type=int, help="F4 issues datasource ID (if available)")
+    args = parser.parse_args()
+
+    if args.f4_id:
+        SERIES_DATASOURCES["stm32cubef4"] = args.f4_id
+
+    print(f"Uploading Alfred-enriched issues to KB #{KB_ID}")
+    print()
+
+    for series, ds_id in SERIES_DATASOURCES.items():
+        alfred_file = BY_SERIES / series / "issues_json" / f"st_ready_issues_{series}_with_alfred_image_text.json"
+
+        if not alfred_file.exists():
+            print(f"[SKIP] {series}: Alfred file not found")
+            continue
+
+        if ds_id is None:
+            print(f"[SKIP] {series}: No datasource ID configured (use --f4-id for F4)")
+            continue
+
+        size_mb = alfred_file.stat().st_size / (1024 * 1024)
+        print(f"[{series}] {alfred_file.name} ({size_mb:.1f} MB) -> datasource #{ds_id}")
+
+        if args.dry_run:
+            continue
+
+        print(f"  Uploading...")
+        cmd = [
+            sys.executable, str(ADD_SCRIPT),
+            "--kb", str(KB_ID),
+            "--operation", "add",
+            "--datasource-id", str(ds_id),
+            "--remote-user", "abir.gharbi@st.com",
+            "--processor", "JSON",
+            "--processor-params", PROCESSOR_PARAMS,
+            "--json-split-size", "1000",
+            "--empty-json-policy", "skip",
+            "--files", str(alfred_file),
+        ]
+        if args.verbose:
+            cmd.append("--verbose")
+
+        result = subprocess.run(cmd, cwd=str(PROJECT_ROOT))
+        if result.returncode != 0:
+            print(f"  [WARN] Upload failed (exit code {result.returncode})")
+        else:
+            print(f"  [OK] Uploaded")
+
+    print("\nDone.")
+
+
+if __name__ == "__main__":
+    main()

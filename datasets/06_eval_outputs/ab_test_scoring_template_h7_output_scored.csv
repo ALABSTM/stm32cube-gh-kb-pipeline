@@ -1,0 +1,31 @@
+query_id,dataset_id,dataset_label,top1_correct_0_or_1,technical_precision_0_to_2,source_relevance_0_to_2,hallucination_risk_0_to_2,actionability_0_to_2,total_0_to_9,reviewer_notes
+Q1,A,raw_issues_h7,1,2,1,1,1,6,Correct answer but source provenance appears mixed for raw run.
+Q1,B,docs_issues_h7_v2,1,2,2,2,1,8,Correct and concise with coherent explanation.
+Q1,C,st_ready_issues_h7,1,2,2,2,1,8,Correct and clear.
+Q2,A,raw_issues_h7,1,2,2,2,2,9,Technically strong and directly actionable.
+Q2,B,docs_issues_h7_v2,1,2,2,2,2,9,Accurate and actionable.
+Q2,C,st_ready_issues_h7,1,2,2,2,2,9,Very clear and operational.
+Q3,A,raw_issues_h7,1,2,2,2,2,9,Comprehensive dual-core troubleshooting guidance.
+Q3,B,docs_issues_h7_v2,1,2,2,2,2,9,Strong technical depth and good structure.
+Q3,C,st_ready_issues_h7,1,2,2,2,2,9,Correct and practical steps.
+Q4,A,raw_issues_h7,1,2,2,2,2,9,Detailed root-cause and mitigation path.
+Q4,B,docs_issues_h7_v2,1,2,2,2,2,9,Accurate with concrete low-power checks.
+Q4,C,st_ready_issues_h7,1,1,2,1,1,6,Partially correct but misses important option-byte and system-level causes.
+Q5,A,raw_issues_h7,1,2,1,1,2,7,Useful but some recommendations are risky for generated code.
+Q5,B,docs_issues_h7_v2,1,2,2,2,1,8,Balanced answer with realistic constraints.
+Q5,C,st_ready_issues_h7,1,1,1,1,2,6,Actionable snippets but lower reliability in CubeMX generated context.
+Q6,A,raw_issues_h7,1,2,2,2,1,8,Correct board mapping explanation.
+Q6,B,docs_issues_h7_v2,1,2,2,2,1,8,Correct and concise.
+Q6,C,st_ready_issues_h7,1,2,2,2,1,8,Correct and clear.
+Q7,A,raw_issues_h7,1,2,2,2,2,9,Strong diagnosis and practical fix path.
+Q7,B,docs_issues_h7_v2,1,2,2,2,2,9,Correct and operational guidance.
+Q7,C,st_ready_issues_h7,0,0,0,0,0,0,Wrong topic retrieved (answered ADC/BOOST instead of FR_NOT_READY SDMMC1).
+Q8,A,raw_issues_h7,1,2,2,2,2,9,Accurate datasheet-oriented answer.
+Q8,B,docs_issues_h7_v2,1,2,2,2,2,9,Accurate and practical checklist.
+Q8,C,st_ready_issues_h7,1,2,2,2,2,9,Correct and concise.
+Q9,A,raw_issues_h7,1,2,2,2,2,9,Very actionable and technically solid.
+Q9,B,docs_issues_h7_v2,1,2,2,2,2,9,Technically good and structured.
+Q9,C,st_ready_issues_h7,1,1,1,1,1,5,Mostly generic; lower precision and weaker source grounding.
+Q10,A,raw_issues_h7,1,2,2,2,2,9,Correct LL calibration sequence and timing.
+Q10,B,docs_issues_h7_v2,1,2,2,2,2,9,Correct and clear.
+Q10,C,st_ready_issues_h7,1,2,2,2,2,9,Correct and concise.

@@ -1,0 +1,182 @@
+# ============================================================
+# Automated KB Update - Runs every 2 weeks
+# ============================================================
+# This workflow keeps the ST GitHub Analyzer persona always up-to-date
+# by re-ingesting GitHub data, preprocessing, and uploading to KB #793.
+#
+# Trigger: bi-weekly (1st and 15th of each month at 3:00 UTC)
+#          + manual dispatch for on-demand runs
+# ============================================================
+
+name: Auto Update KB
+
+on:
+  schedule:
+    # Every 2 weeks: 1st and 15th of each month at 03:00 UTC
+    - cron: '0 3 1,15 * *'
+  workflow_dispatch:
+    inputs:
+      series:
+        description: 'MCU series to process (comma-separated: f4,h5,h7,u5,wl)'
+        required: false
+        default: 'f4,h5,h7,u5,wl'
+      skip_ingestion:
+        description: 'Skip GitHub ingestion (reuse cached raw data)'
+        type: boolean
+        default: false
+      skip_upload:
+        description: 'Skip KB upload (dry-run mode)'
+        type: boolean
+        default: false
+
+env:
+  PYTHON_VERSION: '3.12'
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  ST_CHATGPT_API_KEY: ${{ secrets.ST_CHATGPT_API_KEY }}
+  ST_REMOTE_USER: ${{ secrets.ST_REMOTE_USER }}
+
+jobs:
+  update-kb:
+    name: Pipeline + KB Upload
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests scikit-learn jsonschema openpyxl
+
+      - name: Determine series
+        id: config
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "series=${{ github.event.inputs.series }}" >> $GITHUB_OUTPUT
+            echo "skip_ingestion=${{ github.event.inputs.skip_ingestion }}" >> $GITHUB_OUTPUT
+            echo "skip_upload=${{ github.event.inputs.skip_upload }}" >> $GITHUB_OUTPUT
+          else
+            echo "series=f4,h5,h7,u5,wl" >> $GITHUB_OUTPUT
+            echo "skip_ingestion=false" >> $GITHUB_OUTPUT
+            echo "skip_upload=false" >> $GITHUB_OUTPUT
+          fi
+
+      # ========================================
+      # STAGE 1: Ingestion + Preprocessing
+      # ========================================
+      - name: Run pipeline (all series)
+        run: |
+          IFS=',' read -ra SERIES <<< "${{ steps.config.outputs.series }}"
+          
+          ARGS="--series ${SERIES[*]} --export-st-ready --skip-chunking --continue-on-error"
+          
+          if [ "${{ steps.config.outputs.skip_ingestion }}" = "true" ]; then
+            ARGS="$ARGS --skip-ingestion"
+          fi
+          
+          python -m pipeline_Automation.workflow.run_all_series $ARGS
+
+      # ========================================
+      # STAGE 2: Schema Validation Gate
+      # ========================================
+      - name: Validate schemas
+        run: python -m pipeline.evaluation.validate_schemas
+
+      # ========================================
+      # STAGE 3: Upload to KB #793
+      # ========================================
+      - name: Upload to KB
+        if: steps.config.outputs.skip_upload != 'true'
+        run: |
+          IFS=',' read -ra SERIES <<< "${{ steps.config.outputs.series }}"
+          
+          # Datasource ID registry
+          declare -A DS_ISSUES=( [f4]=28099 [h5]=28158 [h7]=19896 [u5]=28167 [wl]=28171 )
+          declare -A DS_FILES=(  [f4]=28103 [h5]=28163 [h7]=21824 [u5]=28168 [wl]=28172 )
+          declare -A DS_RESOLVER=( [f4]=28118 [h5]=28164 [h7]=20403 [u5]=28244 [wl]=28245 )
+          declare -A DS_DIAGNOSTIC=( [f4]=28122 [h5]=28165 [h7]=23768 [u5]=28170 [wl]=28173 )
+          
+          UPLOADER="pipeline_Automation/upload/Add_Data_Source_Files.py"
+          
+          for s in "${SERIES[@]}"; do
+            BASE="datasets/07_delivery/st_ready/by_series/stm32cube${s}"
+            
+            echo "=== Uploading ${s^^} ==="
+            
+            # Issues
+            if ls ${BASE}/issues_json/st_ready_issues_*.json 1>/dev/null 2>&1; then
+              python $UPLOADER \
+                --input "${BASE}/issues_json/st_ready_issues_stm32cube${s}.json" \
+                --datasource-id ${DS_ISSUES[$s]} \
+                --type kb-datasource-add \
+                --root-tag-path issues \
+                --json-split-size 1000 \
+                --remote-user "$ST_REMOTE_USER"
+            fi
+            
+            # Files
+            if ls ${BASE}/files_json/st_ready_files_*.json 1>/dev/null 2>&1; then
+              python $UPLOADER \
+                --input "${BASE}/files_json/st_ready_files_stm32cube${s}.json" \
+                --datasource-id ${DS_FILES[$s]} \
+                --type kb-datasource-add \
+                --root-tag-path files \
+                --json-split-size 1000 \
+                --remote-user "$ST_REMOTE_USER"
+            fi
+            
+            # Resolver Cases
+            if ls ${BASE}/resolver_cases_json/st_ready_resolver_cases_*.json 1>/dev/null 2>&1; then
+              python $UPLOADER \
+                --input "${BASE}/resolver_cases_json/st_ready_resolver_cases_stm32cube${s}.json" \
+                --datasource-id ${DS_RESOLVER[$s]} \
+                --type kb-datasource-add \
+                --root-tag-path resolver_cases \
+                --json-split-size 1000 \
+                --remote-user "$ST_REMOTE_USER"
+            fi
+            
+            # Diagnostic Cards
+            if ls ${BASE}/diagnostic_cards_json/st_ready_diagnostic_cards_*.json 1>/dev/null 2>&1; then
+              python $UPLOADER \
+                --input "${BASE}/diagnostic_cards_json/st_ready_diagnostic_cards_stm32cube${s}.json" \
+                --datasource-id ${DS_DIAGNOSTIC[$s]} \
+                --type kb-datasource-add \
+                --root-tag-path diagnostic_cards \
+                --json-split-size 1000 \
+                --remote-user "$ST_REMOTE_USER"
+            fi
+          done
+
+      # ========================================
+      # STAGE 4: Archive artifacts
+      # ========================================
+      - name: Upload delivery artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: st-ready-delivery-${{ github.run_number }}
+          path: datasets/07_delivery/st_ready/by_series/
+          retention-days: 30
+
+      # ========================================
+      # STAGE 5: Summary
+      # ========================================
+      - name: Job summary
+        run: |
+          echo "## KB Auto-Update Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Parameter | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Series | ${{ steps.config.outputs.series }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Skip Ingestion | ${{ steps.config.outputs.skip_ingestion }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Skip Upload | ${{ steps.config.outputs.skip_upload }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Run | #${{ github.run_number }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Date | $(date -u '+%Y-%m-%d %H:%M UTC') |" >> $GITHUB_STEP_SUMMARY

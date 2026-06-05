@@ -1,0 +1,61 @@
+[
+  {
+    "repo": "32f469idiscovery-bsp",
+    "issue_number": 2,
+    "title": "Misspelling in comments",
+    "state": "open",
+    "labels": [
+      "bug",
+      "bsp",
+      "internal bug tracker"
+    ],
+    "created_at": "2026-05-17T21:57:39Z",
+    "closed_at": null,
+    "body": "https://github.com/STMicroelectronics/32f469idiscovery-bsp/blob/6e51dbf6865ce35dafc75e3a51d296b94285e7f1/stm32469i_discovery_lcd.c#L172\n\n\"Ititilization\" is used multiple times in this comment where initialization was meant.",
+    "comments": [
+      {
+        "author": "Jah-yee",
+        "created_at": "2026-05-17T22:49:27Z",
+        "body": "PR #4 submitted with the typo fix (ititialization -> initialization in LCD comments)."
+      },
+      {
+        "author": "ASAHSTM",
+        "created_at": "2026-05-21T08:58:26Z",
+        "body": "Hello,\n\nThank you for your report.\nThis issue has been tracked internally.\n\nWith Regards,"
+      },
+      {
+        "author": "ASAHSTM",
+        "created_at": "2026-05-21T08:58:45Z",
+        "body": "ST Internal Reference: CDM0062817 "
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/32f469idiscovery-bsp/issues/2"
+  },
+  {
+    "repo": "32f469idiscovery-bsp",
+    "issue_number": 1,
+    "title": "Conditional Error in function DSI_IO_ReadCmd from stm32469i_discovery_lcd.c",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "bsp",
+      "internal bug tracker"
+    ],
+    "created_at": "2025-01-29T19:25:27Z",
+    "closed_at": "2025-02-25T13:36:24Z",
+    "body": "Hello,\n\nSpotted minor error here, that would create incorrect debugging feedback mainly :\n[stm32469i_discovery_lcd.c/int32_t DSI_IO_ReadCmd(uint32_t Reg, uint8_t *pData, uint32_t Size)](https://github.com/STMicroelectronics/32f469idiscovery-bsp/blob/f79918e76de5310aad28ebf33365f902f51df85b/stm32469i_discovery_lcd.c#L1346)\n\ninside the if condition it shouldn't be :\n```c\nif(HAL_DSI_Read(&hdsi_eval, LCD_Driver_ID, pData, Size, DSI_DCS_SHORT_PKT_READ, Reg, pData)!= HAL_OK)\n```\nbut more:\n```c\nif(HAL_DSI_Read(&hdsi_eval, LCD_Driver_ID, pData, Size, DSI_DCS_SHORT_PKT_READ, Reg, pData)== HAL_OK)\n```\n\nBye.",
+    "comments": [
+      {
+        "author": "ASEHSTM",
+        "created_at": "2025-02-04T16:12:30Z",
+        "body": "Hello @JoCake,\n\nThank you for your report.\nST Internal Reference: 202226\n\nWith Regards,"
+      },
+      {
+        "author": "ASEHSTM",
+        "created_at": "2025-02-25T13:36:24Z",
+        "body": "Fixed in: aa9a1770a2dc7f30d2ba2d45d62124a94cf89d54"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/32f469idiscovery-bsp/issues/1"
+  }
+]

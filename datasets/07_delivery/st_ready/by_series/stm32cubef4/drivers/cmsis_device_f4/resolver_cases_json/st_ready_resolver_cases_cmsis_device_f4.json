@@ -1,0 +1,657 @@
+{
+  "resolver_cases": [
+    {
+      "id": "resolver::cmsis_device_f4::issue::3",
+      "title": "Using '__IOM' for peripheral register definitions",
+      "label": "Using '__IOM' for peripheral register definitions",
+      "externalURL": "https://github.com/STMicroelectronics/cmsis-device-f4/issues/3",
+      "rootTagPath": "resolver_cases",
+      "evidence_refs": [
+        {
+          "type": "issue",
+          "id": 3,
+          "url": "https://github.com/STMicroelectronics/cmsis-device-f4/issues/3"
+        }
+      ],
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "cmsis_device_f4",
+      "issue_root_path": "issues",
+      "pr_root_path": "pull",
+      "commit_root_path": "commit",
+      "issue_number": 3,
+      "issue_title": "Using '__IOM' for peripheral register definitions",
+      "issue_labels": [
+        "enhancement",
+        "wontfix",
+        "internal bug tracker",
+        "cmsis"
+      ],
+      "issue_state": "closed",
+      "issue_url": "https://github.com/STMicroelectronics/cmsis-device-f4/issues/3",
+      "linked_pr_numbers": [
+        4,
+        5
+      ],
+      "linked_commit_shas": [
+        "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+        "fb0d972f320747948f0ff812c80e24f48e2e5a66"
+      ],
+      "primary_pr_number": 4,
+      "primary_commit_sha": "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+      "linked_pr_urls": [
+        "https://github.com/STMicroelectronics/cmsis-device-f4/pull/4",
+        "https://github.com/STMicroelectronics/cmsis-device-f4/pull/5"
+      ],
+      "linked_commit_urls": [
+        "https://github.com/STMicroelectronics/cmsis-device-f4/commit/dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+        "https://github.com/STMicroelectronics/cmsis-device-f4/commit/fb0d972f320747948f0ff812c80e24f48e2e5a66"
+      ],
+      "resolution_status": "candidate_fix",
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0,
+      "link_confidence": "medium",
+      "link_score": 0.8,
+      "delivery_template": "st_v1_resolver_case",
+      "resolver_card_text": "Problem: Issue #3 - Using '__IOM' for peripheral register definitions\nContext: repo=cmsis_device_f4, labels=enhancement, wontfix, internal bug tracker, cmsis, issue_state=closed\nResolver signal: resolution_status=candidate_fix, confidence=medium, score=0.8\nAssessment: Potential fix identified, but integration status is uncertain.\nCandidate PRs: Using '__IOM' for peripheral register definitions | Using '__IOM' for peripheral register definitions\nCommit evidence: Using '__IOM' for peripheral register definitions | Using '__IOM' for peripheral register definitions Rebased to current version\nPR #4 description: This is pulll request to close #3 if there is specific reason to use \"__IO\" in the libraries.\r\n\r\n## IMPORTANT INFORMATION \r\n\r\n### Contributor License Agreement (CLA)\r\n* The Pull Request feature will be considered by STMicroelectronics after the signature of a **Contributor License Agreement (CLA)** by the submiter.\r\n* If you have not signed such agreement, please follow the rules mentioned in the CONTRIBUTING.md file.\nPR #5 description: This is pulll request to close #3 if there is no specific reason to use \"__IO\" in the libraries.\r\n\r\n## IMPORTANT INFORMATION \r\n\r\n### Contributor License Agreement (CLA)\r\n* The Pull Request feature will be considered by STMicroelectronics after the signature of a **Contributor License Agreement (CLA)** by the submiter.\r\n* If you have not signed such agreement, please follow the rules mentioned in the CONTRIBUTING.md file.\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying.",
+      "linked_file_ids": [
+        "cmsis_device_f4-file-2167808905764643615",
+        "cmsis_device_f4-file-2678357630342557212",
+        "cmsis_device_f4-file-3084454615261922608",
+        "cmsis_device_f4-file-3133918292209284285",
+        "cmsis_device_f4-file-3336128943689340113",
+        "cmsis_device_f4-file-3566973572878257832",
+        "cmsis_device_f4-file-3966134763014594479",
+        "cmsis_device_f4-file-4005575216509790187",
+        "cmsis_device_f4-file-4016531954752353415",
+        "cmsis_device_f4-file-5241862614169451327",
+        "cmsis_device_f4-file-5278340858870620735",
+        "cmsis_device_f4-file-5409642208051770369",
+        "cmsis_device_f4-file-6044272183412660617",
+        "cmsis_device_f4-file-6063068985035814051",
+        "cmsis_device_f4-file-6418598021144877720",
+        "cmsis_device_f4-file-6605047865315113808",
+        "cmsis_device_f4-file-6776362133367894685",
+        "cmsis_device_f4-file-7254556174250762415",
+        "cmsis_device_f4-file-8020920395804229797",
+        "cmsis_device_f4-file-8764374079685857467",
+        "cmsis_device_f4-file-8801453013171619486",
+        "cmsis_device_f4-file-8866855767967395113",
+        "cmsis_device_f4-file-8980950420227390418"
+      ],
+      "linked_file_paths": [
+        "Include/stm32f401xc.h",
+        "Include/stm32f401xe.h",
+        "Include/stm32f405xx.h",
+        "Include/stm32f407xx.h",
+        "Include/stm32f410cx.h",
+        "Include/stm32f410rx.h",
+        "Include/stm32f410tx.h",
+        "Include/stm32f411xe.h",
+        "Include/stm32f412cx.h",
+        "Include/stm32f412rx.h",
+        "Include/stm32f412vx.h",
+        "Include/stm32f412zx.h",
+        "Include/stm32f413xx.h",
+        "Include/stm32f415xx.h",
+        "Include/stm32f417xx.h",
+        "Include/stm32f423xx.h",
+        "Include/stm32f427xx.h",
+        "Include/stm32f429xx.h",
+        "Include/stm32f437xx.h",
+        "Include/stm32f439xx.h",
+        "Include/stm32f446xx.h",
+        "Include/stm32f469xx.h",
+        "Include/stm32f479xx.h"
+      ],
+      "files_evidence": {
+        "changed_files_total": 23,
+        "matched_docs_files_count": 23,
+        "unmatched_files_count": 0,
+        "match_rate": 1.0,
+        "files": [
+          {
+            "path": "Include/stm32f479xx.h",
+            "status": "modified",
+            "additions": 1108,
+            "deletions": 1108,
+            "changes": 2216,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+              "fb0d972f320747948f0ff812c80e24f48e2e5a66"
+            ],
+            "module": "include",
+            "file_doc_id": "cmsis_device_f4-file-5409642208051770369",
+            "file_type": "cmsis_source",
+            "component": "ETH",
+            "board": "STM32F479XX",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/cmsis_device_f4/blob/master/Include/stm32f479xx.h",
+            "score": 2236.0
+          },
+          {
+            "path": "Include/stm32f469xx.h",
+            "status": "modified",
+            "additions": 1020,
+            "deletions": 1020,
+            "changes": 2040,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+              "fb0d972f320747948f0ff812c80e24f48e2e5a66"
+            ],
+            "module": "include",
+            "file_doc_id": "cmsis_device_f4-file-3133918292209284285",
+            "file_type": "cmsis_source",
+            "component": "ETH",
+            "board": "STM32F469XX",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/cmsis_device_f4/blob/master/Include/stm32f469xx.h",
+            "score": 2060.0
+          },
+          {
+            "path": "Include/stm32f439xx.h",
+            "status": "modified",
+            "additions": 972,
+            "deletions": 972,
+            "changes": 1944,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+              "fb0d972f320747948f0ff812c80e24f48e2e5a66"
+            ],
+            "module": "include",
+            "file_doc_id": "cmsis_device_f4-file-6776362133367894685",
+            "file_type": "cmsis_source",
+            "component": "ETH",
+            "board": "STM32F439XX",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/cmsis_device_f4/blob/master/Include/stm32f439xx.h",
+            "score": 1964.0
+          },
+          {
+            "path": "Include/stm32f437xx.h",
+            "status": "modified",
+            "additions": 922,
+            "deletions": 922,
+            "changes": 1844,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+              "fb0d972f320747948f0ff812c80e24f48e2e5a66"
+            ],
+            "module": "include",
+            "file_doc_id": "cmsis_device_f4-file-6044272183412660617",
+            "file_type": "cmsis_source",
+            "component": "ETH",
+            "board": "STM32F437XX",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/cmsis_device_f4/blob/master/Include/stm32f437xx.h",
+            "score": 1864.0
+          },
+          {
+            "path": "Include/stm32f429xx.h",
+            "status": "modified",
+            "additions": 884,
+            "deletions": 884,
+            "changes": 1768,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+              "fb0d972f320747948f0ff812c80e24f48e2e5a66"
+            ],
+            "module": "include",
+            "file_doc_id": "cmsis_device_f4-file-2678357630342557212",
+            "file_type": "cmsis_source",
+            "component": "ETH",
+            "board": "STM32F429XX",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/cmsis_device_f4/blob/master/Include/stm32f429xx.h",
+            "score": 1788.0
+          },
+          {
+            "path": "Include/stm32f417xx.h",
+            "status": "modified",
+            "additions": 844,
+            "deletions": 844,
+            "changes": 1688,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+              "fb0d972f320747948f0ff812c80e24f48e2e5a66"
+            ],
+            "module": "include",
+            "file_doc_id": "cmsis_device_f4-file-8020920395804229797",
+            "file_type": "cmsis_source",
+            "component": "ETH",
+            "board": "STM32F417XX",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/cmsis_device_f4/blob/master/Include/stm32f417xx.h",
+            "score": 1708.0
+          },
+          {
+            "path": "Include/stm32f427xx.h",
+            "status": "modified",
+            "additions": 834,
+            "deletions": 834,
+            "changes": 1668,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+              "fb0d972f320747948f0ff812c80e24f48e2e5a66"
+            ],
+            "module": "include",
+            "file_doc_id": "cmsis_device_f4-file-4016531954752353415",
+            "file_type": "cmsis_source",
+            "component": "ETH",
+            "board": "STM32F427XX",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/cmsis_device_f4/blob/master/Include/stm32f427xx.h",
+            "score": 1688.0
+          },
+          {
+            "path": "Include/stm32f407xx.h",
+            "status": "modified",
+            "additions": 756,
+            "deletions": 756,
+            "changes": 1512,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+              "fb0d972f320747948f0ff812c80e24f48e2e5a66"
+            ],
+            "module": "include",
+            "file_doc_id": "cmsis_device_f4-file-8980950420227390418",
+            "file_type": "cmsis_source",
+            "component": "ETH",
+            "board": "STM32F407XX",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/cmsis_device_f4/blob/master/Include/stm32f407xx.h",
+            "score": 1532.0
+          },
+          {
+            "path": "Include/stm32f446xx.h",
+            "status": "modified",
+            "additions": 736,
+            "deletions": 736,
+            "changes": 1472,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+              "fb0d972f320747948f0ff812c80e24f48e2e5a66"
+            ],
+            "module": "include",
+            "file_doc_id": "cmsis_device_f4-file-8801453013171619486",
+            "file_type": "cmsis_source",
+            "component": "USB",
+            "board": "STM32F446XX",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/cmsis_device_f4/blob/master/Include/stm32f446xx.h",
+            "score": 1492.0
+          },
+          {
+            "path": "Include/stm32f413xx.h",
+            "status": "modified",
+            "additions": 734,
+            "deletions": 734,
+            "changes": 1468,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+              "fb0d972f320747948f0ff812c80e24f48e2e5a66"
+            ],
+            "module": "include",
+            "file_doc_id": "cmsis_device_f4-file-3084454615261922608",
+            "file_type": "cmsis_source",
+            "component": "USB",
+            "board": "STM32F413XX",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/cmsis_device_f4/blob/master/Include/stm32f413xx.h",
+            "score": 1488.0
+          },
+          {
+            "path": "Include/stm32f415xx.h",
+            "status": "modified",
+            "additions": 708,
+            "deletions": 708,
+            "changes": 1416,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+              "fb0d972f320747948f0ff812c80e24f48e2e5a66"
+            ],
+            "module": "include",
+            "file_doc_id": "cmsis_device_f4-file-6605047865315113808",
+            "file_type": "cmsis_source",
+            "component": "ETH",
+            "board": "STM32F415XX",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/cmsis_device_f4/blob/master/Include/stm32f415xx.h",
+            "score": 1436.0
+          },
+          {
+            "path": "Include/stm32f412rx.h",
+            "status": "modified",
+            "additions": 668,
+            "deletions": 668,
+            "changes": 1336,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+              "fb0d972f320747948f0ff812c80e24f48e2e5a66"
+            ],
+            "module": "include",
+            "file_doc_id": "cmsis_device_f4-file-6418598021144877720",
+            "file_type": "cmsis_source",
+            "component": "USB",
+            "board": "STM32F412RX",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/cmsis_device_f4/blob/master/Include/stm32f412rx.h",
+            "score": 1356.0
+          },
+          {
+            "path": "Include/stm32f412vx.h",
+            "status": "modified",
+            "additions": 668,
+            "deletions": 668,
+            "changes": 1336,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+              "fb0d972f320747948f0ff812c80e24f48e2e5a66"
+            ],
+            "module": "include",
+            "file_doc_id": "cmsis_device_f4-file-8764374079685857467",
+            "file_type": "cmsis_source",
+            "component": "USB",
+            "board": "STM32F412VX",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/cmsis_device_f4/blob/master/Include/stm32f412vx.h",
+            "score": 1356.0
+          },
+          {
+            "path": "Include/stm32f412zx.h",
+            "status": "modified",
+            "additions": 668,
+            "deletions": 668,
+            "changes": 1336,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+              "fb0d972f320747948f0ff812c80e24f48e2e5a66"
+            ],
+            "module": "include",
+            "file_doc_id": "cmsis_device_f4-file-3336128943689340113",
+            "file_type": "cmsis_source",
+            "component": "USB",
+            "board": "STM32F412ZX",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/cmsis_device_f4/blob/master/Include/stm32f412zx.h",
+            "score": 1356.0
+          },
+          {
+            "path": "Include/stm32f412cx.h",
+            "status": "modified",
+            "additions": 632,
+            "deletions": 632,
+            "changes": 1264,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+              "fb0d972f320747948f0ff812c80e24f48e2e5a66"
+            ],
+            "module": "include",
+            "file_doc_id": "cmsis_device_f4-file-3966134763014594479",
+            "file_type": "cmsis_source",
+            "component": "USB",
+            "board": "STM32F412CX",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/cmsis_device_f4/blob/master/Include/stm32f412cx.h",
+            "score": 1284.0
+          },
+          {
+            "path": "Include/stm32f405xx.h",
+            "status": "modified",
+            "additions": 620,
+            "deletions": 620,
+            "changes": 1240,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+              "fb0d972f320747948f0ff812c80e24f48e2e5a66"
+            ],
+            "module": "include",
+            "file_doc_id": "cmsis_device_f4-file-2167808905764643615",
+            "file_type": "cmsis_source",
+            "component": "ETH",
+            "board": "STM32F405XX",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/cmsis_device_f4/blob/master/Include/stm32f405xx.h",
+            "score": 1260.0
+          },
+          {
+            "path": "Include/stm32f401xc.h",
+            "status": "modified",
+            "additions": 510,
+            "deletions": 510,
+            "changes": 1020,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+              "fb0d972f320747948f0ff812c80e24f48e2e5a66"
+            ],
+            "module": "include",
+            "file_doc_id": "cmsis_device_f4-file-5278340858870620735",
+            "file_type": "cmsis_source",
+            "component": "USB",
+            "board": "STM32F401XC",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/cmsis_device_f4/blob/master/Include/stm32f401xc.h",
+            "score": 1040.0
+          },
+          {
+            "path": "Include/stm32f401xe.h",
+            "status": "modified",
+            "additions": 510,
+            "deletions": 510,
+            "changes": 1020,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+              "fb0d972f320747948f0ff812c80e24f48e2e5a66"
+            ],
+            "module": "include",
+            "file_doc_id": "cmsis_device_f4-file-4005575216509790187",
+            "file_type": "cmsis_source",
+            "component": "USB",
+            "board": "STM32F401XE",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/cmsis_device_f4/blob/master/Include/stm32f401xe.h",
+            "score": 1040.0
+          },
+          {
+            "path": "Include/stm32f411xe.h",
+            "status": "modified",
+            "additions": 510,
+            "deletions": 510,
+            "changes": 1020,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+              "fb0d972f320747948f0ff812c80e24f48e2e5a66"
+            ],
+            "module": "include",
+            "file_doc_id": "cmsis_device_f4-file-8866855767967395113",
+            "file_type": "cmsis_source",
+            "component": "USB",
+            "board": "STM32F411XE",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/cmsis_device_f4/blob/master/Include/stm32f411xe.h",
+            "score": 1040.0
+          },
+          {
+            "path": "Include/stm32f410cx.h",
+            "status": "modified",
+            "additions": 438,
+            "deletions": 438,
+            "changes": 876,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+              "fb0d972f320747948f0ff812c80e24f48e2e5a66"
+            ],
+            "module": "include",
+            "file_doc_id": "cmsis_device_f4-file-6063068985035814051",
+            "file_type": "cmsis_source",
+            "component": "ADC",
+            "board": "STM32F410CX",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/cmsis_device_f4/blob/master/Include/stm32f410cx.h",
+            "score": 896.0
+          },
+          {
+            "path": "Include/stm32f410rx.h",
+            "status": "modified",
+            "additions": 438,
+            "deletions": 438,
+            "changes": 876,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+              "fb0d972f320747948f0ff812c80e24f48e2e5a66"
+            ],
+            "module": "include",
+            "file_doc_id": "cmsis_device_f4-file-5241862614169451327",
+            "file_type": "cmsis_source",
+            "component": "ADC",
+            "board": "STM32F410RX",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/cmsis_device_f4/blob/master/Include/stm32f410rx.h",
+            "score": 896.0
+          },
+          {
+            "path": "Include/stm32f410tx.h",
+            "status": "modified",
+            "additions": 438,
+            "deletions": 438,
+            "changes": 876,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+              "fb0d972f320747948f0ff812c80e24f48e2e5a66"
+            ],
+            "module": "include",
+            "file_doc_id": "cmsis_device_f4-file-7254556174250762415",
+            "file_type": "cmsis_source",
+            "component": "ADC",
+            "board": "STM32F410TX",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/cmsis_device_f4/blob/master/Include/stm32f410tx.h",
+            "score": 896.0
+          },
+          {
+            "path": "Include/stm32f423xx.h",
+            "status": "modified",
+            "additions": 0,
+            "deletions": 0,
+            "changes": 0,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+              "fb0d972f320747948f0ff812c80e24f48e2e5a66"
+            ],
+            "module": "include",
+            "file_doc_id": "cmsis_device_f4-file-3566973572878257832",
+            "file_type": "cmsis_source",
+            "component": "USB",
+            "board": "STM32F423XX",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/cmsis_device_f4/blob/master/Include/stm32f423xx.h",
+            "score": 20.0
+          }
+        ]
+      },
+      "impacted_modules": [
+        "include"
+      ],
+      "impacted_components": [
+        "ADC",
+        "ETH",
+        "USB"
+      ],
+      "impacted_boards": [
+        "STM32F401XC",
+        "STM32F401XE",
+        "STM32F405XX",
+        "STM32F407XX",
+        "STM32F410CX",
+        "STM32F410RX",
+        "STM32F410TX",
+        "STM32F411XE",
+        "STM32F412CX",
+        "STM32F412RX",
+        "STM32F412VX",
+        "STM32F412ZX",
+        "STM32F413XX",
+        "STM32F415XX",
+        "STM32F417XX",
+        "STM32F423XX",
+        "STM32F427XX",
+        "STM32F429XX",
+        "STM32F437XX",
+        "STM32F439XX",
+        "STM32F446XX",
+        "STM32F469XX",
+        "STM32F479XX"
+      ],
+      "impacted_file_types": [
+        "cmsis_source"
+      ],
+      "primary_changed_file": {
+        "path": "Include/stm32f479xx.h",
+        "status": "modified",
+        "additions": 1108,
+        "deletions": 1108,
+        "changes": 2216,
+        "touched_by_commits": 2,
+        "commit_shas": [
+          "dab407adabba46bc2f9da19b8d46cffc7c3d7dde",
+          "fb0d972f320747948f0ff812c80e24f48e2e5a66"
+        ],
+        "module": "include",
+        "file_doc_id": "cmsis_device_f4-file-5409642208051770369",
+        "file_type": "cmsis_source",
+        "component": "ETH",
+        "board": "STM32F479XX",
+        "example_name": null,
+        "source_match": "docs_files_exact",
+        "github_url": "https://github.com/STMicroelectronics/cmsis_device_f4/blob/master/Include/stm32f479xx.h",
+        "score": 2236.0
+      }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "repo": "stm32h735g-dk-bsp",
+  "input_file": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\data\\docs_files_stm32h735g-dk-bsp_v2.json",
+  "output_file": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\by_series\\stm32cubeh7\\drivers\\stm32h735g-dk-bsp\\files_json\\st_ready_files_stm32h735g-dk-bsp.json",
+  "total_docs": 22,
+  "exported_docs": 22,
+  "include_invalid": false,
+  "format": "json",
+  "root_tag_path": "files",
+  "summary_max_chars": 240,
+  "technical_max_chars": 4000
+}

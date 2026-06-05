@@ -1,0 +1,11 @@
+{
+  "repo": "b-u585i-iot02a-bsp",
+  "input_file": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\data\\docs_issues_b-u585i-iot02a-bsp_v2.json",
+  "output_file": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\by_series\\stm32cubeu5\\drivers\\b-u585i-iot02a-bsp\\issues_json\\st_ready_issues_b-u585i-iot02a-bsp.json",
+  "total_docs": 0,
+  "exported_docs": 0,
+  "include_invalid": false,
+  "comments_chars": 1200,
+  "format": "json",
+  "root_tag_path": "issues"
+}

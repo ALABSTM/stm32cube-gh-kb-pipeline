@@ -1,0 +1,12 @@
+{
+  "repo": "stm32wlxx-hal-driver",
+  "issues_input": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\by_series\\stm32cubewl\\drivers\\stm32wlxx-hal-driver\\issues_json\\st_ready_issues_stm32wlxx-hal-driver.json",
+  "resolver_input": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\by_series\\stm32cubewl\\drivers\\stm32wlxx-hal-driver\\resolver_cases_json\\st_ready_resolver_cases_stm32wlxx-hal-driver.json",
+  "output_file": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\by_series\\stm32cubewl\\drivers\\stm32wlxx-hal-driver\\diagnostic_cards_json\\st_ready_diagnostic_cards_stm32wlxx-hal-driver.json",
+  "rescued_issues_considered": 2,
+  "resolver_cases_considered": 1,
+  "exported_cards": 3,
+  "include_all_issues": false,
+  "format": "json-array",
+  "root_tag_path": "diagnostic_cards"
+}

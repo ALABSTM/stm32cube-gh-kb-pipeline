@@ -1,0 +1,874 @@
+[
+  {
+    "repo": "cmsis_device_f4",
+    "pr_number": 12,
+    "title": "stm32f429xx.h: Fix whitespace in `IRQn_Type`",
+    "state": "closed",
+    "merged": false,
+    "draft": false,
+    "author": "bence98",
+    "labels": [
+      "enhancement",
+      "internal bug tracker",
+      "cmsis"
+    ],
+    "created_at": "2025-04-25T15:17:44Z",
+    "updated_at": "2025-05-22T10:51:35Z",
+    "closed_at": "2025-05-22T10:51:34Z",
+    "merged_at": null,
+    "body": "Fix excessive whitespace in the definition of `IRQn_Type`.",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-f4/pull/12",
+    "head_ref": "patch-1",
+    "base_ref": "master",
+    "merge_commit_sha": null,
+    "commits_count": 1,
+    "review_comments_count": 0,
+    "comments_count": 3,
+    "changed_files_count": 1,
+    "additions": 9,
+    "deletions": 9,
+    "linked_issue_numbers": [],
+    "files_changed": [
+      {
+        "filename": "Include/stm32f429xx.h",
+        "status": "modified",
+        "additions": 9,
+        "deletions": 9,
+        "changes": 18,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/72a16183c0b1086cf6b28c004dc0a7b64d0458d6/Include%2Fstm32f429xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/72a16183c0b1086cf6b28c004dc0a7b64d0458d6/Include%2Fstm32f429xx.h"
+      }
+    ]
+  },
+  {
+    "repo": "cmsis_device_f4",
+    "pr_number": 11,
+    "title": "Correctly shift DMA_SxCR_CHSEL_x values to follow convention",
+    "state": "closed",
+    "merged": false,
+    "draft": false,
+    "author": "mrwatts88",
+    "labels": [
+      "enhancement",
+      "internal bug tracker",
+      "cmsis",
+      "dma"
+    ],
+    "created_at": "2025-02-23T18:13:21Z",
+    "updated_at": "2025-03-21T11:33:42Z",
+    "closed_at": "2025-03-21T11:33:42Z",
+    "merged_at": null,
+    "body": "## IMPORTANT INFORMATION\r\n\r\n### Contributor License Agreement (CLA)\r\n* The Pull Request feature will be considered by STMicroelectronics after the signature of a **Contributor License Agreement (CLA)** by the submitter.\r\n* If you did not sign such agreement, please follow the steps mentioned in the [CONTRIBUTING.md](https://github.com/STMicroelectronics/cmsis_device_f4/blob/master/CONTRIBUTING.md) file.\r\n",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-f4/pull/11",
+    "head_ref": "patch-1",
+    "base_ref": "master",
+    "merge_commit_sha": "00f5ef1ba4423e32bdb086e8aad47b8be7644585",
+    "commits_count": 1,
+    "review_comments_count": 0,
+    "comments_count": 2,
+    "changed_files_count": 1,
+    "additions": 3,
+    "deletions": 3,
+    "linked_issue_numbers": [],
+    "files_changed": [
+      {
+        "filename": "Include/stm32f446xx.h",
+        "status": "modified",
+        "additions": 3,
+        "deletions": 3,
+        "changes": 6,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/7b4a94e63758eef61a35d0402396e9a744116f45/Include%2Fstm32f446xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/7b4a94e63758eef61a35d0402396e9a744116f45/Include%2Fstm32f446xx.h"
+      }
+    ]
+  },
+  {
+    "repo": "cmsis_device_f4",
+    "pr_number": 7,
+    "title": "Remove GPIO_BRR_* defines",
+    "state": "closed",
+    "merged": false,
+    "draft": false,
+    "author": "maribu",
+    "labels": [
+      "enhancement",
+      "wontfix",
+      "cmsis"
+    ],
+    "created_at": "2023-03-17T18:24:24Z",
+    "updated_at": "2023-05-25T15:22:15Z",
+    "closed_at": "2023-05-25T13:46:55Z",
+    "merged_at": null,
+    "body": "The GPIO peripheral of the F4 series has no BRR register, only a BSRR register. Hence, delete all misleading defines.\r\n",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-f4/pull/7",
+    "head_ref": "GPIO_BRR",
+    "base_ref": "master",
+    "merge_commit_sha": "b0b00df0c8920be8e95c6d18c2a5aa4fa10ab5f5",
+    "commits_count": 1,
+    "review_comments_count": 0,
+    "comments_count": 7,
+    "changed_files_count": 23,
+    "additions": 0,
+    "deletions": 1104,
+    "linked_issue_numbers": [],
+    "files_changed": [
+      {
+        "filename": "Include/stm32f401xc.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 48,
+        "changes": 48,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f401xc.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f401xc.h"
+      },
+      {
+        "filename": "Include/stm32f401xe.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 48,
+        "changes": 48,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f401xe.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f401xe.h"
+      },
+      {
+        "filename": "Include/stm32f405xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 48,
+        "changes": 48,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f405xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f405xx.h"
+      },
+      {
+        "filename": "Include/stm32f407xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 48,
+        "changes": 48,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f407xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f407xx.h"
+      },
+      {
+        "filename": "Include/stm32f410cx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 48,
+        "changes": 48,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f410cx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f410cx.h"
+      },
+      {
+        "filename": "Include/stm32f410rx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 48,
+        "changes": 48,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f410rx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f410rx.h"
+      },
+      {
+        "filename": "Include/stm32f410tx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 48,
+        "changes": 48,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f410tx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f410tx.h"
+      },
+      {
+        "filename": "Include/stm32f411xe.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 48,
+        "changes": 48,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f411xe.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f411xe.h"
+      },
+      {
+        "filename": "Include/stm32f412cx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 48,
+        "changes": 48,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f412cx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f412cx.h"
+      },
+      {
+        "filename": "Include/stm32f412rx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 48,
+        "changes": 48,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f412rx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f412rx.h"
+      },
+      {
+        "filename": "Include/stm32f412vx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 48,
+        "changes": 48,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f412vx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f412vx.h"
+      },
+      {
+        "filename": "Include/stm32f412zx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 48,
+        "changes": 48,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f412zx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f412zx.h"
+      },
+      {
+        "filename": "Include/stm32f413xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 48,
+        "changes": 48,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f413xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f413xx.h"
+      },
+      {
+        "filename": "Include/stm32f415xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 48,
+        "changes": 48,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f415xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f415xx.h"
+      },
+      {
+        "filename": "Include/stm32f417xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 48,
+        "changes": 48,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f417xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f417xx.h"
+      },
+      {
+        "filename": "Include/stm32f423xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 48,
+        "changes": 48,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f423xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f423xx.h"
+      },
+      {
+        "filename": "Include/stm32f427xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 48,
+        "changes": 48,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f427xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f427xx.h"
+      },
+      {
+        "filename": "Include/stm32f429xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 48,
+        "changes": 48,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f429xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f429xx.h"
+      },
+      {
+        "filename": "Include/stm32f437xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 48,
+        "changes": 48,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f437xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f437xx.h"
+      },
+      {
+        "filename": "Include/stm32f439xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 48,
+        "changes": 48,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f439xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f439xx.h"
+      },
+      {
+        "filename": "Include/stm32f446xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 48,
+        "changes": 48,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f446xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f446xx.h"
+      },
+      {
+        "filename": "Include/stm32f469xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 48,
+        "changes": 48,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f469xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f469xx.h"
+      },
+      {
+        "filename": "Include/stm32f479xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 48,
+        "changes": 48,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f479xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/09738918aaaf47b020d6a03e70384b9cdadd93f6/Include%2Fstm32f479xx.h"
+      }
+    ]
+  },
+  {
+    "repo": "cmsis_device_f4",
+    "pr_number": 5,
+    "title": "Using '__IOM' for peripheral register definitions",
+    "state": "closed",
+    "merged": false,
+    "draft": false,
+    "author": "utkarshsethi",
+    "labels": [
+      "enhancement",
+      "wontfix",
+      "internal bug tracker",
+      "cmsis"
+    ],
+    "created_at": "2021-05-07T07:50:43Z",
+    "updated_at": "2024-03-18T13:51:43Z",
+    "closed_at": "2024-03-18T13:51:28Z",
+    "merged_at": null,
+    "body": "This is pulll request to close #3 if there is no specific reason to use \"__IO\" in the libraries.\r\n\r\n## IMPORTANT INFORMATION \r\n\r\n### Contributor License Agreement (CLA)\r\n* The Pull Request feature will be considered by STMicroelectronics after the signature of a **Contributor License Agreement (CLA)** by the submiter.\r\n* If you have not signed such agreement, please follow the rules mentioned in the CONTRIBUTING.md file. \r\n  \r\n\r\n\r\n",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-f4/pull/5",
+    "head_ref": "__IOM-for-peripheral-register-definitions",
+    "base_ref": "master",
+    "merge_commit_sha": "4ea79bb825e0aac055f5aa04ae06515475762410",
+    "commits_count": 4,
+    "review_comments_count": 0,
+    "comments_count": 4,
+    "changed_files_count": 23,
+    "additions": 8200,
+    "deletions": 8200,
+    "linked_issue_numbers": [
+      3
+    ],
+    "files_changed": [
+      {
+        "filename": "Include/stm32f401xc.h",
+        "status": "modified",
+        "additions": 255,
+        "deletions": 255,
+        "changes": 510,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f401xc.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f401xc.h"
+      },
+      {
+        "filename": "Include/stm32f401xe.h",
+        "status": "modified",
+        "additions": 255,
+        "deletions": 255,
+        "changes": 510,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f401xe.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f401xe.h"
+      },
+      {
+        "filename": "Include/stm32f405xx.h",
+        "status": "modified",
+        "additions": 310,
+        "deletions": 310,
+        "changes": 620,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f405xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f405xx.h"
+      },
+      {
+        "filename": "Include/stm32f407xx.h",
+        "status": "modified",
+        "additions": 378,
+        "deletions": 378,
+        "changes": 756,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f407xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f407xx.h"
+      },
+      {
+        "filename": "Include/stm32f410cx.h",
+        "status": "modified",
+        "additions": 219,
+        "deletions": 219,
+        "changes": 438,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f410cx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f410cx.h"
+      },
+      {
+        "filename": "Include/stm32f410rx.h",
+        "status": "modified",
+        "additions": 219,
+        "deletions": 219,
+        "changes": 438,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f410rx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f410rx.h"
+      },
+      {
+        "filename": "Include/stm32f410tx.h",
+        "status": "modified",
+        "additions": 219,
+        "deletions": 219,
+        "changes": 438,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f410tx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f410tx.h"
+      },
+      {
+        "filename": "Include/stm32f411xe.h",
+        "status": "modified",
+        "additions": 255,
+        "deletions": 255,
+        "changes": 510,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f411xe.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f411xe.h"
+      },
+      {
+        "filename": "Include/stm32f412cx.h",
+        "status": "modified",
+        "additions": 316,
+        "deletions": 316,
+        "changes": 632,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f412cx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f412cx.h"
+      },
+      {
+        "filename": "Include/stm32f412rx.h",
+        "status": "modified",
+        "additions": 334,
+        "deletions": 334,
+        "changes": 668,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f412rx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f412rx.h"
+      },
+      {
+        "filename": "Include/stm32f412vx.h",
+        "status": "modified",
+        "additions": 334,
+        "deletions": 334,
+        "changes": 668,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f412vx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f412vx.h"
+      },
+      {
+        "filename": "Include/stm32f412zx.h",
+        "status": "modified",
+        "additions": 334,
+        "deletions": 334,
+        "changes": 668,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f412zx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f412zx.h"
+      },
+      {
+        "filename": "Include/stm32f413xx.h",
+        "status": "modified",
+        "additions": 367,
+        "deletions": 367,
+        "changes": 734,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f413xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f413xx.h"
+      },
+      {
+        "filename": "Include/stm32f415xx.h",
+        "status": "modified",
+        "additions": 354,
+        "deletions": 354,
+        "changes": 708,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f415xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f415xx.h"
+      },
+      {
+        "filename": "Include/stm32f417xx.h",
+        "status": "modified",
+        "additions": 422,
+        "deletions": 422,
+        "changes": 844,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f417xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f417xx.h"
+      },
+      {
+        "filename": "Include/stm32f423xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 0,
+        "changes": 0,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f423xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f423xx.h"
+      },
+      {
+        "filename": "Include/stm32f427xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 0,
+        "changes": 0,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f427xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f427xx.h"
+      },
+      {
+        "filename": "Include/stm32f429xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 0,
+        "changes": 0,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f429xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f429xx.h"
+      },
+      {
+        "filename": "Include/stm32f437xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 0,
+        "changes": 0,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f437xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f437xx.h"
+      },
+      {
+        "filename": "Include/stm32f439xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 0,
+        "changes": 0,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f439xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f439xx.h"
+      },
+      {
+        "filename": "Include/stm32f446xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 0,
+        "changes": 0,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f446xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f446xx.h"
+      },
+      {
+        "filename": "Include/stm32f469xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 0,
+        "changes": 0,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f469xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f469xx.h"
+      },
+      {
+        "filename": "Include/stm32f479xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 0,
+        "changes": 0,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f479xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/22215f2ef4cda7a2af0ec62fea3704f3eb132460/Include%2Fstm32f479xx.h"
+      }
+    ]
+  },
+  {
+    "repo": "cmsis_device_f4",
+    "pr_number": 4,
+    "title": "Using '__IOM' for peripheral register definitions",
+    "state": "closed",
+    "merged": false,
+    "draft": true,
+    "author": "utkarshsethi",
+    "labels": [],
+    "created_at": "2021-05-07T07:48:57Z",
+    "updated_at": "2021-05-07T07:50:30Z",
+    "closed_at": "2021-05-07T07:49:01Z",
+    "merged_at": null,
+    "body": "This is pulll request to close #3 if there is specific reason to use \"__IO\" in the libraries.\r\n\r\n## IMPORTANT INFORMATION \r\n\r\n### Contributor License Agreement (CLA)\r\n* The Pull Request feature will be considered by STMicroelectronics after the signature of a **Contributor License Agreement (CLA)** by the submiter.\r\n* If you have not signed such agreement, please follow the rules mentioned in the CONTRIBUTING.md file. \r\n  \r\n\r\n\r\n",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-f4/pull/4",
+    "head_ref": "__IOM-for-peripheral-register-definitions",
+    "base_ref": "master",
+    "merge_commit_sha": null,
+    "commits_count": 1,
+    "review_comments_count": 0,
+    "comments_count": 1,
+    "changed_files_count": 23,
+    "additions": 8200,
+    "deletions": 8200,
+    "linked_issue_numbers": [
+      3
+    ],
+    "files_changed": [
+      {
+        "filename": "Include/stm32f401xc.h",
+        "status": "modified",
+        "additions": 255,
+        "deletions": 255,
+        "changes": 510,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f401xc.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f401xc.h"
+      },
+      {
+        "filename": "Include/stm32f401xe.h",
+        "status": "modified",
+        "additions": 255,
+        "deletions": 255,
+        "changes": 510,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f401xe.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f401xe.h"
+      },
+      {
+        "filename": "Include/stm32f405xx.h",
+        "status": "modified",
+        "additions": 310,
+        "deletions": 310,
+        "changes": 620,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f405xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f405xx.h"
+      },
+      {
+        "filename": "Include/stm32f407xx.h",
+        "status": "modified",
+        "additions": 378,
+        "deletions": 378,
+        "changes": 756,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f407xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f407xx.h"
+      },
+      {
+        "filename": "Include/stm32f410cx.h",
+        "status": "modified",
+        "additions": 219,
+        "deletions": 219,
+        "changes": 438,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f410cx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f410cx.h"
+      },
+      {
+        "filename": "Include/stm32f410rx.h",
+        "status": "modified",
+        "additions": 219,
+        "deletions": 219,
+        "changes": 438,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f410rx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f410rx.h"
+      },
+      {
+        "filename": "Include/stm32f410tx.h",
+        "status": "modified",
+        "additions": 219,
+        "deletions": 219,
+        "changes": 438,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f410tx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f410tx.h"
+      },
+      {
+        "filename": "Include/stm32f411xe.h",
+        "status": "modified",
+        "additions": 255,
+        "deletions": 255,
+        "changes": 510,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f411xe.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f411xe.h"
+      },
+      {
+        "filename": "Include/stm32f412cx.h",
+        "status": "modified",
+        "additions": 316,
+        "deletions": 316,
+        "changes": 632,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f412cx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f412cx.h"
+      },
+      {
+        "filename": "Include/stm32f412rx.h",
+        "status": "modified",
+        "additions": 334,
+        "deletions": 334,
+        "changes": 668,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f412rx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f412rx.h"
+      },
+      {
+        "filename": "Include/stm32f412vx.h",
+        "status": "modified",
+        "additions": 334,
+        "deletions": 334,
+        "changes": 668,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f412vx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f412vx.h"
+      },
+      {
+        "filename": "Include/stm32f412zx.h",
+        "status": "modified",
+        "additions": 334,
+        "deletions": 334,
+        "changes": 668,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f412zx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f412zx.h"
+      },
+      {
+        "filename": "Include/stm32f413xx.h",
+        "status": "modified",
+        "additions": 367,
+        "deletions": 367,
+        "changes": 734,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f413xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f413xx.h"
+      },
+      {
+        "filename": "Include/stm32f415xx.h",
+        "status": "modified",
+        "additions": 354,
+        "deletions": 354,
+        "changes": 708,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f415xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f415xx.h"
+      },
+      {
+        "filename": "Include/stm32f417xx.h",
+        "status": "modified",
+        "additions": 422,
+        "deletions": 422,
+        "changes": 844,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f417xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f417xx.h"
+      },
+      {
+        "filename": "Include/stm32f423xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 0,
+        "changes": 0,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f423xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f423xx.h"
+      },
+      {
+        "filename": "Include/stm32f427xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 0,
+        "changes": 0,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f427xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f427xx.h"
+      },
+      {
+        "filename": "Include/stm32f429xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 0,
+        "changes": 0,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f429xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f429xx.h"
+      },
+      {
+        "filename": "Include/stm32f437xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 0,
+        "changes": 0,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f437xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f437xx.h"
+      },
+      {
+        "filename": "Include/stm32f439xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 0,
+        "changes": 0,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f439xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f439xx.h"
+      },
+      {
+        "filename": "Include/stm32f446xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 0,
+        "changes": 0,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f446xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f446xx.h"
+      },
+      {
+        "filename": "Include/stm32f469xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 0,
+        "changes": 0,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f469xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f469xx.h"
+      },
+      {
+        "filename": "Include/stm32f479xx.h",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 0,
+        "changes": 0,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f4/blob/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f479xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f4/raw/dab407adabba46bc2f9da19b8d46cffc7c3d7dde/Include%2Fstm32f479xx.h"
+      }
+    ]
+  }
+]

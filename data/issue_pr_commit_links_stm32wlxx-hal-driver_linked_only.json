@@ -1,0 +1,98 @@
+[
+  {
+    "repo": "stm32wlxx-hal-driver",
+    "issue_number": 7,
+    "issue_title": "[WL][HAL][ADC] Calibration may fail / internal error with slow ADC clock (HSI + async DIV64). Need to wait for ADRDY before writing calibration factor and disabling ADC.",
+    "issue_labels": [
+      "bug",
+      "hal",
+      "internal bug tracker",
+      "spotted before customer",
+      "adc"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32wlxx-hal-driver/issues/7",
+    "linked_pr_numbers": [
+      8,
+      9
+    ],
+    "linked_commit_shas": [
+      "aa447aa71380df6d8e2aa2b88394d5c92d3cf3a7",
+      "dd77659102b4b9a65cbb5a8340f17241a9206056"
+    ],
+    "linked_prs": [
+      {
+        "pr_number": 8,
+        "title": "[WL][ADC][HAL] Fix calibration: wait ADRDY (tSTAB) before writing calibration factor & disabling ADC to avoid HAL_ADCEx_Calibration_Start() timeout at low fADC",
+        "state": "closed",
+        "merged": false,
+        "github_url": "https://github.com/STMicroelectronics/stm32wlxx-hal-driver/pull/8",
+        "changed_files_count": 1,
+        "merge_commit_sha": "b6817dcd4eef75d2f075ccfe3f500f369cc7c4c0"
+      },
+      {
+        "pr_number": 9,
+        "title": "[WL][ADC][HAL] Fix calibration: wait ADRDY (tSTAB) before writing calibration factor & disabling ADC to avoid HAL_ADCEx_Calibration_Start() timeout at low fADC",
+        "state": "closed",
+        "merged": false,
+        "github_url": "https://github.com/STMicroelectronics/stm32wlxx-hal-driver/pull/9",
+        "changed_files_count": 1,
+        "merge_commit_sha": null
+      }
+    ],
+    "linked_commits": [
+      {
+        "sha": "aa447aa71380df6d8e2aa2b88394d5c92d3cf3a7",
+        "message": "WL HAL: ADCEx Calibration: wait for ADRDY before writing factor, then ADDIS\nFixes an internal-error/disable-timeout seen with slow fADC (large prescaler).\nKeeps HAL state machine and timeouts consistent; no API change.\n\nSigned-off-by: ZudaR <d.zudin@alarmtrade.ru>",
+        "committed_at": "2025-09-01T10:54:13Z",
+        "github_url": "https://github.com/STMicroelectronics/stm32wlxx-hal-driver/commit/aa447aa71380df6d8e2aa2b88394d5c92d3cf3a7",
+        "pr_numbers": [
+          8
+        ],
+        "stats": {
+          "additions": 82,
+          "deletions": 17,
+          "total": 99
+        }
+      },
+      {
+        "sha": "dd77659102b4b9a65cbb5a8340f17241a9206056",
+        "message": "WL HAL: ADCEx Calibration: wait for ADRDY before writing factor, then ADDIS\nFixes an internal-error/disable-timeout seen with slow fADC (large prescaler).\nKeeps HAL state machine and timeouts consistent; no API change.\n\nSigned-off-by: ZudaR <d.zudin@alarmtrade.ru>",
+        "committed_at": "2025-09-01T11:37:43Z",
+        "github_url": "https://github.com/STMicroelectronics/stm32wlxx-hal-driver/commit/dd77659102b4b9a65cbb5a8340f17241a9206056",
+        "pr_numbers": [
+          9
+        ],
+        "stats": {
+          "additions": 82,
+          "deletions": 17,
+          "total": 99
+        }
+      }
+    ],
+    "evidence": {
+      "explicit_pr_numbers": [
+        8,
+        9
+      ],
+      "explicit_commit_shas": [
+        "aa447aa71380df6d8e2aa2b88394d5c92d3cf3a7",
+        "dd77659102b4b9a65cbb5a8340f17241a9206056"
+      ],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [
+        "aa447aa71380df6d8e2aa2b88394d5c92d3cf3a7",
+        "dd77659102b4b9a65cbb5a8340f17241a9206056"
+      ],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.8,
+    "link_confidence": "medium",
+    "resolution_status": "candidate_fix"
+  }
+]

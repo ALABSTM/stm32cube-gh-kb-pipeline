@@ -1,0 +1,171 @@
+{
+  "resolver_cases": [
+    {
+      "id": "resolver::STM32CubeH5::issue::10",
+      "title": "size of g_pfnVectors is 0",
+      "label": "size of g_pfnVectors is 0",
+      "externalURL": "https://github.com/STMicroelectronics/STM32CubeH5/issues/10",
+      "rootTagPath": "resolver_cases",
+      "evidence_refs": [
+        {
+          "type": "issue",
+          "id": 10,
+          "url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/10"
+        }
+      ],
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "STM32CubeH5",
+      "issue_root_path": "issues",
+      "pr_root_path": "pull",
+      "commit_root_path": "commit",
+      "issue_number": 10,
+      "issue_title": "size of g_pfnVectors is 0",
+      "issue_labels": [
+        "bug",
+        "cmsis"
+      ],
+      "issue_state": "closed",
+      "issue_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/10",
+      "linked_pr_numbers": [
+        11
+      ],
+      "linked_commit_shas": [
+        "8744067d4a960b52cf9ab153f39f5b64cc4129a3"
+      ],
+      "primary_pr_number": 11,
+      "primary_commit_sha": "8744067d4a960b52cf9ab153f39f5b64cc4129a3",
+      "linked_pr_urls": [
+        "https://github.com/STMicroelectronics/STM32CubeH5/pull/11"
+      ],
+      "linked_commit_urls": [
+        "https://github.com/STMicroelectronics/STM32CubeH5/commit/8744067d4a960b52cf9ab153f39f5b64cc4129a3"
+      ],
+      "resolution_status": "merged_fix",
+      "merged_pr_with_file_evidence": true,
+      "merged_pr_with_file_evidence_pr_numbers": [
+        11
+      ],
+      "merged_pr_changed_files_total": 4,
+      "link_confidence": "high",
+      "link_score": 1.0,
+      "delivery_template": "st_v1_resolver_case",
+      "resolver_card_text": "Problem: Issue #10 - size of g_pfnVectors is 0\nContext: repo=STM32CubeH5, labels=bug, cmsis, issue_state=closed\nResolver signal: resolution_status=merged_fix, confidence=high, score=1.0\nAssessment: Fix likely integrated in mainline; prefer this as primary recommendation.\nCandidate PRs: fix for #10, size of g_pfnVectors\nCommit evidence: fix for #10\nFile evidence: merged PR modifies files even when commit log is merge-heavy\nPR #11 description: sets the size of g_pfnVectors correctly, fix for #10\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying.",
+      "linked_file_ids": [],
+      "linked_file_paths": [],
+      "files_evidence": {
+        "changed_files_total": 4,
+        "matched_docs_files_count": 0,
+        "unmatched_files_count": 4,
+        "match_rate": 0.0,
+        "files": [
+          {
+            "path": "Drivers/CMSIS/Device/ST/STM32H5xx/Source/Templates/gcc/startup_stm32h562xx.s",
+            "status": "modified",
+            "additions": 3,
+            "deletions": 2,
+            "changes": 5,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "8744067d4a960b52cf9ab153f39f5b64cc4129a3"
+            ],
+            "module": "CMSIS",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/blob/master/Drivers/CMSIS/Device/ST/STM32H5xx/Source/Templates/gcc/startup_stm32h562xx.s",
+            "score": 5.0
+          },
+          {
+            "path": "Drivers/CMSIS/Device/ST/STM32H5xx/Source/Templates/gcc/startup_stm32h563xx.s",
+            "status": "modified",
+            "additions": 3,
+            "deletions": 2,
+            "changes": 5,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "8744067d4a960b52cf9ab153f39f5b64cc4129a3"
+            ],
+            "module": "CMSIS",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/blob/master/Drivers/CMSIS/Device/ST/STM32H5xx/Source/Templates/gcc/startup_stm32h563xx.s",
+            "score": 5.0
+          },
+          {
+            "path": "Drivers/CMSIS/Device/ST/STM32H5xx/Source/Templates/gcc/startup_stm32h573xx.s",
+            "status": "modified",
+            "additions": 3,
+            "deletions": 2,
+            "changes": 5,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "8744067d4a960b52cf9ab153f39f5b64cc4129a3"
+            ],
+            "module": "CMSIS",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/blob/master/Drivers/CMSIS/Device/ST/STM32H5xx/Source/Templates/gcc/startup_stm32h573xx.s",
+            "score": 5.0
+          },
+          {
+            "path": "Drivers/CMSIS/Device/ST/STM32H5xx/Source/Templates/gcc/startup_stm32h503xx.s",
+            "status": "modified",
+            "additions": 2,
+            "deletions": 1,
+            "changes": 3,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "8744067d4a960b52cf9ab153f39f5b64cc4129a3"
+            ],
+            "module": "CMSIS",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/blob/master/Drivers/CMSIS/Device/ST/STM32H5xx/Source/Templates/gcc/startup_stm32h503xx.s",
+            "score": 3.0
+          }
+        ]
+      },
+      "impacted_modules": [
+        "CMSIS"
+      ],
+      "impacted_components": [],
+      "impacted_boards": [],
+      "impacted_file_types": [],
+      "primary_changed_file": {
+        "path": "Drivers/CMSIS/Device/ST/STM32H5xx/Source/Templates/gcc/startup_stm32h562xx.s",
+        "status": "modified",
+        "additions": 3,
+        "deletions": 2,
+        "changes": 5,
+        "touched_by_commits": 1,
+        "commit_shas": [
+          "8744067d4a960b52cf9ab153f39f5b64cc4129a3"
+        ],
+        "module": "CMSIS",
+        "file_doc_id": null,
+        "file_type": null,
+        "component": null,
+        "board": null,
+        "example_name": null,
+        "source_match": "commit_only",
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/blob/master/Drivers/CMSIS/Device/ST/STM32H5xx/Source/Templates/gcc/startup_stm32h562xx.s",
+        "score": 5.0
+      }
+    }
+  ]
+}

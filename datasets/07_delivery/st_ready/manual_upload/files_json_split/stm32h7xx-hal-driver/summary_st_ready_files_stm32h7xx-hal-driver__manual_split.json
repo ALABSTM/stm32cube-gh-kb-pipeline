@@ -1,0 +1,520 @@
+{
+  "created_at_utc": "2026-05-08T08:05:04+00:00",
+  "source_file": "st_ready_files_stm32h7xx-hal-driver.json",
+  "source_path": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\files_json\\st_ready_files_stm32h7xx-hal-driver.json",
+  "root_tag_path": "files",
+  "source_docs": 269,
+  "source_size_kb": 13146.93,
+  "split_rules": {
+    "max_docs_per_part": 8,
+    "max_payload_kb": 220,
+    "min_source_size_kb": 350.0
+  },
+  "parts_count": 72,
+  "parts": [
+    {
+      "part_index": 1,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part001.json",
+      "docs": 6,
+      "estimated_payload_kb": 214.3,
+      "st_ready_text_chars": 212947
+    },
+    {
+      "part_index": 2,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part002.json",
+      "docs": 2,
+      "estimated_payload_kb": 163.62,
+      "st_ready_text_chars": 165537
+    },
+    {
+      "part_index": 3,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part003.json",
+      "docs": 8,
+      "estimated_payload_kb": 205.07,
+      "st_ready_text_chars": 203269
+    },
+    {
+      "part_index": 4,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part004.json",
+      "docs": 8,
+      "estimated_payload_kb": 128.2,
+      "st_ready_text_chars": 124971
+    },
+    {
+      "part_index": 5,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part005.json",
+      "docs": 5,
+      "estimated_payload_kb": 167.23,
+      "st_ready_text_chars": 166994
+    },
+    {
+      "part_index": 6,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part006.json",
+      "docs": 4,
+      "estimated_payload_kb": 217.03,
+      "st_ready_text_chars": 218983
+    },
+    {
+      "part_index": 7,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part007.json",
+      "docs": 8,
+      "estimated_payload_kb": 190.2,
+      "st_ready_text_chars": 188485
+    },
+    {
+      "part_index": 8,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part008.json",
+      "docs": 3,
+      "estimated_payload_kb": 206.53,
+      "st_ready_text_chars": 208557
+    },
+    {
+      "part_index": 9,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part009.json",
+      "docs": 8,
+      "estimated_payload_kb": 144.76,
+      "st_ready_text_chars": 141478
+    },
+    {
+      "part_index": 10,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part010.json",
+      "docs": 8,
+      "estimated_payload_kb": 173.26,
+      "st_ready_text_chars": 171232
+    },
+    {
+      "part_index": 11,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part011.json",
+      "docs": 8,
+      "estimated_payload_kb": 130.12,
+      "st_ready_text_chars": 127070
+    },
+    {
+      "part_index": 12,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part012.json",
+      "docs": 4,
+      "estimated_payload_kb": 104.45,
+      "st_ready_text_chars": 103640
+    },
+    {
+      "part_index": 13,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part013.json",
+      "docs": 1,
+      "estimated_payload_kb": 372.17,
+      "st_ready_text_chars": 378062
+    },
+    {
+      "part_index": 14,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part014.json",
+      "docs": 3,
+      "estimated_payload_kb": 195.68,
+      "st_ready_text_chars": 197697
+    },
+    {
+      "part_index": 15,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part015.json",
+      "docs": 8,
+      "estimated_payload_kb": 219.85,
+      "st_ready_text_chars": 218903
+    },
+    {
+      "part_index": 16,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part016.json",
+      "docs": 8,
+      "estimated_payload_kb": 180.03,
+      "st_ready_text_chars": 177714
+    },
+    {
+      "part_index": 17,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part017.json",
+      "docs": 3,
+      "estimated_payload_kb": 153.2,
+      "st_ready_text_chars": 154163
+    },
+    {
+      "part_index": 18,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part018.json",
+      "docs": 5,
+      "estimated_payload_kb": 159.54,
+      "st_ready_text_chars": 158482
+    },
+    {
+      "part_index": 19,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part019.json",
+      "docs": 1,
+      "estimated_payload_kb": 385.7,
+      "st_ready_text_chars": 393453
+    },
+    {
+      "part_index": 20,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part020.json",
+      "docs": 1,
+      "estimated_payload_kb": 85.32,
+      "st_ready_text_chars": 86544
+    },
+    {
+      "part_index": 21,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part021.json",
+      "docs": 1,
+      "estimated_payload_kb": 257.72,
+      "st_ready_text_chars": 261298
+    },
+    {
+      "part_index": 22,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part022.json",
+      "docs": 7,
+      "estimated_payload_kb": 195.25,
+      "st_ready_text_chars": 194549
+    },
+    {
+      "part_index": 23,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part023.json",
+      "docs": 2,
+      "estimated_payload_kb": 180.03,
+      "st_ready_text_chars": 182793
+    },
+    {
+      "part_index": 24,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part024.json",
+      "docs": 2,
+      "estimated_payload_kb": 201.21,
+      "st_ready_text_chars": 204524
+    },
+    {
+      "part_index": 25,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part025.json",
+      "docs": 3,
+      "estimated_payload_kb": 101.53,
+      "st_ready_text_chars": 101634
+    },
+    {
+      "part_index": 26,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part026.json",
+      "docs": 1,
+      "estimated_payload_kb": 424.21,
+      "st_ready_text_chars": 432292
+    },
+    {
+      "part_index": 27,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part027.json",
+      "docs": 4,
+      "estimated_payload_kb": 162.93,
+      "st_ready_text_chars": 163807
+    },
+    {
+      "part_index": 28,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part028.json",
+      "docs": 1,
+      "estimated_payload_kb": 83.25,
+      "st_ready_text_chars": 84460
+    },
+    {
+      "part_index": 29,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part029.json",
+      "docs": 2,
+      "estimated_payload_kb": 184.42,
+      "st_ready_text_chars": 187256
+    },
+    {
+      "part_index": 30,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part030.json",
+      "docs": 1,
+      "estimated_payload_kb": 70.5,
+      "st_ready_text_chars": 71376
+    },
+    {
+      "part_index": 31,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part031.json",
+      "docs": 1,
+      "estimated_payload_kb": 209.33,
+      "st_ready_text_chars": 213570
+    },
+    {
+      "part_index": 32,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part032.json",
+      "docs": 2,
+      "estimated_payload_kb": 187.08,
+      "st_ready_text_chars": 190062
+    },
+    {
+      "part_index": 33,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part033.json",
+      "docs": 3,
+      "estimated_payload_kb": 197.72,
+      "st_ready_text_chars": 200118
+    },
+    {
+      "part_index": 34,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part034.json",
+      "docs": 1,
+      "estimated_payload_kb": 85.48,
+      "st_ready_text_chars": 86662
+    },
+    {
+      "part_index": 35,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part035.json",
+      "docs": 1,
+      "estimated_payload_kb": 193.13,
+      "st_ready_text_chars": 196760
+    },
+    {
+      "part_index": 36,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part036.json",
+      "docs": 5,
+      "estimated_payload_kb": 198.87,
+      "st_ready_text_chars": 199837
+    },
+    {
+      "part_index": 37,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part037.json",
+      "docs": 2,
+      "estimated_payload_kb": 169.53,
+      "st_ready_text_chars": 172022
+    },
+    {
+      "part_index": 38,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part038.json",
+      "docs": 5,
+      "estimated_payload_kb": 206.67,
+      "st_ready_text_chars": 207777
+    },
+    {
+      "part_index": 39,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part039.json",
+      "docs": 4,
+      "estimated_payload_kb": 183.79,
+      "st_ready_text_chars": 185189
+    },
+    {
+      "part_index": 40,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part040.json",
+      "docs": 3,
+      "estimated_payload_kb": 112.62,
+      "st_ready_text_chars": 113050
+    },
+    {
+      "part_index": 41,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part041.json",
+      "docs": 3,
+      "estimated_payload_kb": 177.65,
+      "st_ready_text_chars": 179550
+    },
+    {
+      "part_index": 42,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part042.json",
+      "docs": 4,
+      "estimated_payload_kb": 198.54,
+      "st_ready_text_chars": 200260
+    },
+    {
+      "part_index": 43,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part043.json",
+      "docs": 3,
+      "estimated_payload_kb": 152.11,
+      "st_ready_text_chars": 153469
+    },
+    {
+      "part_index": 44,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part044.json",
+      "docs": 2,
+      "estimated_payload_kb": 217.83,
+      "st_ready_text_chars": 221504
+    },
+    {
+      "part_index": 45,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part045.json",
+      "docs": 4,
+      "estimated_payload_kb": 187.59,
+      "st_ready_text_chars": 189013
+    },
+    {
+      "part_index": 46,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part046.json",
+      "docs": 3,
+      "estimated_payload_kb": 205.47,
+      "st_ready_text_chars": 208129
+    },
+    {
+      "part_index": 47,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part047.json",
+      "docs": 1,
+      "estimated_payload_kb": 259.45,
+      "st_ready_text_chars": 264897
+    },
+    {
+      "part_index": 48,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part048.json",
+      "docs": 2,
+      "estimated_payload_kb": 218.86,
+      "st_ready_text_chars": 222548
+    },
+    {
+      "part_index": 49,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part049.json",
+      "docs": 5,
+      "estimated_payload_kb": 190.12,
+      "st_ready_text_chars": 190916
+    },
+    {
+      "part_index": 50,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part050.json",
+      "docs": 2,
+      "estimated_payload_kb": 191.81,
+      "st_ready_text_chars": 194888
+    },
+    {
+      "part_index": 51,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part051.json",
+      "docs": 4,
+      "estimated_payload_kb": 152.27,
+      "st_ready_text_chars": 152874
+    },
+    {
+      "part_index": 52,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part052.json",
+      "docs": 3,
+      "estimated_payload_kb": 174.4,
+      "st_ready_text_chars": 176271
+    },
+    {
+      "part_index": 53,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part053.json",
+      "docs": 4,
+      "estimated_payload_kb": 151.08,
+      "st_ready_text_chars": 151657
+    },
+    {
+      "part_index": 54,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part054.json",
+      "docs": 4,
+      "estimated_payload_kb": 187.91,
+      "st_ready_text_chars": 189405
+    },
+    {
+      "part_index": 55,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part055.json",
+      "docs": 3,
+      "estimated_payload_kb": 144.94,
+      "st_ready_text_chars": 146155
+    },
+    {
+      "part_index": 56,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part056.json",
+      "docs": 3,
+      "estimated_payload_kb": 158.51,
+      "st_ready_text_chars": 160040
+    },
+    {
+      "part_index": 57,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part057.json",
+      "docs": 4,
+      "estimated_payload_kb": 210.79,
+      "st_ready_text_chars": 212812
+    },
+    {
+      "part_index": 58,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part058.json",
+      "docs": 3,
+      "estimated_payload_kb": 164.62,
+      "st_ready_text_chars": 166268
+    },
+    {
+      "part_index": 59,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part059.json",
+      "docs": 2,
+      "estimated_payload_kb": 194.12,
+      "st_ready_text_chars": 197227
+    },
+    {
+      "part_index": 60,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part060.json",
+      "docs": 4,
+      "estimated_payload_kb": 170.25,
+      "st_ready_text_chars": 171276
+    },
+    {
+      "part_index": 61,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part061.json",
+      "docs": 3,
+      "estimated_payload_kb": 141.16,
+      "st_ready_text_chars": 142248
+    },
+    {
+      "part_index": 62,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part062.json",
+      "docs": 4,
+      "estimated_payload_kb": 200.94,
+      "st_ready_text_chars": 202725
+    },
+    {
+      "part_index": 63,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part063.json",
+      "docs": 1,
+      "estimated_payload_kb": 216.47,
+      "st_ready_text_chars": 220913
+    },
+    {
+      "part_index": 64,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part064.json",
+      "docs": 4,
+      "estimated_payload_kb": 119.1,
+      "st_ready_text_chars": 118755
+    },
+    {
+      "part_index": 65,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part065.json",
+      "docs": 2,
+      "estimated_payload_kb": 172.87,
+      "st_ready_text_chars": 175500
+    },
+    {
+      "part_index": 66,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part066.json",
+      "docs": 8,
+      "estimated_payload_kb": 210.53,
+      "st_ready_text_chars": 209286
+    },
+    {
+      "part_index": 67,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part067.json",
+      "docs": 8,
+      "estimated_payload_kb": 113.98,
+      "st_ready_text_chars": 110504
+    },
+    {
+      "part_index": 68,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part068.json",
+      "docs": 8,
+      "estimated_payload_kb": 88.54,
+      "st_ready_text_chars": 84337
+    },
+    {
+      "part_index": 69,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part069.json",
+      "docs": 7,
+      "estimated_payload_kb": 213.4,
+      "st_ready_text_chars": 212983
+    },
+    {
+      "part_index": 70,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part070.json",
+      "docs": 4,
+      "estimated_payload_kb": 210.93,
+      "st_ready_text_chars": 212873
+    },
+    {
+      "part_index": 71,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part071.json",
+      "docs": 3,
+      "estimated_payload_kb": 99.88,
+      "st_ready_text_chars": 99884
+    },
+    {
+      "part_index": 72,
+      "file_name": "st_ready_files_stm32h7xx-hal-driver__part072.json",
+      "docs": 1,
+      "estimated_payload_kb": 204.57,
+      "st_ready_text_chars": 208551
+    }
+  ]
+}

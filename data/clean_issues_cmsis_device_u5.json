@@ -1,0 +1,145 @@
+[
+  {
+    "repo": "cmsis_device_u5",
+    "issue_number": 8,
+    "title": "Comments give wrong value",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "cmsis",
+      "internal bug tracker",
+      "rcc"
+    ],
+    "created_at": "2025-10-10T12:39:35Z",
+    "closed_at": "2025-11-07T08:58:32Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-u5/issues/8",
+    "clean_text": "Title: Comments give wrong value\n\nBody:\nLots of comments give the wrong values:\n\nhttps://github.com/STMicroelectronics/cmsis-device-u5/blob/6e67187dec98035893692ab2923914cb5f4e0117/Include/stm32u575xx.h#L16683\nhttps://github.com/STMicroelectronics/cmsis-device-u5/blob/6e67187dec98035893692ab2923914cb5f4e0117/Include/stm32u575xx.h#L16688\nhttps://github.com/STMicroelectronics/cmsis-device-u5/blob/6e67187dec98035893692ab2923914cb5f4e0117/Include/stm32u575xx.h#L16690\nhttps://github.com/STMicroelectronics/cmsis-device-u5/blob/6e67187dec98035893692ab2923914cb5f4e0117/Include/stm32u575xx.h#L16691\n\netc..\n\nComments:\n[MKISTM - 2025-10-13T10:37:52Z]\nHi @nbrunner,\n\nThank you for this heads-up. Let's have this fixed. I'll log an internal tracker.\n\nWith regards,\n\n[MKISTM - 2025-10-13T10:38:16Z]\nST Internal Reference: 219386\n\n[MKISTM - 2025-11-07T08:58:32Z]\nFixed in commit a6a97ebb1bc21258490a0ce409ea2a4ecbba7570",
+    "image_urls": [],
+    "images_count": 0
+  },
+  {
+    "repo": "cmsis_device_u5",
+    "issue_number": 7,
+    "title": "Wrong comments",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "cmsis",
+      "internal bug tracker"
+    ],
+    "created_at": "2025-09-25T14:22:02Z",
+    "closed_at": "2025-10-13T15:42:14Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-u5/issues/7",
+    "clean_text": "Title: Wrong comments\n\nBody:\nhttps://github.com/STMicroelectronics/cmsis-device-u5/blob/6e67187dec98035893692ab2923914cb5f4e0117/Source/Templates/gcc/startup_stm32u535xx.s#L3\nshould be  * @file      startup_stm32u535xx.s\nhttps://github.com/STMicroelectronics/cmsis-device-u5/blob/6e67187dec98035893692ab2923914cb5f4e0117/Source/Templates/gcc/startup_stm32u535xx.s#L5\nshould be * @brief     STM32U535xx device vector table for GCC toolchain.\nhttps://github.com/STMicroelectronics/cmsis-device-u5/blob/6e67187dec98035893692ab2923914cb5f4e0117/Source/Templates/gcc/startup_stm32u545xx.s#L3\nshould be  * @file      startup_stm32u545xx.s\nhttps://github.com/STMicroelectronics/cmsis-device-u5/blob/6e67187dec98035893692ab2923914cb5f4e0117/Source/Templates/gcc/startup_stm32u545xx.s#L5\nshould be * @brief     STM32U545xx device vector table for GCC toolchain.\n\nComments:\n[MKISTM - 2025-10-09T08:19:46Z]\nHello @nbrunner,\n\nThank you for this heads-up. Let's have this fixed.\n\nWith regards,\n\n[MKISTM - 2025-10-09T08:21:43Z]\nST Internal Reference: 219206\n\n[KRASTM - 2025-10-13T15:42:14Z]\nFixed in Commit: https://github.com/STMicroelectronics/cmsis-device-u5/commit/7d2523ef5fffdd8d62c448573ce86a489971151a",
+    "image_urls": [],
+    "images_count": 0
+  },
+  {
+    "repo": "cmsis_device_u5",
+    "issue_number": 6,
+    "title": "Wrong mask for HASH_SR_NBWE",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "cmsis",
+      "internal bug tracker",
+      "hash"
+    ],
+    "created_at": "2025-03-28T13:37:20Z",
+    "closed_at": "2025-05-08T09:17:51Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-u5/issues/6",
+    "clean_text": "Title: Wrong mask for HASH_SR_NBWE\n\nBody:\nFound in\nhttps://github.com/STMicroelectronics/cmsis-device-u5/blob/00779e352e24435e0c7fc3b14b2416076216837b/Include/stm32u585xx.h#L6014\nBut the other devices are probably wrong too.\nHASH_SR_NBWE has 5 bits according to the datasheet (and they are really needed since it can hold up to the value 0x11)\nCorect mask is (0x**1**FUL << HASH_SR_NBWE_Pos)  or 0x00**1**F0000  instead of (0x1FUL << HASH_SR_NBWE_Pos) or 0x000F0000.\n\nComments:\n[ALABSTM - 2025-04-02T11:12:36Z]\nHi @Olstyle,\n\nLooks you're right. Thank you for the heads up. I'll let our development teams know in order to fix this.\n\nWith regards,\n\n[ALABSTM - 2025-04-02T11:18:46Z]\nST Internal Reference: 206641\n\n[ALABSTM - 2025-05-08T09:17:51Z]\nFixed in commit 1605b67aba5956fc114025ee7ffea654a9890ab9",
+    "image_urls": [],
+    "images_count": 0
+  },
+  {
+    "repo": "cmsis_device_u5",
+    "issue_number": 5,
+    "title": "Incorrect JPEG register definitions",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "cmsis",
+      "internal bug tracker",
+      "jpeg"
+    ],
+    "created_at": "2025-01-30T12:15:19Z",
+    "closed_at": "2025-03-07T10:55:14Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-u5/issues/5",
+    "clean_text": "Title: Incorrect JPEG register definitions\n\nBody:\nIn stm32u5g9xx.h (and maybe in more files), there are a few incorrect definitions:\n\nc\n#define JPEG_BASE_S (AHB1PERIPH_BASE_S + 0x0A00UL)\n#define JPEG_CFR_CEOCF_Pos   (4U)\n#define JPEG_CFR_CHPDF_Pos   (5U)\n\n\nThey should be:\n\nc\n#define JPEG_BASE_S (AHB1PERIPH_BASE_S + 0x0A000UL)\n#define JPEG_CFR_CEOCF_Pos   (5U)\n#define JPEG_CFR_CHPDF_Pos   (6U)\n\nComments:\n[KRASTM - 2025-01-31T14:07:23Z]\nST Internal Reference: 201981\n\n[KRASTM - 2025-03-07T10:55:14Z]\nFixed in Commit: https://github.com/STMicroelectronics/cmsis-device-u5/commit/00779e352e24435e0c7fc3b14b2416076216837b",
+    "image_urls": [],
+    "images_count": 0
+  },
+  {
+    "repo": "cmsis_device_u5",
+    "issue_number": 4,
+    "title": "STM32U5A5xx_FLASH.ld not provided",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "cmsis",
+      "internal bug tracker",
+      "spotted before customer"
+    ],
+    "created_at": "2025-01-11T00:55:25Z",
+    "closed_at": "2025-02-07T14:10:12Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-u5/issues/4",
+    "clean_text": "Title: STM32U5A5xx_FLASH.ld not provided\n\nBody:\nSTM32U5A5xx_FLASH.ld not provided. Should be similar to the rest, but appears to be missing?\n\nComments:\n[ASEHSTM - 2025-01-17T14:13:23Z]\nHello @c4dsouza,\n\nThank you for your report. You are right, the STM32U5A5xx_FLASH.ld file is missing. \nThis issue has been tracked internally.\nST Internal Reference: 199382\n\nWith Regards,\n\n[ASEHSTM - 2025-02-07T14:10:12Z]\nFixed in: 4cd9458390f49c6d0554d45dd2447923f1e0207e",
+    "image_urls": [],
+    "images_count": 0
+  },
+  {
+    "repo": "cmsis_device_u5",
+    "issue_number": 3,
+    "title": "46d5877874a9fb reintroduces error corrected in 3abe881508869a9e",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "cmsis",
+      "usb",
+      "regression"
+    ],
+    "created_at": "2024-09-12T18:07:01Z",
+    "closed_at": "2024-09-16T10:58:19Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-u5/issues/3",
+    "clean_text": "Title: 46d5877874a9fb reintroduces error corrected in 3abe881508869a9e\n\nBody:\nHead again misses the opening parenthesis.\n\nDoes nobody work with these headers?\n \n#define USB_OTG_GCCFG_FSVMINUS_Pos               (2U)\n-#define USB_OTG_GCCFG_FSVMINUS_Msk               (0x1U << USB_OTG_GCCFG_FSVMINUS_Pos)        /*!< 0x00000004 */\n+#define USB_OTG_GCCFG_FSVMINUS_Msk               0x1U << USB_OTG_GCCFG_FSVMINUS_Pos)         /*!< 0x00000004 */\n\nComments:\n[ALABSTM - 2024-09-16T10:58:00Z]\nHi @UweBonnes,\n\nThank you for the heads-up. Indeed, this is an unwanted change. We'll have this fixed as soon as possible.\n\nWith regards,\n\n[ALABSTM - 2024-09-16T10:58:19Z]\nFixed in commit 48a64b6a00d7627b6c98fcf565cc6cf2b714b659",
+    "image_urls": [],
+    "images_count": 0
+  },
+  {
+    "repo": "cmsis_device_u5",
+    "issue_number": 2,
+    "title": "Wrong VREFBUF voltage scale #define",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "cmsis",
+      "internal bug tracker"
+    ],
+    "created_at": "2024-02-01T07:43:39Z",
+    "closed_at": "2024-08-26T09:55:22Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-u5/issues/2",
+    "clean_text": "Title: Wrong VREFBUF voltage scale #define\n\nBody:\nIn the stm32u5xxxx.h files, the following #define does not setup correctly the VREFBUF voltage scale :\n#define LL_VREFBUF_VOLTAGE_SCALE3          VREFBUF_CSR_VRS_2       /*!< Voltage reference scale 1 (VREF_OUT4) */\n\nVREFBUF_CSR_VRS_2 should be (0x03UL<< VREFBUF_CSR_VRS_Pos) :\n#define VREFBUF_CSR_VRS_2       (0x04UL<< VREFBUF_CSR_VRS_Pos)                      /*!< 0x00000030 */\n\nComments:\n[TOUNSTM - 2024-02-06T14:53:42Z]\nST Internal Reference: 172777\n\n[RJMSTM - 2024-08-26T09:55:13Z]\nFixed in : 46d5877874a9fb5cd3ebd9044171b0c946d7716b",
+    "image_urls": [],
+    "images_count": 0
+  },
+  {
+    "repo": "cmsis_device_u5",
+    "issue_number": 1,
+    "title": "Inconsistent UCPD CFG register names",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "wontfix",
+      "cmsis",
+      "usbpd",
+      "internal bug tracker"
+    ],
+    "created_at": "2023-08-20T21:00:24Z",
+    "closed_at": "2024-03-19T13:20:05Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-u5/issues/1",
+    "clean_text": "Title: Inconsistent UCPD CFG register names\n\nBody:\nUCPD_TypeDef struct defined in  [stm32u575xx.h](https://github.com/STMicroelectronics/cmsis_device_u5/blob/06d7edade7167b0eafdd550bf77cfc4fa98eae2e/Include/stm32u575xx.h#L1245) contains **CFG1-CFG3** registers while in STM32U5 reference manual [RM0456](https://www.st.com/resource/en/reference_manual/rm0456-stm32u5-series-armbased-32bit-mcus-stmicroelectronics.pdf) in sections 74.8.1-74.8.3 those registers are named **CFGR1-CFGR3**.\n\nAnother inconsistency: RM0456 section 74.8.1 defines **CFGR1**.PSC_**USBPD**CLK register value, but HAL implements **CFG1**.UCPD_CFG1_PSC_**UCPD***CLK (USBPDCLK vs UCPDCLK).\n\nThis can be confusing.\nPlease fix code or RM docs - preferably RM, since naming used in HAL makes more sense\n\nComments:\n[tdjastrzebski - 2023-08-26T09:34:58Z]\nThe same applies to STM32H5xx, see\n[STM32U5xx UCPD RM0456 documentation inconsistency](https://community.st.com/t5/stm32-mcu-products/stm32u5xx-ucpd-rm0456-documentation-inconsistency/m-p/584411#M221422)\n\n[ALABSTM - 2023-11-29T14:06:52Z]\nST Internal Reference: 167493\n\n[ALABSTM - 2024-03-19T13:20:05Z]\nHi @tdjastrzebski,\n\nOur development team acknowledged your request. However, they made the choice **not** to deploy such an update for the moment as it would impact the firmware as a whole.\n\nHence, please allow me to close this issue. Thank you for your comprehension and thank you again for having reported.\n\nWith regards,",
+    "image_urls": [],
+    "images_count": 0
+  }
+]

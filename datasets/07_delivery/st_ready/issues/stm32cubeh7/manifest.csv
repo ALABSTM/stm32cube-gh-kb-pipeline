@@ -1,0 +1,222 @@
+id,issue_number,issue_title,state,layer,component,issue_kind,severity,is_valid,output_file,output_chars
+stm32cubeh7-issue-339,339,[Bug]: USART with a single line,open,CubeMX,UART,bug_report,medium,True,issue_339_bug-usart-with-a-single-line.md,1094
+stm32cubeh7-issue-338,338,[Bug]: CubeMx allows an invalid combination of parameters for ADC with DMA,open,CubeMX,ADC,bug_report,low,True,issue_338_bug-cubemx-allows-an-invalid-combination-of-parameters-for-adc-with-dma.md,2151
+stm32cubeh7-issue-335,335,How to resolve observed warning when -Wcast-align flag is used during compile time,closed,HAL,ETH,usage_question,medium,True,issue_335_how-to-resolve-observed-warning-when-wcast-align-flag-is-used-during-compile-tim.md,6134
+stm32cubeh7-issue-333,333,Fix compile time warnings without removing the set compiler flags.,closed,HAL,ETH,bug_report,high,True,issue_333_fix-compile-time-warnings-without-removing-the-set-compiler-flags.md,38123
+stm32cubeh7-issue-332,332,Keil compiler AC6 throwing error: 'sys/time.h' file not found,closed,Middleware,ETH,bug_report,medium,True,issue_332_keil-compiler-ac6-throwing-error-sys-time-h-file-not-found.md,1854
+stm32cubeh7-issue-330,330,NUCLEO-H753ZI duplicate macro defenition and incorrect COM,closed,HAL,UART,bug_report,medium,True,issue_330_nucleo-h753zi-duplicate-macro-defenition-and-incorrect-com.md,5777
+stm32cubeh7-issue-328,328,"issue init sd card on stm32 h7, using sdmmc1 + mdma + fatfs + freertos.",closed,Middleware,DMA,usage_question,medium,True,issue_328_issue-init-sd-card-on-stm32-h7-using-sdmmc1-mdma-fatfs-freertos.md,1335
+stm32cubeh7-issue-327,327,EEPROM emulation example - bugs,closed,Other,,bug_report,medium,True,issue_327_eeprom-emulation-example-bugs.md,5757
+stm32cubeh7-issue-326,326,Deprecated 'register' keyword,closed,LL,,bug_report,medium,True,issue_326_deprecated-register-keyword.md,830
+stm32cubeh7-issue-325,325,Problems in the LwIP_TCP_Echo_Server example,closed,Middleware,ETH,bug_report,medium,True,issue_325_problems-in-the-lwip-tcp-echo-server-example.md,1316
+stm32cubeh7-issue-323,323,STM32H7 LTDC RGB666 Problem,closed,CubeMX,,bug_report,medium,True,issue_323_stm32h7-ltdc-rgb666-problem.md,1846
+stm32cubeh7-issue-320,320,Broken link in README,closed,Other,,bug_report,low,True,issue_320_broken-link-in-readme.md,791
+stm32cubeh7-issue-314,314,STM32CubeH7 1.12.1 SAI4 configuration is broken,closed,Other,,bug_report,medium,True,issue_314_stm32cubeh7-1-12-1-sai4-configuration-is-broken.md,2139
+stm32cubeh7-issue-313,313,Wrong selections in stm32h743 hrtim's dead time settings,closed,HAL,,bug_report,high,True,issue_313_wrong-selections-in-stm32h743-hrtim-s-dead-time-settings.md,2822
+stm32cubeh7-issue-312,312,stm32h7xx_hal_flash_ex.h Unreasonable declaration,closed,HAL,,bug_report,medium,True,issue_312_stm32h7xx-hal-flash-ex-h-unreasonable-declaration.md,646
+stm32cubeh7-issue-310,310,SPDIFRX_playback code throws fault hard exception,closed,Other,,bug_report,high,True,issue_310_spdifrx-playback-code-throws-fault-hard-exception.md,1061
+stm32cubeh7-issue-309,309,NUCLEO-H743ZI EEPROM_Emulation Bug,closed,Other,,bug_report,high,True,issue_309_nucleo-h743zi-eeprom-emulation-bug.md,1922
+stm32cubeh7-issue-308,308,STM32 USB MSC with multiple luns can cause read/write errors,closed,Middleware,USB,bug_report,medium,True,issue_308_stm32-usb-msc-with-multiple-luns-can-cause-read-write-errors.md,2548
+stm32cubeh7-issue-307,307,RBU error because of bug in stm32h7xx_hal_eth.c,closed,HAL,,bug_report,medium,True,issue_307_rbu-error-because-of-bug-in-stm32h7xx-hal-eth-c.md,1522
+stm32cubeh7-issue-306,306,STM32H7 ADC problem,closed,CubeMX,ADC,bug_report,medium,True,issue_306_stm32h7-adc-problem.md,2269
+stm32cubeh7-issue-305,305, STM32H7 CUBEMX SD Card FATFS NVIC problem,closed,HAL,USB,bug_report,medium,True,issue_305_stm32h7-cubemx-sd-card-fatfs-nvic-problem.md,2245
+stm32cubeh7-issue-301,301,D1CorePrescTable[16] causes the RCC module to work abnormally.,closed,HAL,UART,bug_report,medium,True,issue_301_d1corepresctable-16-causes-the-rcc-module-to-work-abnormally.md,3506
+stm32cubeh7-issue-300,300,USB composite CustomHID endpoint size configuration problem,closed,Middleware,USB,bug_report,high,True,issue_300_usb-composite-customhid-endpoint-size-configuration-problem.md,2913
+stm32cubeh7-issue-299,299,jpeg_utils.c:  pure red or pure blue pixel conversion from RGB to YCbCr will result in values too large to hold in a uint8_t buffer.,closed,Other,,bug_report,high,True,issue_299_jpeg-utils-c-pure-red-or-pure-blue-pixel-conversion-from-rgb-to-ycbcr-will-resul.md,3462
+stm32cubeh7-issue-298,298,H743IIT6 USB DMA and Dcache working together produce anomalies,closed,HAL,USB,bug_report,high,True,issue_298_h743iit6-usb-dma-and-dcache-working-together-produce-anomalies.md,2486
+stm32cubeh7-issue-297,297,STM32H747 SWD can not connect anymore,closed,Other,,usage_question,medium,True,issue_297_stm32h747-swd-can-not-connect-anymore.md,1473
+stm32cubeh7-issue-295,295,Stm32H723 Nucleo  LwIP_HTTP_Server_Socket_RTOS project gets constant RBUs,closed,HAL,ETH,bug_report,medium,True,issue_295_stm32h723-nucleo-lwip-http-server-socket-rtos-project-gets-constant-rbus.md,1664
+stm32cubeh7-issue-294,294,JPEG utils not setting ConvertedDataCount variable in YCbCr to RGB functions,closed,Other,,bug_report,medium,True,issue_294_jpeg-utils-not-setting-converteddatacount-variable-in-ycbcr-to-rgb-functions.md,3167
+stm32cubeh7-issue-293,293,"Generate the ADC code for the STM32H750 using CUBEMXV6.11.1, where the Oversampling Ratio must use ADC3_OVERSAMPLING_RATIO_XXX, but an error occurs when compiling.",closed,HAL,ADC,bug_report,medium,True,issue_293_generate-the-adc-code-for-the-stm32h750-using-cubemxv6-11-1-where-the-oversampli.md,5709
+stm32cubeh7-issue-290,290,v1.11.2 changes to lan8742.c result in hardfaults,closed,Other,ETH,bug_report,high,True,issue_290_v1-11-2-changes-to-lan8742-c-result-in-hardfaults.md,1911
+stm32cubeh7-issue-289,289,A bug in the HAL_I2C_IsDeviceReady function in version 1.11.3,closed,HAL,,bug_report,high,True,issue_289_a-bug-in-the-hal-i2c-isdeviceready-function-in-version-1-11-3.md,3099
+stm32cubeh7-issue-288,288,register storage class specifier is deprecated in C++17,closed,HAL,,bug_report,medium,True,issue_288_register-storage-class-specifier-is-deprecated-in-c-17.md,1473
+stm32cubeh7-issue-285,285,"Missing WIFI, Clock and Weather Example in Latest Update",closed,Middleware,,usage_question,medium,True,issue_285_missing-wifi-clock-and-weather-example-in-latest-update.md,1597
+stm32cubeh7-issue-283,283,STM32H725 and FreeRTOS doesn't generate timer IRQ correctly.,closed,HAL,FREERTOS,usage_question,high,True,issue_283_stm32h725-and-freertos-doesn-t-generate-timer-irq-correctly.md,2927
+stm32cubeh7-issue-281,281,Configuration register SYSCFG_PMCR set wrong value when config pins like PC3_C as GPIO,closed,HAL,,configuration_help,medium,True,issue_281_configuration-register-syscfg-pmcr-set-wrong-value-when-config-pins-like-pc3-c-a.md,3726
+stm32cubeh7-issue-278,278,H7B3: USB with DMA generates many interrupts,closed,Middleware,USB,bug_report,medium,True,issue_278_h7b3-usb-with-dma-generates-many-interrupts.md,2468
+stm32cubeh7-issue-276,276,"""BSP"" example for STM32H747I-DISCO is missing in the repo",closed,LL,,usage_question,medium,True,issue_276_bsp-example-for-stm32h747i-disco-is-missing-in-the-repo.md,1006
+stm32cubeh7-issue-275,275,STM32H7B3I-DK PLL3 VCO output exceeds 560MHz limit,closed,CubeMX,,bug_report,medium,True,issue_275_stm32h7b3i-dk-pll3-vco-output-exceeds-560mhz-limit.md,1302
+stm32cubeh7-issue-274,274,"USB composite CDC-CustomHID device problem, one of I/F hangs or data corruption occurs",open,Middleware,USB,bug_report,high,True,issue_274_usb-composite-cdc-customhid-device-problem-one-of-i-f-hangs-or-data-corruption-o.md,3413
+stm32cubeh7-issue-273,273,Possible Duplicate of Issue 99 on the F7 Repository,closed,CubeMX,,usage_question,high,True,issue_273_possible-duplicate-of-issue-99-on-the-f7-repository.md,2470
+stm32cubeh7-issue-272,272,HAL_UART_Transmit can generate faulty error,closed,HAL,UART,bug_report,medium,True,issue_272_hal-uart-transmit-can-generate-faulty-error.md,2447
+stm32cubeh7-issue-269,269,Closing brace of ifdef cplusplus is missing in NUCLEO-H723ZG example: USB_Host/HID_Standalone/USB_Host/Target/usbh_conf.h,closed,Middleware,USB,bug_report,medium,True,issue_269_closing-brace-of-ifdef-cplusplus-is-missing-in-nucleo-h723zg-example-usb-host-hi.md,1096
+stm32cubeh7-issue-268,268,VECT_TAB_OFFSET comments in different releases,closed,Other,,usage_question,high,True,issue_268_vect-tab-offset-comments-in-different-releases.md,3257
+stm32cubeh7-issue-263,263,UART: HAL_UART_ErrorCallback is not called reliably,closed,HAL,DMA,bug_report,medium,True,issue_263_uart-hal-uart-errorcallback-is-not-called-reliably.md,4178
+stm32cubeh7-issue-262,262,USB_Host driver: potential buffer overflow when parsing configuration descriptor ,closed,Middleware,USB,bug_report,medium,True,issue_262_usb-host-driver-potential-buffer-overflow-when-parsing-configuration-descriptor.md,2075
+stm32cubeh7-issue-261,261,Ethernet low_level_init does not handle return code from LAN8742_init,closed,Middleware,ETH,bug_report,medium,True,issue_261_ethernet-low-level-init-does-not-handle-return-code-from-lan8742-init.md,3557
+stm32cubeh7-issue-260,260,I2C: Mixed transfers methods causing Interrupts to hang MCU,closed,HAL,DMA,bug_report,high,True,issue_260_i2c-mixed-transfers-methods-causing-interrupts-to-hang-mcu.md,3773
+stm32cubeh7-issue-259,259,H730 ADC3: macros to calculate temperature and Vref voltage,closed,HAL,ADC,usage_question,medium,True,issue_259_h730-adc3-macros-to-calculate-temperature-and-vref-voltage.md,2938
+stm32cubeh7-issue-258,258,Octo-SPI multiplexed mode unavailable,closed,CubeMX,,bug_report,medium,True,issue_258_octo-spi-multiplexed-mode-unavailable.md,2132
+stm32cubeh7-issue-257,257,wrong register field modified by LL_SPI_SetTxCRCInitPattern(),closed,LL,,bug_report,medium,True,issue_257_wrong-register-field-modified-by-ll-spi-settxcrcinitpattern.md,798
+stm32cubeh7-issue-256,256,H730 ADC3 Oversampling configuration bug,closed,HAL,ADC,bug_report,medium,True,issue_256_h730-adc3-oversampling-configuration-bug.md,2666
+stm32cubeh7-issue-255,255,UART: No DMA Full Interrupt with DMA Receive to Idle mode ,closed,HAL,DMA,usage_question,medium,True,issue_255_uart-no-dma-full-interrupt-with-dma-receive-to-idle-mode.md,3536
+stm32cubeh7-issue-254,254,New STM32H747-DISCO - BSP_LCD_Init() Issue?,closed,HAL,DMA,bug_report,high,True,issue_254_new-stm32h747-disco-bsp-lcd-init-issue.md,2910
+stm32cubeh7-issue-252,252,Potential buffer overflow in WiFi SPI driver,closed,HAL,,bug_report,medium,True,issue_252_potential-buffer-overflow-in-wifi-spi-driver.md,3384
+stm32cubeh7-issue-251,251,"USBCDC not working with V1.11, but OK with V1.10",closed,HAL,USB,bug_report,high,True,issue_251_usbcdc-not-working-with-v1-11-but-ok-with-v1-10.md,2055
+stm32cubeh7-issue-250,250,Whether ADC Vref channel and temperature acquisition channel are consistent with channel 18 and 19,closed,HAL,ADC,configuration_help,high,True,issue_250_whether-adc-vref-channel-and-temperature-acquisition-channel-are-consistent-with.md,2969
+stm32cubeh7-issue-249,249,"Is it reasonable for HAL library SPI to judge RXP in blocking receive 8bit mode? Again, because of the old code to determine the RXWNE/FRLVL flag",closed,HAL,FREERTOS,bug_report,high,True,issue_249_is-it-reasonable-for-hal-library-spi-to-judge-rxp-in-blocking-receive-8bit-mode.md,3500
+stm32cubeh7-issue-248,248,cubeMX can't identify this repository,closed,CubeMX,,other,medium,True,issue_248_cubemx-can-t-identify-this-repository.md,642
+stm32cubeh7-issue-247,247,RTC Accuracy issue,closed,Other,,usage_question,high,True,issue_247_rtc-accuracy-issue.md,1691
+stm32cubeh7-issue-244,244,"NUCLEO-H723ZG, LwIP_HTTP_Server_Socket_RTOS: Ethernet receive fails because DCache is not invalidated in pbuf_free_custom",closed,HAL,ETH,bug_report,medium,True,issue_244_nucleo-h723zg-lwip-http-server-socket-rtos-ethernet-receive-fails-because-dcache.md,4268
+stm32cubeh7-issue-243,243,Invalid compatibility information in README.md of STM32H7xx_HAL_Driver module,closed,HAL,,bug_report,low,True,issue_243_invalid-compatibility-information-in-readme-md-of-stm32h7xx-hal-driver-module.md,1981
+stm32cubeh7-issue-242,242,SAI_AudioPlayback on h745 Discovery Board with Keil Armclang,closed,Other,,usage_question,medium,True,issue_242_sai-audioplayback-on-h745-discovery-board-with-keil-armclang.md,1658
+stm32cubeh7-issue-237,237,Missing some STemWin header files in Middlewares/ST/STemWin/inc/ directory,closed,Middleware,,other,medium,True,issue_237_missing-some-stemwin-header-files-in-middlewares-st-stemwin-inc-directory.md,525
+stm32cubeh7-issue-235,235,Linker script issue,closed,Middleware,,bug_report,medium,True,issue_235_linker-script-issue.md,1085
+stm32cubeh7-issue-234,234,Unable to use IS_xxx_xCLK macros in a preprocesor directives,closed,HAL,,bug_report,medium,True,issue_234_unable-to-use-is-xxx-xclk-macros-in-a-preprocesor-directives.md,4028
+stm32cubeh7-issue-231,231,ethernetif.c issues,closed,HAL,ETH,bug_report,high,True,issue_231_ethernetif-c-issues.md,4409
+stm32cubeh7-issue-230,230,Possible undocumented return value of LL_TIM_OC_GetMode() function,closed,HAL,,usage_question,medium,True,issue_230_possible-undocumented-return-value-of-ll-tim-oc-getmode-function.md,1513
+stm32cubeh7-issue-229,229,SPI with DMA in stm32H750VB ,closed,HAL,DMA,usage_question,medium,True,issue_229_spi-with-dma-in-stm32h750vb.md,1599
+stm32cubeh7-issue-228,228,Another EEPROM emulation example bug,closed,Other,,bug_report,medium,True,issue_228_another-eeprom-emulation-example-bug.md,3186
+stm32cubeh7-issue-227,227,HAL_PWREx_HoldCore(PWR_CORE_CPU1) Does not stop execution in CM7,closed,HAL,,usage_question,medium,True,issue_227_hal-pwrex-holdcore-pwr-core-cpu1-does-not-stop-execution-in-cm7.md,1985
+stm32cubeh7-issue-226,226,Bug in older SCB_DisableDCache() implementation,closed,Other,,bug_report,medium,True,issue_226_bug-in-older-scb-disabledcache-implementation.md,1951
+stm32cubeh7-issue-225,225,NOR Flash driver does not support x8 commands,closed,HAL,,bug_report,high,True,issue_225_nor-flash-driver-does-not-support-x8-commands.md,3643
+stm32cubeh7-issue-224,224,Ethernet transmit is hang on osSemaphoreAcquire( TxPktSemaphore ) inside low_level_output(),closed,HAL,ETH,bug_report,high,True,issue_224_ethernet-transmit-is-hang-on-ossemaphoreacquire-txpktsemaphore-inside-low-level.md,2674
+stm32cubeh7-issue-223,223,Broken link in readme,closed,Middleware,,bug_report,medium,True,issue_223_broken-link-in-readme.md,942
+stm32cubeh7-issue-221,221,Wrong name for RCC Clock Security System callback,closed,HAL,,bug_report,medium,True,issue_221_wrong-name-for-rcc-clock-security-system-callback.md,1055
+stm32cubeh7-issue-219,219,SPI45 PCLK clock source macros are mislabeled.,closed,CubeMX,,bug_report,medium,True,issue_219_spi45-pclk-clock-source-macros-are-mislabeled.md,1550
+stm32cubeh7-issue-216,216,QSPI FIFO Threshold mask wrong,closed,Other,,bug_report,medium,True,issue_216_qspi-fifo-threshold-mask-wrong.md,1879
+stm32cubeh7-issue-215,215,TinyUSB doesn't work on STM32H743ZI,closed,Middleware,USB,other,high,True,issue_215_tinyusb-doesn-t-work-on-stm32h743zi.md,1528
+stm32cubeh7-issue-212,212,I2S: I2S_InitTypeDef doesn't have IOSWP,closed,Other,,bug_report,medium,True,issue_212_i2s-i2s-inittypedef-doesn-t-have-ioswp.md,1632
+stm32cubeh7-issue-211,211,STM32CUBEMX V6.5 cannot configure the ADC clock of some chips,closed,CubeMX,ADC,configuration_help,medium,True,issue_211_stm32cubemx-v6-5-cannot-configure-the-adc-clock-of-some-chips.md,1158
+stm32cubeh7-issue-210,210,implicit declaration LL_RCC_CalcPLLClockFreq,closed,HAL,,bug_report,medium,True,issue_210_implicit-declaration-ll-rcc-calcpllclockfreq.md,1845
+stm32cubeh7-issue-208,208,BSP USART1 pins should be  PA9 and PA10 for STM32H747I-DISCO,closed,Other,UART,bug_report,medium,True,issue_208_bsp-usart1-pins-should-be-pa9-and-pa10-for-stm32h747i-disco.md,1538
+stm32cubeh7-issue-207,207,stm32h7xxx_discovery_conf_template.h replace with the actual stm32h7xxx_discovery_conf.h from the BSP example folder,closed,Other,,usage_question,medium,True,issue_207_stm32h7xxx-discovery-conf-template-h-replace-with-the-actual-stm32h7xxx-discover.md,1224
+stm32cubeh7-issue-205,205,Unclear software licensing,closed,HAL,,bug_report,low,True,issue_205_unclear-software-licensing.md,3478
+stm32cubeh7-issue-203,203,ptp problem,closed,HAL,ETH,other,medium,True,issue_203_ptp-problem.md,1603
+stm32cubeh7-issue-202,202,Flash Dual bank for H735 and H725,closed,Other,,usage_question,medium,True,issue_202_flash-dual-bank-for-h735-and-h725.md,2475
+stm32cubeh7-issue-201,201,"BSP driver for STM32H743I/753I -EVAL, fix for using LEDs without the I2C I/O extender",closed,Other,,bug_report,medium,True,issue_201_bsp-driver-for-stm32h743i-753i-eval-fix-for-using-leds-without-the-i2c-i-o-exten.md,2673
+stm32cubeh7-issue-199,199,SysTick interrupt priority confusion,closed,HAL,FREERTOS,bug_report,low,True,issue_199_systick-interrupt-priority-confusion.md,3053
+stm32cubeh7-issue-191,191,ADC clock frequency greater than maximum allowed and LL_ADC_StartCalibration never called in STM32H723ZG example,closed,LL,ADC,bug_report,medium,True,issue_191_adc-clock-frequency-greater-than-maximum-allowed-and-ll-adc-startcalibration-nev.md,3154
+stm32cubeh7-issue-190,190,[STM32H750-DB] ExtMem_Application: hardfault caused and Unable to jump to Application,closed,Other,,configuration_help,high,True,issue_190_stm32h750-db-extmem-application-hardfault-caused-and-unable-to-jump-to-applicati.md,2200
+stm32cubeh7-issue-189,189,Ethernet: avoid descriptor leak with enabled timestamping,closed,HAL,ETH,bug_report,high,True,issue_189_ethernet-avoid-descriptor-leak-with-enabled-timestamping.md,4156
+stm32cubeh7-issue-187,187,Add support for ADC LDO output voltage ready bit,closed,HAL,ADC,bug_report,medium,True,issue_187_add-support-for-adc-ldo-output-voltage-ready-bit.md,2545
+stm32cubeh7-issue-185,185,Minor typos in Extended FLASH HAL,closed,HAL,,bug_report,low,True,issue_185_minor-typos-in-extended-flash-hal.md,2132
+stm32cubeh7-issue-184,184,I2C: discrepancy between the HAL driver and the RM0433 reference manual,closed,HAL,,configuration_help,high,True,issue_184_i2c-discrepancy-between-the-hal-driver-and-the-rm0433-reference-manual.md,2548
+stm32cubeh7-issue-183,183,Typos in MCU header files,closed,Other,,bug_report,low,True,issue_183_typos-in-mcu-header-files.md,1512
+stm32cubeh7-issue-177,177,ADC3 Oversampling Ratio incorrectly set,closed,HAL,ADC,bug_report,medium,True,issue_177_adc3-oversampling-ratio-incorrectly-set.md,2837
+stm32cubeh7-issue-175,175,All Error and fault related functions with STM32H7XX_IT.C must me marked as __weak functions.,closed,CubeMX,,other,high,True,issue_175_all-error-and-fault-related-functions-with-stm32h7xx-it-c-must-me-marked-as-weak.md,1431
+stm32cubeh7-issue-174,174,EEPROM emulation example bug,closed,Other,,bug_report,medium,True,issue_174_eeprom-emulation-example-bug.md,2849
+stm32cubeh7-issue-173,173,Can provide CubeMX configuration file？,closed,CubeMX,,usage_question,medium,True,issue_173_can-provide-cubemx-configuration-file.md,1345
+stm32cubeh7-issue-172,172,FDCAN examples for NUCLEO-H743ZI2,closed,Other,CAN,usage_question,medium,True,issue_172_fdcan-examples-for-nucleo-h743zi2.md,1718
+stm32cubeh7-issue-170,170,STM32H723 ADC 3 cannot be set to 12-bit resolution using LL drivers,closed,HAL,ADC,bug_report,medium,True,issue_170_stm32h723-adc-3-cannot-be-set-to-12-bit-resolution-using-ll-drivers.md,2452
+stm32cubeh7-issue-169,169,`I2C_Master_Transmit` waits for `TXIS` status instead of `TXE` status,closed,HAL,DMA,usage_question,high,True,issue_169_i2c-master-transmit-waits-for-txis-status-instead-of-txe-status.md,2206
+stm32cubeh7-issue-168,168,Unable to generate .gpdsc file from proj for H745,closed,CubeMX,,other,medium,True,issue_168_unable-to-generate-gpdsc-file-from-proj-for-h745.md,1544
+stm32cubeh7-issue-167,167,Incorrect Macro IS_ADC_EXTTRIGINJEC for H7 in FW V1.9,closed,HAL,ADC,bug_report,medium,True,issue_167_incorrect-macro-is-adc-exttriginjec-for-h7-in-fw-v1-9.md,1922
+stm32cubeh7-issue-166,166,Error handling in HAL_DMA_RegisterCallback,closed,HAL,,bug_report,medium,True,issue_166_error-handling-in-hal-dma-registercallback.md,2611
+stm32cubeh7-issue-165,165,Cannot find macro definition TAMP_BKP0R_BKP,closed,LL,,bug_report,medium,True,issue_165_cannot-find-macro-definition-tamp-bkp0r-bkp.md,1379
+stm32cubeh7-issue-164,164,HAL_DSI_MspInit bad generation for STM32H747,closed,HAL,,other,medium,True,issue_164_hal-dsi-mspinit-bad-generation-for-stm32h747.md,1596
+stm32cubeh7-issue-162,162,stm32h7xx_ll_hsem.h / LL_HSEM_1StepLock uses HSEM_R_LOCK instead of HSEM_RLR_LOCK to while checking RLR register,closed,LL,,bug_report,medium,True,issue_162_stm32h7xx-ll-hsem-h-ll-hsem-1steplock-uses-hsem-r-lock-instead-of-hsem-rlr-lock.md,1822
+stm32cubeh7-issue-159,159,Nucleo-STM32H743ZI2 board gets hung at SystemClock_Config();,closed,HAL,,configuration_help,low,True,issue_159_nucleo-stm32h743zi2-board-gets-hung-at-systemclock-config.md,2877
+stm32cubeh7-issue-158,158,TFTP Server Hanging on H7,closed,Middleware,ETH,usage_question,high,True,issue_158_tftp-server-hanging-on-h7.md,2603
+stm32cubeh7-issue-157,157,Enhancement: Provide a function that is capable of storing multiple CAN messages to CAN TX FIFOs before updating TXBAR,closed,HAL,ADC,bug_report,high,True,issue_157_enhancement-provide-a-function-that-is-capable-of-storing-multiple-can-messages.md,2569
+stm32cubeh7-issue-156,156,Missing eMMC states on HAL_MMC_CardStateTypeDef and eMMC not going into sleep state,closed,HAL,,bug_report,high,True,issue_156_missing-emmc-states-on-hal-mmc-cardstatetypedef-and-emmc-not-going-into-sleep-st.md,4216
+stm32cubeh7-issue-155,155,Early system initialization and correct use of HAL_PWREx_ConfigSupply(),closed,HAL,,configuration_help,high,True,issue_155_early-system-initialization-and-correct-use-of-hal-pwrex-configsupply.md,2517
+stm32cubeh7-issue-154,154,Missing implementation of HAL SPI master automatic SUSP in receive mode,closed,HAL,,bug_report,medium,True,issue_154_missing-implementation-of-hal-spi-master-automatic-susp-in-receive-mode.md,1625
+stm32cubeh7-issue-153,153,SPI example using DMA: Add cache maintenance operation or separate dma_buffer section,closed,HAL,DMA,bug_report,low,True,issue_153_spi-example-using-dma-add-cache-maintenance-operation-or-separate-dma-buffer-sec.md,5480
+stm32cubeh7-issue-152,152,Not able to flash any code on NUCLEO-H745ZI-Q using STM32CubeIDE,closed,HAL,,other,high,True,issue_152_not-able-to-flash-any-code-on-nucleo-h745zi-q-using-stm32cubeide.md,3953
+stm32cubeh7-issue-151,151,Query: Why check / call IS_FDCAN_MAX_VALUE() and IS_FDCAN_STD_FILTER_TYPE() when sFilterConfig->FilterConfig == FDCAN_FILTER_DISABLE || sFilterConfig->FilterConfig == FDCAN_FILTER_HP,closed,HAL,CAN,bug_report,medium,True,issue_151_query-why-check-call-is-fdcan-max-value-and-is-fdcan-std-filter-type-when-sfilte.md,2274
+stm32cubeh7-issue-149,149,STM32H7 RCC Driver Doesn't Support Changing HSIDIV When SYSCLK Using HSI,closed,HAL,UART,configuration_help,low,True,issue_149_stm32h7-rcc-driver-doesn-t-support-changing-hsidiv-when-sysclk-using-hsi.md,4681
+stm32cubeh7-issue-148,148,H745ZI-Q SPI using DMA is not working using Stm32CubeMx,closed,CubeMX,DMA,usage_question,medium,True,issue_148_h745zi-q-spi-using-dma-is-not-working-using-stm32cubemx.md,1184
+stm32cubeh7-issue-147,147,STMCUBEMX STM32H7A3 USB init bug,closed,HAL,USB,configuration_help,medium,True,issue_147_stmcubemx-stm32h7a3-usb-init-bug.md,1930
+stm32cubeh7-issue-146,146,Example: MDMA_RepeatBlock_Rotation - Readme says 90° rotation but not done in source code,closed,Other,,bug_report,low,True,issue_146_example-mdma-repeatblock-rotation-readme-says-90-rotation-but-not-done-in-source.md,1601
+stm32cubeh7-issue-144,144,Wrong pin config in stm32h747i_eval_nor.c,closed,HAL,,configuration_help,medium,True,issue_144_wrong-pin-config-in-stm32h747i-eval-nor-c.md,1987
+stm32cubeh7-issue-142,142,Wrong pin config in stm32h747i_eval_nor.c,closed,HAL,,bug_report,medium,True,issue_142_wrong-pin-config-in-stm32h747i-eval-nor-c.md,2880
+stm32cubeh7-issue-141,141,OpenAMP_RTOS_PingPong does not work with new MX Version,closed,Middleware,FREERTOS,usage_question,high,True,issue_141_openamp-rtos-pingpong-does-not-work-with-new-mx-version.md,2767
+stm32cubeh7-issue-140,140,Nucleo-H753ZI BUG in default configuration,closed,HAL,UART,configuration_help,high,True,issue_140_nucleo-h753zi-bug-in-default-configuration.md,1958
+stm32cubeh7-issue-139,139,Licensing of lwIP example files,closed,HAL,ETH,other,medium,True,issue_139_licensing-of-lwip-example-files.md,3090
+stm32cubeh7-issue-133,133,Query: Declaring a Global variable in External MRAM / SRAM and simultaneously initializing it within the same (C language) statement.,closed,CubeMX,,other,high,True,issue_133_query-declaring-a-global-variable-in-external-mram-sram-and-simultaneously-initi.md,2970
+stm32cubeh7-issue-132,132,Wrong HSE_VALUE in NUCLEO-H743ZI LwIP Application,closed,HAL,UART,bug_report,medium,True,issue_132_wrong-hse-value-in-nucleo-h743zi-lwip-application.md,1551
+stm32cubeh7-issue-131,131,FatFs Application for STM32H745I-DISCO not working properly,closed,Middleware,,bug_report,medium,True,issue_131_fatfs-application-for-stm32h745i-disco-not-working-properly.md,1827
+stm32cubeh7-issue-130,130,Query: USART RX FIFO,closed,HAL,UART,usage_question,high,True,issue_130_query-usart-rx-fifo.md,4073
+stm32cubeh7-issue-129,129,Question: USART_IRQ.TXFT,closed,HAL,UART,usage_question,medium,True,issue_129_question-usart-irq-txft.md,2494
+stm32cubeh7-issue-128,128,Wrong description for timer one pulse mode,closed,LL,,other,medium,True,issue_128_wrong-description-for-timer-one-pulse-mode.md,1756
+stm32cubeh7-issue-127,127,USART_CR2.RTOEN check missing,closed,HAL,UART,usage_question,medium,True,issue_127_usart-cr2-rtoen-check-missing.md,2377
+stm32cubeh7-issue-126,126,"Query: With Keil project, unable to us ""No Auto Include"" option",closed,Middleware,FREERTOS,bug_report,high,True,issue_126_query-with-keil-project-unable-to-us-no-auto-include-option.md,2745
+stm32cubeh7-issue-125,125,H747/dual core CM7 continues execution after wakeup from standby mode with RTC.,closed,HAL,,usage_question,high,True,issue_125_h747-dual-core-cm7-continues-execution-after-wakeup-from-standby-mode-with-rtc.md,6546
+stm32cubeh7-issue-124,124,MDMA Link Nodes not Double Word Aligned by CubeMX as Required,closed,CubeMX,,other,medium,True,issue_124_mdma-link-nodes-not-double-word-aligned-by-cubemx-as-required.md,1273
+stm32cubeh7-issue-123,123,HAL_UART_Receive_IT either captures more data than requested or does not capture data in certain conditions.,closed,HAL,UART,other,medium,True,issue_123_hal-uart-receive-it-either-captures-more-data-than-requested-or-does-not-capture.md,2523
+stm32cubeh7-issue-122,122,Concern: Asynchronous USART1 TX data mismatch when using Parity,closed,HAL,USB,usage_question,high,True,issue_122_concern-asynchronous-usart1-tx-data-mismatch-when-using-parity.md,2868
+stm32cubeh7-issue-121,121,Ethernet: write to SYSCFG before MAC reset require wait,closed,HAL,ETH,usage_question,high,True,issue_121_ethernet-write-to-syscfg-before-mac-reset-require-wait.md,4208
+stm32cubeh7-issue-120,120,Python Wrapper: cmsis_compiler.h not found (CMSIS 5.6.0),closed,Other,,usage_question,medium,True,issue_120_python-wrapper-cmsis-compiler-h-not-found-cmsis-5-6-0.md,1152
+stm32cubeh7-issue-118,118,UART Receive with timeout interrupt issue,closed,HAL,UART,usage_question,high,True,issue_118_uart-receive-with-timeout-interrupt-issue.md,2834
+stm32cubeh7-issue-116,116,Question: ISR Triggered Task priority,closed,Middleware,FREERTOS,usage_question,high,True,issue_116_question-isr-triggered-task-priority.md,5383
+stm32cubeh7-issue-114,114,TIM12 and 15 missing in several TIMER_x macro's.,closed,Other,DMA,bug_report,medium,True,issue_114_tim12-and-15-missing-in-several-timer-x-macro-s.md,3486
+stm32cubeh7-issue-113,113,STM32CubeIDE Default Code for Nucleo H743ZI Includes Ethernet Bug,closed,HAL,ETH,usage_question,low,True,issue_113_stm32cubeide-default-code-for-nucleo-h743zi-includes-ethernet-bug.md,14066
+stm32cubeh7-issue-111,111,Impact of using TEMPSENSOR_CAL_VREFANALOG with macro __LL_ADC_CALC_TEMPERATURE  on macro __HAL_ADC_CALC_TEMPERATURE and the output Temperature,closed,HAL,ADC,usage_question,high,True,issue_111_impact-of-using-tempsensor-cal-vrefanalog-with-macro-ll-adc-calc-temperature-on.md,2493
+stm32cubeh7-issue-107,107,Incorrect comments on SDMMC_GetCmdResp7,closed,HAL,,bug_report,medium,True,issue_107_incorrect-comments-on-sdmmc-getcmdresp7.md,3257
+stm32cubeh7-issue-105,105,HAL_TIMEOUT in USB_CoreReset() due to missing volatile for count variable,closed,HAL,USB,bug_report,low,True,issue_105_hal-timeout-in-usb-corereset-due-to-missing-volatile-for-count-variable.md,2118
+stm32cubeh7-issue-104,104,Ethernet error interrupt,closed,HAL,ETH,bug_report,medium,True,issue_104_ethernet-error-interrupt.md,1717
+stm32cubeh7-issue-103,103,"Issue Entering DFU Mode after User code Sets ClockSource for SPI, Uarts, OR i2c",closed,HAL,USB,usage_question,high,True,issue_103_issue-entering-dfu-mode-after-user-code-sets-clocksource-for-spi-uarts-or-i2c.md,4115
+stm32cubeh7-issue-102,102,"Use Boot -> APP： HAL_ Delay() will be stuck in APP, But it is normal in Boot",closed,HAL,UART,usage_question,high,True,issue_102_use-boot-app-hal-delay-will-be-stuck-in-app-but-it-is-normal-in-boot.md,3599
+stm32cubeh7-issue-101,101,RCC_AHB2RSTR register for DCMI resetting on STM32H743VI,closed,Other,,bug_report,low,True,issue_101_rcc-ahb2rstr-register-for-dcmi-resetting-on-stm32h743vi.md,2318
+stm32cubeh7-issue-99,99,LL_USART_ClockInit issue.,closed,LL,UART,bug_report,medium,True,issue_99_ll-usart-clockinit-issue.md,2047
+stm32cubeh7-issue-97,97,Requesting code integration / update to use FreeRTOS version 10.4.0,closed,Middleware,FREERTOS,usage_question,medium,True,issue_97_requesting-code-integration-update-to-use-freertos-version-10-4-0.md,880
+stm32cubeh7-issue-95,95,STM32H7: Ethernet TX callback complete not called intermittently,closed,HAL,ETH,usage_question,medium,True,issue_95_stm32h7-ethernet-tx-callback-complete-not-called-intermittently.md,2298
+stm32cubeh7-issue-94,94,The __STM32H7xx_CMSIS_DEVICE_VERSION macro in stm32h7xx.h is wrong,closed,HAL,,other,medium,True,issue_94_the-stm32h7xx-cmsis-device-version-macro-in-stm32h7xx-h-is-wrong.md,1614
+stm32cubeh7-issue-93,93,LL_SYSCFG_ETH_RMII definition wrong.,closed,LL,ETH,bug_report,medium,True,issue_93_ll-syscfg-eth-rmii-definition-wrong.md,1721
+stm32cubeh7-issue-92,92,null pointer dereference of lwip function ip_reass_free_complete_datagram,closed,Middleware,,usage_question,medium,True,issue_92_null-pointer-dereference-of-lwip-function-ip-reass-free-complete-datagram.md,2195
+stm32cubeh7-issue-91,91,TIM15 is missing in macro IS_TIM_SLAVE_INSTANCE,closed,HAL,,bug_report,medium,True,issue_91_tim15-is-missing-in-macro-is-tim-slave-instance.md,2968
+stm32cubeh7-issue-90,90,Calling xQueueReceiveFromISR() from within Interrupt results in ASSERET trigger,closed,HAL,UART,usage_question,high,True,issue_90_calling-xqueuereceivefromisr-from-within-interrupt-results-in-asseret-trigger.md,2979
+stm32cubeh7-issue-88,88,CubeMX GPIO not initialized in STM32H747-DISCO?,closed,CubeMX,,other,medium,True,issue_88_cubemx-gpio-not-initialized-in-stm32h747-disco.md,1283
+stm32cubeh7-issue-86,86,Incorrect spelling,closed,Other,,other,low,True,issue_86_incorrect-spelling.md,1060
+stm32cubeh7-issue-84,84,Buffer Overflow due to the variable ep_descriptor->bLength,closed,Middleware,USB,bug_report,medium,True,issue_84_buffer-overflow-due-to-the-variable-ep-descriptor-blength.md,3340
+stm32cubeh7-issue-83,83,Buffer Overflow due to the variable if_descriptor->bLength,closed,Middleware,USB,bug_report,medium,True,issue_83_buffer-overflow-due-to-the-variable-if-descriptor-blength.md,2300
+stm32cubeh7-issue-82,82,No checking if ep_descriptor->bInterval is greater than zero,closed,Middleware,USB,bug_report,high,True,issue_82_no-checking-if-ep-descriptor-binterval-is-greater-than-zero.md,2027
+stm32cubeh7-issue-81,81,No checking if ep_descriptor->wMaxPacketSize is greater than zero,closed,Middleware,USB,bug_report,high,True,issue_81_no-checking-if-ep-descriptor-wmaxpacketsize-is-greater-than-zero.md,2216
+stm32cubeh7-issue-80,80,No checking on both IN and OUT pipe constructed,closed,Middleware,USB,bug_report,high,True,issue_80_no-checking-on-both-in-and-out-pipe-constructed.md,3491
+stm32cubeh7-issue-79,79,Buffer Overflow due to wrong pdesc->bDescriptorType,closed,Middleware,USB,bug_report,medium,True,issue_79_buffer-overflow-due-to-wrong-pdesc-bdescriptortype.md,2938
+stm32cubeh7-issue-78,78,Lack hardware wake-up support checking,closed,Middleware,USB,bug_report,high,True,issue_78_lack-hardware-wake-up-support-checking.md,3486
+stm32cubeh7-issue-77,77,No validity checking on the variable cfg_desc->bLength,closed,Middleware,USB,bug_report,medium,True,issue_77_no-validity-checking-on-the-variable-cfg-desc-blength.md,2307
+stm32cubeh7-issue-76,76,No validity checking on the variable cfg_desc->wTotalLength,closed,Middleware,USB,bug_report,medium,True,issue_76_no-validity-checking-on-the-variable-cfg-desc-wtotallength.md,2284
+stm32cubeh7-issue-75,75,No validity chekcing on the variable dev_desc->bMaxPacketSize,closed,Middleware,USB,bug_report,high,True,issue_75_no-validity-chekcing-on-the-variable-dev-desc-bmaxpacketsize.md,3829
+stm32cubeh7-issue-74,74,Duplicate include call for stm32h7xx_hal.h in file main.h,closed,Middleware,FREERTOS,other,medium,True,issue_74_duplicate-include-call-for-stm32h7xx-hal-h-in-file-main-h.md,1307
+stm32cubeh7-issue-72,72,STM32H753BIT6 Temperature Sensor Channel different reported values,closed,HAL,ADC,usage_question,medium,True,issue_72_stm32h753bit6-temperature-sensor-channel-different-reported-values.md,7857
+stm32cubeh7-issue-71,71,Calling SystemClock_Config() results in call to assert_failed() because of missing assignment uwTickPrio = TICK_INT_PRIORITY,closed,HAL,FREERTOS,usage_question,high,True,issue_71_calling-systemclock-config-results-in-call-to-assert-failed-because-of-missing-a.md,2676
+stm32cubeh7-issue-69,69,UART LL Driver issues,closed,LL,UART,other,medium,True,issue_69_uart-ll-driver-issues.md,1563
+stm32cubeh7-issue-67,67,STM32CubeH7 MDK-ARM Code behaves abnormally when MicroLIB is unselected,closed,Middleware,FREERTOS,usage_question,high,True,issue_67_stm32cubeh7-mdk-arm-code-behaves-abnormally-when-microlib-is-unselected.md,2147
+stm32cubeh7-issue-66,66,STM32CubeMX adds incorrect value to XTAL,closed,CubeMX,,configuration_help,medium,True,issue_66_stm32cubemx-adds-incorrect-value-to-xtal.md,1483
+stm32cubeh7-issue-65,65,STM32CubeMX 6.0.1 with STM32Cube MCU Package for STM32H7 Series version 1.8.0 adds bad value for Keil UVPROJX file,closed,CubeMX,,other,medium,True,issue_65_stm32cubemx-6-0-1-with-stm32cube-mcu-package-for-stm32h7-series-version-1-8-0-ad.md,2422
+stm32cubeh7-issue-64,64,Incorrect value assigned to __STM32H7xx_CMSIS_DEVICE_VERSION and adding __STM32H7xx_HAL_VERSION to a header file,closed,HAL,,bug_report,high,True,issue_64_incorrect-value-assigned-to-stm32h7xx-cmsis-device-version-and-adding-stm32h7xx.md,1674
+stm32cubeh7-issue-63,63,REV_ID_Z missing from file stm32h7xx_hal.h,closed,Other,,usage_question,medium,True,issue_63_rev-id-z-missing-from-file-stm32h7xx-hal-h.md,1359
+stm32cubeh7-issue-61,61,Max value for configMAX_PRIORITIES,closed,Middleware,FREERTOS,configuration_help,low,True,issue_61_max-value-for-configmax-priorities.md,2129
+stm32cubeh7-issue-60,60,STM32CubeMX IDE issue. Throws warning when using macros,closed,CubeMX,UART,other,high,True,issue_60_stm32cubemx-ide-issue-throws-warning-when-using-macros.md,1887
+stm32cubeh7-issue-59,59,Issue with chosen MAX value (i.e. 56) of configMAX_PRIORITIES,closed,Middleware,FREERTOS,usage_question,high,True,issue_59_issue-with-chosen-max-value-i-e-56-of-configmax-priorities.md,3458
+stm32cubeh7-issue-55,55,OB_USER_SWAP_BANK Undeclared on H750 Target,closed,HAL,,bug_report,medium,True,issue_55_ob-user-swap-bank-undeclared-on-h750-target.md,1474
+stm32cubeh7-issue-54,54,Unable to import CDC Device Examples for CubeH7.,closed,Middleware,USB,other,medium,True,issue_54_unable-to-import-cdc-device-examples-for-cubeh7.md,1943
+stm32cubeh7-issue-53,53,"Use BSP_SD_ReadBlocks_DMA() fail, SDMMC1_IRQHandler() interrupt cannot occur",closed,Middleware,USB,other,medium,True,issue_53_use-bsp-sd-readblocks-dma-fail-sdmmc1-irqhandler-interrupt-cannot-occur.md,1632
+stm32cubeh7-issue-47,47,ExtMem_Boot: hardfault caused by unaligned memory access,closed,Other,,usage_question,high,True,issue_47_extmem-boot-hardfault-caused-by-unaligned-memory-access.md,4950
+stm32cubeh7-issue-46,46,HAL_RCCEx_PeriphCLKConfig not setting the HRTIM1 clock source,closed,HAL,,bug_report,high,True,issue_46_hal-rccex-periphclkconfig-not-setting-the-hrtim1-clock-source.md,2410
+stm32cubeh7-issue-45,45,Confusing configuration of ADC trigger at CubeMX (STM32H750),closed,LL,ADC,configuration_help,medium,True,issue_45_confusing-configuration-of-adc-trigger-at-cubemx-stm32h750.md,1962
+stm32cubeh7-issue-43,43,USART fails to compile,closed,HAL,UART,bug_report,low,True,issue_43_usart-fails-to-compile.md,2742
+stm32cubeh7-issue-42,42,Missing include in eth.c,closed,CubeMX,ETH,usage_question,medium,True,issue_42_missing-include-in-eth-c.md,1923
+stm32cubeh7-issue-41,41,Uninitialized local variable VidCfg,closed,HAL,,bug_report,medium,True,issue_41_uninitialized-local-variable-vidcfg.md,1971
+stm32cubeh7-issue-39,39,FreeRTOS-MPU fails to run if its privileged RAM is in a cacheable memory region,closed,Middleware,FREERTOS,bug_report,low,True,issue_39_freertos-mpu-fails-to-run-if-its-privileged-ram-is-in-a-cacheable-memory-region.md,5504
+stm32cubeh7-issue-38,38,FreeRTOS-MPU does not use the MPU on M7 cores,closed,HAL,ETH,bug_report,high,True,issue_38_freertos-mpu-does-not-use-the-mpu-on-m7-cores.md,3505
+stm32cubeh7-issue-37,37,Spelling: Lots of issues found by codespell,closed,Middleware,FREERTOS,bug_report,low,True,issue_37_spelling-lots-of-issues-found-by-codespell.md,1747
+stm32cubeh7-issue-34,34,Dual Core boot up example,closed,HAL,,usage_question,low,True,issue_34_dual-core-boot-up-example.md,2192
+stm32cubeh7-issue-33,33,CubeMX: 0-Pointer access in generated MX_ETH_Init code,closed,HAL,ETH,other,medium,True,issue_33_cubemx-0-pointer-access-in-generated-mx-eth-init-code.md,2823
+stm32cubeh7-issue-32,32,CubeMX: 0-pointer access in generated code if TIM6 is used for HAL tick and DAC is enabled,closed,HAL,,other,medium,True,issue_32_cubemx-0-pointer-access-in-generated-code-if-tim6-is-used-for-hal-tick-and-dac-i.md,2238
+stm32cubeh7-issue-31,31,USART Receive timeout interrupt not enabled.,closed,HAL,UART,bug_report,medium,True,issue_31_usart-receive-timeout-interrupt-not-enabled.md,1822
+stm32cubeh7-issue-30,30,Repository is behind the software provided by the STM32CubeH7 distribution,closed,HAL,,usage_question,medium,True,issue_30_repository-is-behind-the-software-provided-by-the-stm32cubeh7-distribution.md,1288
+stm32cubeh7-issue-28,28,Cannot read Audio Data(MP34DT05TR Mic) based on DFSDM,closed,HAL,DMA,usage_question,low,True,issue_28_cannot-read-audio-data-mp34dt05tr-mic-based-on-dfsdm.md,21120
+stm32cubeh7-issue-25,25,Wrong timer identifiers on some HRTIM functions doc,closed,HAL,,bug_report,medium,True,issue_25_wrong-timer-identifiers-on-some-hrtim-functions-doc.md,2000
+stm32cubeh7-issue-24,24,HAL_RTC_Init() looses time,closed,HAL,,bug_report,high,True,issue_24_hal-rtc-init-looses-time.md,2492
+stm32cubeh7-issue-22,22,Stalling at the DataOutStage in usbd_core.c leads to enumeration issues under Windows 10/7,closed,LL,USB,bug_report,medium,True,issue_22_stalling-at-the-dataoutstage-in-usbd-core-c-leads-to-enumeration-issues-under-wi.md,2305
+stm32cubeh7-issue-21,21,SDMMC: Hard-coded clock dividers only work for 200MHz MMCCLK,closed,HAL,,bug_report,medium,True,issue_21_sdmmc-hard-coded-clock-dividers-only-work-for-200mhz-mmcclk.md,2361
+stm32cubeh7-issue-20,20,The HAL_NOR_ProgramBuffer() has a few defects,closed,HAL,,bug_report,high,True,issue_20_the-hal-nor-programbuffer-has-a-few-defects.md,4165
+stm32cubeh7-issue-19,19,__HAL_RCC_AHB3_FORCE_RESET() sometime causes microprocessor to reset,closed,HAL,,bug_report,high,True,issue_19_hal-rcc-ahb3-force-reset-sometime-causes-microprocessor-to-reset.md,3820
+stm32cubeh7-issue-18,18,Invalid HAL version number in stm32h7xx_hal.c file,closed,HAL,,usage_question,low,True,issue_18_invalid-hal-version-number-in-stm32h7xx-hal-c-file.md,1897
+stm32cubeh7-issue-17,17,Bug in USB implementation,closed,HAL,USB,bug_report,high,True,issue_17_bug-in-usb-implementation.md,2415
+stm32cubeh7-issue-15,15,register storage class specifier is incompatible with C++17,closed,HAL,ADC,bug_report,medium,True,issue_15_register-storage-class-specifier-is-incompatible-with-c-17.md,20469
+stm32cubeh7-issue-14,14,Regression in QSPI vs. v1.3.0,closed,HAL,,bug_report,high,True,issue_14_regression-in-qspi-vs-v1-3-0.md,1970
+stm32cubeh7-issue-12,12,USB MSC Stack: Can't enumerate when disk is not ready,closed,Middleware,USB,bug_report,high,True,issue_12_usb-msc-stack-can-t-enumerate-when-disk-is-not-ready.md,1931
+stm32cubeh7-issue-10,10,In BSP driver lan8742: endless loop in case of timeout,closed,Middleware,ETH,bug_report,high,True,issue_10_in-bsp-driver-lan8742-endless-loop-in-case-of-timeout.md,2090
+stm32cubeh7-issue-9,9,FreeRTOS cannot enable timer,closed,Middleware,FREERTOS,usage_question,high,True,issue_9_freertos-cannot-enable-timer.md,1955
+stm32cubeh7-issue-8,8,enabling unwanted global interrupts,closed,HAL,,bug_report,medium,True,issue_8_enabling-unwanted-global-interrupts.md,1802
+stm32cubeh7-issue-7,7,Bug in ETH_DMARxDescListInit - reported in the forum,closed,HAL,ETH,bug_report,low,True,issue_7_bug-in-eth-dmarxdesclistinit-reported-in-the-forum.md,1877
+stm32cubeh7-issue-6,6,Broken I2S extension module when using the 1.5.0 version.,closed,HAL,,bug_report,medium,True,issue_6_broken-i2s-extension-module-when-using-the-1-5-0-version.md,12090
+stm32cubeh7-issue-4,4,Obsolete Keil pack for H7,closed,Other,,usage_question,medium,True,issue_4_obsolete-keil-pack-for-h7.md,864
+stm32cubeh7-issue-3,3,SDMMC_BASE is undefined,closed,Other,,bug_report,medium,True,issue_3_sdmmc-base-is-undefined.md,2151
+stm32cubeh7-issue-2,2,HRTIM_TIM_TypeDef is undefined,closed,Other,,bug_report,medium,True,issue_2_hrtim-tim-typedef-is-undefined.md,2005
+stm32cubeh7-issue-1,1,Missing source codes in this repository,closed,Other,,usage_question,medium,True,issue_1_missing-source-codes-in-this-repository.md,1086

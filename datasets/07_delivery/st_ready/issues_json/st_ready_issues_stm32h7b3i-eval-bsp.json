@@ -1,0 +1,29 @@
+{
+  "issues": [
+    {
+      "id": "stm32h7b3i-eval-bsp-issue-1",
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "stm32h7b3i-eval-bsp",
+      "root_path": "issues",
+      "mcu_series": "H7",
+      "issue_number": 1,
+      "issue_title": "static Camera_Cap pointer not initialized in stm32h7b3i_eval_camera.c",
+      "state": "closed",
+      "layer": "Other",
+      "component": null,
+      "issue_kind": "bug_report",
+      "severity": "medium",
+      "board": "STM32H7B3I",
+      "labels": [
+        "bug",
+        "internal bug tracker"
+      ],
+      "github_url": "https://github.com/STMicroelectronics/stm32h7b3i-eval-bsp/issues/1",
+      "is_valid": true,
+      "evidence_strength": "high",
+      "rescue_applied": false,
+      "delivery_template": "st_v2_structured_issue_card",
+      "st_ready_text": "Problem: static Camera_Cap pointer not initialized in stm32h7b3i_eval_camera.c\nContext: repo=stm32h7b3i-eval-bsp, mcu_series=H7, board=STM32H7B3I, component=None, layer=Other, issue_kind=bug_report, severity=medium, evidence_strength=high, rescue_applied=False, state=closed, issue_number=1\nRoot cause: Hi @cmarsalc, Thank you for having reported.\nFix: **Describe the set-up** STM32H7B3I-EVAL STM32CubeIde 1.\nConstraints: Validate against exact MCU/board configuration and CubeMX/CubeH7 version before applying.\nKeywords: H7, STM32H7B3I, bug_report, medium, bug, internal bug tracker, STM32H7B3I-EVAL, Camera_Cap, ITCM, RAM, ITC, BSP\n\nTechnical details:\n**Describe the set-up** STM32H7B3I-EVAL STM32CubeIde 1.11.2 This is an error rather than a bug. In https://github.com/STMicroelectronics/stm32h7b3i-eval-bsp/blob/main/stm32h7b3i_eval_camera.c the static Camera_Cap pointer is not initialized. When used it points to 0x0 so it ends up writing on ITCM RAM. This error does not manifest as a bug in the current evaluation kit, but if you try to play with ITCM RAM it will accidentally overwrite the content, probably manifesting as a bug of some kind. **How to reproduce the bug (skip if none)** Put some data in ITC RAM address 0x0. Execute the BSP demo project. Expected result: the ITC RAM data is intact Actual result: the ITC RAM data is corrupted by Camera_Cap pointed data writes in S5K5CAG_Probe or OV5640_Probe. **Screenshots** ![image](https://user-images.githubusercontent.com/34426524/231841481-0c51bb59-791e-4872-9fc4-dc9ca770c936.png)\n\nKey comments:\nHi @cmarsalc, Thank you for having reported. Your point looks relevant. It will be forwarded to our development teams for further analysis. We will get back to you once provided with their feedback. This may take some time. So, thank you for your comprehension and patience. **PS:** Referencing the line where the pointer is declared uninitialized. https://github.com/STMicroelectronics/stm32h7b3i-eval-bsp/blob/1269ecd29355996b26b48fe44ea704ab56d2a8e3/stm32h7b3i_eval_camera.c#L162 ST Internal Reference: 187677 Fixed in 80b39b111e48c132785f14d24bf91a6f412aad5e"
+    }
+  ]
+}

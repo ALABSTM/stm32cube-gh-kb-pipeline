@@ -1,0 +1,13 @@
+- fetch_issue_pr_commit_links.py now supports commit message issue inference with keywords: fixes/closes/resolves/references/refs + #number.
+- New resolution_status: commit_only_candidate (meaningful commit evidence without explicit PR).
+- merged_fix can now be derived when PR is merged and changed_files_count > 0 even if non-merge commit evidence is weak.
+- New linkage signal exported: merged_pr_with_file_evidence (+ pr numbers + total changed files).
+- Scoring tweaks: commit-only cases get an extra +0.15; merge-heavy merged PR with file evidence gets +0.08 when meaningful commits are zero.
+- issue_pr_commit_links schema enum extended with commit_only_candidate.
+- Resolver and diagnostic exports now surface merged_pr_with_file_evidence and commit_only_candidate in text/facts/summary.
+- Offline vs online comparison utility added: pipeline/evaluation/compare_offline_online_quality.py.
+- Utility writes quality_index_30q_online_scores_template.csv and offline_online_30q_summary.{csv,md} under datasets/06_eval_outputs.
+- Linkage heuristic widened to detect commit message anchors: "issue 123" and "/issues/123" (not only resolver verbs + #id).
+- Diagnostic cards now include fallback query aliases, version tags, query_anchor_tags, and mandatory clarification questions.
+- Diagnostic cards now expose a structured response format: facts_confirmed -> hypotheses -> checks.
+- New batch runner added: pipeline/evaluation/run_linkage_delivery_audit.py (exports all repos, schema/coherence checks, unlinked audit report).

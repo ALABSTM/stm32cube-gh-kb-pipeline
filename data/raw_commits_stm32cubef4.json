@@ -1,0 +1,305 @@
+[
+  {
+    "repo": "STM32CubeF4",
+    "sha": "6d11e3b37f28dd4b0ed1128f3aa9929b9dedc5b4",
+    "author": "tcv-git",
+    "committer": "tcv-git",
+    "message": "Fix HAL_GPIO_TogglePin if more than one bit is set in argument",
+    "authored_at": "2020-10-10T18:50:25Z",
+    "committed_at": "2020-10-10T18:54:01Z",
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF4/commit/6d11e3b37f28dd4b0ed1128f3aa9929b9dedc5b4",
+    "parents": [
+      "e084518f363e04344dc37822210a75e87377b200"
+    ],
+    "stats": {
+      "additions": 3,
+      "deletions": 8,
+      "total": 11
+    },
+    "files_changed": [
+      {
+        "filename": "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c",
+        "status": "modified",
+        "additions": 3,
+        "deletions": 8,
+        "changes": 11,
+        "previous_filename": null,
+        "patch": "@@ -437,14 +437,9 @@ void HAL_GPIO_TogglePin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)\n   /* Check the parameters */\n   assert_param(IS_GPIO_PIN(GPIO_Pin));\n \n-  if ((GPIOx->ODR & GPIO_Pin) == GPIO_Pin)\n-  {\n-    GPIOx->BSRR = (uint32_t)GPIO_Pin << GPIO_NUMBER;\n-  }\n-  else\n-  {\n-    GPIOx->BSRR = GPIO_Pin;\n-  }\n+  uint16_t tmp = GPIOx->ODR;\n+\n+  GPIOx->BSRR = ((((uint32_t)GPIO_Pin & tmp) << GPIO_NUMBER) | (GPIO_Pin & ~tmp));\n }\n \n /**"
+      }
+    ],
+    "linked_issue_numbers": [],
+    "pr_numbers": [
+      46
+    ]
+  },
+  {
+    "repo": "STM32CubeF4",
+    "sha": "c00ef07518436ce13c109ffbb6329a35845fa4c8",
+    "author": "DeeFuse",
+    "committer": "web-flow",
+    "message": "Update diskio.c\n\nFix #110 falsely setting is_initialized to 1 regardless of driver return value",
+    "authored_at": "2022-02-13T15:54:20Z",
+    "committed_at": "2022-02-13T15:54:20Z",
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF4/commit/c00ef07518436ce13c109ffbb6329a35845fa4c8",
+    "parents": [
+      "4aba24d78fef03d797a82b258f37dbc84728bbb5"
+    ],
+    "stats": {
+      "additions": 4,
+      "deletions": 1,
+      "total": 5
+    },
+    "files_changed": [
+      {
+        "filename": "Middlewares/Third_Party/FatFS/src/diskio.c",
+        "status": "modified",
+        "additions": 4,
+        "deletions": 1,
+        "changes": 5,
+        "previous_filename": null,
+        "patch": "@@ -56,8 +56,11 @@ DSTATUS disk_initialize (\n \n   if(disk.is_initialized[pdrv] == 0)\n   {\n-    disk.is_initialized[pdrv] = 1;\n     stat = disk.drv[pdrv]->disk_initialize(disk.lun[pdrv]);\n+    if(stat == RES_OK)\n+    {\n+      disk.is_initialized[pdrv] = 1;\n+    }\n   }\n   return stat;\n }"
+      }
+    ],
+    "linked_issue_numbers": [
+      110
+    ],
+    "pr_numbers": [
+      111
+    ]
+  },
+  {
+    "repo": "STM32CubeF4",
+    "sha": "e03d234c2bd9f63646d1a7067a4e14c8bc8642c5",
+    "author": "dingiso",
+    "committer": "web-flow",
+    "message": "[doc]: correct the comment for stm32f4xx_hal_rcc.c",
+    "authored_at": "2022-03-30T07:09:19Z",
+    "committed_at": "2022-03-30T07:09:19Z",
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF4/commit/e03d234c2bd9f63646d1a7067a4e14c8bc8642c5",
+    "parents": [
+      "3d6be4bd406f275728e0a321cc371c62a3100533"
+    ],
+    "stats": {
+      "additions": 2,
+      "deletions": 2,
+      "total": 4
+    },
+    "files_changed": [
+      {
+        "filename": "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c",
+        "status": "modified",
+        "additions": 2,
+        "deletions": 2,
+        "changes": 4,
+        "previous_filename": null,
+        "patch": "@@ -479,7 +479,7 @@ __weak HAL_StatusTypeDef HAL_RCC_OscConfig(RCC_OscInitTypeDef  *RCC_OscInitStruc\n         /* Get Start Tick */\n         tickstart = HAL_GetTick();\n \n-        /* Wait till PLL is ready */\n+        /* Wait till PLL is reset */\n         while(__HAL_RCC_GET_FLAG(RCC_FLAG_PLLRDY) != RESET)\n         {\n           if((HAL_GetTick() - tickstart ) > PLL_TIMEOUT_VALUE)\n@@ -517,7 +517,7 @@ __weak HAL_StatusTypeDef HAL_RCC_OscConfig(RCC_OscInitTypeDef  *RCC_OscInitStruc\n         /* Get Start Tick */\n         tickstart = HAL_GetTick();\n \n-        /* Wait till PLL is ready */\n+        /* Wait till PLL is disabled */\n         while(__HAL_RCC_GET_FLAG(RCC_FLAG_PLLRDY) != RESET)\n         {\n           if((HAL_GetTick() - tickstart ) > PLL_TIMEOUT_VALUE)"
+      }
+    ],
+    "linked_issue_numbers": [],
+    "pr_numbers": [
+      118
+    ]
+  },
+  {
+    "repo": "STM32CubeF4",
+    "sha": "98aa92b4219d8224bed003da56eaeff757a31df9",
+    "author": "kevinpt",
+    "committer": "kevinpt",
+    "message": "Remove redundant prototype declaration",
+    "authored_at": "2022-05-23T03:13:08Z",
+    "committed_at": "2022-05-23T03:13:08Z",
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF4/commit/98aa92b4219d8224bed003da56eaeff757a31df9",
+    "parents": [
+      "3d6be4bd406f275728e0a321cc371c62a3100533"
+    ],
+    "stats": {
+      "additions": 0,
+      "deletions": 1,
+      "total": 1
+    },
+    "files_changed": [
+      {
+        "filename": "Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.c",
+        "status": "modified",
+        "additions": 0,
+        "deletions": 1,
+        "changes": 1,
+        "previous_filename": null,
+        "patch": "@@ -109,7 +109,6 @@ static uint8_t USBD_CDC_EP0_RxReady(USBD_HandleTypeDef *pdev);\n static uint8_t *USBD_CDC_GetFSCfgDesc(uint16_t *length);\n static uint8_t *USBD_CDC_GetHSCfgDesc(uint16_t *length);\n static uint8_t *USBD_CDC_GetOtherSpeedCfgDesc(uint16_t *length);\n-static uint8_t *USBD_CDC_GetOtherSpeedCfgDesc(uint16_t *length);\n uint8_t *USBD_CDC_GetDeviceQualifierDescriptor(uint16_t *length);\n #endif /* USE_USBD_COMPOSITE  */\n "
+      }
+    ],
+    "linked_issue_numbers": [],
+    "pr_numbers": [
+      132
+    ]
+  },
+  {
+    "repo": "STM32CubeF4",
+    "sha": "8cac666399c10cd85a28e7b7b29271d694d9de0f",
+    "author": "Peter Tönz",
+    "committer": "Peter Tönz",
+    "message": "defines: prevent redefinition of UNUSED\n\nTo prevent compiler warnings/errors we have to wrap the definition of\nUNUSED with an ifndef. So there are no problems if this is already\ndefined in the project\n\nSigned-off-by: Peter Tönz <peter.tonz@husqvarnagroup.com>",
+    "authored_at": "2022-09-29T12:43:11Z",
+    "committed_at": "2022-09-29T12:43:11Z",
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF4/commit/8cac666399c10cd85a28e7b7b29271d694d9de0f",
+    "parents": [
+      "52757b5e33259a088509a777a9e3a5b971194c7d"
+    ],
+    "stats": {
+      "additions": 3,
+      "deletions": 1,
+      "total": 4
+    },
+    "files_changed": [
+      {
+        "filename": "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h",
+        "status": "modified",
+        "additions": 3,
+        "deletions": 1,
+        "changes": 4,
+        "previous_filename": null,
+        "patch": "@@ -54,7 +54,9 @@ typedef enum\n \n /* Exported macro ------------------------------------------------------------*/\n \n-#define UNUSED(X) (void)X      /* To avoid gcc/g++ warnings */\n+#ifndef UNUSED\n+  #define UNUSED(X) (void)X      /* To avoid gcc/g++ warnings */\n+#endif\n \n #define HAL_MAX_DELAY      0xFFFFFFFFU\n "
+      }
+    ],
+    "linked_issue_numbers": [],
+    "pr_numbers": [
+      144
+    ]
+  },
+  {
+    "repo": "STM32CubeF4",
+    "sha": "45f2a0e0a75595a5b39949d0b63dcfa00fac1ae6",
+    "author": "theadib",
+    "committer": "theadib",
+    "message": "Allow VECT_TAB_OFFSET to be overridden externally (IDE or Makefile)",
+    "authored_at": "2022-10-28T20:38:18Z",
+    "committed_at": "2022-10-28T20:38:18Z",
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF4/commit/45f2a0e0a75595a5b39949d0b63dcfa00fac1ae6",
+    "parents": [
+      "52757b5e33259a088509a777a9e3a5b971194c7d"
+    ],
+    "stats": {
+      "additions": 4,
+      "deletions": 0,
+      "total": 4
+    },
+    "files_changed": [
+      {
+        "filename": "Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c",
+        "status": "modified",
+        "additions": 4,
+        "deletions": 0,
+        "changes": 4,
+        "previous_filename": null,
+        "patch": "@@ -100,13 +100,17 @@\n #if defined(VECT_TAB_SRAM)\n #define VECT_TAB_BASE_ADDRESS   SRAM_BASE       /*!< Vector Table base address field.\n                                                      This value must be a multiple of 0x200. */\n+#if !defined(VECT_TAB_OFFSET)\n #define VECT_TAB_OFFSET         0x00000000U     /*!< Vector Table base offset field.\n                                                      This value must be a multiple of 0x200. */\n+#endif\n #else\n #define VECT_TAB_BASE_ADDRESS   FLASH_BASE      /*!< Vector Table base address field.\n                                                      This value must be a multiple of 0x200. */\n+#if !defined(VECT_TAB_OFFSET)\n #define VECT_TAB_OFFSET         0x00000000U     /*!< Vector Table base offset field.\n                                                      This value must be a multiple of 0x200. */\n+#endif\n #endif /* VECT_TAB_SRAM */\n #endif /* USER_VECT_TAB_ADDRESS */\n /******************************************************************************/"
+      }
+    ],
+    "linked_issue_numbers": [
+      65
+    ],
+    "pr_numbers": [
+      146
+    ]
+  },
+  {
+    "repo": "STM32CubeF4",
+    "sha": "0a1b5f49da3146294d2a63492b7fdce35cf78103",
+    "author": "Markus Rathgeb",
+    "committer": "Markus Rathgeb",
+    "message": "prevent memory corruption\n\nAn USB device that provides more endpoints then the defined maximum\nsupported ones of the code base this will lead to a memory corruption.\nThe code does not check if it runs over the maximum defined endpoints\nand write to the memory behind of it.\nFor the number of interfaces the check if the maximum is already reached\nis present, for the endpoints it is missing.\n\nSigned-off-by: Markus Rathgeb <maggu2810@gmail.com>",
+    "authored_at": "2022-11-04T07:20:51Z",
+    "committed_at": "2022-11-04T07:20:51Z",
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF4/commit/0a1b5f49da3146294d2a63492b7fdce35cf78103",
+    "parents": [
+      "52757b5e33259a088509a777a9e3a5b971194c7d"
+    ],
+    "stats": {
+      "additions": 1,
+      "deletions": 1,
+      "total": 2
+    },
+    "files_changed": [
+      {
+        "filename": "Middlewares/ST/STM32_USB_Host_Library/Core/Src/usbh_ctlreq.c",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "changes": 2,
+        "previous_filename": null,
+        "patch": "@@ -450,7 +450,7 @@ static USBH_StatusTypeDef USBH_ParseCfgDesc(USBH_HandleTypeDef *phost, uint8_t *\n         ep_ix = 0U;\n         pep = (USBH_EpDescTypeDef *)NULL;\n \n-        while ((ep_ix < pif->bNumEndpoints) && (ptr < cfg_desc->wTotalLength))\n+        while ((ep_ix < USBH_MAX_NUM_ENDPOINTS) && (ep_ix < pif->bNumEndpoints) && (ptr < cfg_desc->wTotalLength))\n         {\n           pdesc = USBH_GetNextDesc((uint8_t *)(void *)pdesc, &ptr);\n "
+      }
+    ],
+    "linked_issue_numbers": [],
+    "pr_numbers": [
+      148
+    ]
+  },
+  {
+    "repo": "STM32CubeF4",
+    "sha": "043197bd401d777ad3d05d97772b8dab5686bd67",
+    "author": "PwnVerse",
+    "committer": "PwnVerse",
+    "message": "HAL_RCC_GetSysClockFreq: Add conditional check for the value of pllm",
+    "authored_at": "2023-02-13T17:48:44Z",
+    "committed_at": "2023-02-13T17:48:44Z",
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF4/commit/043197bd401d777ad3d05d97772b8dab5686bd67",
+    "parents": [
+      "e92669fc501fb8b7512fd6890a6eb379b6ae90c5"
+    ],
+    "stats": {
+      "additions": 5,
+      "deletions": 0,
+      "total": 5
+    },
+    "files_changed": [
+      {
+        "filename": "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c",
+        "status": "modified",
+        "additions": 5,
+        "deletions": 0,
+        "changes": 5,
+        "previous_filename": null,
+        "patch": "@@ -905,6 +905,11 @@ __weak uint32_t HAL_RCC_GetSysClockFreq(void)\n       /* PLL_VCO = (HSE_VALUE or HSI_VALUE / PLLM) * PLLN\n       SYSCLK = PLL_VCO / PLLP */\n       pllm = RCC->PLLCFGR & RCC_PLLCFGR_PLLM;\n+\n+      if(pllm == 0){\n+        return 0;\n+      }\n+\n       if(__HAL_RCC_GET_PLL_OSCSOURCE() != RCC_PLLSOURCE_HSI)\n       {\n         /* HSE used as PLL clock source */"
+      }
+    ],
+    "linked_issue_numbers": [
+      147
+    ],
+    "pr_numbers": [
+      154
+    ]
+  },
+  {
+    "repo": "STM32CubeF4",
+    "sha": "aa46f485f916899230a7451d554f013bdc47efbe",
+    "author": "passgat",
+    "committer": "passgat",
+    "message": "nt35510: fix setting of DPRSLCTR register\n\nAs described in the NT35510 Application Note V0.04, the DPRSLCTR register\n(Display Resolution Control - B500h) needs to be set to 50h for the 480x800\ndisplay resolution.\n\nThe same patch has already been submitted and merged into the STM32CubeF7\nproject:\nhttps://github.com/STMicroelectronics/STM32CubeF7/pull/112/commits/72e73bbb41ad4df67de9630ba146170beb254124\n\nFixes: d599a824dfe2 (\"Release v1.26.0\")\nSigned-off-by: Dario Binacchi <dariobin@libero.it>",
+    "authored_at": "2024-02-07T17:15:58Z",
+    "committed_at": "2024-02-07T17:15:58Z",
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF4/commit/aa46f485f916899230a7451d554f013bdc47efbe",
+    "parents": [
+      "ec8744184587ef76b0e1704d1ee3e391f1aa2b90"
+    ],
+    "stats": {
+      "additions": 1,
+      "deletions": 1,
+      "total": 2
+    },
+    "files_changed": [
+      {
+        "filename": "Drivers/BSP/Components/nt35510/nt35510.c",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "changes": 2,
+        "previous_filename": null,
+        "patch": "@@ -100,7 +100,7 @@ uint8_t NT35510_Init(uint32_t ColorCoding, uint32_t orientation)\n   const uint8_t nt35510_reg16[] = {0x55, 0xAA, 0x52, 0x08, 0x00, 0xF0};\n   const uint8_t nt35510_reg17[] = {0xFC, 0x00, 0xB1};\n   const uint8_t nt35510_reg18[] = {0xB6, 0x03};\n-  const uint8_t nt35510_reg19[] = {0xB5, 0x51};\n+  const uint8_t nt35510_reg19[] = {0xB5, 0x50};\n   const uint8_t nt35510_reg20[] = {0x00, 0x00, 0xB7};\n   const uint8_t nt35510_reg21[] = {0x01, 0x02, 0x02, 0x02, 0xB8};\n   const uint8_t nt35510_reg22[] = {0x00, 0x00, 0x00, 0xBC};"
+      }
+    ],
+    "linked_issue_numbers": [],
+    "pr_numbers": [
+      169
+    ]
+  }
+]

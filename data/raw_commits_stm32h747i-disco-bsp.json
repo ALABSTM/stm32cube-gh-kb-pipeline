@@ -1,0 +1,35 @@
+[
+  {
+    "repo": "stm32h747i-disco-bsp",
+    "sha": "7249c023feddbc248cdaa062e1407524037e8c4d",
+    "author": "MiloAkerman",
+    "committer": "web-flow",
+    "message": "Fix typo in RecordPDM Parameters",
+    "authored_at": "2025-07-30T18:10:16Z",
+    "committed_at": "2025-07-30T18:10:16Z",
+    "github_url": "https://github.com/STMicroelectronics/stm32h747i-disco-bsp/commit/7249c023feddbc248cdaa062e1407524037e8c4d",
+    "parents": [
+      "c11e85749f760a7ee35d12ff7ee79646de75e6db"
+    ],
+    "stats": {
+      "additions": 1,
+      "deletions": 1,
+      "total": 2
+    },
+    "files_changed": [
+      {
+        "filename": "stm32h747i_discovery_audio.c",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "changes": 2,
+        "previous_filename": null,
+        "patch": "@@ -2072,7 +2072,7 @@ int32_t BSP_AUDIO_IN_Resume(uint32_t Instance)\n \n /**\n   * @brief  Start audio recording.\n-  * @param  Instance  AUDIO IN SAI PDM Instance. It can be only 2\n+  * @param  Instance  AUDIO IN SAI PDM Instance. It can only be 1\n   * @param  pBuf     Main buffer pointer for the recorded data storing\n   * @param  NbrOfBytes  Size of the record buffer\n   * @retval BSP status"
+      }
+    ],
+    "linked_issue_numbers": [],
+    "pr_numbers": [
+      8
+    ]
+  }
+]

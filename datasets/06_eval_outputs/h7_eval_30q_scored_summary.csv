@@ -1,0 +1,9 @@
+scope,run_id,dataset_label,avg_total_0_to_7,notes
+global,A,issues_only,2.93,Strong only on issues; very weak on files and mixed.
+global,B,issues_plus_files,5.33,Clear global gain with some mixed-case regressions.
+issues_only_block,A,issues_only,6.70,Very strong stability on issue-centric questions.
+issues_only_block,B,issues_plus_files,6.20,Comparable quality with one major outlier on Q09.
+files_only_block,A,issues_only,1.20,Coverage failure expected without files JSON.
+files_only_block,B,issues_plus_files,6.00,Major improvement after adding files JSON.
+mixed_block,A,issues_only,1.30,Mostly I DON'T KNOW due missing mixed coverage.
+mixed_block,B,issues_plus_files,4.10,Strong gain but still noisy on some mixed prompts.

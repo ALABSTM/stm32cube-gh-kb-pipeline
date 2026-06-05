@@ -1,0 +1,56 @@
+{
+  "issues": [
+    {
+      "id": "32f469idiscovery-bsp-issue-2",
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "32f469idiscovery-bsp",
+      "root_path": "issues",
+      "mcu_series": "F4",
+      "issue_number": 2,
+      "issue_title": "Misspelling in comments",
+      "state": "open",
+      "layer": "Other",
+      "component": null,
+      "issue_kind": "bug_report",
+      "severity": "low",
+      "board": null,
+      "labels": [
+        "bug",
+        "bsp",
+        "internal bug tracker"
+      ],
+      "github_url": "https://github.com/STMicroelectronics/32f469idiscovery-bsp/issues/2",
+      "is_valid": true,
+      "evidence_strength": "high",
+      "rescue_applied": false,
+      "delivery_template": "st_v2_structured_issue_card",
+      "st_ready_text": "Problem: Misspelling in comments\nContext: repo=32f469idiscovery-bsp, mcu_series=F4, board=None, component=None, layer=Other, issue_kind=bug_report, severity=low, evidence_strength=high, rescue_applied=False, state=open, issue_number=2\nRoot cause: PR #4 submitted with the typo fix (ititialization -> initialization in LCD comments).\nFix: https://github.\nConstraints: Validate against exact MCU/board configuration and CubeMX/CubeH7 version before applying.\nKeywords: F4, bug_report, low, bug, bsp, internal bug tracker\n\nTechnical details:\nhttps://github.com/STMicroelectronics/32f469idiscovery-bsp/blob/6e51dbf6865ce35dafc75e3a51d296b94285e7f1/stm32469i_discovery_lcd.c#L172 \"Ititilization\" is used multiple times in this comment where initialization was meant.\n\nKey comments:\nPR #4 submitted with the typo fix (ititialization -> initialization in LCD comments). Hello, Thank you for your report. This issue has been tracked internally. ST Internal Reference: CDM0062817"
+    },
+    {
+      "id": "32f469idiscovery-bsp-issue-1",
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "32f469idiscovery-bsp",
+      "root_path": "issues",
+      "mcu_series": "F4",
+      "issue_number": 1,
+      "issue_title": "Conditional Error in function DSI_IO_ReadCmd from stm32469i_discovery_lcd.c",
+      "state": "closed",
+      "layer": "HAL",
+      "component": "ADC",
+      "issue_kind": "bug_report",
+      "severity": "medium",
+      "board": null,
+      "labels": [
+        "bug",
+        "bsp",
+        "internal bug tracker"
+      ],
+      "github_url": "https://github.com/STMicroelectronics/32f469idiscovery-bsp/issues/1",
+      "is_valid": true,
+      "evidence_strength": "high",
+      "rescue_applied": false,
+      "delivery_template": "st_v2_structured_issue_card",
+      "st_ready_text": "Problem: Conditional Error in function DSI_IO_ReadCmd from stm32469i_discovery_lcd.c\nContext: repo=32f469idiscovery-bsp, mcu_series=F4, board=None, component=ADC, layer=HAL, issue_kind=bug_report, severity=medium, evidence_strength=high, rescue_applied=False, state=closed, issue_number=1\nRoot cause: Hello @JoCake, Thank you for your report.\nFix: Hello, Spotted minor error here, that would create incorrect debugging feedback mainly : [stm32469i_discovery_lcd.\nConstraints: Validate against exact MCU/board configuration and CubeMX/CubeH7 version before applying.\nKeywords: F4, HAL, ADC, bug_report, medium, bug, bsp, internal bug tracker, DSI_IO_ReadCmd, HAL_DSI_Read, hdsi_eval, LCD_Driver_ID\n\nTechnical details:\nHello, Spotted minor error here, that would create incorrect debugging feedback mainly : [stm32469i_discovery_lcd.c/int32_t DSI_IO_ReadCmd(uint32_t Reg, uint8_t *pData, uint32_t Size)](https://github.com/STMicroelectronics/32f469idiscovery-bsp/blob/f79918e76de5310aad28ebf33365f902f51df85b/stm32469i_discovery_lcd.c#L1346) inside the if condition it shouldn't be : c if(HAL_DSI_Read(&hdsi_eval, LCD_Driver_ID, pData, Size, DSI_DCS_SHORT_PKT_READ, Reg, pData)!= HAL_OK) but more: c if(HAL_DSI_Read(&hdsi_eval, LCD_Driver_ID, pData, Size, DSI_DCS_SHORT_PKT_READ, Reg, pData)== HAL_OK) Bye.\n\nKey comments:\nHello @JoCake, Thank you for your report. ST Internal Reference: 202226 Fixed in: aa9a1770a2dc7f30d2ba2d45d62124a94cf89d54"
+    }
+  ]
+}

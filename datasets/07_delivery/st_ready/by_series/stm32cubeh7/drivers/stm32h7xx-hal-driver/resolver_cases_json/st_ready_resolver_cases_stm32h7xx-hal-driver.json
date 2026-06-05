@@ -1,0 +1,355 @@
+{
+  "resolver_cases": [
+    {
+      "id": "resolver::stm32h7xx-hal-driver::issue::3",
+      "title": "HAL_FDCAN_GetRxMessage() evaluates GetIndex value for Rx FIFO overwrite scenario.",
+      "label": "HAL_FDCAN_GetRxMessage() evaluates GetIndex value for Rx FIFO overwrite scenario.",
+      "externalURL": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/3",
+      "rootTagPath": "resolver_cases",
+      "evidence_refs": [
+        {
+          "type": "issue",
+          "id": 3,
+          "url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/3"
+        }
+      ],
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "stm32h7xx-hal-driver",
+      "issue_root_path": "issues",
+      "pr_root_path": "pull",
+      "commit_root_path": "commit",
+      "issue_number": 3,
+      "issue_title": "HAL_FDCAN_GetRxMessage() evaluates GetIndex value for Rx FIFO overwrite scenario.",
+      "issue_labels": [
+        "bug",
+        "internal bug tracker",
+        "spotted before customer",
+        "hal"
+      ],
+      "issue_state": "closed",
+      "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/3",
+      "linked_pr_numbers": [
+        91
+      ],
+      "linked_commit_shas": [
+        "be9c8f73842d0cc398cca735ab2a8d48dc09f52c"
+      ],
+      "primary_pr_number": 91,
+      "primary_commit_sha": "be9c8f73842d0cc398cca735ab2a8d48dc09f52c",
+      "linked_pr_urls": [
+        "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/pull/91"
+      ],
+      "linked_commit_urls": [
+        "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/commit/be9c8f73842d0cc398cca735ab2a8d48dc09f52c"
+      ],
+      "resolution_status": "candidate_fix",
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0,
+      "link_confidence": "medium",
+      "link_score": 0.8,
+      "delivery_template": "st_v1_resolver_case",
+      "resolver_card_text": "Problem: Issue #3 - HAL_FDCAN_GetRxMessage() evaluates GetIndex value for Rx FIFO overwrite scenario.\nContext: repo=stm32h7xx-hal-driver, labels=bug, internal bug tracker, spotted before customer, hal, issue_state=closed\nResolver signal: resolution_status=candidate_fix, confidence=medium, score=0.8\nAssessment: Potential fix identified, but integration status is uncertain.\nCandidate PRs: Fix HAL_FDCAN_GetRxMessage GetIndex computation overflow in overwrite mode\nCommit evidence: Fix buffer overflow in HAL_FDCAN_GetRxMessage when FIFO overwrite mode is active\nPR #91 description: This fixes a buffer overflow that was likely caused by an incomplete fix of #3\r\n\r\nWhen the CAN peripheral RX FIFO is configured in overwrite mode, the `GetIndex` is (correctly) incremented by 1 to avoid reading from the element the peripheral might be writing to:\r\n\r\nhttps://github.com/STMicroelectronics/stm32h7xx-hal-driver/blob/dbfb749f229e1aa89e50b54229ca87766e180d2d/Src/stm32h7xx_hal_fdcan.c#L3015-L3028\r\n\r\nHowever, this ignores the fact that `GetIndex` might be pointing at the last element, in which case it has to be wrapped around instead. This PR fixes this by moving the offset-by-1 after the main `GetIndex` computation, and sets `GetIndex` to 0 if it overflowed. This should be the most performant way to do it, as the check is only done when the FIFO is actually full and overwrite mode is enabled.\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying.",
+      "linked_file_ids": [
+        "stm32h7xx-hal-driver-file-7258612164739999356"
+      ],
+      "linked_file_paths": [
+        "Src/stm32h7xx_hal_fdcan.c"
+      ],
+      "files_evidence": {
+        "changed_files_total": 1,
+        "matched_docs_files_count": 1,
+        "unmatched_files_count": 0,
+        "match_rate": 1.0,
+        "files": [
+          {
+            "path": "Src/stm32h7xx_hal_fdcan.c",
+            "status": "modified",
+            "additions": 21,
+            "deletions": 8,
+            "changes": 29,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "be9c8f73842d0cc398cca735ab2a8d48dc09f52c"
+            ],
+            "module": "src",
+            "file_doc_id": "stm32h7xx-hal-driver-file-7258612164739999356",
+            "file_type": "hal_driver_source",
+            "component": "CAN",
+            "board": "STM32H7XX",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/blob/master/Src/stm32h7xx_hal_fdcan.c",
+            "score": 49.0
+          }
+        ]
+      },
+      "impacted_modules": [
+        "src"
+      ],
+      "impacted_components": [
+        "CAN"
+      ],
+      "impacted_boards": [
+        "STM32H7XX"
+      ],
+      "impacted_file_types": [
+        "hal_driver_source"
+      ],
+      "primary_changed_file": {
+        "path": "Src/stm32h7xx_hal_fdcan.c",
+        "status": "modified",
+        "additions": 21,
+        "deletions": 8,
+        "changes": 29,
+        "touched_by_commits": 1,
+        "commit_shas": [
+          "be9c8f73842d0cc398cca735ab2a8d48dc09f52c"
+        ],
+        "module": "src",
+        "file_doc_id": "stm32h7xx-hal-driver-file-7258612164739999356",
+        "file_type": "hal_driver_source",
+        "component": "CAN",
+        "board": "STM32H7XX",
+        "example_name": null,
+        "source_match": "docs_files_exact",
+        "github_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/blob/master/Src/stm32h7xx_hal_fdcan.c",
+        "score": 49.0
+      }
+    },
+    {
+      "id": "resolver::stm32h7xx-hal-driver::issue::47",
+      "title": "Upgrading the hal library from 1.11.0 to 1.11.1 will cause the SPI master transmission to time out for no reason.",
+      "label": "Upgrading the hal library from 1.11.0 to 1.11.1 will cause the SPI master transmission to time out for no reason.",
+      "externalURL": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/47",
+      "rootTagPath": "resolver_cases",
+      "evidence_refs": [
+        {
+          "type": "issue",
+          "id": 47,
+          "url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/47"
+        }
+      ],
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "stm32h7xx-hal-driver",
+      "issue_root_path": "issues",
+      "pr_root_path": "pull",
+      "commit_root_path": "commit",
+      "issue_number": 47,
+      "issue_title": "Upgrading the hal library from 1.11.0 to 1.11.1 will cause the SPI master transmission to time out for no reason.",
+      "issue_labels": [
+        "bug",
+        "documentation"
+      ],
+      "issue_state": "closed",
+      "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/47",
+      "linked_pr_numbers": [
+        48
+      ],
+      "linked_commit_shas": [
+        "61994139b7643fc8f57127b3d84915ad5363cb80"
+      ],
+      "primary_pr_number": 48,
+      "primary_commit_sha": "61994139b7643fc8f57127b3d84915ad5363cb80",
+      "linked_pr_urls": [
+        "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/pull/48"
+      ],
+      "linked_commit_urls": [
+        "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/commit/61994139b7643fc8f57127b3d84915ad5363cb80"
+      ],
+      "resolution_status": "candidate_fix",
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0,
+      "link_confidence": "medium",
+      "link_score": 0.8,
+      "delivery_template": "st_v1_resolver_case",
+      "resolver_card_text": "Problem: Issue #47 - Upgrading the hal library from 1.11.0 to 1.11.1 will cause the SPI master transmission to time out for no reason.\nContext: repo=stm32h7xx-hal-driver, labels=bug, documentation, issue_state=closed\nResolver signal: resolution_status=candidate_fix, confidence=medium, score=0.8\nAssessment: Potential fix identified, but integration status is uncertain.\nCandidate PRs: fix the bug that the spi suspend flag is not cleared\nCommit evidence: fix the bug that the spi suspend flag is not cleared\nPR #48 description: This PR fix the issue #47 .\r\n\r\nThe thing is that the SPI master in the rx only mode won't wait the CPU to get data from the fifo. So if a interrupt occured during the `HAL_SPI_Receive`, data will lose and the `while (hspi->RxXferCount > 0UL)` will nerver exit, which will then cause a timeout error.\r\n\r\nThere is actually a bit `MASRX` designed for the SPI mater to wait CPU, but after the CPU get data, the SUSP flag need to be cleared in order to start the receive according to the reference manual.\r\n\r\nWithout clearing the susp bit, the SPI master won't receive data anymore, which will also cause a timeout.  Very much like the case without setting MASRX.\r\n\r\nThis PR fixed this bug by adding codes to clear the susp flag in `HAL_SPI_Receive`. After my testing, I think it works very well.\r\n\r\n[IMAGE ATTACHED]\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying.",
+      "linked_file_ids": [
+        "stm32h7xx-hal-driver-file-7876143443303966046"
+      ],
+      "linked_file_paths": [
+        "Src/stm32h7xx_hal_spi.c"
+      ],
+      "files_evidence": {
+        "changed_files_total": 1,
+        "matched_docs_files_count": 1,
+        "unmatched_files_count": 0,
+        "match_rate": 1.0,
+        "files": [
+          {
+            "path": "Src/stm32h7xx_hal_spi.c",
+            "status": "modified",
+            "additions": 15,
+            "deletions": 0,
+            "changes": 15,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "61994139b7643fc8f57127b3d84915ad5363cb80"
+            ],
+            "module": "src",
+            "file_doc_id": "stm32h7xx-hal-driver-file-7876143443303966046",
+            "file_type": "hal_driver_source",
+            "component": "DMA",
+            "board": "STM32H7XX",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/blob/master/Src/stm32h7xx_hal_spi.c",
+            "score": 35.0
+          }
+        ]
+      },
+      "impacted_modules": [
+        "src"
+      ],
+      "impacted_components": [
+        "DMA"
+      ],
+      "impacted_boards": [
+        "STM32H7XX"
+      ],
+      "impacted_file_types": [
+        "hal_driver_source"
+      ],
+      "primary_changed_file": {
+        "path": "Src/stm32h7xx_hal_spi.c",
+        "status": "modified",
+        "additions": 15,
+        "deletions": 0,
+        "changes": 15,
+        "touched_by_commits": 1,
+        "commit_shas": [
+          "61994139b7643fc8f57127b3d84915ad5363cb80"
+        ],
+        "module": "src",
+        "file_doc_id": "stm32h7xx-hal-driver-file-7876143443303966046",
+        "file_type": "hal_driver_source",
+        "component": "DMA",
+        "board": "STM32H7XX",
+        "example_name": null,
+        "source_match": "docs_files_exact",
+        "github_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/blob/master/Src/stm32h7xx_hal_spi.c",
+        "score": 35.0
+      }
+    },
+    {
+      "id": "resolver::stm32h7xx-hal-driver::issue::76",
+      "title": "DMA HAL enables FIFO Error interrupt even if the FIFO is not enabled",
+      "label": "DMA HAL enables FIFO Error interrupt even if the FIFO is not enabled",
+      "externalURL": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/76",
+      "rootTagPath": "resolver_cases",
+      "evidence_refs": [
+        {
+          "type": "issue",
+          "id": 76,
+          "url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/76"
+        }
+      ],
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "stm32h7xx-hal-driver",
+      "issue_root_path": "issues",
+      "pr_root_path": "pull",
+      "commit_root_path": "commit",
+      "issue_number": 76,
+      "issue_title": "DMA HAL enables FIFO Error interrupt even if the FIFO is not enabled",
+      "issue_labels": [
+        "bug",
+        "invalid",
+        "internal bug tracker",
+        "st community",
+        "hal",
+        "dma"
+      ],
+      "issue_state": "closed",
+      "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/76",
+      "linked_pr_numbers": [
+        78
+      ],
+      "linked_commit_shas": [
+        "19fe437fe48c70d890f8d3e0a016ea8168ee96d9"
+      ],
+      "primary_pr_number": 78,
+      "primary_commit_sha": "19fe437fe48c70d890f8d3e0a016ea8168ee96d9",
+      "linked_pr_urls": [
+        "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/pull/78"
+      ],
+      "linked_commit_urls": [
+        "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/commit/19fe437fe48c70d890f8d3e0a016ea8168ee96d9"
+      ],
+      "resolution_status": "candidate_fix",
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0,
+      "link_confidence": "medium",
+      "link_score": 0.8,
+      "delivery_template": "st_v1_resolver_case",
+      "resolver_card_text": "Problem: Issue #76 - DMA HAL enables FIFO Error interrupt even if the FIFO is not enabled\nContext: repo=stm32h7xx-hal-driver, labels=bug, invalid, internal bug tracker, st community, hal, dma, issue_state=closed\nResolver signal: resolution_status=candidate_fix, confidence=medium, score=0.8\nAssessment: Potential fix identified, but integration status is uncertain.\nCandidate PRs: Fix DMA HAL enabling FIFO Error interrupt even if FIFO is not enabled\nCommit evidence: Fix DMA HAL enabling FIFO Error interrupt even if FIFO is not enabled Related to #76 Add condition to enable FIFO Error interrupt only if FIFO is enabled.\nPR #78 description: Related to #76\n\nAdd condition to enable FIFO Error interrupt only if FIFO is enabled.\n\n* Modify `Src/stm32h7xx_hal_dma_ex.c` to check if FIFO is enabled before enabling FIFO Error interrupt.\n* Add condition to line 292 to enable FIFO Error interrupt only if FIFO is enabled (direct mode disabled).\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying.",
+      "linked_file_ids": [
+        "stm32h7xx-hal-driver-file-8155175628400740795"
+      ],
+      "linked_file_paths": [
+        "Src/stm32h7xx_hal_dma_ex.c"
+      ],
+      "files_evidence": {
+        "changed_files_total": 1,
+        "matched_docs_files_count": 1,
+        "unmatched_files_count": 0,
+        "match_rate": 1.0,
+        "files": [
+          {
+            "path": "Src/stm32h7xx_hal_dma_ex.c",
+            "status": "modified",
+            "additions": 4,
+            "deletions": 2,
+            "changes": 6,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "19fe437fe48c70d890f8d3e0a016ea8168ee96d9"
+            ],
+            "module": "src",
+            "file_doc_id": "stm32h7xx-hal-driver-file-8155175628400740795",
+            "file_type": "hal_driver_source",
+            "component": "DMA",
+            "board": "STM32H7XX",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/blob/master/Src/stm32h7xx_hal_dma_ex.c",
+            "score": 26.0
+          }
+        ]
+      },
+      "impacted_modules": [
+        "src"
+      ],
+      "impacted_components": [
+        "DMA"
+      ],
+      "impacted_boards": [
+        "STM32H7XX"
+      ],
+      "impacted_file_types": [
+        "hal_driver_source"
+      ],
+      "primary_changed_file": {
+        "path": "Src/stm32h7xx_hal_dma_ex.c",
+        "status": "modified",
+        "additions": 4,
+        "deletions": 2,
+        "changes": 6,
+        "touched_by_commits": 1,
+        "commit_shas": [
+          "19fe437fe48c70d890f8d3e0a016ea8168ee96d9"
+        ],
+        "module": "src",
+        "file_doc_id": "stm32h7xx-hal-driver-file-8155175628400740795",
+        "file_type": "hal_driver_source",
+        "component": "DMA",
+        "board": "STM32H7XX",
+        "example_name": null,
+        "source_match": "docs_files_exact",
+        "github_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/blob/master/Src/stm32h7xx_hal_dma_ex.c",
+        "score": 26.0
+      }
+    }
+  ]
+}

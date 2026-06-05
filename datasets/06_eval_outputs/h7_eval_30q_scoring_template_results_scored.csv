@@ -1,0 +1,61 @@
+run_id,dataset_label,question_id,question_group,is_expected_source_match_0_or_1,is_topical_match_0_or_1,technical_precision_0_to_2,hallucination_risk_0_to_2,actionability_0_to_2,total_0_to_7,notes
+A,issues_only,Q01,issues,1,1,2,2,1,6,Correct known CubeMX bug and internal reference.
+B,issues_plus_files,Q01,issues,1,1,2,2,1,6,Correct and more detailed than A.
+A,issues_only,Q02,issues,1,1,2,2,2,7,Correct ADC DMA modes and clear do/dont guidance.
+B,issues_plus_files,Q02,issues,1,1,2,2,2,7,Correct and actionable.
+A,issues_only,Q03,issues,1,1,2,2,2,7,Good dual-core standby root-cause framing.
+B,issues_plus_files,Q03,issues,1,1,2,2,2,7,Correct and concise on option-bytes cause.
+A,issues_only,Q04,issues,1,1,2,2,2,7,Good HSEM wake chain diagnosis.
+B,issues_plus_files,Q04,issues,1,1,2,2,2,7,Correct with concrete API-level checks.
+A,issues_only,Q05,issues,1,1,2,1,2,6,Technically useful but some proposals remain risky in generated code.
+B,issues_plus_files,Q05,issues,1,1,2,1,2,6,Same strengths and same caveat as A.
+A,issues_only,Q06,issues,1,1,2,2,1,6,Correct COM1 to USART3 mapping statement.
+B,issues_plus_files,Q06,issues,1,1,2,2,1,6,Correct and concise.
+A,issues_only,Q07,issues,1,1,2,2,2,7,Correct FR_NOT_READY diagnosis path.
+B,issues_plus_files,Q07,issues,1,1,2,2,2,7,Correct and practical.
+A,issues_only,Q08,issues,1,1,2,2,2,7,Correct datasheet-bound ADC clock and BOOST rule.
+B,issues_plus_files,Q08,issues,1,1,2,2,2,7,Correct and production-friendly.
+A,issues_only,Q09,issues,1,1,2,2,2,7,Strong wakeup debug sequence.
+B,issues_plus_files,Q09,issues,1,0,1,1,0,2,Response polluted by merged outputs and format drift.
+A,issues_only,Q10,issues,1,1,2,2,2,7,Correct LL calibration sequence.
+B,issues_plus_files,Q10,issues,1,1,2,2,2,7,Correct and clear.
+A,issues_only,Q11,files,0,1,1,1,1,3,Partially relevant but expected file source not available in issues-only setup.
+B,issues_plus_files,Q11,files,1,1,2,2,2,7,Correct README command for recursive clone.
+A,issues_only,Q12,files,0,0,0,2,0,1,I DON'T KNOW (safe abstention but no coverage).
+B,issues_plus_files,Q12,files,1,1,2,2,2,7,Correct update commands including submodules.
+A,issues_only,Q13,files,0,0,0,2,0,1,I DON'T KNOW (safe abstention).
+B,issues_plus_files,Q13,files,1,1,1,2,2,6,Useful but should also mention git checkout path explicitly.
+A,issues_only,Q14,files,0,0,0,2,0,1,I DON'T KNOW (safe abstention).
+B,issues_plus_files,Q14,files,1,1,2,2,1,6,Correct unavailable middleware list and where to get full package.
+A,issues_only,Q15,files,0,0,0,2,0,1,I DON'T KNOW (safe abstention).
+B,issues_plus_files,Q15,files,1,1,1,2,1,5,Mostly correct but partially mixes scope and version-gap explanation.
+A,issues_only,Q16,files,0,0,0,2,0,1,I DON'T KNOW (safe abstention).
+B,issues_plus_files,Q16,files,1,1,2,2,1,6,Correct project-type summary from README.
+A,issues_only,Q17,files,0,0,0,2,0,1,I DON'T KNOW (safe abstention).
+B,issues_plus_files,Q17,files,1,1,1,2,1,5,On-topic but too generic for a location-focused question.
+A,issues_only,Q18,files,0,0,0,2,0,1,I DON'T KNOW (safe abstention).
+B,issues_plus_files,Q18,files,1,1,1,2,1,5,Partial board list (NUCLEO only) misses full EVAL/DK scope.
+A,issues_only,Q19,files,0,0,0,2,0,1,I DON'T KNOW (safe abstention).
+B,issues_plus_files,Q19,files,1,1,2,2,1,6,Correct Download ZIP recommendation.
+A,issues_only,Q20,files,0,0,0,2,0,1,I DON'T KNOW (safe abstention).
+B,issues_plus_files,Q20,files,1,1,2,2,2,7,Strong explanation of recursive vs shallow branch clone.
+A,issues_only,Q21,mixed,0,0,0,2,0,1,I DON'T KNOW due missing file context in issues-only.
+B,issues_plus_files,Q21,mixed,0,1,1,1,1,3,Partially on-topic but not anchored to expected issue path.
+A,issues_only,Q22,mixed,0,0,0,2,0,1,I DON'T KNOW due missing mixed coverage.
+B,issues_plus_files,Q22,mixed,0,1,1,1,1,3,Partially useful but weak source anchoring to expected issue.
+A,issues_only,Q23,mixed,0,0,0,2,0,1,I DON'T KNOW due missing mixed coverage.
+B,issues_plus_files,Q23,mixed,1,1,1,2,1,5,Good first half but incomplete second half (release docs).
+A,issues_only,Q24,mixed,1,1,1,2,1,4,Partial answer on issue side but misses README version precautions.
+B,issues_plus_files,Q24,mixed,0,0,0,1,0,0,Off-topic drift (USB wakeup) for a dual-core standby question.
+A,issues_only,Q25,mixed,0,0,0,2,0,1,I DON'T KNOW.
+B,issues_plus_files,Q25,mixed,1,1,2,1,2,6,High-quality technical answer with clear constraints.
+A,issues_only,Q26,mixed,0,0,0,2,0,1,I DON'T KNOW.
+B,issues_plus_files,Q26,mixed,1,1,1,1,2,5,Useful process guidance but remains generic on exact repro protocol.
+A,issues_only,Q27,mixed,0,0,0,2,0,1,I DON'T KNOW.
+B,issues_plus_files,Q27,mixed,1,1,1,1,1,4,Partially good linkage board+mapping but not fully specific.
+A,issues_only,Q28,mixed,0,0,0,2,0,1,I DON'T KNOW.
+B,issues_plus_files,Q28,mixed,1,1,2,1,2,6,Good coherence-check method combining issue and docs.
+A,issues_only,Q29,mixed,0,0,0,2,0,1,I DON'T KNOW.
+B,issues_plus_files,Q29,mixed,1,1,1,1,2,5,Good method framing but still generic.
+A,issues_only,Q30,mixed,0,0,0,2,0,1,I DON'T KNOW.
+B,issues_plus_files,Q30,mixed,1,1,1,1,1,4,Correct principle but moderate depth/actionability.

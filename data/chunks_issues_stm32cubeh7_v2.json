@@ -1,7 +1,127 @@
 [
   {
+    "id": "stm32cubeh7-issue-343-0",
+    "text": "Title: [Bug]: HAL_CRYP_Decrypt_DMA fails when transfer size is > 65535 bytes\n\nBody:\n### Bug Summary\n\nHAL_CRYP_Decrypt_DMA fails when transfer size is > 65535 bytes\n\n### Detailed Description\n\nWith CRYP set up with word-sized transfers (CRYP_DATAWIDTHUNIT_WORD), it should be able to process 65535 words, or up to 262140 bytes. Internal to HAL, the Size field is set to the number of bytes in the operation, not the number of words, which causes an overflow in the uint16_t value.\nhttps://github.com/STMicroelectronics/stm32h7xx-hal-driver/blob/a1996eed9172b59887bafaaa0ea1816ea14d48b5/Src/stm32h7xx_hal_cryp.c#L1587\n\n/*  Calculate Size parameter in Byte*/\n    if (hcryp->Init.DataWidthUnit == CRYP_DATAWIDTHUNIT_WORD)\n    {\n      hcryp->Size = Size * 4U;\n    }\n    else\n    {\n      hcryp->Size = Size;\n    }\n\nThe comments say that Size is the number of bytes or the number of words, depending on DataWidthUnit. However, the code sets it to the number of bytes regardless of the DataWidthUnit setting.\nhttps://github.com/STMicroelectronics/stm32h7xx-hal-driver/blob/a1996eed9172b59887bafaaa0ea1816ea14d48b5/Inc/stm32h7xx_hal_cryp.h#L111",
+    "metadata": {
+      "id": "stm32cubeh7-issue-343",
+      "source_kind": "issue",
+      "repo": "STM32CubeH7",
+      "mcu_package": "STM32CubeH7",
+      "mcu_series": "H7",
+      "type": "issue",
+      "path": null,
+      "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/343",
+      "board": "STM32H7XX",
+      "category": null,
+      "component": "DMA",
+      "example_name": null,
+      "issue_number": 343,
+      "issue_title": "[Bug]: HAL_CRYP_Decrypt_DMA fails when transfer size is > 65535 bytes",
+      "state": "open",
+      "labels": [
+        "bug",
+        "internal bug tracker",
+        "hal",
+        "cryp"
+      ],
+      "is_confirmed_bug": true,
+      "created_at": "2026-04-11T17:26:39Z",
+      "closed_at": null,
+      "ingest_version": "v2.0",
+      "image_urls": [],
+      "images_count": 0,
+      "is_valid": true,
+      "layer": "HAL",
+      "severity": "medium",
+      "issue_kind": "bug_report",
+      "related_issue_ids": [],
+      "chunk_index": 0,
+      "chunk_count": 2
+    }
+  },
+  {
+    "id": "stm32cubeh7-issue-343-1",
+    "text": "uint16_t                          Size;           /*!< length of input data in word or in byte, according to DataWidthUnit */\n\nIt looks like many of the DMA functions are passed Size / 4.\n\nThe same issue is present within HAL_CRYP_Encrypt_DMA and possibly others.\n\nCommunity post:\nhttps://community.st.com/t5/stm32-mcus-security/unexpected-behavior-of-the-stm32-cryp-module/m-p/891638#M9633\n\n### Expected Behavior\n\nHAL_CRYP_Decrypt_DMA functions correctly for operations on <= 65535 words when set to CRYP_DATAWIDTHUNIT_WORD\n\n### Actual Behavior\n\nThe transfer size is truncated due to the number of bytes being stored as a uint16_t\n\n### Environment\n\n_No response_\n\n### Severity\n\nNormal\n\nComments:\n[MKISTM - 2026-04-14T10:51:10Z]\nHello @timkostka,\n\nThank you for your report, it seems that point makes sense and will be tracked internally.\nI'll keep you informed about last update and our decision about this point.\n\nBR,\nMohamed Chaker.\n\n[MKISTM - 2026-04-14T10:51:41Z]\nST Internal Reference: CDM0061687",
+    "metadata": {
+      "id": "stm32cubeh7-issue-343",
+      "source_kind": "issue",
+      "repo": "STM32CubeH7",
+      "mcu_package": "STM32CubeH7",
+      "mcu_series": "H7",
+      "type": "issue",
+      "path": null,
+      "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/343",
+      "board": "STM32H7XX",
+      "category": null,
+      "component": "DMA",
+      "example_name": null,
+      "issue_number": 343,
+      "issue_title": "[Bug]: HAL_CRYP_Decrypt_DMA fails when transfer size is > 65535 bytes",
+      "state": "open",
+      "labels": [
+        "bug",
+        "internal bug tracker",
+        "hal",
+        "cryp"
+      ],
+      "is_confirmed_bug": true,
+      "created_at": "2026-04-11T17:26:39Z",
+      "closed_at": null,
+      "ingest_version": "v2.0",
+      "image_urls": [],
+      "images_count": 0,
+      "is_valid": true,
+      "layer": "HAL",
+      "severity": "medium",
+      "issue_kind": "bug_report",
+      "related_issue_ids": [],
+      "chunk_index": 1,
+      "chunk_count": 2
+    }
+  },
+  {
+    "id": "stm32cubeh7-issue-339-0",
+    "text": "Title: [Bug]: USART with a single line\n\nBody:\n### Bug Summary\n\nIn CubeMx, the assignment of pins when trying to use a UART with a single data line is not OK\n\n### Detailed Description\n\nWhen setting a USART to Asynchronous and then setting Advanced Parameters->Data direction to Receive only or Transmit only, both pins stay selected and there's no way of unassigning one. For instance, if I set it to Receive only, I would expect the TX pin to be unassigned.\n\n### Expected Behavior\n\nIf I set it to Receive only, I would expect the TX pin to be unassigned.\n\n### Actual Behavior\n\nboth pins stay assigned and cannot be unassigned\n\n### Environment\n\nCubeMx 6.16.1\n\n### Severity\n\nNone\n\nComments:\n[KRASTM - 2026-03-26T16:17:01Z]\nST Internal Reference: CDM0061073",
+    "metadata": {
+      "id": "stm32cubeh7-issue-339",
+      "source_kind": "issue",
+      "repo": "STM32CubeH7",
+      "mcu_package": "STM32CubeH7",
+      "mcu_series": "H7",
+      "type": "issue",
+      "path": null,
+      "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/339",
+      "board": null,
+      "category": null,
+      "component": "UART",
+      "example_name": null,
+      "issue_number": 339,
+      "issue_title": "[Bug]: USART with a single line",
+      "state": "open",
+      "labels": [
+        "bug",
+        "internal bug tracker",
+        "cube mx",
+        "usart"
+      ],
+      "is_confirmed_bug": true,
+      "created_at": "2026-03-19T20:13:40Z",
+      "closed_at": null,
+      "ingest_version": "v2.0",
+      "image_urls": [],
+      "images_count": 0,
+      "is_valid": true,
+      "layer": "CubeMX",
+      "severity": "medium",
+      "issue_kind": "bug_report",
+      "related_issue_ids": [],
+      "chunk_index": 0,
+      "chunk_count": 1
+    }
+  },
+  {
     "id": "stm32cubeh7-issue-338-0",
-    "text": "Title: [Bug]: CubeMx allows an invalid combination of parameters for ADC with DMA\n\nBody:\n### Bug Summary\n\nCubeMx allows an invalid combination of parameters for ADC with DMA\n\n### Detailed Description\n\nWhen DMA is enabled on an ADC, DMA requests will only be issued if ADC_InitTypeDef::ConversionDataManagement is set to ADC_CONVERSIONDATA_DMA_ONESHOT or ADC_CONVERSIONDATA_DMA_CIRCULAR. That is to say, ADC_CONVERSIONDATA_DR and ADC_CONVERSIONDATA_DFSDM are invalid when DMA is enabled.\n\nThe issue is that if Conversion Data Management Mode is not set to ADC_CONVERSIONDATA_DMA_CIRCULAR or ADC_CONVERSIONDATA_DR, then CubeMx will generate some unusable code.\n\nCubeMx could detect and flag this issue for the user. Or it could disable non-DMA values when DMA is enabled. Or it could make it more obvious to the user some other way that there is some DMA-relevant (and, indeed, crucial) setting in that otherwise irrelevant-looking \"Conversion Data Management Mode\".\n\n### Expected Behavior\n\n_No response_\n\n### Actual Behavior\n\n_No response_\n\n### Environment\n\nCubeMx 6.16.1, STM32H743VITx, ADC1\n\n### Severity\n\nNone",
+    "text": "Title: [Bug]: CubeMx allows an invalid combination of parameters for ADC with DMA\n\nBody:\n### Bug Summary\n\nCubeMx allows an invalid combination of parameters for ADC with DMA\n\n### Detailed Description\n\nWhen DMA is enabled on an ADC, DMA requests will only be issued if ADC_InitTypeDef::ConversionDataManagement is set to ADC_CONVERSIONDATA_DMA_ONESHOT or ADC_CONVERSIONDATA_DMA_CIRCULAR. That is to say, ADC_CONVERSIONDATA_DR and ADC_CONVERSIONDATA_DFSDM are invalid when DMA is enabled.\n\nThe issue is that if Conversion Data Management Mode is not set to ADC_CONVERSIONDATA_DMA_CIRCULAR or ~~ADC CONVERSIONDATA DR~~ ADC_CONVERSIONDATA_DMA_ONESHOT, then CubeMx will generate some unusable code.\n\nCubeMx could detect and flag this issue for the user. Or it could disable non-DMA values when DMA is enabled. Or it could make it more obvious to the user some other way that there is some DMA-relevant (and, indeed, crucial) setting in that otherwise irrelevant-looking \"Conversion Data Management Mode\".\n\n### Expected Behavior\n\n_No response_\n\n### Actual Behavior\n\n_No response_\n\n### Environment\n\nCubeMx 6.16.1, STM32H743VITx, ADC1\n\n### Severity\n\nNone",
     "metadata": {
       "id": "stm32cubeh7-issue-338",
       "source_kind": "issue",
@@ -19,7 +139,10 @@
       "issue_title": "[Bug]: CubeMx allows an invalid combination of parameters for ADC with DMA",
       "state": "open",
       "labels": [
-        "bug"
+        "enhancement",
+        "internal bug tracker",
+        "cube mx",
+        "adc"
       ],
       "is_confirmed_bug": true,
       "created_at": "2026-03-05T22:46:50Z",
@@ -29,11 +152,51 @@
       "images_count": 0,
       "is_valid": true,
       "layer": "CubeMX",
-      "severity": "medium",
+      "severity": "low",
       "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 0,
-      "chunk_count": 1
+      "chunk_count": 2
+    }
+  },
+  {
+    "id": "stm32cubeh7-issue-338-1",
+    "text": "Comments:\n[MKISTM - 2026-03-09T10:34:59Z]\nHello @giuliomoro,\n\nThank you for your report, I think there is a small typo in your sentence\n\n> The issue is that if Conversion Data Management Mode is not set to ADC_CONVERSIONDATA_DMA_CIRCULAR or ADC_CONVERSIONDATA_DR, then CubeMx will generate some unusable code.\n\nYou mean ADC_CONVERSIONDATA_DMA_ONESHOT instead ADC_CONVERSIONDATA_DR ?\n\nBR,\nMohamed Chaker.\n\n[giuliomoro - 2026-03-09T13:03:36Z]\nyes correct, I now amended the original post for clarity.\n\n[MKISTM - 2026-03-19T14:00:07Z]\nHello @giuliomoro,\n\nThank you for your report, this point has been tracked internally.\nI'll keep you informed.\n\nBR,\nMohamed Chaker.\n\n[MKISTM - 2026-03-19T14:00:34Z]\nST Internal Reference: CDM0060711",
+    "metadata": {
+      "id": "stm32cubeh7-issue-338",
+      "source_kind": "issue",
+      "repo": "STM32CubeH7",
+      "mcu_package": "STM32CubeH7",
+      "mcu_series": "H7",
+      "type": "issue",
+      "path": null,
+      "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/338",
+      "board": "STM32H743VITX",
+      "category": null,
+      "component": "ADC",
+      "example_name": null,
+      "issue_number": 338,
+      "issue_title": "[Bug]: CubeMx allows an invalid combination of parameters for ADC with DMA",
+      "state": "open",
+      "labels": [
+        "enhancement",
+        "internal bug tracker",
+        "cube mx",
+        "adc"
+      ],
+      "is_confirmed_bug": true,
+      "created_at": "2026-03-05T22:46:50Z",
+      "closed_at": null,
+      "ingest_version": "v2.0",
+      "image_urls": [],
+      "images_count": 0,
+      "is_valid": true,
+      "layer": "CubeMX",
+      "severity": "low",
+      "issue_kind": "bug_report",
+      "related_issue_ids": [],
+      "chunk_index": 1,
+      "chunk_count": 2
     }
   },
   {
@@ -271,10 +434,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -286,7 +451,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 0,
       "chunk_count": 32
@@ -312,10 +477,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -327,7 +494,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 1,
       "chunk_count": 32
@@ -353,10 +520,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -368,7 +537,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 2,
       "chunk_count": 32
@@ -394,10 +563,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -409,7 +580,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 3,
       "chunk_count": 32
@@ -435,10 +606,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -450,7 +623,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 4,
       "chunk_count": 32
@@ -476,10 +649,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -491,7 +666,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 5,
       "chunk_count": 32
@@ -517,10 +692,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -532,7 +709,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 6,
       "chunk_count": 32
@@ -558,10 +735,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -573,7 +752,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 7,
       "chunk_count": 32
@@ -599,10 +778,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -614,7 +795,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 8,
       "chunk_count": 32
@@ -640,10 +821,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -655,7 +838,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 9,
       "chunk_count": 32
@@ -681,10 +864,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -696,7 +881,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 10,
       "chunk_count": 32
@@ -722,10 +907,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -737,7 +924,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 11,
       "chunk_count": 32
@@ -763,10 +950,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -778,7 +967,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 12,
       "chunk_count": 32
@@ -804,10 +993,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -819,7 +1010,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 13,
       "chunk_count": 32
@@ -845,10 +1036,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -860,7 +1053,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 14,
       "chunk_count": 32
@@ -886,10 +1079,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -901,7 +1096,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 15,
       "chunk_count": 32
@@ -927,10 +1122,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -942,7 +1139,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 16,
       "chunk_count": 32
@@ -968,10 +1165,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -983,7 +1182,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 17,
       "chunk_count": 32
@@ -1009,10 +1208,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -1024,7 +1225,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 18,
       "chunk_count": 32
@@ -1050,10 +1251,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -1065,7 +1268,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 19,
       "chunk_count": 32
@@ -1091,10 +1294,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -1106,7 +1311,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 20,
       "chunk_count": 32
@@ -1132,10 +1337,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -1147,7 +1354,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 21,
       "chunk_count": 32
@@ -1173,10 +1380,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -1188,7 +1397,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 22,
       "chunk_count": 32
@@ -1214,10 +1423,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -1229,7 +1440,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 23,
       "chunk_count": 32
@@ -1255,10 +1466,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -1270,7 +1483,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 24,
       "chunk_count": 32
@@ -1296,10 +1509,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -1311,7 +1526,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 25,
       "chunk_count": 32
@@ -1337,10 +1552,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -1352,7 +1569,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 26,
       "chunk_count": 32
@@ -1378,10 +1595,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -1393,7 +1612,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 27,
       "chunk_count": 32
@@ -1419,10 +1638,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -1434,7 +1655,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 28,
       "chunk_count": 32
@@ -1460,10 +1681,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -1475,7 +1698,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 29,
       "chunk_count": 32
@@ -1501,10 +1724,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -1516,7 +1741,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 30,
       "chunk_count": 32
@@ -1542,10 +1767,12 @@
       "issue_title": "Fix compile time warnings without removing the set compiler flags.",
       "state": "closed",
       "labels": [
+        "bug",
         "enhancement",
+        "cube mx",
         "cmsis"
       ],
-      "is_confirmed_bug": false,
+      "is_confirmed_bug": true,
       "created_at": "2026-02-08T09:33:06Z",
       "closed_at": "2026-02-16T13:46:23Z",
       "ingest_version": "v2.0",
@@ -1557,7 +1784,7 @@
       "is_valid": true,
       "layer": "HAL",
       "severity": "high",
-      "issue_kind": "other",
+      "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 31,
       "chunk_count": 32
@@ -1939,30 +2166,27 @@
       "example_name": null,
       "issue_number": 327,
       "issue_title": "EEPROM emulation example - bugs",
-      "state": "open",
+      "state": "closed",
       "labels": [
         "bug",
         "internal bug tracker",
-        "projects",
-        "needs clarification"
+        "projects"
       ],
       "is_confirmed_bug": true,
       "created_at": "2025-10-02T08:15:10Z",
-      "closed_at": null,
+      "closed_at": "2026-03-31T14:39:21Z",
       "ingest_version": "v2.0",
       "image_urls": [],
       "images_count": 0,
       "is_valid": true,
       "layer": "Other",
-      "severity": "medium",
+      "severity": "high",
       "issue_kind": "bug_report",
       "related_issue_ids": [
-        "stm32cubeh7-issue-228",
-        "stm32cubeh7-issue-174",
-        "stm32cubeh7-issue-309"
+        "stm32cubeh7-issue-228"
       ],
       "chunk_index": 0,
-      "chunk_count": 6
+      "chunk_count": 10
     }
   },
   {
@@ -1983,30 +2207,27 @@
       "example_name": null,
       "issue_number": 327,
       "issue_title": "EEPROM emulation example - bugs",
-      "state": "open",
+      "state": "closed",
       "labels": [
         "bug",
         "internal bug tracker",
-        "projects",
-        "needs clarification"
+        "projects"
       ],
       "is_confirmed_bug": true,
       "created_at": "2025-10-02T08:15:10Z",
-      "closed_at": null,
+      "closed_at": "2026-03-31T14:39:21Z",
       "ingest_version": "v2.0",
       "image_urls": [],
       "images_count": 0,
       "is_valid": true,
       "layer": "Other",
-      "severity": "medium",
+      "severity": "high",
       "issue_kind": "bug_report",
       "related_issue_ids": [
-        "stm32cubeh7-issue-228",
-        "stm32cubeh7-issue-174",
-        "stm32cubeh7-issue-309"
+        "stm32cubeh7-issue-228"
       ],
       "chunk_index": 1,
-      "chunk_count": 6
+      "chunk_count": 10
     }
   },
   {
@@ -2027,30 +2248,27 @@
       "example_name": null,
       "issue_number": 327,
       "issue_title": "EEPROM emulation example - bugs",
-      "state": "open",
+      "state": "closed",
       "labels": [
         "bug",
         "internal bug tracker",
-        "projects",
-        "needs clarification"
+        "projects"
       ],
       "is_confirmed_bug": true,
       "created_at": "2025-10-02T08:15:10Z",
-      "closed_at": null,
+      "closed_at": "2026-03-31T14:39:21Z",
       "ingest_version": "v2.0",
       "image_urls": [],
       "images_count": 0,
       "is_valid": true,
       "layer": "Other",
-      "severity": "medium",
+      "severity": "high",
       "issue_kind": "bug_report",
       "related_issue_ids": [
-        "stm32cubeh7-issue-228",
-        "stm32cubeh7-issue-174",
-        "stm32cubeh7-issue-309"
+        "stm32cubeh7-issue-228"
       ],
       "chunk_index": 2,
-      "chunk_count": 6
+      "chunk_count": 10
     }
   },
   {
@@ -2071,30 +2289,27 @@
       "example_name": null,
       "issue_number": 327,
       "issue_title": "EEPROM emulation example - bugs",
-      "state": "open",
+      "state": "closed",
       "labels": [
         "bug",
         "internal bug tracker",
-        "projects",
-        "needs clarification"
+        "projects"
       ],
       "is_confirmed_bug": true,
       "created_at": "2025-10-02T08:15:10Z",
-      "closed_at": null,
+      "closed_at": "2026-03-31T14:39:21Z",
       "ingest_version": "v2.0",
       "image_urls": [],
       "images_count": 0,
       "is_valid": true,
       "layer": "Other",
-      "severity": "medium",
+      "severity": "high",
       "issue_kind": "bug_report",
       "related_issue_ids": [
-        "stm32cubeh7-issue-228",
-        "stm32cubeh7-issue-174",
-        "stm32cubeh7-issue-309"
+        "stm32cubeh7-issue-228"
       ],
       "chunk_index": 3,
-      "chunk_count": 6
+      "chunk_count": 10
     }
   },
   {
@@ -2115,35 +2330,32 @@
       "example_name": null,
       "issue_number": 327,
       "issue_title": "EEPROM emulation example - bugs",
-      "state": "open",
+      "state": "closed",
       "labels": [
         "bug",
         "internal bug tracker",
-        "projects",
-        "needs clarification"
+        "projects"
       ],
       "is_confirmed_bug": true,
       "created_at": "2025-10-02T08:15:10Z",
-      "closed_at": null,
+      "closed_at": "2026-03-31T14:39:21Z",
       "ingest_version": "v2.0",
       "image_urls": [],
       "images_count": 0,
       "is_valid": true,
       "layer": "Other",
-      "severity": "medium",
+      "severity": "high",
       "issue_kind": "bug_report",
       "related_issue_ids": [
-        "stm32cubeh7-issue-228",
-        "stm32cubeh7-issue-174",
-        "stm32cubeh7-issue-309"
+        "stm32cubeh7-issue-228"
       ],
       "chunk_index": 4,
-      "chunk_count": 6
+      "chunk_count": 10
     }
   },
   {
     "id": "stm32cubeh7-issue-327-5",
-    "text": "4a. IIUC, code tries directly checking the first variable saved in the memory. However, dereferencing PAGE0_BASE_ADDRESS + 6 goes into page header.\n4b. Search for the variable to read goes into the page header in the last iteration.\n4c. Search for erased address for write of the variable starts at the page beginning which is occupied by the page header. The variable can never be written there.\n\nWith only points from 4., I am now unable to reproduce the issue with invalid header, it was probably caused by some combination of the mentioned issues since I was fixing them step by step.",
+    "text": "4a. IIUC, code tries directly checking the first variable saved in the memory. However, dereferencing PAGE0_BASE_ADDRESS + 6 goes into page header.\n4b. Search for the variable to read goes into the page header in the last iteration.\n4c. Search for erased address for write of the variable starts at the page beginning which is occupied by the page header. The variable can never be written there.\n\nWith only points from 4., I am now unable to reproduce the issue with invalid header, it was probably caused by some combination of the mentioned issues since I was fixing them step by step.\n\n[MKISTM - 2026-03-31T14:39:21Z]\nHello @khevessy,\n\nSorry for later reply.  The valid point has been published since last release **V1.13.0**\n\nLet's explain the analyze result of last point **(4)** step by step:\n\n**4.a** is valid:\nThe current use of + 6 is wrong: it falls inside the page header and does not point to the virtual address field of an EEPROM element.\nThe offset must be derived dynamically, based on the element index (VarIdx) and the element size, as shown in the Gerrit link.\n\n**4.b** is not valid:\nIn EE_ReadVariable(), the search start address is computed as:",
     "metadata": {
       "id": "stm32cubeh7-issue-327",
       "source_kind": "issue",
@@ -2159,30 +2371,191 @@
       "example_name": null,
       "issue_number": 327,
       "issue_title": "EEPROM emulation example - bugs",
-      "state": "open",
+      "state": "closed",
       "labels": [
         "bug",
         "internal bug tracker",
-        "projects",
-        "needs clarification"
+        "projects"
       ],
       "is_confirmed_bug": true,
       "created_at": "2025-10-02T08:15:10Z",
-      "closed_at": null,
+      "closed_at": "2026-03-31T14:39:21Z",
       "ingest_version": "v2.0",
       "image_urls": [],
       "images_count": 0,
       "is_valid": true,
       "layer": "Other",
-      "severity": "medium",
+      "severity": "high",
       "issue_kind": "bug_report",
       "related_issue_ids": [
-        "stm32cubeh7-issue-228",
-        "stm32cubeh7-issue-174",
-        "stm32cubeh7-issue-309"
+        "stm32cubeh7-issue-228"
       ],
       "chunk_index": 5,
-      "chunk_count": 6
+      "chunk_count": 10
+    }
+  },
+  {
+    "id": "stm32cubeh7-issue-327-6",
+    "text": "/* Get the valid Page end Address */\nAddress = (uint32_t)((EEPROM_START_ADDRESS - 32) + (uint32_t)((1 + ValidPage) * PAGE_SIZE));\n\nGiven the layout:\n\n- Each EEPROM element = 64 bytes\n\n- For the last element in the page, this Address points to the last virtual address field.\n- The page header uses:\n  - First 32 bytes: page status\n  - Second 32 bytes: left erased and never used (skipped when the first element is written).\n\nThe function scans backwards in steps of 64 bytes, always landing on virtual address locations of elements. When we eventually reach the first element’s virtual address, subtracting 64 bytes from there brings us to:\n\nPageStartAddress + 32\n\nwhich corresponds exactly to the end of the header area.\n\n**4.c** isn't valid: \n- In EE_VerifyPageFullWriteVariable(), starting from the page base \n  \n  Address = EEPROM_START_ADDRESS + ValidPage * PAGE_SIZE;\n   \nis intentional. The function scans the page in 64-byte steps, and each EEPROM element is 64 bytes. Beginning at the page base keeps all Address = Address + 64; steps aligned with element boundaries.",
+    "metadata": {
+      "id": "stm32cubeh7-issue-327",
+      "source_kind": "issue",
+      "repo": "STM32CubeH7",
+      "mcu_package": "STM32CubeH7",
+      "mcu_series": "H7",
+      "type": "issue",
+      "path": null,
+      "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/327",
+      "board": "NUCLEO-H743ZI",
+      "category": null,
+      "component": null,
+      "example_name": null,
+      "issue_number": 327,
+      "issue_title": "EEPROM emulation example - bugs",
+      "state": "closed",
+      "labels": [
+        "bug",
+        "internal bug tracker",
+        "projects"
+      ],
+      "is_confirmed_bug": true,
+      "created_at": "2025-10-02T08:15:10Z",
+      "closed_at": "2026-03-31T14:39:21Z",
+      "ingest_version": "v2.0",
+      "image_urls": [],
+      "images_count": 0,
+      "is_valid": true,
+      "layer": "Other",
+      "severity": "high",
+      "issue_kind": "bug_report",
+      "related_issue_ids": [
+        "stm32cubeh7-issue-228"
+      ],
+      "chunk_index": 6,
+      "chunk_count": 10
+    }
+  },
+  {
+    "id": "stm32cubeh7-issue-327-7",
+    "text": "- The page header word is never 0xFFFFFFFF:\n  - The header state is stored in the LSB 16 bits (0xFFFF for ERASED),\n  - The MSB 16 bits are 0x0000, so the word is 0x0000FFFF, not 0xFFFFFFFF.  \n  Therefore, the header cannot be mistaken for a free 32‑byte block, and there is no risk it will be reused or erased by this logic.\n\n- If you shifted the start to + PAGE_HEADER_SIZE, all subsequent +64 increments could be misaligned with the real 64-byte elements, and the free space detection would no longer work correctly.\n\nSo, the current start address at the page beginning is correct and must be kept.\n\nKind regards,\nMohamed.\n\n[khevessy - 2026-04-01T10:55:50Z]\nHello,\n\nI checked the new release.\n\n1. You just removed all occurrences to I-Cache enable / disable and left all cache maintenance to the user, understood.\n\n2. You skipped this point altogether. EE_VerifyPageFullyErased() still increments by 4 bytes while dereferencing uint16_t, so it only checks every other 16-bit word instead of all words in the page.",
+    "metadata": {
+      "id": "stm32cubeh7-issue-327",
+      "source_kind": "issue",
+      "repo": "STM32CubeH7",
+      "mcu_package": "STM32CubeH7",
+      "mcu_series": "H7",
+      "type": "issue",
+      "path": null,
+      "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/327",
+      "board": "NUCLEO-H743ZI",
+      "category": null,
+      "component": null,
+      "example_name": null,
+      "issue_number": 327,
+      "issue_title": "EEPROM emulation example - bugs",
+      "state": "closed",
+      "labels": [
+        "bug",
+        "internal bug tracker",
+        "projects"
+      ],
+      "is_confirmed_bug": true,
+      "created_at": "2025-10-02T08:15:10Z",
+      "closed_at": "2026-03-31T14:39:21Z",
+      "ingest_version": "v2.0",
+      "image_urls": [],
+      "images_count": 0,
+      "is_valid": true,
+      "layer": "Other",
+      "severity": "high",
+      "issue_kind": "bug_report",
+      "related_issue_ids": [
+        "stm32cubeh7-issue-228"
+      ],
+      "chunk_index": 7,
+      "chunk_count": 10
+    }
+  },
+  {
+    "id": "stm32cubeh7-issue-327-8",
+    "text": "3. You also ignored this point. EE_VerifyPageFullWriteVariable() checks only (*(__IO uint32_t*)Address) == 0xFFFFFFFF (the first 4 bytes) instead of  verifying all 16 32-bit words (64 bytes total) that will be written by the two FLASH_TYPEPROGRAM_FLASHWORD operations.\n\n4a. Fixed, thanks for this.\n\n4b. I agree that the original code was not broken, I had confused myself regarding the > vs >= condition. My change was not incorrect, but it was addressing something that was not actually broken. Sorry about that.",
+    "metadata": {
+      "id": "stm32cubeh7-issue-327",
+      "source_kind": "issue",
+      "repo": "STM32CubeH7",
+      "mcu_package": "STM32CubeH7",
+      "mcu_series": "H7",
+      "type": "issue",
+      "path": null,
+      "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/327",
+      "board": "NUCLEO-H743ZI",
+      "category": null,
+      "component": null,
+      "example_name": null,
+      "issue_number": 327,
+      "issue_title": "EEPROM emulation example - bugs",
+      "state": "closed",
+      "labels": [
+        "bug",
+        "internal bug tracker",
+        "projects"
+      ],
+      "is_confirmed_bug": true,
+      "created_at": "2025-10-02T08:15:10Z",
+      "closed_at": "2026-03-31T14:39:21Z",
+      "ingest_version": "v2.0",
+      "image_urls": [],
+      "images_count": 0,
+      "is_valid": true,
+      "layer": "Other",
+      "severity": "high",
+      "issue_kind": "bug_report",
+      "related_issue_ids": [
+        "stm32cubeh7-issue-228"
+      ],
+      "chunk_index": 8,
+      "chunk_count": 10
+    }
+  },
+  {
+    "id": "stm32cubeh7-issue-327-9",
+    "text": "4c. \n   - yes, the header shouldn't ever contain 0xFFFF at the start of a valid page \n   - due to some cache coherency issues (missing D-cache invalidation), we sometimes observed stale page header values in EE_FindValidPage() - particularly both headers appearing as 0x0000 (page valid), which led to incorrect page selection for write and consequent header corruption\n   - treating the header area as a candidate write location seems not robust (even if the header is never expected to be erased)\n   - about the misalignment: my proposed PAGE_HEADER_SIZE referred to the full 64-byte reserved region before the first EEPROM element, not just the first 32-byte page-status flashword. Under that definition, starting the allocation scan at page_base + PAGE_HEADER_SIZE preserves 64-byte alignment. The misalignment concern applies only if PAGE_HEADER_SIZE is interpreted as 32 bytes\n\nBest regards,\nKarel",
+    "metadata": {
+      "id": "stm32cubeh7-issue-327",
+      "source_kind": "issue",
+      "repo": "STM32CubeH7",
+      "mcu_package": "STM32CubeH7",
+      "mcu_series": "H7",
+      "type": "issue",
+      "path": null,
+      "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/327",
+      "board": "NUCLEO-H743ZI",
+      "category": null,
+      "component": null,
+      "example_name": null,
+      "issue_number": 327,
+      "issue_title": "EEPROM emulation example - bugs",
+      "state": "closed",
+      "labels": [
+        "bug",
+        "internal bug tracker",
+        "projects"
+      ],
+      "is_confirmed_bug": true,
+      "created_at": "2025-10-02T08:15:10Z",
+      "closed_at": "2026-03-31T14:39:21Z",
+      "ingest_version": "v2.0",
+      "image_urls": [],
+      "images_count": 0,
+      "is_valid": true,
+      "layer": "Other",
+      "severity": "high",
+      "issue_kind": "bug_report",
+      "related_issue_ids": [
+        "stm32cubeh7-issue-228"
+      ],
+      "chunk_index": 9,
+      "chunk_count": 10
     }
   },
   {
@@ -2736,7 +3109,7 @@
       "example_name": null,
       "issue_number": 309,
       "issue_title": "NUCLEO-H743ZI EEPROM_Emulation Bug",
-      "state": "open",
+      "state": "closed",
       "labels": [
         "bug",
         "internal bug tracker",
@@ -2744,7 +3117,7 @@
       ],
       "is_confirmed_bug": true,
       "created_at": "2025-02-12T04:51:45Z",
-      "closed_at": null,
+      "closed_at": "2026-03-31T13:25:38Z",
       "ingest_version": "v2.0",
       "image_urls": [],
       "images_count": 0,
@@ -2753,7 +3126,6 @@
       "severity": "high",
       "issue_kind": "bug_report",
       "related_issue_ids": [
-        "stm32cubeh7-issue-327",
         "stm32cubeh7-issue-174"
       ],
       "chunk_index": 0,
@@ -2778,7 +3150,7 @@
       "example_name": null,
       "issue_number": 309,
       "issue_title": "NUCLEO-H743ZI EEPROM_Emulation Bug",
-      "state": "open",
+      "state": "closed",
       "labels": [
         "bug",
         "internal bug tracker",
@@ -2786,7 +3158,7 @@
       ],
       "is_confirmed_bug": true,
       "created_at": "2025-02-12T04:51:45Z",
-      "closed_at": null,
+      "closed_at": "2026-03-31T13:25:38Z",
       "ingest_version": "v2.0",
       "image_urls": [],
       "images_count": 0,
@@ -2795,7 +3167,6 @@
       "severity": "high",
       "issue_kind": "bug_report",
       "related_issue_ids": [
-        "stm32cubeh7-issue-327",
         "stm32cubeh7-issue-174"
       ],
       "chunk_index": 1,
@@ -2804,7 +3175,7 @@
   },
   {
     "id": "stm32cubeh7-issue-309-2",
-    "text": "https://github.com/STMicroelectronics/STM32CubeH7/blob/bf1cd36e9d5cdcecddbb6745cd43ac6f1fa27bb1/Projects/NUCLEO-H743ZI/Applications/EEPROM/EEPROM_Emulation/Src/eeprom.c#L617-L649\n\n[TOUNSTM - 2025-10-10T15:03:59Z]\nST Internal Reference: 219313",
+    "text": "https://github.com/STMicroelectronics/STM32CubeH7/blob/bf1cd36e9d5cdcecddbb6745cd43ac6f1fa27bb1/Projects/NUCLEO-H743ZI/Applications/EEPROM/EEPROM_Emulation/Src/eeprom.c#L617-L649\n\n[TOUNSTM - 2025-10-10T15:03:59Z]\nST Internal Reference: 219313\n\n[MKISTM - 2026-03-31T13:25:29Z]\nHello @Gorden1970,\n\nThis issue has been fixed in the latest release **V1.13.0**\n\nBR,\nMohamed.",
     "metadata": {
       "id": "stm32cubeh7-issue-309",
       "source_kind": "issue",
@@ -2820,7 +3191,7 @@
       "example_name": null,
       "issue_number": 309,
       "issue_title": "NUCLEO-H743ZI EEPROM_Emulation Bug",
-      "state": "open",
+      "state": "closed",
       "labels": [
         "bug",
         "internal bug tracker",
@@ -2828,7 +3199,7 @@
       ],
       "is_confirmed_bug": true,
       "created_at": "2025-02-12T04:51:45Z",
-      "closed_at": null,
+      "closed_at": "2026-03-31T13:25:38Z",
       "ingest_version": "v2.0",
       "image_urls": [],
       "images_count": 0,
@@ -2837,7 +3208,6 @@
       "severity": "high",
       "issue_kind": "bug_report",
       "related_issue_ids": [
-        "stm32cubeh7-issue-327",
         "stm32cubeh7-issue-174"
       ],
       "chunk_index": 2,
@@ -2862,7 +3232,7 @@
       "example_name": null,
       "issue_number": 308,
       "issue_title": "STM32 USB MSC with multiple luns can cause read/write errors",
-      "state": "open",
+      "state": "closed",
       "labels": [
         "bug",
         "internal bug tracker",
@@ -2871,7 +3241,7 @@
       ],
       "is_confirmed_bug": true,
       "created_at": "2025-02-01T13:58:46Z",
-      "closed_at": null,
+      "closed_at": "2026-03-26T16:44:55Z",
       "ingest_version": "v2.0",
       "image_urls": [],
       "images_count": 0,
@@ -2881,12 +3251,12 @@
       "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 0,
-      "chunk_count": 2
+      "chunk_count": 3
     }
   },
   {
     "id": "stm32cubeh7-issue-308-1",
-    "text": "The SCSI_Read10, SCSI_Read12, SCSI_Write10 and SCSI_Write12 functions are all using the hmsc->scsi_blk_size and hmsc->scsi_blk_nbr variables but those values can be wrong when using multiple luns of different sizes. Those functions should first update those values via a call to GetCapacity just like the SCSI_ReadCapacity10, SCCSI_ReadCapacity16 and SCSI_ReadFormatCapacity functions do.\n\nI added the following code to the SCSI_Read10, SCSI_Read12, SCSI_Write10 and SCSI_Write12 functions and the issue was fixed.\n\nif (((USBD_StorageTypeDef *)pdev->pUserData[pdev->classId])->GetCapacity(lun, &hmsc->scsi_blk_nbr, &hmsc->scsi_blk_size) != 0)\n{\n  SCSI_SenseCode(pdev, lun, NOT_READY, MEDIUM_NOT_PRESENT);\n  return -1;\n}\n\nComments:\n[ALABSTM - 2025-02-05T15:51:39Z]\nST Internal Reference: 202361\n\n[ALABSTM - 2025-02-05T15:52:12Z]\nHi @timschuerewegen,\n\nYou point looks relevant. It has been forwarded to our development teams. I'll keep you informed.\n\nWith regards,\n\n[ALABSTM - 2025-03-11T08:27:33Z]\nSee also [STM32CubeL4#41](https://github.com/STMicroelectronics/STM32CubeL4/pull/41)",
+    "text": "The SCSI_Read10, SCSI_Read12, SCSI_Write10 and SCSI_Write12 functions are all using the hmsc->scsi_blk_size and hmsc->scsi_blk_nbr variables but those values can be wrong when using multiple luns of different sizes. Those functions should first update those values via a call to GetCapacity just like the SCSI_ReadCapacity10, SCCSI_ReadCapacity16 and SCSI_ReadFormatCapacity functions do.\n\nI added the following code to the SCSI_Read10, SCSI_Read12, SCSI_Write10 and SCSI_Write12 functions and the issue was fixed.\n\nif (((USBD_StorageTypeDef *)pdev->pUserData[pdev->classId])->GetCapacity(lun, &hmsc->scsi_blk_nbr, &hmsc->scsi_blk_size) != 0)\n{\n  SCSI_SenseCode(pdev, lun, NOT_READY, MEDIUM_NOT_PRESENT);\n  return -1;\n}\n\nComments:\n[ALABSTM - 2025-02-05T15:51:39Z]\nST Internal Reference: 202361\n\n[ALABSTM - 2025-02-05T15:52:12Z]\nHi @timschuerewegen,\n\nYou point looks relevant. It has been forwarded to our development teams. I'll keep you informed.\n\nWith regards,\n\n[ALABSTM - 2025-03-11T08:27:33Z]\nSee also [STM32CubeL4#41](https://github.com/STMicroelectronics/STM32CubeL4/pull/41)\n\n[ALABSTM - 2026-03-26T16:44:55Z]\nHi @timschuerewegen ,",
     "metadata": {
       "id": "stm32cubeh7-issue-308",
       "source_kind": "issue",
@@ -2902,7 +3272,7 @@
       "example_name": null,
       "issue_number": 308,
       "issue_title": "STM32 USB MSC with multiple luns can cause read/write errors",
-      "state": "open",
+      "state": "closed",
       "labels": [
         "bug",
         "internal bug tracker",
@@ -2911,7 +3281,7 @@
       ],
       "is_confirmed_bug": true,
       "created_at": "2025-02-01T13:58:46Z",
-      "closed_at": null,
+      "closed_at": "2026-03-26T16:44:55Z",
       "ingest_version": "v2.0",
       "image_urls": [],
       "images_count": 0,
@@ -2921,7 +3291,47 @@
       "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 1,
-      "chunk_count": 2
+      "chunk_count": 3
+    }
+  },
+  {
+    "id": "stm32cubeh7-issue-308-2",
+    "text": "Issue fixed in version **2.11.4** of the [USB Device](https://github.com/STMicroelectronics/stm32-mw-usb-device) library, now supported by the **STM32CubeH7** firmware. Thank you for having reported.\n\nWith regards,",
+    "metadata": {
+      "id": "stm32cubeh7-issue-308",
+      "source_kind": "issue",
+      "repo": "STM32CubeH7",
+      "mcu_package": "STM32CubeH7",
+      "mcu_series": "H7",
+      "type": "issue",
+      "path": null,
+      "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/308",
+      "board": null,
+      "category": null,
+      "component": "USB",
+      "example_name": null,
+      "issue_number": 308,
+      "issue_title": "STM32 USB MSC with multiple luns can cause read/write errors",
+      "state": "closed",
+      "labels": [
+        "bug",
+        "internal bug tracker",
+        "mw",
+        "usb"
+      ],
+      "is_confirmed_bug": true,
+      "created_at": "2025-02-01T13:58:46Z",
+      "closed_at": "2026-03-26T16:44:55Z",
+      "ingest_version": "v2.0",
+      "image_urls": [],
+      "images_count": 0,
+      "is_valid": true,
+      "layer": "Middleware",
+      "severity": "medium",
+      "issue_kind": "bug_report",
+      "related_issue_ids": [],
+      "chunk_index": 2,
+      "chunk_count": 3
     }
   },
   {
@@ -3465,7 +3875,7 @@
       "example_name": null,
       "issue_number": 300,
       "issue_title": "USB composite CustomHID endpoint size configuration problem",
-      "state": "open",
+      "state": "closed",
       "labels": [
         "bug",
         "internal bug tracker",
@@ -3475,22 +3885,22 @@
       ],
       "is_confirmed_bug": true,
       "created_at": "2024-11-19T13:41:54Z",
-      "closed_at": null,
+      "closed_at": "2026-03-26T16:39:57Z",
       "ingest_version": "v2.0",
       "image_urls": [],
       "images_count": 0,
       "is_valid": true,
       "layer": "Middleware",
-      "severity": "medium",
+      "severity": "high",
       "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 0,
-      "chunk_count": 2
+      "chunk_count": 3
     }
   },
   {
     "id": "stm32cubeh7-issue-300-1",
-    "text": "How To Reproduce\nConfigure a composite USB Device that includes a CustomHID interface.\nSet different sizes for IN and OUT endpoints.\n\nComments:\n[ALABSTM - 2024-11-21T14:41:59Z]\nHi @LaurentGolay,\n\nYour point looks relevant. It has been forwarded to our development teams. Let's wait for their feedback.\n\nWith regards,\n\n[ALABSTM - 2024-11-21T14:42:12Z]\nST Internal Reference: 196750",
+    "text": "How To Reproduce\nConfigure a composite USB Device that includes a CustomHID interface.\nSet different sizes for IN and OUT endpoints.\n\nComments:\n[ALABSTM - 2024-11-21T14:41:59Z]\nHi @LaurentGolay,\n\nYour point looks relevant. It has been forwarded to our development teams. Let's wait for their feedback.\n\nWith regards,\n\n[ALABSTM - 2024-11-21T14:42:12Z]\nST Internal Reference: 196750\n\n[ALABSTM - 2026-03-26T16:39:57Z]\nHi @LaurentGolay,\n\nIssue fixed in version **2.11.4** of the [USB Device](https://github.com/STMicroelectronics/stm32-mw-usb-device) library, now supported by the **STM32CubeH7** firmware. Thank you for having reported.\n\nIn function USBD_CMPSIT_AddToConfDesc(), the last argument passed to each one of the USBD_CMPSIT_AssignEp() function calls has been changed, as shown below...\n\ndiff\n      /* Set IN endpoint slot */\n      iEp = pdev->tclasslist[pdev->classId].EpAdd[0];\n-      USBD_CMPSIT_AssignEp(pdev, iEp, USBD_EP_TYPE_INTR, pdev->tclasslist[pdev->classId].CurrPcktSze);\n+      USBD_CMPSIT_AssignEp(pdev, iEp, USBD_EP_TYPE_INTR,CUSTOM_HID_EPIN_SIZE);",
     "metadata": {
       "id": "stm32cubeh7-issue-300",
       "source_kind": "issue",
@@ -3506,7 +3916,7 @@
       "example_name": null,
       "issue_number": 300,
       "issue_title": "USB composite CustomHID endpoint size configuration problem",
-      "state": "open",
+      "state": "closed",
       "labels": [
         "bug",
         "internal bug tracker",
@@ -3516,17 +3926,58 @@
       ],
       "is_confirmed_bug": true,
       "created_at": "2024-11-19T13:41:54Z",
-      "closed_at": null,
+      "closed_at": "2026-03-26T16:39:57Z",
       "ingest_version": "v2.0",
       "image_urls": [],
       "images_count": 0,
       "is_valid": true,
       "layer": "Middleware",
-      "severity": "medium",
+      "severity": "high",
       "issue_kind": "bug_report",
       "related_issue_ids": [],
       "chunk_index": 1,
-      "chunk_count": 2
+      "chunk_count": 3
+    }
+  },
+  {
+    "id": "stm32cubeh7-issue-300-2",
+    "text": "/* Set OUT endpoint slot */\n      iEp = pdev->tclasslist[pdev->classId].EpAdd[1];\n-      USBD_CMPSIT_AssignEp(pdev, iEp, USBD_EP_TYPE_INTR, pdev->tclasslist[pdev->classId].CurrPcktSze);\n+      USBD_CMPSIT_AssignEp(pdev, iEp, USBD_EP_TYPE_INTR, CUSTOM_HID_EPOUT_SIZE);\n\nSimilarly, in USBD_CMPSIT_CUSTOMHIDDesc(), the output endpoint size argument passed to __USBD_CMPSIT_SET_EP() has been changed too.\n\ndiff\n  /* Append Endpoint descriptor to Configuration descriptor */\n  __USBD_CMPSIT_SET_EP(pdev->tclasslist[pdev->classId].Eps[1].add, \\\n-                       USBD_EP_TYPE_INTR, CUSTOM_HID_EPIN_SIZE, CUSTOM_HID_HS_BINTERVAL, CUSTOM_HID_FS_BINTERVAL);\n+                       USBD_EP_TYPE_INTR, CUSTOM_HID_EPOUT_SIZE, CUSTOM_HID_HS_BINTERVAL, CUSTOM_HID_FS_BINTERVAL);\n\nWith regards,",
+    "metadata": {
+      "id": "stm32cubeh7-issue-300",
+      "source_kind": "issue",
+      "repo": "STM32CubeH7",
+      "mcu_package": "STM32CubeH7",
+      "mcu_series": "H7",
+      "type": "issue",
+      "path": null,
+      "github_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/300",
+      "board": "STM32H7B0IBT6",
+      "category": null,
+      "component": "USB",
+      "example_name": null,
+      "issue_number": 300,
+      "issue_title": "USB composite CustomHID endpoint size configuration problem",
+      "state": "closed",
+      "labels": [
+        "bug",
+        "internal bug tracker",
+        "mw",
+        "usb",
+        "st usb"
+      ],
+      "is_confirmed_bug": true,
+      "created_at": "2024-11-19T13:41:54Z",
+      "closed_at": "2026-03-26T16:39:57Z",
+      "ingest_version": "v2.0",
+      "image_urls": [],
+      "images_count": 0,
+      "is_valid": true,
+      "layer": "Middleware",
+      "severity": "high",
+      "issue_kind": "bug_report",
+      "related_issue_ids": [],
+      "chunk_index": 2,
+      "chunk_count": 3
     }
   },
   {
@@ -5038,7 +5489,7 @@
   },
   {
     "id": "stm32cubeh7-issue-275-0",
-    "text": "Title: STM32H7B3I-DK PLL3 VCO output exceeds 560MHz limit\n\nBody:\nSTM32H7B3I-BK BSP LCD driver sets PLL3 VCO output to 800MHz.\nI know it works, but Data sheet says maximum value is 560MHz.\n\nhttps://github.com/STMicroelectronics/STM32CubeH7/blob/91d4c89228e766a968f8daebc78eb7143d95184e/Drivers/BSP/STM32H7B3I-DK/stm32h7b3i_discovery_lcd.c#L437-L450\n\nComments:\n[TOUNSTM - 2024-03-07T17:03:56Z]\nHello @sirius506,\n\nSorry for the delayed response. Could you please send me the document in which you find this information?\n\nWith regards,\n\n[sirius506 - 2024-03-08T05:02:53Z]\nPlease refer STM32H7B3I datasheet Table 55 on page 112. It says PLL VCO output max freq is 560MHz.\n\nYou can also try to set above listed PLL3 settings on the CubeMX clock config screen, then you'll see it responds with error indication (DIVN3 = 200 is too big).\n\n[TOUNSTM - 2024-03-27T09:09:39Z]\nST Internal Reference: 177140",
+    "text": "Title: STM32H7B3I-DK PLL3 VCO output exceeds 560MHz limit\n\nBody:\nSTM32H7B3I-BK BSP LCD driver sets PLL3 VCO output to 800MHz.\nI know it works, but Data sheet says maximum value is 560MHz.\n\nhttps://github.com/STMicroelectronics/STM32CubeH7/blob/91d4c89228e766a968f8daebc78eb7143d95184e/Drivers/BSP/STM32H7B3I-DK/stm32h7b3i_discovery_lcd.c#L437-L450\n\nComments:\n[TOUNSTM - 2024-03-07T17:03:56Z]\nHello @sirius506,\n\nSorry for the delayed response. Could you please send me the document in which you find this information?\n\nWith regards,\n\n[sirius506 - 2024-03-08T05:02:53Z]\nPlease refer STM32H7B3I datasheet Table 55 on page 112. It says PLL VCO output max freq is 560MHz.\n\nYou can also try to set above listed PLL3 settings on the CubeMX clock config screen, then you'll see it responds with error indication (DIVN3 = 200 is too big).\n\n[TOUNSTM - 2024-03-27T09:09:39Z]\nST Internal Reference: 177140\n\n[ALABSTM - 2026-03-31T11:39:03Z]\nHi @sirius506,\n\nIssue fixed in the frame of release **1.13.0**. Thank you for your patience and thank you again for having reported.\n\nWith regards,",
     "metadata": {
       "id": "stm32cubeh7-issue-275",
       "source_kind": "issue",
@@ -5054,7 +5505,7 @@
       "example_name": null,
       "issue_number": 275,
       "issue_title": "STM32H7B3I-DK PLL3 VCO output exceeds 560MHz limit",
-      "state": "open",
+      "state": "closed",
       "labels": [
         "bug",
         "internal bug tracker",
@@ -5062,7 +5513,7 @@
       ],
       "is_confirmed_bug": true,
       "created_at": "2023-09-10T06:50:47Z",
-      "closed_at": null,
+      "closed_at": "2026-03-31T11:39:03Z",
       "ingest_version": "v2.0",
       "image_urls": [],
       "images_count": 0,
@@ -12303,7 +12754,6 @@
       "issue_kind": "bug_report",
       "related_issue_ids": [
         "stm32cubeh7-issue-228",
-        "stm32cubeh7-issue-327",
         "stm32cubeh7-issue-309"
       ],
       "chunk_index": 0,
@@ -12347,7 +12797,6 @@
       "issue_kind": "bug_report",
       "related_issue_ids": [
         "stm32cubeh7-issue-228",
-        "stm32cubeh7-issue-327",
         "stm32cubeh7-issue-309"
       ],
       "chunk_index": 1,
@@ -12391,7 +12840,6 @@
       "issue_kind": "bug_report",
       "related_issue_ids": [
         "stm32cubeh7-issue-228",
-        "stm32cubeh7-issue-327",
         "stm32cubeh7-issue-309"
       ],
       "chunk_index": 2,
@@ -12431,8 +12879,8 @@
       "severity": "medium",
       "issue_kind": "usage_question",
       "related_issue_ids": [
-        "stm32cubeh7-issue-88",
         "stm32cubeh7-issue-74",
+        "stm32cubeh7-issue-88",
         "stm32cubeh7-issue-211"
       ],
       "chunk_index": 0,

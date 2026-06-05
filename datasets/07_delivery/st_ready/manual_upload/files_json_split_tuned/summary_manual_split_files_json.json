@@ -1,0 +1,37 @@
+{
+  "created_at_utc": "2026-05-08T13:31:56+00:00",
+  "input_dir": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\files_json",
+  "requested_output_dir": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\manual_upload\\files_json_split_tuned",
+  "output_dir": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\manual_upload\\files_json_split_tuned",
+  "used_fallback_output_dir": false,
+  "pattern": "st_ready_files_stm32cubeh7.json",
+  "root_tag_path": "files",
+  "rules": {
+    "split_all": true,
+    "min_source_size_kb": 350.0,
+    "max_docs_per_part": 8,
+    "max_payload_kb": 0,
+    "target_parts": 50
+  },
+  "clean_output_locked_entries": [],
+  "processed_sources": [
+    {
+      "repo": "stm32cubeh7",
+      "source_file": "st_ready_files_stm32cubeh7.json",
+      "source_docs": 4707,
+      "source_size_kb": 57619.81,
+      "parts_count": 50,
+      "output_dir": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\manual_upload\\files_json_split_tuned\\stm32cubeh7",
+      "summary_file": "summary_st_ready_files_stm32cubeh7__manual_split.json"
+    }
+  ],
+  "skipped_sources": [],
+  "errors": [],
+  "totals": {
+    "sources_found": 1,
+    "sources_processed": 1,
+    "sources_skipped": 0,
+    "sources_errors": 0,
+    "parts_created": 50
+  }
+}

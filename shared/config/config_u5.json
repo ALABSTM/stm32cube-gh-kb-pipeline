@@ -1,0 +1,33 @@
+{
+  "owner": "STMicroelectronics",
+  "repos": [
+    "STM32CubeU5",
+    "stm32u5xx-hal-driver",
+    "cmsis_device_u5",
+    "b-u585i-iot02a-bsp",
+    "stm32u575i-ev-bsp",
+    "stm32u5x9j-dk-bsp",
+    "stm32u5g9j-dk2-bsp",
+    "stm32u5xx-nucleo-bsp"
+  ],
+  "data_dir": "data",
+  "repos_dir": "GitHub_repos",
+  "auto_clone_missing_repos": true,
+  "repo_clone_urls": {
+    "stm32u5xx-hal-driver": "https://github.com/STMicroelectronics/stm32u5xx_hal_driver.git",
+    "cmsis_device_u5": "https://github.com/STMicroelectronics/cmsis_device_u5.git",
+    "b-u585i-iot02a-bsp": "https://github.com/STMicroelectronics/b-u585i-iot02a-bsp.git",
+    "stm32u575i-ev-bsp": "https://github.com/STMicroelectronics/stm32u575i-ev-bsp.git",
+    "stm32u5x9j-dk-bsp": "https://github.com/STMicroelectronics/stm32u5x9j-dk-bsp.git",
+    "stm32u5g9j-dk2-bsp": "https://github.com/STMicroelectronics/stm32u5g9j-dk2-bsp.git",
+    "stm32u5xx-nucleo-bsp": "https://github.com/STMicroelectronics/stm32u5xx-nucleo-bsp.git"
+  },
+  "linked_repo_refs": {},
+  "commit_pr_scope": "linked_or_merged",
+  "github_token_env": "GITHUB_TOKEN",
+  "rate_limits": {
+    "issues_sleep": 0.2,
+    "comments_sleep": 0.1
+  },
+  "ingest_version": "v1.0"
+}

@@ -1,0 +1,30 @@
+{
+  "issues": [
+    {
+      "id": "stm324x9i-eval-bsp-issue-1",
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "stm324x9i-eval-bsp",
+      "root_path": "issues",
+      "mcu_series": null,
+      "issue_number": 1,
+      "issue_title": "FSC NOR Flash AccessTime",
+      "state": "closed",
+      "layer": "Other",
+      "component": null,
+      "issue_kind": "bug_report",
+      "severity": "medium",
+      "board": null,
+      "labels": [
+        "bug",
+        "bsp",
+        "internal bug tracker"
+      ],
+      "github_url": "https://github.com/STMicroelectronics/stm324x9i-eval-bsp/issues/1",
+      "is_valid": true,
+      "evidence_strength": "high",
+      "rescue_applied": false,
+      "delivery_template": "st_v2_structured_issue_card",
+      "st_ready_text": "Problem: FSC NOR Flash AccessTime\nContext: repo=stm324x9i-eval-bsp, mcu_series=None, board=None, component=None, layer=Other, issue_kind=bug_report, severity=medium, evidence_strength=high, rescue_applied=False, state=closed, issue_number=1\nRoot cause: Hi @UlfPGerlach, Thank you for this report.\nFix: I have an issue with the access time of the 70ns NOR flash if I calculate the the access time with the two relevant times (AdressSetupTime + DataSetupTime) * HCLK (4+7)*5.\nConstraints: Validate against exact MCU/board configuration and CubeMX/CubeH7 version before applying.\nKeywords: bug_report, medium, bug, bsp, internal bug tracker, NOR, HCLK, FMC_ACCESS_MODE_A\n\nTechnical details:\nI have an issue with the access time of the 70ns NOR flash if I calculate the the access time with the two relevant times (AdressSetupTime + DataSetupTime) * HCLK (4+7)*5.95ns = 65.4ns (@168MHz). The result is less than the needed 70ns. The used M29W128Gx might function, but this is not 100% assured. /* excerpt from stm324x9i_eval_nor.c */ /* NOR device configuration */ Timing.AddressSetupTime = 4; Timing.AddressHoldTime = 3; Timing.DataSetupTime = 7; Timing.BusTurnAroundDuration = 1; Timing.CLKDivision = 2; Timing.DataLatency = 2; Timing.AccessMode = FMC_ACCESS_MODE_A; ![image](https://user-images.githubusercontent.com/129074383/227954988-1e3f1942-9b64-411a-80b4-46cc9a28a82a.png)\n\nKey comments:\nHi @UlfPGerlach, Thank you for this report. We will get back to you as soon as we analyze it further. This may take some time. Thank you for your comprehension. ST Internal Reference: 185672 Fixed in 310231180823d39bb74776bcc442c85f156a7f98"
+    }
+  ]
+}

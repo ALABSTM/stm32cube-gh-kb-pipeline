@@ -1,0 +1,370 @@
+[
+  {
+    "repo": "cmsis_device_h7",
+    "issue_number": 24,
+    "title": "Attribute \"optimize\" not supported by some clang compilers and causes warning",
+    "state": "closed",
+    "labels": [
+      "enhancement",
+      "cmsis",
+      "internal bug tracker"
+    ],
+    "created_at": "2026-03-09T19:13:40Z",
+    "closed_at": "2026-04-17T09:08:41Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-h7/issues/24",
+    "clean_text": "Title: Attribute \"optimize\" not supported by some clang compilers and causes warning\n\nBody:\nHere:\nhttps://github.com/STMicroelectronics/cmsis-device-h7/blob/8f922cdc7cc6de2344e75ddd657889f4ff761790/Include/system_stm32h7xx.h#L88\n\nDescription of the problem: [see in the forum](https://community.st.com/t5/stm32cubeide-for-visual-studio/warning-quot-unknown-attribute-optimize-quot-stm32cubeide-vscode/td-p/884776)\n\nProposed change: add check for attribute \"optimize\" in the #if line above:\n\n\n#if defined(__GNUC__) && __has_attribute(optimize)\n\n\nMore to this.... My AI assistant says...\n\n>    placing __attribute__(optimize) only on the function prototype in a header is not guaranteed to work.\n>   For reliable behavior, you should place the attribute on the function definition in the C file, not just the declaration.\n>   **Why the attribute must be on the definition**\n>   GCC applies optimization attributes at the point where the function is compiled, which is the definition, not the declaration.\n>   If the definition lacks the attribute  ..... Then GCC will simply ignore the attribute from the prototype\n> \n\nIf this is correct, the #if/#else with attribute \"optimize\" should be undone (reverted to ver. 1.10.5) in the .h file and the attribute inserted in all variants of system_stm32h7xx****.c on the body of function  ExitRun0Mode\n\nComments:\n[KRASTM - 2026-03-18T11:48:16Z]\nHello @pavel-a,\n\nThank you for the report.\n\nI have shared the issue internally and will keep you informed of any updates\n\nWith regards,\n\n[KRASTM - 2026-03-19T12:55:02Z]\nST Internal Reference: CDM0060722\n\n[KRASTM - 2026-04-17T09:08:41Z]\nFixed in Commit: https://github.com/STMicroelectronics/cmsis-device-h7/commit/de8243d2c15f87936f28a49fcd9e6f5ba10fc233",
+    "image_urls": [],
+    "images_count": 0
+  },
+  {
+    "repo": "cmsis_device_h7",
+    "issue_number": 23,
+    "title": "Incorrect values in D1CorePrescTable",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "duplicate",
+      "good first issue",
+      "invalid",
+      "cmsis"
+    ],
+    "created_at": "2025-12-04T12:11:12Z",
+    "closed_at": "2026-02-11T13:23:58Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-h7/issues/23",
+    "clean_text": "Title: Incorrect values in D1CorePrescTable\n\nBody:\n**Describe the set-up**\nStm32H7xx\n\n**Describe the bug**\nThe D1CorePrescTable is incorrectly initialized to {0, 0, 0, 0, 1, 2, 3, 4, 1, 2, 3, 4, 6, 7, 8, 9} and used for both 3-bit and 4-bit prescalers.\n\nThis issue has been raised several times in different places. However, due to some brain malfunction, the previous issue reported in this repository was closed with the following explanation (#12):\n\n> The current D1CorePrescTable[16] is implemented to support both 4-bits dividers like D1CPRE and 3-bits dividers such as D1PPRE, D2PPRE2, D2PPRE1.\n\nThe thing is - you **CANNOT** implement this table to support both types of prescalers.\n\n**How To Reproduce**\nOpen code base, search for D1CorePrescTable.\n\n**Additional context**\nThe simplest solution would be to use two separate tables. To explain it further - one table for 3-bit prescalers and one table for 4-bit prescalers. So there is **two** tables in the end. No, you cannot keep single table for both prescalers, I'm sorry.\n\n**Other issues describing the problem**\nhttps://github.com/STMicroelectronics/cmsis-device-h7/issues/12\nhttps://github.com/STMicroelectronics/STM32CubeH7/issues/301\n\n**Screenshots**\nRelevant examples describing the 3-bit and 4-bit prescalers values from the reference manual for STMH7xx - in case anyone developing the ST libraries has problem to read the documentation:\n\n[IMAGE ATTACHED]\n\n[IMAGE ATTACHED]\n\nComments:\n[ALABSTM - 2025-12-08T08:15:47Z]\nDuplicate of #12\n\n[MKISTM - 2025-12-10T16:06:53Z]\nHello @radoslav06,\n\nThank you for your report.\nCould you please share your use case or scenario where you encountered this bug?  This will help us understand and address it better.\n\nBR,\nMohamed Chaker.\n\n[ALABSTM - 2026-02-11T13:23:58Z]\nHi @radoslav06,\n\nI hope you are doing fine. I agree this point is more than tricky, especially if one focuses on the table itself, instead of tracking the **whole trail** from application to drivers.\n\nHowever, once clarified, you will see how all pieces **fit together** and how the whole stuff works **perfectly fine** both for 4-bit and 3-bit prescalers.\n\n> [!TIP]\n> Two points to keep in mind:\n> 1. The D1CorePrescTable[] table returns the necessary **number of right shifts** in order to achieve the desired clock frequency **division**.\n> 2. Only a **set of predefined** values are **allowed** as indices of the D1CorePrescTable[] table.\n\n> [!IMPORTANT]\n> For point 2 above to be enforced, it is necessary that the application uses that **set of predefined** values, not arbitrary ones.\n\n----\n\nLet's dive into the details of an existing example, the [RCC Clock Configuration](https://github.com/STMicroelectronics/STM32CubeH7/tree/master/Projects/NUCLEO-H745ZI-Q/Examples/RCC/RCC_ClockConfig) for instance:\n\n* The D1CorePrescTable[] table is defined in the [system_stm32h7xx.c](https://github.com/STMicroelectronics/STM32CubeH7/blob/f5c0b7a2b1f6eb26fde150f72edb2d7deb647066/Projects/NUCLEO-H745ZI-Q/Examples/RCC/RCC_ClockConfig/Common/Src/system_stm32h7xx.c#L111) **CMSIS** file as follows:\n\nc\n  const  uint8_t D1CorePrescTable[16] = {0, 0, 0, 0, 1, 2, 3, 4, 1, 2, 3, 4, 6, 7, 8, 9};\n\n\n* At application level, the values to set the **4-bit** fields HPRE and D1CPRE of register RCC_D1CFGR, and the **3-bit** fields D2PPRE1 and D2PPRE2 of register RCC_D2CFGR are selected from a **predefined set** of values, in SystemClock_Config() from the [main.c](https://github.com/STMicroelectronics/STM32CubeH7/blob/e109a24f043ec5e6d446c7a8ef31aa57029c7168/Projects/NUCLEO-H745ZI-Q/Examples/RCC/RCC_ClockConfig/CM7/Src/main.c#L215-L222) file, as shown below:\n\nc\n  RCC_ClkInitStruct.SYSCLKDivider  = RCC_SYSCLK_DIV1; /* D1CPRE  */\n  RCC_ClkInitStruct.AHBCLKDivider  = RCC_HCLK_DIV2;   /* HPRE    */\n  RCC_ClkInitStruct.APB1CLKDivider = RCC_APB1_DIV2;   /* D2PPRE1 */\n  RCC_ClkInitStruct.APB2CLKDivider = RCC_APB2_DIV2;   /* D2PPRE2 */\n  RCC_ClkInitStruct.APB3CLKDivider = RCC_APB3_DIV2;   /* D1PPRE  */\n  RCC_ClkInitStruct.APB4CLKDivider = RCC_APB4_DIV2;   /* D3PPRE  */\n\n\n----\n\n* Let's start with the **4-bit** field D1CPRE. The predefined values RCC_SYSCLK_DIVx are found in the [stm32h7xx_hal_rcc.h](https://github.com/STMicroelectronics/stm32h7xx-hal-driver/blob/57ed86b4c358e2333a71fd895b17f1ccdb68739e/Inc/stm32h7xx_hal_rcc.h#L350-L358) **HAL** file. They are **aliases** of definitions found in the [stm32h745xx.h](https://github.com/STMicroelectronics/cmsis-device-h7/blob/v1.10.6/Include/stm32h745xx.h) **CMSIS** header file.\n\nc\n#define RCC_SYSCLK_DIV1                RCC_D1CFGR_D1CPRE_DIV1   /* 0x000 */\n#define RCC_SYSCLK_DIV2                RCC_D1CFGR_D1CPRE_DIV2   /* 0x800 */\n#define RCC_SYSCLK_DIV4                RCC_D1CFGR_D1CPRE_DIV4   /* 0x900 */\n#define RCC_SYSCLK_DIV8                RCC_D1CFGR_D1CPRE_DIV8   /* 0xA00 */\n#define RCC_SYSCLK_DIV16               RCC_D1CFGR_D1CPRE_DIV16  /* 0xB00 */\n#define RCC_SYSCLK_DIV64               RCC_D1CFGR_D1CPRE_DIV64  /* 0xC00 */\n#define RCC_SYSCLK_DIV128              RCC_D1CFGR_D1CPRE_DIV128 /* 0xD00 */\n#define RCC_SYSCLK_DIV256              RCC_D1CFGR_D1CPRE_DIV256 /* 0xE00 */\n#define RCC_SYSCLK_DIV512              RCC_D1CFGR_D1CPRE_DIV512 /* 0xF00 */\n\n \n* Back to the [system_stm32h7xx.c](https://github.com/STMicroelectronics/STM32CubeH7/blob/f5c0b7a2b1f6eb26fde150f72edb2d7deb647066/Projects/NUCLEO-H745ZI-Q/Examples/RCC/RCC_ClockConfig/Common/Src/system_stm32h7xx.c#L338-L342) **CMSIS** file, we have these two lines in SystemCoreClockUpdate():\n\nc\n  /* Compute SystemClock frequency --------------------------------------------------*/\n  tmp = D1CorePrescTable[(RCC->D1CFGR & RCC_D1CFGR_D1CPRE) >> RCC_D1CFGR_D1CPRE_Pos];\n\n  /* common_system_clock frequency : CM7 CPU frequency  */\n  common_system_clock >>= tmp;\n\n\n* Here's how the magic happens:\n    * If, at **application** level, the selected value is RCC_SYSCLK_DIV1 (**i.e.**, 0x000):\n        * Field D1CPRE of register RCC_D1CFGR would be set to 0x0,\n        * The index evaluation (RCC->D1CFGR & RCC_D1CFGR_D1CPRE) >> RCC_D1CFGR_D1CPRE_Pos would also give **0**,\n        * Variable tmp would be equal to **0**, the element **0** of D1CorePrescTable[] being equal to **0**.\n        * Then, there would be **no shift** at line common_system_clock >>= tmp;, meaning **no frequency division**.\n    * If, at **application** level, the selected value is RCC_SYSCLK_DIV2 (**i.e.**, 0x800):\n        * Field D1CPRE of register RCC_D1CFGR would be set to 0x8,\n        * The index evaluation (RCC->D1CFGR & RCC_D1CFGR_D1CPRE) >> RCC_D1CFGR_D1CPRE_Pos would give **8** this time (RCC_D1CFGR_D1CPRE_Pos being defined in the **CMSIS** header file and equal to 8),\n        * Variable tmp would be equal to **1**, the element **8** of D1CorePrescTable[] being equal to **1**.\n        * Then, there would be **one shift** at line common_system_clock >>= tmp;, corresponding to a frequency division **by 2**.\n    * If, at **application** level, the selected value is RCC_SYSCLK_DIV512 (**i.e.**, 0xF00):\n        * Field D1CPRE of register RCC_D1CFGR would be set to 0xF,\n        * The index evaluation (RCC->D1CFGR & RCC_D1CFGR_D1CPRE) >> RCC_D1CFGR_D1CPRE_Pos would give **15** this time,\n        * Variable tmp would be equal to **9**, the element **15** of D1CorePrescTable[] being equal to **9**.\n        * Then, there would be **nine shifts** at line common_system_clock >>= tmp;, corresponding to a frequency division **by 512**.\n    * And so on... You can check with the rest of predefined values.\n\n> [!NOTE]\n> The same applies to the other **4-bit** field HPRE and the predefined values RCC_HCLK_DIVx.\n\n----\n\n* Let's continue with the **3-bit** field D2PPRE1. The predefined values RCC_APB1_DIVx are found in the [stm32h7xx_hal_rcc.h](https://github.com/STMicroelectronics/stm32h7xx-hal-driver/blob/57ed86b4c358e2333a71fd895b17f1ccdb68739e/Inc/stm32h7xx_hal_rcc.h#L427-L431) **HAL** file. They too are **aliases** of definitions found in the [stm32h745xx.h](https://github.com/STMicroelectronics/cmsis-device-h7/blob/v1.10.6/Include/stm32h745xx.h) **CMSIS** header file.\n\nc\n#define RCC_APB1_DIV1                  RCC_D2CFGR_D2PPRE1_DIV1  /* 0x00 */\n#define RCC_APB1_DIV2                  RCC_D2CFGR_D2PPRE1_DIV2  /* 0x40 */\n#define RCC_APB1_DIV4                  RCC_D2CFGR_D2PPRE1_DIV4  /* 0x50 */\n#define RCC_APB1_DIV8                  RCC_D2CFGR_D2PPRE1_DIV8  /* 0x60 */\n#define RCC_APB1_DIV16                 RCC_D2CFGR_D2PPRE1_DIV16 /* 0x70 */\n\n \n* In the [stm32h7xx_hal_rcc.c](https://github.com/STMicroelectronics/stm32h7xx-hal-driver/blob/57ed86b4c358e2333a71fd895b17f1ccdb68739e/Src/stm32h7xx_hal_rcc.c#L1521) **HAL** file, we have this line in HAL_RCC_GetPCLK1Freq():\n\nc\n  return (HAL_RCC_GetHCLKFreq() >> ((D1CorePrescTable[(RCC->D2CFGR & RCC_D2CFGR_D2PPRE1) >> RCC_D2CFGR_D2PPRE1_Pos]) & 0x1FU));\n\n\n* Following the same reasoning:\n    * If, at **application** level, the selected value is RCC_APB1_DIV1 (**i.e.**, 0x00):\n        * Field D2PPRE1 of register RCC_D2CFGR would be set to 0x0,\n        * The index evaluation (RCC->D2CFGR & RCC_D2CFGR_D2PPRE1) >> RCC_D2CFGR_D2PPRE1_Pos would also give **0**,\n        * Since element **0** of D1CorePrescTable[] is equal to **0**, there would be **no shift**, meaning **no frequency division**.\n    * If, at **application** level, the selected value is RCC_APB1_DIV2 (**i.e.**, 0x40):\n        * Field D2PPRE1 of register RCC_D2CFGR would be set to 0x4,\n        * The index evaluation (RCC->D2CFGR & RCC_D2CFGR_D2PPRE1) >> RCC_D2CFGR_D2PPRE1_Pos would give **4** this time (RCC_D2CFGR_D2PPRE1_Pos being defined in the **CMSIS** header file and equal to 4),\n        * Since element **4** of D1CorePrescTable[] is equal to **1**, there would be **one shift**, corresponding to a frequency division **by 2**.\n    * If, at **application** level, the selected value is RCC_APB1_DIV16 (**i.e.**, 0x70):\n        * Field D2PPRE1 of register RCC_D2CFGR would be set to 0x7,\n        * The index evaluation (RCC->D2CFGR & RCC_D2CFGR_D2PPRE1) >> RCC_D2CFGR_D2PPRE1_Pos would give **7** this time,\n        * Since element **7** of D1CorePrescTable[] is equal to **4**, there would be **four shifts**, corresponding to a frequency division **by 16**.\n    * And so on...\n\n> [!NOTE]\n> The same applies to the other **3-bit** fields like D2PPRE2 and the predefined values RCC_APB2_DIVx, for instance.\n\n----\n\n### Conclusion\n\nTo understand how all pieces **fit together** and how the whole stuff works **perfectly fine** both for 4-bit and 3-bit prescalers, one has to look at the **whole trail** from application to drivers, not just focus on the table itself.\n\nAs you can see, both **4-bit** and **3-bit** prescalers are **cleverly** handled using a **single** table D1CorePrescTable[].\n* Elements **0** and **8 to 15** correspond to the **4-bit** prescalers,\n* Elements **0** and **4 to 7** correspond to the **3-bit** prescalers,\n* Elements **1 to 3** are just **placeholders** to make everything perfectly fit together,\n\n----\n\nI hope this clarifies the point. Please allow me to close this issue.\n\nWith regards,\n\n[radoslav06 - 2026-02-12T14:24:07Z]\nHi @ALABSTM,\n\nThere is no \"perfect fit\" in this solution, let me explain it in a different way and let's touch different points here:\n\n1. Wrong values\nLet's clarify one thing at the beginning - the table contains wrong values according to the reference manual as there are conflicts between both prescalers, namely on values between 4-7:\n\nBit Pattern | Register Value | 4-bit divider | 3-bit divider | Current Table Value\n-- | -- | -- | -- | --\n0100 | 4 | Divide by 1 (Shift 0) | Divide by 2 (Shift 1) | Shift 1\n0101 | 5 | Divide by 1 (Shift 0) | Divide by 4 (Shift 2) | Shift 2\n0110 | 6 | Divide by 1 (Shift 0) | Divide by 8 (Shift 3) | Shift 3\n0111 | 7 | Divide by 1 (Shift 0) | Divide by 16 (Shift 4) | Shift 4\n\n**This is clearly wrong.** I cannot explain it better.\n\n2. Wrong assumptions\nYour description assumes that the clocks were setup with your code that takes into account the incorrect table values and they were never changed.  The expected behavior (at least in my opinion) is that the function calculates the correct clocks' values based on hardware register values (all possible values). This is the correct approach taking into account best practices, covering 100% hardware behavior, defense programming techniques and physical hardware effects like bit-flips.\n\n3. Bad design\nIt is a *very* bad practice to ignore an error in one place and try to mask it in another place in a system. I don't even know how to comment that kind of approach. Errors shall be fixed at the place of occurrence.\n\n4. Public interface\nThe mentioned table is not an internal design only. The table is exposed with extern declaration in the header file, so it shall be considered as a public interface. So you are exposing public interfaces that is simply wrong.\n\nTo be honest I am quite astonished that this was reported to you several times and every time you defend your incorrect implementation and refuse to fix that. That says a lot about your quality standards.\n\nI see that you close the issue, I disagree with that, but that's your decision; I am not here to teach. I just voluntarily reported an error, giving you the extensive description, so you have a chance to improve your software. It seems for me that I wasted my time here and it is not worth to report any bugs to you.\n\nTaking into account all the above, the case is closed also for me.\n\nBest regards,\nR",
+    "image_urls": [
+      "https://github.com/user-attachments/assets/4cd33e43-f4c1-49ac-82be-84b6c179e243",
+      "https://github.com/user-attachments/assets/5eb06d0d-6bae-471e-804b-512f7eb3173d"
+    ],
+    "images_count": 2
+  },
+  {
+    "repo": "cmsis_device_h7",
+    "issue_number": 22,
+    "title": "Document suggestion: Change the encoding of the ld file to UTF-8.",
+    "state": "closed",
+    "labels": [
+      "enhancement",
+      "cmsis",
+      "internal bug tracker"
+    ],
+    "created_at": "2025-05-22T05:44:34Z",
+    "closed_at": "2025-06-25T15:33:50Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-h7/issues/22",
+    "clean_text": "Title: Document suggestion: Change the encoding of the ld file to UTF-8.\n\nBody:\nIn this repository, all \".ld\" files have minor differences in their comments compared to other repositories. The quotes around \"as is,\" are encoded in Windows-1252, whereas other repositories do not have these quotes. It's recommended to remove them.\n\nhttps://github.com/STMicroelectronics/cmsis-device-h7/blob/74b62d0bfa82e082c0610ff6a9137805df3cd192/Source/Templates/gcc/linker/stm32h745xg_flash_CM4.ld#L17-L19\n\nComments:\n[ASEHSTM - 2025-05-30T16:08:51Z]\nHello @demopath,\n\nThank you for your report. This issue has been tracked internally and will be fixed soon.\n\nWith Regards,\n\n[ASEHSTM - 2025-06-17T14:40:21Z]\nST Internal Reference: 212433\n\n[demopath - 2025-06-18T17:55:35Z]\nThe symbols in the comments were actually minor issues and didn't affect program compilation at all. However, I ran into trouble when using Python to remove those comments for preprocessing simplification (this problem was easily handled and has already been solved). The issue was that this symbol caused the entire file's encoding to be recognized as Windows-1252, leading to problems when trying to process it with UTF-8. That's why I mentioned it.\n\n[ASEHSTM - 2025-06-25T15:33:50Z]\nFixed in 45b818cab6ee2806e3a27c80e330957223424392",
+    "image_urls": [],
+    "images_count": 0
+  },
+  {
+    "repo": "cmsis_device_h7",
+    "issue_number": 21,
+    "title": "Incorrect `GPIO_MODER_MODE[10:15]_{Pos,Msk}` definitions",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "cmsis",
+      "internal bug tracker",
+      "gpio"
+    ],
+    "created_at": "2025-03-18T16:48:06Z",
+    "closed_at": "2025-03-19T13:14:43Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-h7/issues/21",
+    "clean_text": "Title: Incorrect `GPIO_MODER_MODE[10:15]_{Pos,Msk}` definitions\n\nBody:\nWhile reviewing #20, I noticed that some of the now-legacy GPIO_MODER_MODExx defines are incorrect. The last column got cut off for those with a two digit number.  In 6 places, Po and Ms should be Pos and Msk. This appears to apply to all H7 parts.\n\n\n#define GPIO_MODER_MODE9_Pos           GPIO_MODER_MODER9_Pos\n#define GPIO_MODER_MODE9_Msk           GPIO_MODER_MODER9_Msk\n#define GPIO_MODER_MODE9               GPIO_MODER_MODER9\n#define GPIO_MODER_MODE9_0             GPIO_MODER_MODER9_0\n#define GPIO_MODER_MODE9_1             GPIO_MODER_MODER9_1\n\n#define GPIO_MODER_MODE10_Pos          GPIO_MODER_MODER10_Po\n#define GPIO_MODER_MODE10_Msk          GPIO_MODER_MODER10_Ms\n#define GPIO_MODER_MODE10              GPIO_MODER_MODER10\n#define GPIO_MODER_MODE10_0            GPIO_MODER_MODER10_0\n#define GPIO_MODER_MODE10_1            GPIO_MODER_MODER10_1\n\nComments:\n[TOUNSTM - 2025-03-19T11:50:00Z]\nST Internal Reference: 199825\n\n[TOUNSTM - 2025-03-19T13:14:43Z]\nFixed in 74b62d0bfa82e082c0610ff6a9137805df3cd192",
+    "image_urls": [],
+    "images_count": 0
+  },
+  {
+    "repo": "cmsis_device_h7",
+    "issue_number": 20,
+    "title": "Is it planned to remove old code and macros?",
+    "state": "closed",
+    "labels": [
+      "question",
+      "cmsis"
+    ],
+    "created_at": "2025-03-16T13:00:42Z",
+    "closed_at": "2025-03-24T11:36:06Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-h7/issues/20",
+    "clean_text": "Title: Is it planned to remove old code and macros?\n\nBody:\nCMSIS device files (headers) are very large, and changes are periodically made like: https://github.com/STMicroelectronics/cmsis-device-h7/commit/e4d57d6edc39f35aced298732829fc2a5e6a8a71\n\nThis brings each time a section with Legacy xxx\nThis is almost doubling the code, old + new.\n\nIs it planned to remove the old code or is it left for compatibility and will never be removed?.\nIf for compatibility, then if it is with us forever, why introduce new names for the same thing if the old code will 100% not be removed?\n\nIf at least some plans for a large-scale refactoring that will remove old definitions?\n\nI ask because I would like to have synchronized versions of these files with the official repository.\n\nBut if this refactoring is not planned, we will plan refactoring in our repository, because old/new code with a many of developers leads to an increase in entropy.\n\nThank you.\n\nComments:\n[ALABSTM - 2025-03-17T12:19:09Z]\nHi @KoynovStas,\n\nCould you please clarify more what is meant by \"an increase in entropy\"?\n\nThank you,\n\n[KoynovStas - 2025-03-17T12:37:25Z]\nSorry for my bad English. I meant that some our developers use the old version, others the new one. This leads to the fact that some code uses old defines, others new ones. \nIf you do not have plans to remove the old code, our Tech Leads would have removed the old code in our repositories. Yes, we will have to update our copy manually when releasing new versions.\nBut this will force everyone to write driver code with one version of definitions.\n\n[ASEHSTM - 2025-03-24T11:18:51Z]\nHello @KoynovStas,\n\nThe legacy code is maintained for compatibility reasons and will not be removed. \nDevelopers have the discretion to choose which version to use. However, we strongly recommend utilizing the new code for any new development.\n\nThank you.\nWith Regards,\n\n[KoynovStas - 2025-03-24T11:36:06Z]\nThank you for the official response.",
+    "image_urls": [],
+    "images_count": 0
+  },
+  {
+    "repo": "cmsis_device_h7",
+    "issue_number": 19,
+    "title": "Wrong place for DUAL_CORE check in stm32h7xx.h",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "cmsis",
+      "internal bug tracker"
+    ],
+    "created_at": "2025-01-28T20:04:11Z",
+    "closed_at": "2025-02-13T14:29:25Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-h7/issues/19",
+    "clean_text": "Title: Wrong place for DUAL_CORE check in stm32h7xx.h\n\nBody:\n**Describe the bug**\n\nIn [stm32h7xx.h](https://github.com/STMicroelectronics/cmsis-device-h7/blame/master/Include/stm32h7xx.h)\n\nDUAL_CORE check is placed above inclusion of device specific header files:\nhttps://github.com/STMicroelectronics/cmsis-device-h7/blame/e8d40ae6e2fa06afe5b46d24756f141b363342a7/Include/stm32h7xx.h#L92\n\nSInce DUAL_CORE is not yet defined, this check is meaningless.\n\n**Solution**\n\nMove this check to line 172.\n\nComments:\n[TOUNSTM - 2025-02-04T08:48:37Z]\nST Internal Reference: 202061\n\n[KRASTM - 2025-02-13T14:29:25Z]\nFixed in Commit: https://github.com/STMicroelectronics/cmsis-device-h7/commit/ee5d51cb07c70a8e631762e159b32f7450602740",
+    "image_urls": [],
+    "images_count": 0
+  },
+  {
+    "repo": "cmsis_device_h7",
+    "issue_number": 18,
+    "title": "stm32h7 missing register define",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "cmsis",
+      "internal bug tracker",
+      "qspi"
+    ],
+    "created_at": "2025-01-24T08:21:44Z",
+    "closed_at": "2025-02-13T14:28:07Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-h7/issues/18",
+    "clean_text": "Title: stm32h7 missing register define\n\nBody:\n**Describe the set-up**\n * STM32H747BI\n\n**Additional context**\n\nThe free running clock bit is missing in the header file.\n\ndiff\n #define QUADSPI_CCR_SIOO_Pos             (28U)\n #define QUADSPI_CCR_SIOO_Msk             (0x1UL << QUADSPI_CCR_SIOO_Pos)         /*!< 0x10000000 */\n #define QUADSPI_CCR_SIOO                 QUADSPI_CCR_SIOO_Msk                    /*!< SIOO: Send Instruction Only Once Mode */\n+#define QUADSPI_CCR_FRCM_Pos             (29U)\n+#define QUADSPI_CCR_FRCM_Msk             (0x1UL << QUADSPI_CCR_FRCM_Pos)         /*!< 0x20000000 */\n+#define QUADSPI_CCR_FRCM                 QUADSPI_CCR_FRCM_Msk                    /* FRCM: Free-running clock mode */\n #define QUADSPI_CCR_DHHC_Pos             (30U)\n #define QUADSPI_CCR_DHHC_Msk             (0x1UL << QUADSPI_CCR_DHHC_Pos)         /*!< 0x40000000 */\n #define QUADSPI_CCR_DHHC                 QUADSPI_CCR_DHHC_Msk                    /*!< DHHC: DDR hold half cycle */\n\nComments:\n[KRASTM - 2025-01-27T10:40:33Z]\nST Internal Reference: 201437\n\n[KRASTM - 2025-02-13T14:28:07Z]\nFixed in Commit: https://github.com/STMicroelectronics/cmsis-device-h7/commit/cf3743a6e1a94e381ab15e0899f555f518099567",
+    "image_urls": [],
+    "images_count": 0
+  },
+  {
+    "repo": "cmsis_device_h7",
+    "issue_number": 17,
+    "title": "JPEG_CFR_CEOCF, JPEG_CFR_CHPDF bit definitions in stm32h745xx.h are probably incorrect.",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "cmsis",
+      "internal bug tracker"
+    ],
+    "created_at": "2024-10-13T17:22:14Z",
+    "closed_at": "2024-11-07T14:25:44Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-h7/issues/17",
+    "clean_text": "Title: JPEG_CFR_CEOCF, JPEG_CFR_CHPDF bit definitions in stm32h745xx.h are probably incorrect.\n\nBody:\nInstead\n#define JPEG_CFR_CEOCF_Pos              (4U)\n#define JPEG_CFR_CHPDF_Pos              (5U)\n\nit should be \n#define JPEG_CFR_CEOCF_Pos              (5U)\n#define JPEG_CFR_CHPDF_Pos              (6U)\n\naccording to the spec\n[IMAGE ATTACHED]\n\nComments:\n[ASEHSTM - 2024-10-23T09:42:05Z]\nHello @cos-public,\n\nThank you for your report.\nST Internal Reference: 194796\n\nWith Regards,\n\n[ASEHSTM - 2024-11-07T14:25:38Z]\nFixed in e4d57d6edc39f35aced298732829fc2a5e6a8a71",
+    "image_urls": [
+      "https://github.com/user-attachments/assets/99ed90d1-179b-4b21-93cf-9b942f1dd542"
+    ],
+    "images_count": 1
+  },
+  {
+    "repo": "cmsis_device_h7",
+    "issue_number": 16,
+    "title": "Incorrect ETH_DMADSR_RPS Register Definitions",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "cmsis",
+      "eth"
+    ],
+    "created_at": "2024-09-25T12:05:49Z",
+    "closed_at": "2024-10-07T08:53:05Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-h7/issues/16",
+    "clean_text": "Title: Incorrect ETH_DMADSR_RPS Register Definitions\n\nBody:\n**Describe the set-up**\nSTM32H743\n\n**Describe the bug**\nFor STM32H743 (and probably all other h7 and h5 which have ethernet) the [defines](https://github.com/STMicroelectronics/cmsis_device_h7/blob/13ba9da797a30e1563a8795f974425fb26dd0457/Include/stm32h743xx.h#L8370) for ETH_DMADSR_RPS_X_POS are shifted by 4 (and ETH_DMADSR_RPS_WAITING has wrong comment).\n\nc\n#define ETH_DMADSR_RPS_Pos                            (8U)\n#define ETH_DMADSR_RPS_Msk                            (0xFUL << ETH_DMADSR_RPS_Pos) /*!< 0x00000F00 */\n#define ETH_DMADSR_RPS                                ETH_DMADSR_RPS_Msk       /* DMA Channel Receive Process State */\n#define ETH_DMADSR_RPS_STOPPED                        (0U)   /* Stopped (Reset or Stop Receive Command issued) */\n#define ETH_DMADSR_RPS_FETCHING_Pos                   (12U)\n#define ETH_DMADSR_RPS_FETCHING_Msk                   (0x1UL << ETH_DMADSR_RPS_FETCHING_Pos) /*!< 0x00001000 */\n#define ETH_DMADSR_RPS_FETCHING                       ETH_DMADSR_RPS_FETCHING_Msk /* Running (Fetching Rx Transfer Descriptor) */\n#define ETH_DMADSR_RPS_WAITING_Pos                    (12U)\n#define ETH_DMADSR_RPS_WAITING_Msk                    (0x3UL << ETH_DMADSR_RPS_WAITING_Pos) /*!< 0x00003000 */\n#define ETH_DMADSR_RPS_WAITING                        ETH_DMADSR_RPS_WAITING_Msk /* Running (Waiting for status) */\n#define ETH_DMADSR_RPS_SUSPENDED_Pos                  (14U)\n#define ETH_DMADSR_RPS_SUSPENDED_Msk                  (0x1UL << ETH_DMADSR_RPS_SUSPENDED_Pos) /*!< 0x00004000 */\n#define ETH_DMADSR_RPS_SUSPENDED                      ETH_DMADSR_RPS_SUSPENDED_Msk /* Suspended (Rx Descriptor Unavailable) */\n#define ETH_DMADSR_RPS_CLOSING_Pos                    (12U)\n#define ETH_DMADSR_RPS_CLOSING_Msk                    (0x5UL << ETH_DMADSR_RPS_CLOSING_Pos) /*!< 0x00005000 */\n#define ETH_DMADSR_RPS_CLOSING                        ETH_DMADSR_RPS_CLOSING_Msk /* Running (Closing the Rx Descriptor) */\n#define ETH_DMADSR_RPS_TIMESTAMP_WR_Pos               (13U)\n#define ETH_DMADSR_RPS_TIMESTAMP_WR_Msk               (0x3UL << ETH_DMADSR_RPS_TIMESTAMP_WR_Pos) /*!< 0x00006000 */\n#define ETH_DMADSR_RPS_TIMESTAMP_WR                   ETH_DMADSR_RPS_TIMESTAMP_WR_Msk /* Timestamp write state */\n#define ETH_DMADSR_RPS_TRANSFERRING_Pos               (12U)\n#define ETH_DMADSR_RPS_TRANSFERRING_Msk               (0x7UL << ETH_DMADSR_RPS_TRANSFERRING_Pos) /*!< 0x00007000 */\n#define ETH_DMADSR_RPS_TRANSFERRING                   ETH_DMADSR_RPS_TRANSFERRING_Msk /* Running (Transferring the received packet data from the Rx buffer to the system memory) */\n\n\n**Screenshots**\nRM0433 STM32H742, STM32H743/753 and STM32H750 Rev 8\n![Screenshot_20240925_140457](https://github.com/user-attachments/assets/06e8ea8c-5144-47c9-bd4b-8e0b15bd6f70)\n\nComments:\n[ASEHSTM - 2024-09-27T14:28:49Z]\nHello @biglben,\n\nThank you for your report. The RPS bits are located from 8 to 11 in the DMADSR register, as shown in the image below, so the values must be shifted by 8 bits.\n\n![image](https://github.com/user-attachments/assets/0465cd18-59d1-4cdc-8c15-cc67cfea57cf)\n\nWith Regards\n\n[biglben - 2024-10-07T09:55:54Z]\nSorry if i was not clear enough. ETH_DMADSR_RPS_Pos is correct but the others (like ETH_DMADSR_RPS_FETCHING_Pos, ETH_DMADSR_RPS_WAITING_Pos and so on) are wrong. For example ETH_DMADSR_RPS_FETCHING_Pos is 12 which is outside of 11:8",
+    "image_urls": [],
+    "images_count": 0
+  },
+  {
+    "repo": "cmsis_device_h7",
+    "issue_number": 15,
+    "title": "Pseudo-random behavior of GCC start-up template when main() returns",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "good first issue",
+      "cmsis",
+      "internal bug tracker"
+    ],
+    "created_at": "2024-09-13T08:04:34Z",
+    "closed_at": "2026-03-31T14:09:28Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-h7/issues/15",
+    "clean_text": "Title: Pseudo-random behavior of GCC start-up template when main() returns\n\nBody:\nBoard: NUCLEO-H723ZG\nCompiler: arm-none-eabi-gcc (Arch Repository) 14.1.0\n\nThe GCC start-up assembly template for the H723xx [(see here)](https://github.com/STMicroelectronics/cmsis_device_h7/blob/13ba9da797a30e1563a8795f974425fb26dd0457/Source/Templates/gcc/startup_stm32h723xx.s) contains the following code at the end of Reset_Handler:\n\n\n/* Call static constructors */\n  bl __libc_init_array\n/* Call the application's entry point.*/\n  bl  main\n  bx  lr\n\n\nUsually, main is assumed not to return. However, if it does, the next instruction BX LR will jump to the address stored in the link register. This address will usually be the return address for the last sub-routine call inside main. So, this instruction will jump back into main to a more or less random location. In my particular case, this location was close to the end of main, and execution continued through to the end of main where it pop-ed a value of zero into the program counter. This then triggered a hard fault, because zero is not a thumb mode address, and the default hard fault handler (an infinite loop) was entered.\n\nOf course, one can debate about the desired behavior if main returns, but I think we can agree the current behavior is not it. One approach would be to replace BX LR with an infinite loop, similar to the GCC start-up templates for the H5 series. See for example this snippet below (taken from [here](https://github.com/STMicroelectronics/cmsis_device_h5/blob/9a778e0f162bd21200647adafb922d50b2c60f81/Source/Templates/gcc/startup_stm32h563xx.s)):\n\n\n/* Call static constructors */\n  bl __libc_init_array\n/* Call the application's entry point.*/\n  bl main\n\nLoopForever:\n    b LoopForever\n\n\nOne could also consider throwing in a call to __libc_fini_array() after main and before the infinite loop for symmetry.\n\nComments:\n[sidneycadot - 2024-09-13T08:17:42Z]\nI had a cursory look at some different stm32 mcu's startup code assembly, it appears that this is done this way across the startup code of more STM32 families; the nonsensical \"bx lr\" and the missing __libc_fini_array() call is also in the F4 startup code. The H5 startup code has an infinite loop after return from main() -- but no call to _libc_fini_array().\n\nIt would be best to homogenize this across all families, I think. That would take a sweep across a bunch of repositories.\n\nIn general, the behavior when returning from main() should be documented. If the choice is made to not touch the current implementation (for fear of breaking stuff, for example), I'd like to see a clear statement somewhere in the documentation that returning from main() triggers undefined behavior. I wouldn't favor that approach, but it's better than having UB and *not* documenting it.\n\n[TOUNSTM - 2024-09-18T15:32:58Z]\nHello @0xa000,\n\nYour point seems very relevant. It has been forwarded to our development teams. I will keep you informed.\n\nWith regards,\n\n[TOUNSTM - 2024-09-27T13:51:06Z]\nST Internal Reference: 192331\n\n[ALABSTM - 2026-03-31T14:09:28Z]\nHi @0xa000,\n\nIssue fixed in the frame of release **1.10.7**, as you can see from the code snippet below.\n\nhttps://github.com/STMicroelectronics/cmsis-device-h7/blob/8f922cdc7cc6de2344e75ddd657889f4ff761790/Source/Templates/gcc/startup_stm32h723xx.s#L100-L103\n\nWith regards,\n\n[0xa000 - 2026-03-31T14:22:31Z]\nGreat news, thanks!",
+    "image_urls": [],
+    "images_count": 0
+  },
+  {
+    "repo": "cmsis_device_h7",
+    "issue_number": 14,
+    "title": "Missing linker files for GCC & ARM",
+    "state": "closed",
+    "labels": [
+      "enhancement",
+      "wontfix",
+      "cmsis"
+    ],
+    "created_at": "2024-06-11T08:22:01Z",
+    "closed_at": "2024-06-13T14:16:23Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-h7/issues/14",
+    "clean_text": "Title: Missing linker files for GCC & ARM\n\nBody:\n**Describe the set-up**\n * The board: Nucleo-H723ZG\n * IDE: GCC (with cmake)\n\n**Describe the bug**\n\nIn the folder \"[Source/Templates](https://github.com/STMicroelectronics/cmsis_device_h7/tree/master/Source/Templates)\" there are folders for each compiler.  Within these are linker files for those compilers.  In the [IAR linker folder](https://github.com/STMicroelectronics/cmsis_device_h7/tree/master/Source/Templates/iar/linker), there are linker files for a whole host of microcontrollers, including the STM32H723.  In the [GCC](https://github.com/STMicroelectronics/cmsis_device_h7/tree/master/Source/Templates/gcc/linker) and [ARM](https://github.com/STMicroelectronics/cmsis_device_h7/tree/master/Source/Templates/arm/linker) linker folders, there are far fewer and the STM32H723 is one of the ones missing.\n\nThe [startup code for GCC for the H723](https://github.com/STMicroelectronics/cmsis_device_h7/blob/master/Source/Templates/gcc/startup_stm32h723xx.s) is present [in the folder above](https://github.com/STMicroelectronics/cmsis_device_h7/tree/master/Source/Templates/gcc), so it seems strange that a corresponding linker file would not be included (or instructions on how to convert the provided IAR ICF linker file to GCC format).\n\n**How To Reproduce**\n1. Go to repository\n\n2. Look for the GCC linker file for an STM32H723ZG\n\nComments:\n[TOUNSTM - 2024-06-13T14:16:23Z]\nHello @abudden,\n\nThank you for your contribution. GCC linker files can now be created using the CubeIDE project generator. You can also found them under STM32CubeIDE projects.\nUnfortunately, our development teams have no plan to add new GCC linker files.\n\nPlease allow me to close this issue now. Thank you once again for your contribution and thank you for your comprehension.\n\nWith Regards,",
+    "image_urls": [],
+    "images_count": 0
+  },
+  {
+    "repo": "cmsis_device_h7",
+    "issue_number": 13,
+    "title": "Wrong comment for STM32H7B0xx",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "cmsis",
+      "internal bug tracker"
+    ],
+    "created_at": "2024-04-24T08:20:23Z",
+    "closed_at": "2024-05-20T10:07:43Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-h7/issues/13",
+    "clean_text": "Title: Wrong comment for STM32H7B0xx\n\nBody:\nDevice **STM32H7B0xxQ** is not documented.\nLine 74 in stm32h7xx.h should be changed from:\n c\n  /* #define STM32H7B0xx */   /*!< STM32H7B0ABIxQ, STM32H7B0IBTx, STM32H7B0RBTx, STM32H7B0VBTx, STM32H7B0ZBTx, STM32H7B0IBKxQ */\n\nto:\n c\n  /* #define STM32H7B0xx */   /*!< STM32H7B0IBTx, STM32H7B0RBTx, STM32H7B0VBTx, STM32H7B0ZBTx Devices */\n  /* #define STM32H7B0xxQ */  /*!< STM32H7B0ABIxQ, STM32H7B0IBKxQ Devices */\n\nComments:\n[RJMSTM - 2024-04-29T09:05:07Z]\nST Internal Reference: 180246\n\n[TOUNSTM - 2024-05-20T10:07:43Z]\nFixed in 13ba9da797a30e1563a8795f974425fb26dd0457",
+    "image_urls": [],
+    "images_count": 0
+  },
+  {
+    "repo": "cmsis_device_h7",
+    "issue_number": 12,
+    "title": "D1 Domain Core prescaler array \"D1CorePrescTable[16]\" non-zero values for values from 0b0100 to 0b111",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "invalid",
+      "cmsis",
+      "internal bug tracker",
+      "rcc"
+    ],
+    "created_at": "2024-04-07T16:08:02Z",
+    "closed_at": "2024-11-26T11:28:26Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-h7/issues/12",
+    "clean_text": "Title: D1 Domain Core prescaler array \"D1CorePrescTable[16]\" non-zero values for values from 0b0100 to 0b111\n\nBody:\n**Caution**\nThe Issues are strictly limited for the reporting of problem encountered with the software provided in this project.\nFor any other problem related to the STM32 product, the performance, the hardware characteristics and boards, the tools the environment in general, please post a topic in the [ST Community/STM32 MCUs forum](https://community.st.com/s/group/0F90X000000AXsASAW/stm32-mcus).\n\n**Describe the set-up**\n * STM32H755ZIQ\n * uVision V5.39.0.0\n\n**Describe the bug**\nin the _system_stm32h7xx_dualcore_boot_cm4_cm7.c_ file, the function _SystemCoreClockUpdate_ divides the value in the variable _common_system_clock_ based on the four D1CPRE bits of the RCC_D1CFGR register. If the bits are 0b0000 to 0b0111 (0 to 7), sys_clk is not divided, but the first 8 value of the array D1CorePrescTable[16] are {0, 0, 0, 0, 1, 2, 3, 4}, which might cause a problem.\n\nconst  uint8_t D1CorePrescTable[16] = {0, 0, 0, 0, 1, 2, 3, 4, 1, 2, 3, 4, 6, 7, 8, 9};\n\n\n/* Compute SystemClock frequency --------------------------------------------------*/\n  tmp = D1CorePrescTable[(RCC->D1CFGR & RCC_D1CFGR_D1CPRE)>> RCC_D1CFGR_D1CPRE_Pos];\n  /* common_system_clock frequency : CM7 CPU frequency  */\n  common_system_clock >>= tmp;\n\n\n**Screenshots**\n![image](https://github.com/STMicroelectronics/cmsis_device_h7/assets/113466842/ec62a5d5-db46-4977-af45-49b21e761459)\n\nComments:\n[TOUNSTM - 2024-05-28T11:32:08Z]\nST Internal Reference: 182575\n\n[TOUNSTM - 2024-11-26T11:28:26Z]\nHello @Fadi-Eid ,\n\nThe current D1CorePrescTable[16] is implemented to support both 4-bits dividers like D1CPRE and 3-bits dividers such as D1PPRE, D2PPRE2, D2PPRE1. Your proposal is correct for 4-bit dividers, but it is incorrect for 3-bit dividers. Unfortunately, our development teams has no plan to integrate this kind of change request at this time. \n\nThank you for your understanding. Please allow me to close this issue.\nKind regards,\n\n[ALABSTM - 2026-02-11T13:31:25Z]\nHi @Fadi-Eid,\n\nThank you for your report. Actually, this is not an issue but rather a somewhat complex solution that looks tricky at first sight yet works perfectly. Please have a look at [this](https://github.com/STMicroelectronics/cmsis-device-h7/issues/23#issuecomment-3884426195) explanation for details.\n\nWith regards,",
+    "image_urls": [],
+    "images_count": 0
+  },
+  {
+    "repo": "cmsis_device_h7",
+    "issue_number": 11,
+    "title": "Incorrect bit definitions for APB1HFZ1 and FMC_SDCMR registers",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "cmsis",
+      "internal bug tracker"
+    ],
+    "created_at": "2024-03-25T13:28:44Z",
+    "closed_at": "2024-04-23T16:13:33Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-h7/issues/11",
+    "clean_text": "Title: Incorrect bit definitions for APB1HFZ1 and FMC_SDCMR registers\n\nBody:\n**Describe the bug**\nFor the following devices STM32H723/725/730/733/735 the definition of DBGMCU_APB1HFZ1_DBG_TIM24_Pos is incorrect:\n#define DBGMCU_APB1HFZ1_DBG_TIM24_Pos     (24U)\nIt should be changed to:\n#define DBGMCU_APB1HFZ1_DBG_TIM24_Pos     (25U)\n\n\nFor STM32H733 only also FMC_SDCMR_MODE_2 should be fixed from:\n#define FMC_SDCMR_MODE_2           (0x3UL << FMC_SDCMR_MODE_Pos)                /*!< 0x00000003 */\nto:\n#define FMC_SDCMR_MODE_2           (0x4UL << FMC_SDCMR_MODE_Pos)                /*!< 0x00000004 */\n\nComments:\n[RJMSTM - 2024-03-29T12:12:04Z]\nHello @carlo-dev-git,\n\nI agree with you on the first point. I will pass it on to the development team for correction, However, regarding the second point, my stance differs from yours, as detailed in the reference manual rm0468\n\n![image](https://github.com/STMicroelectronics/cmsis_device_h7/assets/113367897/77c9eb89-d9ae-4f55-9dc9-cb2718396102)\n\nThe mode 2 setting in the FMC_SDCMR register is correctly positioned at 3, as indicated in the definition found in the tm32h733xx.h file.\n![image](https://github.com/STMicroelectronics/cmsis_device_h7/assets/113367897/6f9d8338-24f9-4661-8a87-87fd810d7f53)\n \nRegards,\nRania\n\n[RJMSTM - 2024-03-29T14:09:50Z]\nST Internal Reference: 177832\n\n[carlo-dev-git - 2024-03-29T22:30:47Z]\nHi Rania,\nI think you are confusing the bit number with the bit mask:\n(0x3UL << FMC_SDCMR_MODE_Pos) means 0b0011 which is definitely not MODE[2] bit.\n(0x4UL << FMC_SDCMR_MODE_Pos) means 0b0100.\n\nTo confirm my statement, please check the header files of other micros.\nThe following code is taken from stm32h743xx.h:\n\n/******************  Bit definition for FMC_SDCMR register  *******************/\n#define FMC_SDCMR_MODE_Pos         (0U)\n#define FMC_SDCMR_MODE_Msk         (0x7UL << FMC_SDCMR_MODE_Pos)               /*!< 0x00000007 */\n#define FMC_SDCMR_MODE             FMC_SDCMR_MODE_Msk                          /*!<MODE[2:0] bits (Command mode) */\n#define FMC_SDCMR_MODE_0           (0x1UL << FMC_SDCMR_MODE_Pos)                /*!< 0x00000001 */\n#define FMC_SDCMR_MODE_1           (0x2UL << FMC_SDCMR_MODE_Pos)                /*!< 0x00000002 */\n#define FMC_SDCMR_MODE_2           (0x4UL << FMC_SDCMR_MODE_Pos)                /*!< 0x00000004 */\n\n\n![FMC_SDCMR_MODE](https://github.com/STMicroelectronics/cmsis_device_h7/assets/79503870/372f4efd-3d8c-4167-8015-e418476fa0bc)\n\nI hope I have detailed the topic better.\n\nRegards,\nCarlo\n\n[RJMSTM - 2024-04-23T16:13:25Z]\nFixed in 88f29645ec7e063bae3d5e58699fc541a81efac6",
+    "image_urls": [],
+    "images_count": 0
+  },
+  {
+    "repo": "cmsis_device_h7",
+    "issue_number": 10,
+    "title": "Reset_Handler resets variables set by SystemInit()",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "wontfix",
+      "cmsis"
+    ],
+    "created_at": "2024-01-25T10:54:59Z",
+    "closed_at": "2024-07-19T10:37:03Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-h7/issues/10",
+    "clean_text": "Title: Reset_Handler resets variables set by SystemInit()\n\nBody:\nThe very detailed report was done for https://github.com/STMicroelectronics/cmsis_device_l4/issues/2\nThis issue is not present on some lines, e.g. F4. And present on the majority of others, like L4, G0, H7, etc.\nPlease fix the order of initialisation - data/bss section first, then SystemInit(), second.\n\nComments:\n[TOUNSTM - 2024-07-19T10:37:03Z]\nHello @cpq,\n\nAs mentioned in the previous issue https://github.com/STMicroelectronics/cmsis_device_l4/issues/2, the main reason for this change is the use of external memories. When using external memory, it is crucial to initialize the memory controller before accessing any variables stored in that memory. This is why SystemInit() must be called before initializing the data and BSS sections.\n\nIn the SystemInit() API, there are no variables like SystemCoreClock; instead, it directly accesses hardware registers to configure the system. We have thoroughly tested this approach and have not encountered any cases where SystemCoreClock is equal to 0.\nhttps://github.com/STMicroelectronics/cmsis_device_h7/blob/13ba9da797a30e1563a8795f974425fb26dd0457/Source/Templates/system_stm32h7xx.c#L175-L301\nBy calling SystemInit() first, we ensure that the external memory is properly configured, allowing the subsequent initialization of the data and BSS sections to proceed without issues.\n\nI hope this clarifies the rationale behind the change. Thank you for your understanding. Allow me to close this issue.\n\nKind regards,\n\n[cpq - 2024-07-19T11:07:43Z]\n@TOUNSTM \n\nI don't know what do you mean by In the SystemInit() API, there are no variables like SystemCoreClock.\nMaybe if you take a look at the CMSIS documentation, https://www.keil.com/pack/doc/CMSIS_Dev/Core/html/group__system__init__gr.html , you'll find that uint32_t SystemCoreClock is there, and must be defined by the device code.\n\nUnless you're implementing some other CMSIS, not ARM.\n\nNevertheless, as I pointed out elsewhere, some of the ST device CMSIS startup code call SystemInit() before data/BSS init. Some - after.  So your argument \"This is why SystemInit() must be called before initializing the data and BSS sections\" may be valid, but it contradicts your own practice. Like here, for F4 series:\nhttps://github.com/STMicroelectronics/cmsis_device_f4/blob/73273c20e85c6c57688f6106485a2e4f2592ddf9/Source/Templates/gcc/startup_stm32f429xx.s#L95-L99\n\nSo please don't fill me bullshit. If you don't want to fix thing, just admit it - there could be valid reason, like  legacy, breaking existing code, etc etc.  Adding an \"invalid\" label does not make the issue invalid, maybe in your own mind only.\n\n[TOUNSTM - 2024-07-19T12:02:30Z]\nHello @cpq,\n\nWe understand your concerns and appreciate your feedback. The initialization of the data and BSS sections before calling SystemInit() is indeed a common practice in embedded systems development. However, in certain scenarios, particularly when using external memory, it is necessary to call SystemInit() before initializing the data and BSS sections to ensure proper memory configuration.\n> Nevertheless, as I pointed out elsewhere, some of the ST device CMSIS startup code call SystemInit() before data/BSS init. Some - after. So your argument \"This is why SystemInit() must be called before initializing the data and BSS sections\" may be valid, but it contradicts your own practice. Like here, for F4 series: https://github.com/STMicroelectronics/cmsis_device_f4/blob/73273c20e85c6c57688f6106485a2e4f2592ddf9/Source/Templates/gcc/startup_stm32f429xx.s#L95-L99\n\nIn our specific case, this approach is essential to ensure the correct operation of the system. You can refer to a recent version of the F4 series, where you will see that the issue has been addressed in the same manner.\nhttps://github.com/STMicroelectronics/cmsis_device_f4/blob/cdbad761857acedcdd07ece7939b4cb209ed826a/Source/Templates/gcc/startup_stm32f429xx.s#L63-L100\n\nWhile your perspective is valid in general terms, it is not applicable to our specific situation due to the need for external memory initialization. We hope this clarifies our approach and the rationale behind it.\n\nThank you for your understanding.",
+    "image_urls": [],
+    "images_count": 0
+  },
+  {
+    "repo": "cmsis_device_h7",
+    "issue_number": 9,
+    "title": "Incorrect RTC register",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "cmsis",
+      "internal bug tracker",
+      "rtc"
+    ],
+    "created_at": "2024-01-12T22:57:58Z",
+    "closed_at": "2025-02-21T10:32:20Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-h7/issues/9",
+    "clean_text": "Title: Incorrect RTC register\n\nBody:\n**Describe the set-up:**\n\n- I'm reporting this for the STM32H723/733, STM32H725/735 and STM32H730 family\n\n**Describe the bug:**\n\n- The RTC driver for the STM32H723 is incorrect.\n\n- The RTC_TAFCR register, present in STM32H723/733, STM32H725/735 and STM32H730 family devices, is replaced with the RTC_TAMPCR register in the STM32H7xx.\n\n- This discrepancy raises concerns about potential changes in RTC functionality.\n\n\n**Screenshots:**\n\n_- RM0468 : STM32H723/733, STM32H725/735 and STM32H730 :_\n\n![image](https://github.com/STMicroelectronics/cmsis_device_h7/assets/3200163/38ae663d-6dfd-4f29-b7dc-764c1cfea6bd)\n\n_- RM0433 : STM32H742, STM32H743/753 and STM32H750 :_ \n\n![image](https://github.com/STMicroelectronics/cmsis_device_h7/assets/3200163/648428b3-ab30-472c-a04b-3057e01d9e9b)\n\n_[- cmsis_device_h7/Include/stm32h723xx.h](https://github.com/STMicroelectronics/cmsis_device_h7/blob/master/Include/stm32h723xx.h)_\n\n![image](https://github.com/STMicroelectronics/cmsis_device_h7/assets/3200163/edaa4167-1214-4521-8b0a-2ecd196694ea)\n\nComments:\n[ALABSTM - 2024-01-17T16:50:22Z]\nHi @khezami,\n\nThank you for having reported. At first glance, this looks rather as an issue in the documentation. It has been forwarded to the concerned teams for confirmation. I will keep you updated. Thank you again.\n\nWith regards,\n\n[ALABSTM - 2024-01-17T16:50:42Z]\nST Internal Reference: 196706\n\n[ALABSTM - 2024-11-28T10:16:46Z]\nHi @khezami,\n\nBack to this point you reported. After further analysis, this is rather related to the definitions in the CMSIS header files. This will be fixed soon enough hopefully. Thank you again for the heads-up.\n\nWith regards,\n\n[ALABSTM - 2025-02-21T10:32:20Z]\nHi @khezami,\n\nI hope you are fine. Issue fixed, as you can see from [this](https://github.com/STMicroelectronics/cmsis-device-h7/blob/ee5d51cb07c70a8e631762e159b32f7450602740/Include/stm32h723xx.h#L16976-L17106) sample code. Thank you for your patience and thank you again for having reported.\n\nWith regards,",
+    "image_urls": [],
+    "images_count": 0
+  },
+  {
+    "repo": "cmsis_device_h7",
+    "issue_number": 6,
+    "title": "Usage clarification: KEYR1 and KEYR2 Flash Registers",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "wontfix",
+      "cmsis"
+    ],
+    "created_at": "2023-11-13T10:51:01Z",
+    "closed_at": "2024-06-07T10:13:29Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-h7/issues/6",
+    "clean_text": "Title: Usage clarification: KEYR1 and KEYR2 Flash Registers\n\nBody:\n[KEYR1](https://github.com/STMicroelectronics/cmsis_device_h7/blob/902450ef44d7b4c0595b7620bda8a2ef705ef181/Include/stm32h743xx.h#L942C77-L942C77)\n[KEYR2](https://github.com/STMicroelectronics/cmsis_device_h7/blob/902450ef44d7b4c0595b7620bda8a2ef705ef181/Include/stm32h743xx.h#L918)\nHere KEYR1 and KEYR2 Flash registers are marked as IO (Read and write) but reference manual RM0433 chapters 4.9.2 and 4.9.24 say that should be write-only registers, is this right? If i try to read them from IAR ide the registers are always empty (0x00000000)\n\nComments:\n[TOUNSTM - 2024-06-07T10:13:29Z]\nHello @Steccah,\n\nThank you for your contribution. The KEYR1 and KEYR2 flash registers are write-only, and you are correct in highlighting this. Unfortunately, our development teams do not have immediate plans to implement a fix. It may be considered for future development. I will keep you updated on any changes in their plans.\n\nThank you once more for your report.\n\nKind regards,",
+    "image_urls": [],
+    "images_count": 0
+  },
+  {
+    "repo": "cmsis_device_h7",
+    "issue_number": 5,
+    "title": "Incorrect __CM7_REV and some missing values in device headers",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "cmsis",
+      "internal bug tracker"
+    ],
+    "created_at": "2023-08-12T01:06:44Z",
+    "closed_at": "2024-02-26T13:25:00Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-h7/issues/5",
+    "clean_text": "Title: Incorrect __CM7_REV and some missing values in device headers\n\nBody:\n**Describe the set-up**\nI'm reporting this for the STM32H742/743/750/753 family as I am most familiar with them, but it looks like this applies to all other H7 devices.\n\n**Describe the bug**\nThe __CM7_REV macro indicates that the revision of the M7 core is r1p0, but it's actually r1p1 according to the [errata](https://www.st.com/resource/en/errata_sheet/es0392-stm32h742x743xig-st32h750xb-and-stm32h753xi-device-errata-stmicroelectronics.pdf#page=8) and the CPUID register on a physical device (0x41**1**FC27**1**). I imagine it's a carry over from older F7 devices. Making things more confusing, the datasheet and reference manual do not list the revision and old versions of the errata had a different incorrect value listed (r0p1).\n\nhttps://github.com/STMicroelectronics/cmsis_device_h7/blob/v1.10.3/Include/stm32h742xx.h#L213\n\nThe headers also seem to be missing a few definitions (__VTOR_PRESENT, __FPU_DP, and __DTCM_PRESENT) that are present in the template from the included version of CMSIS.\n\nhttps://github.com/ARM-software/CMSIS_5/blob/5.6.0/Device/_Template_Vendor/Vendor/Device/Include/Device.h#L101-L111\n\nComments:\n[TOUNSTM - 2023-11-10T18:29:15Z]\nST Internal Reference: 166097\n\n[TOUNSTM - 2024-02-26T13:25:00Z]\nFixed in commit acfdbb7a81c43cb7106285da16ae6b9b2e4d879e",
+    "image_urls": [],
+    "images_count": 0
+  },
+  {
+    "repo": "cmsis_device_h7",
+    "issue_number": 4,
+    "title": "Allow VECT_TAB_OFFSET to be set externally",
+    "state": "closed",
+    "labels": [
+      "enhancement",
+      "cmsis",
+      "internal bug tracker"
+    ],
+    "created_at": "2022-08-12T01:18:21Z",
+    "closed_at": "2025-02-21T10:48:27Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-h7/issues/4",
+    "clean_text": "Title: Allow VECT_TAB_OFFSET to be set externally\n\nBody:\nCurrently, in order to change the value of VECT_TAB_OFFSET, the user has to modify the system_stm32h7xx.c file. This is inconvenient in cases where the value has to change for different builds.\n\nIf the code was changed from:\n\nc\n#define VECT_TAB_OFFSET         0x00000000U\n\n\nto \n\nc\n#ifndef VECT_TAB_OFFSET\n#define VECT_TAB_OFFSET         0x00000000U\n#endif\n\n\nThe user could define the value via a command line, like so -DVECT_TAB_OFFSET=0x00020000.\n\nComments:\n[utkarshsethi - 2022-09-14T13:19:45Z]\n@ALABSTM I think this is duplicate/would also fix https://github.com/STMicroelectronics/cmsis_device_g4/issues/1\n\n[okz - 2023-10-18T10:38:46Z]\nnot being able to define this externally, or having this inside a user block, is a real inconvenience, especially when developing seperate boot / application firmware.   \n\nIt's are really small fix, is there a reason for not implementing it yet?\n\n[ALABSTM - 2023-11-29T13:48:52Z]\nHi everyone,\n\n@armandas, thank you for having reported. We already logged the point internally and are working on it, among many other points.\n\n@utkarshsethi, you're absolutely right. This is the same issue as the one you mentioned. However, as the repos are different, we will keep track of them separately.\n\n@okz, I understand your point. We will try to have this fix implemented, deployed, and released soon enough hopefully.\n\nThank you all for your patience and your comprehension.\n\nWith regards,\n\n[ALABSTM - 2023-11-29T13:49:16Z]\nST Internal Reference: 203039\n\n[ALABSTM - 2025-02-21T10:47:37Z]\nFixed in commit 41925bcbd3a84755ce23f0f4b818793df442c3a1\n\n[ALABSTM - 2025-02-21T10:48:27Z]\nHi everyone,\n\nI hope you are doing well. We finally updated the [system_stm32h7xx.c](https://github.com/STMicroelectronics/cmsis-device-h7/blob/6c7cb3ea1e3f139a1a9e1a7bb13c7ce5540bf76b/Source/Templates/system_stm32h7xx.c#L120-L123) files to allow macro VECT_TAB_OFFSET to be overridden externally.\n\nThank you for your patience and thank you again for having reported.\n\nWith regards,",
+    "image_urls": [],
+    "images_count": 0
+  },
+  {
+    "repo": "cmsis_device_h7",
+    "issue_number": 2,
+    "title": "Wrong comment for VECT_TAB_OFFSET",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "cmsis",
+      "internal bug tracker"
+    ],
+    "created_at": "2021-12-15T11:23:44Z",
+    "closed_at": "2023-02-23T15:32:30Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-h7/issues/2",
+    "clean_text": "Title: Wrong comment for VECT_TAB_OFFSET\n\nBody:\nThis value must be a multiple of 0x200 (generic template)\n\nhttps://github.com/STMicroelectronics/cmsis_device_h7/blob/f5e3a1d5e71e6b9278a6d580b7d5ca82c0debd9b/Source/Templates/system_stm32h7xx.c#L98\n\n or 0x300 (other files) ?\nhttps://github.com/STMicroelectronics/cmsis_device_h7/blob/f5e3a1d5e71e6b9278a6d580b7d5ca82c0debd9b/Source/Templates/system_stm32h7xx_dualcore_boot_cm4_cm7.c#L87\n\nComments:\n[ALABSTM - 2022-01-05T16:19:34Z]\nHi @carlo-dev-git,\n\nThank you for having reported. Indeed, there is an inconsistence between the different comments. This will be reported to our development teams.\n\nWith regards,\n\n**PS:** Best wishes for the new year 2022.\n\n[ALABSTM - 2022-01-05T16:37:44Z]\nST Internal Reference: 120332\n\n[carlo-dev-git - 2022-03-10T08:22:07Z]\nHi ALABSTM,\n\nI just updated the STM32Cube STM32H7 MCU Package to v1.10.0 but this ticket is not fixed because it was scheduled to v1.11.0. From stm32cube-mcu-cmsis-dashboard the ticket status is set To release, so could you just tell me what is the correct offset (0x200 or 0x300)?\nIt is very important for me.\n\nBest regards.\n\n[ALABSTM - 2022-03-14T16:41:00Z]\nHi @carlo-dev-git,\n\nMy bad. I mistook the milestone which is v1.10.2 and not v1.11.0. Actually, the typo has been corrected as you can see from the code snippet below. The correct offset value is 0x300. The fix has been published on both  this repo and [STM32CubeH7](https://github.com/STMicroelectronics/STM32CubeH7).\n\nhttps://github.com/STMicroelectronics/cmsis_device_h7/blob/a95954cd368b94e60d3dc42b8005a0460a18d7cb/Source/Templates/system_stm32h7xx.c#L98-L99\n\nWith regards,\n\n[carlo-dev-git - 2022-03-15T01:12:27Z]\nHi ALABSTM,\n\nthanks for your clarification but what about the single-core template?\n\nhttps://github.com/STMicroelectronics/cmsis_device_h7/blob/a95954cd368b94e60d3dc42b8005a0460a18d7cb/Source/Templates/system_stm32h7xx_singlecore.c#L96-L106\n\n[carlo-dev-git - 2022-03-15T10:17:15Z]\nHi ALABSTM,\nplease check **PM0253** _STM32F7 Series and STM32H7 Series Cortex®-M7 processor programming manual_ (Rev 5)\n\n**4.3.4 Vector table offset register**\nThe table alignment requirements mean that **bits [8:0]** of the table offset are always **zero**.\n\n0x300 -> 001100000000b\n\n[ALABSTM - 2022-04-11T09:05:44Z]\nHi @carlo-dev-git,\n\nI sent your question back to our development teams and they confirm your doubts. Actually, the VTO should be a multiple of 0x400 for both single- and dual-core part-numbers.\n\nWe do apologize for this inconvenience. I will reopen this issue pending the fix publication.\n\nWith regards,",
+    "image_urls": [],
+    "images_count": 0
+  },
+  {
+    "repo": "cmsis_device_h7",
+    "issue_number": 1,
+    "title": "stm32h743xx.h: wrong definition of FLASH_CRCCR_ALL_BANK_Pos",
+    "state": "closed",
+    "labels": [
+      "invalid",
+      "cmsis"
+    ],
+    "created_at": "2020-05-06T12:16:29Z",
+    "closed_at": "2020-05-14T08:56:42Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-h7/issues/1",
+    "clean_text": "Title: stm32h743xx.h: wrong definition of FLASH_CRCCR_ALL_BANK_Pos\n\nBody:\nThe **FLASH_CRCCR_ALL_BANK_Pos** definition is set to 22.\nAccording to the RM0433 Rev 7 (February 2020), the ALL_BANK bit in FLASH_CRCCR1 is bit 7.\nThe correct value for FLASH_CRCCR_ALL_BANK_Pos should be:\n\n#define FLASH_CRCCR_ALL_BANK_Pos             (7U)\n\nComments:\n[ASELSTM - 2020-05-13T11:13:38Z]\nHi @deadror ,\n\nThank you for your contribution.\n\nWe raised this issue to our development teams, and they confirmed that the ALL_BANK bit is defined at bit 22 instead of bit 7. \n\nIndeed, the ALL_BANK bit in CUT1.0 has indeed been defined at bit 7, and it has been moved to bit 22 in the new CUT2.0. So, the problem is rather related to the documentation. \n\nIn fact, this version of the reference manual is not yet updated with the new position of the ALL_BANK bit in the CUT2.0 of the STM32H7 which is bit 22. However, this is in progress. The RM0433 is being updated, the ALL_BANK bit position will be fixed and the new version of the reference manual will be available at a later date.\n\nSince that the issue is not related to the CMSIS device, allow me to close this issue, thank you for your comprehension.\n\nWith regards,",
+    "image_urls": [],
+    "images_count": 0
+  }
+]

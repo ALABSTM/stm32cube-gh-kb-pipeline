@@ -1,0 +1,203 @@
+[
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 3,
+    "issue_title": "HAL_FDCAN_GetRxMessage() evaluates GetIndex value for Rx FIFO overwrite scenario.",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "spotted before customer",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/3",
+    "linked_pr_numbers": [
+      91
+    ],
+    "linked_commit_shas": [
+      "be9c8f73842d0cc398cca735ab2a8d48dc09f52c"
+    ],
+    "linked_prs": [
+      {
+        "pr_number": 91,
+        "title": "Fix HAL_FDCAN_GetRxMessage GetIndex computation overflow in overwrite mode",
+        "state": "closed",
+        "merged": false,
+        "github_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/pull/91",
+        "changed_files_count": 1,
+        "merge_commit_sha": null
+      }
+    ],
+    "linked_commits": [
+      {
+        "sha": "be9c8f73842d0cc398cca735ab2a8d48dc09f52c",
+        "message": "Fix buffer overflow in HAL_FDCAN_GetRxMessage when FIFO overwrite mode is active",
+        "committed_at": "2025-08-18T08:17:52Z",
+        "github_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/commit/be9c8f73842d0cc398cca735ab2a8d48dc09f52c",
+        "pr_numbers": [
+          91
+        ],
+        "stats": {
+          "additions": 21,
+          "deletions": 8,
+          "total": 29
+        }
+      }
+    ],
+    "evidence": {
+      "explicit_pr_numbers": [
+        91
+      ],
+      "explicit_commit_shas": [
+        "be9c8f73842d0cc398cca735ab2a8d48dc09f52c"
+      ],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [
+        "be9c8f73842d0cc398cca735ab2a8d48dc09f52c"
+      ],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.8,
+    "link_confidence": "medium",
+    "resolution_status": "candidate_fix"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 47,
+    "issue_title": "Upgrading the hal library from 1.11.0 to 1.11.1 will cause the SPI master transmission to time out for no reason.",
+    "issue_labels": [
+      "bug",
+      "documentation"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/47",
+    "linked_pr_numbers": [
+      48
+    ],
+    "linked_commit_shas": [
+      "61994139b7643fc8f57127b3d84915ad5363cb80"
+    ],
+    "linked_prs": [
+      {
+        "pr_number": 48,
+        "title": "fix the bug that the spi suspend flag is not cleared",
+        "state": "closed",
+        "merged": false,
+        "github_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/pull/48",
+        "changed_files_count": 1,
+        "merge_commit_sha": "7e9f7b331f1b849ff24064e33e42b495b5bf9b31"
+      }
+    ],
+    "linked_commits": [
+      {
+        "sha": "61994139b7643fc8f57127b3d84915ad5363cb80",
+        "message": "fix the bug that the spi suspend flag is not cleared",
+        "committed_at": "2024-03-11T16:09:12Z",
+        "github_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/commit/61994139b7643fc8f57127b3d84915ad5363cb80",
+        "pr_numbers": [
+          48
+        ],
+        "stats": {
+          "additions": 15,
+          "deletions": 0,
+          "total": 15
+        }
+      }
+    ],
+    "evidence": {
+      "explicit_pr_numbers": [
+        48
+      ],
+      "explicit_commit_shas": [
+        "61994139b7643fc8f57127b3d84915ad5363cb80"
+      ],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [
+        "61994139b7643fc8f57127b3d84915ad5363cb80"
+      ],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.8,
+    "link_confidence": "medium",
+    "resolution_status": "candidate_fix"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 76,
+    "issue_title": "DMA HAL enables FIFO Error interrupt even if the FIFO is not enabled",
+    "issue_labels": [
+      "bug",
+      "invalid",
+      "internal bug tracker",
+      "st community",
+      "hal",
+      "dma"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/76",
+    "linked_pr_numbers": [
+      78
+    ],
+    "linked_commit_shas": [
+      "19fe437fe48c70d890f8d3e0a016ea8168ee96d9"
+    ],
+    "linked_prs": [
+      {
+        "pr_number": 78,
+        "title": "Fix DMA HAL enabling FIFO Error interrupt even if FIFO is not enabled",
+        "state": "closed",
+        "merged": false,
+        "github_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/pull/78",
+        "changed_files_count": 1,
+        "merge_commit_sha": "8a37349278b241f9ed3c14bc348127dca32f68f1"
+      }
+    ],
+    "linked_commits": [
+      {
+        "sha": "19fe437fe48c70d890f8d3e0a016ea8168ee96d9",
+        "message": "Fix DMA HAL enabling FIFO Error interrupt even if FIFO is not enabled\n\nRelated to #76\n\nAdd condition to enable FIFO Error interrupt only if FIFO is enabled.\n\n* Modify `Src/stm32h7xx_hal_dma_ex.c` to check if FIFO is enabled before enabling FIFO Error interrupt.\n* Add condition to line 292 to enable FIFO Error interrupt only if FIFO is enabled (direct mode disabled).",
+        "committed_at": "2024-11-02T07:55:35Z",
+        "github_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/commit/19fe437fe48c70d890f8d3e0a016ea8168ee96d9",
+        "pr_numbers": [
+          78
+        ],
+        "stats": {
+          "additions": 4,
+          "deletions": 2,
+          "total": 6
+        }
+      }
+    ],
+    "evidence": {
+      "explicit_pr_numbers": [
+        78
+      ],
+      "explicit_commit_shas": [
+        "19fe437fe48c70d890f8d3e0a016ea8168ee96d9"
+      ],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [
+        "19fe437fe48c70d890f8d3e0a016ea8168ee96d9"
+      ],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.8,
+    "link_confidence": "medium",
+    "resolution_status": "candidate_fix"
+  }
+]

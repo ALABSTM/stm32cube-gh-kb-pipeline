@@ -1,0 +1,9 @@
+{
+  "repo": "STM32CubeH7",
+  "input_file": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\data\\docs_issues_stm32cubeh7_v2.json",
+  "output_dir": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\issues\\stm32cubeh7",
+  "total_docs": 294,
+  "exported_docs": 221,
+  "include_invalid": false,
+  "comments_chars": 1200
+}
