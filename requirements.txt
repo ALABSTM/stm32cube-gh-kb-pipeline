@@ -2,3 +2,4 @@ requests
 scikit-learn
 jsonschema
 openpyxl
+opencv-python-headless
