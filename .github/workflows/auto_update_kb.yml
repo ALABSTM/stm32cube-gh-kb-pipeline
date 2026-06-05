@@ -36,10 +36,16 @@ env:
   ST_REMOTE_USER: ${{ secrets.ST_REMOTE_USER }}
 
 jobs:
-  update-kb:
-    name: Pipeline + KB Upload
+  # ================================================================
+  # JOB 1: Pipeline (runs on GitHub cloud - no ST network needed)
+  # ================================================================
+  pipeline:
+    name: Ingestion + Preprocessing
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 90
+    outputs:
+      series: ${{ steps.config.outputs.series }}
+      skip_upload: ${{ steps.config.outputs.skip_upload }}
 
     steps:
       - name: Checkout repository
@@ -85,12 +91,61 @@ jobs:
           python -m pipeline_Automation.workflow.run_all_series $ARGS
 
       # ========================================
-      # STAGE 2: Upload to KB #793
+      # Archive artifacts (passed to upload job)
       # ========================================
-      - name: Upload to KB
-        if: steps.config.outputs.skip_upload != 'true'
+      - name: Upload delivery artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: st-ready-delivery-${{ github.run_number }}
+          path: datasets/07_delivery/st_ready/by_series/
+          retention-days: 30
+
+      - name: Pipeline summary
         run: |
-          IFS=',' read -ra SERIES <<< "${{ steps.config.outputs.series }}"
+          echo "## Pipeline Completed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Parameter | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Series | ${{ steps.config.outputs.series }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Skip Ingestion | ${{ steps.config.outputs.skip_ingestion }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Run | #${{ github.run_number }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Date | $(date -u '+%Y-%m-%d %H:%M UTC') |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Artifacts uploaded. Upload job will push to KB #793." >> $GITHUB_STEP_SUMMARY
+
+  # ================================================================
+  # JOB 2: Upload to KB (runs on self-hosted runner with ST network)
+  # ================================================================
+  upload:
+    name: Upload to KB #793
+    needs: pipeline
+    if: needs.pipeline.outputs.skip_upload != 'true'
+    runs-on: [self-hosted, st-network]
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Download delivery artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: st-ready-delivery-${{ github.run_number }}
+          path: datasets/07_delivery/st_ready/by_series/
+
+      - name: Upload all series to KB
+        run: |
+          IFS=',' read -ra SERIES <<< "${{ needs.pipeline.outputs.series }}"
           
           # Datasource ID registry
           declare -A DS_ISSUES=( [f4]=28099 [h5]=28158 [h7]=19896 [u5]=28167 [wl]=28171 )
@@ -103,7 +158,6 @@ jobs:
           for s in "${SERIES[@]}"; do
             BASE="datasets/07_delivery/st_ready/by_series/stm32cube${s}"
             
-            # Skip if no datasource ID registered for this series
             if [ -z "${DS_ISSUES[$s]:-}" ]; then
               echo "=== Skipping ${s^^} (no datasource IDs registered) ==="
               continue
@@ -156,27 +210,13 @@ jobs:
             fi
           done
 
-      # ========================================
-      # STAGE 3: Archive artifacts
-      # ========================================
-      - name: Upload delivery artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: st-ready-delivery-${{ github.run_number }}
-          path: datasets/07_delivery/st_ready/by_series/
-          retention-days: 30
-
-      # ========================================
-      # STAGE 4: Summary
-      # ========================================
-      - name: Job summary
+      - name: Upload summary
         run: |
-          echo "## KB Auto-Update Summary" >> $GITHUB_STEP_SUMMARY
+          echo "## KB Upload Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Parameter | Value |" >> $GITHUB_STEP_SUMMARY
           echo "|-----------|-------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Series | ${{ steps.config.outputs.series }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Skip Ingestion | ${{ steps.config.outputs.skip_ingestion }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Skip Upload | ${{ steps.config.outputs.skip_upload }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Series | ${{ needs.pipeline.outputs.series }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| KB | #793 |" >> $GITHUB_STEP_SUMMARY
           echo "| Run | #${{ github.run_number }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Date | $(date -u '+%Y-%m-%d %H:%M UTC') |" >> $GITHUB_STEP_SUMMARY
