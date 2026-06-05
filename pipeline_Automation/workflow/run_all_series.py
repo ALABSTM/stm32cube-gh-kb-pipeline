@@ -23,6 +23,7 @@ SERIES_CONFIGS = {
     "h5": CONFIG_DIR / "config_h5.json",
     "u5": CONFIG_DIR / "config_u5.json",
     "wl": CONFIG_DIR / "config_wl.json",
+    "c0": CONFIG_DIR / "config_c0.json",
 }
 
 
