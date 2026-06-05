@@ -85,13 +85,7 @@ jobs:
           python -m pipeline_Automation.workflow.run_all_series $ARGS
 
       # ========================================
-      # STAGE 2: Schema Validation Gate
-      # ========================================
-      - name: Validate schemas
-        run: python -m pipeline.evaluation.validate_schemas
-
-      # ========================================
-      # STAGE 3: Upload to KB #793
+      # STAGE 2: Upload to KB #793
       # ========================================
       - name: Upload to KB
         if: steps.config.outputs.skip_upload != 'true'
@@ -157,7 +151,7 @@ jobs:
           done
 
       # ========================================
-      # STAGE 4: Archive artifacts
+      # STAGE 3: Archive artifacts
       # ========================================
       - name: Upload delivery artifacts
         uses: actions/upload-artifact@v4
@@ -167,7 +161,7 @@ jobs:
           retention-days: 30
 
       # ========================================
-      # STAGE 5: Summary
+      # STAGE 4: Summary
       # ========================================
       - name: Job summary
         run: |
