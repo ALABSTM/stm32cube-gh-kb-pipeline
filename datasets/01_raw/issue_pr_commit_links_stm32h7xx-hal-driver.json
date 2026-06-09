@@ -1,0 +1,3115 @@
+[
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 1,
+    "issue_title": "STM32H7XX_HAL_UART.C issue: USART1 in asynchronous mode unable to receive the very last transmitted byte",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/1",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 2,
+    "issue_title": "HAL_FDCAN_IRQHandler() : Concern with regards to value assigned to FDCAN_CCU->IR and FDCAN_CCU",
+    "issue_labels": [
+      "invalid",
+      "question",
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/2",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 3,
+    "issue_title": "HAL_FDCAN_GetRxMessage() evaluates GetIndex value for Rx FIFO overwrite scenario.",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "spotted before customer",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/3",
+    "linked_pr_numbers": [
+      91
+    ],
+    "linked_commit_shas": [
+      "be9c8f73842d0cc398cca735ab2a8d48dc09f52c"
+    ],
+    "linked_prs": [
+      {
+        "pr_number": 91,
+        "title": "Fix HAL_FDCAN_GetRxMessage GetIndex computation overflow in overwrite mode",
+        "state": "closed",
+        "merged": false,
+        "github_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/pull/91",
+        "changed_files_count": 1,
+        "merge_commit_sha": null
+      }
+    ],
+    "linked_commits": [
+      {
+        "sha": "be9c8f73842d0cc398cca735ab2a8d48dc09f52c",
+        "message": "Fix buffer overflow in HAL_FDCAN_GetRxMessage when FIFO overwrite mode is active",
+        "committed_at": "2025-08-18T08:17:52Z",
+        "github_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/commit/be9c8f73842d0cc398cca735ab2a8d48dc09f52c",
+        "pr_numbers": [
+          91
+        ],
+        "stats": {
+          "additions": 21,
+          "deletions": 8,
+          "total": 29
+        }
+      }
+    ],
+    "evidence": {
+      "explicit_pr_numbers": [
+        91
+      ],
+      "explicit_commit_shas": [
+        "be9c8f73842d0cc398cca735ab2a8d48dc09f52c"
+      ],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [
+        "be9c8f73842d0cc398cca735ab2a8d48dc09f52c"
+      ],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.8,
+    "link_confidence": "medium",
+    "resolution_status": "candidate_fix"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 4,
+    "issue_title": "Incorrect value assigned to ProtocolStatus->Activity inside HAL_FDCAN_GetProtocolStatus() in file STM32Cube_FW_H7_V1.7.0\\Drivers\\STM32H7xx_HAL_Driver\\Src\\stm32h7xx_hal_fdcan.c",
+    "issue_labels": [
+      "bug",
+      "invalid",
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/4",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 5,
+    "issue_title": "HAL UART Driver issue wherein the last byte is received incorrectly depending on the data of the last byte",
+    "issue_labels": [
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/5",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 6,
+    "issue_title": "Most pointer inputs arguemnts to HAL Drivers functions do not treat the data they are pointing to as a constant data.",
+    "issue_labels": [
+      "duplicate",
+      "enhancement",
+      "internal bug tracker",
+      "spotted before customer",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/6",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 7,
+    "issue_title": "Bug in stm32h7xx_hal_rcc_ex.c - wrong #define for HRTIM1 (versions 1.7, 1.8)",
+    "issue_labels": [
+      "duplicate",
+      "st community",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/7",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 8,
+    "issue_title": "Ethernet: Add ability to explicitly free specific descriptors or release descriptor with new address",
+    "issue_labels": [
+      "enhancement",
+      "hal",
+      "eth"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/8",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 9,
+    "issue_title": "EXTI reset values for IMR1-3 seems to be wrong",
+    "issue_labels": [
+      "enhancement",
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/9",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 10,
+    "issue_title": "Issues in LL_RTC_TIME_Init() and LL_RTC_DATE_Init()",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/10",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 11,
+    "issue_title": "Redefinition of HAL_EnableDBGSleepMode in HAL and legacy HAL",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/11",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 12,
+    "issue_title": "Memory alignment issues in HAL_SPI_TransmitReceive",
+    "issue_labels": [
+      "hal",
+      "needs clarification"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/12",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 13,
+    "issue_title": "Overflow and underflow issue in HAL_SPI_TransmitReceive()",
+    "issue_labels": [
+      "question",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/13",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 14,
+    "issue_title": "Impact of using TEMPSENSOR_CAL_VREFANALOG with macro __LL_ADC_CALC_TEMPERATURE on macro __HAL_ADC_CALC_TEMPERATURE and the output Temperature",
+    "issue_labels": [
+      "duplicate",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/14",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 15,
+    "issue_title": "Ethernet reception is inoperable if the buffers' size is small",
+    "issue_labels": [
+      "bug",
+      "spotted before customer",
+      "hal",
+      "eth"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/15",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 17,
+    "issue_title": "UART HAL driver - handle RX overrun condition",
+    "issue_labels": [
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/17",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 18,
+    "issue_title": "Missing ReceiveToIdle API in HAL USART",
+    "issue_labels": [
+      "question",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/18",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 19,
+    "issue_title": "Ethernet HAL stopping transmitting",
+    "issue_labels": [
+      "hal",
+      "eth",
+      "needs clarification"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/19",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 20,
+    "issue_title": "unwanted interrupt enabling",
+    "issue_labels": [
+      "internal bug tracker",
+      "hal",
+      "eth"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/20",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 21,
+    "issue_title": "No SPDX license identifiers",
+    "issue_labels": [
+      "documentation",
+      "enhancement",
+      "wontfix",
+      "internal bug tracker"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/21",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 22,
+    "issue_title": "Missing default callbacks initialization in ETH_InitCallbacksToDefault()",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "eth"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/22",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 23,
+    "issue_title": "stm32h7xx_ll_adc.c doesn't compile for H723 when USE_FULL_ASSERT is defined",
+    "issue_labels": [
+      "internal bug tracker",
+      "spotted before customer",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/23",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 24,
+    "issue_title": "RCC_CRS_HSI48CALIBRATION_DEFAULT wrong value for G4",
+    "issue_labels": [],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/24",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 25,
+    "issue_title": "Error in LL_CRS_ConfigSynchronization function (L4 and G4)",
+    "issue_labels": [],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/25",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 26,
+    "issue_title": "Function 'SPI_WaitOnFlagUntilTimeout': argument order different between definition and declaration",
+    "issue_labels": [
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/26",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 27,
+    "issue_title": "Padding warnings that need fix",
+    "issue_labels": [
+      "wontfix",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/27",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 28,
+    "issue_title": "usb dma无法正常工作",
+    "issue_labels": [
+      "invalid",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/28",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 29,
+    "issue_title": "HAL_UART_RegisterRxEventCallback fails if there is a transmit ongoing",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/29",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 30,
+    "issue_title": "SDMMC stuck with HAL_SD_ERROR_DATA_TIMEOUT",
+    "issue_labels": [
+      "wontfix",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/30",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 31,
+    "issue_title": "DMA2D_IRQHandler called with empty ISR register",
+    "issue_labels": [
+      "mw"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/31",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 32,
+    "issue_title": "Incorrect ADC calibration factor size",
+    "issue_labels": [
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/32",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 33,
+    "issue_title": "Incorrect assertion in HAL_ADC_ConfigChannel() for STM32H7",
+    "issue_labels": [
+      "internal bug tracker",
+      "hal",
+      "adc"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/33",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 34,
+    "issue_title": "stm32h7xx_hal_ospi.c does not compile when assert_param actually evaluates \"expr\"",
+    "issue_labels": [
+      "invalid",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/34",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 35,
+    "issue_title": "SPI Extra clock pulse generated when CFG2 registers is written without AFCNTR bit set",
+    "issue_labels": [
+      "bug",
+      "invalid",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/35",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 36,
+    "issue_title": "CRYP api upgrade",
+    "issue_labels": [
+      "enhancement",
+      "good first issue",
+      "invalid",
+      "internal bug tracker",
+      "hal",
+      "cryp"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/36",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 37,
+    "issue_title": "USB HID does not work anymore after updating to latest version of stm32h7xx_hal_pcd.c",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "usb"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/37",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 38,
+    "issue_title": "BusFault when calculating a HASH",
+    "issue_labels": [
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/38",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 39,
+    "issue_title": "Need for HAL_SPI_TransmitFollowedByReceive function",
+    "issue_labels": [
+      "enhancement",
+      "wontfix",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/39",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 40,
+    "issue_title": "The type of DMA_HandleTypeDef.Instance may be incorrect.",
+    "issue_labels": [
+      "invalid",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/40",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 41,
+    "issue_title": "USB HCD wrong calculation of toggle_in flag with DMA enabled",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "usb"
+    ],
+    "issue_state": "open",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/41",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 42,
+    "issue_title": "Missing HAL_ETH_LEGACY_MODULE_ENABLED",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/42",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 43,
+    "issue_title": "HAL_DMA_Abort_IT leaves handle in aborted state",
+    "issue_labels": [
+      "bug",
+      "invalid",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/43",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 45,
+    "issue_title": "Undefined Macro Usage in stm32h7xx_hal_eth.h",
+    "issue_labels": [
+      "bug",
+      "hal",
+      "eth"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/45",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 46,
+    "issue_title": "Fix LPI Event Interrupt (check please!)",
+    "issue_labels": [
+      "bug",
+      "hal",
+      "eth"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/46",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 47,
+    "issue_title": "Upgrading the hal library from 1.11.0 to 1.11.1 will cause the SPI master transmission to time out for no reason.",
+    "issue_labels": [
+      "bug",
+      "documentation"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/47",
+    "linked_pr_numbers": [
+      48
+    ],
+    "linked_commit_shas": [
+      "61994139b7643fc8f57127b3d84915ad5363cb80"
+    ],
+    "linked_prs": [
+      {
+        "pr_number": 48,
+        "title": "fix the bug that the spi suspend flag is not cleared",
+        "state": "closed",
+        "merged": false,
+        "github_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/pull/48",
+        "changed_files_count": 1,
+        "merge_commit_sha": "7e9f7b331f1b849ff24064e33e42b495b5bf9b31"
+      }
+    ],
+    "linked_commits": [
+      {
+        "sha": "61994139b7643fc8f57127b3d84915ad5363cb80",
+        "message": "fix the bug that the spi suspend flag is not cleared",
+        "committed_at": "2024-03-11T16:09:12Z",
+        "github_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/commit/61994139b7643fc8f57127b3d84915ad5363cb80",
+        "pr_numbers": [
+          48
+        ],
+        "stats": {
+          "additions": 15,
+          "deletions": 0,
+          "total": 15
+        }
+      }
+    ],
+    "evidence": {
+      "explicit_pr_numbers": [
+        48
+      ],
+      "explicit_commit_shas": [
+        "61994139b7643fc8f57127b3d84915ad5363cb80"
+      ],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [
+        "61994139b7643fc8f57127b3d84915ad5363cb80"
+      ],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.8,
+    "link_confidence": "medium",
+    "resolution_status": "candidate_fix"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 50,
+    "issue_title": "Wrong comment in HAL FDCAN Error Code",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/50",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 56,
+    "issue_title": "Please provide a stm32h7xx_ll_dts.h/c",
+    "issue_labels": [
+      "enhancement",
+      "wontfix",
+      "hal",
+      "dts"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/56",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 57,
+    "issue_title": "ll_delayblock is available when hal qspi module is enable instead of ospi",
+    "issue_labels": [
+      "bug",
+      "wontfix",
+      "internal bug tracker",
+      "hal",
+      "xspi"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/57",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 58,
+    "issue_title": " Release v1.11.3 breaks symbols compatibility for PTP between H and FSoC families",
+    "issue_labels": [
+      "bug",
+      "invalid",
+      "hal",
+      "eth"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/58",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 59,
+    "issue_title": "Device revision ID definitions",
+    "issue_labels": [
+      "enhancement",
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/59",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 60,
+    "issue_title": "SDMMC MMC HighSpeed/DDR ClockDiv too high at 52MHz",
+    "issue_labels": [
+      "bug",
+      "wontfix",
+      "internal bug tracker",
+      "hal",
+      "sdmmc"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/60",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 61,
+    "issue_title": "ETH Rx Tailpointer calculation wrong",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "eth"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/61",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 62,
+    "issue_title": "HASH_Start_IT fails when called with buffer size < 4 while in HAL_HASH_PHASE_PROCESS phase",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "hash"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/62",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 63,
+    "issue_title": "Ethernet PTP timestamp retrieval is entirely wrong",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "eth"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/63",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 64,
+    "issue_title": "stm32h7b0 and at070tn94",
+    "issue_labels": [
+      "question",
+      "hal",
+      "needs clarification"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/64",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 65,
+    "issue_title": "Ethernet tail pointer setup is incorrect, and tail pointer management does not work with timestamping enabled",
+    "issue_labels": [
+      "bug",
+      "duplicate",
+      "hal",
+      "eth"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/65",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 66,
+    "issue_title": "STM32H755 HRTIM_HandleTypeDef misspelling",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "hrtim"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/66",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 67,
+    "issue_title": "TEMPSENSOR_CAL2_TEMP does not match H723 datasheet",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/67",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 68,
+    "issue_title": "PTP coarse/fine update mode selection dropped from HAL_ETH_PTP_SetConfig() by mistake?",
+    "issue_labels": [
+      "internal bug tracker",
+      "hal",
+      "eth"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/68",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 69,
+    "issue_title": "Defines HAL_ETH_STATE_BUSY and HAL_ETH_STATE_STARTED have the same value (0x23) breaking gState checks",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "eth"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/69",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 70,
+    "issue_title": "HAL_ETH does non-atomic Test-and-Set operations on gState which is not thread-safe",
+    "issue_labels": [
+      "bug",
+      "hal",
+      "eth"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/70",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 71,
+    "issue_title": "HAL_ETH_Transmit_IT() and HAL_ETH_Transmit() do not set HAL_ETH_STATE_BUSY before modifying TX descriptors creating race-condition",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "eth"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/71",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 72,
+    "issue_title": "HAL_ETH_ReleaseTxPacket() does not test gState and races with itself and TX functions when accessing TX descriptors and counters",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "eth"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/72",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 73,
+    "issue_title": "HAL_ETH_ReleaseTxPacket() can present the PTP TX timestamp of a different packet to the application code if preempted",
+    "issue_labels": [
+      "bug",
+      "hal",
+      "eth"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/73",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 74,
+    "issue_title": "FDCAN doesn't work with new release",
+    "issue_labels": [
+      "bug",
+      "invalid",
+      "hal",
+      "fdcan"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/74",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 75,
+    "issue_title": "HAL_ETH_ReleaseTxPacket() clears wrong bit when disabling PTP TX timestamping",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "eth"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/75",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 76,
+    "issue_title": "DMA HAL enables FIFO Error interrupt even if the FIFO is not enabled",
+    "issue_labels": [
+      "bug",
+      "invalid",
+      "internal bug tracker",
+      "st community",
+      "hal",
+      "dma"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/76",
+    "linked_pr_numbers": [
+      78
+    ],
+    "linked_commit_shas": [
+      "19fe437fe48c70d890f8d3e0a016ea8168ee96d9"
+    ],
+    "linked_prs": [
+      {
+        "pr_number": 78,
+        "title": "Fix DMA HAL enabling FIFO Error interrupt even if FIFO is not enabled",
+        "state": "closed",
+        "merged": false,
+        "github_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/pull/78",
+        "changed_files_count": 1,
+        "merge_commit_sha": "8a37349278b241f9ed3c14bc348127dca32f68f1"
+      }
+    ],
+    "linked_commits": [
+      {
+        "sha": "19fe437fe48c70d890f8d3e0a016ea8168ee96d9",
+        "message": "Fix DMA HAL enabling FIFO Error interrupt even if FIFO is not enabled\n\nRelated to #76\n\nAdd condition to enable FIFO Error interrupt only if FIFO is enabled.\n\n* Modify `Src/stm32h7xx_hal_dma_ex.c` to check if FIFO is enabled before enabling FIFO Error interrupt.\n* Add condition to line 292 to enable FIFO Error interrupt only if FIFO is enabled (direct mode disabled).",
+        "committed_at": "2024-11-02T07:55:35Z",
+        "github_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/commit/19fe437fe48c70d890f8d3e0a016ea8168ee96d9",
+        "pr_numbers": [
+          78
+        ],
+        "stats": {
+          "additions": 4,
+          "deletions": 2,
+          "total": 6
+        }
+      }
+    ],
+    "evidence": {
+      "explicit_pr_numbers": [
+        78
+      ],
+      "explicit_commit_shas": [
+        "19fe437fe48c70d890f8d3e0a016ea8168ee96d9"
+      ],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [
+        "19fe437fe48c70d890f8d3e0a016ea8168ee96d9"
+      ],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.8,
+    "link_confidence": "medium",
+    "resolution_status": "candidate_fix"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 77,
+    "issue_title": "ospi: driver is more restrictive than necessary",
+    "issue_labels": [
+      "enhancement",
+      "invalid",
+      "hal",
+      "xspi"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/77",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 79,
+    "issue_title": "RTC bug in HAL (Clearing RTC_CR_BYPSHAD bit) - wrong retype (uint8_t)",
+    "issue_labels": [
+      "bug",
+      "spotted before customer",
+      "hal",
+      "rtc"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/79",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 80,
+    "issue_title": "LL driver routine RCC_GetHCLKClockFreq ignores D1CPRE divider from D1CFGR register",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "rcc"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/80",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 81,
+    "issue_title": "USB HCD speed definitions",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "usb"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/81",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 82,
+    "issue_title": "SD_SendSDStatus may cause BusFault or Overflow",
+    "issue_labels": [
+      "bug",
+      "hal",
+      "needs clarification",
+      "sdmmc",
+      "sd"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/82",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 83,
+    "issue_title": "[HAL][EXTI] Typo in comments of EXTI hal driver",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "exti"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/83",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 84,
+    "issue_title": "[HAL][EXTI] Typo in comments of EXTI hal driver",
+    "issue_labels": [
+      "bug",
+      "invalid",
+      "hal",
+      "exti"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/84",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 85,
+    "issue_title": "USART transmit with DMA works only once",
+    "issue_labels": [
+      "bug",
+      "invalid",
+      "hal",
+      "usart"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/85",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 86,
+    "issue_title": "I couldn't use SD of 1GB probably Card V1",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "sdmmc",
+      "sd"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/86",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 87,
+    "issue_title": "HAL_I2C_Mem_Read_DMA should call I2C_Enable_IRQ with flag I2C_XFER_RX_IT instead of I2C_XFER_TX_IT",
+    "issue_labels": [
+      "invalid",
+      "hal",
+      "i2c"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/87",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 88,
+    "issue_title": "AES GCM Invalid Tag Generation after Decryption",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "st community",
+      "hal",
+      "crc",
+      "aes"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/88",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 89,
+    "issue_title": "DFSDM is not working properly in One-Shot mode with DMA",
+    "issue_labels": [
+      "bug",
+      "invalid",
+      "hal",
+      "dfsdm"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/89",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 90,
+    "issue_title": "Missing MDIO Clause 45 support for STM32H7",
+    "issue_labels": [
+      "enhancement",
+      "hal",
+      "eth"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/90",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 93,
+    "issue_title": "Backporting HAL FDCAN from STM32H7RS",
+    "issue_labels": [
+      "enhancement",
+      "internal bug tracker",
+      "hal",
+      "fdcan"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/93",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 94,
+    "issue_title": "Include of stm32h7xx_hal_eth_ex_legacy.h added in stm32h7xx_hal_eth_legacy.h",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "eth"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/94",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 95,
+    "issue_title": "const correctness in HAL functions (e.g. HAL_I2C_Mem_Write)",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "i2c"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/95",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 96,
+    "issue_title": "More backporting HAL FDCAN from STM32H7RS",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "fdcan"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/96",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 97,
+    "issue_title": "impossibility of simultaneous operation of two OSPI in quad mode",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "ospi"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/97",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 98,
+    "issue_title": "I2C Tx DMA race condition causes no Tx-complete IRQ",
+    "issue_labels": [
+      "bug",
+      "hal",
+      "i2c"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/98",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 101,
+    "issue_title": "Metaprogramming with LL",
+    "issue_labels": [
+      "enhancement",
+      "invalid",
+      "hal",
+      "tim"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/101",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 102,
+    "issue_title": "Timeout mechanism in polling methods has vulnerability on tick overflow",
+    "issue_labels": [
+      "bug",
+      "invalid",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/102",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 103,
+    "issue_title": "HAL_DSI_Read not handle 2 bytes read properly",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "dsi"
+    ],
+    "issue_state": "open",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/103",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 104,
+    "issue_title": "AES CCM Encryption and Decryption operations output overflow",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "cryp"
+    ],
+    "issue_state": "open",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/104",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 105,
+    "issue_title": "DFSDM only triggers once in when conversion is started by SW-Trigger and DMA is used",
+    "issue_labels": [
+      "question",
+      "hal",
+      "dfsdm"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/105",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 106,
+    "issue_title": "Possible typo in old commit",
+    "issue_labels": [
+      "question",
+      "hal",
+      "eth"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/106",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 107,
+    "issue_title": "[Bug]: __LL_ADC_CALC_VREFANALOG_VOLTAGE function result is wrong after update to latest version",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "adc"
+    ],
+    "issue_state": "open",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/107",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 108,
+    "issue_title": "[Bug]: DMA DBM: transfer-complete callback dispatch appears inconsistent with callback naming, despite release note claiming a fix",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "dma"
+    ],
+    "issue_state": "open",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/108",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 109,
+    "issue_title": "[Bug]: `HAL_SD_ConfigWideBusOperation` applies UHS clock bypass on 3.3V bus when `USE_SD_TRANSCEIVER == 0`",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "sdmmc",
+      "sd"
+    ],
+    "issue_state": "open",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/109",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 110,
+    "issue_title": "[Bug]: HAL_DMA_Abort may fail with timeout on certain optimization levels",
+    "issue_labels": [
+      "bug",
+      "hal",
+      "needs clarification",
+      "dma"
+    ],
+    "issue_state": "open",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/110",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  }
+]

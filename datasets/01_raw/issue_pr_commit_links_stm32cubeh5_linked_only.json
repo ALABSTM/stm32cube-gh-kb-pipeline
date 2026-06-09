@@ -1,0 +1,69 @@
+[
+  {
+    "repo": "STM32CubeH5",
+    "issue_number": 10,
+    "issue_title": "size of g_pfnVectors is 0",
+    "issue_labels": [
+      "bug",
+      "cmsis"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeH5/issues/10",
+    "linked_pr_numbers": [
+      11
+    ],
+    "linked_commit_shas": [
+      "8744067d4a960b52cf9ab153f39f5b64cc4129a3"
+    ],
+    "linked_prs": [
+      {
+        "pr_number": 11,
+        "title": "fix for #10, size of g_pfnVectors",
+        "state": "closed",
+        "merged": true,
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/pull/11",
+        "changed_files_count": 4,
+        "merge_commit_sha": "d9bc683963de1190859e5fa57d3dbfd2ae3c4fd2"
+      }
+    ],
+    "linked_commits": [
+      {
+        "sha": "8744067d4a960b52cf9ab153f39f5b64cc4129a3",
+        "message": "fix for #10",
+        "committed_at": "2023-09-14T04:46:24Z",
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/commit/8744067d4a960b52cf9ab153f39f5b64cc4129a3",
+        "pr_numbers": [
+          11
+        ],
+        "stats": {
+          "additions": 11,
+          "deletions": 7,
+          "total": 18
+        }
+      }
+    ],
+    "evidence": {
+      "explicit_pr_numbers": [
+        11
+      ],
+      "explicit_commit_shas": [
+        "8744067d4a960b52cf9ab153f39f5b64cc4129a3"
+      ],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [
+        "8744067d4a960b52cf9ab153f39f5b64cc4129a3"
+      ],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 1,
+      "merged_pr_with_file_evidence": true,
+      "merged_pr_with_file_evidence_pr_numbers": [
+        11
+      ],
+      "merged_pr_changed_files_total": 4
+    },
+    "merged_pr_with_file_evidence": true,
+    "link_score": 1.0,
+    "link_confidence": "high",
+    "resolution_status": "merged_fix"
+  }
+]

@@ -150,11 +150,39 @@ jobs:
           name: st-ready-delivery-${{ github.run_number }}
           path: datasets/07_delivery/st_ready/by_series/
 
-      - name: Upload all series to KB
+      - name: Clear existing datasources before re-upload
         run: |
           IFS=',' read -ra SERIES <<< "${{ needs.pipeline.outputs.series }}"
           
           # Datasource ID registry
+          declare -A DS_ISSUES=( [f4]=28099 [h5]=28158 [h7]=19896 [u5]=28167 [wl]=28171 )
+          declare -A DS_FILES=(  [f4]=28103 [h5]=28163 [h7]=21824 [u5]=28168 [wl]=28172 )
+          declare -A DS_RESOLVER=( [f4]=28118 [h5]=28164 [h7]=20403 [u5]=28244 [wl]=28245 )
+          declare -A DS_DIAGNOSTIC=( [f4]=28122 [h5]=28165 [h7]=23768 [u5]=28170 [wl]=28173 )
+          
+          UPLOADER="pipeline_Automation/upload/Add_Data_Source_Files.py"
+          
+          for s in "${SERIES[@]}"; do
+            if [ -z "${DS_ISSUES[$s]:-}" ]; then
+              continue
+            fi
+            
+            echo "=== Deleting existing content for ${s^^} ==="
+            
+            for DS_ID in ${DS_ISSUES[$s]} ${DS_FILES[$s]} ${DS_RESOLVER[$s]} ${DS_DIAGNOSTIC[$s]}; do
+              python $UPLOADER \
+                --kb 793 \
+                --operation delete \
+                --datasource-id $DS_ID \
+                --remote-user "$ST_REMOTE_USER" || echo "  (delete returned non-zero for DS $DS_ID, continuing)"
+            done
+          done
+
+      - name: Upload all series to KB
+        run: |
+          IFS=',' read -ra SERIES <<< "${{ needs.pipeline.outputs.series }}"
+          
+          # Datasource ID registry (same as delete step)
           declare -A DS_ISSUES=( [f4]=28099 [h5]=28158 [h7]=19896 [u5]=28167 [wl]=28171 )
           declare -A DS_FILES=(  [f4]=28103 [h5]=28163 [h7]=21824 [u5]=28168 [wl]=28172 )
           declare -A DS_RESOLVER=( [f4]=28118 [h5]=28164 [h7]=20403 [u5]=28244 [wl]=28245 )

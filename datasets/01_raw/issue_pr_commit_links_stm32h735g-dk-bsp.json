@@ -1,0 +1,152 @@
+[
+  {
+    "repo": "stm32h735g-dk-bsp",
+    "issue_number": 1,
+    "issue_title": "Functions 'I2C4_WriteReg' and 'I2C4_ReadReg': argument order different between definitions and declarations",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "bsp"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h735g-dk-bsp/issues/1",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h735g-dk-bsp",
+    "issue_number": 2,
+    "issue_title": "BSP OSPI drive using the ISS66WVH8M8 external RAM",
+    "issue_labels": [
+      "question",
+      "bsp"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h735g-dk-bsp/issues/2",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h735g-dk-bsp",
+    "issue_number": 3,
+    "issue_title": "STM32H735G-DK C03 BSP demo freezes",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "bsp"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h735g-dk-bsp/issues/3",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h735g-dk-bsp",
+    "issue_number": 4,
+    "issue_title": "Build warnings",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "bsp"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h735g-dk-bsp/issues/4",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h735g-dk-bsp",
+    "issue_number": 5,
+    "issue_title": "Coordinates swapped",
+    "issue_labels": [],
+    "issue_state": "open",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h735g-dk-bsp/issues/5",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  }
+]

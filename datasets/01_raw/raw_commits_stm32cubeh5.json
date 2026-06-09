@@ -1,0 +1,64 @@
+[
+  {
+    "repo": "STM32CubeH5",
+    "sha": "8744067d4a960b52cf9ab153f39f5b64cc4129a3",
+    "author": "metebalci",
+    "committer": "metebalci",
+    "message": "fix for #10",
+    "authored_at": "2023-09-14T04:46:24Z",
+    "committed_at": "2023-09-14T04:46:24Z",
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeH5/commit/8744067d4a960b52cf9ab153f39f5b64cc4129a3",
+    "parents": [
+      "3d723b2467cdb13c2d780ceaa583b269680b67a4"
+    ],
+    "stats": {
+      "additions": 11,
+      "deletions": 7,
+      "total": 18
+    },
+    "files_changed": [
+      {
+        "filename": "Drivers/CMSIS/Device/ST/STM32H5xx/Source/Templates/gcc/startup_stm32h503xx.s",
+        "status": "modified",
+        "additions": 2,
+        "deletions": 1,
+        "changes": 3,
+        "previous_filename": null,
+        "patch": "@@ -123,7 +123,6 @@ Infinite_Loop:\n ******************************************************************************/\n  \t.section\t.isr_vector,\"a\",%progbits\n \t.type\tg_pfnVectors, %object\n-\t.size\tg_pfnVectors, .-g_pfnVectors\n \n \n g_pfnVectors:\n@@ -278,6 +277,8 @@ g_pfnVectors:\n \t.word\tI3C2_ER_IRQHandler\n \t.word\tCOMP1_IRQHandler\n \n+\t.size\tg_pfnVectors, .-g_pfnVectors\n+\n /*******************************************************************************\n *\n * Provide weak aliases for each Exception handler to the Default_Handler."
+      },
+      {
+        "filename": "Drivers/CMSIS/Device/ST/STM32H5xx/Source/Templates/gcc/startup_stm32h562xx.s",
+        "status": "modified",
+        "additions": 3,
+        "deletions": 2,
+        "changes": 5,
+        "previous_filename": null,
+        "patch": "@@ -123,7 +123,6 @@ Infinite_Loop:\n ******************************************************************************/\n  \t.section\t.isr_vector,\"a\",%progbits\n \t.type\tg_pfnVectors, %object\n-\t.size\tg_pfnVectors, .-g_pfnVectors\n \n \n g_pfnVectors:\n@@ -275,6 +274,8 @@ g_pfnVectors:\n \t.word\tLPTIM5_IRQHandler\n \t.word\tLPTIM6_IRQHandler\n \n+\t.size\tg_pfnVectors, .-g_pfnVectors\n+\n /*******************************************************************************\n *\n * Provide weak aliases for each Exception handler to the Default_Handler.\n@@ -677,4 +678,4 @@ g_pfnVectors:\n \t.thumb_set LPTIM5_IRQHandler,Default_Handler\n \n \t.weak\tLPTIM6_IRQHandler\n-\t.thumb_set LPTIM6_IRQHandler,Default_Handler\n\\ No newline at end of file\n+\t.thumb_set LPTIM6_IRQHandler,Default_Handler"
+      },
+      {
+        "filename": "Drivers/CMSIS/Device/ST/STM32H5xx/Source/Templates/gcc/startup_stm32h563xx.s",
+        "status": "modified",
+        "additions": 3,
+        "deletions": 2,
+        "changes": 5,
+        "previous_filename": null,
+        "patch": "@@ -125,7 +125,6 @@ Infinite_Loop:\n ******************************************************************************/\n   .section .isr_vector,\"a\",%progbits\n   .type g_pfnVectors, %object\n-  .size g_pfnVectors, .-g_pfnVectors\n \n g_pfnVectors:\n \t.word\t_estack\n@@ -276,6 +275,8 @@ g_pfnVectors:\n \t.word\tLPTIM5_IRQHandler\n \t.word\tLPTIM6_IRQHandler\n \n+  .size g_pfnVectors, .-g_pfnVectors\n+\n /*******************************************************************************\n *\n * Provide weak aliases for each Exception handler to the Default_Handler.\n@@ -693,4 +694,4 @@ g_pfnVectors:\n \t.thumb_set LPTIM5_IRQHandler,Default_Handler\n \n \t.weak\tLPTIM6_IRQHandler\n-\t.thumb_set LPTIM6_IRQHandler,Default_Handler\n\\ No newline at end of file\n+\t.thumb_set LPTIM6_IRQHandler,Default_Handler"
+      },
+      {
+        "filename": "Drivers/CMSIS/Device/ST/STM32H5xx/Source/Templates/gcc/startup_stm32h573xx.s",
+        "status": "modified",
+        "additions": 3,
+        "deletions": 2,
+        "changes": 5,
+        "previous_filename": null,
+        "patch": "@@ -128,7 +128,6 @@ Infinite_Loop:\n ******************************************************************************/\n  \t.section\t.isr_vector,\"a\",%progbits\n \t.type\tg_pfnVectors, %object\n-\t.size\tg_pfnVectors, .-g_pfnVectors\n \n \n g_pfnVectors:\n@@ -280,6 +279,8 @@ g_pfnVectors:\n \t.word\tLPTIM5_IRQHandler\n \t.word\tLPTIM6_IRQHandler\n \n+\t.size\tg_pfnVectors, .-g_pfnVectors\n+\n /*******************************************************************************\n *\n * Provide weak aliases for each Exception handler to the Default_Handler.\n@@ -709,4 +710,4 @@ g_pfnVectors:\n \t.thumb_set LPTIM5_IRQHandler,Default_Handler\n \n \t.weak\tLPTIM6_IRQHandler\n-\t.thumb_set LPTIM6_IRQHandler,Default_Handler\n\\ No newline at end of file\n+\t.thumb_set LPTIM6_IRQHandler,Default_Handler"
+      }
+    ],
+    "linked_issue_numbers": [
+      10
+    ],
+    "pr_numbers": [
+      11
+    ]
+  }
+]

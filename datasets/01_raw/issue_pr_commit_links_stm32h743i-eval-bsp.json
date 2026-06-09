@@ -1,0 +1,154 @@
+[
+  {
+    "repo": "stm32h743i-eval-bsp",
+    "issue_number": 1,
+    "issue_title": "Fix for using LEDs without the I2C I/O extender",
+    "issue_labels": [
+      "bug",
+      "bsp",
+      "internal bug tracker"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h743i-eval-bsp/issues/1",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h743i-eval-bsp",
+    "issue_number": 2,
+    "issue_title": "stm32h74x eval BSP, stm32h743i_eval_sd.c, stm32h747i_eval_sd.c  - sd card detection BUG",
+    "issue_labels": [
+      "invalid"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h743i-eval-bsp/issues/2",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h743i-eval-bsp",
+    "issue_number": 3,
+    "issue_title": "Wrong core",
+    "issue_labels": [
+      "question"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h743i-eval-bsp/issues/3",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h743i-eval-bsp",
+    "issue_number": 4,
+    "issue_title": "LCD Reset bug disables Ethernet",
+    "issue_labels": [
+      "bug",
+      "bsp",
+      "internal bug tracker",
+      "eth"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h743i-eval-bsp/issues/4",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32h743i-eval-bsp",
+    "issue_number": 5,
+    "issue_title": "BSP_I2C1_Init calls the wrong MX_I2C1_Init function",
+    "issue_labels": [
+      "bug",
+      "invalid",
+      "cube mx"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32h743i-eval-bsp/issues/5",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  }
+]

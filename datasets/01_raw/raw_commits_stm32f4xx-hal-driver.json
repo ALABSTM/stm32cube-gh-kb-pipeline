@@ -1,0 +1,260 @@
+[
+  {
+    "repo": "stm32f4xx-hal-driver",
+    "sha": "ee9337dadc8bff9694ff6dfa020ac1638d7abb08",
+    "author": "CHESS\\Jonny.VanBeek",
+    "committer": "CHESS\\Jonny.VanBeek",
+    "message": "Fix unused variable warning",
+    "authored_at": "2022-06-07T14:49:00Z",
+    "committed_at": "2022-06-07T14:49:00Z",
+    "github_url": "https://github.com/STMicroelectronics/stm32f4xx-hal-driver/commit/ee9337dadc8bff9694ff6dfa020ac1638d7abb08",
+    "parents": [
+      "1d99564fee7e2d766efc94d3811ca4ec6389036c"
+    ],
+    "stats": {
+      "additions": 3,
+      "deletions": 0,
+      "total": 3
+    },
+    "files_changed": [
+      {
+        "filename": "Src/stm32f4xx_hal_pwr.c",
+        "status": "modified",
+        "additions": 3,
+        "deletions": 0,
+        "changes": 3,
+        "previous_filename": null,
+        "patch": "@@ -378,6 +378,9 @@ void HAL_PWR_DisableWakeUpPin(uint32_t WakeUpPinx)\n   */\n void HAL_PWR_EnterSLEEPMode(uint32_t Regulator, uint8_t SLEEPEntry)\n {\n+  /* Prevent unused argument(s) compilation warning */\n+  UNUSED(Regulator);\n+\n   /* Check the parameters */\n   assert_param(IS_PWR_REGULATOR(Regulator));\n   assert_param(IS_PWR_SLEEP_ENTRY(SLEEPEntry));"
+      }
+    ],
+    "linked_issue_numbers": [],
+    "pr_numbers": [
+      15
+    ]
+  },
+  {
+    "repo": "stm32f4xx-hal-driver",
+    "sha": "a508f724394eabb203692bcdcb067e76a08825a7",
+    "author": "stepheny",
+    "committer": "stepheny",
+    "message": "[LL][USB] Update USB_ClearInterrupts() to not clear all interrupts",
+    "authored_at": "2022-10-02T13:22:35Z",
+    "committed_at": "2022-10-02T13:22:35Z",
+    "github_url": "https://github.com/STMicroelectronics/stm32f4xx-hal-driver/commit/a508f724394eabb203692bcdcb067e76a08825a7",
+    "parents": [
+      "6ea96e3bee7629552b26d92e96c2e64217bebfea"
+    ],
+    "stats": {
+      "additions": 1,
+      "deletions": 1,
+      "total": 2
+    },
+    "files_changed": [
+      {
+        "filename": "Src/stm32f4xx_ll_usb.c",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "changes": 2,
+        "previous_filename": null,
+        "patch": "@@ -1380,7 +1380,7 @@ uint32_t USB_ReadDevInEPInterrupt(USB_OTG_GlobalTypeDef *USBx, uint8_t epnum)\n   */\n void  USB_ClearInterrupts(USB_OTG_GlobalTypeDef *USBx, uint32_t interrupt)\n {\n-  USBx->GINTSTS |= interrupt;\n+  USBx->GINTSTS &= interrupt;\n }\n \n /**"
+      }
+    ],
+    "linked_issue_numbers": [],
+    "pr_numbers": [
+      19
+    ]
+  },
+  {
+    "repo": "stm32f4xx-hal-driver",
+    "sha": "1912b8db7e98839d4e69da7894b7d6544633a2e2",
+    "author": "Narukara",
+    "committer": "web-flow",
+    "message": "Fix typo in stm32f4xx_ll_dma.h",
+    "authored_at": "2024-02-01T13:23:10Z",
+    "committed_at": "2024-02-01T13:23:10Z",
+    "github_url": "https://github.com/STMicroelectronics/stm32f4xx-hal-driver/commit/1912b8db7e98839d4e69da7894b7d6544633a2e2",
+    "parents": [
+      "89956295d29f6b79885c0f78847558141d79d89a"
+    ],
+    "stats": {
+      "additions": 1,
+      "deletions": 1,
+      "total": 2
+    },
+    "files_changed": [
+      {
+        "filename": "Inc/stm32f4xx_ll_dma.h",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "changes": 2,
+        "previous_filename": null,
+        "patch": "@@ -1171,7 +1171,7 @@ __STATIC_INLINE void LL_DMA_SetCurrentTargetMem(DMA_TypeDef *DMAx, uint32_t Stre\n }\n \n /**\n-  * @brief Set Current target (only in double buffer mode) to Memory 1 or Memory 0.\n+  * @brief Get Current target (only in double buffer mode).\n   * @rmtoll CR          CT           LL_DMA_GetCurrentTargetMem \n   * @param  DMAx DMAx Instance\n   * @param  Stream This parameter can be one of the following values:"
+      }
+    ],
+    "linked_issue_numbers": [],
+    "pr_numbers": [
+      28
+    ]
+  },
+  {
+    "repo": "stm32f4xx-hal-driver",
+    "sha": "df7427fe3a510e545a89315ae72044088f4fb201",
+    "author": "melonedo",
+    "committer": "web-flow",
+    "message": "Allow TIM2 to remap to ETH_PTP even if TIM8 is present\n\nThis aligns with the manual and 9dd5bce",
+    "authored_at": "2024-12-29T14:57:57Z",
+    "committed_at": "2024-12-29T14:57:57Z",
+    "github_url": "https://github.com/STMicroelectronics/stm32f4xx-hal-driver/commit/df7427fe3a510e545a89315ae72044088f4fb201",
+    "parents": [
+      "8f20a7dfd0b5902e1a5796be78ed2ceddd342085"
+    ],
+    "stats": {
+      "additions": 1,
+      "deletions": 0,
+      "total": 1
+    },
+    "files_changed": [
+      {
+        "filename": "Inc/stm32f4xx_hal_tim_ex.h",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 0,
+        "changes": 1,
+        "previous_filename": null,
+        "patch": "@@ -159,6 +159,7 @@ typedef struct\n #elif defined(TIM8)\n #define IS_TIM_REMAP(INSTANCE, TIM_REMAP)                                 \\\n   ((((INSTANCE) == TIM2)  && (((TIM_REMAP) == TIM_TIM2_TIM8_TRGO)      || \\\n+                              ((TIM_REMAP) == TIM_TIM2_ETH_PTP)        || \\\n                               ((TIM_REMAP) == TIM_TIM2_USBFS_SOF)      || \\\n                               ((TIM_REMAP) == TIM_TIM2_USBHS_SOF)))    || \\\n    (((INSTANCE) == TIM5)  && (((TIM_REMAP) == TIM_TIM5_GPIO)           || \\"
+      }
+    ],
+    "linked_issue_numbers": [],
+    "pr_numbers": [
+      37
+    ]
+  },
+  {
+    "repo": "stm32f4xx-hal-driver",
+    "sha": "0b33033fcffa182360cc146fc6d2a8d3256ceed1",
+    "author": "ivous",
+    "committer": "ivous",
+    "message": "[HAL][RCC] Change HAL_RCC_OscConfig and HAL_RCC_ClockConfig pointer parameters to const\n\nthis allows to use for initialization structure allocated in flash memory, no change in functionality",
+    "authored_at": "2025-01-15T15:10:57Z",
+    "committed_at": "2025-01-15T15:10:57Z",
+    "github_url": "https://github.com/STMicroelectronics/stm32f4xx-hal-driver/commit/0b33033fcffa182360cc146fc6d2a8d3256ceed1",
+    "parents": [
+      "43edf38f6974481fea9692afc5afc06f060d6df7"
+    ],
+    "stats": {
+      "additions": 5,
+      "deletions": 5,
+      "total": 10
+    },
+    "files_changed": [
+      {
+        "filename": "Inc/stm32f4xx_hal_rcc.h",
+        "status": "modified",
+        "additions": 2,
+        "deletions": 2,
+        "changes": 4,
+        "previous_filename": null,
+        "patch": "@@ -1242,8 +1242,8 @@ typedef struct\n   */\n /* Initialization and de-initialization functions  ******************************/\n HAL_StatusTypeDef HAL_RCC_DeInit(void);\n-HAL_StatusTypeDef HAL_RCC_OscConfig(RCC_OscInitTypeDef *RCC_OscInitStruct);\n-HAL_StatusTypeDef HAL_RCC_ClockConfig(RCC_ClkInitTypeDef *RCC_ClkInitStruct, uint32_t FLatency);\n+HAL_StatusTypeDef HAL_RCC_OscConfig(const RCC_OscInitTypeDef *RCC_OscInitStruct);\n+HAL_StatusTypeDef HAL_RCC_ClockConfig(const RCC_ClkInitTypeDef *RCC_ClkInitStruct, uint32_t FLatency);\n /**\n   * @}\n   */"
+      },
+      {
+        "filename": "Src/stm32f4xx_hal_rcc.c",
+        "status": "modified",
+        "additions": 2,
+        "deletions": 2,
+        "changes": 4,
+        "previous_filename": null,
+        "patch": "@@ -216,7 +216,7 @@ __weak HAL_StatusTypeDef HAL_RCC_DeInit(void)\n   *         first and then HSE On or HSE Bypass.\n   * @retval HAL status\n   */\n-__weak HAL_StatusTypeDef HAL_RCC_OscConfig(RCC_OscInitTypeDef  *RCC_OscInitStruct)\n+__weak HAL_StatusTypeDef HAL_RCC_OscConfig(const RCC_OscInitTypeDef  *RCC_OscInitStruct)\n {\n   uint32_t tickstart;\n   uint32_t pll_config;\n@@ -588,7 +588,7 @@ __weak HAL_StatusTypeDef HAL_RCC_OscConfig(RCC_OscInitTypeDef  *RCC_OscInitStruc\n   *         (for more details refer to section above \"Initialization/de-initialization functions\")\n   * @retval None\n   */\n-HAL_StatusTypeDef HAL_RCC_ClockConfig(RCC_ClkInitTypeDef  *RCC_ClkInitStruct, uint32_t FLatency)\n+HAL_StatusTypeDef HAL_RCC_ClockConfig(const RCC_ClkInitTypeDef  *RCC_ClkInitStruct, uint32_t FLatency)\n {\n   uint32_t tickstart;\n "
+      },
+      {
+        "filename": "Src/stm32f4xx_hal_rcc_ex.c",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "changes": 2,
+        "previous_filename": null,
+        "patch": "@@ -3374,7 +3374,7 @@ HAL_StatusTypeDef HAL_RCC_DeInit(void)\n   *         is only available in STM32F410xx/STM32F446xx/STM32F469xx/STM32F479xx/STM32F412Zx/STM32F412Vx/STM32F412Rx/STM32F412Cx devices\n   * @retval HAL status\n   */\n-HAL_StatusTypeDef HAL_RCC_OscConfig(RCC_OscInitTypeDef  *RCC_OscInitStruct)\n+HAL_StatusTypeDef HAL_RCC_OscConfig(const RCC_OscInitTypeDef  *RCC_OscInitStruct)\n {\n   uint32_t tickstart;\n   uint32_t pll_config;"
+      }
+    ],
+    "linked_issue_numbers": [],
+    "pr_numbers": [
+      38
+    ]
+  },
+  {
+    "repo": "stm32f4xx-hal-driver",
+    "sha": "e54ebc544b86ff1ac2f870bdb72c26596e3788ef",
+    "author": "melonedo",
+    "committer": "melonedo",
+    "message": "Add ETHPTP check also to line 145",
+    "authored_at": "2025-01-21T09:50:54Z",
+    "committed_at": "2025-01-21T09:50:54Z",
+    "github_url": "https://github.com/STMicroelectronics/stm32f4xx-hal-driver/commit/e54ebc544b86ff1ac2f870bdb72c26596e3788ef",
+    "parents": [
+      "df7427fe3a510e545a89315ae72044088f4fb201"
+    ],
+    "stats": {
+      "additions": 1,
+      "deletions": 0,
+      "total": 1
+    },
+    "files_changed": [
+      {
+        "filename": "Inc/stm32f4xx_hal_tim_ex.h",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 0,
+        "changes": 1,
+        "previous_filename": null,
+        "patch": "@@ -142,6 +142,7 @@ typedef struct\n #if defined(LPTIM_OR_TIM1_ITR2_RMP) && defined(LPTIM_OR_TIM5_ITR1_RMP) && defined(LPTIM_OR_TIM5_ITR1_RMP)\n #define IS_TIM_REMAP(INSTANCE, TIM_REMAP)                                 \\\n   ((((INSTANCE) == TIM2)  && (((TIM_REMAP) == TIM_TIM2_TIM8_TRGO)      || \\\n+                              ((TIM_REMAP) == TIM_TIM2_ETH_PTP) ||        \\\n                               ((TIM_REMAP) == TIM_TIM2_USBFS_SOF)      || \\\n                               ((TIM_REMAP) == TIM_TIM2_USBHS_SOF)))    || \\\n    (((INSTANCE) == TIM5)  && (((TIM_REMAP) == TIM_TIM5_GPIO)           || \\"
+      }
+    ],
+    "linked_issue_numbers": [],
+    "pr_numbers": [
+      37
+    ]
+  },
+  {
+    "repo": "stm32f4xx-hal-driver",
+    "sha": "8428b2ad2faccd3ce610ce206526af6e7de4e9c9",
+    "author": "bmcdonnell",
+    "committer": "bmcdonnell",
+    "message": "[HAL][CRC] Enhance HAL code quality for MISRA-C Rule-8.13 by adding const qualifiers",
+    "authored_at": "2025-05-15T18:46:12Z",
+    "committed_at": "2025-05-15T18:54:39Z",
+    "github_url": "https://github.com/STMicroelectronics/stm32f4xx-hal-driver/commit/8428b2ad2faccd3ce610ce206526af6e7de4e9c9",
+    "parents": [
+      "9677f4f71f6496d5647cd02a032b468a3139b0ae"
+    ],
+    "stats": {
+      "additions": 4,
+      "deletions": 4,
+      "total": 8
+    },
+    "files_changed": [
+      {
+        "filename": "Inc/stm32f4xx_hal_crc.h",
+        "status": "modified",
+        "additions": 2,
+        "deletions": 2,
+        "changes": 4,
+        "previous_filename": null,
+        "patch": "@@ -147,8 +147,8 @@ void HAL_CRC_MspDeInit(CRC_HandleTypeDef *hcrc);\n /** @defgroup CRC_Exported_Functions_Group2 Peripheral Control functions\n   * @{\n   */\n-uint32_t HAL_CRC_Accumulate(CRC_HandleTypeDef *hcrc, uint32_t pBuffer[], uint32_t BufferLength);\n-uint32_t HAL_CRC_Calculate(CRC_HandleTypeDef *hcrc, uint32_t pBuffer[], uint32_t BufferLength);\n+uint32_t HAL_CRC_Accumulate(CRC_HandleTypeDef *hcrc, const uint32_t pBuffer[], uint32_t BufferLength);\n+uint32_t HAL_CRC_Calculate(CRC_HandleTypeDef *hcrc, const uint32_t pBuffer[], uint32_t BufferLength);\n /**\n   * @}\n   */"
+      },
+      {
+        "filename": "Src/stm32f4xx_hal_crc.c",
+        "status": "modified",
+        "additions": 2,
+        "deletions": 2,
+        "changes": 4,
+        "previous_filename": null,
+        "patch": "@@ -224,7 +224,7 @@ __weak void HAL_CRC_MspDeInit(CRC_HandleTypeDef *hcrc)\n   * @param  BufferLength input data buffer length (number of uint32_t words).\n   * @retval uint32_t CRC (returned value LSBs for CRC shorter than 32 bits)\n   */\n-uint32_t HAL_CRC_Accumulate(CRC_HandleTypeDef *hcrc, uint32_t pBuffer[], uint32_t BufferLength)\n+uint32_t HAL_CRC_Accumulate(CRC_HandleTypeDef *hcrc, const uint32_t pBuffer[], uint32_t BufferLength)\n {\n   uint32_t index;      /* CRC input data buffer index */\n   uint32_t temp = 0U;  /* CRC output (read from hcrc->Instance->DR register) */\n@@ -254,7 +254,7 @@ uint32_t HAL_CRC_Accumulate(CRC_HandleTypeDef *hcrc, uint32_t pBuffer[], uint32_\n   * @param  BufferLength input data buffer length (number of uint32_t words).\n   * @retval uint32_t CRC (returned value LSBs for CRC shorter than 32 bits)\n   */\n-uint32_t HAL_CRC_Calculate(CRC_HandleTypeDef *hcrc, uint32_t pBuffer[], uint32_t BufferLength)\n+uint32_t HAL_CRC_Calculate(CRC_HandleTypeDef *hcrc, const uint32_t pBuffer[], uint32_t BufferLength)\n {\n   uint32_t index;      /* CRC input data buffer index */\n   uint32_t temp = 0U;  /* CRC output (read from hcrc->Instance->DR register) */"
+      }
+    ],
+    "linked_issue_numbers": [],
+    "pr_numbers": [
+      40
+    ]
+  }
+]

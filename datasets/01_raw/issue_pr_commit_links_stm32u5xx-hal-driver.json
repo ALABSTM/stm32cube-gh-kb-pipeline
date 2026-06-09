@@ -1,0 +1,1075 @@
+[
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 1,
+    "issue_title": "Warning unused parameter",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/1",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 2,
+    "issue_title": "Asymmetric TX DMA for SPI causing a crash",
+    "issue_labels": [
+      "internal bug tracker",
+      "hal",
+      "spotted before customer"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/2",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 3,
+    "issue_title": "`OCTOSPI_CR_DQM` defined nowhere",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/3",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 4,
+    "issue_title": "RCC_CCIPR1_ICLKSEL_0 and RCC_CCIPR1_ICLKSEL_1 not defined",
+    "issue_labels": [
+      "invalid",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/4",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 5,
+    "issue_title": "stm32u5xx_hal_dma_ex.c doesn't build with arm-none-eabi-gcc",
+    "issue_labels": [
+      "wontfix"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/5",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 6,
+    "issue_title": "header inclusion issues for STM32U545 series",
+    "issue_labels": [
+      "bug",
+      "hal",
+      "spotted before customer"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/6",
+    "linked_pr_numbers": [
+      7
+    ],
+    "linked_commit_shas": [
+      "de79acaa918c45df358faec1dfbb04b43ef4ab80"
+    ],
+    "linked_prs": [
+      {
+        "pr_number": 7,
+        "title": "fix header inclusion issues on STM32U545 series",
+        "state": "closed",
+        "merged": true,
+        "github_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/pull/7",
+        "changed_files_count": 4,
+        "merge_commit_sha": "d258c686f58713a5eb5167f4e1ad84e2e2ad8df2"
+      }
+    ],
+    "linked_commits": [
+      {
+        "sha": "de79acaa918c45df358faec1dfbb04b43ef4ab80",
+        "message": "fix header inclusion issues on STM32U545 series\n\nResolves https://github.com/STMicroelectronics/stm32u5xx_hal_driver/issues/6\n\nIn trying to get Zephyr RTOS working on the Nucleo U545RE-Q board,\nI discovered header inclusion issues building the HAL for the\nSTM32U545 SoC.\n\nZephyr RTOS makes use of the \"stm32u5xx_hal_driver\" for some\ninteractions with the ST hardware, and builds the HAL by\ncopying the default \"stm32_hal_conf_template.h\" to \"stm32_hal_conf.h\",\nleaving all options enabled.\n\nHowever, some of the modules (specifically HAL_SRAM_MODULE_ENABLED,\nHAL_NAND_MODULE_ENABLED and HAL_NOR_MODULE_ENABLED) do not compile\nfor the STM32U545. Based on recommendations from a engineer in the\nZephyr forums, I modeled changes to four files ((stm32u5xx_hal_sram.h,\nstm32u5xx_hal_nor.h, stm32u5xx_hal_nand.h and stm32u5xx_ll_fmc.h) with\nappropriate \"#ifdef\" checks using the example for the \"stm32g4xx_hal_driver\",\nand this allows the code to build for the U545 series.",
+        "committed_at": "2024-02-29T00:13:13Z",
+        "github_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/commit/de79acaa918c45df358faec1dfbb04b43ef4ab80",
+        "pr_numbers": [
+          7
+        ],
+        "stats": {
+          "additions": 47,
+          "deletions": 0,
+          "total": 47
+        }
+      }
+    ],
+    "evidence": {
+      "explicit_pr_numbers": [
+        7
+      ],
+      "explicit_commit_shas": [
+        "de79acaa918c45df358faec1dfbb04b43ef4ab80"
+      ],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [
+        "de79acaa918c45df358faec1dfbb04b43ef4ab80"
+      ],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 1,
+      "merged_pr_with_file_evidence": true,
+      "merged_pr_with_file_evidence_pr_numbers": [
+        7
+      ],
+      "merged_pr_changed_files_total": 4
+    },
+    "merged_pr_with_file_evidence": true,
+    "link_score": 1.0,
+    "link_confidence": "high",
+    "resolution_status": "merged_fix"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 8,
+    "issue_title": "Assert in stm32u5xx_hal_dma_ex.c breaks the lpbam utility",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "dma"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/8",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 9,
+    "issue_title": "Janitorial: Wrong literal used in GTZC MPCWM2 setup code",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "gtzc"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/9",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 11,
+    "issue_title": "Handling of `Wake up from Stop 3` interrupt",
+    "issue_labels": [
+      "enhancement",
+      "internal bug tracker",
+      "hal",
+      "pwr"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/11",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 12,
+    "issue_title": "CRYP_AES_Decrypt forces key mode as CRYP_KEYMODE_NORMAL",
+    "issue_labels": [
+      "bug",
+      "invalid",
+      "internal bug tracker",
+      "hal",
+      "cryp"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/12",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 13,
+    "issue_title": "SPI transmit not works as expected",
+    "issue_labels": [
+      "bug",
+      "wontfix",
+      "hal",
+      "spi"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/13",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 14,
+    "issue_title": "SPI suspend not handled in blocking mode Receive",
+    "issue_labels": [
+      "enhancement",
+      "internal bug tracker",
+      "hal",
+      "spotted before customer",
+      "spi"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/14",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 15,
+    "issue_title": "HAL_I2C_IsDeviceReady() NACK Bug",
+    "issue_labels": [
+      "bug",
+      "hal",
+      "spotted before customer",
+      "i2c"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/15",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 16,
+    "issue_title": "HAL XSPI DTR read 1 byte",
+    "issue_labels": [
+      "bug",
+      "enhancement",
+      "internal bug tracker",
+      "hal",
+      "xspi"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/16",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 17,
+    "issue_title": "Define __STM32U5xx_HAL_VERSION_SUB1 and __STM32U5xx_HAL_VERSION_SUB2 are not correct on version 1.7",
+    "issue_labels": [
+      "bug",
+      "invalid",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/17",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 18,
+    "issue_title": "Usart reception on idle line event using dma with it disabled",
+    "issue_labels": [
+      "enhancement",
+      "invalid",
+      "hal",
+      "uart"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/18",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 19,
+    "issue_title": "LL_LPTIM_CC_SetChannelMode do not work as expected",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "lptim"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/19",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 20,
+    "issue_title": "SPI receive timeout",
+    "issue_labels": [
+      "bug",
+      "invalid",
+      "hal",
+      "spi"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/20",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 22,
+    "issue_title": "GPDMA 2D Addressing Repeated Block Configuration overwritten by ADC Byte length calculation",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "adc"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/22",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 23,
+    "issue_title": "HAL_UART_Receive() blocks if rx Overrun Error occurs",
+    "issue_labels": [
+      "bug",
+      "invalid",
+      "internal bug tracker",
+      "hal",
+      "uart"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/23",
+    "linked_pr_numbers": [
+      24
+    ],
+    "linked_commit_shas": [
+      "327c620157df29bd107e8d68d6d6d089323a82bd"
+    ],
+    "linked_prs": [
+      {
+        "pr_number": 24,
+        "title": "[HAL][UART] Fix HAL_UART_Receive() blocking on rx overrun when called…",
+        "state": "closed",
+        "merged": false,
+        "github_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/pull/24",
+        "changed_files_count": 1,
+        "merge_commit_sha": "a1849b1344f8ee40de7da9f4ab289500839cb9c0"
+      }
+    ],
+    "linked_commits": [
+      {
+        "sha": "327c620157df29bd107e8d68d6d6d089323a82bd",
+        "message": "[HAL][UART] Fix HAL_UART_Receive() blocking on rx overrun when called with Timeout = HAL_MAX_DELAY",
+        "committed_at": "2025-07-21T15:24:28Z",
+        "github_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/commit/327c620157df29bd107e8d68d6d6d089323a82bd",
+        "pr_numbers": [
+          24
+        ],
+        "stats": {
+          "additions": 27,
+          "deletions": 27,
+          "total": 54
+        }
+      }
+    ],
+    "evidence": {
+      "explicit_pr_numbers": [
+        24
+      ],
+      "explicit_commit_shas": [
+        "327c620157df29bd107e8d68d6d6d089323a82bd"
+      ],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [
+        "327c620157df29bd107e8d68d6d6d089323a82bd"
+      ],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.8,
+    "link_confidence": "medium",
+    "resolution_status": "candidate_fix"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 25,
+    "issue_title": "HAL_RTCEx_SetBoothardwareKey() corrupts TAMP Secure Config Register",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "rtc"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/25",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 26,
+    "issue_title": "HAL_RTCEx_BKUPErase and HAL_RTCEx_BKUPBlock_Enable erroneously use \"WRITE_REG\" instead of \"WRITE_BIT\"",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "rtc"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/26",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 27,
+    "issue_title": "Uninitialized variable",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "dma"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/27",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 28,
+    "issue_title": "Wrong baudrate limit",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "uart"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/28",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 29,
+    "issue_title": "GPDMA DMA state not reset when using negative block repeat address increments",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "dma"
+    ],
+    "issue_state": "open",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/29",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 30,
+    "issue_title": "LL_ADC_REG_StartConversion runs twice during HAL_ADC_Start",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "adc"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/30",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 31,
+    "issue_title": "HAL_UARTEx_ReceiveToIdle_DMA losing the last byte during reception.",
+    "issue_labels": [
+      "bug",
+      "invalid",
+      "hal",
+      "uart"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/31",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 32,
+    "issue_title": "HAL_RCC_OscConfig(), incorrect flash latency when changing MSI frequency used as SYSCLK",
+    "issue_labels": [
+      "bug",
+      "invalid",
+      "hal",
+      "rcc"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/32",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 35,
+    "issue_title": "stm32u5xx_hal_rtc_ex.h - Incorrect RTC_FLAG_INT_TAMP_x in RTC_FLAG_INT_TAMP_ALL",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "rtc"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/35",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 36,
+    "issue_title": "STM32 HAL defines LL_PWR_STOP2_MODE instead of LL_PWR_MODE_STOP2 for U5 variant?",
+    "issue_labels": [
+      "enhancement",
+      "internal bug tracker",
+      "hal",
+      "pwr"
+    ],
+    "issue_state": "open",
+    "issue_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/issues/36",
+    "linked_pr_numbers": [
+      37,
+      38
+    ],
+    "linked_commit_shas": [
+      "4232fa0514c34ccdd00640dcfa4ca40c2085d8bc"
+    ],
+    "linked_prs": [
+      {
+        "pr_number": 37,
+        "title": "Define power mode aliases for low power mode selection",
+        "state": "closed",
+        "merged": false,
+        "github_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/pull/37",
+        "changed_files_count": 1,
+        "merge_commit_sha": "42f29b8323c91e2ad7ab4a6eadbf861cfea623b5"
+      },
+      {
+        "pr_number": 38,
+        "title": "Define power mode aliases for low power mode selection",
+        "state": "open",
+        "merged": false,
+        "github_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/pull/38",
+        "changed_files_count": 1,
+        "merge_commit_sha": "7ebd5f5c5583c1d07a9647b8f9ab80c2a08d71c3"
+      }
+    ],
+    "linked_commits": [
+      {
+        "sha": "4232fa0514c34ccdd00640dcfa4ca40c2085d8bc",
+        "message": "Define power mode aliases for low power mode selection\n\nPreserve backward compatibility, while bringing into alignment with the low power modes of the HALs of other variants.",
+        "committed_at": "2026-04-24T19:06:25Z",
+        "github_url": "https://github.com/STMicroelectronics/stm32u5xx-hal-driver/commit/4232fa0514c34ccdd00640dcfa4ca40c2085d8bc",
+        "pr_numbers": [
+          37,
+          38
+        ],
+        "stats": {
+          "additions": 6,
+          "deletions": 0,
+          "total": 6
+        }
+      }
+    ],
+    "evidence": {
+      "explicit_pr_numbers": [
+        37,
+        38
+      ],
+      "explicit_commit_shas": [
+        "4232fa0514c34ccdd00640dcfa4ca40c2085d8bc"
+      ],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [
+        "4232fa0514c34ccdd00640dcfa4ca40c2085d8bc"
+      ],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.8,
+    "link_confidence": "medium",
+    "resolution_status": "candidate_fix"
+  }
+]

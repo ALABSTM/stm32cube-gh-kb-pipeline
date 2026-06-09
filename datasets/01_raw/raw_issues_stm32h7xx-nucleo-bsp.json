@@ -1,0 +1,35 @@
+[
+  {
+    "repo": "stm32h7xx-nucleo-bsp",
+    "issue_number": 1,
+    "title": "Incorrect LED mappings for NUCLEO_H753ZI",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "bsp",
+      "internal bug tracker",
+      "spotted before customer"
+    ],
+    "created_at": "2025-08-27T13:01:29Z",
+    "closed_at": "2025-09-12T15:46:34Z",
+    "body": "#### Summary\n\nOn the **NUCLEO\\_H753ZI** board, the `LED_BLUE` definition appears to be incorrect. The board has a **yellow** LED instead of a blue one, but the BSP maps it as `LED_BLUE`. As a result, `BSP_LED_On(LED_BLUE)` does not light up any LED.\n\n---\n\n#### Problem\n\nWhen CubeMX generates initialization code, it defines the three LEDs as green, blue, and red:\n\n```c\nBSP_LED_Init(LED_GREEN);\nBSP_LED_Init(LED_BLUE);\nBSP_LED_Init(LED_RED);\n```\n\nHowever, only **green** and **red** light up:\n\n```c\nBSP_LED_On(LED_GREEN);  // Works -> green LED on\nBSP_LED_On(LED_BLUE);   // Does nothing\nBSP_LED_On(LED_RED);    // Works -> red LED on\n```\n\n---\n\n#### Root Cause Analysis\n\nThe pin mappings show two possible definitions for `LED2_PIN`. One mapping `LED2_PIN` to `GPIO_PIN_1` other to `GPIO_PIN_7`. `USE_NUCLEO_H753ZI` seems to be mapped to `GPIO_PIN_7`:\n\n```c\n#if defined (USE_NUCLEO_H745ZI_Q) || defined (USE_NUCLEO_H755ZI_Q) || defined (USE_NUCLEO_H743ZI2) ||\\\n    defined (USE_NUCLEO_H7A3ZI_Q) || defined (USE_NUCLEO_H723ZG)\n#define LED2_PIN                                GPIO_PIN_1\n#define LED2_GPIO_PORT                          GPIOE\n#define LED2_GPIO_CLK_ENABLE()                  __HAL_RCC_GPIOE_CLK_ENABLE()\n#define LED2_GPIO_CLK_DISABLE()                 __HAL_RCC_GPIOE_CLK_DISABLE()\n#else /* USE_NUCLEO_H743ZI || USE_NUCLEO_H753ZI */\n#define LED2_PIN                                GPIO_PIN_7\n#define LED2_GPIO_PORT                          GPIOB\n#define LED2_GPIO_CLK_ENABLE()                  __HAL_RCC_GPIOB_CLK_ENABLE()\n#define LED2_GPIO_CLK_DISABLE()                 __HAL_RCC_GPIOB_CLK_DISABLE()\n#endif\n```\n\nAnd the LED enumerations:\n\n```c\n/** @defgroup STM32H7XX_NUCLEO_LOW_LEVEL_Exported_Types LOW LEVEL Exported Types\n  * @{\n  */\n#if defined (USE_NUCLEO_H745ZI_Q) || defined (USE_NUCLEO_H755ZI_Q) || defined (USE_NUCLEO_H743ZI2) ||\\\n    defined (USE_NUCLEO_H7A3ZI_Q) || defined (USE_NUCLEO_H723ZG)\ntypedef enum\n{\n  LED1 = 0,\n  LED_GREEN = LED1,\n  LED2 = 1,\n  LED_YELLOW = LED2,\n  LED3 = 2,\n  LED_RED = LED3,\n  LEDn\n}Led_TypeDef;\n#else /* USE_NUCLEO_H743ZI || USE_NUCLEO_H753ZI */\ntypedef enum\n{\n  LED1 = 0,\n  LED_GREEN = LED1,\n  LED2 = 1,\n  LED_BLUE = LED2,\n  LED3 = 2,\n  LED_RED = LED3,\n  LEDn\n}Led_TypeDef;\n#endif\n```\n\nFor **NUCLEO\\_H753ZI**, the code falls in both cases into the `#else` branch -> mapping `LED2` as **blue** on `GPIOB, PIN7`.\nBut after trying to manually toggling second `LED2_PIN`'s definition `GPIOE, PIN1` it seems that the actual board wiring has **yellow LED**.\n\n```c\nHAL_GPIO_TogglePin(GPIOE, GPIO_PIN_1);  // Lights yellow LED\n```\n\n#### Potential Fix\n\nAdd `USE_NUCLEO_H753ZI` to `#if` macro in both cases:\n\n**1. map `LED2_PIN` to `GPIO_PIN_1`**:\n```c\n#if defined (USE_NUCLEO_H745ZI_Q) || defined (USE_NUCLEO_H755ZI_Q) || defined (USE_NUCLEO_H743ZI2) ||\\\n    defined (USE_NUCLEO_H7A3ZI_Q) || defined (USE_NUCLEO_H723ZG) || defined (USE_NUCLEO_H753ZI)\n#define LED2_PIN                                GPIO_PIN_1\n#define LED2_GPIO_PORT                          GPIOE\n#define LED2_GPIO_CLK_ENABLE()                  __HAL_RCC_GPIOE_CLK_ENABLE()\n#define LED2_GPIO_CLK_DISABLE()                 __HAL_RCC_GPIOE_CLK_DISABLE()\n#else /* USE_NUCLEO_H743ZI */\n#define LED2_PIN                                GPIO_PIN_7\n#define LED2_GPIO_PORT                          GPIOB\n#define LED2_GPIO_CLK_ENABLE()                  __HAL_RCC_GPIOB_CLK_ENABLE()\n#define LED2_GPIO_CLK_DISABLE()                 __HAL_RCC_GPIOB_CLK_DISABLE()\n#endif\n```\n\n**2. map `LED2,` to `LED_YELLOW`:**\n```c\n/** @defgroup STM32H7XX_NUCLEO_LOW_LEVEL_Exported_Types LOW LEVEL Exported Types\n  * @{\n  */\n#if defined (USE_NUCLEO_H745ZI_Q) || defined (USE_NUCLEO_H755ZI_Q) || defined (USE_NUCLEO_H743ZI2) ||\\\n    defined (USE_NUCLEO_H7A3ZI_Q) || defined (USE_NUCLEO_H723ZG) || defined (USE_NUCLEO_H753ZI)\ntypedef enum\n{\n  LED1 = 0,\n  LED_GREEN = LED1,\n  LED2 = 1,\n  LED_YELLOW = LED2,\n  LED3 = 2,\n  LED_RED = LED3,\n  LEDn\n}Led_TypeDef;\n#else /* USE_NUCLEO_H743ZI */\ntypedef enum\n{\n  LED1 = 0,\n  LED_GREEN = LED1,\n  LED2 = 1,\n  LED_BLUE = LED2,\n  LED3 = 2,\n  LED_RED = LED3,\n  LEDn\n}Led_TypeDef;\n#endif\n```",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2025-09-01T10:04:56Z",
+        "body": "Hello @PeterWaIIace,\n\nThank you for the report.\n\nThis issue has indeed been spotted internally and will be processed shortly.\n\nWith regards,"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-09-01T10:05:45Z",
+        "body": "ST Internal Reference: 215906"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-09-12T15:46:34Z",
+        "body": "Fixed in Commit: https://github.com/STMicroelectronics/stm32h7xx-nucleo-bsp/commit/5186a1cd73efcf92f78b098961ff098fb87e5eef"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32h7xx-nucleo-bsp/issues/1"
+  }
+]

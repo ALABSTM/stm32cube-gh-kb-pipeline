@@ -1,6 +1,6 @@
 ---
 name: stm32cube_preprocessing_contract
-description: "Contract describing how the STM32Cube Preprocessing Agent collaborates with its skills for preprocessing and ST-ready delivery outputs."
+description: "Contract describing how the STM32Cube Preprocessing Agent collaborates with its skills for preprocessing, Alfred image enrichment, and ST-ready delivery outputs."
 agents: ["STM32Cube Preprocessing Agent"]
 skills: ["analyze-stats", "document-json-schema", "chunking-strategies"]
 ---
@@ -9,7 +9,7 @@ skills: ["analyze-stats", "document-json-schema", "chunking-strategies"]
 
 ## Purpose
 
-This contract defines how the STM32Cube Preprocessing Agent should use its skills to support the STM32Cube preprocessing and ST-ready delivery workflow.
+This contract defines how the STM32Cube Preprocessing Agent should use its skills to support the STM32Cube preprocessing, Alfred image enrichment, and ST-ready delivery/upload workflow.
 
 ## Agent
 
@@ -17,6 +17,8 @@ This contract defines how the STM32Cube Preprocessing Agent should use its skill
   - Main role: analyze, validate, and document the STM32Cube pipeline from ingestion to KB-ready delivery exports.
   - Uses workspace files under `pipeline/`, `shared/`, `data/`, `datasets/`, `docs/`.
   - Prioritizes durable fixes in generators and quality gates over manual one-off patches.
+  - Manages Alfred Vision API enrichment for image descriptions in issues.
+  - Handles upload to ST ChatGPT KB via `Add_Data_Source_Files.py`.
 
 ## Active execution paths
 
@@ -27,6 +29,9 @@ This contract defines how the STM32Cube Preprocessing Agent should use its skill
 - Chunking: `pipeline/chunking/*`
 - Evaluation: `pipeline/evaluation/*`
 - Delivery: `pipeline/delivery/*`
+- Alfred enrichment: `pipeline_Automation/alfred/*`
+- Upload: `pipeline_Automation/upload/*`
+- Workflow automation: `pipeline_Automation/workflow/*`
 
 Utility entry points:
 
@@ -38,9 +43,21 @@ Utility entry points:
 Targeted delivery exports:
 
 - `python -m pipeline.delivery.export_st_ready_issues --repo STM32CubeH7`
+- `python -m pipeline.delivery.export_st_ready_issues_with_images --repo STM32CubeH7`
 - `python -m pipeline.delivery.export_st_ready_files --repo STM32CubeH7`
 - `python -m pipeline.delivery.export_st_ready_resolver_cases --repo STM32CubeH7`
 - `python -m pipeline.delivery.export_st_ready_diagnostic_cards --repo STM32CubeH7`
+
+Alfred image enrichment:
+
+- `python pipeline_Automation/alfred/enrich_json_images_with_alfred.py --input <file> --inplace`
+- Options: `--use-proxy`, `--no-replace-text`, `--max-records N`, `--strip-analyses`
+- Alfred replaces `[IMAGE ATTACHED]` markers with `[IMAGE DESCRIPTION] ...` using Vision API.
+
+Upload to KB:
+
+- `python pipeline_Automation/upload/Add_Data_Source_Files.py --kb 793 --operation add --datasource-id <ID> --remote-user "abir.gharbi@st.com" --processor JSON --processor-params "base64:<b64>" --json-split-size 1000 --files <file>`
+- PowerShell base64 encoding required for `--processor-params` containing `{}`.
 
 ## Skills
 
@@ -90,12 +107,32 @@ Targeted delivery exports:
 
 4. When the user reports KB retrieval failures, the agent should first improve generator quality (query aliases, technical anchors, signal filtering, evidence refs) before manual file-specific overrides.
 
+5. When the user wants to enrich issues with image descriptions:
+  - Export with `export_st_ready_issues_with_images` (generates `[IMAGE ATTACHED]` markers + `image_urls`).
+  - Run Alfred enrichment (`enrich_json_images_with_alfred.py --inplace`).
+  - Upload the enriched `*_with_alfred_image_text.json` to the target datasource.
+
+6. When the user wants to upload to KB:
+  - Use base64 encoding for processor-params in PowerShell.
+  - Validate record count matches expected (264 valid for H7).
+  - Reference `docs/pipeline_commands_reference.md` for full command syntax.
+
+## Known fixes and design decisions
+
+- **Image marker duplication fix**: `first_sentence()` in `export_st_ready_issues.py` and `export_st_ready_issues_with_images.py` strips `[IMAGE ATTACHED]` markers from `root_cause_hint`. This prevents duplication when comment images are repeated in the hint AND in Key comments, which caused Alfred to exhaust URLs on the copy and mark the originals as UNAVAILABLE.
+
+- **Invalid issues excluded by default**: Issues with `is_valid: false` (short text < 100 chars, or labels invalid/duplicate/wontfix) are excluded from delivery. The `rescue` mechanism recovers false negatives (mislabeled but technically rich issues).
+
+- **ST ChatGPT Tool fallback**: The persona "ST GitHub Analyzer" uses Alfred as a fallback tool when the KB does not contain a relevant answer. Tool description should enforce KB-first priority.
+
 ## Output quality checks
 
 - Root JSON format matches consumer expectations.
 - Summary counts are coherent with exported payload size.
 - Diagnostic cards contain useful `query_aliases`, `keywords`, and `evidence_refs`.
 - High-value troubleshooting cases include lexical anchors used in real queries.
+- After Alfred enrichment: 0 `[IMAGE DESCRIPTION UNAVAILABLE]` for issues where all image URLs were captured.
+- Upload datasource IDs: H7 Issues = #24406, KB = #793.
 
 
 

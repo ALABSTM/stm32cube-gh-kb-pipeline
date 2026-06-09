@@ -74,6 +74,11 @@ def first_sentence(text: str, max_chars: int = 280) -> str:
     s = normalize_whitespace(text)
     if not s:
         return ""
+    # Strip image markers — root_cause_hint is a textual summary, images
+    # will be described in the full Key comments section by Alfred.
+    s = re.sub(r"\[IMAGE ATTACHED\]\s*", "", s).strip()
+    if not s:
+        return ""
     # Keep a short lead for retrieval while preserving technical tokens.
     match = re.search(r"[.!?]", s)
     if match and match.end() <= max_chars:

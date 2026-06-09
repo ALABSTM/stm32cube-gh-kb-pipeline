@@ -1,0 +1,245 @@
+[
+  {
+    "repo": "cmsis_device_u5",
+    "issue_number": 8,
+    "title": "Comments give wrong value",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "cmsis",
+      "internal bug tracker",
+      "rcc"
+    ],
+    "created_at": "2025-10-10T12:39:35Z",
+    "closed_at": "2025-11-07T08:58:32Z",
+    "body": "Lots of comments give the wrong values:\n\nhttps://github.com/STMicroelectronics/cmsis-device-u5/blob/6e67187dec98035893692ab2923914cb5f4e0117/Include/stm32u575xx.h#L16683\nhttps://github.com/STMicroelectronics/cmsis-device-u5/blob/6e67187dec98035893692ab2923914cb5f4e0117/Include/stm32u575xx.h#L16688\nhttps://github.com/STMicroelectronics/cmsis-device-u5/blob/6e67187dec98035893692ab2923914cb5f4e0117/Include/stm32u575xx.h#L16690\nhttps://github.com/STMicroelectronics/cmsis-device-u5/blob/6e67187dec98035893692ab2923914cb5f4e0117/Include/stm32u575xx.h#L16691\n\netc..\n\n\n",
+    "comments": [
+      {
+        "author": "MKISTM",
+        "created_at": "2025-10-13T10:37:52Z",
+        "body": "Hi @nbrunner,\n\nThank you for this heads-up. Let's have this fixed. I'll log an internal tracker.\n\nWith regards,"
+      },
+      {
+        "author": "MKISTM",
+        "created_at": "2025-10-13T10:38:16Z",
+        "body": "ST Internal Reference: 219386"
+      },
+      {
+        "author": "MKISTM",
+        "created_at": "2025-11-07T08:58:32Z",
+        "body": "Fixed in commit a6a97ebb1bc21258490a0ce409ea2a4ecbba7570"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-u5/issues/8"
+  },
+  {
+    "repo": "cmsis_device_u5",
+    "issue_number": 7,
+    "title": "Wrong comments",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "cmsis",
+      "internal bug tracker"
+    ],
+    "created_at": "2025-09-25T14:22:02Z",
+    "closed_at": "2025-10-13T15:42:14Z",
+    "body": "https://github.com/STMicroelectronics/cmsis-device-u5/blob/6e67187dec98035893692ab2923914cb5f4e0117/Source/Templates/gcc/startup_stm32u535xx.s#L3\nshould be ` * @file      startup_stm32u535xx.s`\nhttps://github.com/STMicroelectronics/cmsis-device-u5/blob/6e67187dec98035893692ab2923914cb5f4e0117/Source/Templates/gcc/startup_stm32u535xx.s#L5\nshould be `* @brief     STM32U535xx device vector table for GCC toolchain.`\nhttps://github.com/STMicroelectronics/cmsis-device-u5/blob/6e67187dec98035893692ab2923914cb5f4e0117/Source/Templates/gcc/startup_stm32u545xx.s#L3\nshould be ` * @file      startup_stm32u545xx.s`\nhttps://github.com/STMicroelectronics/cmsis-device-u5/blob/6e67187dec98035893692ab2923914cb5f4e0117/Source/Templates/gcc/startup_stm32u545xx.s#L5\nshould be `* @brief     STM32U545xx device vector table for GCC toolchain.`",
+    "comments": [
+      {
+        "author": "MKISTM",
+        "created_at": "2025-10-09T08:19:46Z",
+        "body": "Hello @nbrunner,\n\nThank you for this heads-up. Let's have this fixed.\n\nWith regards,"
+      },
+      {
+        "author": "MKISTM",
+        "created_at": "2025-10-09T08:21:43Z",
+        "body": "ST Internal Reference: 219206"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-10-13T15:42:14Z",
+        "body": "Fixed in Commit: https://github.com/STMicroelectronics/cmsis-device-u5/commit/7d2523ef5fffdd8d62c448573ce86a489971151a"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-u5/issues/7"
+  },
+  {
+    "repo": "cmsis_device_u5",
+    "issue_number": 6,
+    "title": "Wrong mask for HASH_SR_NBWE",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "cmsis",
+      "internal bug tracker",
+      "hash"
+    ],
+    "created_at": "2025-03-28T13:37:20Z",
+    "closed_at": "2025-05-08T09:17:51Z",
+    "body": "Found in\nhttps://github.com/STMicroelectronics/cmsis-device-u5/blob/00779e352e24435e0c7fc3b14b2416076216837b/Include/stm32u585xx.h#L6014\nBut the other devices are probably wrong too.\nHASH_SR_NBWE has 5 bits according to the datasheet (and they are really needed since it can hold up to the value 0x11)\nCorect mask is (0x**1**FUL << HASH_SR_NBWE_Pos)  or 0x00**1**F0000  instead of (0x1FUL << HASH_SR_NBWE_Pos) or 0x000F0000.",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2025-04-02T11:12:36Z",
+        "body": "Hi @Olstyle,\n\nLooks you're right. Thank you for the heads up. I'll let our development teams know in order to fix this.\n\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2025-04-02T11:18:46Z",
+        "body": "ST Internal Reference: 206641"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2025-05-08T09:17:51Z",
+        "body": "Fixed in commit 1605b67aba5956fc114025ee7ffea654a9890ab9"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-u5/issues/6"
+  },
+  {
+    "repo": "cmsis_device_u5",
+    "issue_number": 5,
+    "title": "Incorrect JPEG register definitions",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "cmsis",
+      "internal bug tracker",
+      "jpeg"
+    ],
+    "created_at": "2025-01-30T12:15:19Z",
+    "closed_at": "2025-03-07T10:55:14Z",
+    "body": "In `stm32u5g9xx.h` (and maybe in more files), there are a few incorrect definitions:\n\n```c\n#define JPEG_BASE_S (AHB1PERIPH_BASE_S + 0x0A00UL)\n#define JPEG_CFR_CEOCF_Pos   (4U)\n#define JPEG_CFR_CHPDF_Pos   (5U)\n```\n\nThey should be:\n\n```c\n#define JPEG_BASE_S (AHB1PERIPH_BASE_S + 0x0A000UL)\n#define JPEG_CFR_CEOCF_Pos   (5U)\n#define JPEG_CFR_CHPDF_Pos   (6U)\n```",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2025-01-31T14:07:23Z",
+        "body": "ST Internal Reference: 201981"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-03-07T10:55:14Z",
+        "body": "Fixed in Commit: https://github.com/STMicroelectronics/cmsis-device-u5/commit/00779e352e24435e0c7fc3b14b2416076216837b"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-u5/issues/5"
+  },
+  {
+    "repo": "cmsis_device_u5",
+    "issue_number": 4,
+    "title": "STM32U5A5xx_FLASH.ld not provided",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "cmsis",
+      "internal bug tracker",
+      "spotted before customer"
+    ],
+    "created_at": "2025-01-11T00:55:25Z",
+    "closed_at": "2025-02-07T14:10:12Z",
+    "body": "STM32U5A5xx_FLASH.ld not provided. Should be similar to the rest, but appears to be missing?",
+    "comments": [
+      {
+        "author": "ASEHSTM",
+        "created_at": "2025-01-17T14:13:23Z",
+        "body": "Hello @c4dsouza,\n\nThank you for your report. You are right, the STM32U5A5xx_FLASH.ld file is missing. \nThis issue has been tracked internally.\nST Internal Reference: 199382\n\nWith Regards,"
+      },
+      {
+        "author": "ASEHSTM",
+        "created_at": "2025-02-07T14:10:12Z",
+        "body": "Fixed in: 4cd9458390f49c6d0554d45dd2447923f1e0207e"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-u5/issues/4"
+  },
+  {
+    "repo": "cmsis_device_u5",
+    "issue_number": 3,
+    "title": "46d5877874a9fb reintroduces error corrected in 3abe881508869a9e",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "cmsis",
+      "usb",
+      "regression"
+    ],
+    "created_at": "2024-09-12T18:07:01Z",
+    "closed_at": "2024-09-16T10:58:19Z",
+    "body": "Head again misses the opening parenthesis.\r\n\r\nDoes nobody work with these headers?\r\n \r\n#define USB_OTG_GCCFG_FSVMINUS_Pos               (2U)\r\n-#define USB_OTG_GCCFG_FSVMINUS_Msk               (0x1U << USB_OTG_GCCFG_FSVMINUS_Pos)        /*!< 0x00000004 */\r\n+#define USB_OTG_GCCFG_FSVMINUS_Msk               0x1U << USB_OTG_GCCFG_FSVMINUS_Pos)         /*!< 0x00000004 */\r\n",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2024-09-16T10:58:00Z",
+        "body": "Hi @UweBonnes,\r\n\r\nThank you for the heads-up. Indeed, this is an unwanted change. We'll have this fixed as soon as possible.\r\n\r\nWith regards, "
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2024-09-16T10:58:19Z",
+        "body": "Fixed in commit 48a64b6a00d7627b6c98fcf565cc6cf2b714b659"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-u5/issues/3"
+  },
+  {
+    "repo": "cmsis_device_u5",
+    "issue_number": 2,
+    "title": "Wrong VREFBUF voltage scale #define",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "cmsis",
+      "internal bug tracker"
+    ],
+    "created_at": "2024-02-01T07:43:39Z",
+    "closed_at": "2024-08-26T09:55:22Z",
+    "body": "In the stm32u5xxxx.h files, the following #define does not setup correctly the VREFBUF voltage scale :\r\n`#define LL_VREFBUF_VOLTAGE_SCALE3          VREFBUF_CSR_VRS_2       /*!< Voltage reference scale 1 (VREF_OUT4) */`\r\n\r\nVREFBUF_CSR_VRS_2 should be (0x03UL<< VREFBUF_CSR_VRS_Pos) :\r\n`#define VREFBUF_CSR_VRS_2       (0x04UL<< VREFBUF_CSR_VRS_Pos)                      /*!< 0x00000030 */`\r\n",
+    "comments": [
+      {
+        "author": "TOUNSTM",
+        "created_at": "2024-02-06T14:53:42Z",
+        "body": "ST Internal Reference: 172777"
+      },
+      {
+        "author": "RJMSTM",
+        "created_at": "2024-08-26T09:55:13Z",
+        "body": "Fixed in : 46d5877874a9fb5cd3ebd9044171b0c946d7716b"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-u5/issues/2"
+  },
+  {
+    "repo": "cmsis_device_u5",
+    "issue_number": 1,
+    "title": "Inconsistent UCPD CFG register names",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "wontfix",
+      "cmsis",
+      "usbpd",
+      "internal bug tracker"
+    ],
+    "created_at": "2023-08-20T21:00:24Z",
+    "closed_at": "2024-03-19T13:20:05Z",
+    "body": "`UCPD_TypeDef` struct defined in  [stm32u575xx.h](https://github.com/STMicroelectronics/cmsis_device_u5/blob/06d7edade7167b0eafdd550bf77cfc4fa98eae2e/Include/stm32u575xx.h#L1245) contains **CFG1-CFG3** registers while in STM32U5 reference manual [RM0456](https://www.st.com/resource/en/reference_manual/rm0456-stm32u5-series-armbased-32bit-mcus-stmicroelectronics.pdf) in sections 74.8.1-74.8.3 those registers are named **CFGR1-CFGR3**.\r\n\r\nAnother inconsistency: RM0456 section 74.8.1 defines **CFGR1**.PSC_**USBPD**CLK register value, but HAL implements **CFG1**.UCPD_CFG1_PSC_**UCPD***CLK (USBPDCLK vs UCPDCLK).\r\n\r\nThis can be confusing.\r\nPlease fix code or RM docs - preferably RM, since naming used in HAL makes more sense",
+    "comments": [
+      {
+        "author": "tdjastrzebski",
+        "created_at": "2023-08-26T09:34:58Z",
+        "body": "The same applies to STM32H5xx, see\r\n[STM32U5xx UCPD RM0456 documentation inconsistency](https://community.st.com/t5/stm32-mcu-products/stm32u5xx-ucpd-rm0456-documentation-inconsistency/m-p/584411#M221422)"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2023-11-29T14:06:52Z",
+        "body": "ST Internal Reference: 167493"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2024-03-19T13:20:05Z",
+        "body": "Hi @tdjastrzebski,\r\n\r\nOur development team acknowledged your request. However, they made the choice **not** to deploy such an update for the moment as it would impact the firmware as a whole.\r\n\r\nHence, please allow me to close this issue. Thank you for your comprehension and thank you again for having reported.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-u5/issues/1"
+  }
+]

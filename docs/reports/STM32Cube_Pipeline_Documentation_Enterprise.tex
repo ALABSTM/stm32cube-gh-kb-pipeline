@@ -3,8 +3,10 @@
 \usepackage[T1]{fontenc}
 \usepackage[french,english]{babel}
 \usepackage{geometry}
-\geometry{margin=2.5cm}
+\geometry{margin=2.5cm, top=3cm}
+\setlength{\headheight}{14.5pt}
 \usepackage{graphicx}
+\graphicspath{{../diagrams/presentation/exported/}{../diagrams/technical/exported/}}
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{xcolor}
@@ -89,14 +91,12 @@ This project implements an automated preprocessing pipeline that transforms raw 
 
 \section{System Context}
 
-\begin{verbatim}
-GitHub (STMicroelectronics) 
-    → Preprocessing Pipeline (this project)
-        → ST-Ready JSON artifacts
-            → ST AI Bridge KB (#793)
-                → ST GitHub Analyzer Persona (Chatbot)
-                    → End users (Engineers/Customers)
-\end{verbatim}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{03_data_flow_source_to_answer.png}
+  \caption{End-to-end data flow: from GitHub sources to chatbot answers}
+  \label{fig:data-flow-overview}
+\end{figure}
 
 %% ============================================================
 \chapter{Architecture}
@@ -105,6 +105,13 @@ GitHub (STMicroelectronics)
 \section{Pipeline Stages}
 
 The pipeline consists of 7 sequential stages, each reading from the previous stage's output:
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{01_pipeline_overview.png}
+  \caption{High-level pipeline architecture: 7 sequential stages}
+  \label{fig:pipeline-overview}
+\end{figure}
 
 \begin{enumerate}
   \item \textbf{Ingestion} --- Fetch raw data from GitHub API and local clones
@@ -143,6 +150,13 @@ PFE_Chatbot_STM32Cube/
 +-- data/                      # Historical/intermediate
 \end{lstlisting}
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{04_series_coverage_scale.png}
+  \caption{Multi-series coverage: 5 MCU families, 40+ repositories}
+  \label{fig:series-coverage}
+\end{figure}
+
 \section{Configuration System}
 
 Each MCU series has a dedicated configuration file:
@@ -160,6 +174,13 @@ Each MCU series has a dedicated configuration file:
 %% ============================================================
 
 \section{Stage 1: Ingestion}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{01_ingestion_detail.png}
+  \caption{Ingestion stage: scripts, API calls, and output artifacts}
+  \label{fig:ingestion-detail}
+\end{figure}
 
 \subsection{Scripts}
 
@@ -190,6 +211,13 @@ All raw data is stored in \texttt{datasets/01\_raw/} as JSON files named \texttt
 Output: \texttt{data/clean\_issues\_\{repo\}.json}, \texttt{data/clean\_files\_\{repo\}.json}
 
 \section{Stage 3: Enrichment V2}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{02_enrichment_similarity_detail.png}
+  \caption{Enrichment \& similarity stage: heuristic NLP classification and TF-IDF cross-linking}
+  \label{fig:enrichment-detail}
+\end{figure}
 
 \subsection{Issues Enrichment (\texttt{issues\_to\_docs\_v2.py})}
 
@@ -252,6 +280,20 @@ Strategy: bounded chunks (max 512 tokens) with 50-token overlap for context cont
 
 \section{Stage 7: Delivery}
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{03_delivery_resolver_diagnostic.png}
+  \caption{Delivery stage: resolver cases and diagnostic card generation}
+  \label{fig:delivery-resolver}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{02_delivery_kb_upload.png}
+  \caption{Delivery artifacts and KB upload workflow}
+  \label{fig:delivery-kb-upload}
+\end{figure}
+
 \subsection{Export Scripts}
 
 \begin{itemize}
@@ -275,6 +317,13 @@ by_series/stm32cubef4/drivers/cmsis_device_f4/files_json/
 %% ============================================================
 
 \section{ST AI Bridge API}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{07_upload_auth_flow.png}
+  \caption{Upload authentication flow: API key, client app, and datasource creation}
+  \label{fig:upload-auth-flow}
+\end{figure}
 
 \begin{itemize}
   \item \textbf{Endpoint}: \texttt{https://api-ai-bridge.st.com/chatgpt/api/client-apps}
@@ -340,6 +389,13 @@ Many GitHub issues contain screenshots (error dialogs, logic analyzer traces, Cu
 
 \section{Integration}
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{05_alfred_vision_integration.png}
+  \caption{Alfred Vision AI integration: image URL extraction, API call, text injection}
+  \label{fig:alfred-integration}
+\end{figure}
+
 \begin{lstlisting}[language=bash]
 python pipeline_Automation/enrich_json_images_with_alfred.py \
   --input "datasets/.../st_ready_issues_stm32cubef4.json" \
@@ -387,6 +443,20 @@ The persona system prompt follows a 4-case answer strategy:
 %% ============================================================
 
 \section{Full Workflow Execution}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{06_cicd_automation.png}
+  \caption{CI/CD automation: GitHub Actions workflow with delete+add upload pattern}
+  \label{fig:cicd-automation}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{06_automation_ci_upload.png}
+  \caption{Automation architecture: scheduled triggers, validation gates, and upload}
+  \label{fig:automation-upload}
+\end{figure}
 
 \begin{lstlisting}[language=bash]
 # Standard run
@@ -506,6 +576,13 @@ To set up:
 %% ============================================================
 
 \section{Test Suite}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{05_evaluation_validation.png}
+  \caption{Evaluation and validation pipeline: stats, TF-IDF tests, schema gates}
+  \label{fig:evaluation-validation}
+\end{figure}
 
 50-question test suite (\texttt{all\_series\_test\_suite\_50q\_v2.csv}):
 \begin{itemize}

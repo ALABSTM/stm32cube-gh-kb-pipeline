@@ -1,0 +1,726 @@
+[
+  {
+    "repo": "stm32h5xx-hal-driver",
+    "issue_number": 33,
+    "title": "[Bug]: stm32h5xx_hal_spi.c does not operate correctly in blocking mode when optimised",
+    "state": "closed",
+    "labels": [
+      "bug"
+    ],
+    "created_at": "2026-05-29T02:21:19Z",
+    "closed_at": "2026-05-29T02:48:35Z",
+    "body": "### Bug Summary\n\nIf stm32h5xx_hal_spi.c optimisation is set to -Og artifacts are generated in u8g2 graphics\n\n### Detailed Description\n\nCompiled project with u8g2 SPI to LCD with no optimisation, all data displays correctly.\nChange optimisation to Og or above and artifacts appear on the LCD.\nTracked to this file, if all other code is optimised and this file Optimisation set to none, the SPI transfers work correctly and data displays correctly, optimise this file and artifacts appear on the display.\n\n\n### Expected Behavior\n\nShould behave the same with and without optimisation.\n\n### Actual Behavior\n\nSPI data transfers are corrupted when file is optimised\n\n### Environment\n\nSTM32CUBEIDE 2.1.1, gnu-tools-for-stm32.14.3.rel1.win32_1.0.100.202602081740, CUstom PCB with STM32H562 processor\n\n### Severity\n\nMajor",
+    "comments": [
+      {
+        "author": "BarryAndrews",
+        "created_at": "2026-05-29T02:48:23Z",
+        "body": "Sorry, relied on Claude too much.  Its possible this is an LCD clock issue when optimised code pumps data quicker. Dropped clock from 15M to 10M and artifacts disappeared.  LCD is rated to 20M but maybe is marginal when SPI pumps data rapidly."
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/33"
+  },
+  {
+    "repo": "stm32h5xx-hal-driver",
+    "issue_number": 32,
+    "title": "[Bug]: NetX Ethernet PTP Transmit Timestamps not Captured",
+    "state": "open",
+    "labels": [
+      "bug",
+      "hal",
+      "eth"
+    ],
+    "created_at": "2026-05-26T19:57:17Z",
+    "closed_at": null,
+    "body": "### Bug Summary\n\nWhen _nx_driver_hardware_packet_send() is called with a packet setting NX_INTERFACE_CAPABILITY_PTP_TIMESTAMP, a transmit timestamp isn't captured.\n\n### Detailed Description\n\nPackets setting NX_INTERFACE_CAPABILITY_PTP_TIMESTAMP should capture a timestamp on transmit. For STM32H5 variants with MULTI_QUEUE_FEATURE there is the following code:\n\n```C\nif (packet_ptr -> nx_packet_interface_capability_flag & NX_INTERFACE_CAPABILITY_PTP_TIMESTAMP)\n  {\n    HAL_ETH_PTP_InsertTxTimestamp(&eth_handle);\n  }\n```\n\nHowever, no such code exists for variants without MULTI_QUEUE_FEATURE. This means that transmit timestamps aren't captured and `HAL_ETH_TxPtpCallback` and `nx_ptp_client_packet_timestamp_notify` are never called, breaking PTP.\n\nTo fix this the above code snippet needs to be added [here](https://github.com/STMicroelectronics/stm32-mw-netxduo/blob/79232767cef83e20573f2fbc173810f9d29c8fdb/common/drivers/ethernet/nx_stm32_eth_driver.c#L2065).\n\n### Expected Behavior\n\nA timestamp is captured on a packet setting NX_INTERFACE_CAPABILITY_PTP_TIMESTAMP\n\n### Actual Behavior\n\nNo timestamp is captured\n\n### Environment\n\nNetXduo\n\n### Severity\n\nNormal",
+    "comments": [],
+    "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/32"
+  },
+  {
+    "repo": "stm32h5xx-hal-driver",
+    "issue_number": 31,
+    "title": "[Bug]: HAL RCC VCO computation are incorrect for fractional multiplier",
+    "state": "open",
+    "labels": [
+      "bug",
+      "hal",
+      "internal bug tracker",
+      "rcc"
+    ],
+    "created_at": "2026-05-24T08:45:11Z",
+    "closed_at": null,
+    "body": "### Bug Summary\n\nHAL and LL functions dealing with VCO use floating point numbers that don't have enough precision\n\n### Detailed Description\n\nVCO value maximum value is 560 MHZ (560000000).\nThis number has 9 decimal digits value in this range requires 32 bits to represent\nfloat variables have on 6-9 decimal digits (fraction part has 23 bits) so it's clear that not all values can be represented.\n\nLets consider function for calculation of PLL clock for P Q or R\n```c\nuint32_t LL_RCC_CalcPLLClockFreq(uint32_t PLLInputFreq, uint32_t M, uint32_t N, uint32_t FRACN, uint32_t PQR)\n{\n    float_t freq;\n\n    freq = ((float_t)PLLInputFreq / (float_t)M) * ((float_t)N + ((float_t)FRACN / (float_t)0x2000));\n\n    freq = freq / (float_t)PQR;\n\n    return (uint32_t)freq;\n}\n```\n\nWhile formula is consistent with Datasheet calculated values may be incorrect depending on input values due to float_t being used.\n\nIf for example values are as follow\n```\nPLLInputFreq = 4000000\nM = 1\nN = 134\nFRACN = 1855\nPQR = 2\n```\nReturned value is 268437760 Hz\nWhen same function works on double precision numbers result is 268437744 Hz\nThis gives 16 Hz difference.\n\nI guess double precision computation yields more accurate result.\n\nHere is version that gives same result as double precision computation using 64 bit integers\n```c\nuint32_t LL_RCC_CalcPLLClockFreq(uint32_t PLLInputFreq, uint32_t M, uint32_t N, uint32_t FRACN, uint32_t PQR)\n{\n    uint64_t freq = (((uint64_t)PLLInputFreq * (N * 0x2000 + FRACN)) / (M * 0x2000)) / PQR;\n\n    return (uint32_t)freq;\n}\n```\n\nOther places in **stm32h5xx_hal_rcc.c** also use float numbers for computation and probably also are not accurate.\n\nSame problem applies to stm32h7 devices but those do have double precision floats that could be used instead of integer computation.\n\nComputed frequency difference between current function and double precision/integer computation goes up to 30Hz\n\n### Expected Behavior\n\n_No response_\n\n### Actual Behavior\n\n_No response_\n\n### Environment\n\n_No response_\n\n### Severity\n\nMinor",
+    "comments": [
+      {
+        "author": "ASAHSTM",
+        "created_at": "2026-05-26T16:00:37Z",
+        "body": "Hello @kasjer,\n\nThank you for your report.\nThis issue has been tracked internally.\n\nWith Regards,"
+      },
+      {
+        "author": "ASAHSTM",
+        "created_at": "2026-05-26T16:00:59Z",
+        "body": "ST Internal Reference: CDM0062939"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/31"
+  },
+  {
+    "repo": "stm32h5xx-hal-driver",
+    "issue_number": 30,
+    "title": "[Bug]: SPI is disabled too early",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "spi",
+      "bsp"
+    ],
+    "created_at": "2026-05-19T08:18:11Z",
+    "closed_at": "2026-05-26T09:32:28Z",
+    "body": "### Bug Summary\n\nWhen the last (or single) byte of a data transfer has been sent, the SPI is disable too early\n\n### Detailed Description\n\n**SPI disabled to early**\n\nWhen sending data via SPI, the peripheral is disabled afterwards. some investigation showed that it seems to be disabled to early, while the last clock cycle is still ongoing.\n\n<img width=\"1280\" height=\"800\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/24114b86-9343-408d-bf4e-ee955c025838\" />\n\nScreenshot from oscilloscope shows CH1: SPI1_SCK, CH2: SPI1_MOSI.\n\n\nBoth SPI1_SCK and SPI1_MOSI will fade their signal, instead of perfectly finishing the last bit until the clock will do its falling edge. \n\nBetter to wait for a short time, e.g wait for the TXC complete flag in the SR, and then disable the SPI.\n\nThe original code in **stm32h5xx_spi.c** looks like this:\n~~~C\nstatic void SPI_CloseTransfer(SPI_HandleTypeDef *hspi)\n{\n  uint32_t itflag = hspi->Instance->SR;\n\n  __HAL_SPI_CLEAR_EOTFLAG(hspi);\n  __HAL_SPI_CLEAR_TXTFFLAG(hspi);\n\n  /* Disable SPI peripheral */\n  __HAL_SPI_DISABLE(hspi);\n...\n~~~\n\nI suggest something similar like the following, to add a check on the TXC flag and a timeout. The code is **not**  yet thoroughly tested and needs to be revised. (Of course we don't like magic numbers, and no blocking loops.)\n~~~C\nstatic void SPI_CloseTransfer(SPI_HandleTypeDef *hspi)\n{\n  uint32_t itflag = hspi->Instance->SR;\n\n  __HAL_SPI_CLEAR_EOTFLAG(hspi);\n  __HAL_SPI_CLEAR_TXTFFLAG(hspi);\n\n  /* Disable SPI peripheral */\n  int32_t timeout = 1000;\n  while ((hspi->Instance->SR & SPI_SR_TXC) == 0) if (--timeout<0) break;\n  __HAL_SPI_DISABLE(hspi);\n...\n~~~\n\n### Expected Behavior\n\nSPI1_SCK to do all 8 cycles of the clock including the last falling edge before it is disable after a complete transfer.\n\n### Actual Behavior\n\nSPI1_SCK does only 7 clock cycles plus an 8th rising edge.\n\n### Environment\n\nNUCLEO-H563ZI, X-NUCLEO-PLC01A1, STM32CubeIDE V2.1.1, STM32CubeMX V6.17, STM32Cube FW_H5 V1.6.0; SPI1: 8bit, 31.25kHz, Clock to SPI 4MHz; HCLK: 250MHz \n\n### Severity\n\nNormal",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2026-05-22T14:39:26Z",
+        "body": "Hello @ChST8512,\n\nThank you for the report.\n\nRegarding the issue, I ran an example located at STM32CubeH5\\Projects\\NUCLEO-H503RB\\Examples\\SPI\\SPI_FullDuplex_ComPolling_Master. It works correctly, and I did not encounter any problems, especially the ones you experienced. I have attached some screenshots.\n\n<img width=\"751\" height=\"336\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/77e7249f-d175-4e7e-9558-679046a23a5a\" />\n<img width=\"347\" height=\"164\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/14452350-4138-4f9c-864d-8d47000a7bc5\" />\n\n\nI suggest posting on our [Community](https://community.st.com/) forum for further support.\n\nWith regards,"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2026-05-26T09:32:28Z",
+        "body": "Hello @ChST8512,\n\nPlease allow me to close the issue. Thank you for your understanding.\n\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/30"
+  },
+  {
+    "repo": "stm32h5xx-hal-driver",
+    "issue_number": 27,
+    "title": "[Bug]: Raw Ethernet packet sending adds two headers leading to buffer underflow",
+    "state": "open",
+    "labels": [
+      "bug",
+      "hal",
+      "internal bug tracker",
+      "eth"
+    ],
+    "created_at": "2026-05-16T13:34:28Z",
+    "closed_at": null,
+    "body": "### Bug Summary\n\nWhen using any functions in NetXduo that send raw packets the STM32H5 Ethernet driver adds an extra garbage header and underflows the packet buffer.\n\n### Detailed Description\n\nWhen NetXduo sends a gPTP packet the following steps happen:\n1. `nx_link_ethernet_packet_send()` is called\n2. A header is added by the function `nx_link_ethernet_header_add()`. This is the correct header with the right destination and ethertype.\n3. `nx_link_ethernet_packet_send()` calls `nx_link_raw_packet_send()`\n4. `nx_link_raw_packet_send()` calls `nx_stm32_eth_driver()` with `nx_ip_driver_command = NX_LINK_RAW_PACKET_SEND`\n5. `nx_stm32_eth_driver()` calls `_nx_driver_packet_send()`\n6. `_nx_driver_packet_send()` prepends another header with incorrect destination and ethertype\n7. The packet is sent by `_nx_driver_hardware_packet_send()`\n\nThe resulting two headers can be seen in this image:\n\n<img width=\"679\" height=\"372\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/dd66a8aa-fd2b-49c9-89ab-8cbac9ff79e4\" />\n\n- In blue are the destination addresses, note that they are different and the first one is incorrect.\n- In red are the source addresses.\n- In green are the ethertypes, again the first one is invalid.\n\nTo make things worse `_nx_driver_packet_send()` doesn't check if there is enough space to add this second header and so it underflows the packet buffer.\n\nTo fix this `NX_LINK_RAW_PACKET_SEND` needs to be handled separately to `NX_LINK_PACKET_SEND`.\n\nCurrent:\n\n```C\n  case NX_LINK_ARP_SEND:\n  case NX_LINK_ARP_RESPONSE_SEND:\n  case NX_LINK_PACKET_BROADCAST:\n  case NX_LINK_RARP_SEND:\n  case NX_LINK_PACKET_SEND:\n  case NX_LINK_RAW_PACKET_SEND:\n    {\n\n      /* Process packet send requests.  */\n      _nx_driver_packet_send(driver_req_ptr);\n      break;\n    }\n```\n\nImproved:\n\n```C\ncase NX_LINK_ARP_SEND:\n  case NX_LINK_ARP_RESPONSE_SEND:\n  case NX_LINK_PACKET_BROADCAST:\n  case NX_LINK_RARP_SEND:\n  case NX_LINK_PACKET_SEND:\n    {\n\n      /* Process packet send requests.  */\n      _nx_driver_packet_send(driver_req_ptr);\n      break;\n    }\n\n\n  case NX_LINK_RAW_PACKET_SEND:\n    {\n      /* Process raw packet send requests.  */\n      _nx_driver_raw_packet_send(driver_req_ptr);\n      break;\n    }\n```\n\nAnd then something like:\n\n```C\nstatic VOID  _nx_driver_raw_packet_send(NX_IP_DRIVER driver_req_ptr)\n{\n      /* For raw packets, the Ethernet header is already attached */\n      NX_PACKETpacket_ptr = driver_req_ptr->nx_ip_driver_packet;\n      UINT status;\n\n      /* Determine if the packet exceeds the driver's MTU. */\n      if (packet_ptr->nx_packet_length > NX_DRIVER_ETHERNET_MTU)\n      {\n          /* Indicate an unsuccessful packet send. */\n          driver_req_ptr->nx_ip_driver_status = NX_DRIVER_ERROR;\n\n          /* Link is not up or packet too big, simply free the packet. */\n          nx_packet_transmit_release(packet_ptr);\n          return;\n      }\n\n      /* Transmit the packet through the Ethernet controller low-level access routine. */\n      status = _nx_driver_hardware_packet_send(packet_ptr);\n\n      if (status != NX_SUCCESS)\n      {\n          driver_req_ptr->nx_ip_driver_status = NX_DRIVER_ERROR;\n          nx_packet_transmit_release(packet_ptr);\n      }\n      else\n      {\n          driver_req_ptr->nx_ip_driver_status = NX_SUCCESS;\n      }\n}\n```\n\n### Expected Behavior\n\nA packet is sent with one header\n\n### Actual Behavior\n\nA packet is sent with two headers and memory is corrupted\n\n### Environment\n\nTheadX, NetXduo\n\n### Severity\n\nMajor",
+    "comments": [
+      {
+        "author": "ASAHSTM",
+        "created_at": "2026-05-22T10:08:07Z",
+        "body": "Hello @ben5049,\n\nThank you for your report.\nThis issue has been tracked internally.\n\nWith Regards,"
+      },
+      {
+        "author": "ASAHSTM",
+        "created_at": "2026-05-22T10:08:28Z",
+        "body": "ST Internal Reference: CDM0062848"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/27"
+  },
+  {
+    "repo": "stm32h5xx-hal-driver",
+    "issue_number": 26,
+    "title": "[Bug]:  HAL_ETH_PTP_SetTime() adds to the time instead of overwriting it",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "hal",
+      "eth",
+      "st community"
+    ],
+    "created_at": "2026-05-15T19:40:51Z",
+    "closed_at": "2026-05-19T13:50:18Z",
+    "body": "### Bug Summary\n\nTSUPDT is used instead of TSINIT to set the timestamp counter value leading to wildly fluctuating timestamps.\n\n### Detailed Description\n\nOn [line 1695 of stm32h5xx_hal_eth.c](https://github.com/STMicroelectronics/stm32h5xx-hal-driver/blob/38ca4af5b1004d3f9e02003ca489df7d065b75ba/Src/stm32h5xx_hal_eth.c#L1695) ETH_MACTSCR_TSUPDT is used to set the timestamp counter, however page 2934 of RM0481 says this bit is used to add or subtract from the timestamp counter instead.\n\nBased on the description of this function, and its use [elsewhere](https://github.com/STMicroelectronics/stm32-mw-netxduo/blob/79232767cef83e20573f2fbc173810f9d29c8fdb/common/drivers/ethernet/nx_stm32_eth_driver.c#L2572), this function should instead use ETH_MACTSCR_TSINIT to overwrite the timestamp counter. As it is at the moment, the current time is added to the counter every time there is a PTP sync meaning the time fluctuates wildly over a century and a half span, and the time is never close enough to use fine adjustment methods.\n\nNote: I also put this issue on the [STM Community site](https://community.st.com/t5/stm32-mcus-embedded-software/stm32h5-hal-eth-ptp-settime-adds-to-the-time-instead-of/m-p/898661/highlight/true#M75563).\n\n### Expected Behavior\n\nThe timestamp counter is set\n\n### Actual Behavior\n\nThe timestamp counter is added to\n\n### Environment\n\n_No response_\n\n### Severity\n\nNormal",
+    "comments": [
+      {
+        "author": "ASAHSTM",
+        "created_at": "2026-05-19T13:44:47Z",
+        "body": "Hello @ben5049,\n\nThank you for your report.\n\nThis issue is already being tracked internally and will continue to be followed through the related ST Community post. Therefore, please allow us to close this GitHub issue.\n\nWith Regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/26"
+  },
+  {
+    "repo": "stm32h5xx-hal-driver",
+    "issue_number": 25,
+    "title": "[Bug]: ADC2 Channel0 does not read good value",
+    "state": "open",
+    "labels": [
+      "bug",
+      "hal",
+      "internal bug tracker",
+      "adc"
+    ],
+    "created_at": "2026-05-12T14:57:04Z",
+    "closed_at": null,
+    "body": "### Bug Summary\n\nADC2 read out the wrong value on STM32H523\n\n### Detailed Description\n\nWhen configure the ADC2 channel0 the config channel function `HAL_ADC_ConfigChannel` do `LL_ADC_EnableChannel0_GPIO` which do `SET_BIT(ADCx->OR, ADC_OR_OP0);` regarding the reference manual this bit must NOT be set for ADC2 except if you want to enable Vdd channel which is not the case.\nSo I guess only ADC1 or ADC3 must uses this bit, not ADC2 which is set by `LL_ADC_EnableChannelVDDcore`\n\n### Expected Behavior\n\n_No response_\n\n### Actual Behavior\n\n_No response_\n\n### Environment\n\n_No response_\n\n### Severity\n\nMajor",
+    "comments": [
+      {
+        "author": "MKISTM",
+        "created_at": "2026-05-14T09:12:37Z",
+        "body": "Hello @minicarpet,\n\nThank you for your report, it seems that point makes sense and will be tracked internally.\nI'll keep you informed about last update.\n\nBest Regards,\nKIWA Mohamed Chaker.\n"
+      },
+      {
+        "author": "MKISTM",
+        "created_at": "2026-05-14T09:27:23Z",
+        "body": "ST Internal Reference: bff6fede83b0c31016c8176a8cda1e0e"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/25"
+  },
+  {
+    "repo": "stm32h5xx-hal-driver",
+    "issue_number": 20,
+    "title": "Add workaround for building HAL with GCC 11/12",
+    "state": "closed",
+    "labels": [
+      "enhancement",
+      "invalid",
+      "hal",
+      "internal bug tracker",
+      "dma"
+    ],
+    "created_at": "2026-02-02T14:43:47Z",
+    "closed_at": "2026-03-03T08:59:14Z",
+    "body": "Please make local function DMA_List_CheckNodesBaseAddresses() never inlined.\n\nThis fixes a build issue faced with with STM32H5 DMA HAL when building with GCC11 and GCC12 compilers with optimization directives. The build issue is not very explicit, as reported by the build error trace message below:\n\n```\nduring GIMPLE pass: evrp\n/__w/zephyr/modules/tee/tf-m/trusted-firmware-m/platform/ext/target/stm/common/stm32h5xx/hal/Src/stm32h5xx_hal_dma_ex.c: In function 'HAL_DMAEx_List_ReplaceNode_Head':\n/__w/zephyr/modules/tee/tf-m/trusted-firmware-m/platform/ext/target/stm/common/stm32h5xx/hal/Src/stm32h5xx_hal_dma_ex.c:4683:1: internal compiler error: Segmentation fault\n 4683 | }\n      | ^\n0x7f6e24cfb32f ???\n\t./signal/../sysdeps/unix/sysv/linux/x86_64/libc_sigaction.c:0\n0x7f6e24ce01c9 __libc_start_call_main\n\t../sysdeps/nptl/libc_start_call_main.h:58\n0x7f6e24ce028a __libc_start_main_impl\n\t../csu/libc-start.c:360\nPlease submit a full bug report, with preprocessed source (by using -freport-bug).\nPlease include the complete backtrace with any bug report.\nSee <https://github.com/zephyrproject-rtos/sdk-ng/issues> for instructions.\n```\n\nThe issue was tracked in GCC (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106878) and has been addressed in GCC 13 and later.\n\nThis fix has already been applied to HAL shipped with TF-M, see https://review.trustedfirmware.org/c/TF-M/trusted-firmware-m/+/45782.",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2026-02-06T09:52:41Z",
+        "body": "ST Internal Reference: 226793"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2026-03-02T08:48:21Z",
+        "body": "Hello @tpambor,\n\nRegarding the issue, I have checked with our team, and it seems that it is a build configuration issue in Zephyr, HAL is mostly independent of GCC version.\n\nPlease allow me to close the thread. Thank you for your understanding.\n\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/20"
+  },
+  {
+    "repo": "stm32h5xx-hal-driver",
+    "issue_number": 19,
+    "title": "SDIO Bug in stm32h5xx_hal_sdio.c",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "hal",
+      "internal bug tracker",
+      "sdmmc"
+    ],
+    "created_at": "2025-12-19T00:24:12Z",
+    "closed_at": "2026-02-13T15:59:03Z",
+    "body": "```\nHAL_StatusTypeDef HAL_SDIO_WriteExtended(SDIO_HandleTypeDef *hsdio, const HAL_SDIO_ExtendedCmd_TypeDef *Argument,\n                                         uint8_t *pData, uint32_t Size_byte, uint32_t Timeout_Ms)\n{\n  uint32_t cmd;\n  SDMMC_DataInitTypeDef config;\n  uint32_t errorstate;\n  uint32_t tickstart = HAL_GetTick();\n  uint32_t regCount;\n  uint8_t byteCount;\n  uint32_t data;\n  uint32_t dataremaining;\n  uint8_t *u32tempbuff = pData;\n  uint32_t nbr_of_block;\n\n  /* Check the parameters */\n  assert_param(hsdio != NULL);\n  assert_param(Argument != NULL);\n  assert_param(pData != NULL);\n``` ...............\n\n\n` 1. Fix this line -> uint8_t *u32tempbuff = pData  to -> uint32_t *u32tempbuff = (uint32_t*)pData  `\n\nImportant, because FIFO 32bit.",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2025-12-23T11:30:54Z",
+        "body": "Hello @djmolotok,\n\nThank you for highlighting this.\n\nI think the reason behind this implementation is related to the SDIO card specification. I will check with our team for further details. In the meantime, if you encounter any problems, please let us know and share more details.\n\nBest regards,"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-12-26T10:51:44Z",
+        "body": "ST Internal Reference: 224418"
+      },
+      {
+        "author": "MKISTM",
+        "created_at": "2026-02-13T15:59:03Z",
+        "body": "Fixed in commit: 2cb387faf873a3d547233270ca1d5fddd8044a9d"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/19"
+  },
+  {
+    "repo": "stm32h5xx-hal-driver",
+    "issue_number": 18,
+    "title": "definitions no match with the UART6 DMA",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "hal",
+      "internal bug tracker",
+      "dma"
+    ],
+    "created_at": "2025-12-12T08:14:49Z",
+    "closed_at": "2026-01-15T10:52:48Z",
+    "body": "I was wondering if this case have a purpose, or maybe is something wrong, is no critical but just i am curious.\n\nhttps://github.com/STMicroelectronics/stm32h5xx-hal-driver/blob/539824f1b2676b7d4777ceb093df79b985eb81ce/Inc/stm32h5xx_hal_dma.h#L492-L500\n\nat is happening in the section below\n\n**stm32h5xx_hal_dma.h**\n\n<img width=\"1005\" height=\"381\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/80230a90-de30-4159-84f5-6436e0b17323\" />\n\n<img width=\"1005\" height=\"381\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/d8622f31-e177-4a2d-94f1-2e1dd5b833e4\" />\n\n**stm32h5xx_ll_dma.h**\n\n<img width=\"1005\" height=\"381\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/161682b6-46ec-4971-a8a1-5c544a3eda08\" />\n\n<img width=\"1005\" height=\"381\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/546fade9-ba27-4f59-92b6-078e6e619f7f\" />\n\n\n\n",
+    "comments": [
+      {
+        "author": "MKISTM",
+        "created_at": "2025-12-15T13:37:34Z",
+        "body": "Hello @gjaimes-fonestar,\n\nThank you for your report, I'll log an internal tracker.\n\nBR,\nMohamed Chaker."
+      },
+      {
+        "author": "MKISTM",
+        "created_at": "2025-12-15T14:09:18Z",
+        "body": "ST Internal Reference: 223847"
+      },
+      {
+        "author": "MKISTM",
+        "created_at": "2026-01-15T10:52:48Z",
+        "body": "Fixed in commit: 9a3d849bb26613d9f24436c21e22b97537e355ca"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/18"
+  },
+  {
+    "repo": "stm32h5xx-hal-driver",
+    "issue_number": 17,
+    "title": "I2C slave sets I2C_CR2_NACK after TX completes, but the peripheral address has already been received for a new transfer",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "wontfix",
+      "hal",
+      "internal bug tracker",
+      "i2c"
+    ],
+    "created_at": "2025-10-24T17:50:41Z",
+    "closed_at": "2025-11-26T08:47:04Z",
+    "body": "Hello,\n\nI am experiencing NACKs on the client side when I2C requests (write/read, write/write) are sent repeatedly back to back.\n\nHAL drivers version: v1.5.0-8-g539824f\nMCU: STM32H523\n\nThe scenario in which the issue can be seen:\nThe I2C slave has completed transmitting, and the MCU has some work to do and cannot immediately process a new I2C request from a client that is issued immediately after the previous transfer is completed. However, the I2C peripheral has already matched the address of the new request and has set the `I2C_FLAG_STOPF` flag. When the MCU finally has time to process the I2C interrupt, it calls the function `I2C_ITSlaveCplt` from the interrupt handler:\n```c\n  /* Check if STOPF is set */\n  if ((I2C_CHECK_FLAG(tmpITFlags, I2C_FLAG_STOPF) != RESET) && \\\n      (I2C_CHECK_IT_SOURCE(ITSources, I2C_IT_STOPI) != RESET))\n  {\n    /* Call I2C Slave complete process */\n    I2C_ITSlaveCplt(hi2c, tmpITFlags);\n  }\n```\nThe function sets the `I2C_CR2_NACK` flag, which inadvertently stops the active transfer. \n\nThe following workaround does not set the flag if `I2C_FLAG_STOPF` is set and the logical I2C state is `HAL_I2C_STATE_BUSY_TX_LISTEN`. The latter condition may not be necessary, though:\n```diff\ndiff --git a/Src/stm32h5xx_hal_i2c.c b/Src/stm32h5xx_hal_i2c.c\nindex 5214c91..8546b1f 100644\n--- a/Src/stm32h5xx_hal_i2c.c\n+++ b/Src/stm32h5xx_hal_i2c.c\n@@ -6582,8 +6582,11 @@ static void I2C_ITSlaveCplt(I2C_HandleTypeDef *hi2c, uint32_t ITFlags)\n     /* Do nothing */\n   }\n\n-  /* Disable Address Acknowledge */\n-  hi2c->Instance->CR2 |= I2C_CR2_NACK;\n+  if (I2C_CHECK_FLAG(ITFlags, I2C_FLAG_STOPF) == RESET && tmpstate != HAL_I2C_STATE_BUSY_TX_LISTEN)\n+  {\n+    /* Disable Address Acknowledge */\n+    hi2c->Instance->CR2 |= I2C_CR2_NACK;\n+  }\n\n   /* Clear Configuration Register 2 */\n   I2C_RESET_CR2(hi2c);\n```\nThank you!",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2025-10-28T11:38:55Z",
+        "body": "Hello @m4083888-blip,\n\nThank you for bringing this issue to our attention.\n\nI will share it with our team. In the meantime, could you provide us more details, such as:\n\n- Could you please explain more what you mean by `I2C requests (write/read, write/write) are sent repeatedly back to back`.\n- Have you tried using DMA instead of Interrupt, maybe it works fine in your scenario when I2C requests (write/read, write/write) are sent repeatedly back-to-back on the client side.\n- Have you tested the workaround long enough? I think it's missing \"HAL_I2C_STATE_BUSY_RX_LISTEN\" for the receiving case.\n\nWith regards,\n"
+      },
+      {
+        "author": "m4083888-blip",
+        "created_at": "2025-10-29T16:47:44Z",
+        "body": "Hello @KRASTM ,\n\nThank you for looking into it!\n\nBy write/read and write/write sequences from a client (master) perspective, I meant the following:\n- write address, write register, read register data,\n- write address, write register, write register data.\n\nThe master sends one of the above requests as soon as the transfer is complete, immediately after it issues the stop bit.\n\nI did consider using DMA; however:\n- using DMA might involve some design changes that I wanted to avoid at this point,\n- the benefit of using DMA might be negligible in terms of performance since the data part of transfers is usually relatively short.\n\nThe workaround was tested by sending over 2 million of the above requests repeatedly.\n\nChecking both `HAL_I2C_STATE_BUSY_RX_LISTEN` and `HAL_I2C_STATE_BUSY_TX_LISTEN` makes sense. However, I've never encountered a case where checking these flags had any effect. Just checking the flag `I2C_CHECK_FLAG(ITFlags, I2C_FLAG_STOPF)` already resolved the issue for me."
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-11-03T13:57:26Z",
+        "body": "ST Internal Reference: 221011"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-11-24T09:46:10Z",
+        "body": "Hello @m4083888-blip,\n\nRegarding the issue, our team has decided that there is no plan to implement this change in the near future. However, you can keep the workaround locally since it resolves your problem. I will keep you posted if there are any update.\n\nThank you in advance for your understanding, please allow me to close the issue.\n\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/17"
+  },
+  {
+    "repo": "stm32h5xx-hal-driver",
+    "issue_number": 16,
+    "title": "Unexpected UART idle interrupt",
+    "state": "closed",
+    "labels": [
+      "question",
+      "hal",
+      "uart"
+    ],
+    "created_at": "2025-09-23T03:07:01Z",
+    "closed_at": "2025-10-09T14:12:54Z",
+    "body": "I am using the STM32H563VIT6 chip. I am receiving data via UART using DMA, and I have configured the DMA in circular linked-list mode. Below is my code.\n\nHowever, I have encountered a problem: as soon as I initialize the UART and DMA, a UART idle interrupt is triggered, even though no data has been received — I haven’t sent any data to it at all.\n\nThis unexpected idle interrupt interferes with my program’s logic, and I don’t want it to happen. I don’t understand why the idle interrupt is triggered; logically, it shouldn’t be generated if no data has been received.\n\nPlease help me. Thank you!\n\n> By the way, my program is written in C++.\n\n```cpp\nvoid init()\n{\n    _obj.enable_clock();\n\n    LL_GPIO_InitTypeDef tx_pin_init = {\n        .Pin        = _obj.tx_pin.ll_pin,\n        .Mode       = LL_GPIO_MODE_ALTERNATE,\n        .Speed      = _obj.tx_pin.ll_speed,\n        .OutputType = LL_GPIO_OUTPUT_PUSHPULL,\n        .Pull       = LL_GPIO_PULL_UP,\n        .Alternate  = _obj.tx_pin.ll_alternate,\n    };\n    LL_GPIO_Init(_obj.tx_pin.gpiox, &tx_pin_init);\n\n    LL_GPIO_InitTypeDef rx_pin_init = {\n        .Pin        = _obj.rx_pin.ll_pin,\n        .Mode       = LL_GPIO_MODE_ALTERNATE,\n        .Speed      = _obj.rx_pin.ll_speed,\n        .OutputType = LL_GPIO_OUTPUT_PUSHPULL,\n        .Pull       = LL_GPIO_PULL_UP,\n        .Alternate  = _obj.rx_pin.ll_alternate,\n    };\n    LL_GPIO_Init(_obj.rx_pin.gpiox, &rx_pin_init);\n\n    tx_hdma = {\n        .Instance = _obj.tx_dma.instance,\n        .Init     = {\n            .Request               = _obj.tx_dma.request,\n            .BlkHWRequest          = DMA_BREQ_SINGLE_BURST,\n            .Direction             = DMA_MEMORY_TO_PERIPH,\n            .SrcInc                = DMA_SINC_INCREMENTED,\n            .DestInc               = DMA_DINC_FIXED,\n            .SrcDataWidth          = DMA_SRC_DATAWIDTH_BYTE,\n            .DestDataWidth         = DMA_DEST_DATAWIDTH_BYTE,\n            .Priority              = DMA_LOW_PRIORITY_HIGH_WEIGHT,\n            .SrcBurstLength        = 1,\n            .DestBurstLength       = 1,\n            .TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT0,\n            .TransferEventMode     = DMA_TCEM_BLOCK_TRANSFER,\n            .Mode                  = DMA_NORMAL\n        }\n    };\n    HAL_DMA_Init(&tx_hdma);\n    HAL_DMA_ConfigChannelAttributes(&tx_hdma, DMA_CHANNEL_NPRIV);\n\n    rx_hdma = {\n        .Instance       = _obj.rx_dma.instance,\n        .InitLinkedList = {\n            .Priority          = DMA_LOW_PRIORITY_LOW_WEIGHT,\n            .LinkStepMode      = DMA_LSM_FULL_EXECUTION,\n            .LinkAllocatedPort = DMA_LINK_ALLOCATED_PORT1,\n            .TransferEventMode = DMA_TCEM_BLOCK_TRANSFER,\n            .LinkedListMode    = DMA_LINKEDLIST_CIRCULAR\n        }\n    };\n    HAL_DMAEx_List_Init(&rx_hdma);\n    HAL_DMA_ConfigChannelAttributes(&rx_hdma, DMA_CHANNEL_NPRIV);\n\n    DMA_NodeConfTypeDef rx_node_init = {\n        .NodeType = DMA_GPDMA_LINEAR_NODE,\n        .Init = {\n            .Request               = _obj.rx_dma.request,\n            .BlkHWRequest          = DMA_BREQ_SINGLE_BURST,\n            .Direction             = DMA_PERIPH_TO_MEMORY,\n            .SrcInc                = DMA_SINC_FIXED,\n            .DestInc               = DMA_DINC_INCREMENTED,\n            .SrcDataWidth          = DMA_SRC_DATAWIDTH_BYTE,\n            .DestDataWidth         = DMA_DEST_DATAWIDTH_BYTE,\n            .Priority              = DMA_HIGH_PRIORITY,\n            .SrcBurstLength        = 1,\n            .DestBurstLength       = 1,\n            .TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT0 | DMA_DEST_ALLOCATED_PORT0,\n            .TransferEventMode     = DMA_TCEM_BLOCK_TRANSFER,\n            .Mode                  = DMA_NORMAL\n        },\n        .DataHandlingConfig = {\n            .DataExchange  = DMA_EXCHANGE_NONE,\n            .DataAlignment = DMA_DATA_RIGHTALIGN_ZEROPADDED\n        },\n        .TriggerConfig = {\n            .TriggerPolarity = DMA_TRIG_POLARITY_MASKED\n        }\n    };\n    HAL_DMAEx_List_BuildNode(&rx_node_init, &_obj.rx_dma.node);\n    HAL_DMAEx_List_InsertNode(&_obj.rx_dma.list, NULL, &_obj.rx_dma.node);\n    HAL_DMAEx_List_SetCircularMode(&_obj.rx_dma.list);\n    HAL_DMAEx_List_LinkQ(&rx_hdma, &_obj.rx_dma.list);\n\n    huart = {\n        .Instance = _obj.uartx,\n        .Init     = {\n            .BaudRate       = _obj.baudrate,\n            .WordLength     = UART_WORDLENGTH_8B,\n            .StopBits       = UART_STOPBITS_1,\n            .Parity         = UART_PARITY_NONE,\n            .Mode           = UART_MODE_TX_RX,\n            .HwFlowCtl      = UART_HWCONTROL_NONE,\n            .OverSampling   = UART_OVERSAMPLING_16,\n            .OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE,\n            .ClockPrescaler = UART_PRESCALER_DIV1,\n        },\n        .AdvancedInit = {\n            .AdvFeatureInit = UART_ADVFEATURE_NO_INIT\n        }\n    };\n    HAL_UART_Init(&huart);\n\n    __HAL_LINKDMA(&huart, hdmatx, tx_hdma);\n    __HAL_LINKDMA(&huart, hdmarx, rx_hdma);\n\n    NVIC_SetPriority(_obj.uart_irq.irqn, _obj.uart_irq.priority);\n    NVIC_SetPriority(_obj.tx_dma.dma_irq.irqn, _obj.tx_dma.dma_irq.priority);\n    NVIC_SetPriority(_obj.rx_dma.dma_irq.irqn, _obj.rx_dma.dma_irq.priority);\n\n    NVIC_EnableIRQ(_obj.uart_irq.irqn);\n    NVIC_EnableIRQ(_obj.tx_dma.dma_irq.irqn);\n    NVIC_EnableIRQ(_obj.rx_dma.dma_irq.irqn);\n\n    HAL_UARTEx_ReceiveToIdle_DMA(&huart, (uint8_t *)_rx_dma_buffer.data(), _rx_dma_buffer.size());\n\n    _is_ready = true;\n}\n```",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2025-09-26T14:27:40Z",
+        "body": "Hello @ControlCoreX,\n\nThank you for the report.\n\nI ran some tests, but I didn't encounter this issue. Could you please share more details about your project, and, if possible, some screenshots in debug mode showing when the problem occurs? Meanwhile, I will share the ticket with our team for further analysis.\n\n\nWith regards,"
+      },
+      {
+        "author": "ControlCoreX",
+        "created_at": "2025-09-28T04:15:21Z",
+        "body": "Thank you @KRASTM\n\nsome details about my project, may be helpful:\n- my compiler: arm-none-eabi-gcc and arm-none-eabi-g++\n- my build tools: cmake and ninja\n- I use openocd to download and debug program\n\nI put a breakpoint in the `HAL_UARTEx_RxEventCallback()` function, when I start debugging, it alway stop at that point every time, and in this function, I checked the `RxEventType` member in uart handle, it is indeed `HAL_UART_RXEVENT_IDLE`, and I also checked the uart registers, the IDLE flag is indeed 1, but I did not send any data to this uart.\n\nAbout my hardware board, I used isolation IC and RS232 or RS485 converter, I don't think those IC will have some impack, but I am not sure."
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-10-02T13:16:26Z",
+        "body": "Hello @ControlCoreX,\n\nI checked with our team, and there is nothing on the side of the driver. Especially after debugging an example, we didn't encounter such a phenomenon. For the record, the driver triggers the IDLE event at the end of a transmission. In other words, the TC event indication may be followed by an IDLE event indication. \n\nSo, in your case, it's normal to receive the HAL_UART_RXEVENT_IDLE event after **the first** transmission. Otherwise, the issue may be related to the hardware. I suggest posting in our [Community](https://community.st.com/).\n\nPlease, allow me to close the issue and thank you for your understanding.\n\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/16"
+  },
+  {
+    "repo": "stm32h5xx-hal-driver",
+    "issue_number": 14,
+    "title": "Warning due to extraneous parentheses stm32h5xx_hal_rcc_ex.c",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "hal",
+      "internal bug tracker",
+      "rcc"
+    ],
+    "created_at": "2025-09-22T09:35:09Z",
+    "closed_at": "2025-10-22T13:15:43Z",
+    "body": "Compiling with clang raises the following warning\n```\n/home/user/west_workspace/modules/hal/stm32/stm32cube/stm32h5xx/drivers/src/stm32h5xx_hal_rcc_ex.c:3513:26: error: equality comparison with extraneous parentheses [-Werror,-Wparentheses-equality]\n 3513 |         else if ((srcclk == RCC_USART2CLKSOURCE_PLL3Q))\n      |                   ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~\n/home/user/west_workspace/modules/hal/stm32/stm32cube/stm32h5xx/drivers/src/stm32h5xx_hal_rcc_ex.c:3513:26: note: remove extraneous parentheses around the comparison to silence this warning\n 3513 |         else if ((srcclk == RCC_USART2CLKSOURCE_PLL3Q))\n      |                  ~       ^                           ~\n/home/user/west_workspace/modules/hal/stm32/stm32cube/stm32h5xx/drivers/src/stm32h5xx_hal_rcc_ex.c:3513:26: note: use '=' to turn this equality comparison into an assignment\n 3513 |         else if ((srcclk == RCC_USART2CLKSOURCE_PLL3Q))\n      |                          ^~\n      |                          =\n```\n\nPlease, remove the extraneous parentheses.",
+    "comments": [
+      {
+        "author": "MKISTM",
+        "created_at": "2025-09-25T13:56:29Z",
+        "body": "Hi @tpambor,\n\nThank you for this heads-up. Let's have this fixed. I'll log an internal tracker.\n\nWith regards,"
+      },
+      {
+        "author": "MKISTM",
+        "created_at": "2025-09-25T14:12:21Z",
+        "body": "ST Internal Reference: 218364"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/14"
+  },
+  {
+    "repo": "stm32h5xx-hal-driver",
+    "issue_number": 13,
+    "title": "HAL_SPI_Transmit_DMA with Linked-List DMA Unintended Behavior",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "invalid",
+      "hal",
+      "spi"
+    ],
+    "created_at": "2025-09-05T19:43:36Z",
+    "closed_at": "2025-09-19T10:43:05Z",
+    "body": "**Caution**\nThe Issues are strictly limited for the reporting of problem encountered with the software provided in this project.\nFor any other problem related to the STM32 product, the performance, the hardware characteristics and boards, the tools the environment in general, please post your report to the ST Community in the STM32 MCUs dedicated [page](https://community.st.com/s/topic/0TO0X000000BSqSWAW/stm32-mcus).\n\n**Describe the set-up**\nSTM32H573\nV1.5.0\nUsing SPI peripheral with Linked-List DMA\n\n**Describe the bug**\nWhen using SPI with a DMA channel in Linked-List mode, any call to HAL_SPI_Transmit_DMA() will set the head node's BNDT register to TxXferCount. This causes unintended behavior where the head node's source/destination addresses is always used for the entirety of the SPI transaction, making it impossible to ever reach any subsequent node in the Linked-List. I believe the user should be the one responsible for configuring their nodes before calling this function.\n\nThis also applies to HAL_SPI_TransmiReceive_DMA and HAL_SPI_Receive_DMA.  The line(s) I'm referring to:\n[https://github.com/STMicroelectronics/stm32h5xx-hal-driver/blob/main/Src/stm32h5xx_hal_spi.c#L2539](url)\n[https://github.com/STMicroelectronics/stm32h5xx-hal-driver/blob/main/Src/stm32h5xx_hal_spi.c#L2604](url)\n\n\nAttached is a simple example to describe the issue. Happy to share additional code if it would be helpful. \n\nTo be more clear, the situation is as follows:\n1. SPI initialized in slave mode, RX and TX DMA channels linked to SPI, DMA in Linked-List mode\n2. Set up nodeA for BNDT=4 bytes and source address=ADDR_A\n3. Set up nodeB for BNDT=4 bytes and source address=ADDR_B\n4. Call SPI_Transmit_DMA(hspi, ADDR_A, 8) to transmit both buffers\n5. I see 8 bytes transferred contiguously starting from ADDR_A, never goes to ADDR_B\n\n\n[spi_with_linked_list_test.txt](https://github.com/user-attachments/files/22179144/spi_with_linked_list_test.txt)\n\nThank you!\n\n\n",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2025-09-09T08:47:33Z",
+        "body": "Hello @lukewittrup,\n\nThank you for the report.\n\nInfact, when transfers are done in LinkedList, the transfer size given to HAL_SPI_Transmit_DMA() must be the size of the first buffer of the first node. It mustn't be the size of cumulated buffers. HAL_SPI_Transmit_DMA() will start the first node and next nodes will be automatically started by DMA at the end of previous node.\n\nThe size, source address and destination address of second and third transfer must be defined in configuration of second and third nodes.\n\nWith regards,"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-09-17T08:42:52Z",
+        "body": "Hello @lukewittrup,\n\nPlease, allow me to close the issue. Thank you in advance for your understanding.\n\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/13"
+  },
+  {
+    "repo": "stm32h5xx-hal-driver",
+    "issue_number": 10,
+    "title": "Wrong RCC_PERIPHCLK_RTC setup in HAL",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "hal",
+      "internal bug tracker",
+      "rcc"
+    ],
+    "created_at": "2024-12-04T09:46:16Z",
+    "closed_at": "2025-02-07T09:56:07Z",
+    "body": "**Describe the set-up**\r\n\r\n * NUCLEO-H563ZI\r\n * VSC + CLT 16\r\n\r\n**Describe the bug (skip if none)**\r\n\r\nWrong condition in [stm32h5xx_hal_rcc_ex.c](https://github.com/STMicroelectronics/stm32h5xx-hal-driver/blob/main/Src/stm32h5xx_hal_rcc_ex.c#L1743)\r\nexact match of `tmpregister` is not possible with HSE prescaler\r\n\r\n**How to reproduce the bug (skip if none)**\r\n\r\n* enable RTC clock\r\n```\r\n    PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_RTC;\r\n    PeriphClkInitStruct.RTCClockSelection = RCC_RTCCLKSOURCE_HSE_DIV20;\r\n    if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)\r\n```\r\n* read backup register\r\n* set backup register\r\n* reset board\r\n\r\nbackup-domain goes always through reset",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2024-12-09T16:46:45Z",
+        "body": "Hi @jiri-novotny,\r\n\r\nI see you are using a **NUCLEO-H563ZI** board.\r\n* The default configuration for the HSE clock is having it provided the **ST-LINK**. In this case, your application should use `RCC_HSE_BYPASS` as configuration for clock source instead of `RCC_HSE_ON`. Pay attention this HSE clock frequency is **8MHz** in this case.\r\n* Otherwise, you have to remove the solder bridge **SB49** to be able to use the **25MHz** external crystal X3 as HSE clock.\r\n\r\nPlease refer to page **19** or to page **26** of the user manual [UM3115](https://www.st.com/resource/en/user_manual/um3115-stm32h5-nucleo144-board-mb1404-stmicroelectronics.pdf) Rev. 2 for more details.\r\n\r\nWith regards, "
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2024-12-13T11:27:30Z",
+        "body": "Hi @jiri-novotny,\r\n\r\nThe pull-request you submitted clarified the point.\r\n\r\nThank you, "
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2024-12-18T14:50:48Z",
+        "body": "ST Internal Reference: 199007"
+      },
+      {
+        "author": "jiri-novotny",
+        "created_at": "2025-03-03T10:47:22Z",
+        "body": "FYI @ALABSTM change is discarded on 1.5.0"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/10"
+  },
+  {
+    "repo": "stm32h5xx-hal-driver",
+    "issue_number": 9,
+    "title": "stm32h5xx_ll_i3c.c doesn't compile when both USE_HAL_DRIVER and USE_FULL_LL_DRIVER are defined",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "invalid",
+      "hal",
+      "i3c"
+    ],
+    "created_at": "2024-09-29T19:54:15Z",
+    "closed_at": "2024-10-03T08:44:00Z",
+    "body": "**Describe the set-up**\r\n\r\n * The board: Nucleo-H503RB\r\n * Compiler: arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi\r\n\r\n**Describe the bug (skip if none)**\r\n\r\nWhen both USE_HAL_DRIVER and USE_FULL_LL_DRIVER are defined, stm32h5xx_ll_i3c.c doesn't compile.\r\nThe produced error is as follows:\r\n\r\n_In file included from Inc/stm32h5xx_hal_conf.h:344,\r\n                 from Inc/stm32h5xx_hal.h:29,\r\n                 from Device/ST/STM32H5xx/Include/stm32h5xx.h:230,\r\n                 from Inc/stm32h5xx_ll_i3c.h:28,\r\n                 from Src/stm32h5xx_ll_i3c.c:27:\r\nInc/stm32h5xx_hal_i3c.h:50:3: error: unknown type name 'LL_I3C_CtrlBusConfTypeDef'\r\n   _50 |   LL_I3C_CtrlBusConfTypeDef CtrlBusCharacteristic; /*!< Specifies the I3C controller bus characteristic configuration\r\n      |   ^~~~~~~~~~~~~~~~~~~~~~~~~\r\nInc/stm32h5xx_hal_i3c.h:53:3: error: unknown type name 'LL_I3C_TgtBusConfTypeDef'\r\n   53 |   LL_I3C_TgtBusConfTypeDef  TgtBusCharacteristic;  /*!< Specifies the I3C target bus characteristic configuration\r\n      |   ^~~~~~~~~~~~~~~~~~~~~~~~\r\nInc/stm32h5xx_hal_i3c.h:1137:62: error: unknown type name 'LL_I3C_CtrlBusConfTypeDef'\r\n 1137 |                                                        const LL_I3C_CtrlBusConfTypeDef *pConfig);\r\n      |                                                              ^~~~~~~~~~~~~~~~~~~~~~~~~\r\nInc/stm32h5xx_hal_i3c.h:1139:61: error: unknown type name 'LL_I3C_TgtBusConfTypeDef'\r\n 1139 |                                                       const LL_I3C_TgtBusConfTypeDef *pConfig);\r\n      |                                                             ^~~~~~~~~~~~~~~~~~~~~~~~__\r\n\r\n**How to reproduce the bug**\r\n\r\nHere's the full compilation command I use for your convenience:\r\n~/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-gcc Src/stm32h5xx_ll_i3c.c -o object.o --specs=nosys.specs -std=c17 -mcpu=cortex-m33 -isystem Inc -isystem Inc/Legacy -isystem Include -isystem Device/ST/STM32H5xx/Include -DUSE_FULL_LL_DRIVER -DSTM32H503xx\r\n\r\nI implemented stubs for system calls, and added to the include path, in addition to the HAL, the include folders of CMSIS-Core and of the STM32H5xx device.\r\nIn addition, I defined USE_HAL_DRIVER in stm32h5xx.h.\r\n\r\n**Additional context**\r\n\r\nAfter some investigation, it looks to be a problem with recursive includes.\r\nstm32h5xx_ll_i3c.c ->(includes) **stm32h5xx_ll_i3c.h** -> stm32h5xx.h -> stm32h5xx_hal.h -> stm32h5xx_hal_conf.h -> stm32h5xx_hal_i3c.h -> **stm32h5xx_ll_i3c.h**.\r\n\r\nThe nested stm32h5xx_ll_i3c.h include is then guarded from being included a second time, while the earlier included stm32h5xx_ll_i3c.h has included stm32h5xx.h before defining the needed  types. Therefore, the including stm32h5xx_hal_i3c.h has unknown type names.",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2024-10-02T17:21:49Z",
+        "body": "Hi @Aric5301,\r\n\r\nThank you for this report. Issue confirmed. We'll dig deeper into it and get back to you as soon as we get a better insight.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2024-10-03T08:44:00Z",
+        "body": "Hi @Aric5301,\r\n\r\nI hope you are fine. Looks like there is a misuse of the `I3C` drivers. For a particular peripheral, `I3C` in our case, **whether** we use the `LL` driver or the `HAL`, but **not both at the same time**.\r\n\r\nIn your case, I have understood that you are using the `LL` `I3C` driver. Hence, in your `stm32h5xx_hal_conf.h`, the line below should be commented.\r\n\r\nhttps://github.com/STMicroelectronics/stm32h5xx_hal_driver/blob/7e8c7d8e91c15321864f513f8458ce7f6555eb4e/Inc/stm32h5xx_hal_conf_template.h#L60\r\n\r\nI hope this makes things clearer. Please allow me to close this issue.\r\n\r\nWith regards, "
+      },
+      {
+        "author": "Aric5301",
+        "created_at": "2024-10-03T18:53:41Z",
+        "body": "Hey @ALABSTM, thanks for the reply!\r\nI would like to raise another point. It's not the first `STM32` `HAL` that I'm working with, and for previous `HAL`s I've always used either `LL `or `HAL` for each peripheral, but never have I had a problem of compiling what I don't use. I've always compiled the entire library.\r\nTo my understanding, that what you are telling here is that if I would like to use the **`HAL`** `I3C` driver I can't compile the `LL` file.\r\nThis is of course acceptable, but it's the first time that I encounter something like that.\r\nPerhaps it should explicitly say somewhere in the manual that for each peripheral that I use, I should either compile the `LL` and disable the peripheral in `..._hal_conf.h` file (and not compile the `HAL` file?), or enable the `HAL`, compile it, and not compile the `LL`. As, again, this unable-to-even-compile behavior is different from what I've encountered up until today.\r\nThank you!"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/9"
+  },
+  {
+    "repo": "stm32h5xx-hal-driver",
+    "issue_number": 8,
+    "title": "HAL_SPI_Abort_IT does not work for bidirectional DMA transfers due to incorrect logic",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "hal",
+      "internal bug tracker",
+      "spi"
+    ],
+    "created_at": "2024-09-13T05:04:15Z",
+    "closed_at": "2024-10-11T13:58:22Z",
+    "body": "**Caution**\r\n\r\nThe Issues are strictly limited for the reporting of problem encountered with the software provided in this project.\r\nFor any other problem related to the STM32 product, the performance, the hardware characteristics and boards, the tools the environment in general, please post your report to the **ST Community** in the STM32 MCUs dedicated [page](https://community.st.com/s/topic/0TO0X000000BSqSWAW/stm32-mcus).\r\n\r\n**Describe the set-up**\r\n\r\nBoard: Nucleo H563ZI\r\nCompiler: arm-none-eabi-gcc 13.2.1\r\n\r\n**Describe the bug (skip if none)**\r\n\r\nDoing some testing, I noticed that when I aborted a bidirectional DMA SPI transfer with HAL_SPI_Abort_IT, the Rx DMA channel's state (`hspi->hdmarx->State`) would not go back to READY.  This caused the next transfer to spuriously fail.\r\n\r\nWhy did it not go back to READY?  It turns out that [this line](https://github.com/STMicroelectronics/stm32h5xx_hal_driver/blob/7e8c7d8e91c15321864f513f8458ce7f6555eb4e/Src/stm32h5xx_hal_spi.c#L2631) causes SPI_DMATxAbortCallback() to be called, which in turn calls SPI_AbortTransfer().  That function [clears both the RXDMAEN and TXDMAEN bits](https://github.com/STMicroelectronics/stm32h5xx_hal_driver/blob/7e8c7d8e91c15321864f513f8458ce7f6555eb4e/Src/stm32h5xx_hal_spi.c#L3627).  Then, back in HAL_SPI_Abort_IT(), we check the RXDMAEN bit to determine if we need to abort the Rx DMA.  However, that bit was already cleared earlier, so [this if statement](https://github.com/STMicroelectronics/stm32h5xx_hal_driver/blob/7e8c7d8e91c15321864f513f8458ce7f6555eb4e/Src/stm32h5xx_hal_spi.c#L2648) is never entered and we don't abort the Rx DMA.\r\n\r\n**How to reproduce the bug (skip if none)**\r\n\r\n1. Do any long-duration, bidirectional DMA SPI transfer\r\n2. Call HAL_SPI_Abort_IT()\r\n3. Observe that the Rx DMA state is not READY after the abort function returns and that the next transfer, if attempted, will fail due to this\r\n\r\n**Additional context**\r\n\r\nFixing this is pretty easy.  We just have to save the value of the Rx DMA flag before the Tx DMA abort.  Like this:\r\n```cpp\r\n  // Save Rx DMA flag as this gets cleared by SPI_AbortTransfer()\r\n  int rxDMAUsed = HAL_IS_BIT_SET(hspi->Instance->CFG1, SPI_CFG1_RXDMAEN);\r\n  if (hspi->hdmatx != NULL)\r\n  {\r\n    if (HAL_IS_BIT_SET(hspi->Instance->CFG1, SPI_CFG1_TXDMAEN))\r\n    {\r\n<snip>\r\n    }\r\n  }\r\n\r\n  if (hspi->hdmarx != NULL)\r\n  {\r\n    if (rxDMAUsed) // <-- Use this instead of checking the RXDMAEN bit\r\n    {\r\n```\r\n",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2024-09-16T10:26:13Z",
+        "body": "ST Internal Reference: 191186"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2024-10-11T13:58:22Z",
+        "body": "Fixed in commit https://github.com/STMicroelectronics/stm32h5xx_hal_driver/commit/fcd3e48929ec60600e18df19a1cd12d214ebdc6d"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/8"
+  },
+  {
+    "repo": "stm32h5xx-hal-driver",
+    "issue_number": 7,
+    "title": "ETH Rx Tailpointer calculation wrong",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "hal",
+      "internal bug tracker",
+      "eth"
+    ],
+    "created_at": "2024-08-15T09:05:29Z",
+    "closed_at": "2024-09-05T15:00:46Z",
+    "body": "**Caution**\r\nThe Issues are strictly limited for the reporting of problem encountered with the software provided in this project.\r\nFor any other problem related to the STM32 product, the performance, the hardware characteristics and boards, the tools the environment in general, please post your report to the **ST Community** in the STM32 MCUs dedicated [page](https://community.st.com/s/topic/0TO0X000000BSqSWAW/stm32-mcus).\r\n\r\n**Describe the set-up**\r\n[NUCLEO-H563ZI](https://www.st.com/en/evaluation-tools/nucleo-h563zi.html) with STM32H563ZIT6\r\n\r\n**Describe the bug**\r\nIn the function ETH_UpdateDescriptor the calculation of the tailidx/DMACRDTPR is wrong.\r\nBecause of this the HAL_ETH_ErrorCallback is reached in my application.\r\nThe tail pointer should point to the last built/updated descriptor.\r\n\r\nCurrent (v1.3.0) implementation:\r\nhttps://github.com/STMicroelectronics/stm32h5xx_hal_driver/blob/0de1dbf8ad03e6e466ed55d1c174656561e3240d/Src/stm32h5xx_hal_eth.c#L1212\r\n\r\nSolution to fix the tail pointer:\r\n```c\r\ntailidx = (ETH_RX_DESC_CNT + descidx - 1U) % ETH_RX_DESC_CNT;\r\n```\r\n\r\nThe related issue in the stm32h7xx_hal_driver reported by Florian-Fischer-InMach:\r\nhttps://github.com/STMicroelectronics/stm32h7xx_hal_driver/issues/61",
+    "comments": [
+      {
+        "author": "ASEHSTM",
+        "created_at": "2024-08-16T10:44:43Z",
+        "body": "Hello @gresolio,\r\n\r\nThank you for your contribution. You are right, this will be fixed soon.\r\nST Internal Reference: 188836\r\n\r\nWith Regards,"
+      },
+      {
+        "author": "ASEHSTM",
+        "created_at": "2024-09-05T15:00:36Z",
+        "body": "Fixed in 7e8c7d8e91c15321864f513f8458ce7f6555eb4e"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/7"
+  },
+  {
+    "repo": "stm32h5xx-hal-driver",
+    "issue_number": 6,
+    "title": "The constant \"LL_RCC_USB_CLKSOURCE_PLL2Q\" is missing from file \"stm32h5xx_ll_rcc.h\"",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "hal",
+      "internal bug tracker",
+      "rcc"
+    ],
+    "created_at": "2024-05-30T07:00:54Z",
+    "closed_at": "2024-11-25T10:31:27Z",
+    "body": "File: **Inc/stm32h5xx_ll_rcc.h** (sorry, I'm new to the \"issue\" section of github and not sure how to find or embed the commit number.)\r\n\r\nLines starting at: 918\r\n\r\nThe constant: **LL_RCC_USB_CLKSOURCE_PLL2Q** is missing from the file.\r\n\r\nWhen compiling for the NUCLEO-H503RB board, and using the IDE to set the USB clock source to PLL2Q, you will get an undeclared error. The work around is to add:\r\n\r\n> #ifndef LL_RCC_USB_CLKSOURCE_PLL2Q\r\n> #define LL_RCC_USB_CLKSOURCE_PLL2Q   RCC_CCIPR4_USBSEL_1       /\\*!< PLL2 Q clock used as USB clock source \\*/\r\n> #endif\r\n\r\nto the \"main.h\" file.\r\n\r\nMy best guess as to what is needed to fix the issue, is the lines:\r\n\r\n> 918 #define LL_RCC_USB_CLKSOURCE_NONE        0x00000000U               /\\*!< No clock used as USB clock source \\*/\r\n> 919 #define LL_RCC_USB_CLKSOURCE_PLL1Q       RCC_CCIPR4_USBSEL_0       /\\*!< PLL1 Q clock used as USB clock source \\*/\r\n> 920 #if defined(RCC_CR_PLL3ON)\r\n> 921 #define LL_RCC_USB_CLKSOURCE_PLL3Q       RCC_CCIPR4_USBSEL_1       /\\*!< PLL3 Q clock used as USB clock source \\*/\r\n> 922 #endif /\\* PLL3 \\*/\r\n> 923 #define LL_RCC_USB_CLKSOURCE_HSI48       RCC_CCIPR4_USBSEL         /\\*!< HSI48 clock used as USB clock source \\*/\r\n\r\nshould be something like:\r\n\r\n> 918 #define LL_RCC_USB_CLKSOURCE_NONE        0x00000000U               /\\*!< No clock used as USB clock source \\*/\r\n> 919 #define LL_RCC_USB_CLKSOURCE_PLL1Q       RCC_CCIPR4_USBSEL_0       /\\*!< PLL1 Q clock used as USB clock source \\*/\r\n> 920 #if defined(RCC_CR_PLL3ON)\r\n> 921 #define LL_RCC_USB_CLKSOURCE_PLL3Q       RCC_CCIPR4_USBSEL_1       /\\*!< PLL3 Q clock used as USB clock source \\*/\r\n> 922 #else\r\n> 923 #define LL_RCC_USB_CLKSOURCE_PLL2Q       RCC_CCIPR4_USBSEL_1       /\\*!< PLL2 Q clock used as USB clock source \\*/\r\n> 924 #endif /\\* PLL3 \\*/\r\n> 925 #define LL_RCC_USB_CLKSOURCE_HSI48       RCC_CCIPR4_USBSEL         /\\*!< HSI48 clock used as USB clock source \\*/\r\n\r\n\r\n",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2024-06-03T18:15:40Z",
+        "body": "Hi @iizonn,\r\n\r\nIssue reproduced using a `STM32CubeMX` generated example. Thank you for the fix proposal. Looks quite relevant. This will be forwarded to our development team to have it fixed. I will keep you informed.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2024-06-04T14:46:25Z",
+        "body": "ST Internal Reference: 183323"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/6"
+  },
+  {
+    "repo": "stm32h5xx-hal-driver",
+    "issue_number": 5,
+    "title": "HAL_UART_RECEPTION_TORTO declared, but not used. Why ?",
+    "state": "closed",
+    "labels": [
+      "question",
+      "hal",
+      "usart"
+    ],
+    "created_at": "2024-05-22T15:21:47Z",
+    "closed_at": "2024-05-31T08:35:56Z",
+    "body": "HAL_UART_RECEPTION_TORTO declared in stm32h5xx_hal_uart.h\r\nbut not used in stm32h5xx_hal_uart.c and stm32h5xx_hal_uart_ex.c\r\nWhy ?",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2024-05-27T10:41:07Z",
+        "body": "Hello @Ku100vEvgen,\r\n\r\nThank you for the report.\r\n\r\nIn fact, **HAL_UART_RECEPTION_TORTO** and **HAL_UART_RECEPTION_TOCHARMATCH** are declared in stm32h5xx_hal_uart.h by Our Development team in order to be used later (Development expectation). But unfortunately, we do not have a date yet.\r\n\r\nWith regards.\r\n"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2024-05-31T08:35:56Z",
+        "body": "Hello @Ku100vEvgen,\r\n\r\nPlease, allow me to close this issue.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/5"
+  },
+  {
+    "repo": "stm32h5xx-hal-driver",
+    "issue_number": 4,
+    "title": "HAL_ADC_Start_DMA gets too slow if temp. channel is used",
+    "state": "closed",
+    "labels": [
+      "enhancement",
+      "invalid",
+      "hal"
+    ],
+    "created_at": "2024-03-10T12:56:45Z",
+    "closed_at": "2024-03-29T10:13:37Z",
+    "body": "**Describe the set-up**\r\n\r\n * Custom board, using STM32H503CBTx\r\n * arm-none-eabi-gcc (Arch Repository) 13.2.0\r\n\r\n**Describe the bug (skip if none)**\r\n\r\n`HAL_ADC_Start_DMA` get's really slow when internal temp sensor is used on channel that is not strictly related to temperature.\r\n\r\n\r\n**How to reproduce the bug (skip if none)**\r\n\r\nSetup round-robin setup for ADC channels, which at 10kHz does one of the following:\r\n 1) Chann0 is read by DMA for multiple values\r\n 2) Internal temp. is read once\r\n\r\nIn step 1), usage of `HAL_ADC_Start_DMA` function is really slow.\r\n\r\nThe problem disappears if internal temp. channel is not used at all.\r\n\r\n**Additional context**\r\n\r\nBased on reading of the source code, the problematic place is this:\r\nhttps://github.com/STMicroelectronics/stm32h5xx_hal_driver/blob/main/Src/stm32h5xx_hal_adc.c#L3519\r\n\r\nADC_Enable will execute the \"sensor stabilization delay\", which takes a considerable amount of time. (Relative to it being run in 10kHz loop) This seems as waste of time given that the channel being started is NOT the internal temperature channel\r\n",
+    "comments": [
+      {
+        "author": "RJMSTM",
+        "created_at": "2024-03-14T07:43:33Z",
+        "body": "Hello @koniarik,\r\n\r\nThe ADC has been configured to perform two tasks in a 10KHz loop. Firstly, it reads channel 0 using DMA for multiple reads, and secondly, it reads the temperature sensor. This means that the same ADC is being utilized for multiple tasks and is reconfigured each time.\r\nAn issue arises when the temperature sensor channel remains active, causing a delay in the stabilization process of the temperature sensor. This delay further causes the ADC to wait when it needs to read channel 0.\r\n\r\nTo optimize the process, my recommendation would be to disable the temperature sensor when it is not in use. This will prevent any unnecessary delays and ensure that time is not wasted.\r\n\r\nThank you again for your contribution.\r\nWith regards,"
+      },
+      {
+        "author": "koniarik",
+        "created_at": "2024-03-14T20:52:30Z",
+        "body": "How? And frankly, is it trully the best idea?\r\n\r\nMy thouhts:\r\n - The thing is that the this behavior is not exactly clear from the API nor the documentation in adc.c file  (and something I would prefer to be warned about)\r\n - Suddenly it's not clear to me what is the intended usage of the peripheral... what is the proper way to use it? or what is the proper way to disable just the temperature sensor?\r\n - Can I do the disable any other way than disabling entire peripheral and enabling again? \r\n \r\n To put it simply: how to disable just the temperature sensor in a way that I can enable it again?"
+      },
+      {
+        "author": "ARIOSTM",
+        "created_at": "2024-03-15T14:33:55Z",
+        "body": "Hello @koniarik,\r\n\r\nThe `HAL_ADC_ConfigChannel` function automatically enable the temperature sensor when the temperature sensor channel is selected. If you change the configuration the temperature sensor stays enable. You have to manually disable it, if you want to avoid the stabilization time delay.\r\n\r\nTo disable the temperature sensor when you're not using it you can call  \r\n`LL_ADC_SetCommonPathInternalChRem(__LL_ADC_COMMON_INSTANCE(ADC1), LL_ADC_PATH_INTERNAL_TEMPSENSOR);`\r\nand enable it again using (it is already automatically done in `HAL_ADC_ConfigChannel` when temp sensor is selected).\r\n`LL_ADC_SetCommonPathInternalChAdd(__LL_ADC_COMMON_INSTANCE(ADC1), LL_ADC_PATH_INTERNAL_TEMPSENSOR);`\r\nhttps://github.com/STMicroelectronics/stm32h5xx_hal_driver/blob/b21b55fe8b05245d06c559a09a77edf5a0679a74/Inc/stm32h5xx_ll_adc.h#L3199\r\n\r\nBest regards"
+      },
+      {
+        "author": "koniarik",
+        "created_at": "2024-03-15T15:28:27Z",
+        "body": "I tried to apply the fix but it does not work\r\n\r\nI don't have time to investigate this now, as based on my reading of the code it should've worked, I will answer here once I have time for deeper investigation :)\r\n"
+      },
+      {
+        "author": "RJMSTM",
+        "created_at": "2024-03-21T12:27:48Z",
+        "body": "Hello,\r\nCan you please find the time to test the proposed solution?\r\n\r\nI appreciate your honesty and look forward to hearing back from you once you have had the time to conduct a more thorough investigation. In the meantime, please let me know if there is anything I can do to assist you.\r\n\r\nRegards, \r\nRania"
+      },
+      {
+        "author": "koniarik",
+        "created_at": "2024-03-21T17:51:36Z",
+        "body": "Sorry for the way!\r\n\r\nTurns out that fix suggested by @ARIOSTM works, there was failure on my side in evaluation.\r\n\r\nThe proposed fix indeed gets rid of the waiting when different channel is used. It's just that even the wait for temperature channel only switch only, the system is too unresponsive and triggers our internal warnings. But I don't blame that on the HAL, as that is just a property of the temp. sensor.\r\n\r\nThanks!"
+      },
+      {
+        "author": "RJMSTM",
+        "created_at": "2024-03-29T10:13:17Z",
+        "body": "Hello @koniarik,\r\n\r\nThank you for your feedback, If the solution has resolved your problem, so allow me to close the issue.\r\nWe're delighted to hear from you once more.\r\n\r\nRegards,\r\nRania"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/4"
+  },
+  {
+    "repo": "stm32h5xx-hal-driver",
+    "issue_number": 3,
+    "title": "Missing pre-processor directive \"defined\" cause warning.",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "hal",
+      "internal bug tracker"
+    ],
+    "created_at": "2024-02-19T13:43:40Z",
+    "closed_at": "2024-11-25T10:34:44Z",
+    "body": "Commit: b21b55fe8b05245d06c559a09a77edf5a0679a74\r\nFile: stm32h5xx_hal_def.h\r\nLine: 178\r\n\r\nhttps://github.com/STMicroelectronics/stm32h5xx_hal_driver/blob/b21b55fe8b05245d06c559a09a77edf5a0679a74/Inc/stm32h5xx_hal_def.h#L178\r\n\r\n=>\r\n\r\n`#if defined ( __CC_ARM   ) || (defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= ARMCC_MIN_VERSION))`",
+    "comments": [
+      {
+        "author": "42Bastian",
+        "created_at": "2024-02-19T13:48:27Z",
+        "body": "Also here\r\nhttps://github.com/STMicroelectronics/stm32h5xx_hal_driver/blob/b21b55fe8b05245d06c559a09a77edf5a0679a74/Inc/stm32h5xx_hal_def.h#L211"
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2024-02-22T12:47:25Z",
+        "body": "Hello @42Bastian,\r\n\r\nThank you for your contribution. Could you please confirm if the issue occurs solely when the `-Wundef` flag is activated? \r\n\r\nWith regards,"
+      },
+      {
+        "author": "42Bastian",
+        "created_at": "2024-02-22T13:48:49Z",
+        "body": "Only with -Wall (whicht includes -Wundef). But I'd say, -Wall should be standard when compiling.  ;-)\r\n\r\nThe construct ((__ARMCC_VERSION && (...)) makes no sense as undefined macros are replaced by 0.\r\nSo the first part of the term is fully handled by the second."
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2024-03-07T15:35:57Z",
+        "body": "See also https://github.com/STMicroelectronics/STM32CubeU5/issues/16"
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2024-05-09T16:21:47Z",
+        "body": "ST Internal Reference: 181063"
+      },
+      {
+        "author": "ra1nb0w",
+        "created_at": "2024-07-02T17:24:50Z",
+        "body": "obviously, same issue for STM32CubeH5"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2024-11-25T10:34:41Z",
+        "body": "> obviously, same issue for STM32CubeH5\r\n\r\nHi @ra1nb0w,\r\n\r\nThe STM32CubeH5 repository points to this one using the \"submodule\" technique. Once the link updated, the fix will propagate to that repository too.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/3"
+  },
+  {
+    "repo": "stm32h5xx-hal-driver",
+    "issue_number": 2,
+    "title": "Uninitialised variable: HAL_SD_ConfigWideBusOperation",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "hal"
+    ],
+    "created_at": "2024-01-26T16:36:12Z",
+    "closed_at": "2024-03-21T11:02:28Z",
+    "body": "https://github.com/STMicroelectronics/stm32h5xx_hal_driver/blob/b21b55fe8b05245d06c559a09a77edf5a0679a74/Src/stm32h5xx_hal_sd.c#L2373\r\n\r\n`sdmmc_clk` should be initialised to `0U`",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2024-01-31T16:26:56Z",
+        "body": "Hello @thyrrestrup,\r\n\r\nThank you for your report.\r\n\r\nIn fact, the variable \"sdmmc_clk\" shouldn't be initialized to 0U in the function HAL_SD_ConfigWideBusOperation() To comply to Rule 2.2_c of MISRA C:2012.\r\nOtherwise, the value 0 assigned to \"sdmmc_clk\" will never be used, as it will be overwritten in one of the Lines below:\r\nhttps://github.com/STMicroelectronics/stm32h5xx_hal_driver/blob/b21b55fe8b05245d06c559a09a77edf5a0679a74/Src/stm32h5xx_hal_sd.c#L2420-L2429\r\n\r\nI Hope this clarified your point and allow me to close the issue.\r\n\r\nWith Regards"
+      },
+      {
+        "author": "thyrrestrup",
+        "created_at": "2024-01-31T18:18:03Z",
+        "body": "arm-none-eabi-gcc 13.2 complain that sdmmc_clk could be used uninitialized. So maybe this should be handled in a different manner then?\r\n\r\nIf SDMMC2 is not defined then there is no else statement and therefore sdmmc_clk ends up being uninitialized.\r\n"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2024-02-01T16:48:46Z",
+        "body": "Hello @thyrrestrup,\r\n\r\nAfter a double-check we confirm the issue.\r\nOur Dev team has already spotted & fixed it, the fix will be available in the frame of the next release.\r\nBelow the details:\r\n\r\n* The Local variable \"sdmmc_clk\" is kept **uninitialized**\r\n* [These](https://github.com/STMicroelectronics/stm32h5xx_hal_driver/blob/b21b55fe8b05245d06c559a09a77edf5a0679a74/Src/stm32h5xx_hal_sd.c#L2420-L2429) lines of Code have been updated as follow \r\n\r\n```diff\r\n    if (hsd->Instance == SDMMC1)\r\n    {\r\n      sdmmc_clk = HAL_RCCEx_GetPeriphCLKFreq(RCC_PERIPHCLK_SDMMC1);\r\n    }\r\n#if defined(SDMMC2)\r\n-    else\r\n+    else if (hsd->Instance == SDMMC2)\r\n    {\r\n      sdmmc_clk = HAL_RCCEx_GetPeriphCLKFreq(RCC_PERIPHCLK_SDMMC2);\r\n    }\r\n#endif /* SDMMC2 */\r\n+    else\r\n+    {\r\n+      sdmmc_clk = 0U;\r\n+    }\r\n```\r\n\r\nThank you for your feedback, the issue will be kept open until the fix is published on GitHub.\r\nRegards"
+      },
+      {
+        "author": "thyrrestrup",
+        "created_at": "2024-02-16T09:44:46Z",
+        "body": "Should this approach also be used in `HAL_SD_InitCard`?"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2024-02-19T09:37:39Z",
+        "body": "Hello @Thyrrestrup,\r\n\r\nIt's not necessary to use the same approach, it's a choice. \r\n\r\nWith regards."
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2024-03-21T11:02:28Z",
+        "body": "Fixed in afcafe6d4f21a18d898400705addd9c94fba8660"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32h5xx-hal-driver/issues/2"
+  }
+]

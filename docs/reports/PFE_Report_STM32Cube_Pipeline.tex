@@ -3,8 +3,11 @@
 \usepackage[T1]{fontenc}
 \usepackage[french]{babel}
 \usepackage{geometry}
-\geometry{margin=2.5cm}
+\geometry{margin=2.5cm, top=3cm}
+\setlength{\headheight}{14.5pt}
 \usepackage{graphicx}
+% NOTE: Ajouter [draft] ci-dessus si les images PNG ne sont pas encore exportées :
+% \usepackage[draft]{graphicx}
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{xcolor}
@@ -48,6 +51,14 @@
   linkcolor=stblue,
   urlcolor=blue!70!black,
   citecolor=stblue,
+}
+
+% Graphics path for diagrams and evaluation charts
+\graphicspath{
+  {../diagrams/presentation/exported/}
+  {../diagrams/technical/exported/}
+  {../../datasets/07_delivery/st_ready/evaluation_report/}
+  {./figures/}
 }
 
 \begin{document}
@@ -143,10 +154,12 @@ Concevoir et implémenter un pipeline automatisé de prétraitement qui :
 
 \begin{itemize}
   \item \textbf{Chapitre 2} --- État de l'art : RAG, NLP pour code, chatbots techniques
-  \item \textbf{Chapitre 3} --- Méthodologie et architecture du pipeline
-  \item \textbf{Chapitre 4} --- Implémentation détaillée
-  \item \textbf{Chapitre 5} --- Résultats et évaluation
-  \item \textbf{Chapitre 6} --- Conclusion et perspectives
+  \item \textbf{Chapitre 3} --- Pipeline de Data Preprocessing : concepts, enjeux, patterns
+  \item \textbf{Chapitre 4} --- Méthodologie et architecture du pipeline
+  \item \textbf{Chapitre 5} --- Implémentation détaillée
+  \item \textbf{Chapitre 6} --- Résultats et évaluation
+  \item \textbf{Chapitre 7} --- Automatisation et CI/CD
+  \item \textbf{Chapitre 8} --- Conclusion et perspectives
 \end{itemize}
 
 %% ============================================================
@@ -206,6 +219,207 @@ RAG générique & Flexible & Pas de prétraitement domain-aware \\
 \end{longtable}
 
 %% ============================================================
+\chapter{Pipeline de Data Preprocessing}
+%% ============================================================
+
+\section{Qu'est-ce qu'un Pipeline de Preprocessing ?}
+
+Un \textbf{pipeline de preprocessing} (ou pipeline de prétraitement de données) est une chaîne de transformations automatisées qui convertit des données brutes et non structurées en données propres, enrichies et exploitables par un système en aval (ici, un moteur RAG).
+
+\subsection{Principes Fondamentaux}
+
+\begin{enumerate}
+  \item \textbf{Séquentialité} : Chaque étape prend en entrée la sortie de l'étape précédente
+  \item \textbf{Idempotence} : Rejouer une étape avec les mêmes entrées produit les mêmes sorties
+  \item \textbf{Modularité} : Chaque étape est indépendante et remplaçable
+  \item \textbf{Traçabilité} : Chaque transformation est documentée et versionnable
+  \item \textbf{Validation} : Des gates de qualité empêchent la propagation d'erreurs
+\end{enumerate}
+
+\subsection{Analogie avec l'ETL Classique}
+
+Le pipeline de preprocessing s'apparente à un processus \textbf{ETL} (Extract, Transform, Load) adapté au domaine NLP/RAG :
+
+\begin{longtable}{p{3cm}p{4cm}p{6cm}}
+\toprule
+\textbf{Phase ETL} & \textbf{Équivalent Pipeline} & \textbf{Description} \\
+\midrule
+Extract & Ingestion & Extraction depuis l'API GitHub (issues, fichiers, PRs) \\
+Transform & Cleaning + Enrichment + Chunking & Normalisation, classification NLP, découpage \\
+Load & Delivery + Upload & Export JSON + upload vers la KB cloud \\
+\bottomrule
+\end{longtable}
+
+\section{Enjeux du Preprocessing pour le RAG}
+
+Le paradigme RAG (Retrieval-Augmented Generation) est extrêmement sensible à la qualité des documents indexés. Un mauvais preprocessing cause directement :
+
+\subsection{Problème ``Garbage In, Garbage Out''}
+
+\begin{itemize}
+  \item \textbf{Bruit} : du texte non pertinent (signatures email, messages bot, headers GitHub) dilue les signaux techniques utiles
+  \item \textbf{Incomplétude} : un document sans métadonnées (layer, component) ne peut pas être filtré efficacement lors de la recherche
+  \item \textbf{Duplication} : des contenus dupliqués saturent le contexte du LLM avec des informations redondantes
+  \item \textbf{Opacité} : les images (captures d'écran, logs visuels) sont invisibles pour la recherche textuelle
+\end{itemize}
+
+\subsection{Exigences Spécifiques au Domaine Embedded}
+
+Le domaine STM32 pose des défis supplémentaires par rapport au preprocessing de texte générique :
+
+\begin{longtable}{p{4.5cm}p{8.5cm}}
+\toprule
+\textbf{Défi} & \textbf{Impact sur le Preprocessing} \\
+\midrule
+Vocabulaire technique dense & Les noms d'API (\texttt{HAL\_SPI\_Transmit\_DMA}), les registres (\texttt{CR1}), et les codes d'erreur doivent être préservés intacts \\
+Contexte multi-couches & Un problème peut impliquer simultanément le hardware, le HAL, le middleware et l'application --- le pipeline doit identifier la couche concernée \\
+Dépendance à la version & Un workaround valide pour CubeH7 v1.9 peut être obsolète en v1.11 \\
+Images techniques & Oscillogrammes, screenshots IDE, schémas de connexion contiennent des informations critiques \\
+Multi-repository & Une série MCU (ex: H7) s'étend sur 12+ repos (HAL, BSP, CMSIS, exemples) \\
+\bottomrule
+\end{longtable}
+
+\section{Étapes Canoniques d'un Pipeline NLP}
+
+La littérature identifie les étapes suivantes pour un pipeline de preprocessing NLP appliqué au RAG \cite{lewis2020rag} :
+
+\subsection{1. Collecte (Data Ingestion)}
+
+Récupération exhaustive des données depuis les sources :
+\begin{itemize}
+  \item API REST (GitHub, JIRA, Confluence)
+  \item Systèmes de fichiers (repositories clonés)
+  \item Bases de données internes
+\end{itemize}
+
+\textbf{Critère de qualité} : complétude (aucune donnée manquée) et fraîcheur (données récentes).
+
+\subsection{2. Nettoyage (Data Cleaning)}
+
+Suppression du bruit et normalisation :
+\begin{itemize}
+  \item Suppression des éléments non informatifs (messages bot, templates vides, duplicatas)
+  \item Normalisation des encodages et formats
+  \item Extraction du texte utile depuis des structures complexes (HTML, Markdown)
+  \item Remplacement des éléments non textuels (images $\to$ markers)
+\end{itemize}
+
+\textbf{Critère de qualité} : ratio signal/bruit élevé.
+
+\subsection{3. Enrichissement (Feature Engineering)}
+
+Ajout de métadonnées structurées par analyse automatique :
+\begin{itemize}
+  \item \textbf{Classification} : catégoriser chaque document (type, sévérité, couche architecturale)
+  \item \textbf{Extraction d'entités} : identifier les boards, composants, versions mentionnées
+  \item \textbf{Scoring} : évaluer la force probante (\textit{evidence strength}) de chaque document
+  \item \textbf{Filtrage qualité} : marquer les documents invalides (trop courts, hors-scope, spam)
+\end{itemize}
+
+\textbf{Critère de qualité} : précision et rappel de la classification.
+
+\subsection{4. Mise en Relation (Linking \& Similarity)}
+
+Création de liens entre documents :
+\begin{itemize}
+  \item Similarité textuelle (TF-IDF, embeddings)
+  \item Liens structurels (issue $\to$ PR $\to$ commit)
+  \item Regroupement thématique (clustering)
+\end{itemize}
+
+\textbf{Critère de qualité} : pertinence des liens (pas de faux positifs bruyants).
+
+\subsection{5. Découpage (Chunking)}
+
+Division des documents longs en segments optimaux pour le retrieval :
+\begin{itemize}
+  \item Respect des frontières sémantiques (paragraphes, sections)
+  \item Taille bornée (typiquement 256--512 tokens)
+  \item Overlap pour maintenir la cohérence contextuelle
+\end{itemize}
+
+\textbf{Critère de qualité} : chaque chunk est auto-suffisant et pertinent.
+
+\subsection{6. Validation et Export}
+
+Dernière étape avant l'indexation :
+\begin{itemize}
+  \item Validation structurelle (JSON Schema)
+  \item Vérification des champs obligatoires
+  \item Export dans le format attendu par le système cible (KB)
+  \item Écriture de fichiers de traçabilité (summary, manifests)
+\end{itemize}
+
+\textbf{Critère de qualité} : conformité 100\% au schéma cible.
+
+\section{Notre Pipeline : Mapping Théorie $\to$ Implémentation}
+
+Le tableau suivant fait le lien entre les étapes canoniques et notre implémentation concrète :
+
+\begin{longtable}{p{3.5cm}p{3.5cm}p{6cm}}
+\toprule
+\textbf{Étape Canonique} & \textbf{Stage Pipeline} & \textbf{Implémentation} \\
+\midrule
+Collecte & Stage 1 (Ingestion) & \texttt{fetch\_issues.py}, \texttt{fetch\_files.py}, \texttt{repo\_sync\_service.py} \\
+Nettoyage & Stage 2 (Cleaning) & \texttt{clean\_issues.py}, \texttt{clean\_files.py} --- normalisation, markers images \\
+Enrichissement & Stage 3 (Enrichment) & \texttt{issues\_to\_docs\_v2.py} --- heuristiques NLP (layer, severity, board, component) \\
+Mise en Relation & Stage 4 (Similarity) & \texttt{compute\_issue\_similarity\_v2.py} --- TF-IDF cosine, top-$k$ voisins \\
+Découpage & Stage 5 (Chunking) & \texttt{docs\_to\_chunks\_*\_v2.py} --- paragraphe/section, max 512 tokens \\
+Validation & Stage 6 (Evaluation) & \texttt{validate\_schemas.py}, \texttt{test\_stats\_*\_v2.py} \\
+Export & Stage 7 (Delivery) & \texttt{export\_st\_ready\_*.py} --- 4 types d'artefacts JSON \\
+\bottomrule
+\end{longtable}
+
+\section{Métriques de Qualité d'un Pipeline}
+
+Pour évaluer la qualité d'un pipeline de preprocessing, on utilise des métriques à chaque niveau :
+
+\begin{equation}
+Q_{\text{pipeline}} = f(Q_{\text{complétude}},\ Q_{\text{classification}},\ Q_{\text{enrichissement}},\ Q_{\text{conformité}})
+\end{equation}
+
+\begin{itemize}
+  \item $Q_{\text{complétude}}$ : pourcentage de données source effectivement récupérées
+  \item $Q_{\text{classification}}$ : taux de couverture des champs de classification (non-null)
+  \item $Q_{\text{enrichissement}}$ : taux de succès des transformations IA (descriptions d'images)
+  \item $Q_{\text{conformité}}$ : pourcentage de documents passant la validation schéma
+\end{itemize}
+
+L'objectif est de maximiser ces métriques tout en maintenant la \textbf{traçabilité} (pouvoir remonter de tout artefact final vers sa source brute).
+
+\section{Patterns d'Architecture Pipeline}
+
+\subsection{Pattern Batch vs Streaming}
+
+Notre pipeline utilise le pattern \textbf{batch} : toutes les données d'un repository sont traitées en une seule exécution. C'est adapté car :
+\begin{itemize}
+  \item Les données GitHub changent lentement (quelques issues/semaine)
+  \item Le calcul de similarité nécessite le corpus complet
+  \item La validation globale (schéma) ne peut se faire que sur l'ensemble
+\end{itemize}
+
+\subsection{Pattern ``Rejouable par Stage''}
+
+Chaque stage lit un fichier JSON d'entrée et écrit un fichier JSON de sortie. Cela permet de :
+\begin{itemize}
+  \item Relancer une étape sans tout recalculer (\texttt{--skip-ingestion})
+  \item Débugger une étape en isolation
+  \item Tester de nouvelles heuristiques sur les données intermédiaires existantes
+  \item Comparer les résultats entre deux versions d'un même stage
+\end{itemize}
+
+\subsection{Pattern ``Gate de Qualité''}
+
+Avant l'upload final vers la KB, un gate de validation bloque la progression si les données sont non conformes :
+
+\begin{verbatim}
+Pipeline OK → validate_schemas.py → PASS → Upload autorisé
+                                   → FAIL → Upload bloqué, alerte
+\end{verbatim}
+
+Ce pattern empêche la propagation de données corrompues vers la production.
+
+%% ============================================================
 \chapter{Méthodologie et Architecture}
 %% ============================================================
 
@@ -244,12 +458,34 @@ Architecture modulaire & Chaque étape est rejouable indépendamment \\
 
 \section{Diagramme de Flux de Données}
 
-\textit{(Voir diagrammes draw.io en annexe : 01\_pipeline\_overview.drawio)}
+La Figure~\ref{fig:pipeline_overview} illustre la vue globale du pipeline et le flux de données entre les 7 stages.
 
-\begin{verbatim}
-GitHub API → 01_raw → 02_clean → 03_enriched → 04_similarity 
-         → 05_chunked → 06_evaluated → 07_delivery → KB #793
-\end{verbatim}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{01_pipeline_overview.png}
+\caption{Vue d'ensemble du pipeline de preprocessing (7 stages)}
+\label{fig:pipeline_overview}
+\end{figure}
+
+\section{Flux Source-to-Answer}
+
+La Figure~\ref{fig:data_flow} montre le parcours complet d'une donnée depuis GitHub jusqu'à la réponse au client final.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{03_data_flow_source_to_answer.png}
+\caption{Flux de données end-to-end : de la source GitHub à la réponse utilisateur}
+\label{fig:data_flow}
+\end{figure}
+
+\section{Architecture de Delivery et Upload KB}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{02_delivery_kb_upload.png}
+\caption{Architecture de livraison et upload vers la Knowledge Base \#793}
+\label{fig:delivery_upload}
+\end{figure}
 
 %% ============================================================
 \chapter{Implémentation}
@@ -270,6 +506,13 @@ Récupérer exhaustivement les données des repositories GitHub configurés.
 
 \subsection{Données récupérées}
 Pour chaque repo : issues (avec commentaires), PRs, commits, liens croisés, et fichiers source.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{01_ingestion_detail.png}
+\caption{Détail de l'étape d'ingestion : scripts et sorties}
+\label{fig:ingestion_detail}
+\end{figure}
 
 \section{Nettoyage (Stage 2)}
 
@@ -310,13 +553,26 @@ Le module \texttt{stm32cube\_preprocessing\_heuristics.py} applique des règles 
 
 \subsection{Algorithme}
 \begin{enumerate}
-  \item Construction de la matrice TF-IDF sur le corpus (titre + body + commentaires)
-  \item Calcul de la similarité cosinus paire-à-paire
-  \item Sélection des top-5 voisins (seuil $> 0.3$)
+  \item Construction de la matrice TF-IDF sur le corpus (titre + body + commentaires) :
+  \begin{equation}
+    \text{tf-idf}(t, d) = \text{tf}(t,d) \times \log\frac{N}{|\{d' \mid t \in d'\}|}
+  \end{equation}
+  \item Calcul de la similarité cosinus paire-à-paire :
+  \begin{equation}
+    \text{sim}(d_i, d_j) = \frac{\vec{v}_i \cdot \vec{v}_j}{\|\vec{v}_i\| \times \|\vec{v}_j\|}
+  \end{equation}
+  \item Sélection des $k$ plus proches voisins avec seuil $\theta = 0.3$ :
+  \begin{equation}
+    \text{related}(d_i) = \{d_j \mid \text{sim}(d_i, d_j) \geq \theta,\ j \neq i\}
+  \end{equation}
 \end{enumerate}
 
-Formule de similarité cosinus :
-$$\text{sim}(A, B) = \frac{A \cdot B}{\|A\| \times \|B\|}$$
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{02_enrichment_similarity_detail.png}
+\caption{Détail du processus d'enrichissement et de calcul de similarité}
+\label{fig:enrichment_similarity}
+\end{figure}
 
 \section{Chunking V2 (Stage 5)}
 
@@ -331,18 +587,156 @@ Stratégie de découpage :
 \subsection{Resolver Cases}
 Générés à partir d'issues fermées avec PRs liées :
 \begin{enumerate}
-  \item Identification de la chaîne Issue → PR → Commits
+  \item Identification de la chaîne Issue $\to$ PR $\to$ Commits
   \item Évaluation du \texttt{resolution\_status} (merged\_fix, candidate\_fix, reference\_only)
-  \item Construction du texte structuré : Problème → Signal → Évaluation → Preuves
+  \item Construction du texte structuré : Problème $\to$ Signal $\to$ Évaluation $\to$ Preuves
 \end{enumerate}
 
 \subsection{Diagnostic Cards}
 Cartes de diagnostic structurées pour les problèmes récurrents :
 \begin{enumerate}
   \item Sélection des issues à haute valeur diagnostique
-  \item Génération : Symptôme → Cause Racine → Résolution → Validation
+  \item Génération : Symptôme $\to$ Cause Racine $\to$ Résolution $\to$ Validation
   \item Alias de requête pour améliorer la récupération
 \end{enumerate}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{03_delivery_resolver_diagnostic.png}
+\caption{Génération des Resolver Cases et Diagnostic Cards}
+\label{fig:resolver_diagnostic}
+\end{figure}
+
+\subsection{Alfred Vision --- Enrichissement d'Images}
+
+De nombreuses issues GitHub contiennent des captures d'écran (erreurs IDE, oscillogrammes, configurations CubeMX). Ces images sont opaques pour la recherche textuelle RAG.
+
+Le pipeline intègre \textbf{Alfred Vision AI}, un service LLM interne ST, pour convertir automatiquement les images en descriptions textuelles :
+
+\begin{enumerate}
+  \item Le script d'export génère des markers \texttt{[IMAGE ATTACHED]} dans le texte
+  \item Les URLs des images sont extraites dans le champ \texttt{image\_urls}
+  \item Alfred Vision télécharge chaque image et produit une description sémantique
+  \item Le marker est remplacé par \texttt{[IMAGE DESCRIPTION] ...}
+\end{enumerate}
+
+\textbf{Résultats H7} : 97/98 images décrites avec succès (taux de succès 98.9\%).
+
+\textbf{Fix appliqué} : La fonction \texttt{first\_sentence()} supprime les markers \texttt{[IMAGE ATTACHED]} du résumé \texttt{root\_cause\_hint} pour éviter la duplication des markers entre les sections ``Root cause'' et ``Key comments'', ce qui causait des descriptions \texttt{UNAVAILABLE} par épuisement des URLs.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{05_alfred_vision_integration.png}
+\caption{Intégration Alfred Vision AI pour la description automatique d'images}
+\label{fig:alfred}
+\end{figure}
+
+\section{Architecture Agents --- Persona ST ChatGPT}
+
+Le système final s'articule autour d'une architecture \textbf{multi-agents} où chaque composant a un rôle bien défini.
+
+\subsection{Vue d'ensemble}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  box/.style={draw, rounded corners, minimum width=3.5cm, minimum height=1cm, align=center, font=\small},
+  arrow/.style={->, thick, >=stealth}
+]
+  \node[box, fill=stblue!10] (user) at (0,0) {Utilisateur\\(Ingénieur STM32)};
+  \node[box, fill=stblue!20] (persona) at (0,-2) {Persona\\ST GitHub Analyzer};
+  \node[box, fill=stlightblue!20] (kb) at (-3.5,-4.5) {KB Tool\\(Unstructured)};
+  \node[box, fill=storange!20] (alfred) at (3.5,-4.5) {Alfred Tool\\(Fallback)};
+  \node[box, fill=stgreen!15] (pipeline) at (-3.5,-7) {Pipeline\\Preprocessing};
+  \node[box, fill=stgray!20] (github) at (-3.5,-9) {GitHub\\STMicroelectronics};
+
+  \draw[arrow] (user) -- node[right, font=\scriptsize]{Question} (persona);
+  \draw[arrow] (persona) -- node[left, font=\scriptsize]{Recherche KB} (kb);
+  \draw[arrow] (persona) -- node[right, font=\scriptsize]{Fallback\\(si KB vide)} (alfred);
+  \draw[arrow] (kb) -- node[left, font=\scriptsize]{Réponse\\+ citation} (persona);
+  \draw[arrow] (alfred) -- node[right, font=\scriptsize]{Réponse\\générique} (persona);
+  \draw[arrow] (pipeline) -- node[left, font=\scriptsize]{Upload JSON} (kb);
+  \draw[arrow] (github) -- node[left, font=\scriptsize]{Ingestion} (pipeline);
+\end{tikzpicture}
+\caption{Architecture multi-agents du système ST GitHub Analyzer}
+\label{fig:agents_arch}
+\end{figure}
+
+\subsection{Persona : ST GitHub Analyzer}
+
+La persona est un agent conversationnel déployé sur la plateforme \textbf{ST ChatGPT} (Azure OpenAI interne). Elle est configurée avec :
+
+\begin{longtable}{p{4.5cm}p{8.5cm}}
+\toprule
+\textbf{Paramètre} & \textbf{Valeur / Description} \\
+\midrule
+Nom & ST GitHub Analyzer \\
+Modèle & GPT-4o (Azure OpenAI) \\
+Température & 0.2--0.3 (réponses factuelles) \\
+KB associée & KB \#793 (ST GitHub Analyzer) \\
+Tool principal & ST-GitHub-Analyzer-Unstructured (Hybrid Search) \\
+Tool fallback & Alfred (persona \texttt{st\_copilot}) \\
+Search type & Hybrid (Semantic + Full-text) \\
+Semantic threshold & 0.55 \\
+Max documents & 20 (semantic) + 12 (full-text) \\
+\bottomrule
+\end{longtable}
+
+\subsection{Tool 1 : KB Unstructured (Recherche Hybride)}
+
+C'est le tool \textbf{principal}. Il interroge la KB \#793 qui contient les artefacts générés par le pipeline :
+
+\begin{itemize}
+  \item \textbf{Issues} : cartes structurées avec métadonnées, symptôme, root cause, fix
+  \item \textbf{Files} : documentation HAL/BSP/CMSIS extraite des repositories
+  \item \textbf{Resolver Cases} : chaînes Issue $\to$ PR $\to$ Commit avec preuves
+  \item \textbf{Diagnostic Cards} : analyses de pannes structurées (symptôme $\to$ hypothèses $\to$ validation)
+\end{itemize}
+
+La recherche hybride combine :
+\begin{enumerate}
+  \item \textbf{Semantic} : compréhension du sens (``mon SPI ne marche plus'' $\to$ retrouve les issues SPI DMA)
+  \item \textbf{Full-text} : correspondance exacte (``HAL\_SPI\_Transmit\_DMA'' $\to$ match direct)
+\end{enumerate}
+
+\subsection{Tool 2 : Alfred Fallback}
+
+Quand la KB ne contient pas de réponse pertinente, la persona peut appeler \textbf{Alfred} (LLM ST généraliste) comme outil de secours.
+
+\textbf{Configuration critique} --- La description du tool doit \textbf{forcer la priorité KB} :
+
+\begin{quote}
+\textit{``I am a fallback assistant for STM32 firmware questions that are NOT covered by the Knowledge Base. The Knowledge Base is ALWAYS the primary source, search it FIRST for every question. Use this tool ONLY when the Knowledge Base returned no relevant result.''}
+\end{quote}
+
+\textbf{Risque identifié} : Si la description est trop permissive, la persona appelle Alfred au lieu de chercher dans la KB $\to$ réponses génériques $\to$ dégradation du Quality Index ($-10$ points observés).
+
+\subsection{Stratégie de Réponse (System Prompt)}
+
+Le system prompt de la persona impose une stratégie en 4 cas :
+
+\begin{enumerate}
+  \item \textbf{Match direct KB} $\to$ citer la source avec URL GitHub
+  \item \textbf{Match partiel} $\to$ diagnostic + workaround candidat + étapes de validation
+  \item \textbf{Question configuration générale} $\to$ explication technique directe
+  \item \textbf{Aucun match} $\to$ appeler Alfred OU proposer une action concrète (jamais ``je ne sais pas'')
+\end{enumerate}
+
+\subsection{Pipeline comme Agent de Maintenance}
+
+Le pipeline de preprocessing joue lui-même le rôle d'un \textbf{agent de maintenance} de la KB :
+
+\begin{longtable}{p{4cm}p{9cm}}
+\toprule
+\textbf{Rôle} & \textbf{Description} \\
+\midrule
+Ingestion périodique & Détecte les nouvelles issues et mises à jour GitHub (bi-mensuel) \\
+Enrichissement & Classifie automatiquement par heuristiques NLP (layer, component, severity) \\
+Validation qualité & Gate de schéma bloquant les uploads de données corrompues \\
+Mise à jour KB & Delete + Re-add automatique via GitHub Actions \\
+Évaluation continue & Quality Index 52 questions pour détecter les régressions \\
+\bottomrule
+\end{longtable}
 
 %% ============================================================
 \chapter{Résultats et Évaluation}
@@ -350,45 +744,214 @@ Cartes de diagnostic structurées pour les problèmes récurrents :
 
 \section{Couverture des Données}
 
-\begin{longtable}{lcccc}
+\begin{longtable}{lccccc}
 \toprule
-\textbf{Série} & \textbf{Repos} & \textbf{Issues} & \textbf{Files} & \textbf{Resolver Cases} \\
+\textbf{Série} & \textbf{Repos} & \textbf{Issues} & \textbf{Files} & \textbf{Resolver} & \textbf{Diag. Cards} \\
 \midrule
-STM32F4 & 16 & $\sim$800 & $\sim$5400 & $\sim$150 \\
-STM32H5 & 6 & $\sim$200 & $\sim$1200 & $\sim$40 \\
-STM32U5 & 8 & $\sim$350 & $\sim$2000 & $\sim$70 \\
-STM32WL & 5 & $\sim$150 & $\sim$800 & $\sim$30 \\
-STM32H7 & 12 & $\sim$500 & $\sim$3000 & $\sim$100 \\
+STM32F4 & 16 & $\sim$800 & $\sim$5400 & $\sim$150 & $\sim$60 \\
+STM32H5 & 6 & $\sim$200 & $\sim$1200 & $\sim$40 & $\sim$15 \\
+STM32U5 & 8 & $\sim$350 & $\sim$2000 & $\sim$70 & $\sim$30 \\
+STM32WL & 5 & $\sim$150 & $\sim$800 & $\sim$30 & $\sim$12 \\
+STM32H7 & 12 & $\sim$500 & $\sim$3000 & $\sim$100 & $\sim$40 \\
 \midrule
-\textbf{Total} & \textbf{47} & $\sim$\textbf{2000} & $\sim$\textbf{12400} & $\sim$\textbf{390} \\
+\textbf{Total} & \textbf{47} & $\sim$\textbf{2000} & $\sim$\textbf{12400} & $\sim$\textbf{390} & $\sim$\textbf{157} \\
 \bottomrule
 \end{longtable}
 
-\section{Qualité de l'Enrichissement}
+\section{Métriques d'Évaluation par Stage}
 
-Taux d'enrichissement réussi (champ non ``unknown'') :
+L'évaluation quantitative du pipeline est réalisée par le script :\texttt{generate\_evaluation\_report.py} qui calcule des métriques à chaque étape de la chaîne de traitement.
+
+\subsection{Notation et Seuils}
+
+Chaque métrique est classifiée selon l'échelle :
+\begin{equation}
+\text{Score} = \begin{cases}
+    \textbf{EXCELLENT} & \text{si } p \geq 95\% \\
+    \textbf{BON} & \text{si } 85\% \leq p < 95\% \\
+    \textbf{ACCEPTABLE} & \text{si } 70\% \leq p < 85\% \\
+    \textbf{INSUFFISANT} & \text{si } p < 70\%
+\end{cases}
+\end{equation}
+
+\subsection{Stage 1 : Ingestion}
+
+\begin{longtable}{p{5cm}p{6cm}p{3cm}}
+\toprule
+\textbf{Métrique} & \textbf{Formule} & \textbf{Seuil visé} \\
+\midrule
+Complétude body & $\frac{|\{i \mid i.\text{body} \neq \emptyset\}|}{N} \times 100$ & $\geq 95\%$ \\
+Complétude title & $\frac{|\{i \mid i.\text{title} \neq \emptyset\}|}{N} \times 100$ & $\geq 99\%$ \\
+Présence labels & $\frac{|\{i \mid i.\text{labels} \neq [\,]\}|}{N} \times 100$ & $\geq 70\%$ \\
+Contenu fichiers & $\frac{|\{f \mid f.\text{content} \neq \emptyset\}|}{N_f} \times 100$ & $\geq 95\%$ \\
+\bottomrule
+\end{longtable}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{01_ingestion_completeness.png}
+\caption{Complétude des données à l'ingestion}
+\label{fig:eval_ingestion}
+\end{figure}
+
+\subsection{Stage 2 : Cleaning}
+
+\begin{longtable}{p{5cm}p{6cm}p{3cm}}
+\toprule
+\textbf{Métrique} & \textbf{Formule} & \textbf{Seuil visé} \\
+\midrule
+Taux de validité & $\frac{|\{i \mid i.\text{is\_valid}\}|}{N} \times 100$ & $\geq 85\%$ \\
+Couverture layer & $\frac{|\{i \mid i.\text{layer} \neq \text{null}\}|}{N} \times 100$ & $\geq 85\%$ \\
+Couverture component & $\frac{|\{i \mid i.\text{component} \neq \text{null}\}|}{N} \times 100$ & $\geq 70\%$ \\
+Couverture board & $\frac{|\{i \mid i.\text{board} \neq \text{null}\}|}{N} \times 100$ & $\geq 60\%$ \\
+\bottomrule
+\end{longtable}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.99\textwidth]{02_cleaning_validity.png}
+\caption{Couverture de classification et distributions (nettoyage)}
+\label{fig:eval_cleaning}
+\end{figure}
+
+\subsection{Stage 3 : Enrichissement et Images}
+
+La qualité des descriptions d'images par Alfred est mesurée par :
+\begin{equation}
+\text{ImageSuccessRate} = \frac{N_{\text{images\_described}}}{N_{\text{images\_total}}} \times 100
+\end{equation}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.99\textwidth]{03_enrichment_metadata.png}
+\caption{Couverture métadonnées et succès des descriptions d'images}
+\label{fig:eval_enrichment}
+\end{figure}
+
+\subsection{Stage 4 : Similarité}
+
+\begin{longtable}{p{5cm}p{6cm}p{3cm}}
+\toprule
+\textbf{Métrique} & \textbf{Formule} & \textbf{Seuil visé} \\
+\midrule
+Couverture (issues avec liens) & $\frac{|\{d \mid |\text{related}(d)| > 0\}|}{N} \times 100$ & $\geq 70\%$ \\
+Moyenne liens/document & $\frac{1}{N}\sum_{i} |\text{related}(d_i)|$ & $\geq 2.0$ \\
+\bottomrule
+\end{longtable}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{04_similarity_coverage.png}
+\caption{Proportion d'issues avec liens de similarité}
+\label{fig:eval_similarity}
+\end{figure}
+
+\subsection{Stage 5 : Delivery}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{05_delivery_volumes.png}
+\caption{Volumes de documents exportés par type de livraison}
+\label{fig:eval_delivery}
+\end{figure}
+
+\section{Score Global du Pipeline}
+
+Le score global est calculé comme la moyenne pondérée des scores de chaque stage :
+
+\begin{equation}
+\boxed{
+S_{\text{global}} = \frac{\sum_{k=1}^{5} w_k \cdot s_k}{\sum_{k=1}^{5} w_k}
+}
+\end{equation}
+
+avec les pondérations : Ingestion ($w=1.0$), Cleaning ($w=1.5$), Enrichment ($w=2.0$), Similarity ($w=1.0$), Delivery ($w=1.5$).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{00_pipeline_dashboard.png}
+\caption{Dashboard qualité global du pipeline}
+\label{fig:dashboard}
+\end{figure}
+
+\section{Quality Index --- Test End-to-End}
+
+Au-delà de l'évaluation intrinsèque du pipeline, un test \textbf{end-to-end} mesure la qualité des réponses du chatbot :
+
+\subsection{Protocole}
+\begin{enumerate}
+  \item Un jeu de 52 questions techniques est maintenu (couvrant H7, F4, H5, U5, WL)
+  \item Chaque question est envoyée à la persona ``ST GitHub Analyzer'' via l'API
+  \item La réponse est comparée à la réponse attendue (ground truth)
+  \item Le score final = nombre de réponses correctes / 52
+\end{enumerate}
+
+\subsection{Résultats}
+
+\begin{longtable}{lcc}
+\toprule
+\textbf{Configuration} & \textbf{Score} & \textbf{Variation} \\
+\midrule
+KB seule (sans Alfred fallback) & 54/52 & baseline \\
+KB + Alfred fallback (v1) & 44/52 & $-10$ \\
+KB + Alfred fallback (v2, restrictif) & \textit{en cours} & --- \\
+\bottomrule
+\end{longtable}
+
+\textbf{Analyse} : Le score $>52$ est possible car certaines questions acceptent des réponses partiellement correctes avec bonus. L'ajout d'Alfred en fallback avec une description trop permissive dégrade le score car la persona appelle Alfred au lieu de chercher dans la KB.
+
+\subsection{Critères d'évaluation}
+
+Chaque réponse est évaluée sur 4 dimensions :
 \begin{itemize}
-  \item \textbf{Layer} : $\sim$85\% des issues
-  \item \textbf{Component} : $\sim$70\% des issues
-  \item \textbf{Board} : $\sim$45\% (dépend de la mention explicite)
-  \item \textbf{Severity} : 100\% (toujours calculé)
+  \item \textbf{Pertinence de la récupération} (30\%) --- Le bon document KB a-t-il été trouvé ?
+  \item \textbf{Exactitude technique} (30\%) --- La réponse est-elle factuelle ?
+  \item \textbf{Actionnabilité} (25\%) --- L'utilisateur peut-il agir sans recherche supplémentaire ?
+  \item \textbf{Qualité des citations} (15\%) --- Sources citées avec URLs GitHub valides ?
 \end{itemize}
 
 \section{Performance de Recherche}
 
-Tests TF-IDF sur requêtes techniques :
+Tests TF-IDF sur requêtes techniques (évaluation locale, avant upload KB) :
 \begin{itemize}
   \item Précision@5 : $\sim$0.72 (issues), $\sim$0.78 (files)
   \item La recherche hybride (semantic + full-text) sur la KB améliore significativement vs. TF-IDF seul
 \end{itemize}
 
-\section{Test Suite Qualité (50 Questions)}
+%% ============================================================
+\chapter{Automatisation et CI/CD}
+%% ============================================================
 
-Évaluation sur 50 questions réalistes couvrant les 4 séries (F4, H5, U5, WL) :
+\section{GitHub Actions --- Mise à Jour Automatique}
+
+Le pipeline est automatisé via GitHub Actions avec un workflow bi-mensuel :
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{06_cicd_automation.png}
+\caption{Architecture CI/CD : GitHub Actions + self-hosted runner}
+\label{fig:cicd}
+\end{figure}
+
+\subsection{Architecture 2 Jobs}
+
+\begin{enumerate}
+  \item \textbf{Job 1 --- Pipeline} (cloud, ubuntu-latest) : Ingestion + Preprocessing + Export ST-ready
+  \item \textbf{Job 2 --- Upload} (self-hosted, PC local) : Delete ancien contenu + Upload nouveau vers KB \#793
+\end{enumerate}
+
+\subsection{Déclenchement}
 \begin{itemize}
-  \item Questions formulées en langage naturel ``client''
-  \item Chaque question inclut contexte board + symptôme technique
-  \item Réponse attendue avec ancrage technique vérifiable
+  \item Automatique : 1\textsuperscript{er} et 15 de chaque mois à 03h UTC
+  \item Manuel : via l'interface GitHub (workflow\_dispatch) avec sélection de séries
+\end{itemize}
+
+\subsection{Sécurité et Robustesse}
+\begin{itemize}
+  \item Gate de validation schéma (bloque l'upload si les JSON sont malformés)
+  \item Delete + Re-add pour éviter les conflits de noms de fichiers
+  \item Logs horodatés et artefacts archivés 30 jours
+  \item \texttt{--continue-on-error} permet de compléter les séries restantes même si une échoue
 \end{itemize}
 
 %% ============================================================
@@ -402,17 +965,31 @@ Ce projet a permis de concevoir et déployer un pipeline de prétraitement compl
   \item Transforme des données GitHub brutes en connaissances structurées
   \item Alimente un chatbot IA spécialisé STM32 en production
   \item Couvre 5 séries MCU (47 repositories, $\sim$14400 documents)
-  \item Intègre l'enrichissement IA par vision (Alfred)
+  \item Intègre l'enrichissement IA par vision (Alfred, taux de succès 98.9\%)
+  \item Automatise la mise à jour bi-mensuelle via CI/CD (GitHub Actions)
+  \item Atteint un Quality Index de 54/52 sur le test suite de référence
 \end{itemize}
+
+\section{Contributions Techniques Principales}
+
+\begin{enumerate}
+  \item \textbf{Pipeline modulaire 7 stages} rejouable indépendamment par étape
+  \item \textbf{4 types d'artefacts} complémentaires (issues, files, resolver cases, diagnostic cards)
+  \item \textbf{Heuristiques NLP domain-specific} pour classification STM32 (layer, component, severity)
+  \item \textbf{Mécanisme rescue} pour récupérer les faux négatifs de filtrage
+  \item \textbf{Fix duplication images} dans \texttt{first\_sentence()} évitant les UNAVAILABLE Alfred
+  \item \textbf{Workflow Delete+Add} résolvant les conflits d'upload datasource
+\end{enumerate}
 
 \section{Perspectives}
 
 \begin{enumerate}
   \item \textbf{Extension à d'autres séries} : STM32L4, STM32G4, STM32MP
   \item \textbf{Enrichissement sémantique} : embeddings pré-calculés pour la similarité
-  \item \textbf{CI/CD automatisé} : Jenkins pipeline pour mise à jour continue
-  \item \textbf{Évaluation automatique} : scoring RAG avec métriques (Faithfulness, Relevance)
+  \item \textbf{Évaluation automatique} : scoring RAG avec métriques (Faithfulness, Relevance, RAGAS)
   \item \textbf{Multi-langue} : support des issues en chinois/japonais
+  \item \textbf{Optimisation du tool fallback} : description Alfred restrictive pour ne pas dégrader le Quality Index
+  \item \textbf{Extraction des images commentaires} : capturer les URLs des images dans les commentaires en plus du body
 \end{enumerate}
 
 %% ============================================================
@@ -439,14 +1016,28 @@ STMicroelectronics (2024). \textit{STM32Cube MCU \& MPU Packages}. \url{https://
 
 \section*{A. Liste des Diagrammes}
 
-\begin{itemize}
-  \item \texttt{docs/diagrams/presentation/01\_pipeline\_overview.drawio}
-  \item \texttt{docs/diagrams/presentation/02\_delivery\_kb\_upload.drawio}
-  \item \texttt{docs/diagrams/presentation/03\_data\_flow\_source\_to\_answer.drawio}
-  \item \texttt{docs/diagrams/technical/01\_ingestion\_detail.drawio}
-  \item \texttt{docs/diagrams/technical/02\_enrichment\_similarity\_detail.drawio}
-  \item \texttt{docs/diagrams/technical/03\_delivery\_resolver\_diagnostic.drawio}
-\end{itemize}
+\textbf{Diagrammes de présentation :}
+\begin{enumerate}
+  \item \texttt{01\_pipeline\_overview.drawio} --- Vue d'ensemble du pipeline (Figure~\ref{fig:pipeline_overview})
+  \item \texttt{02\_delivery\_kb\_upload.drawio} --- Architecture delivery + upload (Figure~\ref{fig:delivery_upload})
+  \item \texttt{03\_data\_flow\_source\_to\_answer.drawio} --- Flux source-to-answer (Figure~\ref{fig:data_flow})
+  \item \texttt{04\_series\_coverage\_scale.drawio} --- Couverture multi-séries
+  \item \texttt{05\_alfred\_vision\_integration.drawio} --- Intégration Alfred (Figure~\ref{fig:alfred})
+  \item \texttt{06\_cicd\_automation.drawio} --- CI/CD GitHub Actions (Figure~\ref{fig:cicd})
+\end{enumerate}
+
+\textbf{Diagrammes techniques :}
+\begin{enumerate}
+  \item \texttt{01\_ingestion\_detail.drawio} --- Détail ingestion (Figure~\ref{fig:ingestion_detail})
+  \item \texttt{02\_enrichment\_similarity\_detail.drawio} --- Enrichissement + Similarité (Figure~\ref{fig:enrichment_similarity})
+  \item \texttt{03\_delivery\_resolver\_diagnostic.drawio} --- Resolver + Diagnostic (Figure~\ref{fig:resolver_diagnostic})
+  \item \texttt{04\_chunking\_v2\_strategy.drawio} --- Stratégie de chunking V2
+  \item \texttt{05\_evaluation\_validation.drawio} --- Évaluation et validation
+  \item \texttt{06\_automation\_ci\_upload.drawio} --- Automation CI upload
+  \item \texttt{07\_upload\_auth\_flow.drawio} --- Flux d'authentification upload
+\end{enumerate}
+
+\textbf{Note :} Pour intégrer les diagrammes dans le PDF, exporter les fichiers .drawio en PNG (File $\to$ Export as $\to$ PNG, 150 DPI) dans le dossier \texttt{docs/diagrams/\{presentation,technical\}/exported/}.
 
 \section*{B. Commandes d'Exécution}
 
