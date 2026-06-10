@@ -1,0 +1,13 @@
+{
+  "repo": "stm32wlxx-hal-driver",
+  "input_file": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\data\\docs_files_stm32wlxx-hal-driver_v3.json",
+  "output_file": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\by_series\\stm32cubewl\\drivers\\stm32wlxx-hal-driver\\files_json\\st_ready_files_stm32wlxx-hal-driver_v3.json",
+  "total_docs": 160,
+  "exported_docs": 160,
+  "include_invalid": false,
+  "format": "json",
+  "root_tag_path": "files",
+  "summary_max_chars": 360,
+  "technical_max_chars": 20000,
+  "cleaning_version": "v3"
+}

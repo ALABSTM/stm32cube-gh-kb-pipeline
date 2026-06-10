@@ -11,6 +11,7 @@ from pipeline.delivery.delivery_paths import (
 )
 from shared.utils.paths import DATA_DIR, PROJECT_ROOT, get_config_path
 
+CONFIG_DIR = PROJECT_ROOT / "shared" / "config"
 
 DEFAULT_SUMMARY_MAX_CHARS = 360
 DEFAULT_TECHNICAL_MAX_CHARS = 20000
@@ -18,6 +19,19 @@ DEFAULT_TECHNICAL_MAX_CHARS = 20000
 
 def load_config() -> dict[str, Any]:
     return json.loads(get_config_path().read_text(encoding="utf-8"))
+
+
+def load_all_repos() -> list[str]:
+    """Load repos from all config files (all series)."""
+    seen: set[str] = set()
+    all_repos: list[str] = []
+    for cfg_file in sorted(CONFIG_DIR.glob("config*.json")):
+        cfg = json.loads(cfg_file.read_text(encoding="utf-8"))
+        for repo in cfg.get("repos", []):
+            if repo not in seen:
+                seen.add(repo)
+                all_repos.append(repo)
+    return all_repos
 
 
 def normalize_whitespace(text: str) -> str:
@@ -122,8 +136,10 @@ def export_repo_json(
     include_invalid: bool,
     summary_max_chars: int,
     technical_max_chars: int,
+    use_v3: bool = False,
 ) -> tuple[int, int, Path]:
-    in_path = DATA_DIR / f"docs_files_{repo.lower()}_v2.json"
+    suffix = "_v3" if use_v3 else "_v2"
+    in_path = DATA_DIR / f"docs_files_{repo.lower()}{suffix}.json"
     if not in_path.exists():
         raise FileNotFoundError(f"Input file not found: {in_path}")
 
@@ -180,14 +196,16 @@ def export_repo_json(
         "files": payload_docs,
     }
 
-    out_file_name = f"st_ready_files_{repo.lower()}.json"
+    version_tag = "_v3" if use_v3 else ""
+    out_file_name = f"st_ready_files_{repo.lower()}{version_tag}.json"
     out_file = out_root / out_file_name
     out_file.write_text(json.dumps(export_payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
-    # Backward-compatible mirror in legacy flat folder.
-    legacy_out_file = get_legacy_artifact_file("files_json", out_file_name)
-    legacy_out_file.parent.mkdir(parents=True, exist_ok=True)
-    legacy_out_file.write_text(json.dumps(export_payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    # Backward-compatible mirror in legacy flat folder (skip for v3 to avoid overwrite).
+    if not use_v3:
+        legacy_out_file = get_legacy_artifact_file("files_json", out_file_name)
+        legacy_out_file.parent.mkdir(parents=True, exist_ok=True)
+        legacy_out_file.write_text(json.dumps(export_payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
     summary = {
         "repo": repo,
@@ -200,15 +218,17 @@ def export_repo_json(
         "root_tag_path": "files",
         "summary_max_chars": summary_max_chars,
         "technical_max_chars": technical_max_chars,
+        "cleaning_version": "v3" if use_v3 else "v2",
     }
-    summary_file_name = f"summary_files_{repo.lower()}.json"
+    summary_file_name = f"summary_files_{repo.lower()}{version_tag}.json"
     (out_root / summary_file_name).write_text(
         json.dumps(summary, indent=2), encoding="utf-8"
     )
 
-    legacy_summary_file = get_legacy_artifact_file("files_json", summary_file_name)
-    legacy_summary_file.parent.mkdir(parents=True, exist_ok=True)
-    legacy_summary_file.write_text(json.dumps(summary, indent=2), encoding="utf-8")
+    if not use_v3:
+        legacy_summary_file = get_legacy_artifact_file("files_json", summary_file_name)
+        legacy_summary_file.parent.mkdir(parents=True, exist_ok=True)
+        legacy_summary_file.write_text(json.dumps(summary, indent=2), encoding="utf-8")
 
     return total, len(payload_docs), out_root
 
@@ -216,6 +236,7 @@ def export_repo_json(
 def main() -> None:
     parser = argparse.ArgumentParser(description="Export docs_files_v2 into ST-ready JSON file cards.")
     parser.add_argument("--repo", action="append", help="Repo name, e.g., STM32CubeH7. Can be repeated.")
+    parser.add_argument("--v3", action="store_true", help="Use V3 cleaned inputs and write to _v3 output files (no overwrite).")
     parser.add_argument("--include-invalid", action="store_true", help="Include is_valid=false docs.")
     parser.add_argument(
         "--summary-max-chars",
@@ -239,19 +260,25 @@ def main() -> None:
         raise ValueError("--technical-max-chars must be >= --summary-max-chars")
 
     cfg = load_config()
-    repos = args.repo or cfg.get("repos", [])
+    repos = args.repo or (load_all_repos() if args.v3 else cfg.get("repos", []))
 
     if not repos:
         raise ValueError("No repos provided and no repos found in config.")
 
     for repo in repos:
-        total, exported, out_root = export_repo_json(
-            repo=repo,
-            include_invalid=args.include_invalid,
-            summary_max_chars=args.summary_max_chars,
-            technical_max_chars=args.technical_max_chars,
-        )
-        print(f"[ST-READY:json:files] {repo}: exported {exported}/{total} -> {out_root}")
+        try:
+            total, exported, out_root = export_repo_json(
+                repo=repo,
+                include_invalid=args.include_invalid,
+                summary_max_chars=args.summary_max_chars,
+                technical_max_chars=args.technical_max_chars,
+                use_v3=args.v3,
+            )
+            tag = " [V3 clean]" if args.v3 else ""
+            print(f"[ST-READY:json:files] {repo}: exported {exported}/{total} -> {out_root}{tag}")
+        except FileNotFoundError as e:
+            print(f"[SKIP] {repo}: {e}")
+            continue
 
 
 if __name__ == "__main__":
