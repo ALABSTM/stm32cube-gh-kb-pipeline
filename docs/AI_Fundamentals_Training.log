@@ -1,8 +1,8 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.6.9)  11 JUN 2026 17:11
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.6.9)  11 JUN 2026 17:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**./AI_Fundamentals_Training.tex
+**AI_Fundamentals_Training.tex pdflatex AI_Fundamentals_Training.tex
 (AI_Fundamentals_Training.tex
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
@@ -925,7 +925,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.39 ...nization: The First Step}{13}{section.5.4}
+l.39 ...nization: The First Step}{15}{section.5.4}
                                                   % [1
 
 ] [2])
@@ -1103,10 +1103,6 @@ Chapter 20.
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
  ***********
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
 Package rerunfilecheck Info: File `AI_Fundamentals_Training.out' has not change
 d.
 (rerunfilecheck)             Checksum: 4CC4FF858A1656AB78D3FF04EB26C9BD;23260.
@@ -1118,7 +1114,7 @@ Here is how much of TeX's memory you used:
  56164 multiletter control sequences out of 15000+600000
  643874 words of font info for 69 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,13n,104p,1215b,1070s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,13n,104p,1251b,1070s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\e
 cbi0900.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec
 /dpi600\ecti0900.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jk
@@ -1142,7 +1138,7 @@ harbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1440.pk> <C
 88.pk><C:/Users/gharbiab/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfo
 nts/cm/cmmi10.pfb><C:/Users/gharbiab/AppData/Local/Programs/MiKTeX/fonts/type1/
 public/amsfonts/cm/cmsy10.pfb>
-Output written on AI_Fundamentals_Training.pdf (45 pages, 465054 bytes).
+Output written on AI_Fundamentals_Training.pdf (45 pages, 465052 bytes).
 PDF statistics:
  1665 PDF objects out of 1728 (max. 8388607)
  248 named destinations out of 1000 (max. 500000)
