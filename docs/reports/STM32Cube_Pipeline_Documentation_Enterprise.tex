@@ -527,7 +527,6 @@ The script \texttt{pipeline\_Automation/workflow/Run\_Full\_Auto\_Update\_KB.ps1
 \textbf{Method} & \textbf{Setup} \\
 \midrule
 GitHub Actions (recommended) & Workflow file \texttt{.github/workflows/auto\_update\_kb.yml} runs automatically every 2 weeks (1st and 15th of each month). Fully cloud-based --- no local machine needed. \\
-Jenkins (CI/CD) & Use the existing \texttt{Jenkinsfile} with a cron trigger: \texttt{H 2 1,15 * *} (bi-weekly). Add the Upload stage. \\
 Local (fallback) & Windows Task Scheduler running \texttt{Run\_Full\_Auto\_Update\_KB.ps1} every 2 weeks. Requires machine to be powered on. \\
 \bottomrule
 \end{longtable}

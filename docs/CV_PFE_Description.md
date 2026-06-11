@@ -22,9 +22,9 @@ Stage de fin d'études (6 mois) au sein d'une équipe IA dans l'industrie des se
 
 **Framework d'évaluation end-to-end** : mise en place de tests automatisés (retrieval accuracy offline vs online, validation de schémas JSON, statistiques de couverture et qualité, comparaison avant/après chaque itération) pour mesurer l'impact de chaque modification du pipeline sur la qualité des réponses du chatbot. Boucle itérative data-driven : modifier le pipeline → regénérer les données → évaluer → mesurer l'impact sur le RAG.
 
-**Automatisation CI/CD** : déploiement continu vers la Knowledge Base de production (Jenkins, PowerShell, GitHub Actions) avec mise à jour incrémentale de 20+ sources de données sans intervention manuelle.
+**Automatisation CI/CD** : déploiement continu vers la Knowledge Base de production (GitHub Actions, PowerShell) avec mise à jour incrémentale de 20+ sources de données sans intervention manuelle.
 
-**Technologies** : Python, NLP, RAG (Retrieval-Augmented Generation), LLM APIs (Vision), Agentic AI, Feature Engineering, Data Generation, TF-IDF, Cosine Similarity, JSON Schema, REST APIs, Jenkins, CI/CD, Git, PowerShell
+**Technologies** : Python, NLP, RAG (Retrieval-Augmented Generation), LLM APIs (Vision), Agentic AI, Feature Engineering, Data Generation, TF-IDF, Cosine Similarity, JSON Schema, REST APIs, GitHub Actions, CI/CD, Git, PowerShell
 
 ---
 
@@ -54,7 +54,7 @@ Reverse-engineering d'un RAG de production pour en extraire les bonnes pratiques
 - Developed **Agentic AI workflows** orchestrating LLM Vision API calls for automated multimodal data enrichment (image analysis, text generation from screenshots and schematics)
 - Implemented a **retrieval evaluation framework** (TF-IDF search tests, offline vs online accuracy comparison, schema validation, quality statistics) enabling data-driven iteration
 - Applied and compared **chunking strategies** (paragraph-level, section-level, full-document) and similarity computation (TF-IDF, cosine) to optimize retrieval relevance
-- Automated the full **data generation lifecycle** with CI/CD (Jenkins, PowerShell), enabling continuous Knowledge Base updates without manual intervention across 20+ data sources
+- Automated the full **data generation lifecycle** with CI/CD (GitHub Actions, PowerShell), enabling continuous Knowledge Base updates without manual intervention across 20+ data sources
 
 ---
 

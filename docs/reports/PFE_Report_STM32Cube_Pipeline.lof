@@ -1,0 +1,24 @@
+\babel@toc {french}{}\relax 
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Vue d'ensemble du pipeline de preprocessing (7 stages)}}{18}{figure.4.1}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Flux de données end-to-end : de la source GitHub à la réponse utilisateur}}{19}{figure.4.2}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Architecture de livraison et upload vers la Knowledge Base \#793}}{19}{figure.4.3}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Détail de l'étape d'ingestion : scripts et sorties}}{21}{figure.5.1}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Détail du processus d'enrichissement et de calcul de similarité}}{25}{figure.5.2}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Génération des Resolver Cases et Diagnostic Cards}}{26}{figure.5.3}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Intégration Alfred Vision AI pour la description automatique d'images}}{27}{figure.5.4}%
+\contentsline {figure}{\numberline {5.5}{\ignorespaces Architecture multi-agents du système ST GitHub Analyzer}}{27}{figure.5.5}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Complétude des données à l'ingestion}}{33}{figure.6.1}%
+\contentsline {figure}{\numberline {6.2}{\ignorespaces Couverture de classification et distributions (nettoyage)}}{33}{figure.6.2}%
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Couverture métadonnées et succès des descriptions d'images}}{34}{figure.6.3}%
+\contentsline {figure}{\numberline {6.4}{\ignorespaces Proportion d'issues avec liens de similarité}}{35}{figure.6.4}%
+\contentsline {figure}{\numberline {6.5}{\ignorespaces Volumes de documents exportés par type de livraison}}{35}{figure.6.5}%
+\contentsline {figure}{\numberline {6.6}{\ignorespaces Dashboard qualité global du pipeline}}{36}{figure.6.6}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {7.1}{\ignorespaces Architecture CI/CD : GitHub Actions + self-hosted runner}}{41}{figure.7.1}%
+\addvspace {10\p@ }

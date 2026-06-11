@@ -394,11 +394,11 @@ def generate_enterprise_doc(output_path):
         "upload_alfred_issues_all_series.py - Alfred-enriched to all series",
         "create_missing_resolver_datasources.py - Creates missing datasources",
     ])
-    pdf.section_title("7.3 Jenkins CI/CD")
+    pdf.section_title("7.3 GitHub Actions CI/CD")
     pdf.body_text(
-        "Jenkinsfile defines automated weekly pipeline: checkout -> setup -> "
+        "GitHub Actions workflow (.github/workflows/auto_update_kb.yml) defines automated bi-weekly pipeline: checkout -> setup -> "
         "ingest -> process -> validate -> deliver -> upload. "
-        "Parameterized for series selection. Teams webhook on failure."
+        "Parameterized for series selection. Runs on cloud + self-hosted runner for upload."
     )
 
     # Chapter 8: Quality Assurance
@@ -655,7 +655,7 @@ def generate_pfe_report(output_path):
     pdf.bullet_list([
         "Extension a d'autres series: STM32L4, STM32G4, STM32MP",
         "Enrichissement semantique: embeddings pre-calcules",
-        "CI/CD automatise: Jenkins pipeline pour mise a jour continue",
+        "CI/CD automatise: GitHub Actions pipeline pour mise a jour continue",
         "Evaluation automatique: scoring RAG (Faithfulness, Relevance)",
         "Multi-langue: support des issues en chinois/japonais",
     ])

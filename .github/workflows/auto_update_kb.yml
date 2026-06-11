@@ -37,7 +37,7 @@ env:
 
 jobs:
   # ================================================================
-  # JOB 1: Pipeline (runs on GitHub cloud - no ST network needed)
+  # JOB 1: Ingestion + Preprocessing (runs on GitHub-hosted runner)
   # ================================================================
   pipeline:
     name: Ingestion + Preprocessing

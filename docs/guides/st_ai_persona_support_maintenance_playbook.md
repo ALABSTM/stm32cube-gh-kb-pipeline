@@ -486,9 +486,9 @@ Upload order is part001, part002, ..., with per-source summary and global manife
 
 ---
 
-## 11. Full Non-Jenkins Automation Process
+## 11. Full Automation Process
 
-Note: Jenkins setup exists in repo, but this operational process is fully local/non-Jenkins.
+The operational process uses GitHub Actions for cloud execution and PowerShell scripts for local fallback.
 
 ### 11.1 Pipeline run
 
@@ -925,7 +925,7 @@ This repository now supports a complete support-grade lifecycle:
 - operational upload process,
 - and continuous quality governance.
 
-The project value is demonstrated by measurable benchmark gains, strong traceability, and a practical non-Jenkins operating model ready for Support and Maintenance execution.
+The project value is demonstrated by measurable benchmark gains, strong traceability, and a practical CI/CD operating model (GitHub Actions + PowerShell) ready for Support and Maintenance execution.
 ----------------------------
 
 Voici une version plus claire, directement collable dans tes slides PPT.
