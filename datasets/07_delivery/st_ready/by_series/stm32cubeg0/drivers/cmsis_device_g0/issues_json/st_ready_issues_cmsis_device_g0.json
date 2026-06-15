@@ -1,0 +1,109 @@
+{
+  "issues": [
+    {
+      "id": "cmsis_device_g0-issue-7",
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "cmsis_device_g0",
+      "root_path": "issues",
+      "mcu_series": null,
+      "issue_number": 7,
+      "issue_title": "[Bug]: Missing AES/RNG interrupt vector",
+      "state": "closed",
+      "layer": "CubeMX",
+      "component": null,
+      "issue_kind": "bug_report",
+      "severity": "high",
+      "board": null,
+      "labels": [
+        "bug",
+        "invalid",
+        "cmsis",
+        "internal bug tracker",
+        "rng"
+      ],
+      "github_url": "https://github.com/STMicroelectronics/cmsis-device-g0/issues/7",
+      "is_valid": true,
+      "evidence_strength": "high",
+      "rescue_applied": true,
+      "delivery_template": "st_v2_structured_issue_card",
+      "st_ready_text": "Problem: [Bug]: Missing AES/RNG interrupt vector\nContext: repo=cmsis_device_g0, mcu_series=None, board=None, component=None, layer=CubeMX, issue_kind=bug_report, severity=high, evidence_strength=high, rescue_applied=True, state=closed, issue_number=7\nRoot cause: ST Internal Reference: 74ccc0da2bc48318a478f330fe91bf59 Hello @calebyoong216, Regarding the issue, we have double checked the **RM0444 Rev 6** and it seems that the STM32G0B1 does not include either RNG or AES, please see Table 1 Peripherals versus devices **p\nFix: ### Bug Summary The missing vector causes the first 4 bytes of .\nConstraints: Validate against exact MCU/board configuration and CubeMX/CubeH7 version before applying.\nKeywords: CubeMX, bug_report, high, bug, invalid, cmsis, internal bug tracker, rng, STM32G0B1RET6, startup_stm32g0b1xx, STM32G0B1RETX_FLASH, RM0444\n\nTechnical details:\n### Bug Summary The missing vector causes the first 4 bytes of .text to be corrupted when using openblt to flash ### Detailed Description ## Setup - Board: STM32G0B1RET6 - Bootloader: openblt (flashed using CubeProgrammer) - Toolchain: arm-none-eabi-gcc and family, Makefiles based off of CubeMX - Application code: Flashed with openblt to address 0x8003000 - interrupt vectors are placed at start of application flash space ## Description - When flashing with the openblt bootloader, the first four bytes of the .text section gets corrupted/overwritten. - When the application runs, it hardfaults during setup when calling __udivsi3 which is at the start of .text - Disassembling the function shows that the first 2 instructions are different from the objdump of the binary. asm /* objdump from application binary */ 080030bc <__udivsi3>: 80030bc: 2200 movs r2, #0 80030be: 0843 lsrs r3, r0, #1 80030c0: 428b cmp r3, r1 80030c2: d374 bcc.n 80031ae <__udivsi3+0xf2> ... gdb /* gdb disassembly of the same function */ Dump of assembler code for function __udivsi3: 0x080030bc <+0>: cmp r3, #179 @ 0xb3 0x080030be <+2>: stmia r7!, {r2, r3, r4, r5, r6, r7} 0x080030c0 <+4>: cmp r3, r1 0x080030c2 <+6>: bcc.n 0x80031ae <__udivsi3+242> ... - Flashed a different application using the same method with the same 4 bytes being corrupted. - The second instruction in both cases is stmia r7!, {r2, r3, r4, r5, r6, r7}, which seems to be the cause of the hardfault. - Compiling application code with startup_stm32g0b1xx.s and unmodified STM32G0B1RETX_FLASH.ld causes the start of .text to be placed at offset 0xbc as can be seen above. According to RM0444 it looks like it should be reserved for the AES/RNG interrupt handler. - I fully admit that the specific issue I am facing can be due to openblt corrupting the bytes but .text probably should not be where it is either. ## Steps to reproduce - Use the Demo/ARMCM0_STM32G0_Nucleo_G0B1RE_GCC/ version of openblt. I compiled mine with -Os but it may not be needed. - In blt_conf.h disable BOOT_COM_RS232_ENABLE. - Flash it using CubeProgrammer. - Create a blinky application and edit the linker script to start at 0x8003000. I objcopy-ed my binary to .srec - Flash it using feaser's BootCommander. I did mine over xcp_can - The 4 bytes from offset 0xbc to 0xbf are corrupted ## Proposed Fix - Add the AES_RNG_IRQHandler symbol to startup_stm32g0b1xx.s and the AES_RNG_IRQn to stm32g0b1xx.h - These changes fixed my issue, now the start of .text is at offset 0xc0 and the binary is intact - I can contribute a PR for this issue probably within the next week or two if possible. ## Additional Information - openblt works fine, looking from the .map file address 0x80000bc is not used and .text starts from 0x80000c0 with the same startup file and linker script (besides the flash offset). - Flashing my code using CubeProgrammer works fine too. ### Expected Behavior Application code runs ### Actual Behavior Hardfault when the function at the start of .text is called ### Environment STM32G0B1RET6, Arm GNU Toolchain 14.3Rel1, openblt, xcp_can ### Severity Major\n\nKey comments:\nST Internal Reference: 74ccc0da2bc48318a478f330fe91bf59 Hello @calebyoong216, Regarding the issue, we have double checked the **RM0444 Rev 6** and it seems that the STM32G0B1 does not include either RNG or AES, please see Table 1 Peripherals versus devices **page 56**. Please allow me to close the issue. Thank you for your understanding. Got it, my bad for not seeing that table. Thanks for the help!"
+    },
+    {
+      "id": "cmsis_device_g0-issue-4",
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "cmsis_device_g0",
+      "root_path": "issues",
+      "mcu_series": null,
+      "issue_number": 4,
+      "issue_title": "Missing e RCC_CFGR_SW_H... Definitions",
+      "state": "closed",
+      "layer": "Other",
+      "component": null,
+      "issue_kind": "bug_report",
+      "severity": "medium",
+      "board": null,
+      "labels": [
+        "enhancement",
+        "cmsis",
+        "internal bug tracker"
+      ],
+      "github_url": "https://github.com/STMicroelectronics/cmsis-device-g0/issues/4",
+      "is_valid": true,
+      "evidence_strength": "high",
+      "rescue_applied": false,
+      "delivery_template": "st_v2_structured_issue_card",
+      "st_ready_text": "Problem: Missing e RCC_CFGR_SW_H... Definitions\nContext: repo=cmsis_device_g0, mcu_series=None, board=None, component=None, layer=Other, issue_kind=bug_report, severity=medium, evidence_strength=high, rescue_applied=False, state=closed, issue_number=4\nRoot cause: ST Internal Reference: 194507 Fixed in f484fe852535f913a02ee79787eafa74dd7f9488\nFix: Hello, while Release v1.\nConstraints: Validate against exact MCU/board configuration and CubeMX/CubeH7 version before applying.\nKeywords: bug_report, medium, enhancement, cmsis, internal bug tracker, RCC_CFGR_SWS_HSISYS, RCC_CFGR_SW_HSISYS\n\nTechnical details:\nHello, while Release v1.4.4 added RCC_CFGR_SWS_HSISYS and friends , similar definitions for RCC_CFGR_SW_HSISYS are still missing and require extra handling.\n\nKey comments:\nST Internal Reference: 194507 Fixed in f484fe852535f913a02ee79787eafa74dd7f9488"
+    },
+    {
+      "id": "cmsis_device_g0-issue-3",
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "cmsis_device_g0",
+      "root_path": "issues",
+      "mcu_series": null,
+      "issue_number": 3,
+      "issue_title": "Unable to use Multi-file compilation in IAR ( which typically heavy reduces unused excess code )",
+      "state": "closed",
+      "layer": "Other",
+      "component": null,
+      "issue_kind": "usage_question",
+      "severity": "high",
+      "board": null,
+      "labels": [
+        "enhancement",
+        "invalid",
+        "cmsis"
+      ],
+      "github_url": "https://github.com/STMicroelectronics/cmsis-device-g0/issues/3",
+      "is_valid": true,
+      "evidence_strength": "medium",
+      "rescue_applied": true,
+      "delivery_template": "st_v2_structured_issue_card",
+      "st_ready_text": "Problem: Unable to use Multi-file compilation in IAR ( which typically heavy reduces unused excess code )\nContext: repo=cmsis_device_g0, mcu_series=None, board=None, component=None, layer=Other, issue_kind=usage_question, severity=high, evidence_strength=medium, rescue_applied=True, state=closed, issue_number=3\nRoot cause: I realized I am able to compile if I uncheck discard unused public, which is the part that removes unused code.\nFix: **Describe the set-up** Include Low level drivers and CMSIS includes to compile without optimizations.\nConstraints: Validate against exact MCU/board configuration and CubeMX/CubeH7 version before applying.\nKeywords: usage_question, high, enhancement, invalid, cmsis, System_stm32g0xx, cmsis_device_g0, Startup_stm32g030xx, IAR\n\nTechnical details:\n**Describe the set-up** Include Low level drivers and CMSIS includes to compile without optimizations. **Describe the bug** [System_stm32g0xx.c](https://github.com/STMicroelectronics/cmsis_device_g0/blob/master/Source/Templates/system_stm32g0xx.c) does not directly include #include \"system_stm32g0xx.h\" and cannot include. I tried including the files directly and added stdint.h to the header to get uint32_t types but it still cannot find the SystemInit in Startup_stm32g030xx.s it seems like you are trying to extern variables and function, but you cannot do that if Mulit-file compilation is enabled, which will reduce the code size by placing all of the code into one object file (.o) the function and variables need to be called and not externed. This also relates to the C0 which makes the most sense to try to reduce code size to bring up quantity **How To Reproduce** 1. Create a project in IAR 2. Include all LL files, startup_stm32g030xx.s, system_stm32g0xx.c from st drivers. 3. set optimization to high and select multi-file compilation and discard unused public **Additional context** I am using IAR 9.32 **Screenshots** If applicable, add screenshots to help explain your problem.\n\nKey comments:\nI realized I am able to compile if I uncheck discard unused public, which is the part that removes unused code. it does compile. The reason it did no compile is because there was no code in SystemInit function, so I added __root which is a IAR compile command to force this function to remain, which I typically use on interrupt handler functions for the same reason. It is compiling, now for me but I guess this is just information that may be helpful ![image](https://github.com/STMicroelectronics/cmsis_device_g0/assets/142430712/d713fca8-4e46-49d1-95a9-ebf98638b92f) This seems to be the only required fix to allow multi-file configuration given the function is not used but is defined in the .s file Hi @HarrisonTuckerTTIFC, Thank you for the proposal. Please allow me to draw you attention that the system_stm32g0xx.c file is under the [./Source/Templates](https://github.com/STMicroelectronics/cmsis_device_g0/tree/master/Source/Templates). This means that these files are generic **templates**. These generic templates are designed to cover applications **common** use cases and are **intended to be customized** by users to cover special use cases. I hope this clarifies the point. P"
+    },
+    {
+      "id": "cmsis_device_g0-issue-2",
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "cmsis_device_g0",
+      "root_path": "issues",
+      "mcu_series": null,
+      "issue_number": 2,
+      "issue_title": "Incorrect README.md title ",
+      "state": "closed",
+      "layer": "Other",
+      "component": null,
+      "issue_kind": "bug_report",
+      "severity": "low",
+      "board": null,
+      "labels": [
+        "bug",
+        "documentation"
+      ],
+      "github_url": "https://github.com/STMicroelectronics/cmsis-device-g0/issues/2",
+      "is_valid": true,
+      "evidence_strength": "high",
+      "rescue_applied": false,
+      "delivery_template": "st_v2_structured_issue_card",
+      "st_ready_text": "Problem: Incorrect README.md title\nContext: repo=cmsis_device_g0, mcu_series=None, board=None, component=None, layer=Other, issue_kind=bug_report, severity=low, evidence_strength=high, rescue_applied=False, state=closed, issue_number=2\nRoot cause: Hi @glegrain, Thank you for your contribution.\nFix: The README.\nConstraints: Validate against exact MCU/board configuration and CubeMX/CubeH7 version before applying.\nKeywords: bug_report, low, bug, documentation, README\n\nTechnical details:\nThe README.md title mentions \"STM32CubeU5\". Should it not say \"STM32CubeG0\" instead ?\n\nKey comments:\nHi @glegrain, Thank you for your contribution. The issue you pointed out has been confirmed. An update will be made available in GitHub as soon as possible. Thank you once again for your contribution. We are looking forward to reading from you again."
+    }
+  ]
+}

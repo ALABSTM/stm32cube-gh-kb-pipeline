@@ -1,0 +1,197 @@
+[
+  {
+    "repo": "cmsis_device_g0",
+    "issue_number": 7,
+    "title": "[Bug]: Missing AES/RNG interrupt vector",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "invalid",
+      "cmsis",
+      "internal bug tracker",
+      "rng"
+    ],
+    "created_at": "2026-04-01T10:33:13Z",
+    "closed_at": "2026-04-16T14:04:07Z",
+    "body": "### Bug Summary\n\nThe missing vector causes the first 4 bytes of .text to be corrupted when using openblt to flash\n\n### Detailed Description\n\n## Setup\n- Board: STM32G0B1RET6\n- Bootloader: openblt (flashed using CubeProgrammer)\n- Toolchain: arm-none-eabi-gcc and family, Makefiles based off of CubeMX\n- Application code: Flashed with `openblt` to address `0x8003000`\n  - interrupt vectors are placed at start of application flash space\n\n## Description\n- When flashing with the `openblt` bootloader, the first four bytes of the `.text` section gets corrupted/overwritten.\n- When the application runs, it hardfaults during setup when calling `__udivsi3` which is at the start of `.text`\n- Disassembling the function shows that the first 2 instructions are different from the objdump of the binary.\n```asm\n/* objdump from application binary */\n080030bc <__udivsi3>:\n 80030bc:\t2200      \tmovs\tr2, #0\n 80030be:\t0843      \tlsrs\tr3, r0, #1\n 80030c0:\t428b      \tcmp\tr3, r1\n 80030c2:\td374      \tbcc.n\t80031ae <__udivsi3+0xf2>\n...\n\n```\n\n```gdb\n/* gdb disassembly of the same function */\nDump of assembler code for function __udivsi3:\n0x080030bc <+0>:     cmp     r3, #179        @ 0xb3\n0x080030be <+2>:     stmia   r7!, {r2, r3, r4, r5, r6, r7}\n0x080030c0 <+4>:     cmp     r3, r1\n0x080030c2 <+6>:     bcc.n   0x80031ae <__udivsi3+242>\n\n...\n```\n\n\n- Flashed a different application using the same method with the same 4 bytes being corrupted.\n- The second instruction in both cases is `stmia   r7!, {r2, r3, r4, r5, r6, r7}`, which seems to be the cause of the hardfault.\n- Compiling application code with `startup_stm32g0b1xx.s` and unmodified `STM32G0B1RETX_FLASH.ld` causes the start of `.text` to be placed at offset `0xbc` as can be seen above. According to `RM0444` it looks like it should be reserved for the AES/RNG interrupt handler.\n- I fully admit that the specific issue I am facing can be due to `openblt` corrupting the bytes but `.text` probably should not be where it is either.\n\n## Steps to reproduce\n- Use the `Demo/ARMCM0_STM32G0_Nucleo_G0B1RE_GCC/` version of openblt. I compiled mine with -Os but it may not be needed.\n- In `blt_conf.h` disable `BOOT_COM_RS232_ENABLE`.\n- Flash it using `CubeProgrammer`.\n- Create a blinky application and edit the linker script to start at 0x8003000. I `objcopy`-ed my binary to `.srec`\n- Flash it using feaser's `BootCommander`. I did mine over `xcp_can`\n- The 4 bytes from offset `0xbc` to `0xbf` are corrupted\n\n## Proposed Fix\n- Add the `AES_RNG_IRQHandler` symbol to `startup_stm32g0b1xx.s` and the `AES_RNG_IRQn` to `stm32g0b1xx.h`\n- These changes fixed my issue, now the start of `.text` is at offset `0xc0` and the binary is intact\n- I can contribute a PR for this issue probably within the next week or two if possible.\n\n## Additional Information\n- `openblt` works fine, looking from the `.map` file address `0x80000bc` is not used and `.text` starts from `0x80000c0` with the same startup file and linker script (besides the flash offset).\n- Flashing my code using CubeProgrammer works fine too.\n\n\n\n### Expected Behavior\n\nApplication code runs\n\n### Actual Behavior\n\nHardfault when the function at the start of .text is called\n\n### Environment\n\nSTM32G0B1RET6, Arm GNU Toolchain 14.3Rel1, openblt, xcp_can\n\n### Severity\n\nMajor",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2026-04-06T15:04:04Z",
+        "body": "ST Internal Reference: 74ccc0da2bc48318a478f330fe91bf59"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2026-04-15T08:55:40Z",
+        "body": "Hello @calebyoong216,\n\nRegarding the issue, we have double checked the **RM0444 Rev 6** and it seems that the STM32G0B1 does not include either RNG or AES, please see Table 1 `Peripherals versus devices` **page 56**.\n\nPlease allow me to close the issue. Thank you for your understanding.\n\nWith regards,"
+      },
+      {
+        "author": "calebyoong216",
+        "created_at": "2026-04-16T13:57:59Z",
+        "body": "Got it, my bad for not seeing that table. Thanks for the help!"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-g0/issues/7"
+  },
+  {
+    "repo": "cmsis_device_g0",
+    "issue_number": 6,
+    "title": "TIMx status register documented as 16-bit wide but declared as 32-bit wide",
+    "state": "closed",
+    "labels": [
+      "invalid",
+      "cmsis",
+      "tim"
+    ],
+    "created_at": "2025-07-23T12:10:33Z",
+    "closed_at": "2025-07-31T06:33:40Z",
+    "body": "TIM_TypeDef::SR is defined as uint32_t in stm32g0b1xx.h etc., but it is defined as uint16_t in the Standard Peripheral Library, for example in stm32f4xx.h.\n\nRM0444 states that the TIMx status register is 16-bit wide. It is not clear to me what happens if the CPU performs a 32-bit access on such a 16-bit register.\n\nAt the very least, I would add a comment next to TIM_TypeDef::SR stating whether this is an issue or not.",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2025-07-30T16:07:33Z",
+        "body": "Hello @rdiez,\n\nThank you for the report.\n\nAfter a first analysis, and based on the RM0444, the TIM status register __IO uint32_t SR is declared as uint32_t, since TIM1_SR is more than 16 bits wide.\n\nWith regards,\nKarim"
+      },
+      {
+        "author": "rdiez",
+        "created_at": "2025-07-31T06:33:40Z",
+        "body": "Oh, I see, TIM1_SR is the only one which is 32 bits wide, and I missed it. Many thanks.\n\nIn RM0444, I could only find the following information in section \"AHB-to-APB bridge (APB)\":\n\n\"When a 16- or 8-bit access is performed on an APB register, the access is transformed into\na 32-bit access: the bridge duplicates the 16- or 8-bit data to feed the 32-bit vector.\"\n\nIt is not clear what happens if you access a 16-bit wide register with a 32-bit access (that case is not documented, as far as I can tell).\n\nIn the case of the other 16-bit registers like TIM6_SR, I am hoping that, if the user sets the high 16-bits to 0 before doing a 32-bit write, it should be OK."
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-g0/issues/6"
+  },
+  {
+    "repo": "cmsis_device_g0",
+    "issue_number": 5,
+    "title": "Disjunct names RCC_CFGR_SWS_HSISYS vs RCC_CFGR_SWS_HSI and  RCC_CFGR_SWS_PLLRCLK vs RCC_CFGR_SWS_PLL",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "invalid",
+      "cmsis"
+    ],
+    "created_at": "2024-10-18T09:33:13Z",
+    "closed_at": "2024-10-21T13:52:04Z",
+    "body": "the headers use RCC_CFGR_SWS_HSISYS and  RCC_CFGR_SWS_PLLRCLK  while all other families use RCC_CFGR_SWS_HSI  and \r\nRCC_CFGR_SWS_PLL. This is unneeded complication.\r\n\r\n",
+    "comments": [
+      {
+        "author": "TOUNSTM",
+        "created_at": "2024-10-21T13:52:04Z",
+        "body": "Hello @UweBonnes,\r\n\r\nThe naming convention you mentioned (RCC_CFGR_SWS_HSISYS and RCC_CFGR_SWS_PLLRCLK) comes directly from the reference manual. To ensure consistency and accuracy, we align our headers with the terminology used in the reference manual.\r\n\r\n![image](https://github.com/user-attachments/assets/dbb43209-b6a7-47c4-bc45-aa8e90c84c54)\r\n\r\nPlease allow me to close this issue. thank you for your understanding.\r\n\r\nBest regards,\r\n"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-g0/issues/5"
+  },
+  {
+    "repo": "cmsis_device_g0",
+    "issue_number": 4,
+    "title": "Missing e RCC_CFGR_SW_H... Definitions",
+    "state": "closed",
+    "labels": [
+      "enhancement",
+      "cmsis",
+      "internal bug tracker"
+    ],
+    "created_at": "2024-10-18T08:48:06Z",
+    "closed_at": "2025-03-12T08:43:55Z",
+    "body": "Hello,\r\nwhile  Release v1.4.4 added RCC_CFGR_SWS_HSISYS and friends , similar definitions for RCC_CFGR_SW_HSISYS are still missing and require extra handling.\r\n",
+    "comments": [
+      {
+        "author": "TOUNSTM",
+        "created_at": "2024-10-21T13:38:26Z",
+        "body": "ST Internal Reference: 194507"
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2025-03-12T08:43:52Z",
+        "body": "Fixed in f484fe852535f913a02ee79787eafa74dd7f9488"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-g0/issues/4"
+  },
+  {
+    "repo": "cmsis_device_g0",
+    "issue_number": 3,
+    "title": "Unable to use Multi-file compilation in IAR ( which typically heavy reduces unused excess code )",
+    "state": "closed",
+    "labels": [
+      "enhancement",
+      "invalid",
+      "cmsis"
+    ],
+    "created_at": "2024-04-30T15:31:19Z",
+    "closed_at": "2024-05-08T09:06:30Z",
+    "body": "**Describe the set-up**\r\nInclude Low level drivers and CMSIS includes to compile without optimizations.\r\n\r\n**Describe the bug**\r\n[System_stm32g0xx.c](https://github.com/STMicroelectronics/cmsis_device_g0/blob/master/Source/Templates/system_stm32g0xx.c) does not directly include #include \"system_stm32g0xx.h\" and cannot include.\r\nI tried including the files directly and added stdint.h to the header to get uint32_t types but it still cannot find the SystemInit in Startup_stm32g030xx.s\r\n\r\nit seems like you are trying to extern variables and function, but you cannot do that if Mulit-file compilation is enabled, which will reduce the code size by placing all of the code into one object file (.o) the function and variables need to be called and not externed.\r\n\r\nThis also relates to the C0 which makes the most sense to try to reduce code size to bring up quantity \r\n\r\n**How To Reproduce**\r\n1. Create a project in IAR\r\n2. Include all LL files, startup_stm32g030xx.s, system_stm32g0xx.c from st drivers.\r\n3. set optimization to high and select multi-file compilation and discard unused public \r\n\r\n**Additional context**\r\nI am using IAR 9.32\r\n\r\n**Screenshots**\r\nIf applicable, add screenshots to help explain your problem.\r\n",
+    "comments": [
+      {
+        "author": "HarrisonTuckerTTIFC",
+        "created_at": "2024-04-30T15:57:03Z",
+        "body": "I realized I am able to compile if I uncheck discard unused public, which is the part that removes unused code. it does compile.\r\n\r\nThe reason it did no compile is because there was no code in SystemInit function, so I added __root which is a IAR compile command to force this function to remain, which I typically use on interrupt handler functions for the same reason. \r\n\r\nIt is compiling, now for me but I guess this is just information that may be helpful"
+      },
+      {
+        "author": "HarrisonTuckerTTIFC",
+        "created_at": "2024-04-30T18:14:14Z",
+        "body": "![image](https://github.com/STMicroelectronics/cmsis_device_g0/assets/142430712/d713fca8-4e46-49d1-95a9-ebf98638b92f)\r\nThis seems to be the only required fix to allow multi-file configuration given the function is not used but is defined in the .s file"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2024-05-08T09:06:30Z",
+        "body": "Hi @HarrisonTuckerTTIFC,\r\n\r\nThank you for the proposal. Please allow me to draw you attention that the `system_stm32g0xx.c` file is under the [./Source/Templates](https://github.com/STMicroelectronics/cmsis_device_g0/tree/master/Source/Templates). This means that these files are generic **templates**.\r\n\r\nThese generic templates are designed to cover applications **common** use cases and are **intended to be customized** by users to cover special use cases.\r\n\r\nI hope this clarifies the point. Please allow me to close this issue. Thank you for your comprehension and thank you again for your proposal.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "HarrisonTuckerTTIFC",
+        "created_at": "2024-05-08T12:55:10Z",
+        "body": "Hi Ali, \r\n\r\nYea that is fair. I have been using your drivers and CMSIS repositories as submodules in our companies library directly to make sure we use the latest updates. So in doing that, it makes it hard to stay up to date while using the template file as is, since it had not required change before since it is intended to work with the assembly files for each chip. It sounds like you guys do not intend to change to work with the assembly files so I will just stop using the CMSIS repository all together. \r\n\r\nThanks,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-g0/issues/3"
+  },
+  {
+    "repo": "cmsis_device_g0",
+    "issue_number": 2,
+    "title": "Incorrect README.md title ",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "documentation"
+    ],
+    "created_at": "2021-09-24T13:50:08Z",
+    "closed_at": "2021-09-28T08:17:45Z",
+    "body": "The README.md title mentions \"STM32CubeU5\". Should it not say \"STM32CubeG0\" instead ?\r\n",
+    "comments": [
+      {
+        "author": "RKOUSTM",
+        "created_at": "2021-09-27T08:55:51Z",
+        "body": "Hi @glegrain,\r\n\r\nThank you for  your contribution. The issue you pointed out has been confirmed. An update will be made available in GitHub as soon as possible.\r\n\r\nThank you once again for your contribution. We are looking forward to reading from you again.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-g0/issues/2"
+  },
+  {
+    "repo": "cmsis_device_g0",
+    "issue_number": 1,
+    "title": "Latest device pack (1.3.0) in uvision fails to compile cmsis_device_g0/Source/Templates/system_stm32g0xx.c",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "invalid",
+      "cmsis"
+    ],
+    "created_at": "2021-03-14T11:39:23Z",
+    "closed_at": "2021-04-06T10:23:05Z",
+    "body": "The file **cmsis_device_g0/Source/Templates/system_stm32g0xx.c** does not compile due to #define's missing in\r\n**cmsis_device_g0/Include/stm32g030xx.h**\r\n\r\nThe #defines that were in the device pack 1.2.0 that have been removed in 1.3.0 and are causing the failure are;\r\n\r\n#define RCC_CFGR_SWS_HSI               (0UL)                                   /*!< HSI used as system clock */\r\n#define RCC_CFGR_SWS_HSE               (0x00000008UL)                          /*!< HSE used as system clock */\r\n#define RCC_CFGR_SWS_PLL               (0x00000010UL)                          /*!< PLL used as system clock */\r\n#define RCC_CFGR_SWS_LSI               (0x00000018UL)                          /*!< LSI used as system clock */\r\n#define RCC_CFGR_SWS_LSE               (0x00000020UL) \r\n\r\nPlease note I have not checked the other STM32G0 family header files. These need to be checked to",
+    "comments": [
+      {
+        "author": "ASELSTM",
+        "created_at": "2021-03-23T17:07:57Z",
+        "body": "Hi @davidklopsteins,\r\n\r\nFirst we would like to thank you for your contribution.\r\n\r\nActually, these defines has been removed from all STM32G0 CMSIS header files and redefined in the [RCC HAL driver](https://github.com/STMicroelectronics/STM32CubeG0/blob/5cb06333a6a43cefbe145f10a5aa98d3cc4cffee/Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_rcc.h#L566-L570) as they are not specific to the CMSIS but rather to the HAL/LL drivers.\r\n\r\nTo solve this issue, two possibilities are suggested : \r\n\r\n1.  You can include the header file of the RCC HAL module[ stm32g0xx_hal_rcc.h](https://github.com/STMicroelectronics/STM32CubeG0/blob/master/Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_rcc.h)  to your project.\r\n\r\n2. You can replace theses constants by their corresponding bit definition combinations within your application code.  They could then be replaced as following : \r\n\r\n```\r\nRCC_SYSCLKSOURCE_HSI            could be replaced by        0x00000000U\r\nRCC_SYSCLKSOURCE_HSE            could be replaced by        RCC_CFGR_SW_0\r\nRCC_SYSCLKSOURCE_PLLCLK         could be replaced by        RCC_CFGR_SW_1\r\nRCC_SYSCLKSOURCE_LSI            could be replaced by        (RCC_CFGR_SW_1 | RCC_CFGR_SW_0) \r\nRCC_SYSCLKSOURCE_LSE            could be replaced by        RCC_CFGR_SW_2 \r\n\r\n```\r\n\r\nHope that will help you.\r\n\r\nwith regards,"
+      },
+      {
+        "author": "ASELSTM",
+        "created_at": "2021-04-06T10:23:05Z",
+        "body": "Hi @davidklopsteins,\r\n\r\nPlease allow me to close this thread. You can reopen it at any time if you have details to provide us to help you.\r\n\r\nThank you for your comprehension and thank you once more for your contribution\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-g0/issues/1"
+  }
+]

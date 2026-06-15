@@ -1,0 +1,16 @@
+{
+  "repo": "stm32f3discovery-bsp",
+  "generated_at": "2026-06-15T15:10:20.275862+00:00",
+  "issues_total": 0,
+  "linked_issues": 0,
+  "unlinked_issues": 0,
+  "link_rate": 0.0,
+  "resolution_status_counts": {
+    "merged_fix": 0,
+    "candidate_fix": 0,
+    "commit_only_candidate": 0,
+    "reference_only": 0
+  },
+  "merged_pr_with_file_evidence_cases": 0,
+  "top_linked_issue_numbers": []
+}

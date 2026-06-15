@@ -1,0 +1,570 @@
+[
+  {
+    "repo": "stm32g0xx-hal-driver",
+    "issue_number": 18,
+    "title": "[Bug]:   SUCCESS is set before LL_LPUART_SetBaudRate executes and before BRR validation — function can return SUCCESS with an invalid BRR",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "invalid",
+      "hal",
+      "lpuart"
+    ],
+    "created_at": "2026-05-15T12:53:58Z",
+    "closed_at": "2026-05-26T09:35:05Z",
+    "body": "### Bug Summary\n\nbad code\n\n### Detailed Description\n\n  File: stm32g0xx_ll_lpuart.c (and stm32g0xx_ll_usart.c — same pattern)\n\t•  Issue 1: status = SUCCESS is set before LL_LPUART_SetBaudRate executes and before BRR validation — function can return SUCCESS with an invalid BRR\n\t•  Issue 2: BRR range checks use assert_param which is a no-op without USE_FULL_ASSERT, so there is no runtime validation in production builds\n\t•  Issue 3: On the error path (bad clock/baudrate), CR1/CR2/CR3/PRESC are already written, leaving the peripheral half-configured\n\n### Expected Behavior\n\n_No response_\n\n### Actual Behavior\n\n_No response_\n\n### Environment\n\n_No response_\n\n### Severity\n\nNormal",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2026-05-20T14:51:13Z",
+        "body": "Hello @egtduncanbarclay,\n\nThank you for the report.\n\nRegarding the issues, the status variable in **LL_LPUART_Init()** is not intended to validate the BRR. Its role is simply to indicate whether LL_LPUART_Init() was able to initialize the LPUART registers according to the parameters provided in **LPUART_InitTypeDef**.\n\nAlso, **LL_LPUART_SetBaudRate()** is implemented as a **__STATIC_INLINE** function. By design, it is used to perform small register-level operations efficiently with minimal call overhead. If you need BRR checking, you should enable `USE_FULL_ASSERT` and implement your own assert_failed() handler so that any invalid parameter can be handled in a way that matches your application requirements.\n\nThis is consistent with the LL approach, which prioritizes lightweight direct register access and minimal overhead. In comparison, the HAL layer provides more built-in checks and a higher level of abstraction.\n\nWith regards,"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2026-05-26T09:35:05Z",
+        "body": "Hello @egtduncanbarclay,\n\nPlease allow me to close the issue. Thank you for your understanding.\n\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32g0xx-hal-driver/issues/18"
+  },
+  {
+    "repo": "stm32g0xx-hal-driver",
+    "issue_number": 17,
+    "title": "[Question]: HAL_TIM_PWM_Stop stops complete htim instance",
+    "state": "closed",
+    "labels": [
+      "question",
+      "hal",
+      "tim"
+    ],
+    "created_at": "2026-04-13T11:41:02Z",
+    "closed_at": "2026-04-17T05:44:25Z",
+    "body": "### Question Summary\n\nWhy does HAL_TIM_PWM_Stop stop the complete timer peripheral\n\n### Detailed Description\n\nIn the HAL_TIM_PWM_Stop in the file stm32g0xx_hal_tim.c (version 1.6.3) the Macro__HAL_TIM_DISABLE(htim); is called. This is a bit confusing, since I would expect only the specific Channel from the functions arguments to be disabled. \nIs this the intended behaviour?",
+    "comments": [
+      {
+        "author": "ASAHSTM",
+        "created_at": "2026-04-16T16:28:34Z",
+        "body": "Hello @JRStolle,\n\nThank you for your report,\n\nThis behavior is intentional. HAL_TIM_PWM_Stop first disables only the requested PWM channel, then calls __HAL_TIM_DISABLE.\nHowever, __HAL_TIM_DISABLE disables the timer counter only if all CCx/CCxN channels are already disabled.\n\nTherefore:\n- If other channels on the same timer are still active, the timer keeps running.\n- If you stop the last active channel, the timer is stopped.\n\nWith Regards,\n"
+      },
+      {
+        "author": "JRStolle",
+        "created_at": "2026-04-17T05:44:25Z",
+        "body": "Thank you for your reply.\nYes, I did not look inside the Makro, since the description said that it disables the TIM peripheral. \nSo if I want to disable the peripheral I have to make sure, to disable all channels first. \nThis might be good idea to put into the description.\nThanks!"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32g0xx-hal-driver/issues/17"
+  },
+  {
+    "repo": "stm32g0xx-hal-driver",
+    "issue_number": 16,
+    "title": "[Bug]: Check HAL UART driver",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "hal",
+      "uart"
+    ],
+    "created_at": "2026-03-06T08:41:00Z",
+    "closed_at": "2026-03-10T13:06:41Z",
+    "body": "### Bug Summary\n\nCheck HAL UART driver\n\n### Detailed Description\n\nAfter v1.4.7 two commits have been lost:\n\n[[HAL][UART] Remove __HAL_UART_DISABLE(huart) call from the HAL_UART_DeInit()](https://github.com/STMicroelectronics/stm32g0xx-hal-driver/commit/a75c67bf6e38bb86bc885c21b8ff7a6e53230fcb)\n[[HAL][UART] Align UART baud rate macros definition between LL and HAL](https://github.com/STMicroelectronics/stm32g0xx-hal-driver/commit/f552fba176d467303f241bb5ffa47404fb74d0be)\n\nThis is the same problem I reported for STM32G4:\nhttps://github.com/STMicroelectronics/stm32g4xx-hal-driver/issues/32\n\nAlso this commit has been partially reverted:\n[[HAL][UART] Fix transfer count underflow when using polling mode](https://github.com/STMicroelectronics/stm32g0xx-hal-driver/commit/af2129e6d9d9aa4b6b5021defc53854b3bd6da6f)\n\nPlease compare `stm32g0xx_hal_uart.c` with `stm32g4xx_hal_uart.c` and/or `stm32h7xx_hal_uart.c`\n\n### Expected Behavior\n\nThe same we have in G4 and H7 series.\n\n### Actual Behavior\n\n_No response_\n\n### Environment\n\n_No response_\n\n### Severity\n\nNone",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2026-03-10T08:07:19Z",
+        "body": "Hello @carlo-dev-git,\n\nThank you for highlighting the issue. It was due to an internal synchronization error.\nWe will republish the content ASAP.\n\nWith regards,\n"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2026-03-10T11:04:45Z",
+        "body": "Hi again,\n\nCould you please verify the latest commit listed below?\n\n- https://github.com/STMicroelectronics/stm32g0xx-hal-driver/commit/b574da7c48e4ad96f78157e48ba7287e320f7b16\n- https://github.com/STMicroelectronics/stm32g0xx-hal-driver/commit/baf2b1af69ba9fc45fd2f020488dc18025890749\n- https://github.com/STMicroelectronics/stm32g0xx-hal-driver/commit/4c69d5adb2bc4cf0287da1583cfd66acffab55a6\n\nWith regards,"
+      },
+      {
+        "author": "carlo-dev-git",
+        "created_at": "2026-03-10T13:03:25Z",
+        "body": "> Could you please verify the latest commit listed below?\n> \n> * [b574da7](https://github.com/STMicroelectronics/stm32g0xx-hal-driver/commit/b574da7c48e4ad96f78157e48ba7287e320f7b16)\n> * [baf2b1a](https://github.com/STMicroelectronics/stm32g0xx-hal-driver/commit/baf2b1af69ba9fc45fd2f020488dc18025890749)\n> * [4c69d5a](https://github.com/STMicroelectronics/stm32g0xx-hal-driver/commit/4c69d5adb2bc4cf0287da1583cfd66acffab55a6)\n\nCommits verified. This ticket can be closed.\nThank you!\n"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32g0xx-hal-driver/issues/16"
+  },
+  {
+    "repo": "stm32g0xx-hal-driver",
+    "issue_number": 15,
+    "title": "Missing bit shift in FDCAN activity state?",
+    "state": "closed",
+    "labels": [
+      "question",
+      "hal",
+      "fdcan"
+    ],
+    "created_at": "2026-01-27T16:31:09Z",
+    "closed_at": "2026-01-28T15:25:26Z",
+    "body": "https://github.com/STMicroelectronics/stm32g0xx-hal-driver/blob/f7def83db5bd1a1d560533ededae1cd127fbb7f7/Src/stm32g0xx_hal_fdcan.c#L2489\n\nWondering if it should have this bit shift included so that it returns the value 0 or 1. Currently it is returning 8 when active.\n\n<img width=\"809\" height=\"338\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/7b2eff20-8068-4f2d-978b-c0b153cdaf37\" />\n\n<img width=\"524\" height=\"150\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/6403cbc5-5221-4f9e-9c08-e99d0866ebb6\" />",
+    "comments": [
+      {
+        "author": "MKISTM",
+        "created_at": "2026-01-28T10:52:27Z",
+        "body": "Hello @mattkefford,\n\nThank you for your report. After analyzing the issue, I believe this is normal behavior. As you can see, the Activity parameter description [here](https://github.com/STMicroelectronics/stm32g0xx-hal-driver/blob/4b09ce26131a2a8a39791453d312584e683df2c7/Inc/stm32g0xx_hal_fdcan.h#L327).\nActivity parameter represents the FDCAN module communication state and can be a values of the FDCAN_communication_state enumeration [here](https://github.com/STMicroelectronics/stm32g0xx-hal-driver/blob/4b09ce26131a2a8a39791453d312584e683df2c7/Inc/stm32g0xx_hal_fdcan.h#L745).\n\nTherefore, this behavior is expected, and there is no issue.\n\nIf you do not observe any other unexpected behavior, please allow us to close this issue. Thank you for your understanding.\n\nBR,\nMohamed Chaker."
+      },
+      {
+        "author": "mattkefford",
+        "created_at": "2026-01-28T15:25:26Z",
+        "body": "Yeah you're right. As long as the #defines are used like FDCAN_COM_STATE_IDLE then it will work out fine as those are matching up with the bits in the register. I was just expecting them to be shifted down so the values would be 0, 1, 2, 3 as it was done for the FDCAN_protocol_error_code.\n\nNo problem! Thanks for the quick reply"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32g0xx-hal-driver/issues/15"
+  },
+  {
+    "repo": "stm32g0xx-hal-driver",
+    "issue_number": 14,
+    "title": "stm32g0xx_ll_ucpd.h misses some register fields",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "invalid",
+      "hal",
+      "ucpd"
+    ],
+    "created_at": "2025-09-29T11:46:54Z",
+    "closed_at": "2025-09-29T13:24:49Z",
+    "body": "Example which I now plan to use:\nthere is no definition for:\nUCPD_CR_CC1VCONNEN\n\n\neven though it exists according to the RM on STM32G0B1:\n\n<img width=\"1248\" height=\"693\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/86756988-cdff-493a-9e2c-09a4d202bc7f\" />",
+    "comments": [
+      {
+        "author": "Angel2Eyes",
+        "created_at": "2025-09-29T13:24:49Z",
+        "body": "The actual missing register defines are in stm32g0b1.h which is not contained on this codebase"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32g0xx-hal-driver/issues/14"
+  },
+  {
+    "repo": "stm32g0xx-hal-driver",
+    "issue_number": 13,
+    "title": "Polling I2C EEPROM for internal write cycle immediately returns HAL_ERROR",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "hal",
+      "internal bug tracker",
+      "i2c"
+    ],
+    "created_at": "2025-08-06T21:58:31Z",
+    "closed_at": "2025-08-28T08:32:40Z",
+    "body": "Hello,\n\nwhat I reported for the F3 HAL (https://github.com/STMicroelectronics/stm32f3xx-hal-driver/issues/2) is an issue here, too.\nThe corresponding critical code line is here:\nhttps://github.com/STMicroelectronics/stm32g0xx-hal-driver/blob/1cb35e18d941e5a22f1c18437dd100b252d33583/Src/stm32g0xx_hal_i2c.c#L3344\n\nRegards,\nNorbert",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2025-08-08T09:57:56Z",
+        "body": "Hello @Nor-Fla,\n\nThank you for your cooperation. As discussed, the fix will be available for both series ASAP.\n\nWith regards,"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-08-08T09:58:10Z",
+        "body": "ST Internal Reference: 181377"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-08-28T08:32:40Z",
+        "body": "Fixed in Commit: https://github.com/STMicroelectronics/stm32g0xx-hal-driver/commit/a248a9e484d58943b46c68f6c49b4b276778bd59"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32g0xx-hal-driver/issues/13"
+  },
+  {
+    "repo": "stm32g0xx-hal-driver",
+    "issue_number": 12,
+    "title": "LL_TIM_ClearFlag_UPDATE() does not respect the reserved bits",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "wontfix",
+      "hal",
+      "tim"
+    ],
+    "created_at": "2025-07-23T12:21:47Z",
+    "closed_at": "2025-08-06T15:09:33Z",
+    "body": "All TIMx status registers documented in RM0444 have some bits which state \"Reserved, must be kept at reset value\".\n\nYou then normally read the register, modify the bits you are interested in, and then write the new value. Usually, this is done with MODIFY_REG.\n\nThis is done for compatibility reasons, in case some newer microcontroller has more flags at the reserved bits.\n\nHowever, LL_TIM_ClearFlag_UPDATE() overwrites all bits.\n\nI would at least write a comment in LL_TIM_ClearFlag_UPDATE() stating whether that could be a problem.",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2025-07-30T16:18:57Z",
+        "body": "Hello again @rdiez,\n\nRegarding this issue, `LL_TIM_ClearFlag_UPDATE()` does not overwrite all bits. If you look at any TIMx_SR register in the RM0444, you will see the abbreviation rc_w0 (see page 55 of the RM0444):\n**read/clear write0 (rc_w0) Software can read as well as clear this bit by writing 0. Writing 1 has no effect on the bit value**\n\nSince writing 1 has no effect. That's why we have `WRITE_REG(TIMx->SR, ~(TIM_SR_UIF));` inside LL_TIM_ClearFlag_UPDATE()\n\nWith regards,\nKarim"
+      },
+      {
+        "author": "rdiez",
+        "created_at": "2025-07-31T07:10:00Z",
+        "body": "In understand now, thanks.\n\nBut shouldn't the reserved bits be documented as \"rc_w0\" then?\n\nAt the moment, the documentation only states \"Reserved, must be kept at reset value\". Given that the reset value is documented as 0, but writing a 0 would clear the bit, then the documentation is misleading, isn't it? It should actually say that all reserved bits should be written with 1."
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-08-06T13:43:14Z",
+        "body": "Hello @rdiez,\n\nI have checked with our team, and it seems that for the sake of code flexibility (given the wide variety of timers), the `Clear` functions for the LL bits are always implemented in the same way, given that the reserved bits are neither significant nor impacted. It was a decision made by our development team.\n\nThank you for your understanding, please allow me to close the issue.\n\nWith regards,"
+      },
+      {
+        "author": "rdiez",
+        "created_at": "2025-08-06T13:50:03Z",
+        "body": "Like I said, this is rather a documentation issue. The way it is written at the moment, it makes you scratch your head.\n\nI am guessing that you want to close this bug because this area is only about the library, and not about the documentation. Closing this bug is OK then.\n\nIs there a way to raise a separate bug against the documentation?"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-08-06T14:17:59Z",
+        "body": "Hi,\n\nI understand what you are trying to say, and I know you meant the documentation. That's why I checked with our team. I tried to explain the circumstances and the decision that was made by our team. We are not trying to close the issue, but there is no plan in this case.\n\nThank you.\n\nWith regards,"
+      },
+      {
+        "author": "rdiez",
+        "created_at": "2025-08-06T15:00:03Z",
+        "body": "I do not quite understand your answer. I gather that there is no way to raise a separate bug for the documentation, or that you are not willing to fix the documentation. Is that correct?"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-08-06T15:09:33Z",
+        "body": "Hello @rdiez,\n\nAs I said, unfortunately there is no plan to fix it.\n\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32g0xx-hal-driver/issues/12"
+  },
+  {
+    "repo": "stm32g0xx-hal-driver",
+    "issue_number": 11,
+    "title": "HAL_TIM_OnePulse_ConfigChannel and other OnePulse functions only support i/o channels 1 and 2",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "wontfix",
+      "hal",
+      "internal bug tracker",
+      "tim"
+    ],
+    "created_at": "2025-05-14T13:02:31Z",
+    "closed_at": "2025-06-16T11:04:29Z",
+    "body": "**Caution**\nThe Issues are strictly limited for the reporting of problem encountered with the software provided in this project.\nFor any other problem related to the STM32 product, the performance, the hardware characteristics and boards, the tools the environment in general, please post a topic in the [ST Community/STM32 MCUs forum](https://community.st.com/s/group/0F90X000000AXsASAW/stm32-mcus) \n\n**Describe the set-up**\n * The board (either ST RPN reference or your custom board): STM32G0B1\n * IDE or at least the compiler and its version: Keil uVision 5.39\n\n**Describe the bug**\nThe OnePulse functions in stm32g0xx_hal_tim.c support only channels 1 and 2 even though the HW supports input/output from channels 3 and 4 on any timers that have these channels. When configuring the timer in PWM mode for example, the functions seem to accept any channel from 1 to 6.\n\n**How To Reproduce**\nCall function HAL_TIM_OnePulse_ConfigChannel with any channel other than channel 1 or 2 as its input/output\n\n\n**Additional context**\nI have reimplemented HAL_TIM_OnePulse_Init, HAL_TIM_OnePulse_Start and HAL_TIM_OnePulse_ConfigChannel so that they will support getting the input from channel 1 or 2 but getting the output to channel 4. I have also tested this on an actual MCU with TIM1 and the timer worked as expected. I honestly do not understand why this was implemented this way in the first place if there is no HW limitation.\n",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2025-05-16T16:06:48Z",
+        "body": "ST Internal Reference: 209964"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-06-16T11:04:29Z",
+        "body": "Hello @Angel2Eyes,\n\nThank you for the report.\n\nI have forwarded the issue to our team, and they agree that there is nothing to prevent the use of other timer channels. Unfortunately, however, there are no plans to fix this problem. Thankfully, you have managed to implement and use the other channels.\n\nPlease allow me to close this thread and thank you in advance for your understanding.\n\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32g0xx-hal-driver/issues/11"
+  },
+  {
+    "repo": "stm32g0xx-hal-driver",
+    "issue_number": 10,
+    "title": "Possible unaligned memory access in `stm32g0xx_hal_spi.c`",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "hal",
+      "internal bug tracker",
+      "spi"
+    ],
+    "created_at": "2025-05-12T07:39:00Z",
+    "closed_at": "2025-06-17T08:50:20Z",
+    "body": "A bug in `SPI_2linesTxISR_8BIT()` could lead to unaligned memory access, causing a hard fault.\nhttps://github.com/STMicroelectronics/stm32g0xx-hal-driver/blob/11f6c302cf3caab45ea30c54b1120a47990704bd/Src/stm32g0xx_hal_spi.c#L3624\n\nWhen `hspi->TxXferCount` is 2 or more and `hspi->pTxBuffPtr` points to a memory address which is not 16-bit-aligned, the MCU attempts a 16-bit access to the the named address. This leads to a hard fault through unaligned memory access, which is not possible on Cortex M0+:\n\n```\nstatic void SPI_2linesTxISR_8BIT(struct __SPI_HandleTypeDef *hspi)\n{\n  /* Transmit data in packing Bit mode */\n  if (hspi->TxXferCount >= 2U)\n  {\n    hspi->Instance->DR = *((uint16_t *)hspi->pTxBuffPtr);\n    hspi->pTxBuffPtr += sizeof(uint16_t);\n    hspi->TxXferCount -= 2U;\n  }\n  /* Transmit data in 8 Bit mode */\n  else\n  {\n    *(__IO uint8_t *)&hspi->Instance->DR = (*hspi->pTxBuffPtr);\n    hspi->pTxBuffPtr++;\n    hspi->TxXferCount--;\n  }\n```\n\nThe bug have stayed undiscovered, as the code is working well as long as at least one of the following conditions is ensured:\n- Only one byte of data is read/written (`else` clause of the cited code is entered)\n- The source/destination data pointers are aligned to a 16-bit boundary by the linker\n- The code runs on a platform that tolerated unaligned access, for example Cortex M3\n\nThis could be fixed by completely removing the 16-bit-access in this function, as the function is per definition only called in 8-bit-mode: https://github.com/STMicroelectronics/stm32g0xx-hal-driver/blob/11f6c302cf3caab45ea30c54b1120a47990704bd/Src/stm32g0xx_hal_spi.c#L1831\n\nA proposed solution:\n```\nstatic void SPI_2linesTxISR_8BIT(struct __SPI_HandleTypeDef *hspi)\n{\n  /* Transmit data in 8 Bit mode */\n  *(__IO uint8_t *)&hspi->Instance->DR = (*hspi->pTxBuffPtr);\n  hspi->pTxBuffPtr++;\n  hspi->TxXferCount--;\n```\n\nThe bug was reproduced by my with `arm-gnu-toolchain-14.2.rel1-mingw-w64-x86_64-arm-none-eabi`. It was also already mentioned in the ST forum several years ago: https://community.st.com/t5/stm32cubeide-mcus/pointers-and-hal-libs-gt-hardfault/td-p/286857\n\nIt could also be spotted by building the code wit `-Wcast-align` enabled.",
+    "comments": [
+      {
+        "author": "fgrie",
+        "created_at": "2025-05-12T07:43:01Z",
+        "body": "I just saw that this bug was also mentioned in https://github.com/STMicroelectronics/stm32g0xx-hal-driver/issues/5\n\nUnfortunately, the fix provided back then did not fix the root cause (16-bit-access when 8-bit-access is requested by the user)."
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-05-15T09:26:25Z",
+        "body": "Hello @fgrie,\n\nThank you for the report.\n\nAs you mentioned, the bug relating to unaligned memory access was fixed by our Developpement team and explained in the brief section of the source file at the line 70.\n\n>     Data buffer address alignment restriction:\n>       (#) There is no support for unaligned accesses on the Cortex-M0 processor.\n>           If the user wants to transfer in 16Bit data mode, it shall ensure that 16-bit aligned address is used for:\n>           (##) pData parameter in HAL_SPI_Transmit(), HAL_SPI_Transmit_IT(), HAL_SPI_Receive() and HAL_SPI_Receive_IT()\n>           (##) pTxData and pRxData parameters in HAL_SPI_TransmitReceive() and HAL_SPI_TransmitReceive_IT()\n>       (#) There is no such restriction when going through DMA by using HAL_SPI_Transmit_DMA(), HAL_SPI_Receive_DMA()\n>           and HAL_SPI_TransmitReceive_DMA().\n>  \n\nhowever, regarding your proposal for the `SPI_2linesTxISR_8BIT()` function, I will share it with our team for analysis, and I will keep you posted.\n\nWith regards,\n"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-05-20T13:59:39Z",
+        "body": "ST Internal Reference: 210171"
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2025-06-17T08:50:20Z",
+        "body": "Fixed in b86a4ee8d730b2c1696416048ca4b4f3f31d8c04"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32g0xx-hal-driver/issues/10"
+  },
+  {
+    "repo": "stm32g0xx-hal-driver",
+    "issue_number": 7,
+    "title": "HAL_GPIO_EXTI_Callback missing from STM32G0 HAL GPIO API",
+    "state": "closed",
+    "labels": [
+      "enhancement",
+      "invalid",
+      "hal",
+      "gpio"
+    ],
+    "created_at": "2024-12-10T19:47:23Z",
+    "closed_at": "2024-12-18T14:06:23Z",
+    "body": "Ali Labbene requested that I open a new issue here in this thread:\r\nhttps://github.com/STMicroelectronics/STM32CubeG0/issues/7#issuecomment-2491193412\r\n\r\nThe STM32G0 HAL library does not include the standard HAL GPIO external interrupt callback. This is what we would expect:\r\n\r\nvoid HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)\r\n{\r\n}\r\n\r\nInstead, STM32G0 only includes HAL_GPIO_EXTI_Rising_Callback() and HAL_GPIO_EXTI_Falling_Callback(). These functions are fine, but HAL_GPIO_EXTI_Callback is the standard API that is used with most (if not all) other STM32 HAL drivers, and if you google any \"how to make an stm32 respond to GPIO\" tutorial / walk through, HAL_GPIO_EXTI_Callback is the method that is shown.\r\n\r\nHow To Reproduce:\r\n\r\nCompare stm32g0xx_hal_gpio.h in this repository to to https://github.com/STMicroelectronics/stm32f4xx-hal-driver/blob/master/Inc/stm32f4xx_hal_gpio.h and you will see the API method in question is missing in STM32G0.\r\n\r\n",
+    "comments": [
+      {
+        "author": "TOUNSTM",
+        "created_at": "2024-12-18T14:06:24Z",
+        "body": "Hello @insolace,\r\n\r\nThank you for your contribution. This change is actually a new feature that enhances the functionality of the STM32G0 HAL library. By distinguishing between rising and falling edge interrupts.\r\nTo implement this new feature, it was necessary to break compatibility with the previous single callback method. The reason for this is that there is a single entry point for the HAL GPIO interrupt service routine: `HAL_GPIO_EXTI_IRQHandler()`. It is not feasible to support both the legacy single callback method and the new dual callback method within this single entry point.\r\n\r\nAs a result, you will need to adapt your code to align with the new implementation. By doing so, you will be able to take full advantage of the new hardware capabilities.\r\n\r\nThank you for your understanding and cooperation.\r\nBest Regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32g0xx-hal-driver/issues/7"
+  },
+  {
+    "repo": "stm32g0xx-hal-driver",
+    "issue_number": 6,
+    "title": "HAL I2C produces unwanted NACKs in slave mode",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "invalid",
+      "hal",
+      "i2c"
+    ],
+    "created_at": "2024-07-17T12:39:01Z",
+    "closed_at": "2024-08-02T08:26:20Z",
+    "body": "**Describe the set-up**\r\n * MCU: STM32G0B0RET\r\n\r\n**Describe the bug**\r\nIt looks like the I2C HAL driver handles the NACK bit incorrectly, at least in slave mode with Slave Byte Control enabled. Consider e.g. the following line:\r\nhttps://github.com/STMicroelectronics/stm32g0xx_hal_driver/blob/b3638742cfd2e8160f35f616f5ed19877e228f6e/Src/stm32g0xx_hal_i2c.c#L6291-L6292\r\nThis tries to \"disable address acknowledge\" after the current transaction has been completed. Similarly, the code tries to clear the bit in various places. From the documentation however, it is clear that this cannot work:\r\n\r\n> Bit 15 **NACK**: NACK generation (slave mode)\r\nThe bit is set by software, cleared by hardware when the NACK is sent, or when a STOP \r\ncondition or an Address matched is received, or when PE=0.\r\n0: an ACK is sent after current received byte.\r\n1: a NACK is sent after current received byte.\r\n_Note: Writing ‘0’ to this bit has no effect.\r\nThis bit is used in slave mode only: in master receiver mode, NACK is automatically \r\ngenerated after last byte preceding STOP or RESTART condition, whatever the NACK \r\nbit value.\r\nWhen an overrun occurs in slave receiver NOSTRETCH mode, a NACK is \r\nautomatically generated whatever the NACK bit value.\r\nWhen hardware PEC checking is enabled (PECBYTE=1), the PEC acknowledge value \r\ndoes not depend on the NACK value._\r\n>\r\n> Source: RM0450, Page 762 (rm0454-stm32g0x0-advanced-armbased-32bit-mcus-stmicroelectronics.pdf)\r\n\r\nNote the \"Writing 0 to this bit has no effect\". This means that once the bit is incorrectly set, it can never be fixed again\r\n\r\n**How To Reproduce**\r\n1. Set up a board with the MCU, enable one of the I2C peripherals & hook up a device capable of being an I2C master\r\n2. Add this code to the main file of a new project:\r\n  ```c\r\n  char buf;\r\n  \r\n  void start_receive(I2C_HandleTypeDef *hi2c)\r\n  {\r\n\t  LL_I2C_SetTransferSize(hi2c->Instance, 0); // set NBYTES to 0 to prevent premature release of clock\r\n\t  LL_I2C_EnableReloadMode(hi2c->Instance);\r\n\t  HAL_I2C_Slave_Seq_Receive_IT(hi2c, &buf, 1, I2C_FIRST_AND_NEXT_FRAME);\r\n\t  LL_I2C_SetTransferSize(hi2c->Instance, 1); // set NBYTES to 1 to release clock & start receiving\r\n  }\r\n  \r\n  void HAL_I2C_AddrCallback(I2C_HandleTypeDef *hi2c, uint8_t TransferDirection, uint16_t AddrMatchCode)\r\n  {\r\n\t  LL_I2C_EnableSlaveByteControl(hi2c->Instance);\r\n\t  start_receive(hi2c);\r\n  }\r\n  \r\n  void HAL_I2C_ListenCpltCallback(I2C_HandleTypeDef *hi2c)\r\n  {\r\n\t  HAL_I2C_EnableListen_IT(hi2c);\r\n  }\r\n  \r\n  void HAL_I2C_SlaveRxCpltCallback(I2C_HandleTypeDef *hi2c)\r\n  {\r\n\t  start_receive(hi2c);\r\n  }\r\n  \r\n  /* USER CODE END 0 */\r\n  \r\n  /**\r\n    * @brief  The application entry point.\r\n    * @retval int\r\n    */\r\n  int main(void)\r\n  {\r\n    /* USER CODE BEGIN 1 */\r\n  \r\n    /* USER CODE END 1 */\r\n  \r\n    /* MCU Configuration--------------------------------------------------------*/\r\n  \r\n    /* Reset of all peripherals, Initializes the Flash interface and the Systick. */\r\n    HAL_Init();\r\n  \r\n    /* USER CODE BEGIN Init */\r\n  \r\n    /* USER CODE END Init */\r\n  \r\n    /* Configure the system clock */\r\n    SystemClock_Config();\r\n  \r\n    /* USER CODE BEGIN SysInit */\r\n  \r\n    /* USER CODE END SysInit */\r\n  \r\n    /* Initialize all configured peripherals */\r\n    MX_GPIO_Init();\r\n    MX_I2C2_Init();\r\n    /* USER CODE BEGIN 2 */\r\n  \r\n    HAL_I2C_EnableListen_IT(&hi2c2);\r\n    /* USER CODE END 2 */\r\n  \r\n    /* Infinite loop */\r\n    /* USER CODE BEGIN WHILE */\r\n    while (1)\r\n    {\r\n      /* USER CODE END WHILE */\r\n  \r\n      /* USER CODE BEGIN 3 */\r\n    }\r\n    /* USER CODE END 3 */\r\n  }\r\n  ```\r\n3. This code sets up the I2C slave to continuously receive bytes, e.g.\r\n  ![image](https://github.com/user-attachments/assets/52e37433-c0a4-4401-8e4b-838b21c3bc66)\r\n4. Set a breakpoint in the following line:\r\n  https://github.com/STMicroelectronics/stm32g0xx_hal_driver/blob/b3638742cfd2e8160f35f616f5ed19877e228f6e/Src/stm32g0xx_hal_i2c.c#L6291-L6292\r\n5. Initiate two more I2C writes. The first will be acknowledged, then the breakpoint will be hit.\r\n6. Continue execution. The second write will not be acknowledged, because the NACK bit was set after the next byte already started being received:\r\n  ![image](https://github.com/user-attachments/assets/b99fb7af-c32f-41f1-b3c0-35c74d50d2e8)\r\n\r\n\r\n\r\n**Additional context**\r\nAt least in my use case with Slave Byte Control enabled, this leads to spurious NACKs if you're unlucky with timing (see reproduction steps). Simply removing the lines appears to work in my case, and I don't see what that could break. Am I missing something?\r\n",
+    "comments": [
+      {
+        "author": "lukas-lang",
+        "created_at": "2024-07-19T05:23:11Z",
+        "body": "Additional note: At least from my tests, the address byte cannot even be NACK'ed in the first place: Even with clock stretching & SBC enabled, the NACK bit is ignored when releasing the clock after the address byte. That is, the address byte will always be ACK'ed (if it matches the configured address of course).\r\nThis means any attempts at \"disabling address acknowledge\" are even more likely to be incorrect."
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2024-07-19T15:20:09Z",
+        "body": "Hello @lukas-lang,\r\n\r\nThank you for the report.\r\n\r\nIf I'm not wrong, you are using a custom board with this µc `STM32G0B0RET`. In order to reproduce the issue, could you please test your project on our board such as **NUCLEO-G071RB** or share an extract of your project (at least the config). we need to know also the version of HAL driver.\r\n\r\nIn the meanwhile, I will try to analyze further your issue.\r\n\r\nWith regards."
+      },
+      {
+        "author": "lukas-lang",
+        "created_at": "2024-07-21T12:34:58Z",
+        "body": "Unfortunately, I don't have a NUCLEO-board to test with - the board I am testing with is extremely barebones though, so it should be easy enough to reproduce the issue on something else: Apart from a the recommended decoupling capacitors, it only has two pullups for the I2C lines, & all the relevant pins are simply connected to some headers. You can find the entire code here: [I2C_NACK.zip](https://github.com/user-attachments/files/16324418/I2C_NACK.zip) (it's an almost empty project with just the bare minimum set up to reproduce the issue).\r\nAs an I2C master, I am using an [Analog Discovery 3](https://digilent.com/shop/analog-discovery-3/), but of course any other type of logic analyzer or similar should be fine. I set it up to provide 3.3V to the MCU & configure the pins for the I2C bus. Then I simply write some random bytes to the MCU (I2C address 0x01) & verify that they are ACK'ed, as described above. Setting the breakpoint & starting two writes in a row however leads to the second write being NACK'ed as described.\r\nI hope this helps\r\n"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2024-07-22T15:56:31Z",
+        "body": "Hello @lukas-lang,\r\n\r\nThank you for the example. I will try to reproduce the issue using it.\r\nI noticed this Line of code `LL_I2C_SetTransferSize(hi2c->Instance, 1); // set NBYTES to 1 to release clock & start receiving`\r\n\r\nThe **TransferSize** is \"The number of bytes to be transferred\", did you intentionally set it to 1?\r\n\r\nWith regards,"
+      },
+      {
+        "author": "lukas-lang",
+        "created_at": "2024-07-23T08:29:54Z",
+        "body": "Yes, setting NBYTES to 1 is intentional. This is based on my understanding of the following paragraph from the Reference Manual (in particular the bolded sentence):\r\n\r\n> Reload mode must be selected in order to allow byte ACK control in slave reception mode \r\n(RELOAD=1). **To get control of each byte, NBYTES must be initialized to 0x1 in the ADDR \r\ninterrupt subroutine, and reloaded to 0x1 after each received byte.** When the byte is \r\nreceived, the TCR bit is set, stretching the SCL signal low between the 8th and 9th SCL \r\npulses. The user can read the data from the I2C_RXDR register, and then decide to \r\nacknowledge it or not by configuring the ACK bit in the I2C_CR2 register. The SCL stretch is \r\nreleased by programming NBYTES to a non-zero value: the acknowledge or not\u0002acknowledge is sent and next byte can be received. "
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2024-07-30T08:24:17Z",
+        "body": "Hello @lukas-lang,\r\n\r\nRegarding your issue, I have checked with our team that this line of code is not supposed to cause problem, and they aware there is the possibility to remove it, but not in the near future.\r\n\r\nIn the other hand, you can remove this line of code if it suits your application.\r\n\r\nPlease, allow me to close the issue, thank you for your comprehension.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32g0xx-hal-driver/issues/6"
+  },
+  {
+    "repo": "stm32g0xx-hal-driver",
+    "issue_number": 5,
+    "title": "HAL_SPI_TransmitReceive_IT crashes when TX buffer is not 16 bit aligned",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "hal",
+      "internal bug tracker"
+    ],
+    "created_at": "2024-06-14T09:59:34Z",
+    "closed_at": "2024-08-15T09:54:46Z",
+    "body": "**Describe the set-up**\r\n * Tested on nucleo-g0b1re\r\n * arm-none-eabi-gcc version 10.3.1 (but compiler does not matter)\r\n\r\n**Describe the bug**\r\nCalling function `HAL_SPI_Receive_IT()` or `HAL_SPI_TransmitReceive_IT()` with buffer not aligned to 16 bits crashes MCU\r\n\r\n**How To Reproduce**\r\n1. Call `HAL_SPI_Receive_IT()` with unaligned buffer and more then 1 byte to send\r\n\r\n**Additional context**\r\nReal problem however is in `SPI_2linesTxISR_8BIT()` function that tries to optimize send using 16 bits access if there is more data.\r\nFor **Cortex-M0+** unaligned read results in fault.\r\n\r\n```c\r\nstatic void SPI_2linesTxISR_8BIT(struct __SPI_HandleTypeDef *hspi)\r\n{\r\n  /* Transmit data in packing Bit mode */\r\n  if (hspi->TxXferCount >= 2U &&\r\n    ((uint32_t)(hspi->pTxBuffPtr) & 1) == 0) // <= !!!! Additional check to use 8 bit for unaligned buffer here fixes the problem\r\n  {\r\n    hspi->Instance->DR = *((uint16_t *)hspi->pTxBuffPtr); // <= !!! Crashes here on Cortex-M0+\r\n    hspi->pTxBuffPtr += sizeof(uint16_t);\r\n    hspi->TxXferCount -= 2U;\r\n  }\r\n...\r\n```\r\n",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2024-06-19T09:43:51Z",
+        "body": "ST internal Reference: 184492"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2024-08-15T09:54:46Z",
+        "body": "Fixed in commit https://github.com/STMicroelectronics/stm32g0xx_hal_driver/commit/1c95709a51b5a32e02c1469e12e5cfe6b8a1ce71"
+      },
+      {
+        "author": "kasjer",
+        "created_at": "2024-08-15T10:31:50Z",
+        "body": "It's hard do believe that simple bug (unnecessary optimization that was flawed and could be fixed in one line) resulted in change of API that is less functional than before, adds a lot of checks that are not really needed.\r\nIt's not that SPI hardware has some limitation that restrict buffer alignment it's just unreasonable approach that uses \"optimization\".\r\nNow if one uses DMA API that works fine and for some reason wants to switch to IT that has similar API and could be used interchangeable user can face serious crash and go through debugging to find out that both API are not compatible and application has to be aware of this unnecessary limitation (that is not present in non-Cortex-M0 based MCU's).\r\n\r\nThis is very disappointing solution and hardly could be referred as fixed but if counts toward KPI."
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32g0xx-hal-driver/issues/5"
+  },
+  {
+    "repo": "stm32g0xx-hal-driver",
+    "issue_number": 4,
+    "title": "Timeout parameter in HAL_I2C_Master_Receive/HAL_I2C_Mem_Read not used for I2C_WaitOnFlagUntilTimeout function",
+    "state": "closed",
+    "labels": [
+      "question",
+      "hal",
+      "i2c"
+    ],
+    "created_at": "2024-04-22T13:49:24Z",
+    "closed_at": "2024-04-29T13:31:39Z",
+    "body": "Hello,\r\n\r\nI found that the Timeout parameter in both HAL_I2C_Master_Receive & HAL_I2C_Mem_Read functions is not used in these two lines: \r\n\r\nhttps://github.com/STMicroelectronics/stm32g0xx_hal_driver/blob/dabe885cefd3c201c1d8aa1cc98657db7b76a309/Src/stm32g0xx_hal_i2c.c#L1273\r\n\r\nhttps://github.com/STMicroelectronics/stm32g0xx_hal_driver/blob/dabe885cefd3c201c1d8aa1cc98657db7b76a309/Src/stm32g0xx_hal_i2c.c#L2670\r\n\r\nI'm not sure if this is a bug, but in my case, I need to change it to : \r\n_if (I2C_WaitOnFlagUntilTimeout(hi2c, I2C_FLAG_BUSY, SET, Timeout, tickstart) != HAL_OK)_\r\n\r\n**How to reproduce the \"bug \"**: Call the HAL_I2C_Master_Receive or HAL_I2C_Mem_Read function with a timeout parameter of less than 25ms, and don't power up the i2c device to trigger the timeout. \r\n",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2024-04-26T16:20:23Z",
+        "body": "Hello @Kedrel,\r\n\r\nThank you for the report.\r\n\r\nThe Timeout used in `I2C_WaitOnFlagUntilTimeout` for the 2 functions HAL_I2C_Master_Receive & HAL_I2C_Mem_Read is sufficient to check if the peripheral still busy.\r\n\r\nOtherwise, can you share more details about your scenario or project?\r\n\r\nWith regards."
+      },
+      {
+        "author": "Kedrel",
+        "created_at": "2024-04-29T06:48:52Z",
+        "body": "Hello @KRASTM,\r\n\r\nThe system i'm working on currently uses a tick of 10 ms to run the whole process. The aim is never to have a task that exceends 10ms so we can handle the \"real-time\" properly.\r\n\r\nWhen i call \"**HAL_I2C_Mem_Read**\" using a Timeout parameter at 2 ms, inside of it we have the call of \"**I2C_WaitOnFlagUntilTimeout**\" which uses a parameter of **I2C_TIMEOUT_BUSY**, which is 25ms. \r\n\r\nSo if an I2C peripheral can't respond, instead of loosing 2ms of wait time like the setting i chose, i'll loose 25ms. \r\n\r\nI can't afford to loose 25ms like that (as i have multiple I2C sensors), so i'll change the **I2C_TIMEOUT_BUSY** value to something acceptable for my application. \r\n\r\nWith regards."
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2024-04-29T13:31:40Z",
+        "body": "Hello @Kedrel,\r\n\r\nIn this particular case, it is possible to modify the value of `I2C_TIMEOUT_BUSY ` to suit your application.\r\nPlease allow me to close this issue. Thank you for your comprehension.\r\n\r\nWith regards."
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32g0xx-hal-driver/issues/4"
+  },
+  {
+    "repo": "stm32g0xx-hal-driver",
+    "issue_number": 3,
+    "title": "Data filters in LL_ADC_REG_ReadConversionDataX prevent left alignment from working",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "hal",
+      "internal bug tracker"
+    ],
+    "created_at": "2023-12-26T21:09:17Z",
+    "closed_at": "2025-06-17T16:40:59Z",
+    "body": "**Describe the set-up**\r\nAny board.\r\nAny IDE/compiler.\r\nNoticed with MC Library with HAL/LL that uses ADC value left alignment.\r\n\r\n**Describe the bug**\r\nIn recent version of HAL/LL for G0, functions LL_ADC_REG_ReadConversionData12, LL_ADC_REG_ReadConversionData10, LL_ADC_REG_ReadConversionData8 and LL_ADC_REG_ReadConversionData6 were modified with data filters, respectively 0x00000FFFUL, 0x000003FFUL, 0x000000FFUL, and 0x0000003FUL.\r\nThis prevent them from working when LL_ADC_DATA_ALIGN_LEFT is configured.\r\n\r\n**How To Reproduce**\r\nAny project using MC Library or LL_ADC_DATA_ALIGN_LEFT with G0/HAL_LL.\r\n\r\n**Additional context**\r\nRemoving the filters mentioned above solves the issue.\r\nFor example, for 12 bit data value, the correct function is:\r\n```\r\n__STATIC_INLINE uint16_t LL_ADC_REG_ReadConversionData12(const ADC_TypeDef *ADCx)\r\n{\r\n  return (uint16_t)(READ_BIT(ADCx->DR, ADC_DR_DATA));\r\n}\r\n\r\n```",
+    "comments": [
+      {
+        "author": "RJMSTM",
+        "created_at": "2023-12-29T14:50:12Z",
+        "body": "ST Internal Reference: 169678"
+      },
+      {
+        "author": "RJMSTM",
+        "created_at": "2024-01-05T10:35:04Z",
+        "body": "Hello @phileimer,\r\n\r\nThis not a bug:\r\nthe feature \"data alignment\" shifts data to be aligned on bit 15, therefore data is 16 bits wide [15; 0].\r\nAnd therefore, to read data, function LL_ADC_REG_ReadConversionData32() must be used.\r\n\r\nThe other functions ..._ReadConversionData6/8/10/12 are not usable in this mode.\r\n\r\nAn update description will be made of LL_ADC_REG_ReadConversionData32() to be more generic on use cases.\r\n\r\nWith regards,\r\nRania"
+      },
+      {
+        "author": "phileimer",
+        "created_at": "2024-01-05T10:49:32Z",
+        "body": "Hi Rania (@RJMSTM),\r\n\r\nThank you for your feedback. I got the point.\r\nI believe you should fill in a bug for this in the X-CUBE-MCSDK project.\r\nIn its version 5, this project uses left data alignement and the 12 bit function, triggering a severe bug.\r\nI've not checked with the newer version 6.\r\n\r\nAlso, I noticed these LL_ADC functions for other STM32 flavors I use (F4 and L0) don't have these data filters implemented yet.\r\nWill they be modified later?\r\n\r\nThank you again,\r\nJ. Ph."
+      },
+      {
+        "author": "FredericVirot",
+        "created_at": "2024-04-19T17:21:41Z",
+        "body": "Hello Jean-Philippe (@phileimer),\r\n\r\nX-CUBE-MCSDK version 6.x also uses a left alignment configuration for the ADCs, so this issue is present in this line of versions. This indeed causes a severe bug as it makes the MCSDK unusable on G0 with the 1.6.2 version of the G0 LL drivers. \r\nThis issue will be addressed soon in an upcoming version of MCSDK 6.x. \r\nHowever, note that X-CUBE-MCSDK version 5 will most probably not be updated to fix this issue. I would strongly advise you to switch to X-CUBE-MCSDK version 6.x.\r\n\r\nThe other STM32 series are **not** currently touched by this issue.   \r\n\r\nWith my best regards,\r\n\r\nFred."
+      },
+      {
+        "author": "phileimer",
+        "created_at": "2024-04-19T17:57:12Z",
+        "body": "Hi Fred,\r\nThank you for your feedback.\r\nI already fixed this issue in my MCSDK v5 for G0 projects.\r\nThese are unlikely to be switched to v6 because they are mature.\r\nMerci bien,\r\nJ. Ph."
+      },
+      {
+        "author": "RJMSTM",
+        "created_at": "2025-06-17T16:40:56Z",
+        "body": "Fixed in : 4c5571be98e1e549e8f710b3fb7ec7aafafc702d"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32g0xx-hal-driver/issues/3"
+  },
+  {
+    "repo": "stm32g0xx-hal-driver",
+    "issue_number": 2,
+    "title": "USB OUT stall's on high bus load ",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "hal",
+      "internal bug tracker",
+      "usb"
+    ],
+    "created_at": "2023-01-18T11:18:00Z",
+    "closed_at": "2026-05-26T15:43:18Z",
+    "body": "I have a firmware running on the NUCLEO-G0B1RE that receives bulk out transfers over USB and echos them back.\r\nThe endpoint is setup for double buffering.\r\nAt high bus load some transfers are aborted with a STALL.\r\n\r\nThe firmware is ported by @marckleinebudde can be found here https://github.com/marckleinebudde/candleLight_fw/tree/stm32g0\r\n\r\nI suspect the cause to be in [Inc/stm32g0xx_ll_usb.h#L659](https://github.com/STMicroelectronics/stm32g0xx_hal_driver/blob/master/Inc/stm32g0xx_ll_usb.h#L659).\r\nIt does two writes to the buffer descriptor table.\r\nOne to clear BLSIZE, NUM_BLOCK and COUNTn_RX and one the set BLSIZE and NUM_BLOCK.\r\nThis results in a small window in which NUM_BLOCK is 0 while the endpoint is valid.\r\n\r\nAs stated in RM0444 37.5.2\r\n> Reception memory buffer locations are written starting from the address contained in the\r\n> ADDRn_RX for a number of bytes corresponding to the received data packet length, or up\r\n> to the last allocated memory location, as defined by BLSIZE and NUM_BLOCK, whichever\r\n> comes first. In this way, the USB peripheral never writes beyond the end of the allocated\r\n> reception memory buffer area. If the length of the data packet payload (actual number of\r\n> bytes used by the application) is greater than the allocated buffer, the USB peripheral\r\n> detects a buffer overrun condition. In this case, a STALL handshake is sent instead of the\r\n> usual ACK to notify the problem to the host, no interrupt is generated and the transaction is\r\n> considered failed.\r\n\r\nSo either make sure COUNTn_RX is cleared without clearing NUM_BLOCK or setting STATRX to NAK while changing the entry.",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2024-02-08T18:04:31Z",
+        "body": "Hi @lichtfeind,\r\n\r\nPlease excuse this delayed reply. Your point looks relevant. It has been forwarded to our development teams for further analysis. I will keep you informed.\r\n\r\nTo be sure I correctly understood, you suspect the below [code block](https://github.com/STMicroelectronics/stm32g0xx_hal_driver/blob/master/Inc/stm32g0xx_ll_usb.h#L683-L704) to cause the issue, mainly the **two successive accesses** to the buffer descriptor table via the `pdwReg` parameter:\r\n1. to clear both `BLSIZE` and `NBLK`,\r\n2. to set them back.\r\n\r\n```c\r\n#define USB_DRD_SET_CHEP_CNT_RX_REG(pdwReg, wCount) \\\r\n  do { \\\r\n    uint32_t wNBlocks; \\\r\n    \\\r\n    (pdwReg) &= ~(USB_CNTRX_BLSIZE | USB_CNTRX_NBLK_MSK); \\\r\n    \\\r\n    if ((wCount) > 62U) \\\r\n    { \\\r\n      USB_DRD_CALC_BLK32((pdwReg), (wCount), wNBlocks); \\\r\n    } \\\r\n    else \\\r\n    { \\\r\n      if ((wCount) == 0U) \\\r\n      { \\\r\n        (pdwReg) |= USB_CNTRX_BLSIZE; \\\r\n      } \\\r\n      else \\\r\n      { \\\r\n        USB_DRD_CALC_BLK2((pdwReg), (wCount), wNBlocks); \\\r\n      } \\\r\n    } \\\r\n  } while(0) /* USB_DRD_SET_CHEP_CNT_RX_REG */\r\n```\r\n\r\nWith regards, "
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2024-02-08T18:05:01Z",
+        "body": "ST Internal Reference: 191643"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2024-02-09T13:48:43Z",
+        "body": "Hi @lichtfeind,\r\n\r\nJust wondering. Did you give it another try with the latest HAL-LL version available on GitHub to see whether the problem still persists? A number of fixes have been pushed since you first created this issue, some related to the LL USB driver.\r\n\r\nPlease let me know and thank you in advance.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "marckleinebudde",
+        "created_at": "2024-02-09T14:39:51Z",
+        "body": "Hi @ALABSTM,\r\n\r\n> To be sure I correctly understood, you suspect the below code block to cause the issue, mainly the two successive accesses to the buffer descriptor table via the pdwReg parameter:\r\n\r\nThe issue it that there is a small window, where both `COUNTn_RX` and `NUM_BLOCK` are cleared. A received USB frame results in a stall, see patch description of https://github.com/candle-usb/candleLight_fw/pull/156/commits/dffacdeafa9cfe196d76ec8f3b90839f043fcea2"
+      },
+      {
+        "author": "marckleinebudde",
+        "created_at": "2024-02-09T14:40:48Z",
+        "body": "> Just wondering. Did you give it another try with the latest HAL-LL version available on GitHub to see whether the problem still persists? A number of fixes have been pushed since you first created this issue, some related to the LL USB driver.\r\n\r\nThe problematic code is still in place, maybe this version fixes other problems, but not this one."
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2025-07-31T15:21:43Z",
+        "body": "Hi @lichtfeind and @marckleinebudde,\n\nI hope you are fine. Some enhancements have been made in the frame of the double buffering mode. Would you mind checking whether the issue still persists?  You can have a look at commit b3638742cfd2e8160f35f616f5ed19877e228f6e for details.\n\nWith regards,\n\n**PS:** @marckleinebudde, the code you described as problematic has not changed."
+      },
+      {
+        "author": "marckleinebudde",
+        "created_at": "2025-07-31T15:31:24Z",
+        "body": "@ALABSTM why do you think this will solve the problem described in https://github.com/candle-usb/candleLight_fw/commit/dffacdeafa9cfe196d76ec8f3b90839f043fcea2? Why don't you include the the proposed fix? The problematic code is still in place!"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2025-12-16T10:23:57Z",
+        "body": "ST Internal Reference: 223906"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2026-05-25T09:55:19Z",
+        "body": "Hello @lichtfeind, @marckleinebudde,\n\nThis is the fix implemented to **avoid successive accesses** via `pdwReg`. It should be published soon.\n\n```diff\n#define USB_DRD_SET_CHEP_CNT_RX_REG(pdwReg, wCount) \\\n  do { \\\n    uint32_t wNBlocks; \\\n+   uint32_t wRegVal = (uint32_t)(pdwReg) & ~(USB_CNTRX_BLSIZE | USB_CNTRX_NBLK_MSK); \\\n-   \\\n-   (pdwReg) &= ~(USB_CNTRX_BLSIZE | USB_CNTRX_NBLK_MSK); \\\n    \\\n    if ((wCount) == 0U) \\\n    { \\\n-     (pdwReg) |= USB_CNTRX_BLSIZE; \\\n+     wRegVal |= USB_CNTRX_BLSIZE; \\\n    } \\\n    else if ((wCount) <= 62U) \\\n    { \\\n-     USB_DRD_CALC_BLK2((pdwReg), (wCount), wNBlocks); \\\n+     USB_DRD_CALC_BLK2(wRegVal, (wCount), wNBlocks); \\\n    } \\\n    else \\\n    { \\\n-     USB_DRD_CALC_BLK32((pdwReg), (wCount), wNBlocks); \\\n+     USB_DRD_CALC_BLK32(wRegVal, (wCount), wNBlocks); \\\n    } \\\n+   (pdwReg) = wRegVal; \\\n  } while(0) /* USB_DRD_SET_CHEP_CNT_RX_REG */\n```\n\nWith regards,"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2026-05-26T15:43:19Z",
+        "body": "Fixed in commit: https://github.com/STMicroelectronics/stm32g0xx-hal-driver/commit/a1e286e91d3843585a8593edd9e6bde0ad9f0026"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32g0xx-hal-driver/issues/2"
+  },
+  {
+    "repo": "stm32g0xx-hal-driver",
+    "issue_number": 1,
+    "title": "Issue if tick rollover occurs while waiting for flash (from the forum)",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "hal",
+      "st community",
+      "internal bug tracker"
+    ],
+    "created_at": "2022-12-02T22:37:17Z",
+    "closed_at": "2023-09-06T16:23:24Z",
+    "body": "https://github.com/STMicroelectronics/stm32g0xx_hal_driver/blob/84a2e9393d6761802b70a4424e3049b9f3e51a22/Src/stm32g0xx_hal_flash.c#L596\r\n\r\nPlease see https://community.st.com/s/question/0D53W00001yhRP0SAM/issue-if-tick-rollover-occurs-while-waiting-for-flash\r\nand fix.",
+    "comments": [
+      {
+        "author": "TOUNSTM",
+        "created_at": "2023-04-05T11:45:20Z",
+        "body": "ST Internal Reference: 149113"
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2023-09-06T16:23:24Z",
+        "body": "Fixed in commit [272438f](https://github.com/STMicroelectronics/stm32g0xx_hal_driver/commit/272438fbdb3180e5d78c0f25608045af31528383)"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32g0xx-hal-driver/issues/1"
+  }
+]

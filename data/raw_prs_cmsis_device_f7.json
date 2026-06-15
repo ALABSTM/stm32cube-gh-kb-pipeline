@@ -1,0 +1,125 @@
+[
+  {
+    "repo": "cmsis_device_f7",
+    "pr_number": 1,
+    "title": "Add PTPPPSCR register to ETH_TypeDef",
+    "state": "closed",
+    "merged": true,
+    "draft": false,
+    "author": "maribu",
+    "labels": [
+      "bug",
+      "eth",
+      "cmsis",
+      "internal bug tracker"
+    ],
+    "created_at": "2020-12-11T17:33:24Z",
+    "updated_at": "2021-03-23T17:09:11Z",
+    "closed_at": "2021-02-22T18:13:45Z",
+    "merged_at": "2021-02-22T18:13:45Z",
+    "body": "### Contribution Description\r\n\r\nAdded the PTPPPSCR (PTP pulse-per-second control register) to the ETH_TypeDef.",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-f7/pull/1",
+    "head_ref": "ptpppscr",
+    "base_ref": "master",
+    "merge_commit_sha": "f499979de22ecf1ca9881a7130edb35f966d206c",
+    "commits_count": 2,
+    "review_comments_count": 0,
+    "comments_count": 6,
+    "changed_files_count": 9,
+    "additions": 63,
+    "deletions": 9,
+    "linked_issue_numbers": [],
+    "files_changed": [
+      {
+        "filename": "Include/stm32f745xx.h",
+        "status": "modified",
+        "additions": 7,
+        "deletions": 1,
+        "changes": 8,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f7/blob/7692ccb0f28796d3db5ff2f971b37d30c67ede1c/Include%2Fstm32f745xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f7/raw/7692ccb0f28796d3db5ff2f971b37d30c67ede1c/Include%2Fstm32f745xx.h"
+      },
+      {
+        "filename": "Include/stm32f746xx.h",
+        "status": "modified",
+        "additions": 7,
+        "deletions": 1,
+        "changes": 8,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f7/blob/7692ccb0f28796d3db5ff2f971b37d30c67ede1c/Include%2Fstm32f746xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f7/raw/7692ccb0f28796d3db5ff2f971b37d30c67ede1c/Include%2Fstm32f746xx.h"
+      },
+      {
+        "filename": "Include/stm32f750xx.h",
+        "status": "modified",
+        "additions": 7,
+        "deletions": 1,
+        "changes": 8,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f7/blob/7692ccb0f28796d3db5ff2f971b37d30c67ede1c/Include%2Fstm32f750xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f7/raw/7692ccb0f28796d3db5ff2f971b37d30c67ede1c/Include%2Fstm32f750xx.h"
+      },
+      {
+        "filename": "Include/stm32f756xx.h",
+        "status": "modified",
+        "additions": 7,
+        "deletions": 1,
+        "changes": 8,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f7/blob/7692ccb0f28796d3db5ff2f971b37d30c67ede1c/Include%2Fstm32f756xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f7/raw/7692ccb0f28796d3db5ff2f971b37d30c67ede1c/Include%2Fstm32f756xx.h"
+      },
+      {
+        "filename": "Include/stm32f765xx.h",
+        "status": "modified",
+        "additions": 7,
+        "deletions": 1,
+        "changes": 8,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f7/blob/7692ccb0f28796d3db5ff2f971b37d30c67ede1c/Include%2Fstm32f765xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f7/raw/7692ccb0f28796d3db5ff2f971b37d30c67ede1c/Include%2Fstm32f765xx.h"
+      },
+      {
+        "filename": "Include/stm32f767xx.h",
+        "status": "modified",
+        "additions": 7,
+        "deletions": 1,
+        "changes": 8,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f7/blob/7692ccb0f28796d3db5ff2f971b37d30c67ede1c/Include%2Fstm32f767xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f7/raw/7692ccb0f28796d3db5ff2f971b37d30c67ede1c/Include%2Fstm32f767xx.h"
+      },
+      {
+        "filename": "Include/stm32f769xx.h",
+        "status": "modified",
+        "additions": 7,
+        "deletions": 1,
+        "changes": 8,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f7/blob/7692ccb0f28796d3db5ff2f971b37d30c67ede1c/Include%2Fstm32f769xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f7/raw/7692ccb0f28796d3db5ff2f971b37d30c67ede1c/Include%2Fstm32f769xx.h"
+      },
+      {
+        "filename": "Include/stm32f777xx.h",
+        "status": "modified",
+        "additions": 7,
+        "deletions": 1,
+        "changes": 8,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f7/blob/7692ccb0f28796d3db5ff2f971b37d30c67ede1c/Include%2Fstm32f777xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f7/raw/7692ccb0f28796d3db5ff2f971b37d30c67ede1c/Include%2Fstm32f777xx.h"
+      },
+      {
+        "filename": "Include/stm32f779xx.h",
+        "status": "modified",
+        "additions": 7,
+        "deletions": 1,
+        "changes": 8,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-f7/blob/7692ccb0f28796d3db5ff2f971b37d30c67ede1c/Include%2Fstm32f779xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-f7/raw/7692ccb0f28796d3db5ff2f971b37d30c67ede1c/Include%2Fstm32f779xx.h"
+      }
+    ]
+  }
+]

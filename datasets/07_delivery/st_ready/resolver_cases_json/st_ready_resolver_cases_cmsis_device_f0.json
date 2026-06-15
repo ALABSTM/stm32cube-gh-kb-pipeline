@@ -1,0 +1,125 @@
+{
+  "resolver_cases": [
+    {
+      "id": "resolver::cmsis_device_f0::issue::1",
+      "title": "Why SystemCoreClockUpdate did not supports RCC_CFGR_SWS_HSI48",
+      "label": "Why SystemCoreClockUpdate did not supports RCC_CFGR_SWS_HSI48",
+      "externalURL": "https://github.com/STMicroelectronics/cmsis-device-f0/issues/1",
+      "rootTagPath": "resolver_cases",
+      "evidence_refs": [
+        {
+          "type": "issue",
+          "id": 1,
+          "url": "https://github.com/STMicroelectronics/cmsis-device-f0/issues/1"
+        }
+      ],
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "cmsis_device_f0",
+      "issue_root_path": "issues",
+      "pr_root_path": "pull",
+      "commit_root_path": "commit",
+      "issue_number": 1,
+      "issue_title": "Why SystemCoreClockUpdate did not supports RCC_CFGR_SWS_HSI48",
+      "issue_labels": [
+        "duplicate",
+        "cmsis"
+      ],
+      "issue_state": "closed",
+      "issue_url": "https://github.com/STMicroelectronics/cmsis-device-f0/issues/1",
+      "linked_pr_numbers": [
+        2,
+        5
+      ],
+      "linked_commit_shas": [
+        "9f6dc4b97b44207f48c17adc2908156da8367ad3",
+        "dc7f8de5449bcb64d8d5b3b3ed6e61a7bd5c2190",
+        "f6ff35a554b8b81e62b74c45c96e4d9a4b1da8a8"
+      ],
+      "primary_pr_number": 2,
+      "primary_commit_sha": "9f6dc4b97b44207f48c17adc2908156da8367ad3",
+      "linked_pr_urls": [
+        "https://github.com/STMicroelectronics/cmsis-device-f0/pull/2",
+        "https://github.com/STMicroelectronics/cmsis-device-f0/pull/5"
+      ],
+      "linked_commit_urls": [
+        "https://github.com/STMicroelectronics/cmsis-device-f0/commit/9f6dc4b97b44207f48c17adc2908156da8367ad3",
+        "https://github.com/STMicroelectronics/cmsis-device-f0/commit/dc7f8de5449bcb64d8d5b3b3ed6e61a7bd5c2190",
+        "https://github.com/STMicroelectronics/cmsis-device-f0/commit/f6ff35a554b8b81e62b74c45c96e4d9a4b1da8a8"
+      ],
+      "resolution_status": "candidate_fix",
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0,
+      "link_confidence": "medium",
+      "link_score": 0.8,
+      "delivery_template": "st_v1_resolver_case",
+      "resolver_card_text": "Problem: Issue #1 - Why SystemCoreClockUpdate did not supports RCC_CFGR_SWS_HSI48\nContext: repo=cmsis_device_f0, labels=duplicate, cmsis, issue_state=closed\nResolver signal: resolution_status=candidate_fix, confidence=medium, score=0.8\nAssessment: Potential fix identified, but integration status is uncertain.\nCandidate PRs: Add support for HSI48 in SystemCoreClockUpdate | Add support for HSI48 in SystemCoreClockUpdate\nCommit evidence: Fix error about HSI48 in SystemCoreClockUpdate Handle HSI48 only when it's applicable. | Add support for HSI48 in SystemCoreClockUpdate | Add support for HSI48 in SystemCoreClockUpdate\nPR #2 description: ## IMPORTANT INFORMATION \r\n\r\n### Contributor License Agreement (CLA)\r\n* The Pull Request feature will be considered by STMicroelectronics after the signature of a **Contributor License Agreement (CLA)** by the submiter.\r\n* If you did not signed such agreement, please follow the rules mentioned in the CONTRIBUTING.md file. \r\n  \r\n> Already signed\r\n\r\nsee also issue #1\nPR #5 description: Hi there,\r\n\r\nIt's me again, please read #2 #1 for background.\r\n\r\nI have tried latest version of this repo, and found out that only comments about HSI48 is updated to SystemCoreClockUpdate, but SystemCoreClockUpdate still *DID NOT* handle the case of switching clock source to HSI48, which I believe should fix by add an `case RCC_CFGR_SWS_HSI48 ` clause to the `switch` block. \r\n\r\nI'm asking you to review that again, please.\r\n\r\n### copilot summary\r\n\r\nThis pull request includes an update to the `SystemCoreClockUpdate` function in the `system_stm32f0xx.c` file. The change involves adding support for the HSI48 clock source.\r\n\r\nClock source support:\r\n\r\n* [`Source/Templates/system_stm32f0xx.c`](diffhunk://#diff-dc2dd3acdfd0cc07fd48554b6c9e80ef61e2668dbccb5993b0f7c0a2addc3647R227-R229): Added a case for `RCC_CFGR_SWS_HSI48` to set `SystemCoreClock` to `HSI48_VALUE` when HSI48 is used as the system clock.\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying.",
+      "linked_file_ids": [
+        "cmsis_device_f0-file-3488356763686412484"
+      ],
+      "linked_file_paths": [
+        "Source/Templates/system_stm32f0xx.c"
+      ],
+      "files_evidence": {
+        "changed_files_total": 1,
+        "matched_docs_files_count": 1,
+        "unmatched_files_count": 0,
+        "match_rate": 1.0,
+        "files": [
+          {
+            "path": "Source/Templates/system_stm32f0xx.c",
+            "status": "modified",
+            "additions": 14,
+            "deletions": 0,
+            "changes": 14,
+            "touched_by_commits": 3,
+            "commit_shas": [
+              "9f6dc4b97b44207f48c17adc2908156da8367ad3",
+              "dc7f8de5449bcb64d8d5b3b3ed6e61a7bd5c2190",
+              "f6ff35a554b8b81e62b74c45c96e4d9a4b1da8a8"
+            ],
+            "module": "source",
+            "file_doc_id": "cmsis_device_f0-file-3488356763686412484",
+            "file_type": "cmsis_source",
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/cmsis_device_f0/blob/master/Source/Templates/system_stm32f0xx.c",
+            "score": 34.0
+          }
+        ]
+      },
+      "impacted_modules": [
+        "source"
+      ],
+      "impacted_components": [],
+      "impacted_boards": [],
+      "impacted_file_types": [
+        "cmsis_source"
+      ],
+      "primary_changed_file": {
+        "path": "Source/Templates/system_stm32f0xx.c",
+        "status": "modified",
+        "additions": 14,
+        "deletions": 0,
+        "changes": 14,
+        "touched_by_commits": 3,
+        "commit_shas": [
+          "9f6dc4b97b44207f48c17adc2908156da8367ad3",
+          "dc7f8de5449bcb64d8d5b3b3ed6e61a7bd5c2190",
+          "f6ff35a554b8b81e62b74c45c96e4d9a4b1da8a8"
+        ],
+        "module": "source",
+        "file_doc_id": "cmsis_device_f0-file-3488356763686412484",
+        "file_type": "cmsis_source",
+        "component": null,
+        "board": null,
+        "example_name": null,
+        "source_match": "docs_files_exact",
+        "github_url": "https://github.com/STMicroelectronics/cmsis_device_f0/blob/master/Source/Templates/system_stm32f0xx.c",
+        "score": 34.0
+      }
+    }
+  ]
+}

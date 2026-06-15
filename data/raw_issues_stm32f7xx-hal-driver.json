@@ -1,0 +1,685 @@
+[
+  {
+    "repo": "stm32f7xx-hal-driver",
+    "issue_number": 25,
+    "title": "HAL CRC functions not const-correct.",
+    "state": "open",
+    "labels": [
+      "enhancement",
+      "hal",
+      "internal bug tracker",
+      "spotted before customer",
+      "crc"
+    ],
+    "created_at": "2026-06-10T23:55:03Z",
+    "closed_at": null,
+    "body": "**Describe the bug**\nThe `HAL_CRC_Accumulate` and `HAL_CRC_Calculate` functions don't modify the underlying data, and therefore pBuffer should be `const`.\n\n**Additional context**\nThis can be done by making the argument const in the two extern functions mentioned above, as well as static functions `CRC_Handle_8` and `CRC_Handle_16`\n\n[0001-Fixed-const-correctness-for-HAL_CRC_Accumulate-and-H.patch](https://github.com/user-attachments/files/28816960/0001-Fixed-const-correctness-for-HAL_CRC_Accumulate-and-H.patch)",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2026-06-12T14:00:04Z",
+        "body": "See also [stm32f4xx-hal-driver#40](https://github.com/STMicroelectronics/stm32f4xx-hal-driver/pull/40)"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2026-06-12T14:03:17Z",
+        "body": "ST Internal Reference: 210192"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2026-06-12T14:04:17Z",
+        "body": "Hi @NJDFan,\n\nThank you for having reported. This has been already fixed internally and should be made available soon enough, hopefully.\n\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/25"
+  },
+  {
+    "repo": "stm32f7xx-hal-driver",
+    "issue_number": 24,
+    "title": "ETH driver regression in HAL_ETH_GetMACFilterConfig, HAL_ETH_SetMACFilterConfig",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "invalid",
+      "hal",
+      "eth"
+    ],
+    "created_at": "2026-06-08T09:46:16Z",
+    "closed_at": "2026-06-15T08:20:26Z",
+    "body": "The meaning of bit 5 in MACFFR is \"disable broadcast\", so the bit set (1) means DISABLE.\n\nIn these lines:\nhttps://github.com/STMicroelectronics/stm32f7xx-hal-driver/blob/daf38ecc98298d8434a5fab8f5da35e34e4c1695/Src/stm32f7xx_hal_eth.c#L2461\nhttps://github.com/STMicroelectronics/stm32f7xx-hal-driver/blob/daf38ecc98298d8434a5fab8f5da35e34e4c1695/Src/stm32f7xx_hal_eth.c#L2500\n\nThe change is part of commit 58f6d79 ; May 16, 2025\n\nPlease see also:\nhttps://community.st.com/t5/stm32-mcus-embedded-software/enabling-igmp-disables-reception-of-broadcast-messages-v1-5-0/m-p/902322#M76083\n\n",
+    "comments": [
+      {
+        "author": "ASAHSTM",
+        "created_at": "2026-06-12T10:56:35Z",
+        "body": "Hello @pavel-a,\n\nThank you for your report.\n\nThe `HAL_ETH_SetMACFilterConfig` function configures the `BroadcastFilter` field, which maps to bit 5 (BFD, Broadcast Frames Disable) of the MACFFR register. When this bit is set to 1, broadcast packets are disabled. That is, setting `BroadcastFilter = ENABLE `enables the broadcast filter, which blocks broadcast frames. This matches the current implementation.\n\n<img width=\"958\" height=\"133\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/4e8919ef-d398-4fc2-af13-95555755d7fb\" />\n\nWith Regards,"
+      },
+      {
+        "author": "pavel-a",
+        "created_at": "2026-06-12T16:37:20Z",
+        "body": "Thank you for clarification. If this is intended, please close.\n"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/24"
+  },
+  {
+    "repo": "stm32f7xx-hal-driver",
+    "issue_number": 23,
+    "title": "Inconsistent DMA FIFO Error handling in STM32F7 SPI/PPP drivers compared to STM32H7",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "hal",
+      "internal bug tracker",
+      "spi"
+    ],
+    "created_at": "2026-01-12T21:26:08Z",
+    "closed_at": "2026-02-13T16:21:40Z",
+    "body": "Hello ST,\n\nI would like to follow up on an issue that was originally reported by my colleague but for the STM32H7 family here: [STMicroelectronics/stm32h7xx-hal-driver#76](https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/76).\n\n**Describe the set-up**\n- Nucleo-F767ZI\n- VS Code, GCC 13.3.1 (inside STM32CubeCLT 1.18.0), CMake, Ninja\n\n**Describe the bug**\nIn stm32f7xx_hal_dma.c, the function HAL_DMA_Start_IT unconditionally enables the FIFO Error Interrupt (DMA_IT_FE), even when the DMA is used in Direct Mode (FIFO disabled).\nAs discussed in the H7 issue mentioned above. In the STM32H7 HAL handles this in the PPP driver error callbacks. For example, in the H7 SPI driver: [stm32h7xx_hal_spi.c L3523](https://github.com/STMicroelectronics/stm32h7xx-hal-driver/blob/57ed86b4c358e2333a71fd895b17f1ccdb68739e/Src/stm32h7xx_hal_spi.c#L3487) \nHowever STM32F7 HAL driver lacks this safeguard. In HAL_DMA_Start_IT, the DMA_IT_FE is unconditionally enabled and the SPI peripheral driver for F7 does not filter this error: [stm32f7xx_hal_spi.c L3375](https://github.com/STMicroelectronics/stm32f7xx-hal-driver/blob/e1446fa12ffda80ea1016faf349e45b2047fff12/Src/stm32f7xx_hal_spi.c#L3375).  This leads to triggered error callbacks for a feature that is not even active.\n\n**Questions:**\n1. Could you please let us know if there are any plans to align the F7 drivers with the H7 implementation in the near release?\n2. Just out of curiosity, why is this issue being addressed in PPP drivers instead of the DMA driver itself? I am not expert so definitely do not see whole context.\n\nThank you for your time and have a nice day\n\nBR, Jan\n",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2026-01-14T13:44:08Z",
+        "body": "See also [stm32h7xx-hal-driver#76](https://github.com/STMicroelectronics/stm32h7xx-hal-driver/issues/76)"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2026-01-26T14:15:04Z",
+        "body": "Hello @JohnK1987,\n\nThank you for highlighting this.\n\nI have shared your point with our team, especially regarding any plans to align the F7 drivers with the H7 implementation. I will keep you updated on any progress.\n\nRegarding the second point, the issue is being addressed within the PPP drivers rather than the DMA driver itself because:\n\n- The DMA driver is intentionally kept generic and “dumb”, it configures transfers and reports raw DMA status (transfer complete, error bits, etc.), but it does not know how these events should be interpreted for a specific peripheral or mode. That interpretation belongs to the PPP driver (SPI, UART, I2C, etc.), which is protocol‑aware and can decide whether a given DMA error is meaningful, ignorable, or critical in a given configuration.\n\n- Additionally, the same DMA controller is shared by many peripherals. If we change the behavior inside the DMA driver (for example, altering which interrupts are enabled or how some error bits are handled), we implicitly change it for all peripherals and all existing applications using DMA. By addressing the issue in each PPP driver, we can scope the fix only to the affected peripheral and mode, without creating regressions for other peripherals that might rely on the current DMA behavior.\n\nwith regards,"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2026-02-05T09:24:38Z",
+        "body": "Hello @JohnK1987,\n\nUpon review, we discovered that the line of code enabling the FIFO error interrupt was removed for all series except the F7 series. This was an oversight, and the line was mistakenly left in the F7 series.\nWe will correct it by removing the line from the F7 series to align it with the others and the fix will be available on GitHub shortly.\n\nWith regards,"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2026-02-05T09:25:03Z",
+        "body": "ST Internal Reference: 226678"
+      },
+      {
+        "author": "MKISTM",
+        "created_at": "2026-02-13T16:21:41Z",
+        "body": "Fixed in commit: 72415c07daceb85d098f8462753697d3c281de44"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/23"
+  },
+  {
+    "repo": "stm32f7xx-hal-driver",
+    "issue_number": 22,
+    "title": "Proposal: Prevent unused argument warning in HAL_EXTI_GetPending and HAL_EXTI_ClearPending",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "hal",
+      "internal bug tracker",
+      "exti"
+    ],
+    "created_at": "2025-10-13T08:21:48Z",
+    "closed_at": "2025-10-24T14:52:50Z",
+    "body": "**Describe the set-up**\n * Board: NUCLEO-F767ZI\n * IDE/Compiler: SEGGER Embedded Studio 8.24 / SEGGER Compiler\n\n**Additional context**\nIn the file `stm32f7xx_hal_exti.c`, I have added the following patch in the functions `HAL_EXTI_GetPending` and `HAL_EXTI_ClearPending`:\n\n```c\n  /* Prevent unused argument(s) compilation warning */\n  UNUSED(Edge);\n```\n\nDetails of the functions:\n\n```c\n/**\n  * @brief  Get interrupt pending bit of a dedicated line.\n  * @param  hexti Exti handle.\n  * @param  Edge Specify which pending edge as to be checked.\n  *         This parameter can be one of the following values:\n  *           @arg @ref EXTI_TRIGGER_RISING_FALLING\n  *         This parameter is kept for compatibility with other series.\n  * @retval 1 if interrupt is pending else 0.\n  */\nuint32_t HAL_EXTI_GetPending(EXTI_HandleTypeDef *hexti, uint32_t Edge)\n{\n  uint32_t regval;\n  uint32_t linepos;\n  uint32_t maskline;\n\n  /* Prevent unused argument(s) compilation warning */\n  UNUSED(Edge);\n\n  /* Check parameters */\n  assert_param(IS_EXTI_LINE(hexti->Line));\n  assert_param(IS_EXTI_CONFIG_LINE(hexti->Line));\n  assert_param(IS_EXTI_PENDING_EDGE(Edge));\n\n  /* Compute line mask */\n  linepos = (hexti->Line & EXTI_PIN_MASK);\n  maskline = (1uL << linepos);\n\n  /* return 1 if bit is set else 0 */\n  regval = ((EXTI->PR & maskline) >> linepos);\n  return regval;\n}\n\n/**\n  * @brief  Clear interrupt pending bit of a dedicated line.\n  * @param  hexti Exti handle.\n  * @param  Edge Specify which pending edge as to be clear.\n  *         This parameter can be one of the following values:\n  *           @arg @ref EXTI_TRIGGER_RISING_FALLING\n  *         This parameter is kept for compatibility with other series.\n  * @retval None.\n  */\nvoid HAL_EXTI_ClearPending(EXTI_HandleTypeDef *hexti, uint32_t Edge)\n{\n  uint32_t maskline;\n\n  /* Prevent unused argument(s) compilation warning */\n  UNUSED(Edge);\n\n  /* Check parameters */\n  assert_param(IS_EXTI_LINE(hexti->Line));\n  assert_param(IS_EXTI_CONFIG_LINE(hexti->Line));\n  assert_param(IS_EXTI_PENDING_EDGE(Edge));\n\n  /* Compute line mask */\n  maskline = (1uL << (hexti->Line & EXTI_PIN_MASK));\n\n  /* Clear Pending bit */\n  EXTI->PR =  maskline;\n}\n```\n\n**Question:**\nIs this fix in line with the project goals and would a pull request with this patch be welcome?\n\nThank you!",
+    "comments": [
+      {
+        "author": "MKISTM",
+        "created_at": "2025-10-17T08:56:24Z",
+        "body": "Hello @aschlueter-dev,\n\nThank you for this heads-up. Let's have this fixed. I'll log an internal tracker.\n\nWith regards,"
+      },
+      {
+        "author": "MKISTM",
+        "created_at": "2025-10-17T08:57:20Z",
+        "body": "ST Internal Reference: 219880"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-10-24T14:52:50Z",
+        "body": "Fixed in Commit: https://github.com/STMicroelectronics/stm32f7xx-hal-driver/commit/944feeabf699f73b3083167ff52a4ed77304def5"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/22"
+  },
+  {
+    "repo": "stm32f7xx-hal-driver",
+    "issue_number": 21,
+    "title": "HAL_ETH broken after last update?",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "invalid",
+      "hal",
+      "eth"
+    ],
+    "created_at": "2025-08-26T15:31:13Z",
+    "closed_at": "2025-08-28T14:36:41Z",
+    "body": "I use the latest version of hal_eth.c\ncompared to previous version there are some modification on PTP related parts and other related to \nHAL_ETH_SetMACFilterConfig e HAL_ETH_GetMACFilterConfig\n\nthese differences using the file with FreeRTOS+TCP v4.3.3 cause a problem in dhcp lease..\n\n<img width=\"1668\" height=\"47\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/e1aa3219-9600-4afb-a698-afe0be0f0c53\" />\n\naccording to RM0410 page 1825 when pFilterConfig->BroadcastFilter == ENABLE bit should be 1 not \n\nBit 5 BFD: Broadcast frames disable\nWhen this bit is set, the address filters filter all incoming broadcast frames.\nWhen this bit is reset, the address filters pass all received broadcast frames.\n\nso I think that the new version is wrong on this part",
+    "comments": [
+      {
+        "author": "ASEHSTM",
+        "created_at": "2025-08-28T13:20:56Z",
+        "body": "Hello @micheledarold,\n\nThank you for your report.\n\nWhen bit 5 of the configuration register is set to 1, broadcast packets are disabled, which means the Broadcast Filter is enabled.\n\nConversely, when the Broadcast Filter is disabled, all broadcast packets should be allowed to pass through without restriction. This behavior is achieved by ensuring that bit 5 is cleared (set to 0) when the Broadcast Filter is disabled.\n\n`((uint32_t)((pFilterConfig->BroadcastFilter == ENABLE) ? 1U : 0U) << 5)`\nthis modification ensures that bit 5 is set to 1 when the Broadcast Filter is enabled, and cleared to 0 when it is disabled, thereby allowing all broadcast packets to pass when the filter is off.\n\nTo port applications to the new HAL ETH driver, please configure the MAC filter as follows:\n\n- Set BroadcastFilter = DISABLE to allow reception of broadcast packets.\n- Set BroadcastFilter = ENABLE to block reception of broadcast packets.\n\nWith Regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2025-09-05T15:19:22Z",
+        "body": "See also #20 "
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/21"
+  },
+  {
+    "repo": "stm32f7xx-hal-driver",
+    "issue_number": 20,
+    "title": "ethernet broadcast filter inverted in cubemx F7 MCU package 1.17.3",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "invalid",
+      "hal",
+      "eth"
+    ],
+    "created_at": "2025-08-01T08:05:04Z",
+    "closed_at": "2025-08-07T06:22:19Z",
+    "body": "ethernet problems due to broadcast filter cubemx F7 1.17.3 (even Network examples for STM32F746G DISCO don't work anymore when upgrading from 1.17.2 to 1.17.3)\n\nbroadcast filter is enabled when disabling it - see [STMicroelectronics Community / STM32 MCUs Software development tools / STM32CubeMX (MCUs) /  Re: Enabling IGMP disables reception of broadcast ](https://community.st.com/t5/stm32cubemx-mcus/enabling-igmp-disables-reception-of-broadcast-messages-v1-5-0/m-p/827722#M33088)\n\n<img width=\"2698\" height=\"384\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/851769a6-442c-44b0-92e2-2d7a9c04bd53\" />",
+    "comments": [
+      {
+        "author": "ASEHSTM",
+        "created_at": "2025-08-05T11:58:57Z",
+        "body": "Hello @hans-naert,\n\nThank you for your report. \n\nThe HAL_ETH_SetMACFilterConfig() API has been updated to correctly handle the enable/disable configuration of the broadcast filter.\n\nTo port your application to the new HAL ETH driver, please configure the MAC filter as follows:\n\n- Set **BroadcastFilter = DISABLE** to allow reception of broadcast packets.\n- Set **BroadcastFilter = ENABLE** to block reception of broadcast packets.\n\n\nThis behavior will be thoroughly documented in our upcoming release.\n\nThank you for your understanding.\n\nWith Regards,"
+      },
+      {
+        "author": "hans-naert",
+        "created_at": "2025-08-05T12:18:29Z",
+        "body": "Hello @ASEHSTM \n\nThanks\n\nI see that its picked up for CMSIS-Driver_STM32  Version 1.2.1-dev2 \nhttps://open-cmsis-pack.github.io/CMSIS-Driver_STM32/main/eth_mac_stm32.html\n\nBest regards\nHans Naert"
+      },
+      {
+        "author": "ASEHSTM",
+        "created_at": "2025-08-05T13:04:37Z",
+        "body": "If you have no further questions, please allow me to close this issue.\n\nWith Rrgards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/20"
+  },
+  {
+    "repo": "stm32f7xx-hal-driver",
+    "issue_number": 17,
+    "title": "LL ADC GetTriggerSource() returning zero",
+    "state": "closed",
+    "labels": [
+      "question",
+      "hal",
+      "adc"
+    ],
+    "created_at": "2025-07-29T12:14:11Z",
+    "closed_at": "2025-08-04T11:12:16Z",
+    "body": "**The set-up**\n * Custom board with STM32F722ZE processor\n * Visual Studio Code, with GNU ARM compiler gcc-arm-none-eabi-9-2019-q4-major\n * stm32f7xx-hal-driver version v1.11.0\n\n**Describe the bug**\nI am working on a system that modifies the trigger source of a regular group ADC conversion, in runtime. Using the LowLevel functions in `stm32f7xx_ll_adc.h`, I can set the trigger source by using:\n\n`__STATIC_INLINE void LL_ADC_REG_SetTriggerSource(ADC_TypeDef *ADCx, uint32_t TriggerSource)`\n\nI was hoping I could read back the value I set, but that is not the case. Using function:\n\n`__STATIC_INLINE uint32_t LL_ADC_REG_GetTriggerSource(ADC_TypeDef *ADCx)`\n\nThis function returns zero for me. This is before actually starting conversions.\n\n**Additional context**\nI found that performing the & operation with `ADC_REG_TRIG_SOURCE_MASK` seems to delete the exact information I am interested in. See snippet below of this mask.\n\n```\n/* Mask containing trigger source masks for each of possible                  */\n/* trigger edge selection duplicated with shifts [0; 4; 8; 12]                */\n/* corresponding to {SW start; ext trigger; ext trigger; ext trigger}.        */\n#define ADC_REG_TRIG_SOURCE_MASK            (((LL_ADC_REG_TRIG_SOFTWARE & ADC_CR2_EXTSEL) >> (4U * 0U)) | \\\n                                             ((ADC_CR2_EXTSEL)                            >> (4U * 1U)) | \\\n                                             ((ADC_CR2_EXTSEL)                            >> (4U * 2U)) | \\\n                                             ((ADC_CR2_EXTSEL)                            >> (4U * 3U)))\n```\n\nI don't really understand why there is a need for the extra logic in the `Get` version of the function. Looking at the `Set` version, it simply writes the `TriggerSource` value to the `ADC_CR2_EXTSEL` register bits of the ADC peripheral. Why does the `Get` care about `ADC_CR2_EXTSEL`, and apply shifts for that? Why does `GetTriggerSource()` not just get what `SetTriggerSource()` set?\n\nAm I doing something wrong, or is there indeed an issue with the current implementation?\n\nDo I need to have `ADC_CR2_EXTEN` (trigger edge detection) set at the time of using `GetTriggerSource()`? That would mean that `GetTriggerSource()` only gives valid return values after starting conversions using `LL_ADC_REG_StartConversionExtTrig()`. I would like to be able to r/w the trigger source, irrespective of whether or not conversions are happening. Is that possible?\n\nThanks in advance.",
+    "comments": [
+      {
+        "author": "RJMSTM",
+        "created_at": "2025-08-04T10:14:48Z",
+        "body": "Hello @FelixBTR,\n\nFirst, thank you for your contribution,\n\n- The trigger source for regular ADC conversions is determined by the EXTSEL bits in the ADC_CR2 register.\n\n- The trigger edge (rising/falling/both) is controlled by the EXTEN bits in the same register.\n\nThe `LL_ADC_REG_GetTriggerSource()` function applies a mask (ADC_REG_TRIG_SOURCE_MASK) and possibly shifts, because the trigger source is only meaningful when the ADC is configured for an external trigger (when EXTEN is not zero). \nIf EXTEN is zero (example: software trigger), the hardware ignores the EXTSEL bits, and the function may return zero or a default value.\n\nThe mask and shifts in `GetTriggerSource() ` are there to abstract the hardware behavior:\n\n- If the ADC is set for software trigger (EXTEN == 0), the function may return zero, as the trigger source is not relevant.\n\n- If the ADC is set for external trigger, the function extracts the correct bits for the trigger source.\n\nI hope this helps to answer your question. If you have any further questions or need additional assistance, please don’t hesitate to ask. \n\nThank you!"
+      },
+      {
+        "author": "FelixBTR",
+        "created_at": "2025-08-04T11:12:16Z",
+        "body": "Hello @RJMSTM \n\nThank you for your help and detailed explanation. This explains the behavior I was seeing.\nI was hoping I could use the function to read out the configured trigger source. That would have helped me switch between SW and HW initiated conversions in runtime, without reconfiguring the external trigger source. I will now keep track of the set external trigger in another driver and manage it myself. That is fine, but less convenient than using the LL functions directly.\n\nThanks again. I will close the ticket now."
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/17"
+  },
+  {
+    "repo": "stm32f7xx-hal-driver",
+    "issue_number": 16,
+    "title": "IEEE 1588 Proper way of getting transmitted time stamps",
+    "state": "closed",
+    "labels": [
+      "question",
+      "hal",
+      "eth"
+    ],
+    "created_at": "2025-07-12T23:37:19Z",
+    "closed_at": "2025-08-05T12:48:58Z",
+    "body": "I'm trying to port a ptp library (ptp master) to a STM32F769 device on a stm32f769i-disco development board.\nStarted with ethernetif.c from LwIP example, changed link_output function to call HAL_ETH_PTP_InsertTxTimestamp before HAL_ETH_Transmit_IT, this instructs ETH_DMA to perform time stamping.\n\nAfter packet being transmitted, HAL_ETH_PTP_GetTxTimestamp is called and the obtained timestamp is passed to ptp library which then use it for FollowUp message.\n\nUsing wireshark I'm observing that the FollowUp messages contain timestamp from previous Sync message and not the last one. This looks like as if the tx descriptors index is off by one. I have confirmed that PTP is correctly configured with HAL_ETH_PTP_SetConfig and time set correctly.\n\nThe question is what is the proper sequence to transmit and get timestamp or if is there any example with ptp from ST?\n\nI have figure it out, however HAL_ETH_PTP_GetTxTimestamp seams to have a bug, since it is returning time stamp from\ndmatxdesc->DESC0 and dmatxdesc->DESC1 intead of dmatxdesc->DESC6 and dmatxdesc->DESC7.",
+    "comments": [
+      {
+        "author": "ASEHSTM",
+        "created_at": "2025-07-20T20:28:40Z",
+        "body": "Hello @r315,\n\nUnfortunately, ST does not provide an official PTP example. However, the following resources may help you implement PTP on the STM32F769:\n\n[STM32F7 PTP Support](https://community.st.com/t5/stm32-mcus-embedded-software/stm32f7-ptp-support/td-p/633500) \n[stm32_ptpd](https://github.com/mpthompson/stm32_ptpd)\n\nWith Regards,"
+      },
+      {
+        "author": "r315",
+        "created_at": "2025-07-21T12:19:55Z",
+        "body": "I'm already using those resources, and was able to implement a PTP master based on them. by porting ethernetif.c to use latest HAL_Driver.\n\nMy understanding is that ST never had a example for PTP, not even for STM32MP1 family. Does it will ever be one? \n\n\n"
+      },
+      {
+        "author": "ASEHSTM",
+        "created_at": "2025-08-05T12:48:58Z",
+        "body": "Hello @r315, \n\nCurrently, we do not have an official example for PTP, and there is no plan to provide one in the near future. However, we appreciate your feedback and will take it into consideration for future development.\n\nPlease allow me to close this issue.\n\nThank you.\nWith Regards, "
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/16"
+  },
+  {
+    "repo": "stm32f7xx-hal-driver",
+    "issue_number": 14,
+    "title": "8-Bit NOR devices cause hard fault on Hal_Nor_Init",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "wontfix",
+      "hal",
+      "internal bug tracker",
+      "fmc",
+      "nor"
+    ],
+    "created_at": "2025-04-08T18:22:49Z",
+    "closed_at": "2026-02-13T14:48:28Z",
+    "body": "**Describe the set-up**\n * The board (either ST RPN reference or your custom board)\n * IDE or at least the compiler and its version\n Custom STM32F756BG Board.\nMacronix MX29LV040CTI (or any other 8-bit NOR flash)\nVisual Studio IDE; Code generated from STM32CubeMx.\n\n**Describe the bug**\nin HAL_NOR_Init, the code Hard Faults when setting the Nor ->CommandSet.\nAdditionally, before this, the NOR_WRITE is writing 16-bit values to a 8-bit device.\n\n**How To Reproduce**\n1- Spin up a project in stm32cubemx that has a NOR flash on NORSRAM_Bank_3 in Write mode (8-bit data)\n2-Ensure the MPU is configured correctly\n3- Generate Code\n4- Run the code on a compatible board/device\n\n2. The modules that you suspect to be the cause of the problem (Driver, BSP, MW ...)\nHAL -> NOR\n\n3. The use case that generates the problem\nWhen running HAL_NOR_Init in the FMC for a 8-bit parallel NOR flash chip\n\n**Additional context**\n\nISSUE1:\n`NOR_WRITE` casts addresses to a 16-bit pointer.  So when 'writing' to a 8-bit Flash, it is writing 2 bytes instead of just 1.\nISSUE2:\n`hnor->CommandSet = *(__IO uint16_t *) NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_ADDRESS_COMMAND_SET);`\nThis line also has an explicit 16-bit cast.  WHen working with 8-bit flash, this should be an 8-bit cast - THe  16-bit cast is causing a mis-aligned memory access when reading the command set (the address is 0x13... which is odd).\nOdd-alligned memory access is prohibited for 16-bit pointers.\nISSUE3:\n~this section~\n```C\n    /* Get the value of the command set */\n    if (uwNORMemoryDataWidth == NOR_MEMORY_8B)\n    {\n      NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_FIRST_CFI_BYTE),\n                NOR_CMD_DATA_CFI);\n    }\n    else\n    {\n      NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_FIRST_CFI), NOR_CMD_DATA_CFI);\n    }\n```\n~is meaningless as written.  the `NOR_ADDR_SHIFT` already takes the `uwNORMemoryDataWidth` into account.  There does not need to be 2 separate calls for 2 addresses since the `NOR_ADDR_SHIFT` already modifies the address.~\nThis was a misunderstanding by me.  The shift is indeed necessary.\n\n\nThe issues raised here have implications for the rest of the HAL NOR.\nAnywhere that `NOR_WRITE` is used.",
+    "comments": [
+      {
+        "author": "StephenPTxEng",
+        "created_at": "2025-04-08T18:40:55Z",
+        "body": "My suggested fix;  Or at least, something that works.\n\nin stm32f7xx_hal_nor.c\n![Image](https://github.com/user-attachments/assets/a8c93b5c-4874-4878-bbc4-69b6c3d1c131)\n\nin stm32f7xx_hal_nor.h\n![Image](https://github.com/user-attachments/assets/2b49201e-24b0-478d-b1d6-914683da79e7)\n"
+      },
+      {
+        "author": "StephenPTxEng",
+        "created_at": "2025-04-08T18:53:22Z",
+        "body": "After evaluating some more, i do not see a straightforward solution to this problem.\nThe easiest workaround, for now, is to declare the NOR flash as a 16-bit data width, and everything appears to work flawlessly (but i have not extensively tested this).... except every other byte is 0xFF!"
+      },
+      {
+        "author": "StephenPTxEng",
+        "created_at": "2025-04-09T20:03:54Z",
+        "body": "Spent the last day looking at this;\nThis is all some really strange behavior...\n1. My NOR flash chip uses FUJITSU command set, and is an 8-bit data bus.  However, for the CFI Read, it requires writing `0x98` to _**0x55**_ instead of _**0xAA**_, as seen in my code snippet above.  ~From my understanding, this is strange behavior.~ My datasheet is rather confusing. 0x55 is the expected address.\n2. There are many spots in the HAL where `NOR_WRITE` calls must be cast to a `__IO uint8_t *` to prevent memory misallignment when trying to use the default `__IO uint16_t *`; these change must be made in the supplied HAL itself.\n3. When i identify my NOR chip as a 16-bit data bus, the `commandSet` reads a `0xFF02`, which is obviously not the expected `0x02` of the Fujitsu command set..... however sometimes my code still runs somehow.\n\nI'm currently in the process of modifying the HAL to *correctly* support both 8-bit and 16-bit data buses for my purposes.  Let me know if you need any info."
+      },
+      {
+        "author": "StephenPTxEng",
+        "created_at": "2025-04-09T20:30:57Z",
+        "body": "> My suggested fix; Or at least, something that works.\n> \n> in stm32f7xx_hal_nor.c ![Image](https://github.com/user-attachments/assets/a8c93b5c-4874-4878-bbc4-69b6c3d1c131)\n> \n> in stm32f7xx_hal_nor.h ![Image](https://github.com/user-attachments/assets/2b49201e-24b0-478d-b1d6-914683da79e7)\n\n![Image](https://github.com/user-attachments/assets/0c0b4bd0-5d45-4270-a07d-e9936577f0b8)\nA cleaner version of what i had written earlier."
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-04-11T14:22:11Z",
+        "body": "Hello @StephenPPEng,\n\nThank you for the report.\n\nRegarding the issue, and after a first check in the **RM0385**, we have a chapter `13.5 External device address mapping` at the page 312 describing how the external memory is divided into fixed-size banks of 256 Mbytes each, below an extract of the different banks and the supported memory type for each one (for the bank 3, we have only NAND flash memory):\n\n<img width=\"404\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/098dbff1-cb3b-42c7-8938-3970689c1cc4\" />\n\n\nSo, if you may share with us, your ioc File and the version of CubeMX you are using, we can analyze it further.\n\nWith regards,"
+      },
+      {
+        "author": "StephenPTxEng",
+        "created_at": "2025-04-11T17:08:10Z",
+        "body": "Absolutely, once I am back at my computer I will share the .ioc\nFor now, I should clarify:\nI have my NOR on Bank 1(NOR/SRAM), Sub bank 3 (NE3).\nMPU is modified to allow full access to 0x68000000 for 512kB.\nThe NOR chip is byte-addressed (8 bit) only, but supports CFI in 16-Bit mode.\n\n\nBest,\nStephen\n________________________________\nFrom: KRASTM ***@***.***>\nSent: Friday, April 11, 2025 10:22:33 AM\nTo: STMicroelectronics/stm32f7xx-hal-driver ***@***.***>\nCc: Stephen Kercher ***@***.***>; Mention ***@***.***>\nSubject: Re: [STMicroelectronics/stm32f7xx-hal-driver] 8-Bit NOR devices cause hard fault on Hal_Nor_Init (Issue #14)\n\n\nHello @StephenPPEng<https://github.com/StephenPPEng>,\n\nThank you for the report.\n\nRegarding the issue, and after a first check in the RM0385, we have a chapter 13.5 External device address mapping at the page 312 describing how the external memory is divided into fixed-size banks of 256 Mbytes each, below an extract of the different banks and the supported memory type for each one (for the bank 3, we have only NAND flash memory):\n\nimage.png (view on web)<https://github.com/user-attachments/assets/098dbff1-cb3b-42c7-8938-3970689c1cc4>\n\nSo, if you may share with us, your ioc File and the version of CubeMX you are using, we can analyze it further.\n\nWith regards,\n\n—\nReply to this email directly, view it on GitHub<https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/14#issuecomment-2797062245>, or unsubscribe<https://github.com/notifications/unsubscribe-auth/BIOTX3N6QZKY2ZVVSIULN532Y7F2TAVCNFSM6AAAAAB2XAD4I2VHI2DSMVQWIX3LMV43OSLTON2WKQ3PNVWWK3TUHMZDOOJXGA3DEMRUGU>.\nYou are receiving this because you were mentioned.Message ID: ***@***.***>\n\n[https://avatars.githubusercontent.com/u/156921537?s=20&v=4]KRASTM left a comment (STMicroelectronics/stm32f7xx-hal-driver#14)<https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/14#issuecomment-2797062245>\n\nHello @StephenPPEng<https://github.com/StephenPPEng>,\n\nThank you for the report.\n\nRegarding the issue, and after a first check in the RM0385, we have a chapter 13.5 External device address mapping at the page 312 describing how the external memory is divided into fixed-size banks of 256 Mbytes each, below an extract of the different banks and the supported memory type for each one (for the bank 3, we have only NAND flash memory):\n\nimage.png (view on web)<https://github.com/user-attachments/assets/098dbff1-cb3b-42c7-8938-3970689c1cc4>\n\nSo, if you may share with us, your ioc File and the version of CubeMX you are using, we can analyze it further.\n\nWith regards,\n\n—\nReply to this email directly, view it on GitHub<https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/14#issuecomment-2797062245>, or unsubscribe<https://github.com/notifications/unsubscribe-auth/BIOTX3N6QZKY2ZVVSIULN532Y7F2TAVCNFSM6AAAAAB2XAD4I2VHI2DSMVQWIX3LMV43OSLTON2WKQ3PNVWWK3TUHMZDOOJXGA3DEMRUGU>.\nYou are receiving this because you were mentioned.Message ID: ***@***.***>\n\nThis email is intended solely for the use of the individual to whom it is addressed and may contain confidential and/or privileged material. Any views or opinions presented are solely those of the author and do not necessarily represent those of Precision Planting. If you are not the intended recipient, be advised that you have received this email in error and that any use, dissemination, forwarding, printing, or copying of this email is strictly prohibited. Neither AGCO nor the sender accepts any responsibility for viruses, and it is your responsibility to scan, and virus check the e-mail and its attachment(s) (if any).\n"
+      },
+      {
+        "author": "StephenPTxEng",
+        "created_at": "2025-04-14T18:01:24Z",
+        "body": "@KRASTM \nCubeMx, 6.14.0\n\n```\n#MicroXplorer Configuration settings - do not modify\nCAD.formats=[]\nCAD.pinconfig=Dual\nCAD.provider=\nCORTEX_M7.AccessPermission_S-Cortex_Memory_Protection_Unit_Region1_Settings_S=MPU_REGION_FULL_ACCESS\nCORTEX_M7.AccessPermission_S-Cortex_Memory_Protection_Unit_Region2_Settings_S=MPU_REGION_FULL_ACCESS\nCORTEX_M7.AccessPermission_S-Cortex_Memory_Protection_Unit_Region3_Settings_S=MPU_REGION_FULL_ACCESS\nCORTEX_M7.AccessPermission_S-Cortex_Memory_Protection_Unit_Region4_Settings_S=MPU_REGION_FULL_ACCESS\nCORTEX_M7.BaseAddress_S-Cortex_Memory_Protection_Unit_Region1_Settings_S=0xA0000000\nCORTEX_M7.BaseAddress_S-Cortex_Memory_Protection_Unit_Region2_Settings_S=0x60000000\nCORTEX_M7.BaseAddress_S-Cortex_Memory_Protection_Unit_Region3_Settings_S=0x80000000\nCORTEX_M7.BaseAddress_S-Cortex_Memory_Protection_Unit_Region4_Settings_S=0x68000000\nCORTEX_M7.DisableExec_S-Cortex_Memory_Protection_Unit_Region1_Settings_S=MPU_INSTRUCTION_ACCESS_DISABLE\nCORTEX_M7.DisableExec_S-Cortex_Memory_Protection_Unit_Region3_Settings_S=MPU_INSTRUCTION_ACCESS_DISABLE\nCORTEX_M7.Enable_S-Cortex_Memory_Protection_Unit_Region1_Settings_S=MPU_REGION_ENABLE\nCORTEX_M7.Enable_S-Cortex_Memory_Protection_Unit_Region2_Settings_S=MPU_REGION_ENABLE\nCORTEX_M7.Enable_S-Cortex_Memory_Protection_Unit_Region3_Settings_S=MPU_REGION_ENABLE\nCORTEX_M7.Enable_S-Cortex_Memory_Protection_Unit_Region4_Settings_S=MPU_REGION_ENABLE\nCORTEX_M7.Enable_Spec=MPU_REGION_ENABLE\nCORTEX_M7.IPParameters=default_mode_Activation,Enable_Spec,Enable_S-Cortex_Memory_Protection_Unit_Region1_Settings_S,BaseAddress_S-Cortex_Memory_Protection_Unit_Region1_Settings_S,Size_S-Cortex_Memory_Protection_Unit_Region1_Settings_S,AccessPermission_S-Cortex_Memory_Protection_Unit_Region1_Settings_S,DisableExec_S-Cortex_Memory_Protection_Unit_Region1_Settings_S,IsShareable_S-Cortex_Memory_Protection_Unit_Region1_Settings_S,Enable_S-Cortex_Memory_Protection_Unit_Region2_Settings_S,BaseAddress_S-Cortex_Memory_Protection_Unit_Region2_Settings_S,Size_S-Cortex_Memory_Protection_Unit_Region2_Settings_S,AccessPermission_S-Cortex_Memory_Protection_Unit_Region2_Settings_S,IsShareable_S-Cortex_Memory_Protection_Unit_Region2_Settings_S,Enable_S-Cortex_Memory_Protection_Unit_Region3_Settings_S,BaseAddress_S-Cortex_Memory_Protection_Unit_Region3_Settings_S,Size_S-Cortex_Memory_Protection_Unit_Region3_Settings_S,AccessPermission_S-Cortex_Memory_Protection_Unit_Region3_Settings_S,DisableExec_S-Cortex_Memory_Protection_Unit_Region3_Settings_S,IsShareable_S-Cortex_Memory_Protection_Unit_Region3_Settings_S,Enable_S-Cortex_Memory_Protection_Unit_Region4_Settings_S,BaseAddress_S-Cortex_Memory_Protection_Unit_Region4_Settings_S,Size_S-Cortex_Memory_Protection_Unit_Region4_Settings_S,IsShareable_S-Cortex_Memory_Protection_Unit_Region4_Settings_S,AccessPermission_S-Cortex_Memory_Protection_Unit_Region4_Settings_S\nCORTEX_M7.IsShareable_S-Cortex_Memory_Protection_Unit_Region1_Settings_S=MPU_ACCESS_SHAREABLE\nCORTEX_M7.IsShareable_S-Cortex_Memory_Protection_Unit_Region2_Settings_S=MPU_ACCESS_SHAREABLE\nCORTEX_M7.IsShareable_S-Cortex_Memory_Protection_Unit_Region3_Settings_S=MPU_ACCESS_SHAREABLE\nCORTEX_M7.IsShareable_S-Cortex_Memory_Protection_Unit_Region4_Settings_S=MPU_ACCESS_SHAREABLE\nCORTEX_M7.Size_S-Cortex_Memory_Protection_Unit_Region1_Settings_S=MPU_REGION_SIZE_8KB\nCORTEX_M7.Size_S-Cortex_Memory_Protection_Unit_Region2_Settings_S=MPU_REGION_SIZE_1MB\nCORTEX_M7.Size_S-Cortex_Memory_Protection_Unit_Region3_Settings_S=MPU_REGION_SIZE_1GB\nCORTEX_M7.Size_S-Cortex_Memory_Protection_Unit_Region4_Settings_S=MPU_REGION_SIZE_1MB\nCORTEX_M7.default_mode_Activation=1\nDma.I2C2_TX.0.Direction=DMA_MEMORY_TO_PERIPH\nDma.I2C2_TX.0.FIFOMode=DMA_FIFOMODE_DISABLE\nDma.I2C2_TX.0.Instance=DMA1_Stream7\nDma.I2C2_TX.0.MemDataAlignment=DMA_MDATAALIGN_BYTE\nDma.I2C2_TX.0.MemInc=DMA_MINC_ENABLE\nDma.I2C2_TX.0.Mode=DMA_NORMAL\nDma.I2C2_TX.0.PeriphDataAlignment=DMA_PDATAALIGN_BYTE\nDma.I2C2_TX.0.PeriphInc=DMA_PINC_DISABLE\nDma.I2C2_TX.0.Priority=DMA_PRIORITY_LOW\nDma.I2C2_TX.0.RequestParameters=Instance,Direction,PeriphInc,MemInc,PeriphDataAlignment,MemDataAlignment,Mode,Priority,FIFOMode\nDma.Request0=I2C2_TX\nDma.RequestsNb=1\nFATFS.IPParameters=_USE_LFN,_FS_EXFAT\nFATFS._FS_EXFAT=1\nFATFS._USE_LFN=1\nFMC.AddressSetupTime3=10\nFMC.AttributeSpaceHiZSetupTime1=4\nFMC.AttributeSpaceHoldSetupTime1=3\nFMC.AttributeSpaceSetupTime1=3\nFMC.AttributeSpaceWaitSetupTime1=5\nFMC.BusTurnAroundDuration1=6\nFMC.BusTurnAroundDuration3=5\nFMC.CommonSpaceHiZSetupTime1=4\nFMC.CommonSpaceHoldSetupTime1=3\nFMC.CommonSpaceSetupTime1=3\nFMC.CommonSpaceWaitSetupTime1=5\nFMC.DataSetupTime1=8\nFMC.DataSetupTime3=20\nFMC.ECCPageSize1=FMC_NAND_ECC_PAGE_SIZE_512BYTE\nFMC.EccComputation1=FMC_NAND_ECC_ENABLE\nFMC.IPParameters=NandPageSize1,NandSpareAreaSize1,NandBlockSize1,NandBlockNbr1,NandPlaneNbr1,NandPlaneSize1,EccComputation1,ECCPageSize1,AttributeSpaceHiZSetupTime1,AttributeSpaceSetupTime1,AttributeSpaceWaitSetupTime1,AttributeSpaceHoldSetupTime1,CommonSpaceSetupTime1,CommonSpaceWaitSetupTime1,CommonSpaceHoldSetupTime1,CommonSpaceHiZSetupTime1,TCLRSetupTime1,TARSetupTime1,DataSetupTime1,BusTurnAroundDuration1,WriteOperation1,WriteOperation3,AddressSetupTime3,DataSetupTime3,BusTurnAroundDuration3\nFMC.NandBlockNbr1=8192\nFMC.NandBlockSize1=64\nFMC.NandPageSize1=2048\nFMC.NandPlaneNbr1=2\nFMC.NandPlaneSize1=4096\nFMC.NandSpareAreaSize1=64\nFMC.TARSetupTime1=3\nFMC.TCLRSetupTime1=3\nFMC.WriteOperation1=FMC_WRITE_OPERATION_ENABLE\nFMC.WriteOperation3=FMC_WRITE_OPERATION_ENABLE\nFile.Version=6\nGPIO.groupedBy=Group By Peripherals\nI2C2.I2C_Speed_Mode=I2C_Fast\nI2C2.IPParameters=Timing,I2C_Speed_Mode\nI2C2.Timing=0x6000030D\nKeepUserPlacement=false\nMcu.CPN=STM32F756BGT6\nMcu.Family=STM32F7\nMcu.IP0=CORTEX_M7\nMcu.IP1=DMA\nMcu.IP10=USB_OTG_FS\nMcu.IP2=FATFS\nMcu.IP3=FMC\nMcu.IP4=I2C2\nMcu.IP5=NVIC\nMcu.IP6=RCC\nMcu.IP7=SYS\nMcu.IP8=TIM3\nMcu.IP9=USB_HOST\nMcu.IPNb=11\nMcu.Name=STM32F756BGTx\nMcu.Package=LQFP208\nMcu.Pin0=PC15/OSC32_OUT\nMcu.Pin1=PF0\nMcu.Pin10=PH4\nMcu.Pin11=PH5\nMcu.Pin12=PF12\nMcu.Pin13=PF13\nMcu.Pin14=PF14\nMcu.Pin15=PF15\nMcu.Pin16=PG0\nMcu.Pin17=PG1\nMcu.Pin18=PE7\nMcu.Pin19=PE8\nMcu.Pin2=PF1\nMcu.Pin20=PE9\nMcu.Pin21=PE10\nMcu.Pin22=PE11\nMcu.Pin23=PE12\nMcu.Pin24=PE13\nMcu.Pin25=PE14\nMcu.Pin26=PE15\nMcu.Pin27=PD8\nMcu.Pin28=PD9\nMcu.Pin29=PD10\nMcu.Pin3=PF2\nMcu.Pin30=PD11\nMcu.Pin31=PD12\nMcu.Pin32=PD13\nMcu.Pin33=PD14\nMcu.Pin34=PD15\nMcu.Pin35=PJ11\nMcu.Pin36=PG2\nMcu.Pin37=PG3\nMcu.Pin38=PG4\nMcu.Pin39=PG5\nMcu.Pin4=PF3\nMcu.Pin40=PA8\nMcu.Pin41=PA11\nMcu.Pin42=PA12\nMcu.Pin43=PD0\nMcu.Pin44=PD1\nMcu.Pin45=PD4\nMcu.Pin46=PD5\nMcu.Pin47=PD6\nMcu.Pin48=PD7\nMcu.Pin49=PG9\nMcu.Pin5=PF4\nMcu.Pin50=PG10\nMcu.Pin51=PE0\nMcu.Pin52=PE1\nMcu.Pin53=VP_FATFS_VS_USB\nMcu.Pin54=VP_SYS_VS_Systick\nMcu.Pin55=VP_TIM3_VS_ClockSourceINT\nMcu.Pin56=VP_USB_HOST_VS_USB_HOST_MSC_FS\nMcu.Pin6=PF5\nMcu.Pin7=PH0/OSC_IN\nMcu.Pin8=PH1/OSC_OUT\nMcu.Pin9=PC0\nMcu.PinsNb=57\nMcu.ThirdPartyNb=0\nMcu.UserConstants=\nMcu.UserName=STM32F756BGTx\nMxCube.Version=6.14.0\nMxDb.Version=DB.6.0.140\nNVIC.BusFault_IRQn=true\\:0\\:0\\:false\\:false\\:true\\:false\\:false\\:false\nNVIC.DMA1_Stream7_IRQn=true\\:0\\:0\\:false\\:false\\:true\\:false\\:true\\:true\nNVIC.DebugMonitor_IRQn=true\\:0\\:0\\:false\\:false\\:true\\:false\\:false\\:false\nNVIC.ForceEnableDMAVector=true\nNVIC.HardFault_IRQn=true\\:0\\:0\\:false\\:false\\:true\\:false\\:false\\:false\nNVIC.I2C2_ER_IRQn=true\\:0\\:0\\:false\\:false\\:true\\:true\\:true\\:true\nNVIC.I2C2_EV_IRQn=true\\:0\\:0\\:false\\:false\\:true\\:true\\:true\\:true\nNVIC.MemoryManagement_IRQn=true\\:0\\:0\\:false\\:false\\:true\\:false\\:false\\:false\nNVIC.NonMaskableInt_IRQn=true\\:0\\:0\\:false\\:false\\:true\\:false\\:false\\:false\nNVIC.OTG_FS_IRQn=true\\:0\\:0\\:false\\:false\\:true\\:false\\:true\\:true\nNVIC.PendSV_IRQn=true\\:0\\:0\\:false\\:false\\:true\\:false\\:false\\:false\nNVIC.PriorityGroup=NVIC_PRIORITYGROUP_4\nNVIC.SVCall_IRQn=true\\:0\\:0\\:false\\:false\\:true\\:false\\:false\\:false\nNVIC.SysTick_IRQn=true\\:15\\:0\\:false\\:false\\:true\\:false\\:true\\:false\nNVIC.TIM3_IRQn=true\\:0\\:0\\:false\\:false\\:true\\:true\\:true\\:true\nNVIC.UsageFault_IRQn=true\\:0\\:0\\:false\\:false\\:true\\:false\\:false\\:false\nPA11.Mode=Host_Only\nPA11.Signal=USB_OTG_FS_DM\nPA12.Mode=Host_Only\nPA12.Signal=USB_OTG_FS_DP\nPA8.GPIOParameters=GPIO_Label\nPA8.GPIO_Label=USB_FLG\nPA8.Locked=true\nPA8.Signal=GPIO_Input\nPC0.GPIOParameters=GPIO_Label\nPC0.GPIO_Label=USB_VBUS_EN\nPC0.Locked=true\nPC0.Signal=GPIO_Output\nPC15/OSC32_OUT.GPIOParameters=PinState,GPIO_Label\nPC15/OSC32_OUT.GPIO_Label=FMC_NAND_NWP\nPC15/OSC32_OUT.Locked=true\nPC15/OSC32_OUT.PinState=GPIO_PIN_RESET\nPC15/OSC32_OUT.Signal=GPIO_Output\nPD0.GPIOParameters=GPIO_PuPd\nPD0.GPIO_PuPd=GPIO_PULLUP\nPD0.Signal=FMC_D2_DA2\nPD1.GPIOParameters=GPIO_PuPd\nPD1.GPIO_PuPd=GPIO_PULLUP\nPD1.Signal=FMC_D3_DA3\nPD10.GPIOParameters=GPIO_PuPd\nPD10.GPIO_PuPd=GPIO_PULLUP\nPD10.Signal=FMC_D15_DA15\nPD11.GPIOParameters=GPIO_PuPd\nPD11.GPIO_PuPd=GPIO_PULLUP\nPD11.Signal=FMC_A16_CLE\nPD12.GPIOParameters=GPIO_PuPd\nPD12.GPIO_PuPd=GPIO_PULLUP\nPD12.Signal=FMC_A17_ALE\nPD13.GPIOParameters=GPIO_PuPd\nPD13.GPIO_PuPd=GPIO_PULLUP\nPD13.Signal=FMC_A18\nPD14.GPIOParameters=GPIO_PuPd\nPD14.GPIO_PuPd=GPIO_PULLUP\nPD14.Signal=FMC_D0_DA0\nPD15.GPIOParameters=GPIO_PuPd\nPD15.GPIO_PuPd=GPIO_PULLUP\nPD15.Signal=FMC_D1_DA1\nPD4.GPIOParameters=GPIO_PuPd\nPD4.GPIO_PuPd=GPIO_NOPULL\nPD4.Signal=FMC_NOE\nPD5.GPIOParameters=GPIO_PuPd\nPD5.GPIO_PuPd=GPIO_PULLUP\nPD5.Signal=FMC_NWE\nPD6.GPIOParameters=GPIO_PuPd\nPD6.GPIO_PuPd=GPIO_PULLUP\nPD6.Locked=true\nPD6.Signal=FMC_NWAIT\nPD7.GPIOParameters=GPIO_PuPd\nPD7.GPIO_PuPd=GPIO_PULLUP\nPD7.Mode=NorPsramChipSelect1_1\nPD7.Signal=FMC_NE1\nPD8.GPIOParameters=GPIO_PuPd\nPD8.GPIO_PuPd=GPIO_PULLUP\nPD8.Signal=FMC_D13_DA13\nPD9.GPIOParameters=GPIO_PuPd\nPD9.GPIO_PuPd=GPIO_PULLUP\nPD9.Signal=FMC_D14_DA14\nPE0.GPIOParameters=GPIO_PuPd\nPE0.GPIO_PuPd=GPIO_PULLUP\nPE0.Locked=true\nPE0.Signal=FMC_NBL0\nPE1.GPIOParameters=GPIO_PuPd\nPE1.GPIO_PuPd=GPIO_PULLUP\nPE1.Locked=true\nPE1.Signal=FMC_NBL1\nPE10.GPIOParameters=GPIO_PuPd\nPE10.GPIO_PuPd=GPIO_PULLUP\nPE10.Signal=FMC_D7_DA7\nPE11.GPIOParameters=GPIO_PuPd,GPIO_Mode\nPE11.GPIO_Mode=GPIO_MODE_AF_PP\nPE11.GPIO_PuPd=GPIO_PULLUP\nPE11.Signal=FMC_D8_DA8\nPE12.GPIOParameters=GPIO_PuPd,GPIO_Mode\nPE12.GPIO_Mode=GPIO_MODE_AF_PP\nPE12.GPIO_PuPd=GPIO_PULLUP\nPE12.Signal=FMC_D9_DA9\nPE13.GPIOParameters=GPIO_PuPd,GPIO_Mode\nPE13.GPIO_Mode=GPIO_MODE_AF_PP\nPE13.GPIO_PuPd=GPIO_PULLUP\nPE13.Signal=FMC_D10_DA10\nPE14.GPIOParameters=GPIO_PuPd,GPIO_Mode\nPE14.GPIO_Mode=GPIO_MODE_AF_PP\nPE14.GPIO_PuPd=GPIO_PULLUP\nPE14.Signal=FMC_D11_DA11\nPE15.GPIOParameters=GPIO_PuPd,GPIO_Mode\nPE15.GPIO_Mode=GPIO_MODE_AF_PP\nPE15.GPIO_PuPd=GPIO_PULLUP\nPE15.Signal=FMC_D12_DA12\nPE7.GPIOParameters=GPIO_PuPd\nPE7.GPIO_PuPd=GPIO_PULLUP\nPE7.Signal=FMC_D4_DA4\nPE8.GPIOParameters=GPIO_PuPd\nPE8.GPIO_PuPd=GPIO_PULLUP\nPE8.Signal=FMC_D5_DA5\nPE9.GPIOParameters=GPIO_PuPd\nPE9.GPIO_PuPd=GPIO_PULLUP\nPE9.Signal=FMC_D6_DA6\nPF0.GPIOParameters=GPIO_PuPd\nPF0.GPIO_PuPd=GPIO_PULLUP\nPF0.Signal=FMC_A0\nPF1.GPIOParameters=GPIO_PuPd\nPF1.GPIO_PuPd=GPIO_PULLUP\nPF1.Signal=FMC_A1\nPF12.GPIOParameters=GPIO_PuPd\nPF12.GPIO_PuPd=GPIO_PULLUP\nPF12.Signal=FMC_A6\nPF13.GPIOParameters=GPIO_PuPd\nPF13.GPIO_PuPd=GPIO_PULLUP\nPF13.Signal=FMC_A7\nPF14.GPIOParameters=GPIO_PuPd\nPF14.GPIO_PuPd=GPIO_PULLUP\nPF14.Signal=FMC_A8\nPF15.GPIOParameters=GPIO_PuPd\nPF15.GPIO_PuPd=GPIO_PULLUP\nPF15.Signal=FMC_A9\nPF2.GPIOParameters=GPIO_PuPd\nPF2.GPIO_PuPd=GPIO_PULLUP\nPF2.Signal=FMC_A2\nPF3.GPIOParameters=GPIO_PuPd\nPF3.GPIO_PuPd=GPIO_PULLUP\nPF3.Signal=FMC_A3\nPF4.GPIOParameters=GPIO_PuPd\nPF4.GPIO_PuPd=GPIO_PULLUP\nPF4.Signal=FMC_A4\nPF5.GPIOParameters=GPIO_PuPd\nPF5.GPIO_PuPd=GPIO_PULLUP\nPF5.Signal=FMC_A5\nPG0.GPIOParameters=GPIO_PuPd\nPG0.GPIO_PuPd=GPIO_PULLUP\nPG0.Signal=FMC_A10\nPG1.GPIOParameters=GPIO_PuPd\nPG1.GPIO_PuPd=GPIO_PULLUP\nPG1.Signal=FMC_A11\nPG10.GPIOParameters=GPIO_PuPd\nPG10.GPIO_PuPd=GPIO_NOPULL\nPG10.Mode=NorPsramChipSelect3_3\nPG10.Signal=FMC_NE3\nPG2.GPIOParameters=GPIO_PuPd\nPG2.GPIO_PuPd=GPIO_PULLUP\nPG2.Signal=FMC_A12\nPG3.GPIOParameters=GPIO_PuPd\nPG3.GPIO_PuPd=GPIO_PULLUP\nPG3.Signal=FMC_A13\nPG4.GPIOParameters=GPIO_PuPd\nPG4.GPIO_PuPd=GPIO_PULLUP\nPG4.Signal=FMC_A14_BA0\nPG5.GPIOParameters=GPIO_PuPd\nPG5.GPIO_PuPd=GPIO_PULLUP\nPG5.Signal=FMC_A15_BA1\nPG9.GPIOParameters=GPIO_PuPd\nPG9.GPIO_PuPd=GPIO_PULLUP\nPG9.Mode=NandChipSelect3_1\nPG9.Signal=FMC_NCE\nPH0/OSC_IN.Mode=HSE-External-Oscillator\nPH0/OSC_IN.Signal=RCC_OSC_IN\nPH1/OSC_OUT.Mode=HSE-External-Oscillator\nPH1/OSC_OUT.Signal=RCC_OSC_OUT\nPH4.GPIOParameters=GPIO_Pu\nPH4.GPIO_Pu=GPIO_PULLUP\nPH4.Mode=I2C\nPH4.Signal=I2C2_SCL\nPH5.GPIOParameters=GPIO_Pu\nPH5.GPIO_Pu=GPIO_PULLUP\nPH5.Mode=I2C\nPH5.Signal=I2C2_SDA\nPJ11.GPIOParameters=PinState,GPIO_PuPd,GPIO_Label,GPIO_ModeDefaultOutputPP\nPJ11.GPIO_Label=LED_EN\nPJ11.GPIO_ModeDefaultOutputPP=GPIO_MODE_OUTPUT_PP\nPJ11.GPIO_PuPd=GPIO_PULLUP\nPJ11.Locked=true\nPJ11.PinState=GPIO_PIN_SET\nPJ11.Signal=GPIO_Output\nPinOutPanel.RotationAngle=0\nProjectManager.AskForMigrate=true\nProjectManager.BackupPrevious=false\nProjectManager.CompilerLinker=GCC\nProjectManager.CompilerOptimize=6\nProjectManager.ComputerToolchain=false\nProjectManager.CoupleFile=true\nProjectManager.CustomerFirmwarePackage=\nProjectManager.DefaultFWLocation=true\nProjectManager.DeletePrevious=false\nProjectManager.DeviceId=STM32F756BGTx\nProjectManager.FirmwarePackage=STM32Cube FW_F7 V1.17.2\nProjectManager.FreePins=false\nProjectManager.HalAssertFull=false\nProjectManager.HeapSize=0x200\nProjectManager.KeepUserCode=true\nProjectManager.LastFirmware=true\nProjectManager.LibraryCopy=0\nProjectManager.MainLocation=Core/Src\nProjectManager.NoMain=false\nProjectManager.PreviousToolchain=STM32CubeIDE\nProjectManager.ProjectBuild=false\nProjectManager.ProjectFileName=nemo_bl.ioc\nProjectManager.ProjectName=nemo_bl\nProjectManager.ProjectStructure=\nProjectManager.RegisterCallBack=\nProjectManager.StackSize=0x400\nProjectManager.TargetToolchain=CMake\nProjectManager.ToolChainLocation=\nProjectManager.UAScriptAfterPath=convertLineEndings.sh\nProjectManager.UAScriptBeforePath=\nProjectManager.UnderRoot=false\nProjectManager.functionlistsort=1-SystemClock_Config-RCC-false-HAL-false,2-MX_GPIO_Init-GPIO-false-HAL-true,3-MX_DMA_Init-DMA-false-HAL-true,4-MX_FMC_Init-FMC-false-HAL-true,5-MX_FATFS_Init-FATFS-false-HAL-false,6-MX_USB_HOST_Init-USB_HOST-false-HAL-false,7-MX_I2C2_Init-I2C2-false-HAL-true,8-MX_TIM3_Init-TIM3-false-HAL-true,0-MX_CORTEX_M7_Init-CORTEX_M7-false-HAL-true\nRCC.AHBFreq_Value=216000000\nRCC.APB1CLKDivider=RCC_HCLK_DIV4\nRCC.APB1Freq_Value=54000000\nRCC.APB1TimFreq_Value=108000000\nRCC.APB2CLKDivider=RCC_HCLK_DIV2\nRCC.APB2Freq_Value=108000000\nRCC.APB2TimFreq_Value=216000000\nRCC.CECFreq_Value=32786.88524590164\nRCC.CortexFreq_Value=216000000\nRCC.EthernetFreq_Value=216000000\nRCC.FCLKCortexFreq_Value=216000000\nRCC.FamilyName=M\nRCC.HCLKFreq_Value=216000000\nRCC.HSE_VALUE=16000000\nRCC.HSI_VALUE=16000000\nRCC.I2C1Freq_Value=54000000\nRCC.I2C2Freq_Value=54000000\nRCC.I2C3Freq_Value=54000000\nRCC.I2C4Freq_Value=54000000\nRCC.I2SFreq_Value=192000000\nRCC.IPParameters=AHBFreq_Value,APB1CLKDivider,APB1Freq_Value,APB1TimFreq_Value,APB2CLKDivider,APB2Freq_Value,APB2TimFreq_Value,CECFreq_Value,CortexFreq_Value,EthernetFreq_Value,FCLKCortexFreq_Value,FamilyName,HCLKFreq_Value,HSE_VALUE,HSI_VALUE,I2C1Freq_Value,I2C2Freq_Value,I2C3Freq_Value,I2C4Freq_Value,I2SFreq_Value,LCDTFToutputFreq_Value,LPTIM1Freq_Value,LSE_VALUE,LSI_VALUE,MCO2PinFreq_Value,PLLCLKFreq_Value,PLLI2SPCLKFreq_Value,PLLI2SQCLKFreq_Value,PLLI2SRCLKFreq_Value,PLLI2SRoutputFreq_Value,PLLM,PLLN,PLLQ,PLLQCLKFreq_Value,PLLQoutputFreq_Value,PLLSAIPCLKFreq_Value,PLLSAIQCLKFreq_Value,PLLSAIRCLKFreq_Value,PLLSAIoutputFreq_Value,RNGFreq_Value,SAI1Freq_Value,SAI2Freq_Value,SDMMCFreq_Value,SPDIFRXFreq_Value,SYSCLKFreq_VALUE,SYSCLKSource,UART4Freq_Value,UART5Freq_Value,UART7Freq_Value,UART8Freq_Value,USART1Freq_Value,USART2Freq_Value,USART3Freq_Value,USART6Freq_Value,USBFreq_Value,VCOI2SOutputFreq_Value,VCOInputFreq_Value,VCOOutputFreq_Value,VCOSAIOutputFreq_Value\nRCC.LCDTFToutputFreq_Value=96000000\nRCC.LPTIM1Freq_Value=54000000\nRCC.LSE_VALUE=32768\nRCC.LSI_VALUE=32000\nRCC.MCO2PinFreq_Value=216000000\nRCC.PLLCLKFreq_Value=216000000\nRCC.PLLI2SPCLKFreq_Value=192000000\nRCC.PLLI2SQCLKFreq_Value=192000000\nRCC.PLLI2SRCLKFreq_Value=192000000\nRCC.PLLI2SRoutputFreq_Value=192000000\nRCC.PLLM=8\nRCC.PLLN=216\nRCC.PLLQ=9\nRCC.PLLQCLKFreq_Value=48000000\nRCC.PLLQoutputFreq_Value=48000000\nRCC.PLLSAIPCLKFreq_Value=192000000\nRCC.PLLSAIQCLKFreq_Value=192000000\nRCC.PLLSAIRCLKFreq_Value=192000000\nRCC.PLLSAIoutputFreq_Value=192000000\nRCC.RNGFreq_Value=48000000\nRCC.SAI1Freq_Value=192000000\nRCC.SAI2Freq_Value=192000000\nRCC.SDMMCFreq_Value=216000000\nRCC.SPDIFRXFreq_Value=192000000\nRCC.SYSCLKFreq_VALUE=216000000\nRCC.SYSCLKSource=RCC_SYSCLKSOURCE_PLLCLK\nRCC.UART4Freq_Value=54000000\nRCC.UART5Freq_Value=54000000\nRCC.UART7Freq_Value=54000000\nRCC.UART8Freq_Value=54000000\nRCC.USART1Freq_Value=108000000\nRCC.USART2Freq_Value=54000000\nRCC.USART3Freq_Value=54000000\nRCC.USART6Freq_Value=108000000\nRCC.USBFreq_Value=48000000\nRCC.VCOI2SOutputFreq_Value=384000000\nRCC.VCOInputFreq_Value=2000000\nRCC.VCOOutputFreq_Value=432000000\nRCC.VCOSAIOutputFreq_Value=384000000\nSH.FMC_A0.0=FMC_A0,19b-a1\nSH.FMC_A0.1=FMC_A0,19b-a3\nSH.FMC_A0.ConfNb=2\nSH.FMC_A1.0=FMC_A1,19b-a1\nSH.FMC_A1.1=FMC_A1,19b-a3\nSH.FMC_A1.ConfNb=2\nSH.FMC_A10.0=FMC_A10,19b-a1\nSH.FMC_A10.1=FMC_A10,19b-a3\nSH.FMC_A10.ConfNb=2\nSH.FMC_A11.0=FMC_A11,19b-a1\nSH.FMC_A11.1=FMC_A11,19b-a3\nSH.FMC_A11.ConfNb=2\nSH.FMC_A12.0=FMC_A12,19b-a1\nSH.FMC_A12.1=FMC_A12,19b-a3\nSH.FMC_A12.ConfNb=2\nSH.FMC_A13.0=FMC_A13,19b-a1\nSH.FMC_A13.1=FMC_A13,19b-a3\nSH.FMC_A13.ConfNb=2\nSH.FMC_A14_BA0.0=FMC_A14,19b-a1\nSH.FMC_A14_BA0.1=FMC_A14,19b-a3\nSH.FMC_A14_BA0.ConfNb=2\nSH.FMC_A15_BA1.0=FMC_A15,19b-a1\nSH.FMC_A15_BA1.1=FMC_A15,19b-a3\nSH.FMC_A15_BA1.ConfNb=2\nSH.FMC_A16_CLE.0=FMC_CLE,8b-dmux1\nSH.FMC_A16_CLE.1=FMC_A16,19b-a1\nSH.FMC_A16_CLE.2=FMC_A16,19b-a3\nSH.FMC_A16_CLE.ConfNb=3\nSH.FMC_A17_ALE.0=FMC_ALE,8b-dmux1\nSH.FMC_A17_ALE.1=FMC_A17,19b-a1\nSH.FMC_A17_ALE.2=FMC_A17,19b-a3\nSH.FMC_A17_ALE.ConfNb=3\nSH.FMC_A18.0=FMC_A18,19b-a1\nSH.FMC_A18.1=FMC_A18,19b-a3\nSH.FMC_A18.ConfNb=2\nSH.FMC_A2.0=FMC_A2,19b-a1\nSH.FMC_A2.1=FMC_A2,19b-a3\nSH.FMC_A2.ConfNb=2\nSH.FMC_A3.0=FMC_A3,19b-a1\nSH.FMC_A3.1=FMC_A3,19b-a3\nSH.FMC_A3.ConfNb=2\nSH.FMC_A4.0=FMC_A4,19b-a1\nSH.FMC_A4.1=FMC_A4,19b-a3\nSH.FMC_A4.ConfNb=2\nSH.FMC_A5.0=FMC_A5,19b-a1\nSH.FMC_A5.1=FMC_A5,19b-a3\nSH.FMC_A5.ConfNb=2\nSH.FMC_A6.0=FMC_A6,19b-a1\nSH.FMC_A6.1=FMC_A6,19b-a3\nSH.FMC_A6.ConfNb=2\nSH.FMC_A7.0=FMC_A7,19b-a1\nSH.FMC_A7.1=FMC_A7,19b-a3\nSH.FMC_A7.ConfNb=2\nSH.FMC_A8.0=FMC_A8,19b-a1\nSH.FMC_A8.1=FMC_A8,19b-a3\nSH.FMC_A8.ConfNb=2\nSH.FMC_A9.0=FMC_A9,19b-a1\nSH.FMC_A9.1=FMC_A9,19b-a3\nSH.FMC_A9.ConfNb=2\nSH.FMC_D0_DA0.0=FMC_D0,8b-dmux1\nSH.FMC_D0_DA0.1=FMC_D0,16b-d1\nSH.FMC_D0_DA0.2=FMC_D0,8b-d3\nSH.FMC_D0_DA0.ConfNb=3\nSH.FMC_D10_DA10.0=FMC_D10,16b-d1\nSH.FMC_D10_DA10.ConfNb=1\nSH.FMC_D11_DA11.0=FMC_D11,16b-d1\nSH.FMC_D11_DA11.ConfNb=1\nSH.FMC_D12_DA12.0=FMC_D12,16b-d1\nSH.FMC_D12_DA12.ConfNb=1\nSH.FMC_D13_DA13.0=FMC_D13,16b-d1\nSH.FMC_D13_DA13.ConfNb=1\nSH.FMC_D14_DA14.0=FMC_D14,16b-d1\nSH.FMC_D14_DA14.ConfNb=1\nSH.FMC_D15_DA15.0=FMC_D15,16b-d1\nSH.FMC_D15_DA15.ConfNb=1\nSH.FMC_D1_DA1.0=FMC_D1,8b-dmux1\nSH.FMC_D1_DA1.1=FMC_D1,16b-d1\nSH.FMC_D1_DA1.2=FMC_D1,8b-d3\nSH.FMC_D1_DA1.ConfNb=3\nSH.FMC_D2_DA2.0=FMC_D2,8b-dmux1\nSH.FMC_D2_DA2.1=FMC_D2,16b-d1\nSH.FMC_D2_DA2.2=FMC_D2,8b-d3\nSH.FMC_D2_DA2.ConfNb=3\nSH.FMC_D3_DA3.0=FMC_D3,8b-dmux1\nSH.FMC_D3_DA3.1=FMC_D3,16b-d1\nSH.FMC_D3_DA3.2=FMC_D3,8b-d3\nSH.FMC_D3_DA3.ConfNb=3\nSH.FMC_D4_DA4.0=FMC_D4,8b-dmux1\nSH.FMC_D4_DA4.1=FMC_D4,16b-d1\nSH.FMC_D4_DA4.2=FMC_D4,8b-d3\nSH.FMC_D4_DA4.ConfNb=3\nSH.FMC_D5_DA5.0=FMC_D5,8b-dmux1\nSH.FMC_D5_DA5.1=FMC_D5,16b-d1\nSH.FMC_D5_DA5.2=FMC_D5,8b-d3\nSH.FMC_D5_DA5.ConfNb=3\nSH.FMC_D6_DA6.0=FMC_D6,8b-dmux1\nSH.FMC_D6_DA6.1=FMC_D6,16b-d1\nSH.FMC_D6_DA6.2=FMC_D6,8b-d3\nSH.FMC_D6_DA6.ConfNb=3\nSH.FMC_D7_DA7.0=FMC_D7,8b-dmux1\nSH.FMC_D7_DA7.1=FMC_D7,16b-d1\nSH.FMC_D7_DA7.2=FMC_D7,8b-d3\nSH.FMC_D7_DA7.ConfNb=3\nSH.FMC_D8_DA8.0=FMC_D8,16b-d1\nSH.FMC_D8_DA8.ConfNb=1\nSH.FMC_D9_DA9.0=FMC_D9,16b-d1\nSH.FMC_D9_DA9.ConfNb=1\nSH.FMC_NBL0.0=FMC_NBL0,2ByteEnable1\nSH.FMC_NBL0.ConfNb=1\nSH.FMC_NBL1.0=FMC_NBL1,2ByteEnable1\nSH.FMC_NBL1.ConfNb=1\nSH.FMC_NOE.0=FMC_NOE,8b-dmux1\nSH.FMC_NOE.1=FMC_NOE,Psram1\nSH.FMC_NOE.2=FMC_NOE,NorFlash3\nSH.FMC_NOE.ConfNb=3\nSH.FMC_NWAIT.0=FMC_NWAIT,Wait1\nSH.FMC_NWAIT.ConfNb=1\nSH.FMC_NWE.0=FMC_NWE,8b-dmux1\nSH.FMC_NWE.1=FMC_NWE,Psram1\nSH.FMC_NWE.2=FMC_NWE,NorFlash3\nSH.FMC_NWE.ConfNb=3\nTIM3.IPParameters=Period,Prescaler\nTIM3.Period=5000\nTIM3.Prescaler=10799\nUSB_HOST.IPParameters=USBH_HandleTypeDef-MSC_FS,VirtualModeFS,SW_VBUS_DRIVE_MSC_FS\nUSB_HOST.SW_VBUS_DRIVE_MSC_FS=true\nUSB_HOST.USBH_HandleTypeDef-MSC_FS=hUsbHostFS\nUSB_HOST.VirtualModeFS=Msc\nUSB_OTG_FS.IPParameters=VirtualMode,phy_itface,speed\nUSB_OTG_FS.VirtualMode=Host_Only\nUSB_OTG_FS.phy_itface=HCD_PHY_EMBEDDED\nUSB_OTG_FS.speed=HCD_SPEED_FULL\nVP_FATFS_VS_USB.Mode=USB\nVP_FATFS_VS_USB.Signal=FATFS_VS_USB\nVP_SYS_VS_Systick.Mode=SysTick\nVP_SYS_VS_Systick.Signal=SYS_VS_Systick\nVP_TIM3_VS_ClockSourceINT.Mode=Internal\nVP_TIM3_VS_ClockSourceINT.Signal=TIM3_VS_ClockSourceINT\nVP_USB_HOST_VS_USB_HOST_MSC_FS.Mode=MSC_FS\nVP_USB_HOST_VS_USB_HOST_MSC_FS.Signal=USB_HOST_VS_USB_HOST_MSC_FS\nboard=custom\n```\nAdditionally, here is the final version of how to get the Command Set (notice the 8-bit NOR_WRITE).  This can always be 8-bit because the standard incicates that the return value for the command set will be 1 byte.\n\n![Image](https://github.com/user-attachments/assets/9bb1c80c-58db-43b5-9f5c-81505eeeba30)"
+      },
+      {
+        "author": "StephenPTxEng",
+        "created_at": "2025-04-14T18:40:58Z",
+        "body": "So what I've found in my testing:\n\nThe NOR_WRITE() function needs to match the size of the Data Width.\nIf Data Width is 8-bits, then the `NOR_WRITE()` needs to cast to a `(__IO uint8_t *)`.\nIf 16-bits, then the `NOR_WRITE()` needs to cast to a `(__IO uint16_t *)`.\netc.\n\nThe NOR_ADDR_SHIFT already does the job of moving the correct value to the right spot.  There does not need to be \"special\" 8-bit vs 16-bit command bytes.\n\n\nGenerated Code for HAL_NOR_Init():  \n![Image](https://github.com/user-attachments/assets/b6cc3ff4-0f57-4f93-a85d-1d9520da99b4)\nIssues are circled.\n\nGreen:  This should be an 8-bit `NOR_WRITE()` instead of a 16-bit `NOR_WRITE()`. Since 8-bit addresses can be odd, using a 16-bit `NOR_WRITE()` here could/will cause an Unalligned Memory Access fault.\n\nRed: This should be `NOR_CMD_ADDRESS_FIRST_CFI`.  It SHOULD NOT be `NOR_CMD_ADDRESS_FIRST_CFI_BYTE` because the NOR_ADDR_SHIFT handles shifting the address to the correct bits. (The correct address to Write to for this command is `0x55`, not `0xAA`, according to the CFI Spec Document)\n\nBlue:  Any time values are READ from NOR, the address to read should be casted to the appropriate sized pointer.  Here, it is always cast as a 16-bit pointer.  This is a problem.  Another option is to ALWAYS use an 8-bit pointer.  Well now you are only getting 1 byte on a 16-bit data bus.\n\n| Device Type / Mode | Result |\n| --- | --- |\n| x8 Device / x8 Read / Odd Address | No fault. Works as expected.  Read will retrieve 1 byte from NOR and put 1 byte into the buffer. |\n| x8 Device / x8 Read / Even Address | No fault. Works as expected  Read will retrieve 1 byte from NOR and put 1 byte into the buffer. |\n| x8 Device / x16 Read / Odd Address | Misalligned Memory Access Fault |\n| x8 Device / x16 Read / Even Address | No fault. Value must be masked off with `val & 0xFF` to ensure upper trash byte is not forwarded |\n| x16 Device / x8 Read / Odd Address | No Fault. But you are sending an odd address to a 16-bit device, so behavior may be device-dependent.  My device simply removed the LSb from the address to make it even and then returned that value.  But the buffer will only be filled with 1 byte, instead of the expected 2 bytes.\n| x16 Device / x8 Read / Even Address | No Fault.  But the buffer will only be filled with 1 byte instead of the expected 2 bytes.\n| x16 Device / x16 Read / Odd Address | No Fault.  Works as expected.  Read will retrieve 2 bytes from NOR and put 2 bytes into the buffer.\n| x16 Device / x16 Read / Even Address | No Fault. Works as expected.  Read will retrieve 2 bytes from NOR and put 2 bytes into the buffer."
+      },
+      {
+        "author": "StephenPTxEng",
+        "created_at": "2025-04-14T18:46:33Z",
+        "body": "TL;DR:\nOriginal Generated Code for the end of the `HAL_NOR_Init()`:\n```C\n//...\nelse\n  {\n    /* Get the value of the command set */\n    if (uwNORMemoryDataWidth == NOR_MEMORY_8B)\n    {\n      NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_FIRST_CFI_BYTE),\n                NOR_CMD_DATA_CFI);\n    }\n    else\n    {\n      NOR_WRITE(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_FIRST_CFI), NOR_CMD_DATA_CFI);\n    }\n\n    hnor->CommandSet = *(__IO uint16_t *) NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_ADDRESS_COMMAND_SET);\n\n    status = HAL_NOR_ReturnToReadMode(hnor);\n  }\n//...\n```\nMy suggested change:\n```C\n//...\nelse\n  {\n    /* Get the value of the command set */\n    NOR_WRITE_8b(NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_FIRST_CFI), \n                NOR_CMD_DATA_CFI);\n    hnor->CommandSet = *(__IO uint8_t *)NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_ADDRESS_COMMAND_SET);\n\n    status = HAL_NOR_ReturnToReadMode(hnor);\n  }\n//...\n/**\n  * @brief  NOR memory write 8-bit data to specified address.\n  * @param  __ADDRESS__ NOR memory address\n  * @param  __DATA__ Data to write\n  * @retval None\n  */\n#define NOR_WRITE_8b(__ADDRESS__, __DATA__)   do{                                                             \\\n                                               (*(__IO uint8_t *)((uint32_t)(__ADDRESS__)) = (__DATA__)); \\\n                                               __DSB();                                                    \\\n                                             } while(0)\n```\n\n### **_And this needs to be done everywhere in the HAL_NOR file._**\nTo support different data types, HAL_NOR_Read() and HAL_NOR_Program() must have their signatures changed to the following\n\n`HAL_StatusTypeDef HAL_NOR_Read(NOR_HandleTypeDef *hnor, uint32_t *pAddress, uint16_t *pData); `\nbecomes\n`HAL_StatusTypeDef HAL_NOR_Read(NOR_HandleTypeDef *hnor, uint8_t *pAddress, void *pData);`\n\nand\n`HAL_StatusTypeDef HAL_NOR_Program(NOR_HandleTypeDef *hnor, uint32_t *pAddress, uint16_t *pData);`\nbecomes\n`HAL_StatusTypeDef HAL_NOR_Program(NOR_HandleTypeDef *hnor, uint8_t *pAddress, uint32_t Data);`"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-04-15T11:09:24Z",
+        "body": "Hello @StephenPPEng,\n\nThanks for the details, I will forward your suggestion to our team.\n\nWith regards,"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-04-15T11:31:55Z",
+        "body": "ST Internal Reference: 207766"
+      },
+      {
+        "author": "StephenPTxEng",
+        "created_at": "2025-04-15T13:00:39Z",
+        "body": "For another reference, here is what my HAL_NOR_Program() looks like\n```C\n/**\n  * @brief  Program data to NOR memory\n  * @param  hnor pointer to a NOR_HandleTypeDef structure that contains\n  *                the configuration information for NOR module.\n  * @param  pAddress Device address\n  * @param  data the data to be programmed\n  * @retval HAL status\n  */\nHAL_StatusTypeDef HAL_NOR_Program(NOR_HandleTypeDef *hnor, uint8_t *pAddress, uint32_t data)\n{\n  uint32_t deviceaddress;\n  HAL_StatusTypeDef status = HAL_OK;\n\n  /* Check the NOR controller state */\n  if (hnor->State == HAL_NOR_STATE_BUSY)\n  {\n    return HAL_BUSY;\n  }\n  else if (hnor->State == HAL_NOR_STATE_READY)\n  {\n    /* Process Locked */\n    __HAL_LOCK(hnor);\n\n    /* Update the NOR controller state */\n    hnor->State = HAL_NOR_STATE_BUSY;\n\n    /* Select the NOR device address */\n    if (hnor->Init.NSBank == FMC_NORSRAM_BANK1)\n    {\n      deviceaddress = NOR_MEMORY_ADRESS1;\n    }\n    else if (hnor->Init.NSBank == FMC_NORSRAM_BANK2)\n    {\n      deviceaddress = NOR_MEMORY_ADRESS2;\n    }\n    else if (hnor->Init.NSBank == FMC_NORSRAM_BANK3)\n    {\n      deviceaddress = NOR_MEMORY_ADRESS3;\n    }\n    else /* FMC_NORSRAM_BANK4 */\n    {\n      deviceaddress = NOR_MEMORY_ADRESS4;\n    }\n\n    /* Send program data command */\n    if (hnor->CommandSet == NOR_AMD_FUJITSU_COMMAND_SET)\n    {\n      uint32_t cycle1Addr = NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_FIRST);\n      uint32_t cycle2Addr = NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_SECOND);\n      uint32_t cycle3Addr = NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_THIRD);\n      if (uwNORMemoryDataWidth == NOR_MEMORY_8B)\n      {\n        NOR_WRITE_8b(cycle1Addr, NOR_CMD_DATA_FIRST);\n        NOR_WRITE_8b(cycle2Addr, NOR_CMD_DATA_SECOND);\n        NOR_WRITE_8b(cycle3Addr, NOR_CMD_DATA_PROGRAM);\n      }\n      else\n      {\n        NOR_WRITE(cycle1Addr, NOR_CMD_DATA_FIRST);\n        NOR_WRITE(cycle2Addr, NOR_CMD_DATA_SECOND);\n        NOR_WRITE(cycle3Addr, NOR_CMD_DATA_PROGRAM);\n      }\n    }\n    else if (hnor->CommandSet == NOR_INTEL_SHARP_EXT_COMMAND_SET)\n    {\n      NOR_WRITE(pAddress, NOR_CMD_WORD_PROGRAM);\n    }\n    else\n    {\n      /* Primary command set not supported by the driver */\n      status = HAL_ERROR;\n    }\n\n    if (status != HAL_ERROR)\n    {\n      /* Write the data */\n      if(uwNORMemoryDataWidth == NOR_MEMORY_8B)\n      {\n        NOR_WRITE_8b(pAddress, data & 0xFF);\n      }\n      else\n      {\n        pAddress = (uint8_t *)((uint32_t)pAddress & 0xFFFFFFFE); /* Address must be even for 16 bits access */\n        NOR_WRITE(pAddress, data & 0xFFFF);\n      }\n    }\n    \n    /* Check the NOR controller state */\n    hnor->State = HAL_NOR_STATE_READY;\n\n    /* Process unlocked */\n    __HAL_UNLOCK(hnor);\n  }\n  else\n  {\n    return HAL_ERROR;\n  }\n\n  return status;\n}\n\n```\nAnd my HAL_NOR_Read()\n```C\n/**\n  * @brief  Read data from NOR memory\n  * @param  hnor pointer to a NOR_HandleTypeDef structure that contains\n  *                the configuration information for NOR module.\n  * @param  pAddress pointer to Device address\n  * @param  pData  pointer to read data\n  * @retval HAL status\n  */\nHAL_StatusTypeDef HAL_NOR_Read(NOR_HandleTypeDef *hnor, uint8_t *pAddress, void *pData)\n{\n  uint32_t deviceaddress;\n  HAL_NOR_StateTypeDef state;\n  HAL_StatusTypeDef status = HAL_OK;\n  if(pData == NULL)\n  {\n    return HAL_ERROR;\n  }\n\n  /* Check the NOR controller state */\n  state = hnor->State;\n  if (state == HAL_NOR_STATE_BUSY)\n  {\n    return HAL_BUSY;\n  }\n  else if (state == HAL_NOR_STATE_PROTECTED)\n  {\n    return HAL_ERROR;\n  }\n  else if (state == HAL_NOR_STATE_READY)\n  {\n    /* Process Locked */\n    __HAL_LOCK(hnor);\n\n    /* Update the NOR controller state */\n    hnor->State = HAL_NOR_STATE_BUSY;\n\n    /* Select the NOR device address */\n    if (hnor->Init.NSBank == FMC_NORSRAM_BANK1)\n    {\n      deviceaddress = NOR_MEMORY_ADRESS1;\n    }\n    else if (hnor->Init.NSBank == FMC_NORSRAM_BANK2)\n    {\n      deviceaddress = NOR_MEMORY_ADRESS2;\n    }\n    else if (hnor->Init.NSBank == FMC_NORSRAM_BANK3)\n    {\n      deviceaddress = NOR_MEMORY_ADRESS3;\n    }\n    else /* FMC_NORSRAM_BANK4 */\n    {\n      deviceaddress = NOR_MEMORY_ADRESS4;\n    }\n\n    /* Send read data command */\n    if (hnor->CommandSet == NOR_AMD_FUJITSU_COMMAND_SET)\n    {\n      uint32_t cycle1Addr = NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_FIRST);\n      uint32_t cycle2Addr = NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_SECOND);\n      uint32_t cycle3Addr = NOR_ADDR_SHIFT(deviceaddress, uwNORMemoryDataWidth, NOR_CMD_ADDRESS_THIRD);\n\n      if (uwNORMemoryDataWidth == NOR_MEMORY_8B)\n      {\n        NOR_WRITE_8b(cycle1Addr, NOR_CMD_DATA_FIRST);\n        NOR_WRITE_8b(cycle2Addr, NOR_CMD_DATA_SECOND);\n        NOR_WRITE_8b(cycle3Addr, NOR_CMD_DATA_READ_RESET);\n      }\n      else\n      {\n        NOR_WRITE(cycle1Addr, NOR_CMD_DATA_FIRST);\n        NOR_WRITE(cycle2Addr, NOR_CMD_DATA_SECOND);\n        NOR_WRITE(cycle3Addr, NOR_CMD_DATA_READ_RESET);\n      }\n    }\n    else if (hnor->CommandSet == NOR_INTEL_SHARP_EXT_COMMAND_SET)\n    {\n      NOR_WRITE(pAddress, NOR_CMD_READ_ARRAY);\n    }\n    else\n    {\n      /* Primary command set not supported by the driver */\n      status = HAL_ERROR;\n    }\n\n    if (status != HAL_ERROR)\n    {\n      /* Read the data */\n      if(uwNORMemoryDataWidth == NOR_MEMORY_8B)\n      {\n        *(uint8_t *)pData = (uint8_t)(*(__IO uint8_t *)pAddress);\n      }\n      else\n      {\n        /* Address must be even for 16 bits access */\n        pAddress = (uint8_t *)((uint32_t)pAddress & 0xFFFFFFFE); \n\n        *(uint16_t *)pData = (uint16_t)(*(__IO uint16_t *)pAddress);\n      }\n    }\n\n    /* Check the NOR controller state */\n    hnor->State = state;\n\n    /* Process unlocked */\n    __HAL_UNLOCK(hnor);\n  }\n  else\n  {\n    return HAL_ERROR;\n  }\n\n  return status;\n}\n```\n\nAlso note:\nI only have experience with the AMD command set.  Likely the other comand set will need to updated with similar functionality"
+      },
+      {
+        "author": "StephenPTxEng",
+        "created_at": "2025-04-15T14:33:03Z",
+        "body": "I'm putting together a pull request for this issue"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2026-02-10T11:31:34Z",
+        "body": "Hello @StephenPTxEng,\n\nRegarding the issue and the PR, our team has decided that the driver will no longer support **NOR_MEMORY_8B** and this configuration will be deprecated. An update to the driver will be available accordingly.\n\nHowever, you may keep your proposal and correction; fortunately, your solution will remain available for other customer in such case.\n\nPlease allow me to close the issue. Thank you for your understanding.\n\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/14"
+  },
+  {
+    "repo": "stm32f7xx-hal-driver",
+    "issue_number": 13,
+    "title": "Cannot program internal flash with double word",
+    "state": "closed",
+    "labels": [
+      "invalid",
+      "hal",
+      "flash"
+    ],
+    "created_at": "2025-03-25T23:49:38Z",
+    "closed_at": "2025-04-08T07:48:43Z",
+    "body": "**Describe the set-up**\n * NUCLEO-F767ZI\n * ARM NONE EABI GCC 13.3\n\n**Describe the bug**\nFlash program PGP error when trying to write double word to address 0x08010000\n\n**How To Reproduce**\nUse the following code:\n\n    HAL_StatusTypeDef status = HAL_OK;\n\n    HAL_FLASH_Unlock();\n\n    uint64_t double_word_data 0xAA;\n    status = HAL_FLASH_Program(FLASH_TYPEPROGRAM_DOUBLEWORD, 0x08010000, double_word_data);\n\n    HAL_FLASH_Lock();\n\nWhen using just single WORD programming it works. Datasheet DS11532 Rev 8 for \"STM32F765xx STM32F767xx STM32F768Ax STM32F769xx\" never mentions parallelism x64 anywhere. I think this chip doesn't really support double word programming. There are no examples of double word programming in STM32F7Cube. If chip doesn't support it then driver should not offer it, define FLASH_TYPEPROGRAM_DOUBLEWORD should be removed or more information provided how to make it work or HAL fixed so it just works.",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2025-03-28T10:13:51Z",
+        "body": "Hello @satur9nine,\n\nThank you for the report.\n\nIn fact, the DS11532 Rev 8 datasheet contains a table **Table 58. Flash Memory Programming with VPP** on page 152 for double word programming, also in the driver HAL file and in the short section for **static void FLASH_Program_DoubleWord()**, there is a note ` @note   This function must be used when the device voltage range is from 2.7V to 3.6V and an External Vpp is present.`. I suggest you take a look and try it out with this configuration.\n\nIn the meantime, I will check with our team for more information and keep you posted.\n\nWith regards,"
+      },
+      {
+        "author": "satur9nine",
+        "created_at": "2025-03-31T00:49:32Z",
+        "body": "Thanks since I am not calling the function `FLASH_Program_DoubleWord` directly I did not read the source code documentation on it. Would be ideal if the `FLASH_TYPEPROGRAM_DOUBLEWORD` parameter has the same code documentation mentioned that Vpp is required to use this parameter."
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-04-08T07:48:43Z",
+        "body": "Hello @satur9nine,\n\nI think so, I will share your opinion with our team. Please allow me to close the issue.\n\nThank you for your understanding.\n\nBest Regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/13"
+  },
+  {
+    "repo": "stm32f7xx-hal-driver",
+    "issue_number": 12,
+    "title": "[Request] [AES] Change default AES input size from uint16_t to uint32_t or enable chunking data.",
+    "state": "open",
+    "labels": [
+      "enhancement",
+      "internal bug tracker",
+      "cryp",
+      "aes"
+    ],
+    "created_at": "2025-03-24T08:58:45Z",
+    "closed_at": null,
+    "body": "Currently HAL doesn't enable you to encrypt more than 65KB in one go nor doest it enable you to upload data by chunks. Its smol :c \nI changed my  stm32f7xx_hal_cryp.h and .c to uint32_t input size in initializers and interrupts and it works just fine. If there is any particular reason for keeping uint16_t please let me know. \nHave a good day! ",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2025-03-28T09:48:06Z",
+        "body": "Hello @printfKrzysztof,\n\nThank you for the report.\n\nJust to be sure, you are talking about the parameter **size** in the structure **CRYP_HandleTypeDef** which is defined as uint16_t, and when you changed it to uint32_t it worked just fine. If so, I will check with our team and keep you posted.\n\nWith regards,"
+      },
+      {
+        "author": "printfKrzysztof",
+        "created_at": "2025-03-28T13:35:46Z",
+        "body": "Hi @KRASTM, \nIt requied to change more than just a size in CRYP_HandleTypeDef.\nIn CRYP_HandleTypeDef i changed \n```\n__IO uint32_t                     CrypHeaderCount;   /*!< Counter of header data */\n__IO uint32_t                     CrypInCount;      /*!< Counter of input data */\n__IO uint32_t                     CrypOutCount;     /*!< Counter of output data */\n      uint32_t                          Size;           /*!< length of input data in word */\n```\n\nIn interrupt callbacks there were also: \n```\nuint16_t incount; /* Temporary CrypInCount Value */\nuint16_t outcount;  /* Temporary CrypOutCount Value */\n```\nneeds to be changed.\n\nAfter those i tested it with 300KB file and it encrypted properly using AES CTR. I decrypted it using openssl without any problem. \nFor clarity i am using 2021 version of HAL in my project, but i checked and on current release and there wasn't any fix to this problem. \n\nRgrds"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-04-07T08:17:52Z",
+        "body": "ST Internal Reference: 206903"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/12"
+  },
+  {
+    "repo": "stm32f7xx-hal-driver",
+    "issue_number": 11,
+    "title": "SPI generates too many clocks in Bidirectional mode",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "hal",
+      "needs clarification",
+      "spi"
+    ],
+    "created_at": "2025-01-31T11:55:16Z",
+    "closed_at": "2025-03-06T10:21:44Z",
+    "body": "**Describe the set-up**\n- Bidirectional SPI, high clock frequency, SPI device with FIFO registers (STM manufactured accelerometer)\n\n**Describe the bug**\nFunction `HAL_SPI_Receive` generate clock on SPI clock line a few octets too long, for example reading 6 octets generates 9 octets of clock, thus transmissions \"with side effect\" like for example reading FIFO from accelerometer can result in extremely confusing bugs\n\nMore detailed info:\nhttp://efton.sk/STM32/gotcha/g32.html\n\n**How To Reproduce**\nSetup bidirectional SPI working at high clock and observe MISO/MOSI line with logic analyzer, use CubeMX autogenerated code.\n\n**Additional context**\nInstead of fixing it you can inform CubeMX users of the problem or even remove bidirectional SPI choice from CubeMX\n",
+    "comments": [
+      {
+        "author": "KRASTM",
+        "created_at": "2025-02-03T13:23:32Z",
+        "body": "Hello @dsabala,\n\nThank you for the report.\n\nCould you please share more details about this phenomenon (scrennshot with or from logic analyzer and a snippet of code for the transmit or receive function), and your IOC file for further analysis. In the meantime, we will try to check with our team.\n\nWith regards,"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-02-14T16:47:59Z",
+        "body": "Hello @dsabala,\n\nAny news please?\n\nWith regards"
+      },
+      {
+        "author": "dsabala",
+        "created_at": "2025-02-17T10:04:17Z",
+        "body": "Hello @KRASTM \n\nI solved the problem by creating a custom SPI driver that manages half-duplex SPI communication without introducing unnecessary SPI clock cycles. I used HAL LL (low layer) routines to configure the SPI and TIM peripherals to the desired states.\n\nThe key aspect of the solution is disabling the SPI peripheral within a very strict timing regime. To achieve this, I utilized a high-resolution hardware timer configured in single-pulse mode. The timer is set to trigger an interrupt after a duration equal to the `time required for transmitting a single byte * (number of bytes - 0,5)`. Within the timer interrupt handler, the SPI peripheral is disabled.\n\nThe entire read transfer is executed in a \"subcritical\" section by using the ```basepri``` register, ensuring that only the timer interrupt remains enabled during this process.\n\nBelow are the results of reading measurements from the LIS2MDL magnetometer. The device is expected to receive 6 bytes, and while it does receive these 6 bytes, it continues to emit clock signals for an additional 3 cycles. If you are reading registers with side effects, such as FIFO registers in another STM MEMS sensor, this behavior could lead to difficult to debug bugs.\n\n![Image](https://github.com/user-attachments/assets/dcf285cf-c9bb-4389-9d4c-f27e580e60f0)\n\n"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-02-26T08:31:18Z",
+        "body": "Hello @dsabala,\n\nI ran some tests with a **NUCELO-F767ZI** board and I didn't encounter such phenomena (in other word Number of bytes equal to the number of clocks generated), if you could share with us more details about your config and code, so we can analyze it further with our team. Otherwise, you can submit a post to the ST [Community](https://community.st.com/t5/mems-and-sensors/ct-p/mems-sensors).\n\nWith regards,"
+      },
+      {
+        "author": "KRASTM",
+        "created_at": "2025-03-06T10:21:44Z",
+        "body": "Hello @dsabala,\n\nPlease, allow me to close the issue, if you have more details to share, you can reopen it or submit another ticket.\nThank you in advance for your understanding.\n\nWith regards"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/11"
+  },
+  {
+    "repo": "stm32f7xx-hal-driver",
+    "issue_number": 10,
+    "title": "HAL_PCD_SetTestMode() doesn't clear register bits before setting them",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "hal",
+      "usb",
+      "internal bug tracker"
+    ],
+    "created_at": "2024-07-10T14:37:57Z",
+    "closed_at": "2025-07-28T13:46:40Z",
+    "body": "**Describe the set-up**\r\n * STM32F723\r\n * IDE 1.14.1, HAL 1.3.1\r\n\r\n**Describe the bug**\r\nInspection of the code for [HAL_PCD_SetTestMode()](https://github.com/STMicroelectronics/stm32f7xx_hal_driver/blob/2e3aac48671f6f5d86c8e85b314b50589c1dc93c/Src/stm32f7xx_hal_pcd.c#L2031) shows that the RW bits for TCTL in the OTG_DCTL register are not cleared before setting them. This function will work on the first usage but future changes to test mode will garble the bits.\r\n\r\nFor completeness there should probably also be a define for test mode disabled (0U).\r\n",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2024-07-12T16:04:25Z",
+        "body": "ST Internal Reference: 186507"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2025-07-28T13:46:40Z",
+        "body": "Fixed in release **1.3.2**"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/10"
+  },
+  {
+    "repo": "stm32f7xx-hal-driver",
+    "issue_number": 8,
+    "title": "STM32F723 does not trigger HAL_PCD_DataOutStageCallback for USB Audio on Windows",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "hal",
+      "usb",
+      "internal bug tracker"
+    ],
+    "created_at": "2024-06-23T17:52:23Z",
+    "closed_at": "2024-07-23T09:51:51Z",
+    "body": "Dear STM team, \r\n\r\nWhen I created a new STM32F723ZETx project (FW v1.17.2) with STM32CubeMx and selected USB audio, then it worked nicely on Linux, but `AUDIO_PeriodicTC_HS` was never called on Windows. I've verified that Windows is sending isochronous audio packets, which means the problem is caused by the STM32 HAL not triggering the appropriate callbacks despite the hardware receiving the data.\r\n\r\nMy impression is that this line:\r\n\r\nhttps://github.com/STMicroelectronics/stm32f7xx_hal_driver/blob/52bfa97ba66afc08481f6fd7631322593bd89691/Src/stm32f7xx_hal_pcd.c#L1377\r\n\r\nis trying to verify that the even/odd flag inside `DOEPCTL` is matching with the current frame number's parity. If that is the intention, then instead of \r\n\r\n```\r\n((RegVal & (0x1U << 16)) == (hpcd->FrameNumber & 0x1U)))\r\n```\r\n\r\nit should read \r\n\r\n```\r\n(((RegVal & (0x1U << 16)) != 0) == (hpcd->FrameNumber & 0x1U)))\r\n```\r\n\r\nbecause we want to check if the `EONUM` bit is set and not check for its absolute value. And, indeed, that small change repairs the `HAL_PCD_DataOutStageCallback` on Windows :smiley: \r\n\r\n",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2024-06-24T16:11:27Z",
+        "body": "Hi @fxtentacle,\r\n\r\nThank you for this report. The point looks valid. A question though please. After you changed the code in the `hal_pcd.c` file, did you try again on Linux to check everything is still OK?\r\n\r\nWith regards,"
+      },
+      {
+        "author": "fxtentacle",
+        "created_at": "2024-06-24T17:59:52Z",
+        "body": "Yes, the change had no influence on Linux where the `HAL_PCD_DataOutStageCallback` was being called both before and afterwards. My subjective impression is that Linux now has a slightly improved timing from when I connect the STM32 until when the audio device changes, but that's really hard to measure objectively. "
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2024-06-28T09:38:17Z",
+        "body": "ST Internal Reference: 185291"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2024-07-22T13:44:42Z",
+        "body": "Hi @fxtentacle,\r\n\r\nI hope you are doing well. Just to let you know that according to our development team, the fix should rather be as below, in order to check for both odd and even frames.\r\n\r\n```c\r\n(((RegVal & (0x1U << 16)) >> 16) == (hpcd->FrameNumber & 0x1U)))\r\n```\r\n\r\nWith regards, "
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2024-07-23T09:51:51Z",
+        "body": "Fixed in commit c393a68a4d63a50a4427d9f15ad128aa7dadab38"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/8"
+  },
+  {
+    "repo": "stm32f7xx-hal-driver",
+    "issue_number": 6,
+    "title": "Bug found in  HAL_NAND_Read_Page_8b and HAL_NAND_Read_SpareArea_8b",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "duplicate",
+      "hal"
+    ],
+    "created_at": "2023-09-07T14:04:16Z",
+    "closed_at": "2024-11-26T08:23:01Z",
+    "body": "The code for reading data from the NAND Flash in the stm32f7xx_hal_nand.c is `*buff = *(uint8_t *)deviceaddress;` rather than `*(__IO uint8_t *)deviceaddress;` which may cause the data always to be the first data read from the nand flash when code is optimized by the compiler.\r\n\r\nhttps://github.com/STMicroelectronics/stm32f7xx_hal_driver/blob/a89b85ba16ab07f42165ca67949c0366a9ea1c3a/Src/stm32f7xx_hal_nand.c#L638\r\n\r\nhttps://github.com/STMicroelectronics/stm32f7xx_hal_driver/blob/a89b85ba16ab07f42165ca67949c0366a9ea1c3a/Src/stm32f7xx_hal_nand.c#L1288\r\n\r\nAnd the bug is still exists in this version:\r\n![image](https://github.com/STMicroelectronics/stm32f7xx_hal_driver/assets/34576789/d61f3af5-b3bf-4f12-ac03-209f4d62a084)\r\n",
+    "comments": [
+      {
+        "author": "huoxingdawang",
+        "created_at": "2023-09-07T14:30:51Z",
+        "body": "I created PR #7 to fix this bug."
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/6"
+  },
+  {
+    "repo": "stm32f7xx-hal-driver",
+    "issue_number": 2,
+    "title": "Bug in stm32f7xx_hal_hcd.c using callback",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "hal",
+      "usb",
+      "internal bug tracker"
+    ],
+    "created_at": "2021-06-24T07:13:34Z",
+    "closed_at": "2021-12-15T16:56:58Z",
+    "body": "Missing use of registered callback in some part of the code.\r\n\r\nI have enabled USE_HAL_HCD_REGISTER_CALLBACKS but I find some part of the code not using the correct way to call the function\r\nHAL_HCD_HC_NotifyURBChange_Callback.\r\n[hcd_patch.txt](https://github.com/STMicroelectronics/stm32f7xx_hal_driver/files/6707072/hcd_patch.txt)\r\n\r\n",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2021-08-09T11:31:18Z",
+        "body": "Hi @micheledarold,\r\n\r\nThank you for this report. Your point is correct. It will be forwarded to our development teams. May I ask you first to create a pull-request? This will allow a far more easy way to view the changes proposed. Thank you very much.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2021-08-11T09:24:15Z",
+        "body": "ST Internal Reference: 111775"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2021-08-11T09:27:38Z",
+        "body": "Hi @micheledarold,\r\n\r\nThe issue you reported has been forwarded to our development teams. No more need to create a pull-request this time. Next times maybe, as it allows to visualize the changes far more easily and, more important, to integrate them faster into the repository. Thank you again for having reported this one.\r\n\r\nWith regards, "
+      },
+      {
+        "author": "micheledarold",
+        "created_at": "2021-08-23T07:51:59Z",
+        "body": "Hi @ALABSTM I'm on vacation and back in office only today, so thank you for your help, next time I'll provide the pull request."
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2021-12-15T16:56:58Z",
+        "body": "Hi @micheledarold,\r\n\r\nI hope you are fine. The issue you reported has been fixed in the frame of version **v1.2.10** of the stm32f7xx_hal_driver published recently on GitHub. Thank you again for having reported.\r\n\r\nWith regards,  "
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/2"
+  },
+  {
+    "repo": "stm32f7xx-hal-driver",
+    "issue_number": 1,
+    "title": "Bug in CRC32 calculation ",
+    "state": "closed",
+    "labels": [
+      "invalid",
+      "hal"
+    ],
+    "created_at": "2020-03-13T15:46:02Z",
+    "closed_at": "2021-06-28T09:28:09Z",
+    "body": "Hi,\r\n\r\nOn this line:\r\nhttps://github.com/STMicroelectronics/stm32f7xx_hal_driver/blob/8a83a680a5c0c678df3897ae41b430444abb3cb7/Src/stm32f7xx_hal_crc.c#L453\r\n\r\nand on this one too:\r\nhttps://github.com/STMicroelectronics/stm32f7xx_hal_driver/blob/8a83a680a5c0c678df3897ae41b430444abb3cb7/Src/stm32f7xx_hal_crc.c#L467\r\n\r\nit's missing a cast to `(uint8_t)` when loading the DR register, otherwise it won't compute the correct CRC32.",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-04-16T08:31:22Z",
+        "body": "Hi @josesimoes,\r\n\r\nThank you for your report. May I ask you to provide us with the test case that allowed you to obtain an incorrect CRC32?\r\n\r\nThank you,"
+      },
+      {
+        "author": "josesimoes",
+        "created_at": "2020-04-16T08:45:20Z",
+        "body": "@ALABSTM I haven't added any test case… just found out about it when using the code on my app.\r\nThe issue is not a specific to a particular calculation is just wrong for any calculation on which there is a single byte left in the buffer (after feeding the register with 32bits data chunks). On another perspective, if one is feeding the calculator with a byte array with an odd length."
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-04-16T09:31:13Z",
+        "body": "Hi @josesimoes,\r\n\r\nDo you confirm you obtain a wrong CRC32 even though member `InputDataFormat` in the handler structure is set to `CRC_INPUTDATA_FORMAT_BYTES`? Thank you in advance for your answer.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "josesimoes",
+        "created_at": "2020-04-16T09:34:11Z",
+        "body": "That is correct. On our project the CRC32 only applies to byte arrays and we set the `InputDataFormat` to `CRC_INPUTDATA_FORMAT_BYTES`  when configuring the CRC peripheral. And that is never changed afterwards. "
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-04-16T10:02:42Z",
+        "body": "Hi @josesimoes,\r\n\r\nThank you for your answer. In order to be sure I correctly understood your request, you suggest the following implementation?\r\n```diff\r\n- *(__IO uint8_t *)(__IO void *)(&hcrc->Instance->DR) = pBuffer[4U * i];\r\n+ *(__IO uint8_t *)(__IO void *)(&hcrc->Instance->DR) = (uint8_t) pBuffer[4U * i];\r\n```\r\nMay I also ask you whether you obtained a correct CRC once you added the cast? Thank you for your answers once more.\r\n\r\nWith regards, "
+      },
+      {
+        "author": "josesimoes",
+        "created_at": "2020-04-16T10:19:23Z",
+        "body": "Basically yes. On both lines 453 and 467. That cast is all that's needed to fix this. Actually inline with the other casts there on the other data sizes cases."
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-04-16T10:47:05Z",
+        "body": "Hi @josesimoes,\r\n\r\nPlease excuse my insistence. Do you confirm you updated the two lines above by adding the `(uint8_t)`cast to the `pBuffer[4U * i]` array element and had the issue fixed in consequence (**i.e.** the correct CRC has been obtained)?\r\n\r\nI ask the question because the `pBuffer` parameter is already defined to be a pointer on `uint8_t` data. Thank you for your comprehension.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "josesimoes",
+        "created_at": "2020-04-16T12:01:27Z",
+        "body": "Hi again,\r\n\r\nThat is correct. I agree that this sounds weird but it is what it is... I guess that's probably because of the way the compiler is handling that. The cast makes sure that the proper data and size are feed to the CRC32 register. \r\n\r\nAll that code feeding the registers looks over engineered and there are notes about that. \r\nIf it's of interest: I'm using GCC 8-2019-q3-update."
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-04-16T13:32:52Z",
+        "body": "Hi @josesimoes,\r\n\r\nShall I understand you tested the fix you are proposing and it solved the issue?\r\n\r\nWith regards,"
+      },
+      {
+        "author": "josesimoes",
+        "created_at": "2020-04-19T18:38:42Z",
+        "body": "Hi @ALABSTM yes, of course. Otherwise I wouldn't be reporting this and offering the fix I've used.\r\nThe code with the above fix is being used in production (for almost two month now) in a project I'm with the core team: https://github.com/nanoframework \r\n(BTW, it's a framework allowing to code for embedded systems using .NET C#)"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-04-22T09:04:42Z",
+        "body": "Hi @josesimoes,\r\n\r\nThank you for the confirmation. Your request has been forwarded to our development teams. I will be back to you as soon as they provide me with their feedback.\r\n\r\nThank you once again for having reported this point. Thank you also for having introduced the \"nanoframework\" initiative I have not knew about before reading your message. The project looks promising and really interesting. I wish you the best of lucks.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2021-02-08T12:38:42Z",
+        "body": "Hi @josesimoes,\r\n\r\nI hope you are fine.\r\n\r\nOur development teams could **not** reproduce the issue you are describing. They used a **STM32L5 Discovery** board and the **STM32Cube ID3** v1.4.0 (with the GCC compiler version **7_2018_q2_update**). The CRC computation of a 5-byte long stream returned the expected result.\r\n\r\nTheir recommendation is to migrate to the last compiler version. Please allow me to close this issue now. Thank you again for your contribution and patience.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "josesimoes",
+        "created_at": "2021-02-08T12:47:01Z",
+        "body": "Hi @ALABSTM doing fine thanks.\r\n\r\nI have to say that I'm a bit puzzled with your reply... I specifically mentioned that this was happening on an **F7** target and that I was seeing this with GCC **8-2019-q3-update**. Now you tell me that your development team tried to reproduce this on a *L5* target with GCC *7_2018_q2_update*... I don't get it...\r\n\r\nWe'll stick with our local fix then."
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2021-02-26T17:30:16Z",
+        "body": "Hi @josesimoes,\r\n\r\n\"Mea culpa\" for the inconsistent details in my last comment. With some colleague, we ran the [CRC_Bytes_Stream_7bit_CRC](https://github.com/STMicroelectronics/STM32CubeF7/tree/master/Projects/STM32F769I_EVAL/Examples/CRC/CRC_Bytes_Stream_7bit_CRC) example:\r\n* on a **STM32F7696-EVAL** board using EWARM v8.32.4.\r\n* on a **STM32F767ZI-Nucleo** board using Cube IDE **v1.6.0** (integrating **GCC** 9.11.1.**2020**04012021).\r\n\r\nThe CRC calculations **passed** in both cases.\r\n\r\nMay I ask you to send us a modified version of the above mentioned example allowing to reproduce the issue?\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2021-06-28T09:28:09Z",
+        "body": "Hi @josesimoes,\r\n\r\nPlease allow me to close this issue as no reply has been received since a couple of months.\r\n\r\nWith regards, "
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/1"
+  }
+]

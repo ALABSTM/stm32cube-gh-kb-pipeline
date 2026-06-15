@@ -1,0 +1,29 @@
+{
+  "issues": [
+    {
+      "id": "cmsis_device_f7-issue-2",
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "cmsis_device_f7",
+      "root_path": "issues",
+      "mcu_series": null,
+      "issue_number": 2,
+      "issue_title": "CMSIS configuration defines are too generic",
+      "state": "closed",
+      "layer": "Other",
+      "component": "ADC",
+      "issue_kind": "usage_question",
+      "severity": "medium",
+      "board": "STM32F769XX",
+      "labels": [
+        "wontfix",
+        "cmsis"
+      ],
+      "github_url": "https://github.com/STMicroelectronics/cmsis-device-f7/issues/2",
+      "is_valid": true,
+      "evidence_strength": "medium",
+      "rescue_applied": true,
+      "delivery_template": "st_v2_structured_issue_card",
+      "st_ready_text": "Problem: CMSIS configuration defines are too generic\nContext: repo=cmsis_device_f7, mcu_series=None, board=STM32F769XX, component=ADC, layer=Other, issue_kind=usage_question, severity=medium, evidence_strength=medium, rescue_applied=True, state=closed, issue_number=2\nRoot cause: Hi @ladislas, Thank you for this report.\nFix: Original posted here: https://github.\nConstraints: Validate against exact MCU/board configuration and CubeMX/CubeH7 version before applying.\nKeywords: STM32F769XX, ADC, usage_question, medium, wontfix, cmsis, TARGET, DMA2D, TARGET_STM, TARGET_STM32F7, JPEG, DSI\n\nTechnical details:\nOriginal posted here: https://github.com/ARMmbed/mbed-os/issues/15047 ## Description of defect <!-- Add detailed description of what you are reporting. Good example: https://os.mbed.com/docs/mbed-os/latest/contributing/workflow.html --> Some TARGET/CMSIS defines are given names that are really generic such as DMA2D in https://github.com/ARMmbed/mbed-os/blob/master/targets/TARGET_STM/TARGET_STM32F7/STM32Cube_FW/CMSIS/stm32f769xx.h This prevents the user from defining variables/structs/classes with the same name. In our case we want to have: cpp namespace interface { class DMA2D { // ... }; } To define the DMA2D interface other components would need. I could rename it DMA2DBase but this breaks our naming rules. DMA2D is not the only one and the same issues could arise with JPEG, DSI, DAC, ADC, etc. ## Target(s) affected by this defect ? SM32F769 but others might be as well. ## Toolchain(s) (name and version) displaying this defect ? arm-none-eabi-c++ (GNU Arm Embedded Toolchain 10-2020-q4-major) 10.2.1 20201103 (release) ## How is this defect reproduced ? See description on how to reproduce. ## Ideas on how to fix From the top of my head: - use another name - prefix wit ST_, e.g. ST_DMA2D - encapsulate in MAKE_SIMPLE_NAMES_PUBLIC macro to be able to opt out from having DMA2D and rely on DMA2D_BASE\n\nKey comments:\nHi @ladislas, Thank you for this report. Unfortunately, there is no plans for our technical team to accept your DMA2D rename suggestion in order to not break the compatibility with almost all CMSIS and to not update all examples and applications within the Cube deliverable and also on the user application side. Please allow me to close this issue now. Thank you again for your report and for your comprehension. That's too bad... What about something like: cpp #ifndef HIDE_PERIPHERAL_DECLARATION // ... #define DMA2D ((DMA2D_TypeDef *)DMA2D_BASE) // ... #endif This way it won't break anything in current code and people who need it can just define HIDE_PERIPHERAL_DECLARATION somewhere."
+    }
+  ]
+}

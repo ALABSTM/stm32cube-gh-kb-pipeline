@@ -1,0 +1,416 @@
+[
+  {
+    "repo": "STM32CubeF7",
+    "sha": "7e2746f45ac5d57ae7cee1e15d76369da1e70485",
+    "author": "ALABSTM",
+    "committer": "ALABSTM",
+    "message": "[HAL][LL][USB] Fix the count of the received data length when DMA is enabled",
+    "authored_at": "2022-01-14T13:31:54Z",
+    "committed_at": "2022-01-14T13:31:54Z",
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/commit/7e2746f45ac5d57ae7cee1e15d76369da1e70485",
+    "parents": [
+      "f8cefdf02e8ad7fd06bd38a2dd85a55ecdbe92a9"
+    ],
+    "stats": {
+      "additions": 24,
+      "deletions": 10,
+      "total": 34
+    },
+    "files_changed": [
+      {
+        "filename": "Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usb.h",
+        "status": "modified",
+        "additions": 2,
+        "deletions": 0,
+        "changes": 2,
+        "previous_filename": null,
+        "patch": "@@ -152,6 +152,8 @@ typedef struct\n \n   uint32_t  xfer_len;             /*!< Current transfer length                                                  */\n \n+  uint32_t  xfer_size;            /*!< requested transfer size                                                  */\n+\n   uint32_t  xfer_count;           /*!< Partial transfer length in case of multi packet transfer                 */\n } USB_OTG_EPTypeDef;\n "
+      },
+      {
+        "filename": "Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_pcd.c",
+        "status": "modified",
+        "additions": 15,
+        "deletions": 8,
+        "changes": 23,
+        "previous_filename": null,
+        "patch": "@@ -2022,6 +2022,7 @@ static HAL_StatusTypeDef PCD_WriteEmptyTxFifo(PCD_HandleTypeDef *hpcd, uint32_t\n   */\n static HAL_StatusTypeDef PCD_EP_OutXfrComplete_int(PCD_HandleTypeDef *hpcd, uint32_t epnum)\n {\n+  USB_OTG_EPTypeDef *ep;\n   USB_OTG_GlobalTypeDef *USBx = hpcd->Instance;\n   uint32_t USBx_BASE = (uint32_t)USBx;\n   uint32_t gSNPSiD = *(__IO uint32_t *)(&USBx->CID + 0x1U);\n@@ -2052,18 +2053,24 @@ static HAL_StatusTypeDef PCD_EP_OutXfrComplete_int(PCD_HandleTypeDef *hpcd, uint\n       }\n       else\n       {\n-        /* out data packet received over EP0 */\n-        hpcd->OUT_ep[epnum].xfer_count =\n-          hpcd->OUT_ep[epnum].maxpacket -\n-          (USBx_OUTEP(epnum)->DOEPTSIZ & USB_OTG_DOEPTSIZ_XFRSIZ);\n+        ep = &hpcd->OUT_ep[epnum];\n \n-        hpcd->OUT_ep[epnum].xfer_buff += hpcd->OUT_ep[epnum].maxpacket;\n+        /* out data packet received over EP */\n+        ep->xfer_count = ep->xfer_size - (USBx_OUTEP(epnum)->DOEPTSIZ & USB_OTG_DOEPTSIZ_XFRSIZ);\n \n-        if ((epnum == 0U) && (hpcd->OUT_ep[epnum].xfer_len == 0U))\n+        if (epnum == 0U)\n         {\n-          /* this is ZLP, so prepare EP0 for next setup */\n-          (void)USB_EP0_OutStart(hpcd->Instance, 1U, (uint8_t *)hpcd->Setup);\n+          if (ep->xfer_len == 0U)\n+          {\n+            /* this is ZLP, so prepare EP0 for next setup */\n+            (void)USB_EP0_OutStart(hpcd->Instance, 1U, (uint8_t *)hpcd->Setup);\n+          }\n+          else\n+          {\n+            ep->xfer_buff += ep->xfer_count;\n+          }\n         }\n+\n #if (USE_HAL_PCD_REGISTER_CALLBACKS == 1U)\n         hpcd->DataOutStageCallback(hpcd, (uint8_t)epnum);\n #else"
+      },
+      {
+        "filename": "Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_ll_usb.c",
+        "status": "modified",
+        "additions": 7,
+        "deletions": 2,
+        "changes": 9,
+        "previous_filename": null,
+        "patch": "@@ -884,8 +884,10 @@ HAL_StatusTypeDef USB_EPStartXfer(USB_OTG_GlobalTypeDef *USBx, USB_OTG_EPTypeDef\n     else\n     {\n       pktcnt = (uint16_t)((ep->xfer_len + ep->maxpacket - 1U) / ep->maxpacket);\n+      ep->xfer_size = ep->maxpacket * pktcnt;\n+\n       USBx_OUTEP(epnum)->DOEPTSIZ |= USB_OTG_DOEPTSIZ_PKTCNT & ((uint32_t)pktcnt << 19);\n-      USBx_OUTEP(epnum)->DOEPTSIZ |= USB_OTG_DOEPTSIZ_XFRSIZ & (ep->maxpacket * pktcnt);\n+      USBx_OUTEP(epnum)->DOEPTSIZ |= USB_OTG_DOEPTSIZ_XFRSIZ & ep->xfer_size;\n     }\n \n     if (dma == 1U)\n@@ -993,8 +995,11 @@ HAL_StatusTypeDef USB_EP0StartXfer(USB_OTG_GlobalTypeDef *USBx, USB_OTG_EPTypeDe\n       ep->xfer_len = ep->maxpacket;\n     }\n \n+    /* Store transfer size, for EP0 this is equal to endpoint max packet size */\n+    ep->xfer_size = ep->maxpacket;\n+\n     USBx_OUTEP(epnum)->DOEPTSIZ |= (USB_OTG_DOEPTSIZ_PKTCNT & (1U << 19));\n-    USBx_OUTEP(epnum)->DOEPTSIZ |= (USB_OTG_DOEPTSIZ_XFRSIZ & (ep->maxpacket));\n+    USBx_OUTEP(epnum)->DOEPTSIZ |= (USB_OTG_DOEPTSIZ_XFRSIZ & ep->xfer_size);\n \n     if (dma == 1U)\n     {"
+      }
+    ],
+    "linked_issue_numbers": [
+      30
+    ],
+    "pr_numbers": [
+      61
+    ]
+  },
+  {
+    "repo": "STM32CubeF7",
+    "sha": "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa",
+    "author": "ASELSTM",
+    "committer": "ASELSTM",
+    "message": "[projects][UART] Add missing syscalls.c files part of SW4STM32 projects",
+    "authored_at": "2023-08-18T09:09:05Z",
+    "committed_at": "2023-08-23T12:55:16Z",
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/commit/da50945e2e414dff6a646f1a3e7100ccb7e7a6aa",
+    "parents": [
+      "d89aa7d5c560c24db2dae421eaa8064a9083419d"
+    ],
+    "stats": {
+      "additions": 2470,
+      "deletions": 0,
+      "total": 2470
+    },
+    "files_changed": [
+      {
+        "filename": "Projects/STM32746G-Discovery/Examples/UART/UART_TwoBoards_ComDMA/SW4STM32/STM32746G_DISCOVERY/.project",
+        "status": "modified",
+        "additions": 4,
+        "deletions": 0,
+        "changes": 4,
+        "previous_filename": null,
+        "patch": "@@ -68,6 +68,10 @@\n \t\t\t<name>Example/User/main.c</name>\n \t\t\t<type>1</type>\n \t\t\t<location>PARENT-2-PROJECT_LOC/Src/main.c</location>\n+\t\t</link><link>\n+\t\t\t<name>Example/SW4STM32/syscalls.c</name>\n+\t\t\t<type>1</type>\n+\t\t\t<locationURI>PARENT-1-PROJECT_LOC/syscalls.c</locationURI>\n \t\t</link><link>\n \t\t\t<name>Drivers/CMSIS/system_stm32f7xx.c</name>\n \t\t\t<type>1</type>"
+      },
+      {
+        "filename": "Projects/STM32746G-Discovery/Examples/UART/UART_TwoBoards_ComDMA/SW4STM32/syscalls.c",
+        "status": "added",
+        "additions": 186,
+        "deletions": 0,
+        "changes": 186,
+        "previous_filename": null,
+        "patch": "@@ -0,0 +1,186 @@\n+/**\n+*****************************************************************************\n+**\n+**  File        : syscalls.c\n+**\n+**  Abstract    : System Workbench Minimal System calls file\n+**\n+** \t\t          For more information about which c-functions\n+**                need which of these lowlevel functions\n+**                please consult the Newlib libc-manual\n+**\n+**  Environment : System Workbench for MCU\n+**\n+**  Distribution: The file is distributed �as is,� without any warranty\n+**                of any kind.\n+**\n+**  (c)Copyright System Workbench for MCU.\n+**  You may use this file as-is or modify it according to the needs of your\n+**  project. Distribution of this file (unmodified or modified) is not\n+**  permitted. System Workbench for MCU permit registered System Workbench(R) users the\n+**  rights to distribute the assembled, compiled & linked contents of this\n+**  file as part of an application binary file, provided that it is built\n+**  using the System Workbench for MCU toolchain.\n+**\n+*****************************************************************************\n+*/\n+\n+/* Includes */\n+#include <sys/stat.h>\n+#include <stdlib.h>\n+#include <errno.h>\n+#include <stdio.h>\n+#include <signal.h>\n+#include <time.h>\n+#include <sys/time.h>\n+#include <sys/times.h>\n+\n+\n+/* Variables */\n+//#undef errno\n+extern int errno;\n+extern int __io_putchar(int ch) __attribute__((weak));\n+extern int __io_getchar(void) __attribute__((weak));\n+\n+register char * stack_ptr asm(\"sp\");\n+\n+char *__env[1] = { 0 };\n+char **environ = __env;\n+\n+\n+/* Functions */\n+void initialise_monitor_handles()\n+{\n+}\n+\n+int _getpid(void)\n+{\n+\treturn 1;\n+}\n+\n+int _kill(int pid, int sig)\n+{\n+\terrno = EINVAL;\n+\treturn -1;\n+}\n+\n+void _exit (int status)\n+{\n+\t_kill(status, -1);\n+\twhile (1) {}\t\t/* Make sure we hang here */\n+}\n+\n+int _read (int file, char *ptr, int len)\n+{\n+\tint DataIdx;\n+\n+\tfor (DataIdx = 0; DataIdx < len; DataIdx++)\n+\t{\n+\t\t*ptr++ = __io_getchar();\n+\t}\n+\n+return len;\n+}\n+\n+int _write(int file, char *ptr, int len)\n+{\n+\tint DataIdx;\n+\n+\tfor (DataIdx = 0; DataIdx < len; DataIdx++)\n+\t{\n+\t\t__io_putchar(*ptr++);\n+\t}\n+\treturn len;\n+}\n+\n+caddr_t _sbrk(int incr)\n+{\n+\textern char end asm(\"end\");\n+\tstatic char *heap_end;\n+\tchar *prev_heap_end;\n+\n+\tif (heap_end == 0)\n+\t\theap_end = &end;\n+\n+\tprev_heap_end = heap_end;\n+\tif (heap_end + incr > stack_ptr)\n+\t{\n+//\t\twrite(1, \"Heap and stack collision\\n\", 25);\n+//\t\tabort();\n+\t\terrno = ENOMEM;\n+\t\treturn (caddr_t) -1;\n+\t}\n+\n+\theap_end += incr;\n+\n+\treturn (caddr_t) prev_heap_end;\n+}\n+\n+int _close(int file)\n+{\n+\treturn -1;\n+}\n+\n+\n+int _fstat(int file, struct stat *st)\n+{\n+\tst->st_mode = S_IFCHR;\n+\treturn 0;\n+}\n+\n+int _isatty(int file)\n+{\n+\treturn 1;\n+}\n+\n+int _lseek(int file, int ptr, int dir)\n+{\n+\treturn 0;\n+}\n+\n+int _open(char *path, int flags, ...)\n+{\n+\t/* Pretend like we always fail */\n+\treturn -1;\n+}\n+\n+int _wait(int *status)\n+{\n+\terrno = ECHILD;\n+\treturn -1;\n+}\n+\n+int _unlink(char *name)\n+{\n+\terrno = ENOENT;\n+\treturn -1;\n+}\n+\n+int _times(struct tms *buf)\n+{\n+\treturn -1;\n+}\n+\n+int _stat(char *file, struct stat *st)\n+{\n+\tst->st_mode = S_IFCHR;\n+\treturn 0;\n+}\n+\n+int _link(char *old, char *new)\n+{\n+\terrno = EMLINK;\n+\treturn -1;\n+}\n+\n+int _fork(void)\n+{\n+\terrno = EAGAIN;\n+\treturn -1;\n+}\n+\n+int _execve(char *name, char **argv, char **env)\n+{\n+\terrno = ENOMEM;\n+\treturn -1;\n+}"
+      },
+      {
+        "filename": "Projects/STM32746G-Discovery/Examples/UART/UART_TwoBoards_ComIT/SW4STM32/STM32746G_DISCOVERY/.project",
+        "status": "modified",
+        "additions": 4,
+        "deletions": 0,
+        "changes": 4,
+        "previous_filename": null,
+        "patch": "@@ -68,6 +68,10 @@\n \t\t\t<name>Example/User/main.c</name>\n \t\t\t<type>1</type>\n \t\t\t<location>PARENT-2-PROJECT_LOC/Src/main.c</location>\n+\t\t</link><link>\n+\t\t\t<name>Example/SW4STM32/syscalls.c</name>\n+\t\t\t<type>1</type>\n+\t\t\t<locationURI>PARENT-1-PROJECT_LOC/syscalls.c</locationURI>\n \t\t</link><link>\n \t\t\t<name>Drivers/CMSIS/system_stm32f7xx.c</name>\n \t\t\t<type>1</type>"
+      },
+      {
+        "filename": "Projects/STM32746G-Discovery/Examples/UART/UART_TwoBoards_ComIT/SW4STM32/syscalls.c",
+        "status": "added",
+        "additions": 186,
+        "deletions": 0,
+        "changes": 186,
+        "previous_filename": null,
+        "patch": "@@ -0,0 +1,186 @@\n+/**\n+*****************************************************************************\n+**\n+**  File        : syscalls.c\n+**\n+**  Abstract    : System Workbench Minimal System calls file\n+**\n+** \t\t          For more information about which c-functions\n+**                need which of these lowlevel functions\n+**                please consult the Newlib libc-manual\n+**\n+**  Environment : System Workbench for MCU\n+**\n+**  Distribution: The file is distributed �as is,� without any warranty\n+**                of any kind.\n+**\n+**  (c)Copyright System Workbench for MCU.\n+**  You may use this file as-is or modify it according to the needs of your\n+**  project. Distribution of this file (unmodified or modified) is not\n+**  permitted. System Workbench for MCU permit registered System Workbench(R) users the\n+**  rights to distribute the assembled, compiled & linked contents of this\n+**  file as part of an application binary file, provided that it is built\n+**  using the System Workbench for MCU toolchain.\n+**\n+*****************************************************************************\n+*/\n+\n+/* Includes */\n+#include <sys/stat.h>\n+#include <stdlib.h>\n+#include <errno.h>\n+#include <stdio.h>\n+#include <signal.h>\n+#include <time.h>\n+#include <sys/time.h>\n+#include <sys/times.h>\n+\n+\n+/* Variables */\n+//#undef errno\n+extern int errno;\n+extern int __io_putchar(int ch) __attribute__((weak));\n+extern int __io_getchar(void) __attribute__((weak));\n+\n+register char * stack_ptr asm(\"sp\");\n+\n+char *__env[1] = { 0 };\n+char **environ = __env;\n+\n+\n+/* Functions */\n+void initialise_monitor_handles()\n+{\n+}\n+\n+int _getpid(void)\n+{\n+\treturn 1;\n+}\n+\n+int _kill(int pid, int sig)\n+{\n+\terrno = EINVAL;\n+\treturn -1;\n+}\n+\n+void _exit (int status)\n+{\n+\t_kill(status, -1);\n+\twhile (1) {}\t\t/* Make sure we hang here */\n+}\n+\n+int _read (int file, char *ptr, int len)\n+{\n+\tint DataIdx;\n+\n+\tfor (DataIdx = 0; DataIdx < len; DataIdx++)\n+\t{\n+\t\t*ptr++ = __io_getchar();\n+\t}\n+\n+return len;\n+}\n+\n+int _write(int file, char *ptr, int len)\n+{\n+\tint DataIdx;\n+\n+\tfor (DataIdx = 0; DataIdx < len; DataIdx++)\n+\t{\n+\t\t__io_putchar(*ptr++);\n+\t}\n+\treturn len;\n+}\n+\n+caddr_t _sbrk(int incr)\n+{\n+\textern char end asm(\"end\");\n+\tstatic char *heap_end;\n+\tchar *prev_heap_end;\n+\n+\tif (heap_end == 0)\n+\t\theap_end = &end;\n+\n+\tprev_heap_end = heap_end;\n+\tif (heap_end + incr > stack_ptr)\n+\t{\n+//\t\twrite(1, \"Heap and stack collision\\n\", 25);\n+//\t\tabort();\n+\t\terrno = ENOMEM;\n+\t\treturn (caddr_t) -1;\n+\t}\n+\n+\theap_end += incr;\n+\n+\treturn (caddr_t) prev_heap_end;\n+}\n+\n+int _close(int file)\n+{\n+\treturn -1;\n+}\n+\n+\n+int _fstat(int file, struct stat *st)\n+{\n+\tst->st_mode = S_IFCHR;\n+\treturn 0;\n+}\n+\n+int _isatty(int file)\n+{\n+\treturn 1;\n+}\n+\n+int _lseek(int file, int ptr, int dir)\n+{\n+\treturn 0;\n+}\n+\n+int _open(char *path, int flags, ...)\n+{\n+\t/* Pretend like we always fail */\n+\treturn -1;\n+}\n+\n+int _wait(int *status)\n+{\n+\terrno = ECHILD;\n+\treturn -1;\n+}\n+\n+int _unlink(char *name)\n+{\n+\terrno = ENOENT;\n+\treturn -1;\n+}\n+\n+int _times(struct tms *buf)\n+{\n+\treturn -1;\n+}\n+\n+int _stat(char *file, struct stat *st)\n+{\n+\tst->st_mode = S_IFCHR;\n+\treturn 0;\n+}\n+\n+int _link(char *old, char *new)\n+{\n+\terrno = EMLINK;\n+\treturn -1;\n+}\n+\n+int _fork(void)\n+{\n+\terrno = EAGAIN;\n+\treturn -1;\n+}\n+\n+int _execve(char *name, char **argv, char **env)\n+{\n+\terrno = ENOMEM;\n+\treturn -1;\n+}"
+      },
+      {
+        "filename": "Projects/STM32746G-Discovery/Examples/UART/UART_TwoBoards_ComPolling/SW4STM32/STM32746G_DISCOVERY/.project",
+        "status": "modified",
+        "additions": 4,
+        "deletions": 0,
+        "changes": 4,
+        "previous_filename": null,
+        "patch": "@@ -68,6 +68,10 @@\n \t\t\t<name>Example/User/main.c</name>\n \t\t\t<type>1</type>\n \t\t\t<location>PARENT-2-PROJECT_LOC/Src/main.c</location>\n+\t\t</link><link>\n+\t\t\t<name>Example/SW4STM32/syscalls.c</name>\n+\t\t\t<type>1</type>\n+\t\t\t<locationURI>PARENT-1-PROJECT_LOC/syscalls.c</locationURI>\n \t\t</link><link>\n \t\t\t<name>Drivers/CMSIS/system_stm32f7xx.c</name>\n \t\t\t<type>1</type>"
+      },
+      {
+        "filename": "Projects/STM32746G-Discovery/Examples/UART/UART_TwoBoards_ComPolling/SW4STM32/syscalls.c",
+        "status": "added",
+        "additions": 186,
+        "deletions": 0,
+        "changes": 186,
+        "previous_filename": null,
+        "patch": "@@ -0,0 +1,186 @@\n+/**\n+*****************************************************************************\n+**\n+**  File        : syscalls.c\n+**\n+**  Abstract    : System Workbench Minimal System calls file\n+**\n+** \t\t          For more information about which c-functions\n+**                need which of these lowlevel functions\n+**                please consult the Newlib libc-manual\n+**\n+**  Environment : System Workbench for MCU\n+**\n+**  Distribution: The file is distributed �as is,� without any warranty\n+**                of any kind.\n+**\n+**  (c)Copyright System Workbench for MCU.\n+**  You may use this file as-is or modify it according to the needs of your\n+**  project. Distribution of this file (unmodified or modified) is not\n+**  permitted. System Workbench for MCU permit registered System Workbench(R) users the\n+**  rights to distribute the assembled, compiled & linked contents of this\n+**  file as part of an application binary file, provided that it is built\n+**  using the System Workbench for MCU toolchain.\n+**\n+*****************************************************************************\n+*/\n+\n+/* Includes */\n+#include <sys/stat.h>\n+#include <stdlib.h>\n+#include <errno.h>\n+#include <stdio.h>\n+#include <signal.h>\n+#include <time.h>\n+#include <sys/time.h>\n+#include <sys/times.h>\n+\n+\n+/* Variables */\n+//#undef errno\n+extern int errno;\n+extern int __io_putchar(int ch) __attribute__((weak));\n+extern int __io_getchar(void) __attribute__((weak));\n+\n+register char * stack_ptr asm(\"sp\");\n+\n+char *__env[1] = { 0 };\n+char **environ = __env;\n+\n+\n+/* Functions */\n+void initialise_monitor_handles()\n+{\n+}\n+\n+int _getpid(void)\n+{\n+\treturn 1;\n+}\n+\n+int _kill(int pid, int sig)\n+{\n+\terrno = EINVAL;\n+\treturn -1;\n+}\n+\n+void _exit (int status)\n+{\n+\t_kill(status, -1);\n+\twhile (1) {}\t\t/* Make sure we hang here */\n+}\n+\n+int _read (int file, char *ptr, int len)\n+{\n+\tint DataIdx;\n+\n+\tfor (DataIdx = 0; DataIdx < len; DataIdx++)\n+\t{\n+\t\t*ptr++ = __io_getchar();\n+\t}\n+\n+return len;\n+}\n+\n+int _write(int file, char *ptr, int len)\n+{\n+\tint DataIdx;\n+\n+\tfor (DataIdx = 0; DataIdx < len; DataIdx++)\n+\t{\n+\t\t__io_putchar(*ptr++);\n+\t}\n+\treturn len;\n+}\n+\n+caddr_t _sbrk(int incr)\n+{\n+\textern char end asm(\"end\");\n+\tstatic char *heap_end;\n+\tchar *prev_heap_end;\n+\n+\tif (heap_end == 0)\n+\t\theap_end = &end;\n+\n+\tprev_heap_end = heap_end;\n+\tif (heap_end + incr > stack_ptr)\n+\t{\n+//\t\twrite(1, \"Heap and stack collision\\n\", 25);\n+//\t\tabort();\n+\t\terrno = ENOMEM;\n+\t\treturn (caddr_t) -1;\n+\t}\n+\n+\theap_end += incr;\n+\n+\treturn (caddr_t) prev_heap_end;\n+}\n+\n+int _close(int file)\n+{\n+\treturn -1;\n+}\n+\n+\n+int _fstat(int file, struct stat *st)\n+{\n+\tst->st_mode = S_IFCHR;\n+\treturn 0;\n+}\n+\n+int _isatty(int file)\n+{\n+\treturn 1;\n+}\n+\n+int _lseek(int file, int ptr, int dir)\n+{\n+\treturn 0;\n+}\n+\n+int _open(char *path, int flags, ...)\n+{\n+\t/* Pretend like we always fail */\n+\treturn -1;\n+}\n+\n+int _wait(int *status)\n+{\n+\terrno = ECHILD;\n+\treturn -1;\n+}\n+\n+int _unlink(char *name)\n+{\n+\terrno = ENOENT;\n+\treturn -1;\n+}\n+\n+int _times(struct tms *buf)\n+{\n+\treturn -1;\n+}\n+\n+int _stat(char *file, struct stat *st)\n+{\n+\tst->st_mode = S_IFCHR;\n+\treturn 0;\n+}\n+\n+int _link(char *old, char *new)\n+{\n+\terrno = EMLINK;\n+\treturn -1;\n+}\n+\n+int _fork(void)\n+{\n+\terrno = EAGAIN;\n+\treturn -1;\n+}\n+\n+int _execve(char *name, char **argv, char **env)\n+{\n+\terrno = ENOMEM;\n+\treturn -1;\n+}"
+      },
+      {
+        "filename": "Projects/STM32756G_EVAL/Examples/UART/UART_HyperTerminal_DMA/SW4STM32/STM327x6G_EVAL/.project",
+        "status": "modified",
+        "additions": 4,
+        "deletions": 0,
+        "changes": 4,
+        "previous_filename": null,
+        "patch": "@@ -88,6 +88,10 @@\n \t\t\t<name>Example/User/main.c</name>\n \t\t\t<type>1</type>\n \t\t\t<location>PARENT-2-PROJECT_LOC/Src/main.c</location>\n+\t\t</link><link>\n+\t\t\t<name>Example/SW4STM32/syscalls.c</name>\n+\t\t\t<type>1</type>\n+\t\t\t<locationURI>PARENT-1-PROJECT_LOC/syscalls.c</locationURI>\n \t\t</link><link>\n \t\t\t<name>Drivers/STM32F7xx_HAL_Driver/stm32f7xx_hal_cortex.c</name>\n \t\t\t<type>1</type>"
+      },
+      {
+        "filename": "Projects/STM32756G_EVAL/Examples/UART/UART_HyperTerminal_DMA/SW4STM32/syscalls.c",
+        "status": "added",
+        "additions": 186,
+        "deletions": 0,
+        "changes": 186,
+        "previous_filename": null,
+        "patch": "@@ -0,0 +1,186 @@\n+/**\n+*****************************************************************************\n+**\n+**  File        : syscalls.c\n+**\n+**  Abstract    : System Workbench Minimal System calls file\n+**\n+** \t\t          For more information about which c-functions\n+**                need which of these lowlevel functions\n+**                please consult the Newlib libc-manual\n+**\n+**  Environment : System Workbench for MCU\n+**\n+**  Distribution: The file is distributed �as is,� without any warranty\n+**                of any kind.\n+**\n+**  (c)Copyright System Workbench for MCU.\n+**  You may use this file as-is or modify it according to the needs of your\n+**  project. Distribution of this file (unmodified or modified) is not\n+**  permitted. System Workbench for MCU permit registered System Workbench(R) users the\n+**  rights to distribute the assembled, compiled & linked contents of this\n+**  file as part of an application binary file, provided that it is built\n+**  using the System Workbench for MCU toolchain.\n+**\n+*****************************************************************************\n+*/\n+\n+/* Includes */\n+#include <sys/stat.h>\n+#include <stdlib.h>\n+#include <errno.h>\n+#include <stdio.h>\n+#include <signal.h>\n+#include <time.h>\n+#include <sys/time.h>\n+#include <sys/times.h>\n+\n+\n+/* Variables */\n+//#undef errno\n+extern int errno;\n+extern int __io_putchar(int ch) __attribute__((weak));\n+extern int __io_getchar(void) __attribute__((weak));\n+\n+register char * stack_ptr asm(\"sp\");\n+\n+char *__env[1] = { 0 };\n+char **environ = __env;\n+\n+\n+/* Functions */\n+void initialise_monitor_handles()\n+{\n+}\n+\n+int _getpid(void)\n+{\n+\treturn 1;\n+}\n+\n+int _kill(int pid, int sig)\n+{\n+\terrno = EINVAL;\n+\treturn -1;\n+}\n+\n+void _exit (int status)\n+{\n+\t_kill(status, -1);\n+\twhile (1) {}\t\t/* Make sure we hang here */\n+}\n+\n+int _read (int file, char *ptr, int len)\n+{\n+\tint DataIdx;\n+\n+\tfor (DataIdx = 0; DataIdx < len; DataIdx++)\n+\t{\n+\t\t*ptr++ = __io_getchar();\n+\t}\n+\n+return len;\n+}\n+\n+int _write(int file, char *ptr, int len)\n+{\n+\tint DataIdx;\n+\n+\tfor (DataIdx = 0; DataIdx < len; DataIdx++)\n+\t{\n+\t\t__io_putchar(*ptr++);\n+\t}\n+\treturn len;\n+}\n+\n+caddr_t _sbrk(int incr)\n+{\n+\textern char end asm(\"end\");\n+\tstatic char *heap_end;\n+\tchar *prev_heap_end;\n+\n+\tif (heap_end == 0)\n+\t\theap_end = &end;\n+\n+\tprev_heap_end = heap_end;\n+\tif (heap_end + incr > stack_ptr)\n+\t{\n+//\t\twrite(1, \"Heap and stack collision\\n\", 25);\n+//\t\tabort();\n+\t\terrno = ENOMEM;\n+\t\treturn (caddr_t) -1;\n+\t}\n+\n+\theap_end += incr;\n+\n+\treturn (caddr_t) prev_heap_end;\n+}\n+\n+int _close(int file)\n+{\n+\treturn -1;\n+}\n+\n+\n+int _fstat(int file, struct stat *st)\n+{\n+\tst->st_mode = S_IFCHR;\n+\treturn 0;\n+}\n+\n+int _isatty(int file)\n+{\n+\treturn 1;\n+}\n+\n+int _lseek(int file, int ptr, int dir)\n+{\n+\treturn 0;\n+}\n+\n+int _open(char *path, int flags, ...)\n+{\n+\t/* Pretend like we always fail */\n+\treturn -1;\n+}\n+\n+int _wait(int *status)\n+{\n+\terrno = ECHILD;\n+\treturn -1;\n+}\n+\n+int _unlink(char *name)\n+{\n+\terrno = ENOENT;\n+\treturn -1;\n+}\n+\n+int _times(struct tms *buf)\n+{\n+\treturn -1;\n+}\n+\n+int _stat(char *file, struct stat *st)\n+{\n+\tst->st_mode = S_IFCHR;\n+\treturn 0;\n+}\n+\n+int _link(char *old, char *new)\n+{\n+\terrno = EMLINK;\n+\treturn -1;\n+}\n+\n+int _fork(void)\n+{\n+\terrno = EAGAIN;\n+\treturn -1;\n+}\n+\n+int _execve(char *name, char **argv, char **env)\n+{\n+\terrno = ENOMEM;\n+\treturn -1;\n+}"
+      },
+      {
+        "filename": "Projects/STM32756G_EVAL/Examples/UART/UART_HyperTerminal_IT/SW4STM32/STM327x6G_EVAL/.project",
+        "status": "modified",
+        "additions": 4,
+        "deletions": 0,
+        "changes": 4,
+        "previous_filename": null,
+        "patch": "@@ -88,6 +88,10 @@\n \t\t\t<name>Example/User/main.c</name>\n \t\t\t<type>1</type>\n \t\t\t<location>PARENT-2-PROJECT_LOC/Src/main.c</location>\n+\t\t</link><link>\n+\t\t\t<name>Example/SW4STM32/syscalls.c</name>\n+\t\t\t<type>1</type>\n+\t\t\t<locationURI>PARENT-1-PROJECT_LOC/syscalls.c</locationURI>\n \t\t</link><link>\n \t\t\t<name>Drivers/STM32F7xx_HAL_Driver/stm32f7xx_hal_cortex.c</name>\n \t\t\t<type>1</type>"
+      },
+      {
+        "filename": "Projects/STM32756G_EVAL/Examples/UART/UART_HyperTerminal_IT/SW4STM32/syscalls.c",
+        "status": "added",
+        "additions": 186,
+        "deletions": 0,
+        "changes": 186,
+        "previous_filename": null,
+        "patch": "@@ -0,0 +1,186 @@\n+/**\n+*****************************************************************************\n+**\n+**  File        : syscalls.c\n+**\n+**  Abstract    : System Workbench Minimal System calls file\n+**\n+** \t\t          For more information about which c-functions\n+**                need which of these lowlevel functions\n+**                please consult the Newlib libc-manual\n+**\n+**  Environment : System Workbench for MCU\n+**\n+**  Distribution: The file is distributed �as is,� without any warranty\n+**                of any kind.\n+**\n+**  (c)Copyright System Workbench for MCU.\n+**  You may use this file as-is or modify it according to the needs of your\n+**  project. Distribution of this file (unmodified or modified) is not\n+**  permitted. System Workbench for MCU permit registered System Workbench(R) users the\n+**  rights to distribute the assembled, compiled & linked contents of this\n+**  file as part of an application binary file, provided that it is built\n+**  using the System Workbench for MCU toolchain.\n+**\n+*****************************************************************************\n+*/\n+\n+/* Includes */\n+#include <sys/stat.h>\n+#include <stdlib.h>\n+#include <errno.h>\n+#include <stdio.h>\n+#include <signal.h>\n+#include <time.h>\n+#include <sys/time.h>\n+#include <sys/times.h>\n+\n+\n+/* Variables */\n+//#undef errno\n+extern int errno;\n+extern int __io_putchar(int ch) __attribute__((weak));\n+extern int __io_getchar(void) __attribute__((weak));\n+\n+register char * stack_ptr asm(\"sp\");\n+\n+char *__env[1] = { 0 };\n+char **environ = __env;\n+\n+\n+/* Functions */\n+void initialise_monitor_handles()\n+{\n+}\n+\n+int _getpid(void)\n+{\n+\treturn 1;\n+}\n+\n+int _kill(int pid, int sig)\n+{\n+\terrno = EINVAL;\n+\treturn -1;\n+}\n+\n+void _exit (int status)\n+{\n+\t_kill(status, -1);\n+\twhile (1) {}\t\t/* Make sure we hang here */\n+}\n+\n+int _read (int file, char *ptr, int len)\n+{\n+\tint DataIdx;\n+\n+\tfor (DataIdx = 0; DataIdx < len; DataIdx++)\n+\t{\n+\t\t*ptr++ = __io_getchar();\n+\t}\n+\n+return len;\n+}\n+\n+int _write(int file, char *ptr, int len)\n+{\n+\tint DataIdx;\n+\n+\tfor (DataIdx = 0; DataIdx < len; DataIdx++)\n+\t{\n+\t\t__io_putchar(*ptr++);\n+\t}\n+\treturn len;\n+}\n+\n+caddr_t _sbrk(int incr)\n+{\n+\textern char end asm(\"end\");\n+\tstatic char *heap_end;\n+\tchar *prev_heap_end;\n+\n+\tif (heap_end == 0)\n+\t\theap_end = &end;\n+\n+\tprev_heap_end = heap_end;\n+\tif (heap_end + incr > stack_ptr)\n+\t{\n+//\t\twrite(1, \"Heap and stack collision\\n\", 25);\n+//\t\tabort();\n+\t\terrno = ENOMEM;\n+\t\treturn (caddr_t) -1;\n+\t}\n+\n+\theap_end += incr;\n+\n+\treturn (caddr_t) prev_heap_end;\n+}\n+\n+int _close(int file)\n+{\n+\treturn -1;\n+}\n+\n+\n+int _fstat(int file, struct stat *st)\n+{\n+\tst->st_mode = S_IFCHR;\n+\treturn 0;\n+}\n+\n+int _isatty(int file)\n+{\n+\treturn 1;\n+}\n+\n+int _lseek(int file, int ptr, int dir)\n+{\n+\treturn 0;\n+}\n+\n+int _open(char *path, int flags, ...)\n+{\n+\t/* Pretend like we always fail */\n+\treturn -1;\n+}\n+\n+int _wait(int *status)\n+{\n+\terrno = ECHILD;\n+\treturn -1;\n+}\n+\n+int _unlink(char *name)\n+{\n+\terrno = ENOENT;\n+\treturn -1;\n+}\n+\n+int _times(struct tms *buf)\n+{\n+\treturn -1;\n+}\n+\n+int _stat(char *file, struct stat *st)\n+{\n+\tst->st_mode = S_IFCHR;\n+\treturn 0;\n+}\n+\n+int _link(char *old, char *new)\n+{\n+\terrno = EMLINK;\n+\treturn -1;\n+}\n+\n+int _fork(void)\n+{\n+\terrno = EAGAIN;\n+\treturn -1;\n+}\n+\n+int _execve(char *name, char **argv, char **env)\n+{\n+\terrno = ENOMEM;\n+\treturn -1;\n+}"
+      },
+      {
+        "filename": "Projects/STM32F722ZE-Nucleo/Examples/UART/UART_TwoBoards_ComDMA/SW4STM32/STM32F722ZE_Nucleo/.project",
+        "status": "modified",
+        "additions": 4,
+        "deletions": 0,
+        "changes": 4,
+        "previous_filename": null,
+        "patch": "@@ -80,6 +80,10 @@\n \t\t\t<name>Example/User/main.c</name>\n \t\t\t<type>1</type>\n \t\t\t<location>PARENT-2-PROJECT_LOC/Src/main.c</location>\n+\t\t</link><link>\n+\t\t\t<name>Example/SW4STM32/syscalls.c</name>\n+\t\t\t<type>1</type>\n+\t\t\t<locationURI>PARENT-1-PROJECT_LOC/syscalls.c</locationURI>\n \t\t</link><link>\n \t\t\t<name>Drivers/BSP/STM32F7xx_Nucleo_144/stm32f7xx_nucleo_144.c</name>\n \t\t\t<type>1</type>"
+      },
+      {
+        "filename": "Projects/STM32F722ZE-Nucleo/Examples/UART/UART_TwoBoards_ComDMA/SW4STM32/syscalls.c",
+        "status": "added",
+        "additions": 186,
+        "deletions": 0,
+        "changes": 186,
+        "previous_filename": null,
+        "patch": "@@ -0,0 +1,186 @@\n+/**\n+*****************************************************************************\n+**\n+**  File        : syscalls.c\n+**\n+**  Abstract    : System Workbench Minimal System calls file\n+**\n+** \t\t          For more information about which c-functions\n+**                need which of these lowlevel functions\n+**                please consult the Newlib libc-manual\n+**\n+**  Environment : System Workbench for MCU\n+**\n+**  Distribution: The file is distributed �as is,� without any warranty\n+**                of any kind.\n+**\n+**  (c)Copyright System Workbench for MCU.\n+**  You may use this file as-is or modify it according to the needs of your\n+**  project. Distribution of this file (unmodified or modified) is not\n+**  permitted. System Workbench for MCU permit registered System Workbench(R) users the\n+**  rights to distribute the assembled, compiled & linked contents of this\n+**  file as part of an application binary file, provided that it is built\n+**  using the System Workbench for MCU toolchain.\n+**\n+*****************************************************************************\n+*/\n+\n+/* Includes */\n+#include <sys/stat.h>\n+#include <stdlib.h>\n+#include <errno.h>\n+#include <stdio.h>\n+#include <signal.h>\n+#include <time.h>\n+#include <sys/time.h>\n+#include <sys/times.h>\n+\n+\n+/* Variables */\n+//#undef errno\n+extern int errno;\n+extern int __io_putchar(int ch) __attribute__((weak));\n+extern int __io_getchar(void) __attribute__((weak));\n+\n+register char * stack_ptr asm(\"sp\");\n+\n+char *__env[1] = { 0 };\n+char **environ = __env;\n+\n+\n+/* Functions */\n+void initialise_monitor_handles()\n+{\n+}\n+\n+int _getpid(void)\n+{\n+\treturn 1;\n+}\n+\n+int _kill(int pid, int sig)\n+{\n+\terrno = EINVAL;\n+\treturn -1;\n+}\n+\n+void _exit (int status)\n+{\n+\t_kill(status, -1);\n+\twhile (1) {}\t\t/* Make sure we hang here */\n+}\n+\n+int _read (int file, char *ptr, int len)\n+{\n+\tint DataIdx;\n+\n+\tfor (DataIdx = 0; DataIdx < len; DataIdx++)\n+\t{\n+\t\t*ptr++ = __io_getchar();\n+\t}\n+\n+return len;\n+}\n+\n+int _write(int file, char *ptr, int len)\n+{\n+\tint DataIdx;\n+\n+\tfor (DataIdx = 0; DataIdx < len; DataIdx++)\n+\t{\n+\t\t__io_putchar(*ptr++);\n+\t}\n+\treturn len;\n+}\n+\n+caddr_t _sbrk(int incr)\n+{\n+\textern char end asm(\"end\");\n+\tstatic char *heap_end;\n+\tchar *prev_heap_end;\n+\n+\tif (heap_end == 0)\n+\t\theap_end = &end;\n+\n+\tprev_heap_end = heap_end;\n+\tif (heap_end + incr > stack_ptr)\n+\t{\n+//\t\twrite(1, \"Heap and stack collision\\n\", 25);\n+//\t\tabort();\n+\t\terrno = ENOMEM;\n+\t\treturn (caddr_t) -1;\n+\t}\n+\n+\theap_end += incr;\n+\n+\treturn (caddr_t) prev_heap_end;\n+}\n+\n+int _close(int file)\n+{\n+\treturn -1;\n+}\n+\n+\n+int _fstat(int file, struct stat *st)\n+{\n+\tst->st_mode = S_IFCHR;\n+\treturn 0;\n+}\n+\n+int _isatty(int file)\n+{\n+\treturn 1;\n+}\n+\n+int _lseek(int file, int ptr, int dir)\n+{\n+\treturn 0;\n+}\n+\n+int _open(char *path, int flags, ...)\n+{\n+\t/* Pretend like we always fail */\n+\treturn -1;\n+}\n+\n+int _wait(int *status)\n+{\n+\terrno = ECHILD;\n+\treturn -1;\n+}\n+\n+int _unlink(char *name)\n+{\n+\terrno = ENOENT;\n+\treturn -1;\n+}\n+\n+int _times(struct tms *buf)\n+{\n+\treturn -1;\n+}\n+\n+int _stat(char *file, struct stat *st)\n+{\n+\tst->st_mode = S_IFCHR;\n+\treturn 0;\n+}\n+\n+int _link(char *old, char *new)\n+{\n+\terrno = EMLINK;\n+\treturn -1;\n+}\n+\n+int _fork(void)\n+{\n+\terrno = EAGAIN;\n+\treturn -1;\n+}\n+\n+int _execve(char *name, char **argv, char **env)\n+{\n+\terrno = ENOMEM;\n+\treturn -1;\n+}"
+      },
+      {
+        "filename": "Projects/STM32F723E-Discovery/Examples/UART/UART_TwoBoards_ComDMA/SW4STM32/STM32F723E_DISCOVERY/.project",
+        "status": "modified",
+        "additions": 4,
+        "deletions": 0,
+        "changes": 4,
+        "previous_filename": null,
+        "patch": "@@ -108,6 +108,10 @@\n \t\t\t<name>Example/User/main.c</name>\n \t\t\t<type>1</type>\n \t\t\t<location>PARENT-2-PROJECT_LOC/Src/main.c</location>\n+\t\t</link><link>\n+\t\t\t<name>Example/SW4STM32/syscalls.c</name>\n+\t\t\t<type>1</type>\n+\t\t\t<locationURI>PARENT-1-PROJECT_LOC/syscalls.c</locationURI>\n \t\t</link>\n \t</linkedResources>\n </projectDescription>"
+      },
+      {
+        "filename": "Projects/STM32F723E-Discovery/Examples/UART/UART_TwoBoards_ComDMA/SW4STM32/syscalls.c",
+        "status": "added",
+        "additions": 186,
+        "deletions": 0,
+        "changes": 186,
+        "previous_filename": null,
+        "patch": "@@ -0,0 +1,186 @@\n+/**\n+*****************************************************************************\n+**\n+**  File        : syscalls.c\n+**\n+**  Abstract    : System Workbench Minimal System calls file\n+**\n+** \t\t          For more information about which c-functions\n+**                need which of these lowlevel functions\n+**                please consult the Newlib libc-manual\n+**\n+**  Environment : System Workbench for MCU\n+**\n+**  Distribution: The file is distributed �as is,� without any warranty\n+**                of any kind.\n+**\n+**  (c)Copyright System Workbench for MCU.\n+**  You may use this file as-is or modify it according to the needs of your\n+**  project. Distribution of this file (unmodified or modified) is not\n+**  permitted. System Workbench for MCU permit registered System Workbench(R) users the\n+**  rights to distribute the assembled, compiled & linked contents of this\n+**  file as part of an application binary file, provided that it is built\n+**  using the System Workbench for MCU toolchain.\n+**\n+*****************************************************************************\n+*/\n+\n+/* Includes */\n+#include <sys/stat.h>\n+#include <stdlib.h>\n+#include <errno.h>\n+#include <stdio.h>\n+#include <signal.h>\n+#include <time.h>\n+#include <sys/time.h>\n+#include <sys/times.h>\n+\n+\n+/* Variables */\n+//#undef errno\n+extern int errno;\n+extern int __io_putchar(int ch) __attribute__((weak));\n+extern int __io_getchar(void) __attribute__((weak));\n+\n+register char * stack_ptr asm(\"sp\");\n+\n+char *__env[1] = { 0 };\n+char **environ = __env;\n+\n+\n+/* Functions */\n+void initialise_monitor_handles()\n+{\n+}\n+\n+int _getpid(void)\n+{\n+\treturn 1;\n+}\n+\n+int _kill(int pid, int sig)\n+{\n+\terrno = EINVAL;\n+\treturn -1;\n+}\n+\n+void _exit (int status)\n+{\n+\t_kill(status, -1);\n+\twhile (1) {}\t\t/* Make sure we hang here */\n+}\n+\n+int _read (int file, char *ptr, int len)\n+{\n+\tint DataIdx;\n+\n+\tfor (DataIdx = 0; DataIdx < len; DataIdx++)\n+\t{\n+\t\t*ptr++ = __io_getchar();\n+\t}\n+\n+return len;\n+}\n+\n+int _write(int file, char *ptr, int len)\n+{\n+\tint DataIdx;\n+\n+\tfor (DataIdx = 0; DataIdx < len; DataIdx++)\n+\t{\n+\t\t__io_putchar(*ptr++);\n+\t}\n+\treturn len;\n+}\n+\n+caddr_t _sbrk(int incr)\n+{\n+\textern char end asm(\"end\");\n+\tstatic char *heap_end;\n+\tchar *prev_heap_end;\n+\n+\tif (heap_end == 0)\n+\t\theap_end = &end;\n+\n+\tprev_heap_end = heap_end;\n+\tif (heap_end + incr > stack_ptr)\n+\t{\n+//\t\twrite(1, \"Heap and stack collision\\n\", 25);\n+//\t\tabort();\n+\t\terrno = ENOMEM;\n+\t\treturn (caddr_t) -1;\n+\t}\n+\n+\theap_end += incr;\n+\n+\treturn (caddr_t) prev_heap_end;\n+}\n+\n+int _close(int file)\n+{\n+\treturn -1;\n+}\n+\n+\n+int _fstat(int file, struct stat *st)\n+{\n+\tst->st_mode = S_IFCHR;\n+\treturn 0;\n+}\n+\n+int _isatty(int file)\n+{\n+\treturn 1;\n+}\n+\n+int _lseek(int file, int ptr, int dir)\n+{\n+\treturn 0;\n+}\n+\n+int _open(char *path, int flags, ...)\n+{\n+\t/* Pretend like we always fail */\n+\treturn -1;\n+}\n+\n+int _wait(int *status)\n+{\n+\terrno = ECHILD;\n+\treturn -1;\n+}\n+\n+int _unlink(char *name)\n+{\n+\terrno = ENOENT;\n+\treturn -1;\n+}\n+\n+int _times(struct tms *buf)\n+{\n+\treturn -1;\n+}\n+\n+int _stat(char *file, struct stat *st)\n+{\n+\tst->st_mode = S_IFCHR;\n+\treturn 0;\n+}\n+\n+int _link(char *old, char *new)\n+{\n+\terrno = EMLINK;\n+\treturn -1;\n+}\n+\n+int _fork(void)\n+{\n+\terrno = EAGAIN;\n+\treturn -1;\n+}\n+\n+int _execve(char *name, char **argv, char **env)\n+{\n+\terrno = ENOMEM;\n+\treturn -1;\n+}"
+      },
+      {
+        "filename": "Projects/STM32F723E-Discovery/Examples/UART/UART_TwoBoards_ComIT/SW4STM32/STM32F723E_DISCOVERY/.project",
+        "status": "modified",
+        "additions": 4,
+        "deletions": 0,
+        "changes": 4,
+        "previous_filename": null,
+        "patch": "@@ -108,6 +108,10 @@\n \t\t\t<name>Example/User/main.c</name>\n \t\t\t<type>1</type>\n \t\t\t<location>PARENT-2-PROJECT_LOC/Src/main.c</location>\n+\t\t</link><link>\n+\t\t\t<name>Example/SW4STM32/syscalls.c</name>\n+\t\t\t<type>1</type>\n+\t\t\t<locationURI>PARENT-1-PROJECT_LOC/syscalls.c</locationURI>\n \t\t</link>\n \t</linkedResources>\n </projectDescription>"
+      },
+      {
+        "filename": "Projects/STM32F723E-Discovery/Examples/UART/UART_TwoBoards_ComIT/SW4STM32/syscalls.c",
+        "status": "added",
+        "additions": 186,
+        "deletions": 0,
+        "changes": 186,
+        "previous_filename": null,
+        "patch": "@@ -0,0 +1,186 @@\n+/**\n+*****************************************************************************\n+**\n+**  File        : syscalls.c\n+**\n+**  Abstract    : System Workbench Minimal System calls file\n+**\n+** \t\t          For more information about which c-functions\n+**                need which of these lowlevel functions\n+**                please consult the Newlib libc-manual\n+**\n+**  Environment : System Workbench for MCU\n+**\n+**  Distribution: The file is distributed �as is,� without any warranty\n+**                of any kind.\n+**\n+**  (c)Copyright System Workbench for MCU.\n+**  You may use this file as-is or modify it according to the needs of your\n+**  project. Distribution of this file (unmodified or modified) is not\n+**  permitted. System Workbench for MCU permit registered System Workbench(R) users the\n+**  rights to distribute the assembled, compiled & linked contents of this\n+**  file as part of an application binary file, provided that it is built\n+**  using the System Workbench for MCU toolchain.\n+**\n+*****************************************************************************\n+*/\n+\n+/* Includes */\n+#include <sys/stat.h>\n+#include <stdlib.h>\n+#include <errno.h>\n+#include <stdio.h>\n+#include <signal.h>\n+#include <time.h>\n+#include <sys/time.h>\n+#include <sys/times.h>\n+\n+\n+/* Variables */\n+//#undef errno\n+extern int errno;\n+extern int __io_putchar(int ch) __attribute__((weak));\n+extern int __io_getchar(void) __attribute__((weak));\n+\n+register char * stack_ptr asm(\"sp\");\n+\n+char *__env[1] = { 0 };\n+char **environ = __env;\n+\n+\n+/* Functions */\n+void initialise_monitor_handles()\n+{\n+}\n+\n+int _getpid(void)\n+{\n+\treturn 1;\n+}\n+\n+int _kill(int pid, int sig)\n+{\n+\terrno = EINVAL;\n+\treturn -1;\n+}\n+\n+void _exit (int status)\n+{\n+\t_kill(status, -1);\n+\twhile (1) {}\t\t/* Make sure we hang here */\n+}\n+\n+int _read (int file, char *ptr, int len)\n+{\n+\tint DataIdx;\n+\n+\tfor (DataIdx = 0; DataIdx < len; DataIdx++)\n+\t{\n+\t\t*ptr++ = __io_getchar();\n+\t}\n+\n+return len;\n+}\n+\n+int _write(int file, char *ptr, int len)\n+{\n+\tint DataIdx;\n+\n+\tfor (DataIdx = 0; DataIdx < len; DataIdx++)\n+\t{\n+\t\t__io_putchar(*ptr++);\n+\t}\n+\treturn len;\n+}\n+\n+caddr_t _sbrk(int incr)\n+{\n+\textern char end asm(\"end\");\n+\tstatic char *heap_end;\n+\tchar *prev_heap_end;\n+\n+\tif (heap_end == 0)\n+\t\theap_end = &end;\n+\n+\tprev_heap_end = heap_end;\n+\tif (heap_end + incr > stack_ptr)\n+\t{\n+//\t\twrite(1, \"Heap and stack collision\\n\", 25);\n+//\t\tabort();\n+\t\terrno = ENOMEM;\n+\t\treturn (caddr_t) -1;\n+\t}\n+\n+\theap_end += incr;\n+\n+\treturn (caddr_t) prev_heap_end;\n+}\n+\n+int _close(int file)\n+{\n+\treturn -1;\n+}\n+\n+\n+int _fstat(int file, struct stat *st)\n+{\n+\tst->st_mode = S_IFCHR;\n+\treturn 0;\n+}\n+\n+int _isatty(int file)\n+{\n+\treturn 1;\n+}\n+\n+int _lseek(int file, int ptr, int dir)\n+{\n+\treturn 0;\n+}\n+\n+int _open(char *path, int flags, ...)\n+{\n+\t/* Pretend like we always fail */\n+\treturn -1;\n+}\n+\n+int _wait(int *status)\n+{\n+\terrno = ECHILD;\n+\treturn -1;\n+}\n+\n+int _unlink(char *name)\n+{\n+\terrno = ENOENT;\n+\treturn -1;\n+}\n+\n+int _times(struct tms *buf)\n+{\n+\treturn -1;\n+}\n+\n+int _stat(char *file, struct stat *st)\n+{\n+\tst->st_mode = S_IFCHR;\n+\treturn 0;\n+}\n+\n+int _link(char *old, char *new)\n+{\n+\terrno = EMLINK;\n+\treturn -1;\n+}\n+\n+int _fork(void)\n+{\n+\terrno = EAGAIN;\n+\treturn -1;\n+}\n+\n+int _execve(char *name, char **argv, char **env)\n+{\n+\terrno = ENOMEM;\n+\treturn -1;\n+}"
+      },
+      {
+        "filename": "Projects/STM32F723E-Discovery/Examples/UART/UART_TwoBoards_ComPolling/SW4STM32/STM32F723E_DISCOVERY/.project",
+        "status": "modified",
+        "additions": 4,
+        "deletions": 0,
+        "changes": 4,
+        "previous_filename": null,
+        "patch": "@@ -108,6 +108,10 @@\n \t\t\t<name>Example/User/main.c</name>\n \t\t\t<type>1</type>\n \t\t\t<location>PARENT-2-PROJECT_LOC/Src/main.c</location>\n+\t\t</link><link>\n+\t\t\t<name>Example/SW4STM32/syscalls.c</name>\n+\t\t\t<type>1</type>\n+\t\t\t<locationURI>PARENT-1-PROJECT_LOC/syscalls.c</locationURI>\n \t\t</link>\n \t</linkedResources>\n </projectDescription>"
+      },
+      {
+        "filename": "Projects/STM32F723E-Discovery/Examples/UART/UART_TwoBoards_ComPolling/SW4STM32/syscalls.c",
+        "status": "added",
+        "additions": 186,
+        "deletions": 0,
+        "changes": 186,
+        "previous_filename": null,
+        "patch": "@@ -0,0 +1,186 @@\n+/**\n+*****************************************************************************\n+**\n+**  File        : syscalls.c\n+**\n+**  Abstract    : System Workbench Minimal System calls file\n+**\n+** \t\t          For more information about which c-functions\n+**                need which of these lowlevel functions\n+**                please consult the Newlib libc-manual\n+**\n+**  Environment : System Workbench for MCU\n+**\n+**  Distribution: The file is distributed �as is,� without any warranty\n+**                of any kind.\n+**\n+**  (c)Copyright System Workbench for MCU.\n+**  You may use this file as-is or modify it according to the needs of your\n+**  project. Distribution of this file (unmodified or modified) is not\n+**  permitted. System Workbench for MCU permit registered System Workbench(R) users the\n+**  rights to distribute the assembled, compiled & linked contents of this\n+**  file as part of an application binary file, provided that it is built\n+**  using the System Workbench for MCU toolchain.\n+**\n+*****************************************************************************\n+*/\n+\n+/* Includes */\n+#include <sys/stat.h>\n+#include <stdlib.h>\n+#include <errno.h>\n+#include <stdio.h>\n+#include <signal.h>\n+#include <time.h>\n+#include <sys/time.h>\n+#include <sys/times.h>\n+\n+\n+/* Variables */\n+//#undef errno\n+extern int errno;\n+extern int __io_putchar(int ch) __attribute__((weak));\n+extern int __io_getchar(void) __attribute__((weak));\n+\n+register char * stack_ptr asm(\"sp\");\n+\n+char *__env[1] = { 0 };\n+char **environ = __env;\n+\n+\n+/* Functions */\n+void initialise_monitor_handles()\n+{\n+}\n+\n+int _getpid(void)\n+{\n+\treturn 1;\n+}\n+\n+int _kill(int pid, int sig)\n+{\n+\terrno = EINVAL;\n+\treturn -1;\n+}\n+\n+void _exit (int status)\n+{\n+\t_kill(status, -1);\n+\twhile (1) {}\t\t/* Make sure we hang here */\n+}\n+\n+int _read (int file, char *ptr, int len)\n+{\n+\tint DataIdx;\n+\n+\tfor (DataIdx = 0; DataIdx < len; DataIdx++)\n+\t{\n+\t\t*ptr++ = __io_getchar();\n+\t}\n+\n+return len;\n+}\n+\n+int _write(int file, char *ptr, int len)\n+{\n+\tint DataIdx;\n+\n+\tfor (DataIdx = 0; DataIdx < len; DataIdx++)\n+\t{\n+\t\t__io_putchar(*ptr++);\n+\t}\n+\treturn len;\n+}\n+\n+caddr_t _sbrk(int incr)\n+{\n+\textern char end asm(\"end\");\n+\tstatic char *heap_end;\n+\tchar *prev_heap_end;\n+\n+\tif (heap_end == 0)\n+\t\theap_end = &end;\n+\n+\tprev_heap_end = heap_end;\n+\tif (heap_end + incr > stack_ptr)\n+\t{\n+//\t\twrite(1, \"Heap and stack collision\\n\", 25);\n+//\t\tabort();\n+\t\terrno = ENOMEM;\n+\t\treturn (caddr_t) -1;\n+\t}\n+\n+\theap_end += incr;\n+\n+\treturn (caddr_t) prev_heap_end;\n+}\n+\n+int _close(int file)\n+{\n+\treturn -1;\n+}\n+\n+\n+int _fstat(int file, struct stat *st)\n+{\n+\tst->st_mode = S_IFCHR;\n+\treturn 0;\n+}\n+\n+int _isatty(int file)\n+{\n+\treturn 1;\n+}\n+\n+int _lseek(int file, int ptr, int dir)\n+{\n+\treturn 0;\n+}\n+\n+int _open(char *path, int flags, ...)\n+{\n+\t/* Pretend like we always fail */\n+\treturn -1;\n+}\n+\n+int _wait(int *status)\n+{\n+\terrno = ECHILD;\n+\treturn -1;\n+}\n+\n+int _unlink(char *name)\n+{\n+\terrno = ENOENT;\n+\treturn -1;\n+}\n+\n+int _times(struct tms *buf)\n+{\n+\treturn -1;\n+}\n+\n+int _stat(char *file, struct stat *st)\n+{\n+\tst->st_mode = S_IFCHR;\n+\treturn 0;\n+}\n+\n+int _link(char *old, char *new)\n+{\n+\terrno = EMLINK;\n+\treturn -1;\n+}\n+\n+int _fork(void)\n+{\n+\terrno = EAGAIN;\n+\treturn -1;\n+}\n+\n+int _execve(char *name, char **argv, char **env)\n+{\n+\terrno = ENOMEM;\n+\treturn -1;\n+}"
+      },
+      {
+        "filename": "Projects/STM32F746ZG-Nucleo/Examples/UART/UART_Printf/SW4STM32/STM32746ZG_Nucleo/.project",
+        "status": "modified",
+        "additions": 4,
+        "deletions": 0,
+        "changes": 4,
+        "previous_filename": null,
+        "patch": "@@ -28,6 +28,10 @@\n \t\t\t<name>Example/User/main.c</name>\n \t\t\t<type>1</type>\n \t\t\t<location>PARENT-2-PROJECT_LOC/Src/main.c</location>\n+\t\t</link><link>\n+\t\t\t<name>Example/SW4STM32/syscalls.c</name>\n+\t\t\t<type>1</type>\n+\t\t\t<locationURI>PARENT-1-PROJECT_LOC/syscalls.c</locationURI>\n \t\t</link><link>\n \t\t\t<name>Drivers/STM32F7xx_HAL_Driver/stm32f7xx_hal_rcc_ex.c</name>\n \t\t\t<type>1</type>"
+      },
+      {
+        "filename": "Projects/STM32F746ZG-Nucleo/Examples/UART/UART_Printf/SW4STM32/syscalls.c",
+        "status": "added",
+        "additions": 186,
+        "deletions": 0,
+        "changes": 186,
+        "previous_filename": null,
+        "patch": "@@ -0,0 +1,186 @@\n+/**\n+*****************************************************************************\n+**\n+**  File        : syscalls.c\n+**\n+**  Abstract    : System Workbench Minimal System calls file\n+**\n+** \t\t          For more information about which c-functions\n+**                need which of these lowlevel functions\n+**                please consult the Newlib libc-manual\n+**\n+**  Environment : System Workbench for MCU\n+**\n+**  Distribution: The file is distributed �as is,� without any warranty\n+**                of any kind.\n+**\n+**  (c)Copyright System Workbench for MCU.\n+**  You may use this file as-is or modify it according to the needs of your\n+**  project. Distribution of this file (unmodified or modified) is not\n+**  permitted. System Workbench for MCU permit registered System Workbench(R) users the\n+**  rights to distribute the assembled, compiled & linked contents of this\n+**  file as part of an application binary file, provided that it is built\n+**  using the System Workbench for MCU toolchain.\n+**\n+*****************************************************************************\n+*/\n+\n+/* Includes */\n+#include <sys/stat.h>\n+#include <stdlib.h>\n+#include <errno.h>\n+#include <stdio.h>\n+#include <signal.h>\n+#include <time.h>\n+#include <sys/time.h>\n+#include <sys/times.h>\n+\n+\n+/* Variables */\n+//#undef errno\n+extern int errno;\n+extern int __io_putchar(int ch) __attribute__((weak));\n+extern int __io_getchar(void) __attribute__((weak));\n+\n+register char * stack_ptr asm(\"sp\");\n+\n+char *__env[1] = { 0 };\n+char **environ = __env;\n+\n+\n+/* Functions */\n+void initialise_monitor_handles()\n+{\n+}\n+\n+int _getpid(void)\n+{\n+\treturn 1;\n+}\n+\n+int _kill(int pid, int sig)\n+{\n+\terrno = EINVAL;\n+\treturn -1;\n+}\n+\n+void _exit (int status)\n+{\n+\t_kill(status, -1);\n+\twhile (1) {}\t\t/* Make sure we hang here */\n+}\n+\n+int _read (int file, char *ptr, int len)\n+{\n+\tint DataIdx;\n+\n+\tfor (DataIdx = 0; DataIdx < len; DataIdx++)\n+\t{\n+\t\t*ptr++ = __io_getchar();\n+\t}\n+\n+return len;\n+}\n+\n+int _write(int file, char *ptr, int len)\n+{\n+\tint DataIdx;\n+\n+\tfor (DataIdx = 0; DataIdx < len; DataIdx++)\n+\t{\n+\t\t__io_putchar(*ptr++);\n+\t}\n+\treturn len;\n+}\n+\n+caddr_t _sbrk(int incr)\n+{\n+\textern char end asm(\"end\");\n+\tstatic char *heap_end;\n+\tchar *prev_heap_end;\n+\n+\tif (heap_end == 0)\n+\t\theap_end = &end;\n+\n+\tprev_heap_end = heap_end;\n+\tif (heap_end + incr > stack_ptr)\n+\t{\n+//\t\twrite(1, \"Heap and stack collision\\n\", 25);\n+//\t\tabort();\n+\t\terrno = ENOMEM;\n+\t\treturn (caddr_t) -1;\n+\t}\n+\n+\theap_end += incr;\n+\n+\treturn (caddr_t) prev_heap_end;\n+}\n+\n+int _close(int file)\n+{\n+\treturn -1;\n+}\n+\n+\n+int _fstat(int file, struct stat *st)\n+{\n+\tst->st_mode = S_IFCHR;\n+\treturn 0;\n+}\n+\n+int _isatty(int file)\n+{\n+\treturn 1;\n+}\n+\n+int _lseek(int file, int ptr, int dir)\n+{\n+\treturn 0;\n+}\n+\n+int _open(char *path, int flags, ...)\n+{\n+\t/* Pretend like we always fail */\n+\treturn -1;\n+}\n+\n+int _wait(int *status)\n+{\n+\terrno = ECHILD;\n+\treturn -1;\n+}\n+\n+int _unlink(char *name)\n+{\n+\terrno = ENOENT;\n+\treturn -1;\n+}\n+\n+int _times(struct tms *buf)\n+{\n+\treturn -1;\n+}\n+\n+int _stat(char *file, struct stat *st)\n+{\n+\tst->st_mode = S_IFCHR;\n+\treturn 0;\n+}\n+\n+int _link(char *old, char *new)\n+{\n+\terrno = EMLINK;\n+\treturn -1;\n+}\n+\n+int _fork(void)\n+{\n+\terrno = EAGAIN;\n+\treturn -1;\n+}\n+\n+int _execve(char *name, char **argv, char **env)\n+{\n+\terrno = ENOMEM;\n+\treturn -1;\n+}"
+      },
+      {
+        "filename": "Projects/STM32F769I-Discovery/Examples/UART/UART_TwoBoards_ComDMA/SW4STM32/STM32F769I_Discovery/.project",
+        "status": "modified",
+        "additions": 4,
+        "deletions": 0,
+        "changes": 4,
+        "previous_filename": null,
+        "patch": "@@ -92,6 +92,10 @@\n \t\t\t<name>Example/User/main.c</name>\n \t\t\t<type>1</type>\n \t\t\t<location>PARENT-2-PROJECT_LOC/Src/main.c</location>\n+\t\t</link><link>\n+\t\t\t<name>Example/SW4STM32/syscalls.c</name>\n+\t\t\t<type>1</type>\n+\t\t\t<locationURI>PARENT-1-PROJECT_LOC/syscalls.c</locationURI>\n \t\t</link><link>\n \t\t\t<name>Drivers/BSP/STM32F769I-Discovery/stm32f769i_discovery.c</name>\n \t\t\t<type>1</type>"
+      },
+      {
+        "filename": "Projects/STM32F769I-Discovery/Examples/UART/UART_TwoBoards_ComDMA/SW4STM32/syscalls.c",
+        "status": "added",
+        "additions": 186,
+        "deletions": 0,
+        "changes": 186,
+        "previous_filename": null,
+        "patch": "@@ -0,0 +1,186 @@\n+/**\n+*****************************************************************************\n+**\n+**  File        : syscalls.c\n+**\n+**  Abstract    : System Workbench Minimal System calls file\n+**\n+** \t\t          For more information about which c-functions\n+**                need which of these lowlevel functions\n+**                please consult the Newlib libc-manual\n+**\n+**  Environment : System Workbench for MCU\n+**\n+**  Distribution: The file is distributed �as is,� without any warranty\n+**                of any kind.\n+**\n+**  (c)Copyright System Workbench for MCU.\n+**  You may use this file as-is or modify it according to the needs of your\n+**  project. Distribution of this file (unmodified or modified) is not\n+**  permitted. System Workbench for MCU permit registered System Workbench(R) users the\n+**  rights to distribute the assembled, compiled & linked contents of this\n+**  file as part of an application binary file, provided that it is built\n+**  using the System Workbench for MCU toolchain.\n+**\n+*****************************************************************************\n+*/\n+\n+/* Includes */\n+#include <sys/stat.h>\n+#include <stdlib.h>\n+#include <errno.h>\n+#include <stdio.h>\n+#include <signal.h>\n+#include <time.h>\n+#include <sys/time.h>\n+#include <sys/times.h>\n+\n+\n+/* Variables */\n+//#undef errno\n+extern int errno;\n+extern int __io_putchar(int ch) __attribute__((weak));\n+extern int __io_getchar(void) __attribute__((weak));\n+\n+register char * stack_ptr asm(\"sp\");\n+\n+char *__env[1] = { 0 };\n+char **environ = __env;\n+\n+\n+/* Functions */\n+void initialise_monitor_handles()\n+{\n+}\n+\n+int _getpid(void)\n+{\n+\treturn 1;\n+}\n+\n+int _kill(int pid, int sig)\n+{\n+\terrno = EINVAL;\n+\treturn -1;\n+}\n+\n+void _exit (int status)\n+{\n+\t_kill(status, -1);\n+\twhile (1) {}\t\t/* Make sure we hang here */\n+}\n+\n+int _read (int file, char *ptr, int len)\n+{\n+\tint DataIdx;\n+\n+\tfor (DataIdx = 0; DataIdx < len; DataIdx++)\n+\t{\n+\t\t*ptr++ = __io_getchar();\n+\t}\n+\n+return len;\n+}\n+\n+int _write(int file, char *ptr, int len)\n+{\n+\tint DataIdx;\n+\n+\tfor (DataIdx = 0; DataIdx < len; DataIdx++)\n+\t{\n+\t\t__io_putchar(*ptr++);\n+\t}\n+\treturn len;\n+}\n+\n+caddr_t _sbrk(int incr)\n+{\n+\textern char end asm(\"end\");\n+\tstatic char *heap_end;\n+\tchar *prev_heap_end;\n+\n+\tif (heap_end == 0)\n+\t\theap_end = &end;\n+\n+\tprev_heap_end = heap_end;\n+\tif (heap_end + incr > stack_ptr)\n+\t{\n+//\t\twrite(1, \"Heap and stack collision\\n\", 25);\n+//\t\tabort();\n+\t\terrno = ENOMEM;\n+\t\treturn (caddr_t) -1;\n+\t}\n+\n+\theap_end += incr;\n+\n+\treturn (caddr_t) prev_heap_end;\n+}\n+\n+int _close(int file)\n+{\n+\treturn -1;\n+}\n+\n+\n+int _fstat(int file, struct stat *st)\n+{\n+\tst->st_mode = S_IFCHR;\n+\treturn 0;\n+}\n+\n+int _isatty(int file)\n+{\n+\treturn 1;\n+}\n+\n+int _lseek(int file, int ptr, int dir)\n+{\n+\treturn 0;\n+}\n+\n+int _open(char *path, int flags, ...)\n+{\n+\t/* Pretend like we always fail */\n+\treturn -1;\n+}\n+\n+int _wait(int *status)\n+{\n+\terrno = ECHILD;\n+\treturn -1;\n+}\n+\n+int _unlink(char *name)\n+{\n+\terrno = ENOENT;\n+\treturn -1;\n+}\n+\n+int _times(struct tms *buf)\n+{\n+\treturn -1;\n+}\n+\n+int _stat(char *file, struct stat *st)\n+{\n+\tst->st_mode = S_IFCHR;\n+\treturn 0;\n+}\n+\n+int _link(char *old, char *new)\n+{\n+\terrno = EMLINK;\n+\treturn -1;\n+}\n+\n+int _fork(void)\n+{\n+\terrno = EAGAIN;\n+\treturn -1;\n+}\n+\n+int _execve(char *name, char **argv, char **env)\n+{\n+\terrno = ENOMEM;\n+\treturn -1;\n+}"
+      },
+      {
+        "filename": "Projects/STM32F769I_EVAL/Examples/UART/UART_HyperTerminal_DMA/SW4STM32/STM32F769I_EVAL/.project",
+        "status": "modified",
+        "additions": 4,
+        "deletions": 0,
+        "changes": 4,
+        "previous_filename": null,
+        "patch": "@@ -72,6 +72,10 @@\n \t\t\t<name>Example/User/main.c</name>\n \t\t\t<type>1</type>\n \t\t\t<location>PARENT-2-PROJECT_LOC/Src/main.c</location>\n+\t\t</link><link>\n+\t\t\t<name>Example/SW4STM32/syscalls.c</name>\n+\t\t\t<type>1</type>\n+\t\t\t<locationURI>PARENT-1-PROJECT_LOC/syscalls.c</locationURI>\n \t\t</link><link>\n \t\t\t<name>Drivers/STM32F7xx_HAL_Driver/stm32f7xx_hal_pwr_ex.c</name>\n \t\t\t<type>1</type>"
+      },
+      {
+        "filename": "Projects/STM32F769I_EVAL/Examples/UART/UART_HyperTerminal_DMA/SW4STM32/syscalls.c",
+        "status": "added",
+        "additions": 186,
+        "deletions": 0,
+        "changes": 186,
+        "previous_filename": null,
+        "patch": "@@ -0,0 +1,186 @@\n+/**\n+*****************************************************************************\n+**\n+**  File        : syscalls.c\n+**\n+**  Abstract    : System Workbench Minimal System calls file\n+**\n+** \t\t          For more information about which c-functions\n+**                need which of these lowlevel functions\n+**                please consult the Newlib libc-manual\n+**\n+**  Environment : System Workbench for MCU\n+**\n+**  Distribution: The file is distributed �as is,� without any warranty\n+**                of any kind.\n+**\n+**  (c)Copyright System Workbench for MCU.\n+**  You may use this file as-is or modify it according to the needs of your\n+**  project. Distribution of this file (unmodified or modified) is not\n+**  permitted. System Workbench for MCU permit registered System Workbench(R) users the\n+**  rights to distribute the assembled, compiled & linked contents of this\n+**  file as part of an application binary file, provided that it is built\n+**  using the System Workbench for MCU toolchain.\n+**\n+*****************************************************************************\n+*/\n+\n+/* Includes */\n+#include <sys/stat.h>\n+#include <stdlib.h>\n+#include <errno.h>\n+#include <stdio.h>\n+#include <signal.h>\n+#include <time.h>\n+#include <sys/time.h>\n+#include <sys/times.h>\n+\n+\n+/* Variables */\n+//#undef errno\n+extern int errno;\n+extern int __io_putchar(int ch) __attribute__((weak));\n+extern int __io_getchar(void) __attribute__((weak));\n+\n+register char * stack_ptr asm(\"sp\");\n+\n+char *__env[1] = { 0 };\n+char **environ = __env;\n+\n+\n+/* Functions */\n+void initialise_monitor_handles()\n+{\n+}\n+\n+int _getpid(void)\n+{\n+\treturn 1;\n+}\n+\n+int _kill(int pid, int sig)\n+{\n+\terrno = EINVAL;\n+\treturn -1;\n+}\n+\n+void _exit (int status)\n+{\n+\t_kill(status, -1);\n+\twhile (1) {}\t\t/* Make sure we hang here */\n+}\n+\n+int _read (int file, char *ptr, int len)\n+{\n+\tint DataIdx;\n+\n+\tfor (DataIdx = 0; DataIdx < len; DataIdx++)\n+\t{\n+\t\t*ptr++ = __io_getchar();\n+\t}\n+\n+return len;\n+}\n+\n+int _write(int file, char *ptr, int len)\n+{\n+\tint DataIdx;\n+\n+\tfor (DataIdx = 0; DataIdx < len; DataIdx++)\n+\t{\n+\t\t__io_putchar(*ptr++);\n+\t}\n+\treturn len;\n+}\n+\n+caddr_t _sbrk(int incr)\n+{\n+\textern char end asm(\"end\");\n+\tstatic char *heap_end;\n+\tchar *prev_heap_end;\n+\n+\tif (heap_end == 0)\n+\t\theap_end = &end;\n+\n+\tprev_heap_end = heap_end;\n+\tif (heap_end + incr > stack_ptr)\n+\t{\n+//\t\twrite(1, \"Heap and stack collision\\n\", 25);\n+//\t\tabort();\n+\t\terrno = ENOMEM;\n+\t\treturn (caddr_t) -1;\n+\t}\n+\n+\theap_end += incr;\n+\n+\treturn (caddr_t) prev_heap_end;\n+}\n+\n+int _close(int file)\n+{\n+\treturn -1;\n+}\n+\n+\n+int _fstat(int file, struct stat *st)\n+{\n+\tst->st_mode = S_IFCHR;\n+\treturn 0;\n+}\n+\n+int _isatty(int file)\n+{\n+\treturn 1;\n+}\n+\n+int _lseek(int file, int ptr, int dir)\n+{\n+\treturn 0;\n+}\n+\n+int _open(char *path, int flags, ...)\n+{\n+\t/* Pretend like we always fail */\n+\treturn -1;\n+}\n+\n+int _wait(int *status)\n+{\n+\terrno = ECHILD;\n+\treturn -1;\n+}\n+\n+int _unlink(char *name)\n+{\n+\terrno = ENOENT;\n+\treturn -1;\n+}\n+\n+int _times(struct tms *buf)\n+{\n+\treturn -1;\n+}\n+\n+int _stat(char *file, struct stat *st)\n+{\n+\tst->st_mode = S_IFCHR;\n+\treturn 0;\n+}\n+\n+int _link(char *old, char *new)\n+{\n+\terrno = EMLINK;\n+\treturn -1;\n+}\n+\n+int _fork(void)\n+{\n+\terrno = EAGAIN;\n+\treturn -1;\n+}\n+\n+int _execve(char *name, char **argv, char **env)\n+{\n+\terrno = ENOMEM;\n+\treturn -1;\n+}"
+      },
+      {
+        "filename": "Projects/STM32F769I_EVAL/Examples/UART/UART_HyperTerminal_IT/SW4STM32/STM32F769I_EVAL/.project",
+        "status": "modified",
+        "additions": 4,
+        "deletions": 0,
+        "changes": 4,
+        "previous_filename": null,
+        "patch": "@@ -76,6 +76,10 @@\n \t\t\t<name>Example/User/main.c</name>\n \t\t\t<type>1</type>\n \t\t\t<location>PARENT-2-PROJECT_LOC/Src/main.c</location>\n+\t\t</link><link>\n+\t\t\t<name>Example/SW4STM32/syscalls.c</name>\n+\t\t\t<type>1</type>\n+\t\t\t<locationURI>PARENT-1-PROJECT_LOC/syscalls.c</locationURI>\n \t\t</link><link>\n \t\t\t<name>Drivers/STM32F7xx_HAL_Driver/stm32f7xx_hal_pwr_ex.c</name>\n \t\t\t<type>1</type>"
+      },
+      {
+        "filename": "Projects/STM32F769I_EVAL/Examples/UART/UART_HyperTerminal_IT/SW4STM32/syscalls.c",
+        "status": "added",
+        "additions": 186,
+        "deletions": 0,
+        "changes": 186,
+        "previous_filename": null,
+        "patch": "@@ -0,0 +1,186 @@\n+/**\n+*****************************************************************************\n+**\n+**  File        : syscalls.c\n+**\n+**  Abstract    : System Workbench Minimal System calls file\n+**\n+** \t\t          For more information about which c-functions\n+**                need which of these lowlevel functions\n+**                please consult the Newlib libc-manual\n+**\n+**  Environment : System Workbench for MCU\n+**\n+**  Distribution: The file is distributed �as is,� without any warranty\n+**                of any kind.\n+**\n+**  (c)Copyright System Workbench for MCU.\n+**  You may use this file as-is or modify it according to the needs of your\n+**  project. Distribution of this file (unmodified or modified) is not\n+**  permitted. System Workbench for MCU permit registered System Workbench(R) users the\n+**  rights to distribute the assembled, compiled & linked contents of this\n+**  file as part of an application binary file, provided that it is built\n+**  using the System Workbench for MCU toolchain.\n+**\n+*****************************************************************************\n+*/\n+\n+/* Includes */\n+#include <sys/stat.h>\n+#include <stdlib.h>\n+#include <errno.h>\n+#include <stdio.h>\n+#include <signal.h>\n+#include <time.h>\n+#include <sys/time.h>\n+#include <sys/times.h>\n+\n+\n+/* Variables */\n+//#undef errno\n+extern int errno;\n+extern int __io_putchar(int ch) __attribute__((weak));\n+extern int __io_getchar(void) __attribute__((weak));\n+\n+register char * stack_ptr asm(\"sp\");\n+\n+char *__env[1] = { 0 };\n+char **environ = __env;\n+\n+\n+/* Functions */\n+void initialise_monitor_handles()\n+{\n+}\n+\n+int _getpid(void)\n+{\n+\treturn 1;\n+}\n+\n+int _kill(int pid, int sig)\n+{\n+\terrno = EINVAL;\n+\treturn -1;\n+}\n+\n+void _exit (int status)\n+{\n+\t_kill(status, -1);\n+\twhile (1) {}\t\t/* Make sure we hang here */\n+}\n+\n+int _read (int file, char *ptr, int len)\n+{\n+\tint DataIdx;\n+\n+\tfor (DataIdx = 0; DataIdx < len; DataIdx++)\n+\t{\n+\t\t*ptr++ = __io_getchar();\n+\t}\n+\n+return len;\n+}\n+\n+int _write(int file, char *ptr, int len)\n+{\n+\tint DataIdx;\n+\n+\tfor (DataIdx = 0; DataIdx < len; DataIdx++)\n+\t{\n+\t\t__io_putchar(*ptr++);\n+\t}\n+\treturn len;\n+}\n+\n+caddr_t _sbrk(int incr)\n+{\n+\textern char end asm(\"end\");\n+\tstatic char *heap_end;\n+\tchar *prev_heap_end;\n+\n+\tif (heap_end == 0)\n+\t\theap_end = &end;\n+\n+\tprev_heap_end = heap_end;\n+\tif (heap_end + incr > stack_ptr)\n+\t{\n+//\t\twrite(1, \"Heap and stack collision\\n\", 25);\n+//\t\tabort();\n+\t\terrno = ENOMEM;\n+\t\treturn (caddr_t) -1;\n+\t}\n+\n+\theap_end += incr;\n+\n+\treturn (caddr_t) prev_heap_end;\n+}\n+\n+int _close(int file)\n+{\n+\treturn -1;\n+}\n+\n+\n+int _fstat(int file, struct stat *st)\n+{\n+\tst->st_mode = S_IFCHR;\n+\treturn 0;\n+}\n+\n+int _isatty(int file)\n+{\n+\treturn 1;\n+}\n+\n+int _lseek(int file, int ptr, int dir)\n+{\n+\treturn 0;\n+}\n+\n+int _open(char *path, int flags, ...)\n+{\n+\t/* Pretend like we always fail */\n+\treturn -1;\n+}\n+\n+int _wait(int *status)\n+{\n+\terrno = ECHILD;\n+\treturn -1;\n+}\n+\n+int _unlink(char *name)\n+{\n+\terrno = ENOENT;\n+\treturn -1;\n+}\n+\n+int _times(struct tms *buf)\n+{\n+\treturn -1;\n+}\n+\n+int _stat(char *file, struct stat *st)\n+{\n+\tst->st_mode = S_IFCHR;\n+\treturn 0;\n+}\n+\n+int _link(char *old, char *new)\n+{\n+\terrno = EMLINK;\n+\treturn -1;\n+}\n+\n+int _fork(void)\n+{\n+\terrno = EAGAIN;\n+\treturn -1;\n+}\n+\n+int _execve(char *name, char **argv, char **env)\n+{\n+\terrno = ENOMEM;\n+\treturn -1;\n+}"
+      }
+    ],
+    "linked_issue_numbers": [
+      6
+    ],
+    "pr_numbers": [
+      103
+    ]
+  },
+  {
+    "repo": "STM32CubeF7",
+    "sha": "10b945377111a53670559ba5651d62d6209f4a59",
+    "author": "huoxingdawang",
+    "committer": "web-flow",
+    "message": "Fix the bug that HAL_NAND_Read_Page_8b and HAL_NAND_Read_SpareArea_8b cannot read data normally.",
+    "authored_at": "2023-09-07T14:40:46Z",
+    "committed_at": "2023-09-07T14:40:46Z",
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/commit/10b945377111a53670559ba5651d62d6209f4a59",
+    "parents": [
+      "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+    ],
+    "stats": {
+      "additions": 2,
+      "deletions": 2,
+      "total": 4
+    },
+    "files_changed": [
+      {
+        "filename": "Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_nand.c",
+        "status": "modified",
+        "additions": 2,
+        "deletions": 2,
+        "changes": 4,
+        "previous_filename": null,
+        "patch": "@@ -635,7 +635,7 @@ HAL_StatusTypeDef HAL_NAND_Read_Page_8b(NAND_HandleTypeDef *hnand, NAND_AddressT\n       /* Get Data into Buffer */\n       for (index = 0U; index < hnand->Config.PageSize; index++)\n       {\n-        *buff = *(uint8_t *)deviceaddress;\n+        *buff = *(__IO uint8_t *)deviceaddress;\n         buff++;\n       }\n \n@@ -1285,7 +1285,7 @@ HAL_StatusTypeDef HAL_NAND_Read_SpareArea_8b(NAND_HandleTypeDef *hnand, NAND_Add\n       /* Get Data into Buffer */\n       for (index = 0U; index < hnand->Config.SpareAreaSize; index++)\n       {\n-        *buff = *(uint8_t *)deviceaddress;\n+        *buff = *(__IO uint8_t *)deviceaddress;\n         buff++;\n       }\n "
+      }
+    ],
+    "linked_issue_numbers": [
+      6
+    ],
+    "pr_numbers": [
+      103
+    ]
+  },
+  {
+    "repo": "STM32CubeF7",
+    "sha": "5d108eb842d4ceebdd67d69b1f936cbe4b18f907",
+    "author": "minhaj6",
+    "committer": "web-flow",
+    "message": "fix function description typo in usbd_core.c\n\nPreviously - \r\n```\r\n/**\r\n  * @brief  USBD_DeInit\r\n  *         Re-Initialize the device library\r\n  * @param  pdev: device instance\r\n  * @retval status: status\r\n  */\r\n```\r\nAfterwards - \r\n```\r\n/**\r\n  * @brief  USBD_DeInit\r\n  *         De-Initialize the device library\r\n  * @param  pdev: device instance\r\n  * @retval status: status\r\n  */",
+    "authored_at": "2023-10-13T07:28:46Z",
+    "committed_at": "2023-10-13T07:28:46Z",
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/commit/5d108eb842d4ceebdd67d69b1f936cbe4b18f907",
+    "parents": [
+      "043626d52e34ee8146588bae597513398683e329"
+    ],
+    "stats": {
+      "additions": 1,
+      "deletions": 1,
+      "total": 2
+    },
+    "files_changed": [
+      {
+        "filename": "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "changes": 2,
+        "previous_filename": null,
+        "patch": "@@ -142,7 +142,7 @@ USBD_StatusTypeDef USBD_Init(USBD_HandleTypeDef *pdev,\n \n /**\n   * @brief  USBD_DeInit\n-  *         Re-Initialize the device library\n+  *         De-Initialize the device library\n   * @param  pdev: device instance\n   * @retval status: status\n   */"
+      }
+    ],
+    "linked_issue_numbers": [],
+    "pr_numbers": [
+      105
+    ]
+  },
+  {
+    "repo": "STM32CubeF7",
+    "sha": "72e73bbb41ad4df67de9630ba146170beb254124",
+    "author": "passgat",
+    "committer": "passgat",
+    "message": "nt35510: fix setting of DPRSLCTR register\n\nAs described in the NT35510 Application Note V0.04, the DPRSLCTR register\n(Display Resolution Control - B500h) needs to be set to 50h for the 480x800\ndisplay resolution.\n\nFixes: 6eed5bb15304 (\"Update STM32F769I-Discovery BSP drivers to support\nnew nt35510 component available on new LCD DSI daughter board MB1166 RevA09\nand above versions.\")\nSigned-off-by: Dario Binacchi <dariobin@libero.it>",
+    "authored_at": "2023-12-29T14:33:47Z",
+    "committed_at": "2023-12-29T15:02:04Z",
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/commit/72e73bbb41ad4df67de9630ba146170beb254124",
+    "parents": [
+      "cc17dc480f638a398de87a29b5f25ff2cb16e8a8"
+    ],
+    "stats": {
+      "additions": 1,
+      "deletions": 1,
+      "total": 2
+    },
+    "files_changed": [
+      {
+        "filename": "Drivers/BSP/Components/nt35510/nt35510.c",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "changes": 2,
+        "previous_filename": null,
+        "patch": "@@ -100,7 +100,7 @@ uint8_t NT35510_Init(uint32_t ColorCoding, uint32_t orientation)\n   const uint8_t nt35510_reg16[] = {0x55, 0xAA, 0x52, 0x08, 0x00, 0xF0};\n   const uint8_t nt35510_reg17[] = {0xFC, 0x00, 0xB1};\n   const uint8_t nt35510_reg18[] = {0xB6, 0x03};\n-  const uint8_t nt35510_reg19[] = {0xB5, 0x51};\n+  const uint8_t nt35510_reg19[] = {0xB5, 0x50};\n   const uint8_t nt35510_reg20[] = {0x00, 0x00, 0xB7};\n   const uint8_t nt35510_reg21[] = {0x01, 0x02, 0x02, 0x02, 0xB8};\n   const uint8_t nt35510_reg22[] = {0x00, 0x00, 0x00, 0xBC};"
+      }
+    ],
+    "linked_issue_numbers": [],
+    "pr_numbers": [
+      112
+    ]
+  }
+]

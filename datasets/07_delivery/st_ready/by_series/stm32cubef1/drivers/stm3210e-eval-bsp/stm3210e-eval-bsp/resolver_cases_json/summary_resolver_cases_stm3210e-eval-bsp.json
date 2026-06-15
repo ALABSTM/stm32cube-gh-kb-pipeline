@@ -1,0 +1,17 @@
+{
+  "repo": "stm3210e-eval-bsp",
+  "input_file": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\data\\issue_pr_commit_links_stm3210e-eval-bsp_linked_only.json",
+  "output_file": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\by_series\\stm3210e-eval-bsp\\resolver_cases_json\\st_ready_resolver_cases_stm3210e-eval-bsp.json",
+  "total_cases_in_input": 0,
+  "exported_cases": 0,
+  "include_reference_only": false,
+  "format": "json",
+  "root_tag_path": "resolver_cases",
+  "status_breakdown": {
+    "merged_fix": 0,
+    "candidate_fix": 0,
+    "commit_only_candidate": 0,
+    "reference_only": 0
+  },
+  "merged_pr_with_file_evidence_cases": 0
+}

@@ -1,6 +1,6 @@
 [
   {
-    "id": "stm32h5xx-hal-driver-file-8230803966468152166",
+    "id": "stm32h5xx-hal-driver-file-7276469903016844373",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -23,7 +23,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5989993935214370965",
+    "id": "stm32h5xx-hal-driver-file-3808598478447343393",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -46,7 +46,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8252277990648493267",
+    "id": "stm32h5xx-hal-driver-file-1046249005695567353",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -69,7 +69,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-6207349953462816313",
+    "id": "stm32h5xx-hal-driver-file-1686924381703728790",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -92,7 +92,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-9222866097470924362",
+    "id": "stm32h5xx-hal-driver-file-6381976759417729750",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -115,7 +115,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-4219021190654112148",
+    "id": "stm32h5xx-hal-driver-file-6156097056151333485",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -138,7 +138,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-759074751967701845",
+    "id": "stm32h5xx-hal-driver-file-2267608598704058235",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -161,7 +161,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-6395723991778841797",
+    "id": "stm32h5xx-hal-driver-file-1126749987648654504",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -184,7 +184,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8080666891538733499",
+    "id": "stm32h5xx-hal-driver-file-3132547058152984305",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -207,7 +207,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-1103582835709045831",
+    "id": "stm32h5xx-hal-driver-file-6502179826153432806",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -230,7 +230,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-9028128001906779813",
+    "id": "stm32h5xx-hal-driver-file-221796413611575953",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -253,7 +253,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5670879265411852371",
+    "id": "stm32h5xx-hal-driver-file-1191427785993334604",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -276,7 +276,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2277216741164176360",
+    "id": "stm32h5xx-hal-driver-file-3980689063283467469",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -299,7 +299,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-9184723625868919340",
+    "id": "stm32h5xx-hal-driver-file-5309538038614285505",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -322,7 +322,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-1794063017514692315",
+    "id": "stm32h5xx-hal-driver-file-2151950625772312524",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -345,7 +345,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8880350658391272120",
+    "id": "stm32h5xx-hal-driver-file-5302359466541296518",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -368,7 +368,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-7939338294804346982",
+    "id": "stm32h5xx-hal-driver-file-590586659775883901",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -391,7 +391,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-1253152626901136680",
+    "id": "stm32h5xx-hal-driver-file-6450752686532107365",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -414,7 +414,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-1778853185943469694",
+    "id": "stm32h5xx-hal-driver-file-3490129133444241107",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -437,7 +437,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-4337243716864480114",
+    "id": "stm32h5xx-hal-driver-file-4970733011697619914",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -460,7 +460,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-7160638151302725540",
+    "id": "stm32h5xx-hal-driver-file-8290426536621134715",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -483,7 +483,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-6290200544397961109",
+    "id": "stm32h5xx-hal-driver-file-7780309649508643519",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -506,7 +506,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5294666841399247443",
+    "id": "stm32h5xx-hal-driver-file-5524736450090521784",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -529,7 +529,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-1610447531869365924",
+    "id": "stm32h5xx-hal-driver-file-8149931882827083744",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -552,7 +552,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-6757018717427898914",
+    "id": "stm32h5xx-hal-driver-file-1067550479435139431",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -575,7 +575,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3505222757618365341",
+    "id": "stm32h5xx-hal-driver-file-1090187612293055877",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -598,7 +598,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3756022289975185632",
+    "id": "stm32h5xx-hal-driver-file-5428037528868592456",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -621,7 +621,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-6306436929031787016",
+    "id": "stm32h5xx-hal-driver-file-3787505661194980558",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -644,7 +644,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-6312713408145846263",
+    "id": "stm32h5xx-hal-driver-file-3856321140734753895",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -667,7 +667,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-9024935830208459081",
+    "id": "stm32h5xx-hal-driver-file-8724686498024232295",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -690,7 +690,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-4258032123013458402",
+    "id": "stm32h5xx-hal-driver-file-704623185648677298",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -713,7 +713,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-6694164065461928776",
+    "id": "stm32h5xx-hal-driver-file-5437604693277793397",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -736,7 +736,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-4209973229223479693",
+    "id": "stm32h5xx-hal-driver-file-2706674521496946470",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -759,7 +759,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-1788284844937625840",
+    "id": "stm32h5xx-hal-driver-file-1624628542146928316",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -782,7 +782,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3313103419723501901",
+    "id": "stm32h5xx-hal-driver-file-4514966320273291776",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -805,7 +805,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2854535422420412245",
+    "id": "stm32h5xx-hal-driver-file-7314089940759162611",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -828,7 +828,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8201234039980428166",
+    "id": "stm32h5xx-hal-driver-file-449453157379470745",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -851,7 +851,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-6051863702370674858",
+    "id": "stm32h5xx-hal-driver-file-6737370497646579182",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -874,7 +874,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-9111746104407949573",
+    "id": "stm32h5xx-hal-driver-file-5365301493914155905",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -897,7 +897,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-6299514236289144253",
+    "id": "stm32h5xx-hal-driver-file-6769568363971456325",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -920,7 +920,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3335200511052394745",
+    "id": "stm32h5xx-hal-driver-file-671650433146356341",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -943,7 +943,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-6481115496866039653",
+    "id": "stm32h5xx-hal-driver-file-9012032768493407300",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -966,7 +966,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5021503909619955349",
+    "id": "stm32h5xx-hal-driver-file-1874938396641330605",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -989,7 +989,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8723574278039323569",
+    "id": "stm32h5xx-hal-driver-file-4598465676175165364",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1012,7 +1012,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-7468271142358876964",
+    "id": "stm32h5xx-hal-driver-file-7549298762438433410",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1035,7 +1035,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8785979960862162002",
+    "id": "stm32h5xx-hal-driver-file-6625135594906838347",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1058,7 +1058,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3313538550615596307",
+    "id": "stm32h5xx-hal-driver-file-6254562343264646425",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1081,7 +1081,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8593188811345311237",
+    "id": "stm32h5xx-hal-driver-file-6696037573788989086",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1104,7 +1104,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2186140540079516524",
+    "id": "stm32h5xx-hal-driver-file-7290278733731015284",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1127,7 +1127,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-7811126662287260964",
+    "id": "stm32h5xx-hal-driver-file-7588771494936882176",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1150,7 +1150,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5873494149833870070",
+    "id": "stm32h5xx-hal-driver-file-2411207539166602542",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1173,7 +1173,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5941094006989587422",
+    "id": "stm32h5xx-hal-driver-file-5820358472964526721",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1196,7 +1196,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3250267718106955090",
+    "id": "stm32h5xx-hal-driver-file-5933512884035744805",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1219,7 +1219,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-7083563377956141275",
+    "id": "stm32h5xx-hal-driver-file-6418139437896625676",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1242,7 +1242,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-4405664502063550176",
+    "id": "stm32h5xx-hal-driver-file-1172290742268614580",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1265,7 +1265,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3376568950885768478",
+    "id": "stm32h5xx-hal-driver-file-8834657405807435779",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1288,7 +1288,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2465200876548611852",
+    "id": "stm32h5xx-hal-driver-file-7471712243009901457",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1311,7 +1311,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3065757567435793698",
+    "id": "stm32h5xx-hal-driver-file-1311779182936191775",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1334,7 +1334,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-6405214299058266003",
+    "id": "stm32h5xx-hal-driver-file-122379814933744372",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1357,7 +1357,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-968730190073488298",
+    "id": "stm32h5xx-hal-driver-file-960356077198322994",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1380,7 +1380,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2977563562385324070",
+    "id": "stm32h5xx-hal-driver-file-4443697382338707546",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1403,7 +1403,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2887967582095132351",
+    "id": "stm32h5xx-hal-driver-file-5440655878064404484",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1426,7 +1426,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5310583709500647124",
+    "id": "stm32h5xx-hal-driver-file-5410375852064751869",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1449,7 +1449,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2178570427158921161",
+    "id": "stm32h5xx-hal-driver-file-3962658548949327805",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1472,7 +1472,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5245641111727829118",
+    "id": "stm32h5xx-hal-driver-file-5244853769087921898",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1495,7 +1495,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3976462622771864315",
+    "id": "stm32h5xx-hal-driver-file-840926526682455351",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1518,7 +1518,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2411688565222890008",
+    "id": "stm32h5xx-hal-driver-file-1248285679971791885",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1541,7 +1541,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-6786300735928200777",
+    "id": "stm32h5xx-hal-driver-file-2848105741035511713",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1564,7 +1564,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-9099058746479933325",
+    "id": "stm32h5xx-hal-driver-file-8077766631112146644",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1587,7 +1587,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3714592522982557665",
+    "id": "stm32h5xx-hal-driver-file-7095420801834793585",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1610,7 +1610,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2223153824541744226",
+    "id": "stm32h5xx-hal-driver-file-509669108478682176",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1633,7 +1633,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5203332283190422846",
+    "id": "stm32h5xx-hal-driver-file-2485333041155375723",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1656,7 +1656,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-754484077336084033",
+    "id": "stm32h5xx-hal-driver-file-2841281484117660365",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1679,7 +1679,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8253939293429039364",
+    "id": "stm32h5xx-hal-driver-file-7209981453570112936",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1702,7 +1702,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-709989225937808846",
+    "id": "stm32h5xx-hal-driver-file-1478661157790328412",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1725,7 +1725,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3899765909382324049",
+    "id": "stm32h5xx-hal-driver-file-2656491322950867476",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1748,7 +1748,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-6608427363246760290",
+    "id": "stm32h5xx-hal-driver-file-3250291069114172781",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1771,7 +1771,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8190755109166748274",
+    "id": "stm32h5xx-hal-driver-file-3424663905515474830",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1794,7 +1794,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2826890830363388531",
+    "id": "stm32h5xx-hal-driver-file-3434360922159128965",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1817,7 +1817,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3041164520269076934",
+    "id": "stm32h5xx-hal-driver-file-2352801881536708198",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1840,7 +1840,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2287269804997123783",
+    "id": "stm32h5xx-hal-driver-file-2859457220895574855",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1863,7 +1863,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-1706152667858300051",
+    "id": "stm32h5xx-hal-driver-file-5129224926849805972",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1886,7 +1886,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8951813091509141598",
+    "id": "stm32h5xx-hal-driver-file-3757915870741720121",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1909,7 +1909,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8050393212617622690",
+    "id": "stm32h5xx-hal-driver-file-3408360327681611337",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1932,7 +1932,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-6277852159407929272",
+    "id": "stm32h5xx-hal-driver-file-7540726882476120995",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1955,7 +1955,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8199632829255989233",
+    "id": "stm32h5xx-hal-driver-file-5598617967326162674",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -1978,7 +1978,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8959829415339235839",
+    "id": "stm32h5xx-hal-driver-file-1326129131297944280",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2001,7 +2001,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8292487822286114436",
+    "id": "stm32h5xx-hal-driver-file-6443032761143548619",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2024,7 +2024,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3723602421898614790",
+    "id": "stm32h5xx-hal-driver-file-1947950734349057445",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2047,7 +2047,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-7201401576254946270",
+    "id": "stm32h5xx-hal-driver-file-1340514883975955825",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2070,7 +2070,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-1047475033365807010",
+    "id": "stm32h5xx-hal-driver-file-6614609760817091805",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2093,7 +2093,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8352071470438296352",
+    "id": "stm32h5xx-hal-driver-file-7041056730582175724",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2116,7 +2116,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-7465157336038952487",
+    "id": "stm32h5xx-hal-driver-file-6287606877368139708",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2139,7 +2139,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3482991084928047661",
+    "id": "stm32h5xx-hal-driver-file-5321434415114388454",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2162,7 +2162,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-1551060136986572167",
+    "id": "stm32h5xx-hal-driver-file-4856666558226692606",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2185,7 +2185,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-1030700428784838863",
+    "id": "stm32h5xx-hal-driver-file-3135906835262789274",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2208,7 +2208,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2863297109530718509",
+    "id": "stm32h5xx-hal-driver-file-1063396086520872840",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2231,7 +2231,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-4290623553691021810",
+    "id": "stm32h5xx-hal-driver-file-1628940680033180879",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2254,7 +2254,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3590688008084838711",
+    "id": "stm32h5xx-hal-driver-file-3398696281228816120",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2277,7 +2277,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5634868816481372213",
+    "id": "stm32h5xx-hal-driver-file-6355074967406955632",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2300,7 +2300,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3252113142935005757",
+    "id": "stm32h5xx-hal-driver-file-3363438664440413220",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2323,7 +2323,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-455650290208233086",
+    "id": "stm32h5xx-hal-driver-file-505681873338867787",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2346,7 +2346,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-4719114851810705432",
+    "id": "stm32h5xx-hal-driver-file-1551137841892548494",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2369,7 +2369,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8613776723394484287",
+    "id": "stm32h5xx-hal-driver-file-6248914309816394457",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2392,7 +2392,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-4864869170195147195",
+    "id": "stm32h5xx-hal-driver-file-178013869714957662",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2415,7 +2415,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-1705918109555037712",
+    "id": "stm32h5xx-hal-driver-file-7700803209135617980",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2438,7 +2438,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-6309535576944135905",
+    "id": "stm32h5xx-hal-driver-file-3864291712095883839",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2461,7 +2461,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-4671445393601193349",
+    "id": "stm32h5xx-hal-driver-file-2011839356925576506",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2484,7 +2484,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2729541272727213899",
+    "id": "stm32h5xx-hal-driver-file-4360735331662018873",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2507,7 +2507,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5369566171082516156",
+    "id": "stm32h5xx-hal-driver-file-263594063832095576",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2530,7 +2530,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-4580215505672302426",
+    "id": "stm32h5xx-hal-driver-file-6412184406939041313",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2553,7 +2553,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5441039195083589461",
+    "id": "stm32h5xx-hal-driver-file-2402606350823458712",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2576,7 +2576,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8617303540958389188",
+    "id": "stm32h5xx-hal-driver-file-4437189747899717093",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2599,7 +2599,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3657109773040577735",
+    "id": "stm32h5xx-hal-driver-file-7121040794069558934",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2622,7 +2622,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-7472606058426602152",
+    "id": "stm32h5xx-hal-driver-file-398506636366576407",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2645,7 +2645,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3571490430570591053",
+    "id": "stm32h5xx-hal-driver-file-5079898851843166137",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2668,7 +2668,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5074709980561389520",
+    "id": "stm32h5xx-hal-driver-file-7396712916970164872",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2691,7 +2691,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2176337091505590696",
+    "id": "stm32h5xx-hal-driver-file-647537639999431793",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2714,7 +2714,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8616698677099708828",
+    "id": "stm32h5xx-hal-driver-file-3098784196206242800",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2737,7 +2737,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5103868141962949128",
+    "id": "stm32h5xx-hal-driver-file-6432883893372498067",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2760,7 +2760,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-1382609625199292484",
+    "id": "stm32h5xx-hal-driver-file-5412269328460500469",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2783,7 +2783,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5264625641591820693",
+    "id": "stm32h5xx-hal-driver-file-8513986718299171552",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2806,7 +2806,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5591699742788070673",
+    "id": "stm32h5xx-hal-driver-file-7848596693179471262",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2829,7 +2829,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-6477207690269368026",
+    "id": "stm32h5xx-hal-driver-file-3222864608002581569",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2852,7 +2852,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-7998195834371748237",
+    "id": "stm32h5xx-hal-driver-file-8773445253530190500",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2875,7 +2875,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5592932540254370506",
+    "id": "stm32h5xx-hal-driver-file-1469257217663607769",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2898,7 +2898,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-7180016891391785040",
+    "id": "stm32h5xx-hal-driver-file-6080411330865084333",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2921,7 +2921,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-6648740623481939083",
+    "id": "stm32h5xx-hal-driver-file-365504293615855828",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2944,7 +2944,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-1690646946756414955",
+    "id": "stm32h5xx-hal-driver-file-6558308220840336790",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2967,7 +2967,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5064065224500314352",
+    "id": "stm32h5xx-hal-driver-file-104213799034549516",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -2990,7 +2990,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-9169748656862381970",
+    "id": "stm32h5xx-hal-driver-file-6672169756066552690",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3013,7 +3013,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3189705189820073146",
+    "id": "stm32h5xx-hal-driver-file-667067427990368010",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3036,7 +3036,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2727446326423585569",
+    "id": "stm32h5xx-hal-driver-file-409047486152220354",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3059,7 +3059,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-7679693129270423679",
+    "id": "stm32h5xx-hal-driver-file-7848706811462549811",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3082,7 +3082,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8802153507099702556",
+    "id": "stm32h5xx-hal-driver-file-191421580749078058",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3105,7 +3105,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-1916843886802992445",
+    "id": "stm32h5xx-hal-driver-file-5443505742225365835",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3128,7 +3128,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-6350393975950474954",
+    "id": "stm32h5xx-hal-driver-file-2302238057796249138",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3151,7 +3151,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8390043027105721128",
+    "id": "stm32h5xx-hal-driver-file-1382349382177093279",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3174,7 +3174,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2926434078466117666",
+    "id": "stm32h5xx-hal-driver-file-1222247151644174810",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3197,7 +3197,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8195606691833766761",
+    "id": "stm32h5xx-hal-driver-file-4050626139065456723",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3220,7 +3220,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-716362957210548073",
+    "id": "stm32h5xx-hal-driver-file-1741973280653419907",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3243,7 +3243,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-1289703166685506346",
+    "id": "stm32h5xx-hal-driver-file-5094948672226206084",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3266,7 +3266,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2636139790102104562",
+    "id": "stm32h5xx-hal-driver-file-8730244202239007402",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3289,7 +3289,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-4270033141045751097",
+    "id": "stm32h5xx-hal-driver-file-4456630925311960806",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3312,7 +3312,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-7408912815895143300",
+    "id": "stm32h5xx-hal-driver-file-717108724891181812",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3335,7 +3335,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8434690592430323663",
+    "id": "stm32h5xx-hal-driver-file-6615356167660133535",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3358,7 +3358,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2406501891833589654",
+    "id": "stm32h5xx-hal-driver-file-2666674335593329511",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3381,7 +3381,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-4623889011968614464",
+    "id": "stm32h5xx-hal-driver-file-7833148381364911553",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3404,7 +3404,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-9196674668980810509",
+    "id": "stm32h5xx-hal-driver-file-4614323820453582487",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3427,7 +3427,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8686273899224728855",
+    "id": "stm32h5xx-hal-driver-file-1239116173562382819",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3450,7 +3450,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-815585957961102545",
+    "id": "stm32h5xx-hal-driver-file-2504848042418414836",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3473,7 +3473,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3448597864164674212",
+    "id": "stm32h5xx-hal-driver-file-6665091052972089021",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3496,7 +3496,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-1014966420297859208",
+    "id": "stm32h5xx-hal-driver-file-2688695015073800346",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3519,7 +3519,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-6272876200637339458",
+    "id": "stm32h5xx-hal-driver-file-6028874775672969025",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3542,7 +3542,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-24522883163636926",
+    "id": "stm32h5xx-hal-driver-file-2234110512667722306",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3565,7 +3565,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-6942182891828255855",
+    "id": "stm32h5xx-hal-driver-file-5010944656662660266",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3588,7 +3588,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-7143625285213269636",
+    "id": "stm32h5xx-hal-driver-file-7699565278750532518",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3611,7 +3611,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-4615489170367639103",
+    "id": "stm32h5xx-hal-driver-file-5845311897513202237",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3634,7 +3634,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8435926958348061061",
+    "id": "stm32h5xx-hal-driver-file-3111935399266146271",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3657,7 +3657,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8505310370279119192",
+    "id": "stm32h5xx-hal-driver-file-8341122051710237630",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3680,7 +3680,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3907636409090154652",
+    "id": "stm32h5xx-hal-driver-file-5850798212147024335",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3703,7 +3703,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2318429692184456850",
+    "id": "stm32h5xx-hal-driver-file-4292519470448304704",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3726,7 +3726,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5856247981407445667",
+    "id": "stm32h5xx-hal-driver-file-1246926116547305985",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3749,7 +3749,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5658465729248922572",
+    "id": "stm32h5xx-hal-driver-file-5655846350874259607",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3772,7 +3772,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-6746917983639906734",
+    "id": "stm32h5xx-hal-driver-file-4566877834686733884",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3795,7 +3795,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5795157038824187441",
+    "id": "stm32h5xx-hal-driver-file-6935895979993351664",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3818,7 +3818,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8748988693045762267",
+    "id": "stm32h5xx-hal-driver-file-6673056187613960526",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3841,7 +3841,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-874403550218799032",
+    "id": "stm32h5xx-hal-driver-file-8431129551073983035",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3864,7 +3864,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2693212865930307377",
+    "id": "stm32h5xx-hal-driver-file-3812251404982717852",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3887,7 +3887,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5926025799148813579",
+    "id": "stm32h5xx-hal-driver-file-6896181115686476422",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3910,7 +3910,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3024326867634077757",
+    "id": "stm32h5xx-hal-driver-file-5833787416583244139",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3933,7 +3933,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-9131498897779964416",
+    "id": "stm32h5xx-hal-driver-file-3358875316180549221",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3956,7 +3956,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2094227393064850947",
+    "id": "stm32h5xx-hal-driver-file-2282607696046748805",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -3979,7 +3979,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8554105298364519441",
+    "id": "stm32h5xx-hal-driver-file-9169361796350998210",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4002,7 +4002,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3834005637815870613",
+    "id": "stm32h5xx-hal-driver-file-920915140727030554",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4025,7 +4025,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-4382506537642382457",
+    "id": "stm32h5xx-hal-driver-file-2659369199356278172",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4048,7 +4048,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2448278697434967178",
+    "id": "stm32h5xx-hal-driver-file-4757897002501165824",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4071,7 +4071,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8635978137789095916",
+    "id": "stm32h5xx-hal-driver-file-6838339896748381715",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4094,7 +4094,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3095167546694112356",
+    "id": "stm32h5xx-hal-driver-file-1514670777153572060",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4117,7 +4117,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3518183137122221709",
+    "id": "stm32h5xx-hal-driver-file-327784740488308680",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4140,7 +4140,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-7280435904797468390",
+    "id": "stm32h5xx-hal-driver-file-2416835056455263008",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4163,7 +4163,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5069934450031359686",
+    "id": "stm32h5xx-hal-driver-file-3040799508550364939",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4186,7 +4186,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-6948149250859366450",
+    "id": "stm32h5xx-hal-driver-file-6162939318280257600",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4209,7 +4209,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5769848069190083662",
+    "id": "stm32h5xx-hal-driver-file-1251408280449794017",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4232,7 +4232,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-7423414060244724972",
+    "id": "stm32h5xx-hal-driver-file-2842629829701906618",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4255,7 +4255,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2090054822447802018",
+    "id": "stm32h5xx-hal-driver-file-7040826979657698897",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4278,7 +4278,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3847673528238991539",
+    "id": "stm32h5xx-hal-driver-file-702998570174019042",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4301,7 +4301,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-1890807774101647483",
+    "id": "stm32h5xx-hal-driver-file-220849296403591012",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4324,7 +4324,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-6569017882598538798",
+    "id": "stm32h5xx-hal-driver-file-3001958777750087273",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4347,7 +4347,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-1213035863498092571",
+    "id": "stm32h5xx-hal-driver-file-6025188184913850296",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4370,7 +4370,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-4748073844985216091",
+    "id": "stm32h5xx-hal-driver-file-7899140325750595430",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4393,7 +4393,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-1031938764327405372",
+    "id": "stm32h5xx-hal-driver-file-7084134906808780830",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4416,7 +4416,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-4306551123086936525",
+    "id": "stm32h5xx-hal-driver-file-6127357172223125627",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4439,7 +4439,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-838634345574619124",
+    "id": "stm32h5xx-hal-driver-file-7787910806040201481",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4462,7 +4462,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3133931750902600854",
+    "id": "stm32h5xx-hal-driver-file-4184761769173399482",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4485,7 +4485,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3118383309989871239",
+    "id": "stm32h5xx-hal-driver-file-6229930241384155693",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4508,7 +4508,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-7537414285501884712",
+    "id": "stm32h5xx-hal-driver-file-7920543795935105133",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4531,7 +4531,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3203020579775106968",
+    "id": "stm32h5xx-hal-driver-file-9035276001168520341",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4554,7 +4554,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-1798011211485046779",
+    "id": "stm32h5xx-hal-driver-file-5217938907338211052",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4577,7 +4577,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-1846519935515426467",
+    "id": "stm32h5xx-hal-driver-file-8061683061651671342",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4600,7 +4600,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2098238540426337889",
+    "id": "stm32h5xx-hal-driver-file-4759355731420439464",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4623,7 +4623,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8749473504052761151",
+    "id": "stm32h5xx-hal-driver-file-931612223793385736",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4646,7 +4646,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-6663936469172015682",
+    "id": "stm32h5xx-hal-driver-file-847509708340476761",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4669,7 +4669,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-7042796720401877788",
+    "id": "stm32h5xx-hal-driver-file-3408411917847796868",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4692,7 +4692,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-7847627362563651223",
+    "id": "stm32h5xx-hal-driver-file-1414410820161932345",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4715,7 +4715,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5210913781093275974",
+    "id": "stm32h5xx-hal-driver-file-1966305957111019812",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4738,7 +4738,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-591654860641451657",
+    "id": "stm32h5xx-hal-driver-file-8526603254889552944",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4761,7 +4761,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8138210145933517320",
+    "id": "stm32h5xx-hal-driver-file-8612394125842156040",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4784,7 +4784,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2212637568258793788",
+    "id": "stm32h5xx-hal-driver-file-807917615821848715",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4807,7 +4807,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2773154788534975959",
+    "id": "stm32h5xx-hal-driver-file-5094264780386644881",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4830,7 +4830,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-82961867608711243",
+    "id": "stm32h5xx-hal-driver-file-3738350727910569676",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4853,7 +4853,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3790089632285522626",
+    "id": "stm32h5xx-hal-driver-file-4715559444328170984",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4876,7 +4876,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3166306771610956945",
+    "id": "stm32h5xx-hal-driver-file-8202131007687411945",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4899,7 +4899,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5473352380510535682",
+    "id": "stm32h5xx-hal-driver-file-1623961993942343471",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4922,7 +4922,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-4726604966974667730",
+    "id": "stm32h5xx-hal-driver-file-3068001460944898704",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4945,7 +4945,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-224007762440247549",
+    "id": "stm32h5xx-hal-driver-file-997427790544035796",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4968,7 +4968,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5549643267563202094",
+    "id": "stm32h5xx-hal-driver-file-1154417145424878443",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -4991,7 +4991,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-6573287172910134062",
+    "id": "stm32h5xx-hal-driver-file-6234867339806926203",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5014,7 +5014,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-1181519133873944043",
+    "id": "stm32h5xx-hal-driver-file-9164477209558188358",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5037,7 +5037,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-4701582273547949142",
+    "id": "stm32h5xx-hal-driver-file-2784717951322157511",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5060,7 +5060,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-1332855277856731514",
+    "id": "stm32h5xx-hal-driver-file-8110724278720420287",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5083,7 +5083,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3408164653428473289",
+    "id": "stm32h5xx-hal-driver-file-4004878620484354965",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5106,7 +5106,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3874891571534771683",
+    "id": "stm32h5xx-hal-driver-file-9213413960338339073",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5129,7 +5129,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5001412995513401802",
+    "id": "stm32h5xx-hal-driver-file-5852224836500789943",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5152,7 +5152,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2288816562031315424",
+    "id": "stm32h5xx-hal-driver-file-5393402736661475725",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5175,7 +5175,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-4612610543915479449",
+    "id": "stm32h5xx-hal-driver-file-7380261099035808907",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5198,7 +5198,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8190272251279495764",
+    "id": "stm32h5xx-hal-driver-file-2400960742082311173",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5221,7 +5221,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-1345927032404499512",
+    "id": "stm32h5xx-hal-driver-file-1177721290975210189",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5244,7 +5244,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-795353391094221613",
+    "id": "stm32h5xx-hal-driver-file-7820461033984947516",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5267,7 +5267,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-1960460822052530387",
+    "id": "stm32h5xx-hal-driver-file-9114777890218052356",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5290,7 +5290,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-195584794485423883",
+    "id": "stm32h5xx-hal-driver-file-6335566372142047102",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5313,7 +5313,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-6115118831160771847",
+    "id": "stm32h5xx-hal-driver-file-4205072359387602482",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5336,7 +5336,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5194849655018570862",
+    "id": "stm32h5xx-hal-driver-file-3750692213637505114",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5359,7 +5359,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5977918370146879251",
+    "id": "stm32h5xx-hal-driver-file-9055881789183195137",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5382,7 +5382,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-8860549282238984699",
+    "id": "stm32h5xx-hal-driver-file-3765476704503121976",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5405,7 +5405,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-4856707982952286325",
+    "id": "stm32h5xx-hal-driver-file-914649223580248874",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5428,7 +5428,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2285221876023833100",
+    "id": "stm32h5xx-hal-driver-file-352241091331253879",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5451,7 +5451,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-7741382313554278415",
+    "id": "stm32h5xx-hal-driver-file-6227306988424929312",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5474,7 +5474,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-1086130195515262204",
+    "id": "stm32h5xx-hal-driver-file-8545915695783413336",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5497,7 +5497,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2828771785365319117",
+    "id": "stm32h5xx-hal-driver-file-6258985830773468413",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5520,7 +5520,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5687303041541483648",
+    "id": "stm32h5xx-hal-driver-file-3326095701847727127",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5543,7 +5543,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-279198793610021610",
+    "id": "stm32h5xx-hal-driver-file-1762717540294085910",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5566,7 +5566,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2796426693536244827",
+    "id": "stm32h5xx-hal-driver-file-316863065249549867",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5589,7 +5589,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-7764729996962765341",
+    "id": "stm32h5xx-hal-driver-file-5796706167290131779",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5612,7 +5612,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-44813704287942540",
+    "id": "stm32h5xx-hal-driver-file-7802828706139299036",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5635,7 +5635,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5513857498979289075",
+    "id": "stm32h5xx-hal-driver-file-2674137196428450834",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5658,7 +5658,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2759759108390235494",
+    "id": "stm32h5xx-hal-driver-file-894444401619170001",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5681,7 +5681,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-1284854613900159695",
+    "id": "stm32h5xx-hal-driver-file-8976216137390186453",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5704,7 +5704,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-2752029403545362992",
+    "id": "stm32h5xx-hal-driver-file-4061072738008760679",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5727,7 +5727,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-564416216346252657",
+    "id": "stm32h5xx-hal-driver-file-1545881846577031985",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5750,7 +5750,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-4712397569667447803",
+    "id": "stm32h5xx-hal-driver-file-4615533744408387907",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5773,7 +5773,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-4546752204188256195",
+    "id": "stm32h5xx-hal-driver-file-1064190579194118310",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5796,7 +5796,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-7626427609187099036",
+    "id": "stm32h5xx-hal-driver-file-6900259400860212335",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5819,7 +5819,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-436099487400295886",
+    "id": "stm32h5xx-hal-driver-file-2805496583803837459",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5842,7 +5842,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-1624999319377991962",
+    "id": "stm32h5xx-hal-driver-file-340305717332589157",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5865,7 +5865,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-438886819326474701",
+    "id": "stm32h5xx-hal-driver-file-7456989954447956368",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5888,7 +5888,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-4028539673953578322",
+    "id": "stm32h5xx-hal-driver-file-508501221846042349",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5911,7 +5911,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-7116134356095073270",
+    "id": "stm32h5xx-hal-driver-file-3966676062289412649",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5934,7 +5934,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-7204960270938914118",
+    "id": "stm32h5xx-hal-driver-file-7316641107847824358",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5957,7 +5957,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5108163636219398102",
+    "id": "stm32h5xx-hal-driver-file-42651333339978265",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -5980,7 +5980,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-3386999493759957361",
+    "id": "stm32h5xx-hal-driver-file-9194056584639553987",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",
@@ -6003,7 +6003,7 @@
     "is_valid": true
   },
   {
-    "id": "stm32h5xx-hal-driver-file-5740775605959803498",
+    "id": "stm32h5xx-hal-driver-file-2653319445203432314",
     "source_kind": "file",
     "repo": "stm32h5xx-hal-driver",
     "mcu_package": "stm32h5xx-hal-driver",

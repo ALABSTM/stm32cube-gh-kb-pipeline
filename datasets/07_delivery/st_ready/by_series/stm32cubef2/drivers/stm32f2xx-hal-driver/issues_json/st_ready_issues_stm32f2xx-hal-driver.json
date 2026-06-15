@@ -1,0 +1,109 @@
+{
+  "issues": [
+    {
+      "id": "stm32f2xx-hal-driver-issue-5",
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "stm32f2xx-hal-driver",
+      "root_path": "issues",
+      "mcu_series": null,
+      "issue_number": 5,
+      "issue_title": "Fix signed/unsigned comparison warning in HAL_GPIO_DeInit",
+      "state": "closed",
+      "layer": "HAL",
+      "component": null,
+      "issue_kind": "bug_report",
+      "severity": "high",
+      "board": null,
+      "labels": [
+        "enhancement",
+        "internal bug tracker",
+        "hal",
+        "gpio"
+      ],
+      "github_url": "https://github.com/STMicroelectronics/stm32f2xx-hal-driver/issues/5",
+      "is_valid": true,
+      "evidence_strength": "high",
+      "rescue_applied": false,
+      "delivery_template": "st_v2_structured_issue_card",
+      "st_ready_text": "Problem: Fix signed/unsigned comparison warning in HAL_GPIO_DeInit\nContext: repo=stm32f2xx-hal-driver, mcu_series=None, board=None, component=None, layer=HAL, issue_kind=bug_report, severity=high, evidence_strength=high, rescue_applied=False, state=closed, issue_number=5\nRoot cause: Hello @otukka, Thank you for your report, this point will be tracked internally.\nFix: https://github.\nConstraints: Validate against exact MCU/board configuration and CubeMX/CubeH7 version before applying.\nKeywords: HAL, bug_report, high, enhancement, internal bug tracker, gpio, HAL_GPIO_DeInit, GPIO_GET_INDEX\n\nTechnical details:\nhttps://github.com/STMicroelectronics/stm32f2xx-hal-driver/blob/9941bdf23186e2f33f1bc07e998f121597061d48/Src/stm32f2xx_hal_gpio.c#L320 **Issue:** HAL_GPIO_DeInit() triggers -Wsign-compare due to integer promotions in this comparison: if (tmp == (GPIO_GET_INDEX(GPIOx) << (4u * (position & 0x03u)))) GPIO_GET_INDEX() returns uint8_t but it is promoted to int. **Proposed fix:** Cast to uint32_t if (tmp == ((uint32_t)GPIO_GET_INDEX(GPIOx) << (4u * (position & 0x03u)))) The change shouldn't cause any new issues and fixes the compiler warning.\n\nKey comments:\nHello @otukka, Thank you for your report, this point will be tracked internally. BR, Mohamed Chaker. ST Internal Reference: 225139 Hello @otukka, I have a question; have you encountered this issue using any IDE please? BR, Mohamed Chaker. @MKISTM I have cmake build configuration and the warning has nothing to do with IDE. The warning comes from these compilation flags: add_compile_options(-Wall -Wextra -Wpedantic) Fixed in commit: a456efa5eb0508a88e5cc7e2a24f0861dd3622ef That fixed the warning. Thank you @MKISTM"
+    },
+    {
+      "id": "stm32f2xx-hal-driver-issue-3",
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "stm32f2xx-hal-driver",
+      "root_path": "issues",
+      "mcu_series": null,
+      "issue_number": 3,
+      "issue_title": "Signature for HAL_Delay in F2 produces a warning when compiled with C++20",
+      "state": "closed",
+      "layer": "HAL",
+      "component": null,
+      "issue_kind": "bug_report",
+      "severity": "medium",
+      "board": null,
+      "labels": [
+        "bug",
+        "internal bug tracker",
+        "hal"
+      ],
+      "github_url": "https://github.com/STMicroelectronics/stm32f2xx-hal-driver/issues/3",
+      "is_valid": true,
+      "evidence_strength": "high",
+      "rescue_applied": false,
+      "delivery_template": "st_v2_structured_issue_card",
+      "st_ready_text": "Problem: Signature for HAL_Delay in F2 produces a warning when compiled with C++20\nContext: repo=stm32f2xx-hal-driver, mcu_series=None, board=None, component=None, layer=HAL, issue_kind=bug_report, severity=medium, evidence_strength=high, rescue_applied=False, state=closed, issue_number=3\nRoot cause: ST Internal Reference: 161850 See also [STM32CubeWB#22](https://github.\nFix: The signature for HAL_Delay in the STM32f2xx_hal_driver is: __weak void HAL_Delay(__IO uint32_t Delay) This is different from the signatures for the other architectures I've checked (like H7, F7, F1 and G4) where the __IO part is removed (i.\nConstraints: Validate against exact MCU/board configuration and CubeMX/CubeH7 version before applying.\nKeywords: HAL, bug_report, medium, bug, internal bug tracker, HAL_Delay\n\nTechnical details:\nThe signature for HAL_Delay in the STM32f2xx_hal_driver is: __weak void HAL_Delay(__IO uint32_t Delay) This is different from the signatures for the other architectures I've checked (like H7, F7, F1 and G4) where the __IO part is removed (i.e. volatile). The lack of consistency in the signature is far from ideal in it self, but it becomes an issue with C++ 20 where it produces the warning: warning: 'volatile'-qualified parameter is deprecated [-Wvolatile] (See: https://godbolt.org/z/3nnranYzq for an example) I propose to make the signature the same as for the other architectures I've checked: __weak void HAL_Delay(uint32_t Delay)\n\nKey comments:\nST Internal Reference: 161850 See also [STM32CubeWB#22](https://github.com/STMicroelectronics/STM32CubeWB/issues/22). See also [STM32CubeF0#11](https://github.com/STMicroelectronics/STM32CubeF0/issues/11). Fixed in https://github.com/STMicroelectronics/stm32f2xx_hal_driver/commit/ee1fdd91b51a9bfc4eefa0f6421b47fb15f804f9"
+    },
+    {
+      "id": "stm32f2xx-hal-driver-issue-2",
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "stm32f2xx-hal-driver",
+      "root_path": "issues",
+      "mcu_series": null,
+      "issue_number": 2,
+      "issue_title": "Constant interrupts during 2nd byte of 2 or 3 byte I2C receive. ",
+      "state": "closed",
+      "layer": "HAL",
+      "component": null,
+      "issue_kind": "bug_report",
+      "severity": "high",
+      "board": null,
+      "labels": [
+        "bug",
+        "internal bug tracker",
+        "hal"
+      ],
+      "github_url": "https://github.com/STMicroelectronics/stm32f2xx-hal-driver/issues/2",
+      "is_valid": true,
+      "evidence_strength": "high",
+      "rescue_applied": false,
+      "delivery_template": "st_v2_structured_issue_card",
+      "st_ready_text": "Problem: Constant interrupts during 2nd byte of 2 or 3 byte I2C receive.\nContext: repo=stm32f2xx-hal-driver, mcu_series=None, board=None, component=None, layer=HAL, issue_kind=bug_report, severity=high, evidence_strength=high, rescue_applied=False, state=closed, issue_number=2\nRoot cause: Hi @Arild-Ver, Thank you for this detailed report and the clarifying screenshots.\nFix: STM32F205VBT6, stm32f2xx_hal_i2c.\nConstraints: Validate against exact MCU/board configuration and CubeMX/CubeH7 version before applying.\nKeywords: HAL, bug_report, high, bug, internal bug tracker, STM32F205VBT6, HAL_I2C_EV_IRQHandler, HAL_I2C_Master_Receive_IT, SDA, SCL, GPIO, SDA_SCL_INT_WITHOUT_FIXpng\n\nTechnical details:\nSTM32F205VBT6, stm32f2xx_hal_i2c.c: HAL_I2C_EV_IRQHandler and I2C_MasterReceive_RXNE When receiving byte 2 out of a 2 or 3 byte receive using HAL_I2C_Master_Receive_IT, there is a storm interrupts. The following picture of of a series of transmissions with a slave. Green is SDA, yellow is SCL, and red is a GPIO set to high when HAL_I2C_EV_IRQHandler is called, and low when it returns. The second transmission is a 2 byte receive, with the interrupt storm highlighted. This is not from a minimal example, additional interrupts with higher priority are firing. ![SDA_SCL_INT_WITHOUT_FIXpng](https://user-images.githubusercontent.com/86243109/122772919-2579a580-d2a8-11eb-86ee-d31ad631ce3f.png) When starting the transmission, ITBUFEN is set, and hi2c->XferCount = 2/3. After the first byte is received, RXNE is set, generating an interrupt. HAL_I2C_EV_IRQHandler calls I2C_MasterReceive_RXNE. When the total tranmission is 2 or 3 bytes, this enters into the final, empty, else case and returns with no change. The flags are still set, and a new interrupt is generated. This continues until a second byte has been received, where BTF is set and I2C_MasterReceive_BTF is called instead of I2C_MasterReceive_RXNE. For a 2 byte receive, this is the end and the callback is called. For a 3 byte receive ITBUFEN is cleared and 1 byte read, preventing further interrupt spamming. My suggested fix is to add __HAL_I2C_DISABLE_IT(hi2c, I2C_IT_BUF); to the final else in I2C_MasterReceive_RXNE. With that fix, only a single interrupt is generated for the second byte. ![SDA_SCL_INT_WITH_FIXpng](https://user-images.githubusercontent.com/86243109/122773621-ca947e00-d2a8-11eb-8d14-be35b65e2022.png)\n\nKey comments:\nHi @Arild-Ver, Thank you for this detailed report and the clarifying screenshots. Our development teams confirmed the point. It will be logged into our internal database and a fix will be made available soon hopefully. ST Internal Reference: 114158 Fixed in commit 8b0bf71783d6f871e30d173295728f5edfc9755a"
+    },
+    {
+      "id": "stm32f2xx-hal-driver-issue-1",
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "stm32f2xx-hal-driver",
+      "root_path": "issues",
+      "mcu_series": null,
+      "issue_number": 1,
+      "issue_title": "Error flag HAL_ADC_STATE_ERROR_INTERNAL checked but never set",
+      "state": "closed",
+      "layer": "HAL",
+      "component": "ADC",
+      "issue_kind": "bug_report",
+      "severity": "medium",
+      "board": null,
+      "labels": [
+        "bug",
+        "internal bug tracker",
+        "hal"
+      ],
+      "github_url": "https://github.com/STMicroelectronics/stm32f2xx-hal-driver/issues/1",
+      "is_valid": true,
+      "evidence_strength": "high",
+      "rescue_applied": false,
+      "delivery_template": "st_v2_structured_issue_card",
+      "st_ready_text": "Problem: Error flag HAL_ADC_STATE_ERROR_INTERNAL checked but never set\nContext: repo=stm32f2xx-hal-driver, mcu_series=None, board=None, component=ADC, layer=HAL, issue_kind=bug_report, severity=medium, evidence_strength=high, rescue_applied=False, state=closed, issue_number=1\nRoot cause: Hi @vilesovds, Thank you for reporting this issue.\nFix: **Description** At line https://github.\nConstraints: Validate against exact MCU/board configuration and CubeMX/CubeH7 version before applying.\nKeywords: HAL, ADC, bug_report, medium, bug, internal bug tracker, HAL_ADC_STATE_ERROR_INTERNAL\n\nTechnical details:\n**Description** At line https://github.com/STMicroelectronics/stm32f2xx_hal_driver/blob/master/Src/stm32f2xx_hal_adc.c#L370 (just example) flag HAL_ADC_STATE_ERROR_INTERNAL checked I looked in all the files and realized that it is not setting anywhere **Screenshots** ![image](https://user-images.githubusercontent.com/14920004/78912950-eee3b080-7a90-11ea-8505-b54edef9fc74.png)\n\nKey comments:\nHi @vilesovds, Thank you for reporting this issue. It will be forwarded to our development teams. I will let you updated as soon as they provide me with their feedback. Thank you for your patience. Hi @vilesovds, Our development teams confirmed the issue you pointed out. As a fix, they propose you to add the else case described above : else { /* Update ADC state machine to error */ SET_BIT(hadc->State, HAL_ADC_STATE_ERROR_INTERNAL); /* Set ADC error code to ADC IP internal error */ SET_BIT(hadc->ErrorCode, HAL_ADC_ERROR_INTERNAL); } in the following functions : - HAL_ADC_Start() line [805](https://github.com/STMicroelectronics/stm32f2xx_hal_driver/blob/6e95e5668f6a8900ecb073db847ff71898bde799/Src/stm32f2xx_hal_adc.c#L805) - HAL_ADC_Start_IT() line [1099](https://github.com/STMicroelectronics/stm32f2xx_hal_driver/blob/6e95e5668f6a8900ecb073db847ff71898bde799/Src/stm32f2xx_hal_adc.c#L1099) - HAL_ADC_Start_DMA() line [1419 ](https://github.com/STMicroelectronics/stm32f2xx_hal_driver/blob/6e95e5668f6a8900ecb073db847ff71898bde799/Src/stm32f2xx_hal_adc.c#L1419) - HAL_ADCEx_InjectedStart() line [205](https://github.com/STMicroelectronics/stm32f2xx_hal"
+    }
+  ]
+}

@@ -1,0 +1,409 @@
+[
+  {
+    "repo": "stm32f1xx-hal-driver",
+    "issue_number": 1,
+    "issue_title": "extern uwTick : Missing from F1 variant stm32f1xx_hal.h",
+    "issue_labels": [
+      "duplicate",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32f1xx-hal-driver/issues/1",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32f1xx-hal-driver",
+    "issue_number": 3,
+    "issue_title": "SetPinMode and SetPinPull sequence",
+    "issue_labels": [
+      "question",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32f1xx-hal-driver/issues/3",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32f1xx-hal-driver",
+    "issue_number": 4,
+    "issue_title": "A bug when use HAL_UARTEx_ReceiveToIdle_DMA",
+    "issue_labels": [
+      "question",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32f1xx-hal-driver/issues/4",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32f1xx-hal-driver",
+    "issue_number": 6,
+    "issue_title": "Bug in HAL_FLASHEx_Erase_IT - if process already ongoing then pFlash remains locked",
+    "issue_labels": [
+      "wontfix",
+      "hal",
+      "internal bug tracker"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32f1xx-hal-driver/issues/6",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32f1xx-hal-driver",
+    "issue_number": 8,
+    "issue_title": "Changing the write-only AFIO_MAPR.SWJ_CFG field in LL",
+    "issue_labels": [
+      "bug",
+      "hal",
+      "st community"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32f1xx-hal-driver/issues/8",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32f1xx-hal-driver",
+    "issue_number": 9,
+    "issue_title": "Interrupting USB Transfer",
+    "issue_labels": [
+      "bug",
+      "invalid",
+      "hal",
+      "internal bug tracker",
+      "usb"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32f1xx-hal-driver/issues/9",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32f1xx-hal-driver",
+    "issue_number": 10,
+    "issue_title": "New release to STM32F1xxHAL",
+    "issue_labels": [
+      "question",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32f1xx-hal-driver/issues/10",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32f1xx-hal-driver",
+    "issue_number": 11,
+    "issue_title": "STM32F1xx RTC BKP Registers 16bit, but HAL requests 32bits",
+    "issue_labels": [
+      "enhancement",
+      "invalid",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32f1xx-hal-driver/issues/11",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32f1xx-hal-driver",
+    "issue_number": 12,
+    "issue_title": "Missing return at end of a non void function",
+    "issue_labels": [
+      "bug",
+      "spotted before customer",
+      "hal",
+      "internal bug tracker",
+      "fmc"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32f1xx-hal-driver/issues/12",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32f1xx-hal-driver",
+    "issue_number": 13,
+    "issue_title": " extraneous parentheses",
+    "issue_labels": [
+      "bug",
+      "hal",
+      "internal bug tracker",
+      "usart"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32f1xx-hal-driver/issues/13",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32f1xx-hal-driver",
+    "issue_number": 14,
+    "issue_title": "In HAL_UART_IRQHandler function, I found a small issue. Please take a look and confirm it.",
+    "issue_labels": [
+      "bug",
+      "hal",
+      "internal bug tracker",
+      "uart"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32f1xx-hal-driver/issues/14",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32f1xx-hal-driver",
+    "issue_number": 15,
+    "issue_title": "Unexpected WRP0 Value When Disabling Write Protection on STM32F103C6",
+    "issue_labels": [
+      "bug",
+      "hal",
+      "internal bug tracker",
+      "flash"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32f1xx-hal-driver/issues/15",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "stm32f1xx-hal-driver",
+    "issue_number": 16,
+    "issue_title": "HAL_FLASHEx_OBProgram erases write protection if read protection is also selected",
+    "issue_labels": [
+      "bug",
+      "invalid",
+      "hal",
+      "flash"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32f1xx-hal-driver/issues/16",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  }
+]

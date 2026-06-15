@@ -1,0 +1,35 @@
+{
+  "owner": "STMicroelectronics",
+  "repos": [
+    "STM32CubeF0",
+    "stm32f0xx-hal-driver",
+    "cmsis_device_f0",
+    "stm32f0xx-nucleo-bsp",
+    "stm32f0discovery-bsp",
+    "32f072bdiscovery-bsp",
+    "32f0508discovery-bsp",
+    "stm32091c-eval-bsp",
+    "stm32072b-eval-bsp"
+  ],
+  "data_dir": "data",
+  "repos_dir": "GitHub_repos",
+  "auto_clone_missing_repos": true,
+  "repo_clone_urls": {
+    "stm32f0xx-hal-driver": "https://github.com/STMicroelectronics/stm32f0xx_hal_driver.git",
+    "cmsis_device_f0": "https://github.com/STMicroelectronics/cmsis_device_f0.git",
+    "stm32f0xx-nucleo-bsp": "https://github.com/STMicroelectronics/stm32f0xx-nucleo-bsp.git",
+    "stm32f0discovery-bsp": "https://github.com/STMicroelectronics/stm32f0discovery-bsp.git",
+    "32f072bdiscovery-bsp": "https://github.com/STMicroelectronics/32f072bdiscovery-bsp.git",
+    "32f0508discovery-bsp": "https://github.com/STMicroelectronics/32f0508discovery-bsp.git",
+    "stm32091c-eval-bsp": "https://github.com/STMicroelectronics/stm32091c-eval-bsp.git",
+    "stm32072b-eval-bsp": "https://github.com/STMicroelectronics/stm32072b-eval-bsp.git"
+  },
+  "linked_repo_refs": {},
+  "commit_pr_scope": "linked_or_merged",
+  "github_token_env": "GITHUB_TOKEN",
+  "rate_limits": {
+    "issues_sleep": 0.2,
+    "comments_sleep": 0.1
+  },
+  "ingest_version": "v1.0"
+}

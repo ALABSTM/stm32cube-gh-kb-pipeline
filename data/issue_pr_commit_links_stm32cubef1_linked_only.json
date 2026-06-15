@@ -1,0 +1,139 @@
+[
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 11,
+    "issue_title": "EEPROM Emulation library for STM32F1 -- Notice for a possible bug source.",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "projects"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/11",
+    "linked_pr_numbers": [
+      40
+    ],
+    "linked_commit_shas": [
+      "4b5805238d10b96914537a239da5f46ba4198b89"
+    ],
+    "linked_prs": [
+      {
+        "pr_number": 40,
+        "title": "[PROJECTS][NUCLEO-F103RB][EEPROM] Replace hard-coded page end address…",
+        "state": "closed",
+        "merged": true,
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/pull/40",
+        "changed_files_count": 2,
+        "merge_commit_sha": "156741e067c4acdf655d7f54f4d8129f6c5f97fc"
+      }
+    ],
+    "linked_commits": [
+      {
+        "sha": "4b5805238d10b96914537a239da5f46ba4198b89",
+        "message": "[PROJECTS][NUCLEO-F103RB][EEPROM] Replace hard-coded page end address by a variable in EE_VerifyPageFullyErased()\n\nFixes issue raised in #11.",
+        "committed_at": "2022-01-21T16:46:47Z",
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/commit/4b5805238d10b96914537a239da5f46ba4198b89",
+        "pr_numbers": [
+          40
+        ],
+        "stats": {
+          "additions": 34,
+          "deletions": 32,
+          "total": 66
+        }
+      }
+    ],
+    "evidence": {
+      "explicit_pr_numbers": [
+        40
+      ],
+      "explicit_commit_shas": [
+        "4b5805238d10b96914537a239da5f46ba4198b89"
+      ],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [
+        "4b5805238d10b96914537a239da5f46ba4198b89"
+      ],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 1,
+      "merged_pr_with_file_evidence": true,
+      "merged_pr_with_file_evidence_pr_numbers": [
+        40
+      ],
+      "merged_pr_changed_files_total": 2
+    },
+    "merged_pr_with_file_evidence": true,
+    "link_score": 1.0,
+    "link_confidence": "high",
+    "resolution_status": "merged_fix"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 52,
+    "issue_title": "Typo in usbd_core.c",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "mw",
+      "usb"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/52",
+    "linked_pr_numbers": [
+      53
+    ],
+    "linked_commit_shas": [
+      "a188ada2a5aab5358cb0ce1e6e5ab77d7d0d014e"
+    ],
+    "linked_prs": [
+      {
+        "pr_number": 53,
+        "title": "Typo in usbd_core.c",
+        "state": "closed",
+        "merged": true,
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/pull/53",
+        "changed_files_count": 1,
+        "merge_commit_sha": "e978fcac5637365b736a8712fda975ad4dd96c52"
+      }
+    ],
+    "linked_commits": [
+      {
+        "sha": "a188ada2a5aab5358cb0ce1e6e5ab77d7d0d014e",
+        "message": "add missing e in the",
+        "committed_at": "2022-08-01T19:01:17Z",
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/commit/a188ada2a5aab5358cb0ce1e6e5ab77d7d0d014e",
+        "pr_numbers": [
+          53
+        ],
+        "stats": {
+          "additions": 1,
+          "deletions": 1,
+          "total": 2
+        }
+      }
+    ],
+    "evidence": {
+      "explicit_pr_numbers": [
+        53
+      ],
+      "explicit_commit_shas": [
+        "a188ada2a5aab5358cb0ce1e6e5ab77d7d0d014e"
+      ],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [
+        "a188ada2a5aab5358cb0ce1e6e5ab77d7d0d014e"
+      ],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 1,
+      "merged_pr_with_file_evidence": true,
+      "merged_pr_with_file_evidence_pr_numbers": [
+        53
+      ],
+      "merged_pr_changed_files_total": 1
+    },
+    "merged_pr_with_file_evidence": true,
+    "link_score": 1.0,
+    "link_confidence": "high",
+    "resolution_status": "merged_fix"
+  }
+]

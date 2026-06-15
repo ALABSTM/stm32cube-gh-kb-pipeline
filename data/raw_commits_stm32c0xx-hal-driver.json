@@ -1,0 +1,35 @@
+[
+  {
+    "repo": "stm32c0xx-hal-driver",
+    "sha": "9fe18f6863ae23e19a2753474c08ed0c27a8a15e",
+    "author": "rum-htkw",
+    "committer": "rum-htkw",
+    "message": "Add missing AF7 for USART3\n\nAccording to datasheet AF7 is used for USART3_TX when on Port PC14",
+    "authored_at": "2026-05-06T09:11:13Z",
+    "committed_at": "2026-06-11T07:37:35Z",
+    "github_url": "https://github.com/STMicroelectronics/stm32c0xx-hal-driver/commit/9fe18f6863ae23e19a2753474c08ed0c27a8a15e",
+    "parents": [
+      "de71464321d7c68d18df4924963224e556c9f285"
+    ],
+    "stats": {
+      "additions": 3,
+      "deletions": 0,
+      "total": 3
+    },
+    "files_changed": [
+      {
+        "filename": "Inc/stm32c0xx_hal_gpio_ex.h",
+        "status": "modified",
+        "additions": 3,
+        "deletions": 0,
+        "changes": 3,
+        "previous_filename": null,
+        "patch": "@@ -195,6 +195,9 @@ extern \"C\" {\n   */\n #define GPIO_AF7_EVENTOUT      ((uint8_t)0x07)  /*!< EVENTOUT Alternate Function mapping */\n #define GPIO_AF7_I2C1          ((uint8_t)0x07)  /*!< I2C1 Alternate Function mapping */\n+#if defined(USART3)\n+#define GPIO_AF7_USART3        ((uint8_t)0x07)  /*!< USART3 Alternate Function mapping */\n+#endif /* USART3 */\n /**\n   * @brief   AF 8 selection\n   */"
+      }
+    ],
+    "linked_issue_numbers": [],
+    "pr_numbers": [
+      7
+    ]
+  }
+]

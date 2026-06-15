@@ -1,0 +1,12 @@
+{
+  "repo": "stm32f7xx-hal-driver",
+  "issues_input": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\by_series\\stm32cubef7\\drivers\\stm32f7xx-hal-driver\\issues_json\\st_ready_issues_stm32f7xx-hal-driver.json",
+  "resolver_input": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\by_series\\stm32cubef7\\drivers\\stm32f7xx-hal-driver\\resolver_cases_json\\st_ready_resolver_cases_stm32f7xx-hal-driver.json",
+  "output_file": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\by_series\\stm32cubef7\\drivers\\stm32f7xx-hal-driver\\diagnostic_cards_json\\st_ready_diagnostic_cards_stm32f7xx-hal-driver.json",
+  "rescued_issues_considered": 7,
+  "resolver_cases_considered": 2,
+  "exported_cards": 7,
+  "include_all_issues": false,
+  "format": "json-array",
+  "root_tag_path": "diagnostic_cards"
+}

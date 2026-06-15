@@ -1,0 +1,782 @@
+{
+  "resolver_cases": [
+    {
+      "id": "resolver::STM32CubeF7::issue::6",
+      "title": "QSPI locks up at STM32F746G-DISCO board",
+      "label": "QSPI locks up at STM32F746G-DISCO board",
+      "externalURL": "https://github.com/STMicroelectronics/STM32CubeF7/issues/6",
+      "rootTagPath": "resolver_cases",
+      "evidence_refs": [
+        {
+          "type": "issue",
+          "id": 6,
+          "url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/6"
+        }
+      ],
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "STM32CubeF7",
+      "issue_root_path": "issues",
+      "pr_root_path": "pull",
+      "commit_root_path": "commit",
+      "issue_number": 6,
+      "issue_title": "QSPI locks up at STM32F746G-DISCO board",
+      "issue_labels": [
+        "bug",
+        "internal bug tracker",
+        "hal"
+      ],
+      "issue_state": "closed",
+      "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/6",
+      "linked_pr_numbers": [
+        103
+      ],
+      "linked_commit_shas": [
+        "10b945377111a53670559ba5651d62d6209f4a59",
+        "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+      ],
+      "primary_pr_number": 103,
+      "primary_commit_sha": "10b945377111a53670559ba5651d62d6209f4a59",
+      "linked_pr_urls": [
+        "https://github.com/STMicroelectronics/STM32CubeF7/pull/103"
+      ],
+      "linked_commit_urls": [
+        "https://github.com/STMicroelectronics/STM32CubeF7/commit/10b945377111a53670559ba5651d62d6209f4a59",
+        "https://github.com/STMicroelectronics/STM32CubeF7/commit/da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+      ],
+      "resolution_status": "candidate_fix",
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0,
+      "link_confidence": "medium",
+      "link_score": 0.8,
+      "delivery_template": "st_v1_resolver_case",
+      "resolver_card_text": "Problem: Issue #6 - QSPI locks up at STM32F746G-DISCO board\nContext: repo=STM32CubeF7, labels=bug, internal bug tracker, hal, issue_state=closed\nResolver signal: resolution_status=candidate_fix, confidence=medium, score=0.8\nAssessment: Potential fix identified, but integration status is uncertain.\nCandidate PRs: Fix the bug that HAL_NAND_Read_Page_8b and HAL_NAND_Read_SpareArea_8b cannot read data normally.\nCommit evidence: Fix the bug that HAL_NAND_Read_Page_8b and HAL_NAND_Read_SpareArea_8b cannot read data normally. | [projects][UART] Add missing syscalls.\nPR #103 description: This PR fixed the issue https://github.com/STMicroelectronics/stm32f7xx_hal_driver/issues/6 .\r\n\r\nBy changing the `*buff = *(uint8_t *)deviceaddress;` to `*buff = *(__IO uint8_t *)deviceaddress;` , now the data could be read correctly.\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying.",
+      "linked_file_ids": [],
+      "linked_file_paths": [],
+      "files_evidence": {
+        "changed_files_total": 27,
+        "matched_docs_files_count": 0,
+        "unmatched_files_count": 27,
+        "match_rate": 0.0,
+        "files": [
+          {
+            "path": "Projects/STM32746G-Discovery/Examples/UART/UART_TwoBoards_ComDMA/SW4STM32/syscalls.c",
+            "status": "added",
+            "additions": 186,
+            "deletions": 0,
+            "changes": 186,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+            ],
+            "module": "Projects",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Projects/STM32746G-Discovery/Examples/UART/UART_TwoBoards_ComDMA/SW4STM32/syscalls.c",
+            "score": 186.0
+          },
+          {
+            "path": "Projects/STM32746G-Discovery/Examples/UART/UART_TwoBoards_ComIT/SW4STM32/syscalls.c",
+            "status": "added",
+            "additions": 186,
+            "deletions": 0,
+            "changes": 186,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+            ],
+            "module": "Projects",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Projects/STM32746G-Discovery/Examples/UART/UART_TwoBoards_ComIT/SW4STM32/syscalls.c",
+            "score": 186.0
+          },
+          {
+            "path": "Projects/STM32746G-Discovery/Examples/UART/UART_TwoBoards_ComPolling/SW4STM32/syscalls.c",
+            "status": "added",
+            "additions": 186,
+            "deletions": 0,
+            "changes": 186,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+            ],
+            "module": "Projects",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Projects/STM32746G-Discovery/Examples/UART/UART_TwoBoards_ComPolling/SW4STM32/syscalls.c",
+            "score": 186.0
+          },
+          {
+            "path": "Projects/STM32756G_EVAL/Examples/UART/UART_HyperTerminal_DMA/SW4STM32/syscalls.c",
+            "status": "added",
+            "additions": 186,
+            "deletions": 0,
+            "changes": 186,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+            ],
+            "module": "Projects",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Projects/STM32756G_EVAL/Examples/UART/UART_HyperTerminal_DMA/SW4STM32/syscalls.c",
+            "score": 186.0
+          },
+          {
+            "path": "Projects/STM32756G_EVAL/Examples/UART/UART_HyperTerminal_IT/SW4STM32/syscalls.c",
+            "status": "added",
+            "additions": 186,
+            "deletions": 0,
+            "changes": 186,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+            ],
+            "module": "Projects",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Projects/STM32756G_EVAL/Examples/UART/UART_HyperTerminal_IT/SW4STM32/syscalls.c",
+            "score": 186.0
+          },
+          {
+            "path": "Projects/STM32F722ZE-Nucleo/Examples/UART/UART_TwoBoards_ComDMA/SW4STM32/syscalls.c",
+            "status": "added",
+            "additions": 186,
+            "deletions": 0,
+            "changes": 186,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+            ],
+            "module": "Projects",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Projects/STM32F722ZE-Nucleo/Examples/UART/UART_TwoBoards_ComDMA/SW4STM32/syscalls.c",
+            "score": 186.0
+          },
+          {
+            "path": "Projects/STM32F723E-Discovery/Examples/UART/UART_TwoBoards_ComDMA/SW4STM32/syscalls.c",
+            "status": "added",
+            "additions": 186,
+            "deletions": 0,
+            "changes": 186,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+            ],
+            "module": "Projects",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Projects/STM32F723E-Discovery/Examples/UART/UART_TwoBoards_ComDMA/SW4STM32/syscalls.c",
+            "score": 186.0
+          },
+          {
+            "path": "Projects/STM32F723E-Discovery/Examples/UART/UART_TwoBoards_ComIT/SW4STM32/syscalls.c",
+            "status": "added",
+            "additions": 186,
+            "deletions": 0,
+            "changes": 186,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+            ],
+            "module": "Projects",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Projects/STM32F723E-Discovery/Examples/UART/UART_TwoBoards_ComIT/SW4STM32/syscalls.c",
+            "score": 186.0
+          },
+          {
+            "path": "Projects/STM32F723E-Discovery/Examples/UART/UART_TwoBoards_ComPolling/SW4STM32/syscalls.c",
+            "status": "added",
+            "additions": 186,
+            "deletions": 0,
+            "changes": 186,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+            ],
+            "module": "Projects",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Projects/STM32F723E-Discovery/Examples/UART/UART_TwoBoards_ComPolling/SW4STM32/syscalls.c",
+            "score": 186.0
+          },
+          {
+            "path": "Projects/STM32F746ZG-Nucleo/Examples/UART/UART_Printf/SW4STM32/syscalls.c",
+            "status": "added",
+            "additions": 186,
+            "deletions": 0,
+            "changes": 186,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+            ],
+            "module": "Projects",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Projects/STM32F746ZG-Nucleo/Examples/UART/UART_Printf/SW4STM32/syscalls.c",
+            "score": 186.0
+          },
+          {
+            "path": "Projects/STM32F769I-Discovery/Examples/UART/UART_TwoBoards_ComDMA/SW4STM32/syscalls.c",
+            "status": "added",
+            "additions": 186,
+            "deletions": 0,
+            "changes": 186,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+            ],
+            "module": "Projects",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Projects/STM32F769I-Discovery/Examples/UART/UART_TwoBoards_ComDMA/SW4STM32/syscalls.c",
+            "score": 186.0
+          },
+          {
+            "path": "Projects/STM32F769I_EVAL/Examples/UART/UART_HyperTerminal_DMA/SW4STM32/syscalls.c",
+            "status": "added",
+            "additions": 186,
+            "deletions": 0,
+            "changes": 186,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+            ],
+            "module": "Projects",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Projects/STM32F769I_EVAL/Examples/UART/UART_HyperTerminal_DMA/SW4STM32/syscalls.c",
+            "score": 186.0
+          },
+          {
+            "path": "Projects/STM32F769I_EVAL/Examples/UART/UART_HyperTerminal_IT/SW4STM32/syscalls.c",
+            "status": "added",
+            "additions": 186,
+            "deletions": 0,
+            "changes": 186,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+            ],
+            "module": "Projects",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Projects/STM32F769I_EVAL/Examples/UART/UART_HyperTerminal_IT/SW4STM32/syscalls.c",
+            "score": 186.0
+          },
+          {
+            "path": "Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_nand.c",
+            "status": "modified",
+            "additions": 2,
+            "deletions": 2,
+            "changes": 4,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "10b945377111a53670559ba5651d62d6209f4a59"
+            ],
+            "module": "HAL_Driver",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_nand.c",
+            "score": 4.0
+          },
+          {
+            "path": "Projects/STM32746G-Discovery/Examples/UART/UART_TwoBoards_ComDMA/SW4STM32/STM32746G_DISCOVERY/.project",
+            "status": "modified",
+            "additions": 4,
+            "deletions": 0,
+            "changes": 4,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+            ],
+            "module": "Projects",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Projects/STM32746G-Discovery/Examples/UART/UART_TwoBoards_ComDMA/SW4STM32/STM32746G_DISCOVERY/.project",
+            "score": 4.0
+          },
+          {
+            "path": "Projects/STM32746G-Discovery/Examples/UART/UART_TwoBoards_ComIT/SW4STM32/STM32746G_DISCOVERY/.project",
+            "status": "modified",
+            "additions": 4,
+            "deletions": 0,
+            "changes": 4,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+            ],
+            "module": "Projects",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Projects/STM32746G-Discovery/Examples/UART/UART_TwoBoards_ComIT/SW4STM32/STM32746G_DISCOVERY/.project",
+            "score": 4.0
+          },
+          {
+            "path": "Projects/STM32746G-Discovery/Examples/UART/UART_TwoBoards_ComPolling/SW4STM32/STM32746G_DISCOVERY/.project",
+            "status": "modified",
+            "additions": 4,
+            "deletions": 0,
+            "changes": 4,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+            ],
+            "module": "Projects",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Projects/STM32746G-Discovery/Examples/UART/UART_TwoBoards_ComPolling/SW4STM32/STM32746G_DISCOVERY/.project",
+            "score": 4.0
+          },
+          {
+            "path": "Projects/STM32756G_EVAL/Examples/UART/UART_HyperTerminal_DMA/SW4STM32/STM327x6G_EVAL/.project",
+            "status": "modified",
+            "additions": 4,
+            "deletions": 0,
+            "changes": 4,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+            ],
+            "module": "Projects",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Projects/STM32756G_EVAL/Examples/UART/UART_HyperTerminal_DMA/SW4STM32/STM327x6G_EVAL/.project",
+            "score": 4.0
+          },
+          {
+            "path": "Projects/STM32756G_EVAL/Examples/UART/UART_HyperTerminal_IT/SW4STM32/STM327x6G_EVAL/.project",
+            "status": "modified",
+            "additions": 4,
+            "deletions": 0,
+            "changes": 4,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+            ],
+            "module": "Projects",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Projects/STM32756G_EVAL/Examples/UART/UART_HyperTerminal_IT/SW4STM32/STM327x6G_EVAL/.project",
+            "score": 4.0
+          },
+          {
+            "path": "Projects/STM32F722ZE-Nucleo/Examples/UART/UART_TwoBoards_ComDMA/SW4STM32/STM32F722ZE_Nucleo/.project",
+            "status": "modified",
+            "additions": 4,
+            "deletions": 0,
+            "changes": 4,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+            ],
+            "module": "Projects",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Projects/STM32F722ZE-Nucleo/Examples/UART/UART_TwoBoards_ComDMA/SW4STM32/STM32F722ZE_Nucleo/.project",
+            "score": 4.0
+          },
+          {
+            "path": "Projects/STM32F723E-Discovery/Examples/UART/UART_TwoBoards_ComDMA/SW4STM32/STM32F723E_DISCOVERY/.project",
+            "status": "modified",
+            "additions": 4,
+            "deletions": 0,
+            "changes": 4,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+            ],
+            "module": "Projects",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Projects/STM32F723E-Discovery/Examples/UART/UART_TwoBoards_ComDMA/SW4STM32/STM32F723E_DISCOVERY/.project",
+            "score": 4.0
+          },
+          {
+            "path": "Projects/STM32F723E-Discovery/Examples/UART/UART_TwoBoards_ComIT/SW4STM32/STM32F723E_DISCOVERY/.project",
+            "status": "modified",
+            "additions": 4,
+            "deletions": 0,
+            "changes": 4,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+            ],
+            "module": "Projects",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Projects/STM32F723E-Discovery/Examples/UART/UART_TwoBoards_ComIT/SW4STM32/STM32F723E_DISCOVERY/.project",
+            "score": 4.0
+          },
+          {
+            "path": "Projects/STM32F723E-Discovery/Examples/UART/UART_TwoBoards_ComPolling/SW4STM32/STM32F723E_DISCOVERY/.project",
+            "status": "modified",
+            "additions": 4,
+            "deletions": 0,
+            "changes": 4,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+            ],
+            "module": "Projects",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Projects/STM32F723E-Discovery/Examples/UART/UART_TwoBoards_ComPolling/SW4STM32/STM32F723E_DISCOVERY/.project",
+            "score": 4.0
+          },
+          {
+            "path": "Projects/STM32F746ZG-Nucleo/Examples/UART/UART_Printf/SW4STM32/STM32746ZG_Nucleo/.project",
+            "status": "modified",
+            "additions": 4,
+            "deletions": 0,
+            "changes": 4,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+            ],
+            "module": "Projects",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Projects/STM32F746ZG-Nucleo/Examples/UART/UART_Printf/SW4STM32/STM32746ZG_Nucleo/.project",
+            "score": 4.0
+          },
+          {
+            "path": "Projects/STM32F769I-Discovery/Examples/UART/UART_TwoBoards_ComDMA/SW4STM32/STM32F769I_Discovery/.project",
+            "status": "modified",
+            "additions": 4,
+            "deletions": 0,
+            "changes": 4,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+            ],
+            "module": "Projects",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Projects/STM32F769I-Discovery/Examples/UART/UART_TwoBoards_ComDMA/SW4STM32/STM32F769I_Discovery/.project",
+            "score": 4.0
+          },
+          {
+            "path": "Projects/STM32F769I_EVAL/Examples/UART/UART_HyperTerminal_DMA/SW4STM32/STM32F769I_EVAL/.project",
+            "status": "modified",
+            "additions": 4,
+            "deletions": 0,
+            "changes": 4,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+            ],
+            "module": "Projects",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Projects/STM32F769I_EVAL/Examples/UART/UART_HyperTerminal_DMA/SW4STM32/STM32F769I_EVAL/.project",
+            "score": 4.0
+          },
+          {
+            "path": "Projects/STM32F769I_EVAL/Examples/UART/UART_HyperTerminal_IT/SW4STM32/STM32F769I_EVAL/.project",
+            "status": "modified",
+            "additions": 4,
+            "deletions": 0,
+            "changes": 4,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+            ],
+            "module": "Projects",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Projects/STM32F769I_EVAL/Examples/UART/UART_HyperTerminal_IT/SW4STM32/STM32F769I_EVAL/.project",
+            "score": 4.0
+          }
+        ]
+      },
+      "impacted_modules": [
+        "HAL_Driver",
+        "Projects"
+      ],
+      "impacted_components": [],
+      "impacted_boards": [],
+      "impacted_file_types": [],
+      "primary_changed_file": {
+        "path": "Projects/STM32746G-Discovery/Examples/UART/UART_TwoBoards_ComDMA/SW4STM32/syscalls.c",
+        "status": "added",
+        "additions": 186,
+        "deletions": 0,
+        "changes": 186,
+        "touched_by_commits": 1,
+        "commit_shas": [
+          "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+        ],
+        "module": "Projects",
+        "file_doc_id": null,
+        "file_type": null,
+        "component": null,
+        "board": null,
+        "example_name": null,
+        "source_match": "commit_only",
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Projects/STM32746G-Discovery/Examples/UART/UART_TwoBoards_ComDMA/SW4STM32/syscalls.c",
+        "score": 186.0
+      }
+    },
+    {
+      "id": "resolver::STM32CubeF7::issue::30",
+      "title": "USBD_LL_GetRxDataSize/HAL_PCD_EP_GetRxCount return wrong value",
+      "label": "USBD_LL_GetRxDataSize/HAL_PCD_EP_GetRxCount return wrong value",
+      "externalURL": "https://github.com/STMicroelectronics/STM32CubeF7/issues/30",
+      "rootTagPath": "resolver_cases",
+      "evidence_refs": [
+        {
+          "type": "issue",
+          "id": 30,
+          "url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/30"
+        }
+      ],
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "STM32CubeF7",
+      "issue_root_path": "issues",
+      "pr_root_path": "pull",
+      "commit_root_path": "commit",
+      "issue_number": 30,
+      "issue_title": "USBD_LL_GetRxDataSize/HAL_PCD_EP_GetRxCount return wrong value",
+      "issue_labels": [
+        "bug",
+        "internal bug tracker",
+        "hal",
+        "usb"
+      ],
+      "issue_state": "closed",
+      "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/30",
+      "linked_pr_numbers": [
+        61
+      ],
+      "linked_commit_shas": [
+        "7e2746f45ac5d57ae7cee1e15d76369da1e70485"
+      ],
+      "primary_pr_number": 61,
+      "primary_commit_sha": "7e2746f45ac5d57ae7cee1e15d76369da1e70485",
+      "linked_pr_urls": [
+        "https://github.com/STMicroelectronics/STM32CubeF7/pull/61"
+      ],
+      "linked_commit_urls": [
+        "https://github.com/STMicroelectronics/STM32CubeF7/commit/7e2746f45ac5d57ae7cee1e15d76369da1e70485"
+      ],
+      "resolution_status": "merged_fix",
+      "merged_pr_with_file_evidence": true,
+      "merged_pr_with_file_evidence_pr_numbers": [
+        61
+      ],
+      "merged_pr_changed_files_total": 3,
+      "link_confidence": "high",
+      "link_score": 1.0,
+      "delivery_template": "st_v1_resolver_case",
+      "resolver_card_text": "Problem: Issue #30 - USBD_LL_GetRxDataSize/HAL_PCD_EP_GetRxCount return wrong value\nContext: repo=STM32CubeF7, labels=bug, internal bug tracker, hal, usb, issue_state=closed\nResolver signal: resolution_status=merged_fix, confidence=high, score=1.0\nAssessment: Fix likely integrated in mainline; prefer this as primary recommendation.\nCandidate PRs: [HAL][LL][USB] Correct the calculation of received data length when DMA is enabled\nCommit evidence: [HAL][LL][USB] Fix the count of the received data length when DMA is enabled\nFile evidence: merged PR modifies files even when commit log is merge-heavy\nPR #61 description: This pull-request fixes the issue mentioned in #30.\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying.",
+      "linked_file_ids": [],
+      "linked_file_paths": [],
+      "files_evidence": {
+        "changed_files_total": 3,
+        "matched_docs_files_count": 0,
+        "unmatched_files_count": 3,
+        "match_rate": 0.0,
+        "files": [
+          {
+            "path": "Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_pcd.c",
+            "status": "modified",
+            "additions": 15,
+            "deletions": 8,
+            "changes": 23,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "7e2746f45ac5d57ae7cee1e15d76369da1e70485"
+            ],
+            "module": "HAL_Driver",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_pcd.c",
+            "score": 23.0
+          },
+          {
+            "path": "Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_ll_usb.c",
+            "status": "modified",
+            "additions": 7,
+            "deletions": 2,
+            "changes": 9,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "7e2746f45ac5d57ae7cee1e15d76369da1e70485"
+            ],
+            "module": "HAL_Driver",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_ll_usb.c",
+            "score": 9.0
+          },
+          {
+            "path": "Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usb.h",
+            "status": "modified",
+            "additions": 2,
+            "deletions": 0,
+            "changes": 2,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "7e2746f45ac5d57ae7cee1e15d76369da1e70485"
+            ],
+            "module": "HAL_Driver",
+            "file_doc_id": null,
+            "file_type": null,
+            "component": null,
+            "board": null,
+            "example_name": null,
+            "source_match": "commit_only",
+            "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usb.h",
+            "score": 2.0
+          }
+        ]
+      },
+      "impacted_modules": [
+        "HAL_Driver"
+      ],
+      "impacted_components": [],
+      "impacted_boards": [],
+      "impacted_file_types": [],
+      "primary_changed_file": {
+        "path": "Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_pcd.c",
+        "status": "modified",
+        "additions": 15,
+        "deletions": 8,
+        "changes": 23,
+        "touched_by_commits": 1,
+        "commit_shas": [
+          "7e2746f45ac5d57ae7cee1e15d76369da1e70485"
+        ],
+        "module": "HAL_Driver",
+        "file_doc_id": null,
+        "file_type": null,
+        "component": null,
+        "board": null,
+        "example_name": null,
+        "source_match": "commit_only",
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/blob/master/Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_pcd.c",
+        "score": 23.0
+      }
+    }
+  ]
+}

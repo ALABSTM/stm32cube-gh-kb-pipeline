@@ -1,0 +1,3339 @@
+[
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 1,
+    "issue_title": "Any ETA on when this repo will receive the code?",
+    "issue_labels": [
+      "question"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/1",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 2,
+    "issue_title": "inconsistent board names",
+    "issue_labels": [
+      "invalid",
+      "projects"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/2",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 3,
+    "issue_title": "EXTI-HAL (i.e. not GPIO-HAL using EXTI) ",
+    "issue_labels": [
+      "bug",
+      "spotted before customer",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/3",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 4,
+    "issue_title": "Inconsistent GPIO macro names",
+    "issue_labels": [
+      "enhancement",
+      "internal bug tracker",
+      "cmsis"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/4",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 5,
+    "issue_title": "Floating-point ABI for Audio Addons libraries",
+    "issue_labels": [
+      "enhancement",
+      "spotted before customer",
+      "mw",
+      "audio"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/5",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 6,
+    "issue_title": "QSPI locks up at STM32F746G-DISCO board",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/6",
+    "linked_pr_numbers": [
+      103
+    ],
+    "linked_commit_shas": [
+      "10b945377111a53670559ba5651d62d6209f4a59",
+      "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+    ],
+    "linked_prs": [
+      {
+        "pr_number": 103,
+        "title": "Fix the bug that HAL_NAND_Read_Page_8b and HAL_NAND_Read_SpareArea_8b cannot read data normally.",
+        "state": "closed",
+        "merged": false,
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/pull/103",
+        "changed_files_count": 27,
+        "merge_commit_sha": "56c9dec3b8756e0042c632903c19c4785e854a51"
+      }
+    ],
+    "linked_commits": [
+      {
+        "sha": "10b945377111a53670559ba5651d62d6209f4a59",
+        "message": "Fix the bug that HAL_NAND_Read_Page_8b and HAL_NAND_Read_SpareArea_8b cannot read data normally.",
+        "committed_at": "2023-09-07T14:40:46Z",
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/commit/10b945377111a53670559ba5651d62d6209f4a59",
+        "pr_numbers": [
+          103
+        ],
+        "stats": {
+          "additions": 2,
+          "deletions": 2,
+          "total": 4
+        }
+      },
+      {
+        "sha": "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa",
+        "message": "[projects][UART] Add missing syscalls.c files part of SW4STM32 projects",
+        "committed_at": "2023-08-23T12:55:16Z",
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/commit/da50945e2e414dff6a646f1a3e7100ccb7e7a6aa",
+        "pr_numbers": [
+          103
+        ],
+        "stats": {
+          "additions": 2470,
+          "deletions": 0,
+          "total": 2470
+        }
+      }
+    ],
+    "evidence": {
+      "explicit_pr_numbers": [
+        103
+      ],
+      "explicit_commit_shas": [
+        "10b945377111a53670559ba5651d62d6209f4a59",
+        "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+      ],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [
+        "10b945377111a53670559ba5651d62d6209f4a59",
+        "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+      ],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.8,
+    "link_confidence": "medium",
+    "resolution_status": "candidate_fix"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 7,
+    "issue_title": "USB_DriveVbus() doxygen documentation is incorrect",
+    "issue_labels": [
+      "enhancement",
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/7",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 8,
+    "issue_title": "USB Host does not work with DCache and DMA enabled",
+    "issue_labels": [
+      "bug",
+      "invalid",
+      "internal bug tracker",
+      "st community",
+      "projects"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/8",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 9,
+    "issue_title": "Order of disabling in `HAL_TIM_IC_Stop_DMA` function",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "st community",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/9",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 13,
+    "issue_title": "stm32f7xx_hal_rcc.c - Assert Failed",
+    "issue_labels": [
+      "wontfix",
+      "st community",
+      "cube mx"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/13",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 14,
+    "issue_title": "Build and run an example in atollic TrueSTUDIO (or any other IDE)",
+    "issue_labels": [
+      "help wanted",
+      "good first issue",
+      "question",
+      "projects"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/14",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 15,
+    "issue_title": "Excess garbage.",
+    "issue_labels": [
+      "question",
+      "cmsis"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/15",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 16,
+    "issue_title": "HAL_EXTI_SetConfigLine() generates the continuous interrupt. ",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "st community",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/16",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 17,
+    "issue_title": "Сode optimization problem in stm32f7xx_hal_spi.c",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/17",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 18,
+    "issue_title": "QSPI_ReadWrite demo failed to verify written data",
+    "issue_labels": [
+      "invalid",
+      "projects"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/18",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 19,
+    "issue_title": "Fatfs - SD card - gives Disk-Not-Ready error during subsequent f_mount()",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/19",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 20,
+    "issue_title": "SDMMC_DATATIMEOUT is used in multiple ways in the code and thus can't be adjusted.",
+    "issue_labels": [
+      "spotted before customer",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/20",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 21,
+    "issue_title": "SDMMC FIFO not being emptied in SD_FindSCR",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/21",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 22,
+    "issue_title": "Compilation error in STM32CubeF7\\Projects\\STM32F7508-DISCO\\Demonstrations\\STemWin",
+    "issue_labels": [
+      "question",
+      "mw",
+      "graphics"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/22",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 23,
+    "issue_title": "uwTickPrio not set to TickPriority in timer based HAL_InitTick",
+    "issue_labels": [
+      "bug",
+      "spotted before customer",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/23",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 24,
+    "issue_title": "Questionable logic when setting the number of flash wait states",
+    "issue_labels": [
+      "enhancement",
+      "wontfix",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/24",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 25,
+    "issue_title": "Remove deprecated `register` keyword",
+    "issue_labels": [
+      "bug",
+      "spotted before customer",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/25",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 26,
+    "issue_title": "STM32F769I-Discovery - BSP example does not work - DFSDM/SAI problem",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "projects"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/26",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 27,
+    "issue_title": "__HAL_RCC_USB_OTG_FS_CLK_ENABLE: declaration of 'tmpreg' shadows a previous local",
+    "issue_labels": [],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/27",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 28,
+    "issue_title": "Memory corruption when FPU is used",
+    "issue_labels": [
+      "question",
+      "boot"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/28",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 29,
+    "issue_title": "White noise when we are calling BSP_AUDIO_IN_OUT_Init(uint16_t InputDevice, uint16_t OutputDevice, uint32_t AudioFreq, uint32_t BitRes, uint32_t ChnlNbr)",
+    "issue_labels": [
+      "bug",
+      "duplicate",
+      "internal bug tracker",
+      "hal",
+      "projects"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/29",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 30,
+    "issue_title": "USBD_LL_GetRxDataSize/HAL_PCD_EP_GetRxCount return wrong value",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "usb"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/30",
+    "linked_pr_numbers": [
+      61
+    ],
+    "linked_commit_shas": [
+      "7e2746f45ac5d57ae7cee1e15d76369da1e70485"
+    ],
+    "linked_prs": [
+      {
+        "pr_number": 61,
+        "title": "[HAL][LL][USB] Correct the calculation of received data length when DMA is enabled",
+        "state": "closed",
+        "merged": true,
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/pull/61",
+        "changed_files_count": 3,
+        "merge_commit_sha": "e96f98542c6782d97bdd0c50833ee4b70130f3a7"
+      }
+    ],
+    "linked_commits": [
+      {
+        "sha": "7e2746f45ac5d57ae7cee1e15d76369da1e70485",
+        "message": "[HAL][LL][USB] Fix the count of the received data length when DMA is enabled",
+        "committed_at": "2022-01-14T13:31:54Z",
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/commit/7e2746f45ac5d57ae7cee1e15d76369da1e70485",
+        "pr_numbers": [
+          61
+        ],
+        "stats": {
+          "additions": 24,
+          "deletions": 10,
+          "total": 34
+        }
+      }
+    ],
+    "evidence": {
+      "explicit_pr_numbers": [
+        61
+      ],
+      "explicit_commit_shas": [
+        "7e2746f45ac5d57ae7cee1e15d76369da1e70485"
+      ],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [
+        "7e2746f45ac5d57ae7cee1e15d76369da1e70485"
+      ],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 1,
+      "merged_pr_with_file_evidence": true,
+      "merged_pr_with_file_evidence_pr_numbers": [
+        61
+      ],
+      "merged_pr_changed_files_total": 3
+    },
+    "merged_pr_with_file_evidence": true,
+    "link_score": 1.0,
+    "link_confidence": "high",
+    "resolution_status": "merged_fix"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 31,
+    "issue_title": "Stack corruption in MSC_File_Operations()",
+    "issue_labels": [
+      "bug",
+      "good first issue",
+      "internal bug tracker",
+      "projects",
+      "usb"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/31",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 32,
+    "issue_title": "Add HAL_TIM_GetFrequency",
+    "issue_labels": [
+      "invalid",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/32",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 33,
+    "issue_title": "Can't configure PLL on STM32F722 with CubeF7 v1.16",
+    "issue_labels": [
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/33",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 34,
+    "issue_title": "Used NULL value for uint32_t osMessageQueuePut() parameter in STM32_USB_Host_Library",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "mw",
+      "rtos",
+      "usb"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/34",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 35,
+    "issue_title": "Wrong prescaler value in HAL_InitTick() when Timer clocks less than 1MHz",
+    "issue_labels": [
+      "cube mx"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/35",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 36,
+    "issue_title": "Update FatFs (ff.h) to latest version",
+    "issue_labels": [
+      "question",
+      "mw",
+      "fs"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/36",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 37,
+    "issue_title": "Error in usbd_conf_template.c line 178. 'ep_addr' undeclared",
+    "issue_labels": [
+      "bug",
+      "wontfix",
+      "internal bug tracker",
+      "mw",
+      "usb"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/37",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 38,
+    "issue_title": "STM32F767ZI-Nucleo/LwIP_HTTP_Server_Netconn_RTOS project not compiling when ported on STM32CubeIDE",
+    "issue_labels": [
+      "bug",
+      "spotted before customer",
+      "mw",
+      "projects"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/38",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 39,
+    "issue_title": "Missing support for NUCLEO-F756ZG ",
+    "issue_labels": [
+      "question"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/39",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 40,
+    "issue_title": "lwIP Static and FreeRTOS does not work. ",
+    "issue_labels": [
+      "cube ide"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/40",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 42,
+    "issue_title": "assertion \"REENT malloc succeeded\" failed",
+    "issue_labels": [
+      "mw",
+      "eth",
+      "needs clarification"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/42",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 44,
+    "issue_title": "Different defines at Ethernet peripheral configuration",
+    "issue_labels": [
+      "cube mx",
+      "eth"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/44",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 45,
+    "issue_title": "HAL MMC card initialization always fails",
+    "issue_labels": [
+      "bug",
+      "spotted before customer",
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/45",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 46,
+    "issue_title": "void MX_DriverVbusFS(uint8_t state) - wrong state evaluation?",
+    "issue_labels": [
+      "spotted before customer",
+      "internal bug tracker",
+      "cube mx",
+      "usb"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/46",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 47,
+    "issue_title": "Combination of USB_HOST, FATFS, and FreeRTOS crashes for too small stack size",
+    "issue_labels": [
+      "question",
+      "mw",
+      "rtos",
+      "usb",
+      "fatfs"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/47",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 48,
+    "issue_title": "CubeMX: USB_OTG_FS / USB_HOST does not initialize PA10",
+    "issue_labels": [
+      "duplicate",
+      "question",
+      "cube mx",
+      "mw",
+      "usb"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/48",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 49,
+    "issue_title": "stm32 lwip sample projects have problem at cable unplug mcu start",
+    "issue_labels": [
+      "invalid",
+      "internal bug tracker",
+      "projects",
+      "eth"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/49",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 50,
+    "issue_title": "stm32f7xx_hal_rcc.c has a broken PLLN check",
+    "issue_labels": [
+      "duplicate",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/50",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 51,
+    "issue_title": "stm32f7xx_hal_uart.c:1557:48: error: 'HAL_DMA_ERROR_TIMEOUT' undeclared",
+    "issue_labels": [
+      "question"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/51",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 52,
+    "issue_title": "QSPI times out on 32F769IDISCOVERY",
+    "issue_labels": [
+      "duplicate",
+      "help wanted",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/52",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 53,
+    "issue_title": "SDMMC_DATATIMEOUT used incrorrectly",
+    "issue_labels": [
+      "duplicate",
+      "invalid",
+      "question",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/53",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 54,
+    "issue_title": "Buffer overrun in stm32f7xx_hal_sd.c",
+    "issue_labels": [
+      "duplicate",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/54",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 56,
+    "issue_title": "FLASH sector description is wrong for NUCLEO F722ZE",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "projects"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/56",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 57,
+    "issue_title": "__LL_TIM_CALC_PSC rounding",
+    "issue_labels": [
+      "bug",
+      "good first issue",
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/57",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 58,
+    "issue_title": "Typo in ART_ACCLERATOR_ENABLE ",
+    "issue_labels": [
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/58",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 59,
+    "issue_title": "Startup files set DMA2_Stream4_IRQHandler twice",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "cmsis"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/59",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 60,
+    "issue_title": "Issue to call HAL_QSPI_Command_IT on RTOS, the interrupt continuous on QUADSPI_IRQHandler",
+    "issue_labels": [
+      "st community"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/60",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 62,
+    "issue_title": "PWR_STOP_RTC example doesn't work",
+    "issue_labels": [
+      "bug",
+      "invalid",
+      "internal bug tracker",
+      "projects"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/62",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 63,
+    "issue_title": "ADC2, ADC3 no continuous conversion mode possible in STM32CubeMX when ADC1 enabled",
+    "issue_labels": [
+      "cube mx"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/63",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 64,
+    "issue_title": "Nucleo F746ZG not working when generating code with all peripherals initialized",
+    "issue_labels": [
+      "invalid",
+      "cube mx"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/64",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 65,
+    "issue_title": "Nucleo F746ZG UART with DMA not working",
+    "issue_labels": [
+      "needs clarification"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/65",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 66,
+    "issue_title": "How to generate fontX.c file?",
+    "issue_labels": [
+      "good first issue",
+      "question",
+      "utils"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/66",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 67,
+    "issue_title": "Incorrect code generation for PLL of F767",
+    "issue_labels": [
+      "st community",
+      "cube mx"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/67",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 68,
+    "issue_title": "Does the built-in DMA of USB-HOST support accessing non-32bit aligned addresses?",
+    "issue_labels": [],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/68",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 69,
+    "issue_title": "HTTP IAP bug",
+    "issue_labels": [
+      "bug",
+      "wontfix",
+      "internal bug tracker",
+      "projects",
+      "eth",
+      "lwip"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/69",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 73,
+    "issue_title": "Middleware/ST/TouchGFX, etc. links in  readme.txt don't work ",
+    "issue_labels": [
+      "bug",
+      "invalid"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/73",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 74,
+    "issue_title": "USB FS Host MSC STM32F7 cube 1.17.0",
+    "issue_labels": [
+      "bug",
+      "wontfix",
+      "mw",
+      "usb"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/74",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 75,
+    "issue_title": "GUI_Delay STemWin doesn't work as expected for STM32769I-DISCO",
+    "issue_labels": [
+      "bug",
+      "wontfix",
+      "spotted before customer",
+      "internal bug tracker",
+      "st community",
+      "projects"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/75",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 76,
+    "issue_title": "MX_DMA_Init() should be called BEFORE other periphery Init",
+    "issue_labels": [
+      "invalid",
+      "cube mx"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/76",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 77,
+    "issue_title": "max bytes limitation on function HAL_I2C_Mem_Read_DMA() using STM32F746IG and FW1.17.0",
+    "issue_labels": [
+      "bug",
+      "good first issue",
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/77",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 78,
+    "issue_title": "SDMMC_DATATIMEOUT use in two different clock situations",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/78",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 79,
+    "issue_title": "The function HAL_I2C_Mem_Read_IT and HAL_I2C_Mem_Write_IT are blocking until the first ACK",
+    "issue_labels": [
+      "invalid",
+      "hal",
+      "needs clarification"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/79",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 80,
+    "issue_title": "STM32F769 - STOP Mode + LCD / DSI - Screen not working on wake up",
+    "issue_labels": [
+      "hal",
+      "needs clarification"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/80",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 81,
+    "issue_title": "STM32F746G-DISCO : USB host HID standalone demo application doesn't work anymore in 1.17",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "mw",
+      "usb"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/81",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 82,
+    "issue_title": "QSPI still times out on 32F769IDISCOVERY",
+    "issue_labels": [
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/82",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 83,
+    "issue_title": "GPIO_AF9_TIM13 is unused",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/83",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 85,
+    "issue_title": "Settings of the main internal Regulator output voltage is not working",
+    "issue_labels": [
+      "internal bug tracker",
+      "cube mx",
+      "projects"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/85",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 86,
+    "issue_title": "can't download folder",
+    "issue_labels": [
+      "question"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/86",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 87,
+    "issue_title": "HAL_DMA_Init set invalid state when DMA_CheckFifoParam not return HAL_OK",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/87",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 88,
+    "issue_title": "Some text can be more comfortable.",
+    "issue_labels": [
+      "enhancement",
+      "internal bug tracker",
+      "projects"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/88",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 89,
+    "issue_title": "F756: Conitnious mode does not work on ADC with particular settings",
+    "issue_labels": [
+      "question"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/89",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 90,
+    "issue_title": "Inconsistent information about overrun detection in ADC",
+    "issue_labels": [
+      "question",
+      "documentation"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/90",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 91,
+    "issue_title": "Nucleo-F756zg: Debug support for StopMode does not work",
+    "issue_labels": [
+      "invalid"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/91",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 92,
+    "issue_title": "HAL_ETH_ReadData() uses ethernet framelength as buffer length",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/92",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 93,
+    "issue_title": "ETH_UpdateDescriptor() uses ETH_RX_BUF_SIZE define instead of user supplied value",
+    "issue_labels": [
+      "enhancement",
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/93",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 95,
+    "issue_title": "SD_read - SCB_InvalidateDCache_by_Addr issue",
+    "issue_labels": [
+      "bug",
+      "invalid",
+      "internal bug tracker",
+      "mw",
+      "fs",
+      "fatfs"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/95",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 96,
+    "issue_title": "Spontaneous setting of RDP 1 after reset when saving option bytes",
+    "issue_labels": [
+      "invalid",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/96",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 97,
+    "issue_title": "Wrong description about HAL_IWDG_DEFAULT_TIMEOUT",
+    "issue_labels": [
+      "bug",
+      "invalid",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/97",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 98,
+    "issue_title": "Wrong information about boot address through option bytes",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "documentation"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/98",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 99,
+    "issue_title": "Files syscalls.c missing in SW4STM32 examples for NUCLEO-746ZG, Nucleo-F722ZE...",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "projects"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/99",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 100,
+    "issue_title": "STM32Cube7 v1.17.1 (Patch)",
+    "issue_labels": [
+      "cube ide"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/100",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 101,
+    "issue_title": "Basically all of the stm32f7xx_hal_eth.h macros are just copy-pasta'd from H7 and using H7 registers",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "eth"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/101",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 104,
+    "issue_title": "FreeRTOS: No Memory Pool API Support",
+    "issue_labels": [
+      "question",
+      "mw",
+      "rtos"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/104",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 106,
+    "issue_title": "Timers: HAL_TIM_PWM_Stop() disable timer even channel 5 or channel 6 are enabled",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "tim"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/106",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 108,
+    "issue_title": "Can't Use IS_TIM_CCX_INSTANCE in CMSIS periph file using LL drivers by default",
+    "issue_labels": [
+      "question",
+      "wontfix",
+      "internal bug tracker",
+      "cmsis"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/108",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 110,
+    "issue_title": "TIM: dirty state SR register after invoke TIM_Base_SetConfig()",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/110",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 113,
+    "issue_title": "ADC: Documentation: Description EOC bit  in ADC_SR is wrong",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "documentation"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/113",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 114,
+    "issue_title": "Add example code on PTP",
+    "issue_labels": [
+      "question",
+      "projects"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/114",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 115,
+    "issue_title": "ETH: Missing ETH_MACCR_CSTF in cmsis header and driver",
+    "issue_labels": [
+      "bug",
+      "question",
+      "spotted before customer",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/115",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 116,
+    "issue_title": "STM32 USB OTG Dual Role",
+    "issue_labels": [
+      "question",
+      "projects",
+      "usb"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/116",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 117,
+    "issue_title": "STM32 USB OTG ",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "cube mx",
+      "usb"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/117",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 118,
+    "issue_title": "core_cm7.h is out of date",
+    "issue_labels": [
+      "enhancement",
+      "wontfix",
+      "internal bug tracker",
+      "cmsis"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/118",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 119,
+    "issue_title": "HAL_UARTEx_ReceiveToIdle_DMA() doesn't trigger IRQHandler() but manually enable RxDMA and IDLE IT works",
+    "issue_labels": [
+      "bug",
+      "hal",
+      "needs clarification",
+      "usart"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/119",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 120,
+    "issue_title": "Instructions for running example programs.",
+    "issue_labels": [
+      "question",
+      "projects"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/120",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 121,
+    "issue_title": "Incorrect Handling of TX Timestamp Flags in STM32 Ethernet Driver",
+    "issue_labels": [
+      "bug",
+      "hal",
+      "eth"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/121",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 122,
+    "issue_title": "STM32746G-Discovery `Audio_playback_and_record` project for CubeIDE",
+    "issue_labels": [
+      "enhancement",
+      "wontfix",
+      "projects",
+      "audio"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/122",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 123,
+    "issue_title": "UART DMA in IDLE Mode calls callback function twice in Half transfer",
+    "issue_labels": [
+      "bug",
+      "invalid",
+      "hal",
+      "uart"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/123",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 124,
+    "issue_title": "SCB_EnableDCache(): Add check for already enabled DCache",
+    "issue_labels": [
+      "enhancement",
+      "wontfix",
+      "spotted before customer",
+      "cmsis"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/124",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  }
+]

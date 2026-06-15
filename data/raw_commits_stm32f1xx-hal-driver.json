@@ -1,0 +1,35 @@
+[
+  {
+    "repo": "stm32f1xx-hal-driver",
+    "sha": "a3b3e9b1b5858c65d8c3a2a71f8b31b39e8e794b",
+    "author": "Viktar",
+    "committer": "web-flow",
+    "message": "Fix mistype in register name\n\nAPB2RSTR to APB1RSTR in __HAL_RCC_APB1_FORCE_RESET()",
+    "authored_at": "2022-11-10T10:34:27Z",
+    "committed_at": "2022-11-10T10:34:27Z",
+    "github_url": "https://github.com/STMicroelectronics/stm32f1xx-hal-driver/commit/a3b3e9b1b5858c65d8c3a2a71f8b31b39e8e794b",
+    "parents": [
+      "169a57d190bd80ad79d01f13ee581ee1e45a2093"
+    ],
+    "stats": {
+      "additions": 1,
+      "deletions": 1,
+      "total": 2
+    },
+    "files_changed": [
+      {
+        "filename": "Inc/stm32f1xx_hal_rcc.h",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "changes": 2,
+        "previous_filename": null,
+        "patch": "@@ -613,7 +613,7 @@ typedef struct\n   * @brief  Force or release APB1 peripheral reset.\n   * @{\n   */\n-#define __HAL_RCC_APB1_FORCE_RESET()       (RCC->APB2RSTR = 0xFFFFFFFFU)\n+#define __HAL_RCC_APB1_FORCE_RESET()       (RCC->APB1RSTR = 0xFFFFFFFFU)\n #define __HAL_RCC_TIM2_FORCE_RESET()       (RCC->APB1RSTR |= (RCC_APB1RSTR_TIM2RST))\n #define __HAL_RCC_TIM3_FORCE_RESET()       (RCC->APB1RSTR |= (RCC_APB1RSTR_TIM3RST))\n #define __HAL_RCC_WWDG_FORCE_RESET()       (RCC->APB1RSTR |= (RCC_APB1RSTR_WWDGRST))"
+      }
+    ],
+    "linked_issue_numbers": [],
+    "pr_numbers": [
+      5
+    ]
+  }
+]

@@ -1,0 +1,29 @@
+{
+  "issues": [
+    {
+      "id": "stm32h7s78-dk-bsp-issue-1",
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "stm32h7s78-dk-bsp",
+      "root_path": "issues",
+      "mcu_series": "H7",
+      "issue_number": 1,
+      "issue_title": "README Broken link",
+      "state": "closed",
+      "layer": "Other",
+      "component": null,
+      "issue_kind": "bug_report",
+      "severity": "low",
+      "board": "STM32H7S78",
+      "labels": [
+        "bug",
+        "documentation"
+      ],
+      "github_url": "https://github.com/STMicroelectronics/stm32h7s78-dk-bsp/issues/1",
+      "is_valid": true,
+      "evidence_strength": "high",
+      "rescue_applied": false,
+      "delivery_template": "st_v2_structured_issue_card",
+      "st_ready_text": "Problem: README Broken link\nContext: repo=stm32h7s78-dk-bsp, mcu_series=H7, board=STM32H7S78, component=None, layer=Other, issue_kind=bug_report, severity=low, evidence_strength=high, rescue_applied=False, state=closed, issue_number=1\nRoot cause: Hi @marcalmp, Thank you for the heads-up.\nFix: README.\nConstraints: Validate against exact MCU/board configuration and CubeMX/CubeH7 version before applying.\nKeywords: H7, STM32H7S78, bug_report, low, bug, documentation, README\n\nTechnical details:\nREADME.md https://github.com/STMicroelectronics/stm32-aps256xx -> https://github.com/STMicroelectronics/stm32-aps256\n\nKey comments:\nHi @marcalmp, Thank you for the heads-up. We'll have this fixed soon enough hopefully. Fixed in commit: https://github.com/STMicroelectronics/stm32h7s78-dk-bsp/commit/0dc1925f399439396aac825de83fbbd305202dc5"
+    }
+  ]
+}

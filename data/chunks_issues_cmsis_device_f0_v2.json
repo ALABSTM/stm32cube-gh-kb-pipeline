@@ -1,0 +1,45 @@
+[
+  {
+    "id": "cmsis_device_f0-issue-3-0",
+    "text": "Title: stmf0xx.h comment contains non-utf-8 character\n\nBody:\ncmsis_device_f0/Include/stm32f0xx.h:60:  * - Product miscellaneous configuration: assert macros, �\n\nclang-16 warns about invalid utf-8 characters in comments:\ncmsis_device_f0/Include/stm32f0xx.h:60:59: warning: invalid UTF-8 in comment [-Winvalid-utf8]\n[build]   * - Product miscellaneous configuration: assert macros, <85>\n\nassuming a UTF-8 locale the following command can be used to find non-utf8 chars:\nfind STMicroelectronics -type f | xargs grep -anxv '.*'\n\nComments:\n[HBOSTM - 2023-08-30T08:54:05Z]\nST Internal Reference: 160255\n\n[corrigami - 2023-10-20T13:41:12Z]\nAny updates on this? Seems like a fairly trivial issue to change three apostrophe's and an ellipsis in some comments. Thank you.\n\n[ALABSTM - 2024-01-24T14:17:17Z]\nHi @JanHildenbrandBosch,\n\nPlease excuse this delay to reply. The fix has just been uploaded. Thank you again for having reported.\n\nWith regards,\n\n[ALABSTM - 2024-01-24T14:17:28Z]\nFixed in commit 56cf85c7e2f8ecdf7f2093b77edab28c12ebe96d",
+    "metadata": {
+      "id": "cmsis_device_f0-issue-3",
+      "source_kind": "issue",
+      "repo": "cmsis_device_f0",
+      "mcu_package": "cmsis_device_f0",
+      "mcu_series": null,
+      "type": "issue",
+      "path": null,
+      "github_url": "https://github.com/STMicroelectronics/cmsis-device-f0/issues/3",
+      "board": null,
+      "category": null,
+      "component": null,
+      "example_name": null,
+      "issue_number": 3,
+      "issue_title": "stmf0xx.h comment contains non-utf-8 character",
+      "state": "closed",
+      "labels": [
+        "bug",
+        "internal bug tracker",
+        "cmsis"
+      ],
+      "is_confirmed_bug": true,
+      "created_at": "2023-08-25T09:37:59Z",
+      "closed_at": "2024-01-24T14:17:28Z",
+      "ingest_version": "v2.0",
+      "image_urls": [],
+      "images_count": 0,
+      "is_valid": true,
+      "rescue_applied": false,
+      "rescue_signal_count": 0,
+      "evidence_strength": "high",
+      "filter_invalid_reasons": [],
+      "layer": "Other",
+      "severity": "high",
+      "issue_kind": "bug_report",
+      "related_issue_ids": [],
+      "chunk_index": 0,
+      "chunk_count": 1
+    }
+  }
+]

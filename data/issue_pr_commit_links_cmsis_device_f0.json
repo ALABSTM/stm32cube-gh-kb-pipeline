@@ -1,0 +1,143 @@
+[
+  {
+    "repo": "cmsis_device_f0",
+    "issue_number": 1,
+    "issue_title": "Why SystemCoreClockUpdate did not supports RCC_CFGR_SWS_HSI48",
+    "issue_labels": [
+      "duplicate",
+      "cmsis"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/cmsis-device-f0/issues/1",
+    "linked_pr_numbers": [
+      2,
+      5
+    ],
+    "linked_commit_shas": [
+      "9f6dc4b97b44207f48c17adc2908156da8367ad3",
+      "dc7f8de5449bcb64d8d5b3b3ed6e61a7bd5c2190",
+      "f6ff35a554b8b81e62b74c45c96e4d9a4b1da8a8"
+    ],
+    "linked_prs": [
+      {
+        "pr_number": 2,
+        "title": "Add support for HSI48 in SystemCoreClockUpdate",
+        "state": "closed",
+        "merged": false,
+        "github_url": "https://github.com/STMicroelectronics/cmsis-device-f0/pull/2",
+        "changed_files_count": 1,
+        "merge_commit_sha": "c4e5972658131b1997863106da6de3d053a8b3d1"
+      },
+      {
+        "pr_number": 5,
+        "title": "Add support for HSI48 in SystemCoreClockUpdate",
+        "state": "closed",
+        "merged": false,
+        "github_url": "https://github.com/STMicroelectronics/cmsis-device-f0/pull/5",
+        "changed_files_count": 1,
+        "merge_commit_sha": "44a8c5787d86c657b448e8582d001d1f3e49e527"
+      }
+    ],
+    "linked_commits": [
+      {
+        "sha": "9f6dc4b97b44207f48c17adc2908156da8367ad3",
+        "message": "Fix error about HSI48 in SystemCoreClockUpdate\n\nHandle HSI48 only when it's applicable.",
+        "committed_at": "2025-03-06T08:52:39Z",
+        "github_url": "https://github.com/STMicroelectronics/cmsis-device-f0/commit/9f6dc4b97b44207f48c17adc2908156da8367ad3",
+        "pr_numbers": [
+          5
+        ],
+        "stats": {
+          "additions": 2,
+          "deletions": 0,
+          "total": 2
+        }
+      },
+      {
+        "sha": "dc7f8de5449bcb64d8d5b3b3ed6e61a7bd5c2190",
+        "message": "Add support for HSI48 in SystemCoreClockUpdate",
+        "committed_at": "2022-11-11T08:32:43Z",
+        "github_url": "https://github.com/STMicroelectronics/cmsis-device-f0/commit/dc7f8de5449bcb64d8d5b3b3ed6e61a7bd5c2190",
+        "pr_numbers": [
+          2
+        ],
+        "stats": {
+          "additions": 9,
+          "deletions": 0,
+          "total": 9
+        }
+      },
+      {
+        "sha": "f6ff35a554b8b81e62b74c45c96e4d9a4b1da8a8",
+        "message": "Add support for HSI48 in SystemCoreClockUpdate",
+        "committed_at": "2025-03-06T07:47:13Z",
+        "github_url": "https://github.com/STMicroelectronics/cmsis-device-f0/commit/f6ff35a554b8b81e62b74c45c96e4d9a4b1da8a8",
+        "pr_numbers": [
+          5
+        ],
+        "stats": {
+          "additions": 3,
+          "deletions": 0,
+          "total": 3
+        }
+      }
+    ],
+    "evidence": {
+      "explicit_pr_numbers": [
+        2,
+        5
+      ],
+      "explicit_commit_shas": [
+        "9f6dc4b97b44207f48c17adc2908156da8367ad3",
+        "dc7f8de5449bcb64d8d5b3b3ed6e61a7bd5c2190",
+        "f6ff35a554b8b81e62b74c45c96e4d9a4b1da8a8"
+      ],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [
+        "9f6dc4b97b44207f48c17adc2908156da8367ad3",
+        "dc7f8de5449bcb64d8d5b3b3ed6e61a7bd5c2190",
+        "f6ff35a554b8b81e62b74c45c96e4d9a4b1da8a8"
+      ],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.8,
+    "link_confidence": "medium",
+    "resolution_status": "candidate_fix"
+  },
+  {
+    "repo": "cmsis_device_f0",
+    "issue_number": 3,
+    "issue_title": "stmf0xx.h comment contains non-utf-8 character",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "cmsis"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/cmsis-device-f0/issues/3",
+    "linked_pr_numbers": [],
+    "linked_commit_shas": [],
+    "linked_prs": [],
+    "linked_commits": [],
+    "evidence": {
+      "explicit_pr_numbers": [],
+      "explicit_commit_shas": [],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.0,
+    "link_confidence": "none",
+    "resolution_status": "unlinked"
+  }
+]

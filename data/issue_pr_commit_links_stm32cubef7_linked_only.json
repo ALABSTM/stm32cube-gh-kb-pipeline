@@ -1,0 +1,154 @@
+[
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 6,
+    "issue_title": "QSPI locks up at STM32F746G-DISCO board",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/6",
+    "linked_pr_numbers": [
+      103
+    ],
+    "linked_commit_shas": [
+      "10b945377111a53670559ba5651d62d6209f4a59",
+      "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+    ],
+    "linked_prs": [
+      {
+        "pr_number": 103,
+        "title": "Fix the bug that HAL_NAND_Read_Page_8b and HAL_NAND_Read_SpareArea_8b cannot read data normally.",
+        "state": "closed",
+        "merged": false,
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/pull/103",
+        "changed_files_count": 27,
+        "merge_commit_sha": "56c9dec3b8756e0042c632903c19c4785e854a51"
+      }
+    ],
+    "linked_commits": [
+      {
+        "sha": "10b945377111a53670559ba5651d62d6209f4a59",
+        "message": "Fix the bug that HAL_NAND_Read_Page_8b and HAL_NAND_Read_SpareArea_8b cannot read data normally.",
+        "committed_at": "2023-09-07T14:40:46Z",
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/commit/10b945377111a53670559ba5651d62d6209f4a59",
+        "pr_numbers": [
+          103
+        ],
+        "stats": {
+          "additions": 2,
+          "deletions": 2,
+          "total": 4
+        }
+      },
+      {
+        "sha": "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa",
+        "message": "[projects][UART] Add missing syscalls.c files part of SW4STM32 projects",
+        "committed_at": "2023-08-23T12:55:16Z",
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/commit/da50945e2e414dff6a646f1a3e7100ccb7e7a6aa",
+        "pr_numbers": [
+          103
+        ],
+        "stats": {
+          "additions": 2470,
+          "deletions": 0,
+          "total": 2470
+        }
+      }
+    ],
+    "evidence": {
+      "explicit_pr_numbers": [
+        103
+      ],
+      "explicit_commit_shas": [
+        "10b945377111a53670559ba5651d62d6209f4a59",
+        "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+      ],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [
+        "10b945377111a53670559ba5651d62d6209f4a59",
+        "da50945e2e414dff6a646f1a3e7100ccb7e7a6aa"
+      ],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.8,
+    "link_confidence": "medium",
+    "resolution_status": "candidate_fix"
+  },
+  {
+    "repo": "STM32CubeF7",
+    "issue_number": 30,
+    "issue_title": "USBD_LL_GetRxDataSize/HAL_PCD_EP_GetRxCount return wrong value",
+    "issue_labels": [
+      "bug",
+      "internal bug tracker",
+      "hal",
+      "usb"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/STM32CubeF7/issues/30",
+    "linked_pr_numbers": [
+      61
+    ],
+    "linked_commit_shas": [
+      "7e2746f45ac5d57ae7cee1e15d76369da1e70485"
+    ],
+    "linked_prs": [
+      {
+        "pr_number": 61,
+        "title": "[HAL][LL][USB] Correct the calculation of received data length when DMA is enabled",
+        "state": "closed",
+        "merged": true,
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/pull/61",
+        "changed_files_count": 3,
+        "merge_commit_sha": "e96f98542c6782d97bdd0c50833ee4b70130f3a7"
+      }
+    ],
+    "linked_commits": [
+      {
+        "sha": "7e2746f45ac5d57ae7cee1e15d76369da1e70485",
+        "message": "[HAL][LL][USB] Fix the count of the received data length when DMA is enabled",
+        "committed_at": "2022-01-14T13:31:54Z",
+        "github_url": "https://github.com/STMicroelectronics/STM32CubeF7/commit/7e2746f45ac5d57ae7cee1e15d76369da1e70485",
+        "pr_numbers": [
+          61
+        ],
+        "stats": {
+          "additions": 24,
+          "deletions": 10,
+          "total": 34
+        }
+      }
+    ],
+    "evidence": {
+      "explicit_pr_numbers": [
+        61
+      ],
+      "explicit_commit_shas": [
+        "7e2746f45ac5d57ae7cee1e15d76369da1e70485"
+      ],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [
+        "7e2746f45ac5d57ae7cee1e15d76369da1e70485"
+      ],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 1,
+      "merged_pr_with_file_evidence": true,
+      "merged_pr_with_file_evidence_pr_numbers": [
+        61
+      ],
+      "merged_pr_changed_files_total": 3
+    },
+    "merged_pr_with_file_evidence": true,
+    "link_score": 1.0,
+    "link_confidence": "high",
+    "resolution_status": "merged_fix"
+  }
+]

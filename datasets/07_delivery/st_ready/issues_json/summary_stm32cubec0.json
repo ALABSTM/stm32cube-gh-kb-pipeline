@@ -1,0 +1,11 @@
+{
+  "repo": "STM32CubeC0",
+  "input_file": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\data\\docs_issues_stm32cubec0_v2.json",
+  "output_file": "C:\\Users\\gharbiab\\OneDrive - STMicroelectronics\\Desktop\\PFE_Chatbot_STM32Cube\\datasets\\07_delivery\\st_ready\\by_series\\stm32cubec0\\issues_json\\st_ready_issues_stm32cubec0.json",
+  "total_docs": 7,
+  "exported_docs": 7,
+  "include_invalid": false,
+  "comments_chars": 1200,
+  "format": "json",
+  "root_tag_path": "issues"
+}

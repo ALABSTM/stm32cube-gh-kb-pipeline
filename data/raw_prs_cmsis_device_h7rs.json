@@ -1,0 +1,75 @@
+[
+  {
+    "repo": "cmsis_device_h7rs",
+    "pr_number": 2,
+    "title": "Fix syntax errors.",
+    "state": "closed",
+    "merged": true,
+    "draft": false,
+    "author": "Dirbaio",
+    "labels": [
+      "bug",
+      "cmsis",
+      "usb",
+      "internal bug tracker"
+    ],
+    "created_at": "2024-04-29T00:09:58Z",
+    "updated_at": "2024-05-24T11:19:35Z",
+    "closed_at": "2024-05-24T11:19:35Z",
+    "merged_at": "2024-05-24T11:19:35Z",
+    "body": "",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-h7rs/pull/2",
+    "head_ref": "fix-syntax",
+    "base_ref": "main",
+    "merge_commit_sha": "724ff3104592de8bcb8bf508feb10f7f8303a404",
+    "commits_count": 1,
+    "review_comments_count": 0,
+    "comments_count": 2,
+    "changed_files_count": 4,
+    "additions": 4,
+    "deletions": 4,
+    "linked_issue_numbers": [],
+    "files_changed": [
+      {
+        "filename": "Include/stm32h7r3xx.h",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "changes": 2,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-h7rs/blob/968ab58c550314afab37649d9d658230fe0a9764/Include%2Fstm32h7r3xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-h7rs/raw/968ab58c550314afab37649d9d658230fe0a9764/Include%2Fstm32h7r3xx.h"
+      },
+      {
+        "filename": "Include/stm32h7r7xx.h",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "changes": 2,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-h7rs/blob/968ab58c550314afab37649d9d658230fe0a9764/Include%2Fstm32h7r7xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-h7rs/raw/968ab58c550314afab37649d9d658230fe0a9764/Include%2Fstm32h7r7xx.h"
+      },
+      {
+        "filename": "Include/stm32h7s3xx.h",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "changes": 2,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-h7rs/blob/968ab58c550314afab37649d9d658230fe0a9764/Include%2Fstm32h7s3xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-h7rs/raw/968ab58c550314afab37649d9d658230fe0a9764/Include%2Fstm32h7s3xx.h"
+      },
+      {
+        "filename": "Include/stm32h7s7xx.h",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "changes": 2,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/cmsis-device-h7rs/blob/968ab58c550314afab37649d9d658230fe0a9764/Include%2Fstm32h7s7xx.h",
+        "raw_url": "https://github.com/STMicroelectronics/cmsis-device-h7rs/raw/968ab58c550314afab37649d9d658230fe0a9764/Include%2Fstm32h7s7xx.h"
+      }
+    ]
+  }
+]

@@ -1,0 +1,84 @@
+[
+  {
+    "repo": "stm32g0xx-hal-driver",
+    "pr_number": 9,
+    "title": "Update stm32g0xx_hal_flash_ex.c : Fix typo",
+    "state": "closed",
+    "merged": true,
+    "draft": false,
+    "author": "jonadem",
+    "labels": [
+      "bug",
+      "documentation",
+      "hal",
+      "internal bug tracker",
+      "flash"
+    ],
+    "created_at": "2025-05-05T09:50:09Z",
+    "updated_at": "2025-05-08T14:06:51Z",
+    "closed_at": "2025-05-08T14:06:50Z",
+    "merged_at": "2025-05-08T14:06:50Z",
+    "body": "## IMPORTANT INFORMATION\r\n\r\n### Contributor License Agreement (CLA)\r\n* The Pull Request feature will be considered by STMicroelectronics after the signature of a **Contributor License Agreement (CLA)** by the submitter.\r\n* If you did not sign such agreement, please follow the steps mentioned in the CONTRIBUTING.md file.\r\n",
+    "github_url": "https://github.com/STMicroelectronics/stm32g0xx-hal-driver/pull/9",
+    "head_ref": "patch-1",
+    "base_ref": "master",
+    "merge_commit_sha": "11f6c302cf3caab45ea30c54b1120a47990704bd",
+    "commits_count": 1,
+    "review_comments_count": 0,
+    "comments_count": 1,
+    "changed_files_count": 1,
+    "additions": 1,
+    "deletions": 1,
+    "linked_issue_numbers": [],
+    "files_changed": [
+      {
+        "filename": "Src/stm32g0xx_hal_flash_ex.c",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "changes": 2,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/stm32g0xx-hal-driver/blob/4e7d9b5530bb1a46fb6882fe8e269391d946deba/Src%2Fstm32g0xx_hal_flash_ex.c",
+        "raw_url": "https://github.com/STMicroelectronics/stm32g0xx-hal-driver/raw/4e7d9b5530bb1a46fb6882fe8e269391d946deba/Src%2Fstm32g0xx_hal_flash_ex.c"
+      }
+    ]
+  },
+  {
+    "repo": "stm32g0xx-hal-driver",
+    "pr_number": 8,
+    "title": "Update stm32g0xx_hal_flash_ex.c : Fix typo",
+    "state": "closed",
+    "merged": false,
+    "draft": false,
+    "author": "jonadem",
+    "labels": [],
+    "created_at": "2025-04-29T15:00:07Z",
+    "updated_at": "2025-04-29T15:00:12Z",
+    "closed_at": "2025-04-29T15:00:12Z",
+    "merged_at": null,
+    "body": "## IMPORTANT INFORMATION\r\n\r\n### Contributor License Agreement (CLA)\r\n* The Pull Request feature will be considered by STMicroelectronics after the signature of a **Contributor License Agreement (CLA)** by the submitter.\r\n* If you did not sign such agreement, please follow the steps mentioned in the CONTRIBUTING.md file.\r\n",
+    "github_url": "https://github.com/STMicroelectronics/stm32g0xx-hal-driver/pull/8",
+    "head_ref": "patch-1",
+    "base_ref": "master",
+    "merge_commit_sha": "a31228f9f877e417527c68175f99da6a0c8fc0f6",
+    "commits_count": 1,
+    "review_comments_count": 0,
+    "comments_count": 1,
+    "changed_files_count": 1,
+    "additions": 1,
+    "deletions": 1,
+    "linked_issue_numbers": [],
+    "files_changed": [
+      {
+        "filename": "Src/stm32g0xx_hal_flash_ex.c",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "changes": 2,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/stm32g0xx-hal-driver/blob/4e7d9b5530bb1a46fb6882fe8e269391d946deba/Src%2Fstm32g0xx_hal_flash_ex.c",
+        "raw_url": "https://github.com/STMicroelectronics/stm32g0xx-hal-driver/raw/4e7d9b5530bb1a46fb6882fe8e269391d946deba/Src%2Fstm32g0xx_hal_flash_ex.c"
+      }
+    ]
+  }
+]

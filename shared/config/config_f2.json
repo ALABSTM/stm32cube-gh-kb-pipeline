@@ -1,0 +1,25 @@
+{
+  "owner": "STMicroelectronics",
+  "repos": [
+    "STM32CubeF2",
+    "stm32f2xx-hal-driver",
+    "cmsis_device_f2",
+    "stm322xg-eval-bsp"
+  ],
+  "data_dir": "data",
+  "repos_dir": "GitHub_repos",
+  "auto_clone_missing_repos": true,
+  "repo_clone_urls": {
+    "stm32f2xx-hal-driver": "https://github.com/STMicroelectronics/stm32f2xx_hal_driver.git",
+    "cmsis_device_f2": "https://github.com/STMicroelectronics/cmsis_device_f2.git",
+    "stm322xg-eval-bsp": "https://github.com/STMicroelectronics/stm322xg-eval-bsp.git"
+  },
+  "linked_repo_refs": {},
+  "commit_pr_scope": "linked_or_merged",
+  "github_token_env": "GITHUB_TOKEN",
+  "rate_limits": {
+    "issues_sleep": 0.2,
+    "comments_sleep": 0.1
+  },
+  "ingest_version": "v1.0"
+}

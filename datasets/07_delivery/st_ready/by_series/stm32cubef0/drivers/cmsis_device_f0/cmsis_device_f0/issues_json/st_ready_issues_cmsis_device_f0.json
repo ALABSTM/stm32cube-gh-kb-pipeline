@@ -1,0 +1,30 @@
+{
+  "issues": [
+    {
+      "id": "cmsis_device_f0-issue-3",
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "cmsis_device_f0",
+      "root_path": "issues",
+      "mcu_series": null,
+      "issue_number": 3,
+      "issue_title": "stmf0xx.h comment contains non-utf-8 character",
+      "state": "closed",
+      "layer": "Other",
+      "component": null,
+      "issue_kind": "bug_report",
+      "severity": "high",
+      "board": null,
+      "labels": [
+        "bug",
+        "internal bug tracker",
+        "cmsis"
+      ],
+      "github_url": "https://github.com/STMicroelectronics/cmsis-device-f0/issues/3",
+      "is_valid": true,
+      "evidence_strength": "high",
+      "rescue_applied": false,
+      "delivery_template": "st_v2_structured_issue_card",
+      "st_ready_text": "Problem: stmf0xx.h comment contains non-utf-8 character\nContext: repo=cmsis_device_f0, mcu_series=None, board=None, component=None, layer=Other, issue_kind=bug_report, severity=high, evidence_strength=high, rescue_applied=False, state=closed, issue_number=3\nRoot cause: ST Internal Reference: 160255 Any updates on this?\nFix: cmsis_device_f0/Include/stm32f0xx.\nConstraints: Validate against exact MCU/board configuration and CubeMX/CubeH7 version before applying.\nKeywords: bug_report, high, bug, internal bug tracker, cmsis, cmsis_device_f0, UTF-8\n\nTechnical details:\ncmsis_device_f0/Include/stm32f0xx.h:60: * - Product miscellaneous configuration: assert macros, � clang-16 warns about invalid utf-8 characters in comments: cmsis_device_f0/Include/stm32f0xx.h:60:59: warning: invalid UTF-8 in comment [-Winvalid-utf8] [build] * - Product miscellaneous configuration: assert macros, <85> assuming a UTF-8 locale the following command can be used to find non-utf8 chars: find STMicroelectronics -type f | xargs grep -anxv '.*'\n\nKey comments:\nST Internal Reference: 160255 Any updates on this? Seems like a fairly trivial issue to change three apostrophe's and an ellipsis in some comments. Thank you. Hi @JanHildenbrandBosch, Please excuse this delay to reply. The fix has just been uploaded. Thank you again for having reported. Fixed in commit 56cf85c7e2f8ecdf7f2093b77edab28c12ebe96d"
+    }
+  ]
+}

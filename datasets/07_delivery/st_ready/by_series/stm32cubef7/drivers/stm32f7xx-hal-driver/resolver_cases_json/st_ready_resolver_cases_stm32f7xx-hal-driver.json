@@ -1,0 +1,264 @@
+{
+  "resolver_cases": [
+    {
+      "id": "resolver::stm32f7xx-hal-driver::issue::6",
+      "title": "Bug found in  HAL_NAND_Read_Page_8b and HAL_NAND_Read_SpareArea_8b",
+      "label": "Bug found in  HAL_NAND_Read_Page_8b and HAL_NAND_Read_SpareArea_8b",
+      "externalURL": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/6",
+      "rootTagPath": "resolver_cases",
+      "evidence_refs": [
+        {
+          "type": "issue",
+          "id": 6,
+          "url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/6"
+        }
+      ],
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "stm32f7xx-hal-driver",
+      "issue_root_path": "issues",
+      "pr_root_path": "pull",
+      "commit_root_path": "commit",
+      "issue_number": 6,
+      "issue_title": "Bug found in  HAL_NAND_Read_Page_8b and HAL_NAND_Read_SpareArea_8b",
+      "issue_labels": [
+        "bug",
+        "duplicate",
+        "hal"
+      ],
+      "issue_state": "closed",
+      "issue_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/6",
+      "linked_pr_numbers": [
+        7
+      ],
+      "linked_commit_shas": [
+        "303701c4646946296df96a9318a3409bff85cedd",
+        "46c6d4a81853b8e2d4e069b391d40ada42f6f67f"
+      ],
+      "primary_pr_number": 7,
+      "primary_commit_sha": "303701c4646946296df96a9318a3409bff85cedd",
+      "linked_pr_urls": [
+        "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/pull/7"
+      ],
+      "linked_commit_urls": [
+        "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/commit/303701c4646946296df96a9318a3409bff85cedd",
+        "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/commit/46c6d4a81853b8e2d4e069b391d40ada42f6f67f"
+      ],
+      "resolution_status": "merged_fix",
+      "merged_pr_with_file_evidence": true,
+      "merged_pr_with_file_evidence_pr_numbers": [
+        7
+      ],
+      "merged_pr_changed_files_total": 1,
+      "link_confidence": "high",
+      "link_score": 1.0,
+      "delivery_template": "st_v1_resolver_case",
+      "resolver_card_text": "Problem: Issue #6 - Bug found in HAL_NAND_Read_Page_8b and HAL_NAND_Read_SpareArea_8b\nContext: repo=stm32f7xx-hal-driver, labels=bug, duplicate, hal, issue_state=closed\nResolver signal: resolution_status=merged_fix, confidence=high, score=1.0\nAssessment: Fix likely integrated in mainline; prefer this as primary recommendation.\nCandidate PRs: Fix the bug that HAL_NAND_Read_Page_8b and HAL_NAND_Read_SpareArea_8b cannot read data normally.\nCommit evidence: Fix the bug that HAL_NAND_Read_Page_16b and HAL_NAND_Read_SpareArea_16b cannot read data normally. | Fix the bug that HAL_NAND_Read_Page_8b and HAL_NAND_Read_SpareArea_8b cannot read data normally.\nFile evidence: merged PR modifies files even when commit log is merge-heavy\nPR #7 description: This PR fixed the issue #6 .\r\n\r\nBy changing the `*buff = *(uint8_t *)deviceaddress;` to `*buff = *(__IO uint8_t *)deviceaddress;` , now the data could be read correctly.\r\n\r\nAdditionally, I have signed the CLA as required by CONTRIBUTING.md.\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying.",
+      "linked_file_ids": [
+        "stm32f7xx-hal-driver-file-1955766872339004214"
+      ],
+      "linked_file_paths": [
+        "Src/stm32f7xx_hal_nand.c"
+      ],
+      "files_evidence": {
+        "changed_files_total": 1,
+        "matched_docs_files_count": 1,
+        "unmatched_files_count": 0,
+        "match_rate": 1.0,
+        "files": [
+          {
+            "path": "Src/stm32f7xx_hal_nand.c",
+            "status": "modified",
+            "additions": 4,
+            "deletions": 4,
+            "changes": 8,
+            "touched_by_commits": 2,
+            "commit_shas": [
+              "303701c4646946296df96a9318a3409bff85cedd",
+              "46c6d4a81853b8e2d4e069b391d40ada42f6f67f"
+            ],
+            "module": "src",
+            "file_doc_id": "stm32f7xx-hal-driver-file-1955766872339004214",
+            "file_type": "hal_driver_source",
+            "component": null,
+            "board": "STM32F7XX",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/blob/master/Src/stm32f7xx_hal_nand.c",
+            "score": 28.0
+          }
+        ]
+      },
+      "impacted_modules": [
+        "src"
+      ],
+      "impacted_components": [],
+      "impacted_boards": [
+        "STM32F7XX"
+      ],
+      "impacted_file_types": [
+        "hal_driver_source"
+      ],
+      "primary_changed_file": {
+        "path": "Src/stm32f7xx_hal_nand.c",
+        "status": "modified",
+        "additions": 4,
+        "deletions": 4,
+        "changes": 8,
+        "touched_by_commits": 2,
+        "commit_shas": [
+          "303701c4646946296df96a9318a3409bff85cedd",
+          "46c6d4a81853b8e2d4e069b391d40ada42f6f67f"
+        ],
+        "module": "src",
+        "file_doc_id": "stm32f7xx-hal-driver-file-1955766872339004214",
+        "file_type": "hal_driver_source",
+        "component": null,
+        "board": "STM32F7XX",
+        "example_name": null,
+        "source_match": "docs_files_exact",
+        "github_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/blob/master/Src/stm32f7xx_hal_nand.c",
+        "score": 28.0
+      }
+    },
+    {
+      "id": "resolver::stm32f7xx-hal-driver::issue::14",
+      "title": "8-Bit NOR devices cause hard fault on Hal_Nor_Init",
+      "label": "8-Bit NOR devices cause hard fault on Hal_Nor_Init",
+      "externalURL": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/14",
+      "rootTagPath": "resolver_cases",
+      "evidence_refs": [
+        {
+          "type": "issue",
+          "id": 14,
+          "url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/14"
+        }
+      ],
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "stm32f7xx-hal-driver",
+      "issue_root_path": "issues",
+      "pr_root_path": "pull",
+      "commit_root_path": "commit",
+      "issue_number": 14,
+      "issue_title": "8-Bit NOR devices cause hard fault on Hal_Nor_Init",
+      "issue_labels": [
+        "bug",
+        "wontfix",
+        "hal",
+        "internal bug tracker",
+        "fmc",
+        "nor"
+      ],
+      "issue_state": "closed",
+      "issue_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/14",
+      "linked_pr_numbers": [
+        15
+      ],
+      "linked_commit_shas": [
+        "5836a061d4b95074121872075805a9add13d00c4"
+      ],
+      "primary_pr_number": 15,
+      "primary_commit_sha": "5836a061d4b95074121872075805a9add13d00c4",
+      "linked_pr_urls": [
+        "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/pull/15"
+      ],
+      "linked_commit_urls": [
+        "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/commit/5836a061d4b95074121872075805a9add13d00c4"
+      ],
+      "resolution_status": "candidate_fix",
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0,
+      "link_confidence": "medium",
+      "link_score": 0.8,
+      "delivery_template": "st_v1_resolver_case",
+      "resolver_card_text": "Problem: Issue #14 - 8-Bit NOR devices cause hard fault on Hal_Nor_Init\nContext: repo=stm32f7xx-hal-driver, labels=bug, wontfix, hal, internal bug tracker, fmc, nor, issue_state=closed\nResolver signal: resolution_status=candidate_fix, confidence=medium, score=0.8\nAssessment: Potential fix identified, but integration status is uncertain.\nCandidate PRs: [HAL][NOR] Fix support for 8-bit NOR that uses the AMD command set. C…\nCommit evidence: [HAL][NOR] Fix support for 8-bit NOR that uses the AMD command set.\nPR #15 description: …hanges should be backwards compatible.\r\nIn reference to [this issue, #14](https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/14)\r\nTThe previous version of the HAL_NOR did not accurately handle 16-bit and 8-bit NOR devices.  There were many instances of typecasting to a 16-bit pointer which, when used with 8-bit addressing, results in Misalligned Memory Access faults.\r\nAdditionally, the `NOR_ADDR_SHIFT` already handles the address shifting; There does not need to be 2 different address values for 8-bit vs 16-bit.\r\nI also turned the `NOR_WRITE` into a wrapper for a function pointer; This ensures backwards compatibility, while ensuring the correct `NOR_WRITE` is used in all circumstances.\r\n\r\nDo note: I was unable to find any Coding Standard for contributing, so i attempted to follow existing code.\r\nAdditionally, there are still potential issues in HAL_NOR that I could not adequately address without rewriting;  HAL_NOR_ReadCFI, anything in the `NOR_INTEL_SHARP_EXT_COMMAND_SET`.\r\n\r\nFinally, I am not overly happy with exposing the `extern WriteNORFunc NORWriteFunction; /* Function Pointer to active NOR_Write*/`.  I'd much rather have that function pointer be private to the HAL_NOR .c file.  But to support backwards compatibility with projects that use `NOR_WRITE`, it has to be exposed.\r\n\r\n## IMPORTANT INFORMATION\r\n\r\n### Contributor License Agreement (CLA)\r\n* The Pull Request feature will be considered by STMicroelectronics after the signature of a **Contributor [truncated]\nConstraints: Validate against exact MCU series, board, firmware package version, and local project config before applying.",
+      "linked_file_ids": [
+        "stm32f7xx-hal-driver-file-2277730372554000121",
+        "stm32f7xx-hal-driver-file-4881036905874787633"
+      ],
+      "linked_file_paths": [
+        "Inc/stm32f7xx_hal_nor.h",
+        "Src/stm32f7xx_hal_nor.c"
+      ],
+      "files_evidence": {
+        "changed_files_total": 2,
+        "matched_docs_files_count": 2,
+        "unmatched_files_count": 0,
+        "match_rate": 1.0,
+        "files": [
+          {
+            "path": "Src/stm32f7xx_hal_nor.c",
+            "status": "modified",
+            "additions": 163,
+            "deletions": 157,
+            "changes": 320,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "5836a061d4b95074121872075805a9add13d00c4"
+            ],
+            "module": "src",
+            "file_doc_id": "stm32f7xx-hal-driver-file-2277730372554000121",
+            "file_type": "hal_driver_source",
+            "component": null,
+            "board": "STM32F7XX",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/blob/master/Src/stm32f7xx_hal_nor.c",
+            "score": 340.0
+          },
+          {
+            "path": "Inc/stm32f7xx_hal_nor.h",
+            "status": "modified",
+            "additions": 39,
+            "deletions": 11,
+            "changes": 50,
+            "touched_by_commits": 1,
+            "commit_shas": [
+              "5836a061d4b95074121872075805a9add13d00c4"
+            ],
+            "module": "inc",
+            "file_doc_id": "stm32f7xx-hal-driver-file-4881036905874787633",
+            "file_type": "hal_driver_source",
+            "component": null,
+            "board": "STM32F7XX",
+            "example_name": null,
+            "source_match": "docs_files_exact",
+            "github_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/blob/master/Inc/stm32f7xx_hal_nor.h",
+            "score": 70.0
+          }
+        ]
+      },
+      "impacted_modules": [
+        "inc",
+        "src"
+      ],
+      "impacted_components": [],
+      "impacted_boards": [
+        "STM32F7XX"
+      ],
+      "impacted_file_types": [
+        "hal_driver_source"
+      ],
+      "primary_changed_file": {
+        "path": "Src/stm32f7xx_hal_nor.c",
+        "status": "modified",
+        "additions": 163,
+        "deletions": 157,
+        "changes": 320,
+        "touched_by_commits": 1,
+        "commit_shas": [
+          "5836a061d4b95074121872075805a9add13d00c4"
+        ],
+        "module": "src",
+        "file_doc_id": "stm32f7xx-hal-driver-file-2277730372554000121",
+        "file_type": "hal_driver_source",
+        "component": null,
+        "board": "STM32F7XX",
+        "example_name": null,
+        "source_match": "docs_files_exact",
+        "github_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/blob/master/Src/stm32f7xx_hal_nor.c",
+        "score": 340.0
+      }
+    }
+  ]
+}

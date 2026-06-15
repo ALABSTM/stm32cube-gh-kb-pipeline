@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.6.9)  11 JUN 2026 17:21
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.6.9)  15 JUN 2026 15:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**./docs/reports/PFE_Report_STM32Cube_Pipeline.tex
-(docs/reports/PFE_Report_STM32Cube_Pipeline.tex
+**./PFE_Report_STM32Cube_Pipeline.tex
+(PFE_Report_STM32Cube_Pipeline.tex
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
 (C:\Users\gharbiab\AppData\Local\Programs\MiKTeX\tex/latex/base\report.cls
@@ -568,11 +568,7 @@ pdftex.def
 File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count342
 )
-(C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\
-docs\reports\PFE_Report_STM32Cube_Pipeline.aux
-Package babel Info: 'french' activates 'french' shorthands.
-(babel)             Reported on input line 11.
-)
+No file PFE_Report_STM32Cube_Pipeline.aux.
 \openout1 = `PFE_Report_STM32Cube_Pipeline.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 64.
@@ -593,8 +589,9 @@ LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 64.
 LaTeX Font Info:    ... okay on input line 64.
 LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 64.
 LaTeX Font Info:    ... okay on input line 64.
+Package babel Info: 'french' activates 'french' shorthands.
+(babel)             Reported on input line 64.
 LaTeX Info: Redefining \degres on input line 64.
-
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -656,11 +653,6 @@ s.cfg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
 Package hyperref Info: Link coloring ON on input line 64.
-
-(C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\
-docs\reports\PFE_Report_STM32Cube_Pipeline.out)
-(C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\
-docs\reports\PFE_Report_STM32Cube_Pipeline.out)
 \@outlinefile=\write3
 \openout3 = `PFE_Report_STM32Cube_Pipeline.out'.
 
@@ -711,30 +703,28 @@ l.113 \newpage
                [1
 
 ]
-(C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\
-docs\reports\PFE_Report_STM32Cube_Pipeline.toc [2]
-Package babel Info: 'french' activates 'french' shorthands.
-(babel)             Reported on input line 68.
-
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[3]
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[4])
+No file PFE_Report_STM32Cube_Pipeline.toc.
 \tf@toc=\write4
 \openout4 = `PFE_Report_STM32Cube_Pipeline.toc'.
 
+[2]
+No file PFE_Report_STM32Cube_Pipeline.lof.
+\tf@lof=\write5
+\openout5 = `PFE_Report_STM32Cube_Pipeline.lof'.
+
+[3]
+Chapitre 1.
+
+Overfull \hbox (2.30098pt too wide) in paragraph at lines 127--129
+[]\T1/cmr/m/n/12 Les dé-pôts Gi-tHub pu-blics de ST-Mi-croe-lec-tro-nics (\T1/c
+mtt/m/n/12 github.com/STMicroelectronics\T1/cmr/m/n/12 )
+ []
+
+[4
+
+]
+Package babel Info: 'french' activates 'french' shorthands.
+(babel)             Reported on input line 166.
 
 
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
@@ -744,32 +734,11 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
 [5]
-(C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\
-docs\reports\PFE_Report_STM32Cube_Pipeline.lof)
-\tf@lof=\write5
-\openout5 = `PFE_Report_STM32Cube_Pipeline.lof'.
-
- [6]
-Chapitre 1.
-
-Overfull \hbox (2.30098pt too wide) in paragraph at lines 127--129
-[]\T1/cmr/m/n/12 Les dé-pôts Gi-tHub pu-blics de ST-Mi-croe-lec-tro-nics (\T1/c
-mtt/m/n/12 github.com/STMicroelectronics\T1/cmr/m/n/12 )
- []
-
-[7
-
-]
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[8]
 Chapitre 2.
-[9
+
+LaTeX Warning: Citation `lewis2020rag' on page 6 undefined on input line 171.
+
+[6
 
 ]
 
@@ -779,7 +748,7 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[10]
+[7]
 Chapitre 3.
 
 Underfull \hbox (badness 4686) in paragraph at lines 248--248
@@ -791,7 +760,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 248--249
 []|\T1/cmr/m/n/12 Normalisation, clas-si-fi-ca-tion
  []
 
-[11
+[8
 
 ]
 Underfull \hbox (badness 10000) in paragraph at lines 274--274
@@ -803,7 +772,10 @@ Underfull \hbox (badness 1184) in paragraph at lines 277--278
 \T1/cmr/m/n/12 connexion contiennent des in-for-ma-tions cri-
  []
 
-[12] [13]
+
+LaTeX Warning: Citation `lewis2020rag' on page 9 undefined on input line 284.
+
+[9] [10]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 355.
@@ -876,18 +848,22 @@ Underfull \hbox (badness 10000) in paragraph at lines 369--370
 []|\T1/cmtt/m/n/12 export_st_ready_*.py \T1/cmr/m/n/12 --- 4
  []
 
-ignored error: Infinite glue shrinkage found in box being split [14] [15]
-[16]
+ignored error: Infinite glue shrinkage found in box being split [11] [12]
+[13]
 Chapitre 4.
 
 Underfull \hbox (badness 10000) in paragraph at lines 455--455
 []|\T1/cmr/m/n/12 Architecture mo-du-
  []
 
-ignored error: Infinite glue shrinkage found in box being split [17
+ignored error: Infinite glue shrinkage found in box being split [14
 
 ]
-<../diagrams/presentation/exported/01_pipeline_overview.png, id=684, 2835.59375
+
+LaTeX Warning: Reference `fig:pipeline_overview' on page 15 undefined on input 
+line 461.
+
+<../diagrams/presentation/exported/01_pipeline_overview.png, id=141, 2835.59375
 pt x 1428.33624pt>
 File: ../diagrams/presentation/exported/01_pipeline_overview.png Graphic file (
 type png)
@@ -895,7 +871,11 @@ type png)
 Package pdftex.def Info: ../diagrams/presentation/exported/01_pipeline_overview
 .png  used on input line 465.
 (pdftex.def)             Requested size: 432.48051pt x 217.8373pt.
-<../diagrams/presentation/exported/03_data_flow_source_to_answer.png, id=686, 1
+
+LaTeX Warning: Reference `fig:data_flow' on page 15 undefined on input line 472
+.
+
+<../diagrams/presentation/exported/03_data_flow_source_to_answer.png, id=142, 1
 851.91875pt x 1287.81125pt>
 File: ../diagrams/presentation/exported/03_data_flow_source_to_answer.png Graph
 ic file (type png)
@@ -904,23 +884,20 @@ Package pdftex.def Info: ../diagrams/presentation/exported/03_data_flow_source_
 to_answer.png  used on input line 476.
 (pdftex.def)             Requested size: 432.48051pt x 300.7296pt.
 
-
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
 (fancyhdr)                Make it at least 14.61858pt, for example:
 (fancyhdr)                \setlength{\headheight}{14.61858pt}.
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[18
+[15
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4.1}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
 l.480 
-       <C:/Users/gharbiab/OneDrive - STMicroelectronics/Desktop/PFE_Chatbot_STM
-32Cube/docs/diagrams/presentation/exported/01_pipeline_overview.png (PNG copy)>
-]
-<../diagrams/presentation/exported/02_delivery_kb_upload.png, id=693, 2092.8187
+       <../diagrams/presentation/exported/01_pipeline_overview.png (PNG copy)>]
+<../diagrams/presentation/exported/02_delivery_kb_upload.png, id=151, 2092.8187
 6pt x 1307.88625pt>
 File: ../diagrams/presentation/exported/02_delivery_kb_upload.png Graphic file 
 (type png)
@@ -929,14 +906,13 @@ Package pdftex.def Info: ../diagrams/presentation/exported/02_delivery_kb_uploa
 d.png  used on input line 485.
 (pdftex.def)             Requested size: 409.71692pt x 256.0446pt.
 
-
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
 (fancyhdr)                Make it at least 14.61858pt, for example:
 (fancyhdr)                \setlength{\headheight}{14.61858pt}.
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[19
+[16
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4.2}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
@@ -948,13 +924,11 @@ has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
 l.491 \chapter
-              {ImplÃ©mentation} <C:/Users/gharbiab/OneDrive - STMicroelectronic
-s/Desktop/PFE_Chatbot_STM32Cube/docs/diagrams/presentation/exported/03_data_flo
-w_source_to_answer.png (PNG copy)> <C:/Users/gharbiab/OneDrive - STMicroelectro
-nics/Desktop/PFE_Chatbot_STM32Cube/docs/diagrams/presentation/exported/02_deliv
-ery_kb_upload.png (PNG copy)>]
+              {ImplÃ©mentation} <../diagrams/presentation/exported/03_data_flow
+_source_to_answer.png (PNG copy)> <../diagrams/presentation/exported/02_deliver
+y_kb_upload.png (PNG copy)>]
 Chapitre 5.
-<../diagrams/technical/exported/01_ingestion_detail.png, id=698, 2815.51875pt x
+<../diagrams/technical/exported/01_ingestion_detail.png, id=159, 2815.51875pt x
  1307.88625pt>
 File: ../diagrams/technical/exported/01_ingestion_detail.png Graphic file (type
  png)
@@ -962,39 +936,9 @@ File: ../diagrams/technical/exported/01_ingestion_detail.png Graphic file (type
 Package pdftex.def Info: ../diagrams/technical/exported/01_ingestion_detail.png
   used on input line 512.
 (pdftex.def)             Requested size: 409.71692pt x 190.30719pt.
-[20
+[17
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 538--539
-[]|\T1/cmr/m/n/12 Suppression ba-lises HTML,
- []
-
-
-Underfull \hbox (badness 7326) in paragraph at lines 539--540
-[]|\T1/cmr/m/n/12 Suppression badges CI, liens
- []
-
-
-Overfull \hbox (17.71172pt too wide) in paragraph at lines 540--540
-[]|\T1/cmtt/m/n/12 clean_source_code()| 
- []
-
-
-Underfull \hbox (badness 1552) in paragraph at lines 540--541
-\T1/cmr/m/n/12 right), conser-va-tion code tech-
- []
-
-
-Overfull \hbox (73.27315pt too wide) in paragraph at lines 541--541
-[]|\T1/cmtt/m/n/12 filter_cmsis_device_header()| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 541--542
-[]|\T1/cmr/m/n/12 Filtrage in-tel-li-gent (voir ci-
- []
-
-ignored error: Infinite glue shrinkage found in box being split
 
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
 (fancyhdr)                Make it at least 14.61858pt, for example:
@@ -1002,22 +946,47 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[21
+[18
 pdfTeX warning (ext4): destination with the same identifier (name{figure.5.1}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.544 \end{longtable}
-                      <C:/Users/gharbiab/OneDrive - STMicroelectronics/Desktop/
-PFE_Chatbot_STM32Cube/docs/diagrams/technical/exported/01_ingestion_detail.png 
-(PNG copy)>]
+l.542 
+       <../diagrams/technical/exported/01_ingestion_detail.png (PNG copy)>]
+Underfull \hbox (badness 10000) in paragraph at lines 551--552
+[]|\T1/cmr/m/n/12 Suppression ba-lises HTML,
+ []
+
+
+Underfull \hbox (badness 7326) in paragraph at lines 552--553
+[]|\T1/cmr/m/n/12 Suppression badges CI, liens
+ []
+
+
+Overfull \hbox (17.71172pt too wide) in paragraph at lines 553--553
+[]|\T1/cmtt/m/n/12 clean_source_code()| 
+ []
+
+
+Underfull \hbox (badness 1552) in paragraph at lines 553--554
+\T1/cmr/m/n/12 right), conser-va-tion code tech-
+ []
+
+
+Overfull \hbox (73.27315pt too wide) in paragraph at lines 554--554
+[]|\T1/cmtt/m/n/12 filter_cmsis_device_header()| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 554--555
+[]|\T1/cmr/m/n/12 Filtrage in-tel-li-gent (voir ci-
+ []
+
+
 (C:\Users\gharbiab\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.st
 y
 File: lstlang1.sty 2025/11/14 1.11b listings language file
 )
-Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
-nput line 560.
-
 
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
 (fancyhdr)                Make it at least 14.61858pt, for example:
@@ -1025,14 +994,24 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[22]
-Overfull \hbox (12.60246pt too wide) in paragraph at lines 597--598
+[19]
+Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
+nput line 573.
+
+Overfull \hbox (12.60246pt too wide) in paragraph at lines 610--611
 []\T1/cmr/m/n/12 Fichiers d'en-trée : \T1/cmtt/m/n/12 clean_files_<repo>.json \
 T1/cmr/m/n/12 (V1) ou \T1/cmtt/m/n/12 clean_files_<repo>_v3.json
  []
 
 
-Overfull \hbox (1.4305pt too wide) in paragraph at lines 606--608
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[20]
+Overfull \hbox (1.4305pt too wide) in paragraph at lines 619--621
 []\T1/cmr/m/n/12 Le mo-dule \T1/cmtt/m/n/12 stm32cube_preprocessing_heuristics.
 py \T1/cmr/m/n/12 ap-plique des règles ba-sées sur : 
  []
@@ -1057,7 +1036,7 @@ See the Listings package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.615 \begin{lstlisting}[language=json]
+l.628 \begin{lstlisting}[language=json]
                                        
 ? 
 
@@ -1067,7 +1046,7 @@ See the Listings package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.615 \begin{lstlisting}[language=json]
+l.628 \begin{lstlisting}[language=json]
                                        
 ? 
 
@@ -1077,14 +1056,14 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[23]
-<../diagrams/technical/exported/02_enrichment_similarity_detail.png, id=737, 24
+[21]
+<../diagrams/technical/exported/02_enrichment_similarity_detail.png, id=240, 24
 74.24374pt x 1287.81125pt>
 File: ../diagrams/technical/exported/02_enrichment_similarity_detail.png Graphi
 c file (type png)
 <use ../diagrams/technical/exported/02_enrichment_similarity_detail.png>
 Package pdftex.def Info: ../diagrams/technical/exported/02_enrichment_similarit
-y_detail.png  used on input line 648.
+y_detail.png  used on input line 661.
 (pdftex.def)             Requested size: 386.96027pt x 201.39687pt.
 
 
@@ -1094,45 +1073,36 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[24]
-<../diagrams/technical/exported/03_delivery_resolver_diagnostic.png, id=762, 27
+[22
+pdfTeX warning (ext4): destination with the same identifier (name{figure.5.2}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.689   \item A
+               lias de requÃªte pour amÃ©liorer la rÃ©cupÃ©ration <../diagrams/
+technical/exported/02_enrichment_similarity_detail.png (PNG copy)>]
+<../diagrams/technical/exported/03_delivery_resolver_diagnostic.png, id=256, 27
 95.44376pt x 1348.03625pt>
 File: ../diagrams/technical/exported/03_delivery_resolver_diagnostic.png Graphi
 c file (type png)
 <use ../diagrams/technical/exported/03_delivery_resolver_diagnostic.png>
 Package pdftex.def Info: ../diagrams/technical/exported/03_delivery_resolver_di
-agnostic.png  used on input line 681.
+agnostic.png  used on input line 694.
 (pdftex.def)             Requested size: 409.71692pt x 197.5686pt.
 
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[25
-pdfTeX warning (ext4): destination with the same identifier (name{figure.5.2}) 
-has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.685 
-       <C:/Users/gharbiab/OneDrive - STMicroelectronics/Desktop/PFE_Chatbot_STM
-32Cube/docs/diagrams/technical/exported/02_enrichment_similarity_detail.png (PN
-G copy)>]
-Overfull \hbox (11.6277pt too wide) in paragraph at lines 701--702
+Overfull \hbox (11.6277pt too wide) in paragraph at lines 714--715
 []\T1/cmr/bx/n/12 Fix ap-pli-qué \T1/cmr/m/n/12 : La fonc-tion \T1/cmtt/m/n/12 
 first_sentence() \T1/cmr/m/n/12 sup-prime les mar-kers \T1/cmtt/m/n/12 [IMAGE A
 TTACHED]
  []
 
-<../diagrams/presentation/exported/05_alfred_vision_integration.png, id=773, 22
+<../diagrams/presentation/exported/05_alfred_vision_integration.png, id=257, 22
 53.41875pt x 1327.96124pt>
 File: ../diagrams/presentation/exported/05_alfred_vision_integration.png Graphi
 c file (type png)
 <use ../diagrams/presentation/exported/05_alfred_vision_integration.png>
 Package pdftex.def Info: ../diagrams/presentation/exported/05_alfred_vision_int
-egration.png  used on input line 705.
+egration.png  used on input line 718.
 (pdftex.def)             Requested size: 409.71692pt x 241.434pt.
 
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
@@ -1141,15 +1111,14 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[26
+[23
 pdfTeX warning (ext4): destination with the same identifier (name{figure.5.3}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.709 
-       <C:/Users/gharbiab/OneDrive - STMicroelectronics/Desktop/PFE_Chatbot_STM
-32Cube/docs/diagrams/technical/exported/03_delivery_resolver_diagnostic.png (PN
-G copy)>]
+l.722 
+       <../diagrams/technical/exported/03_delivery_resolver_diagnostic.png (PNG
+ copy)>]
 
 ! LaTeX Error: Environment tikzpicture undefined.
 
@@ -1157,86 +1126,86 @@ See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.718 \begin{tikzpicture}
+l.731 \begin{tikzpicture}
                          [
 ? 
 ! Undefined control sequence.
-l.722   \node
+l.735   \node
              [box, fill=stblue!10] (user) at (0,0) {Utilisateur\\(IngÃ©nieur...
 
 ? 
 ! Undefined control sequence.
-l.723   \node
+l.736   \node
              [box, fill=stblue!20] (persona) at (0,-2) {Persona\\ST GitHub A...
 
 ? 
 ! Undefined control sequence.
-l.724   \node
+l.737   \node
              [box, fill=stlightblue!20] (kb) at (-3.5,-4.5) {KB Tool\\(Unstr...
 
 ? 
 ! Undefined control sequence.
-l.725   \node
+l.738   \node
              [box, fill=storange!20] (alfred) at (3.5,-4.5) {Alfred Tool\\(F...
 
 ? 
 ! Undefined control sequence.
-l.726   \node
+l.739   \node
              [box, fill=stgreen!15] (pipeline) at (-3.5,-7) {Pipeline\\Prepr...
 
 ? 
 ! Undefined control sequence.
-l.727   \node
+l.740   \node
              [box, fill=stgray!20] (github) at (-3.5,-9) {GitHub\\STMicroele...
 
 ? 
 ! Undefined control sequence.
-l.729   \draw
+l.742   \draw
              [arrow] (user) -- node[right, font=\scriptsize]{Question} (pers...
 
 ? 
 ! Undefined control sequence.
-l.730   \draw
+l.743   \draw
              [arrow] (persona) -- node[left, font=\scriptsize]{Recherche KB}...
 
 ? 
 ! Undefined control sequence.
-l.731   \draw
+l.744   \draw
              [arrow] (persona) -- node[right, font=\scriptsize]{Fallback\\(s...
 
 ? 
 ! Undefined control sequence.
-l.732   \draw
+l.745   \draw
              [arrow] (kb) -- node[left, font=\scriptsize]{RÃ©ponse\\+ citati...
 
 ? 
 ! Undefined control sequence.
-l.733   \draw
+l.746   \draw
              [arrow] (alfred) -- node[right, font=\scriptsize]{RÃ©ponse\\gÃ©...
 
 ? 
 ! Undefined control sequence.
-l.734   \draw
+l.747   \draw
              [arrow] (pipeline) -- node[left, font=\scriptsize]{Upload JSON}...
 
 ? 
 ! Undefined control sequence.
-l.735   \draw
+l.748   \draw
              [arrow] (github) -- node[left, font=\scriptsize]{Ingestion} (pi...
 
 ? 
 
-! LaTeX Error: \begin{figure} on input line 716 ended by \end{tikzpicture}.
+! LaTeX Error: \begin{figure} on input line 729 ended by \end{tikzpicture}.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.736 \end{tikzpicture}
+l.749 \end{tikzpicture}
                        
 ? 
 
-Underfull \hbox (badness 10000) in paragraph at lines 753--754
+Underfull \hbox (badness 10000) in paragraph at lines 766--767
 []|\T1/cmr/m/n/12 ST-GitHub-Analyzer-Unstructured (Hy-brid
  []
 
@@ -1247,21 +1216,20 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[27
+[24
 pdfTeX warning (ext4): destination with the same identifier (name{figure.5.4}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.759 \end{longtable}
+l.772 \end{longtable}
                      
 pdfTeX warning (ext4): destination with the same identifier (name{figure.5.5}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.759 \end{longtable}
-                      <C:/Users/gharbiab/OneDrive - STMicroelectronics/Desktop/
-PFE_Chatbot_STM32Cube/docs/diagrams/presentation/exported/05_alfred_vision_inte
-gration.png (PNG copy)>]
+l.772 \end{longtable}
+                      <../diagrams/presentation/exported/05_alfred_vision_integ
+ration.png (PNG copy)>]
 
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
 (fancyhdr)                Make it at least 14.61858pt, for example:
@@ -1269,7 +1237,7 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[28]
+[25]
 
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
 (fancyhdr)                Make it at least 14.61858pt, for example:
@@ -1277,19 +1245,19 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[29]
+[26]
 Chapitre 6.
 
-Underfull \hbox (badness 1622) in paragraph at lines 849--849
+Underfull \hbox (badness 1622) in paragraph at lines 862--862
 []|\T1/cmr/m/n/12 Volume to-tal cor-pus files
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 850--850
+Underfull \hbox (badness 10000) in paragraph at lines 863--863
 []|\T1/cmr/m/n/12 Fichiers ex-clus
  []
 
-ignored error: Infinite glue shrinkage found in box being split [30
+ignored error: Infinite glue shrinkage found in box being split [27
 
 ]
 
@@ -1299,20 +1267,20 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[31]
-Overfull \hbox (52.41515pt too wide) in paragraph at lines 895--896
+[28]
+Overfull \hbox (52.41515pt too wide) in paragraph at lines 908--909
 []\T1/cmr/m/n/12 L'évaluation quan-ti-ta-tive du pi-pe-line est réa-li-sée par 
 le script :\T1/cmtt/m/n/12 generate_evaluation_report.py
  []
 
 <../../datasets/07_delivery/st_ready/evaluation_report/01_ingestion_completenes
-s.png, id=819, 798.3426pt x 357.0138pt>
+s.png, id=323, 798.3426pt x 357.0138pt>
 File: ../../datasets/07_delivery/st_ready/evaluation_report/01_ingestion_comple
 teness.png Graphic file (type png)
 <use ../../datasets/07_delivery/st_ready/evaluation_report/01_ingestion_complet
 eness.png>
 Package pdftex.def Info: ../../datasets/07_delivery/st_ready/evaluation_report/
-01_ingestion_completeness.png  used on input line 924.
+01_ingestion_completeness.png  used on input line 937.
 (pdftex.def)             Requested size: 432.48051pt x 193.4056pt.
 
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
@@ -1321,25 +1289,107 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[32]
+[29]
+Underfull \hbox (badness 10000) in paragraph at lines 951--951
+[]|\T1/cmr/m/n/12 Fichiers non-vides après
+ []
+
 <../../datasets/07_delivery/st_ready/evaluation_report/02_cleaning_validity.png
-, id=829, 1148.6112pt x 356.532pt>
+, id=336, 1148.6112pt x 356.532pt>
 File: ../../datasets/07_delivery/st_ready/evaluation_report/02_cleaning_validit
 y.png Graphic file (type png)
 <use ../../datasets/07_delivery/st_ready/evaluation_report/02_cleaning_validity
 .png>
 Package pdftex.def Info: ../../datasets/07_delivery/st_ready/evaluation_report/
-02_cleaning_validity.png  used on input line 944.
+02_cleaning_validity.png  used on input line 959.
 (pdftex.def)             Requested size: 450.69417pt x 139.89558pt.
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[30
+pdfTeX warning (ext4): destination with the same identifier (name{figure.6.1}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.978 \end{longtable}
+                     
+pdfTeX warning (ext4): destination with the same identifier (name{figure.6.2}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.978 \end{longtable}
+                      <../../datasets/07_delivery/st_ready/evaluation_report/01
+_ingestion_completeness.png> <../../datasets/07_delivery/st_ready/evaluation_re
+port/02_cleaning_validity.png>]
 <../../datasets/07_delivery/st_ready/evaluation_report/03_enrichment_metadata.p
-ng, id=830, 1076.3412pt x 357.0138pt>
+ng, id=350, 1076.3412pt x 357.0138pt>
 File: ../../datasets/07_delivery/st_ready/evaluation_report/03_enrichment_metad
 ata.png Graphic file (type png)
 <use ../../datasets/07_delivery/st_ready/evaluation_report/03_enrichment_metada
 ta.png>
 Package pdftex.def Info: ../../datasets/07_delivery/st_ready/evaluation_report/
-03_enrichment_metadata.png  used on input line 958.
+03_enrichment_metadata.png  used on input line 989.
 (pdftex.def)             Requested size: 450.69417pt x 149.49261pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 1000--1000
+[]|\T1/cmr/m/n/12 Couverture (is-sues avec
+ []
+
+<../../datasets/07_delivery/st_ready/evaluation_report/04_similarity_coverage.p
+ng, id=351, 364.7226pt x 357.4956pt>
+File: ../../datasets/07_delivery/st_ready/evaluation_report/04_similarity_cover
+age.png Graphic file (type png)
+<use ../../datasets/07_delivery/st_ready/evaluation_report/04_similarity_covera
+ge.png>
+Package pdftex.def Info: ../../datasets/07_delivery/st_ready/evaluation_report/
+04_similarity_coverage.png  used on input line 1007.
+(pdftex.def)             Requested size: 318.66948pt x 312.35512pt.
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[31
+pdfTeX warning (ext4): destination with the same identifier (name{figure.6.3}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.1011 
+        <../../datasets/07_delivery/st_ready/evaluation_report/03_enrichment_me
+tadata.png>]
+<../../datasets/07_delivery/st_ready/evaluation_report/05_delivery_volumes.png,
+ id=363, 625.8582pt x 1445.8818pt>
+File: ../../datasets/07_delivery/st_ready/evaluation_report/05_delivery_volumes
+.png Graphic file (type png)
+<use ../../datasets/07_delivery/st_ready/evaluation_report/05_delivery_volumes.
+png>
+Package pdftex.def Info: ../../datasets/07_delivery/st_ready/evaluation_report/
+05_delivery_volumes.png  used on input line 1016.
+(pdftex.def)             Requested size: 386.96027pt x 893.98854pt.
+
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[32
+pdfTeX warning (ext4): destination with the same identifier (name{figure.6.4}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.1020 
+        <../../datasets/07_delivery/st_ready/evaluation_report/04_similarity_co
+verage.png>]
+Overfull \vbox (273.35065pt too high) has occurred while \output is active []
+
 
 
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
@@ -1349,35 +1399,27 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
 [33
-pdfTeX warning (ext4): destination with the same identifier (name{figure.6.1}) 
+pdfTeX warning (ext4): destination with the same identifier (name{figure.6.5}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.962 
-      
-pdfTeX warning (ext4): destination with the same identifier (name{figure.6.2}) 
-has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.962 
-       <C:/Users/gharbiab/OneDrive - STMicroelectronics/Desktop/PFE_Chatbot_STM
-32Cube/datasets/07_delivery/st_ready/evaluation_report/01_ingestion_completenes
-s.png> <C:/Users/gharbiab/OneDrive - STMicroelectronics/Desktop/PFE_Chatbot_STM
-32Cube/datasets/07_delivery/st_ready/evaluation_report/02_cleaning_validity.png
->]
-Underfull \hbox (badness 10000) in paragraph at lines 969--969
-[]|\T1/cmr/m/n/12 Couverture (is-sues avec
+l.1020 
+        <../../datasets/07_delivery/st_ready/evaluation_report/05_delivery_volu
+mes.png>]
+Overfull \hbox (16.78232pt too wide) in paragraph at lines 1023--1024
+[]\T1/cmr/m/n/12 Le ta-bleau sui-vant pré-sente les scores réels ob-te-nus par 
+\T1/cmtt/m/n/12 generate_evaluation_report.py
  []
 
-<../../datasets/07_delivery/st_ready/evaluation_report/04_similarity_coverage.p
-ng, id=839, 354.6048pt x 357.4956pt>
-File: ../../datasets/07_delivery/st_ready/evaluation_report/04_similarity_cover
-age.png Graphic file (type png)
-<use ../../datasets/07_delivery/st_ready/evaluation_report/04_similarity_covera
-ge.png>
+<../../datasets/07_delivery/st_ready/evaluation_report/00_pipeline_dashboard.pn
+g, id=377, 855.6768pt x 423.984pt>
+File: ../../datasets/07_delivery/st_ready/evaluation_report/00_pipeline_dashboa
+rd.png Graphic file (type png)
+<use ../../datasets/07_delivery/st_ready/evaluation_report/00_pipeline_dashboar
+d.png>
 Package pdftex.def Info: ../../datasets/07_delivery/st_ready/evaluation_report/
-04_similarity_coverage.png  used on input line 976.
-(pdftex.def)             Requested size: 318.66948pt x 321.27394pt.
+00_pipeline_dashboard.png  used on input line 1062.
+(pdftex.def)             Requested size: 432.48051pt x 214.29459pt.
 
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
 (fancyhdr)                Make it at least 14.61858pt, for example:
@@ -1386,24 +1428,12 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
 [34
-pdfTeX warning (ext4): destination with the same identifier (name{figure.6.3}) 
-has been already used, duplicate ignored
+pdfTeX warning (ext4): destination with the same identifier (name{table.6.8}) h
+as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.980 
-       <C:/Users/gharbiab/OneDrive - STMicroelectronics/Desktop/PFE_Chatbot_STM
-32Cube/datasets/07_delivery/st_ready/evaluation_report/03_enrichment_metadata.p
-ng>]
-<../../datasets/07_delivery/st_ready/evaluation_report/05_delivery_volumes.png,
- id=846, 714.9912pt x 357.0138pt>
-File: ../../datasets/07_delivery/st_ready/evaluation_report/05_delivery_volumes
-.png Graphic file (type png)
-<use ../../datasets/07_delivery/st_ready/evaluation_report/05_delivery_volumes.
-png>
-Package pdftex.def Info: ../../datasets/07_delivery/st_ready/evaluation_report/
-05_delivery_volumes.png  used on input line 985.
-(pdftex.def)             Requested size: 386.96027pt x 193.22037pt.
-
+l.1066 
+       ]
 
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
 (fancyhdr)                Make it at least 14.61858pt, for example:
@@ -1412,48 +1442,20 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
 [35
-pdfTeX warning (ext4): destination with the same identifier (name{figure.6.4}) 
-has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.994 \begin{equation}
-                      
-pdfTeX warning (ext4): destination with the same identifier (name{figure.6.5}) 
-has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.994 \begin{equation}
-                       <C:/Users/gharbiab/OneDrive - STMicroelectronics/Desktop
-/PFE_Chatbot_STM32Cube/datasets/07_delivery/st_ready/evaluation_report/04_simil
-arity_coverage.png> <C:/Users/gharbiab/OneDrive - STMicroelectronics/Desktop/PF
-E_Chatbot_STM32Cube/datasets/07_delivery/st_ready/evaluation_report/05_delivery
-_volumes.png>]
-<../../datasets/07_delivery/st_ready/evaluation_report/00_pipeline_dashboard.pn
-g, id=853, 855.6768pt x 423.984pt>
-File: ../../datasets/07_delivery/st_ready/evaluation_report/00_pipeline_dashboa
-rd.png Graphic file (type png)
-<use ../../datasets/07_delivery/st_ready/evaluation_report/00_pipeline_dashboar
-d.png>
-Package pdftex.def Info: ../../datasets/07_delivery/st_ready/evaluation_report/
-00_pipeline_dashboard.png  used on input line 1004.
-(pdftex.def)             Requested size: 432.48051pt x 214.29459pt.
-
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[36
 pdfTeX warning (ext4): destination with the same identifier (name{figure.6.6}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.1031 \end{longtable}
-                       <C:/Users/gharbiab/OneDrive - STMicroelectronics/Desktop
-/PFE_Chatbot_STM32Cube/datasets/07_delivery/st_ready/evaluation_report/00_pipel
-ine_dashboard.png>]
+l.1097   \item \textbf
+                      {Pertinence de la rÃ©cupÃ©ration} (30\%) --- Le bon do...
+ <../../datasets/07_delivery/st_ready/evaluation_report/00_pipeline_dashboard.p
+ng>]
+Overfull \hbox (19.05113pt too wide) in paragraph at lines 1125--1126
+[]\T1/cmr/m/n/12 Les ré-ponses sont éva-luées se-lon une grille de sco-ring à 6
+ cri-tères (max 10 points/réponse) 
+ []
+
+ignored error: Infinite glue shrinkage found in box being split
 
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
 (fancyhdr)                Make it at least 14.61858pt, for example:
@@ -1461,29 +1463,23 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[37]
-Overfull \hbox (19.05113pt too wide) in paragraph at lines 1067--1068
-[]\T1/cmr/m/n/12 Les ré-ponses sont éva-luées se-lon une grille de sco-ring à 6
- cri-tères (max 10 points/réponse) 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1094--1094
+[36]
+Underfull \hbox (badness 10000) in paragraph at lines 1152--1152
 []|\T1/cmr/m/n/12 UART_Receive_IT
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1097--1097
+Underfull \hbox (badness 10000) in paragraph at lines 1155--1155
 []|\T1/cmr/m/n/12 SPI DMA cor-rupt
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1100--1100
+Underfull \hbox (badness 10000) in paragraph at lines 1158--1158
 []|\T1/cmr/m/n/12 SDMMC FreeR-TOS
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1109--1109
+Underfull \hbox (badness 10000) in paragraph at lines 1167--1167
 []|\T1/cmr/m/n/12 GPDMA linked-list
  []
 
@@ -1495,7 +1491,7 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[38]
+[37]
 
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
 (fancyhdr)                Make it at least 14.61858pt, for example:
@@ -1503,8 +1499,8 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[39]
-Overfull \hbox (3.09525pt too wide) in paragraph at lines 1155--1156
+[38]
+Overfull \hbox (3.09525pt too wide) in paragraph at lines 1213--1214
 []\T1/cmr/m/n/12 La va-leur ajou-tée est maxi-male sur les ques-tions \T1/cmr/b
 x/n/12 issue-specific \T1/cmr/m/n/12 et \T1/cmr/bx/n/12 version-sensitive 
  []
@@ -1516,42 +1512,72 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[40]
+[39]
 Chapitre 7.
-<../diagrams/presentation/exported/06_cicd_automation.png, id=898, 2474.24374pt
+<../diagrams/presentation/exported/06_cicd_automation.png, id=441, 2474.24374pt
  x 1729.46124pt>
 File: ../diagrams/presentation/exported/06_cicd_automation.png Graphic file (ty
 pe png)
 <use ../diagrams/presentation/exported/06_cicd_automation.png>
 Package pdftex.def Info: ../diagrams/presentation/exported/06_cicd_automation.p
-ng  used on input line 1172.
+ng  used on input line 1230.
 (pdftex.def)             Requested size: 409.71692pt x 286.37798pt.
-[41
+[40
 
 
 pdfTeX warning (ext4): destination with the same identifier (name{figure.7.1}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.1182 \end{enumerate}
-                       <C:/Users/gharbiab/OneDrive - STMicroelectronics/Desktop
-/PFE_Chatbot_STM32Cube/docs/diagrams/presentation/exported/06_cicd_automation.p
-ng (PNG copy)>] [42]
+l.1240 \end{enumerate}
+                       <../diagrams/presentation/exported/06_cicd_automation.pn
+g (PNG copy)>] [41]
 Chapitre 8.
 
-Overfull \hbox (3.13376pt too wide) in paragraph at lines 1220--1221
+Overfull \hbox (3.13376pt too wide) in paragraph at lines 1278--1279
 []\T1/cmr/bx/n/12 Heuristiques NLP domain-specific \T1/cmr/m/n/12 pour clas-si-
 fi-ca-tion STM32 (layer, com-ponent,
  []
 
-[43
+[42
 
-] [44] [45
+] [43] [44
 
-] [46
+] [45
 
 ]
-Overfull \hbox (107.0371pt too wide) in paragraph at lines 1287--1288
+
+LaTeX Warning: Reference `fig:pipeline_overview' on page 46 undefined on input 
+line 1326.
+
+
+LaTeX Warning: Reference `fig:delivery_upload' on page 46 undefined on input li
+ne 1327.
+
+
+LaTeX Warning: Reference `fig:data_flow' on page 46 undefined on input line 132
+8.
+
+
+LaTeX Warning: Reference `fig:alfred' on page 46 undefined on input line 1330.
+
+
+LaTeX Warning: Reference `fig:cicd' on page 46 undefined on input line 1331.
+
+
+LaTeX Warning: Reference `fig:ingestion_detail' on page 46 undefined on input l
+ine 1336.
+
+
+LaTeX Warning: Reference `fig:enrichment_similarity' on page 46 undefined on in
+put line 1337.
+
+
+LaTeX Warning: Reference `fig:resolver_diagnostic' on page 46 undefined on inpu
+t line 1338.
+
+
+Overfull \hbox (107.0371pt too wide) in paragraph at lines 1345--1346
 \T1/cmr/m/n/12 (File $\OMS/cmsy/m/n/12 !$ \T1/cmr/m/n/12 Ex-port as $\OMS/cmsy/
 m/n/12 !$ \T1/cmr/m/n/12 PNG, 150 DPI) dans le dos-sier \T1/cmtt/m/n/12 docs/di
 agrams/{presentation,technical}/exported/\T1/cmr/m/n/12 . 
@@ -1565,7 +1591,7 @@ File: lstlang1.sty 2025/11/14 1.11b listings language file
 (C:\Users\gharbiab\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.st
 y
 File: lstlang1.sty 2025/11/14 1.11b listings language file
-) [47
+) [46
 
 ]
 (C:\Users\gharbiab\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.st
@@ -1587,7 +1613,7 @@ See the Listings package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.1309 \begin{lstlisting}[language=json]
+l.1367 \begin{lstlisting}[language=json]
                                         
 ? 
 
@@ -1597,63 +1623,70 @@ See the Listings package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.1309 \begin{lstlisting}[language=json]
+l.1367 \begin{lstlisting}[language=json]
                                         
 ? 
-[48]
-(C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\
-docs\reports\PFE_Report_STM32Cube_Pipeline.aux)
+[47] (PFE_Report_STM32Cube_Pipeline.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
  ***********
 
 
+LaTeX Warning: There were undefined references.
+
+
 LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
-Package rerunfilecheck Info: File `PFE_Report_STM32Cube_Pipeline.out' has not c
-hanged.
-(rerunfilecheck)             Checksum: 383E8CD6E60410CEDA4763B88D50F099;20936.
+
+Package rerunfilecheck Warning: File `PFE_Report_STM32Cube_Pipeline.out' has ch
+anged.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `PFE_Report_STM32Cube_Pipeline.out':
+
+(rerunfilecheck)             Before: <no file>
+(rerunfilecheck)             After:  0A913D15B844771958ECE7030FD4BCA7;21791.
  ) 
 Here is how much of TeX's memory you used:
- 16335 strings out of 467871
- 263262 string characters out of 5416925
- 990485 words of memory out of 5000000
- 44644 multiletter control sequences out of 15000+600000
+ 16226 strings out of 467871
+ 260137 string characters out of 5416925
+ 1008265 words of memory out of 5000000
+ 44541 multiletter control sequences out of 15000+600000
  646032 words of font info for 77 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,12n,79p,472b,2195s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,12n,79p,459b,2112s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\t
 cbx1200.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec
-/dpi600\tcrm1200.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jk
-nappen/ec/dpi600\ectt1095.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/
-ljfour/jknappen/ec/dpi600\eccc1200.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\
-fonts/pk/ljfour/jknappen/ec/dpi600\tctt1200.pk> <C:\Users\gharbiab\AppData\Loca
-l\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm0800.pk> <C:\Users\gharbiab\App
-Data\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecti1200.pk> <C:\Users\gha
-rbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1440.pk> <C:\
-Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt1200
+/dpi600\ecrm0600.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jk
+nappen/ec/dpi600\tcrm1200.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/
+ljfour/jknappen/ec/dpi600\ectt1095.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\
+fonts/pk/ljfour/jknappen/ec/dpi600\eccc1200.pk> <C:\Users\gharbiab\AppData\Loca
+l\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tctt1200.pk> <C:\Users\gharbiab\App
+Data\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm0800.pk> <C:\Users\gha
+rbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecti1200.pk> <C:\
+Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1440
 .pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600
-\ecrm1200.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/
-ec/dpi600\ecbx1200.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/
-jknappen/ec/dpi600\ecrm2074.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/p
-k/ljfour/jknappen/ec/dpi600\ecbx2488.pk> <C:\Users\gharbiab\AppData\Local\MiKTe
-X\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1440.pk> <C:\Users\gharbiab\AppData\Lo
-cal\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1728.pk><C:/Users/gharbiab/Ap
-pData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users
-/gharbiab/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.p
-fb><C:/Users/gharbiab/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts
-/cm/cmmi6.pfb><C:/Users/gharbiab/AppData/Local/Programs/MiKTeX/fonts/type1/publ
-ic/amsfonts/cm/cmmi8.pfb><C:/Users/gharbiab/AppData/Local/Programs/MiKTeX/fonts
-/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/gharbiab/AppData/Local/Programs/M
-iKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/gharbiab/AppData/Local/
-Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/gharbiab/Ap
-pData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on "C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_
-Chatbot_STM32Cube\docs\reports\PFE_Report_STM32Cube_Pipeline.pdf" (49 pages, 39
-95279 bytes).
+\ectt1200.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/
+ec/dpi600\ecrm1200.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/
+jknappen/ec/dpi600\ecbx1200.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/p
+k/ljfour/jknappen/ec/dpi600\ecrm2074.pk> <C:\Users\gharbiab\AppData\Local\MiKTe
+X\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx2488.pk> <C:\Users\gharbiab\AppData\Lo
+cal\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1440.pk> <C:\Users\gharbiab\A
+ppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1728.pk><C:/Users/gh
+arbiab/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb>
+<C:/Users/gharbiab/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm
+/cmmi12.pfb><C:/Users/gharbiab/AppData/Local/Programs/MiKTeX/fonts/type1/public
+/amsfonts/cm/cmmi6.pfb><C:/Users/gharbiab/AppData/Local/Programs/MiKTeX/fonts/t
+ype1/public/amsfonts/cm/cmmi8.pfb><C:/Users/gharbiab/AppData/Local/Programs/MiK
+TeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/gharbiab/AppData/Local/P
+rograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/gharbiab/AppDa
+ta/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/gh
+arbiab/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
+Output written on PFE_Report_STM32Cube_Pipeline.pdf (48 pages, 3918004 bytes).
 PDF statistics:
- 1836 PDF objects out of 2073 (max. 8388607)
- 351 named destinations out of 1000 (max. 500000)
- 927 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1401 PDF objects out of 1440 (max. 8388607)
+ 356 named destinations out of 1000 (max. 500000)
+ 71 words of extra memory for PDF output out of 10000 (max. 10000000)
 

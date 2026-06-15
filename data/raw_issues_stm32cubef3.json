@@ -1,0 +1,563 @@
+[
+  {
+    "repo": "STM32CubeF3",
+    "issue_number": 23,
+    "title": "Double definition of  ADC12_CSR_ADRDY_XXX_XXX",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "internal bug tracker",
+      "cmsis"
+    ],
+    "created_at": "2023-10-13T09:39:13Z",
+    "closed_at": "2024-02-26T16:14:27Z",
+    "body": "In the file stm32f303xc.h, \r\nthe constant ADC12_CSR_ADRDY_OVR_SLV_Pos, ADC12_CSR_ADRDY_OVR_SLV_Msk and ADC12_CSR_ADRDY_OVR_SLV  are defined twice.\r\n\r\nMoreover, the equivalent constant for ADC34 are not defined.\r\nLine and file reference:\r\nhttps://github.com/STMicroelectronics/STM32CubeF3/blob/121e4039445ba59f284ebff013d8b3782d503e9f/Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f303xc.h#L1999C9-L1999C42\r\n````C\r\n#define ADC34_CSR_ADRDY_EOS_SLV          ADC34_CSR_ADRDY_EOS_SLV_Msk           /*!< End of regular sequence flag of the slave ADC */\r\n#define ADC12_CSR_ADRDY_OVR_SLV_Pos      (20U)                                 \r\n#define ADC12_CSR_ADRDY_OVR_SLV_Msk      (0x1U << ADC12_CSR_ADRDY_OVR_SLV_Pos) /*!< 0x00100000 */\r\n#define ADC12_CSR_ADRDY_OVR_SLV          ADC12_CSR_ADRDY_OVR_SLV_Msk           /*!< Overrun flag of the slave ADC */\r\n#define ADC34_CSR_ADRDY_JEOC_SLV_Pos     (21U)\r\n````\r\n\r\nshould be replaced by\r\n\r\n````C\r\n#define ADC34_CSR_ADRDY_EOS_SLV          ADC34_CSR_ADRDY_EOS_SLV_Msk           /*!< End of regular sequence flag of the slave ADC */\r\n#define ADC34_CSR_ADRDY_OVR_SLV_Pos      (20U)                                 \r\n#define ADC34_CSR_ADRDY_OVR_SLV_Msk      (0x1U << ADC34_CSR_ADRDY_OVR_SLV_Pos) /*!< 0x00100000 */\r\n#define ADC34_CSR_ADRDY_OVR_SLV          ADC34_CSR_ADRDY_OVR_SLV_Msk           /*!< Overrun flag of the slave ADC */\r\n#define ADC34_CSR_ADRDY_JEOC_SLV_Pos     (21U)\r\n````\r\n\r\nThis error is also present in stm32f303xe.h, stm32f358xx.h, stm32f334x8.h, stm32f358xx.h, stm32f398xx.h",
+    "comments": [
+      {
+        "author": "RJMSTM",
+        "created_at": "2023-10-24T15:53:34Z",
+        "body": "ST Internal Reference: 164694"
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2024-02-26T16:14:27Z",
+        "body": "Fixed in 53c8834f42263af4754833980c702ab60c972bab"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF3/issues/23"
+  },
+  {
+    "repo": "STM32CubeF3",
+    "issue_number": 22,
+    "title": "AN4449 Example on STM32F3348-Discovery Failing to Run",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "wontfix",
+      "projects"
+    ],
+    "created_at": "2023-03-18T11:45:31Z",
+    "closed_at": "2026-03-25T16:52:57Z",
+    "body": "**Describe the set-up**\r\nSTM32CubeIDE 1.12.0\r\n\r\n**Describe the bug (skip if none)**\r\nAN4449 Example builds but immediately faults on launch with indeterminate error. Setting breaks on an LED3 calls doesn't yield a clear failure point however it appears as if `Run2Stop` is being called and `vout` yields no physical or ADC-read output.\r\n\r\n\r\nA clear and concise description of what the bug is.\r\n\r\nImport STM32F3348-Discovery AN4449 BuckBoost example into CubeIDE 1.12.0. Apply (4V) voltage source to Vin on Discovery board. Build and run program.\r\n\r\n",
+    "comments": [
+      {
+        "author": "RJMSTM",
+        "created_at": "2023-03-27T09:01:39Z",
+        "body": "Hello @alexanderturner \r\n\r\nThank you for this report. We will get back to you as soon as we analyze it further. This may take some time. Thank you for your comprehension.\r\n\r\nBeST Regards,\r\nRania"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2026-03-25T16:52:44Z",
+        "body": "Hello @alexanderturner,\n\nPlease excuse this delayed reply. Would mind forwarding your post to the [ST Community](https://community.st.com/t5/stm32-mcus-embedded-software/bd-p/mcu-embedded-software-forum) if still relevant, please? Thank you for your understanding.\n\nWith regards, "
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF3/issues/22"
+  },
+  {
+    "repo": "STM32CubeF3",
+    "issue_number": 21,
+    "title": "FLASH_OB_DisableWRP() disables write protection of all pages",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "created_at": "2023-03-16T17:04:46Z",
+    "closed_at": "2023-08-25T15:39:59Z",
+    "body": "Problem in\r\n[https://github.com/STMicroelectronics/STM32CubeF3/blob/master/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash_ex.c](url)\r\n\r\n**Describe the set-up**\r\n- STM32F302CCT6 on custom HW\r\n- STM32CubeIDE 1.11.2\r\n- STM32Cube FW_F3 V1.11.3 (but no changes to this file since in latest commit)\r\n- ST-Link on NUCLEO-F072RB with FW V2J40M27\r\n\r\n**Describe the bug**\r\nBecause of calling `HAL_FLASHEx_OBErase()` https://github.com/STMicroelectronics/STM32CubeF3/blob/e805a235c431db2e01cea47d795fa83d597c64af/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash_ex.c#L679 the `FLASH_OBR` register is reset and because of that the `OB->WRPx` contains 0xffff\r\n\r\nThis means that the following instructions\r\nhttps://github.com/STMicroelectronics/STM32CubeF3/blob/e805a235c431db2e01cea47d795fa83d597c64af/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash_ex.c#L687 https://github.com/STMicroelectronics/STM32CubeF3/blob/e805a235c431db2e01cea47d795fa83d597c64af/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash_ex.c#L697 https://github.com/STMicroelectronics/STM32CubeF3/blob/e805a235c431db2e01cea47d795fa83d597c64af/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash_ex.c#L707 https://github.com/STMicroelectronics/STM32CubeF3/blob/e805a235c431db2e01cea47d795fa83d597c64af/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash_ex.c#L717 will always write 0xffff to the registers.\r\n\r\nIn my opinion, the solution would be \r\n`OB->WRPx &= WRPx_Data` \r\ninstead, because the `WriteProtectPage `\r\nwas already initialized correctly : https://github.com/STMicroelectronics/STM32CubeF3/blob/e805a235c431db2e01cea47d795fa83d597c64af/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash_ex.c#L649\r\n\r\n\r\nPlease compare `FLASH_OB_EnableWRP()`: https://github.com/STMicroelectronics/STM32CubeF3/blob/e805a235c431db2e01cea47d795fa83d597c64af/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_flash_ex.c#L519\r\n",
+    "comments": [
+      {
+        "author": "RJMSTM",
+        "created_at": "2023-03-27T09:03:26Z",
+        "body": "Hi @P5pDev ,\r\n\r\n Thank you for this report. We will get back to you as soon as we analyze it further. This may take some time. Thank you for your comprehension.\r\n\r\n With regards,"
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2023-04-11T09:40:31Z",
+        "body": "ST Internal Reference: 149343"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2023-08-25T15:39:59Z",
+        "body": "Fixed in commit 121e4039445ba59f284ebff013d8b3782d503e9f"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF3/issues/21"
+  },
+  {
+    "repo": "STM32CubeF3",
+    "issue_number": 19,
+    "title": "Some code is missing",
+    "state": "closed",
+    "labels": [
+      "invalid",
+      "question"
+    ],
+    "created_at": "2022-04-15T10:44:38Z",
+    "closed_at": "2022-04-19T10:55:28Z",
+    "body": "Hi,\r\n\r\nI am trying to use the CMSIS-DSP library with my Nucleo Board (F3) and I need to test the Levinson Durbin algorithm. I have seen that this function is described and defined here https://www.keil.com/pack/doc/cmsis/DSP/html/group__LD.html, but i cannot use that in my code because there is not inside the CMSIS Library. I have even look for it inside the G4 Library, but is missing even there.\r\nAm I missing something? Do I need to Install or download anything else?\r\n\r\nThank you,\r\n\r\nEmbeddedVito.\r\n<img width=\"794\" alt=\"Schermata 2022-04-15 alle 12 43 58\" src=\"https://user-images.githubusercontent.com/103099923/163561973-3bf27655-fd77-4aa0-88ce-fa7195e30c59.png\">\r\n\r\n",
+    "comments": [
+      {
+        "author": "ASELSTM",
+        "created_at": "2022-04-19T10:55:28Z",
+        "body": "Hi @EmbeddedVito,\r\n\r\nUnfortunately, we don't address aspects related to **CMSIS-DSP** library in our GitHub repositories as the library come from Arm and we use it as is. Therefore, these files are out of the scope of STMicroelectronics. You may report this issue to the [ARM](https://github.com/ARM-software) GitHub.\r\n\r\nPlease allow me to close this issue now. Thank you again for your comprehension and for your contribution.\r\n\r\nWith regards, "
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF3/issues/19"
+  },
+  {
+    "repo": "STM32CubeF3",
+    "issue_number": 18,
+    "title": "Is it possible to add PDM2CPM in F3?",
+    "state": "closed",
+    "labels": [
+      "duplicate",
+      "st community"
+    ],
+    "created_at": "2022-04-07T07:10:23Z",
+    "closed_at": "2022-04-11T06:39:49Z",
+    "body": "Just like what I did in G4, I was able to add manually PDM2PCM [https://github.com/STMicroelectronics/STM32CubeG4/issues/31](https://github.com/STMicroelectronics/STM32CubeG4/issues/31).\r\nIs it also possible to add in F3? I asked in ST community for this problem [https://community.st.com/s/question/0D53W00001U2weXSAR/you-can-also-use-pdm2pcm-on-stm32f3-in-cubemx](https://community.st.com/s/question/0D53W00001U2weXSAR/you-can-also-use-pdm2pcm-on-stm32f3-in-cubemx).",
+    "comments": [
+      {
+        "author": "RKOUSTM",
+        "created_at": "2022-04-11T06:36:15Z",
+        "body": "Hi @VictorTagayun,\r\n\r\nThe point you reported has been already treated at [ST Community](https://community.st.com/s/question/0D53W00001U2weXSAR/you-can-also-use-pdm2pcm-on-stm32f3-in-cubemx), please allow me to close this duplicated issue now.\r\n\r\nThank you for your comprehension. We are looking forward to reading from you again.\r\n\r\nWith regards,\r\n "
+      },
+      {
+        "author": "RKOUSTM",
+        "created_at": "2022-04-11T06:39:35Z",
+        "body": "Duplicate of [STM32CubeG4](https://github.com/STMicroelectronics/STM32CubeG4/issues/31)"
+      },
+      {
+        "author": "VictorTagayun",
+        "created_at": "2022-04-11T12:19:04Z",
+        "body": "Why you cannot add PDM2PCM in F3?"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF3/issues/18"
+  },
+  {
+    "repo": "STM32CubeF3",
+    "issue_number": 17,
+    "title": "missing static in stm32f3xx_hal_rcc.c",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "created_at": "2022-01-03T13:39:24Z",
+    "closed_at": "2023-03-07T17:23:30Z",
+    "body": "Hi\r\nIn stm32f3xx_hal_rcc.c are two const array\r\n\r\n```\r\nuint8_t const aPLLMULFactorTable[16U] = { 2U,  3U,  4U,  5U,  6U,  7U,  8U,  9U,\r\n                                       10U, 11U, 12U, 13U, 14U, 15U, 16U, 16U};\r\nuint8_t const aPredivFactorTable[16U] = { 1U, 2U,  3U,  4U,  5U,  6U,  7U,  8U,\r\n                                         9U,10U, 11U, 12U, 13U, 14U, 15U, 16U};\r\n\r\n```\r\n\r\nThey are not declared in stm32f3xx_hal_rcc.h.\r\nSo they should be static.\r\n\r\nSame in stm32f3xx_hal_rcc_ex.c\r\n\r\n```\r\n#if defined(RCC_CFGR2_ADC1PRES) || defined(RCC_CFGR2_ADCPRE12) || defined(RCC_CFGR2_ADCPRE34)\r\n  uint16_t adc_pll_prediv_table[16U] = { 1U,  2U,  4U,  6U, 8U, 10U, 12U, 16U, 32U, 64U, 128U, 256U, 256U, 256U, 256U, 256U};\r\n#endif /* RCC_CFGR2_ADC1PRES || RCC_CFGR2_ADCPRE12 || RCC_CFGR2_ADCPRE34 */\r\n#if defined(RCC_CFGR_SDPRE)\r\n  uint8_t sdadc_prescaler_table[16U] = { 2U,  4U,  6U, 8U, 10U, 12U, 14U, 16U, 20U, 24U, 28U, 32U, 36U, 40U, 44U, 48U};\r\n#endif /* RCC_CFGR_SDPRE */\r\n\r\n```\r\n\r\nSame in stm32f3xx_ll_rcc.c\r\n\r\n```\r\n#if defined(RCC_CFGR2_ADC1PRES) || defined(RCC_CFGR2_ADCPRE12) || defined(RCC_CFGR2_ADCPRE34)\r\nuint16_t const aADCPrescTable[16U]       = {1U, 2U, 4U, 6U, 8U, 10U, 12U, 16U, 32U, 64U, 128U, 256U, 256U, 256U, 256U, 256U};\r\n#endif /* RCC_CFGR2_ADC1PRES || RCC_CFGR2_ADCPRE12 || RCC_CFGR2_ADCPRE34 */\r\n#if defined(RCC_CFGR_SDPRE)\r\nuint8_t const aSDADCPrescTable[16U]       = {2U, 4U, 6U, 8U, 10U, 12U, 14U, 16U, 20U, 24U, 28U, 32U, 36U, 40U, 44U, 48U};\r\n#endif /* RCC_CFGR_SDPRE */\r\n\r\n```\r\n\r\nPlease fix this\r\n\r\n",
+    "comments": [
+      {
+        "author": "RKOUSTM",
+        "created_at": "2022-01-07T14:02:17Z",
+        "body": "Hi @CanastraRF,\r\n\r\nThank you for your report. An internal tracker has been logged and a fix will be implemented and made available in the frame of a future release.\r\n\r\nThank you again for you report.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "RKOUSTM",
+        "created_at": "2022-01-07T14:03:29Z",
+        "body": "ST Internal Reference: 120490 "
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2023-03-07T17:23:30Z",
+        "body": "Hello @CanastraRF,\r\n\r\nThe issue you reported has been fixed in the frame of version v1.11.4 of the STM32CubeF3 published on GitHub.\r\n\r\nThank you again for having reported.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF3/issues/17"
+  },
+  {
+    "repo": "STM32CubeF3",
+    "issue_number": 16,
+    "title": "EEPROM Page Size and Number of Pages",
+    "state": "closed",
+    "labels": [
+      "question",
+      "st community"
+    ],
+    "created_at": "2021-07-29T00:05:30Z",
+    "closed_at": "2021-08-13T12:00:34Z",
+    "body": "Trying to use the example provided for EEPROM interfacing with STM32. The module I'm trying to use is AD7147. How can I get the number of PAGES and PAGE size? It is not given. ..\r\n\r\n\r\n\r\nBest,\r\nPrasanna",
+    "comments": [
+      {
+        "author": "RKOUSTM",
+        "created_at": "2021-08-13T12:00:27Z",
+        "body": "Hi @pkr97,\r\n\r\nThe point you reported is not directly related to the firmware published in this repository and is out of the scope of STMicroelectronics' activity. They are rather treated at [ST Community](https://community.st.com/s/topic/0TO0X000000BSqSWAW/stm32-mcus) level. Please allow me to redirect you to address your request in [this](https://community.st.com/s/question/0D53W00000yZ36y/how-to-implement-i2c-communication-with-a-sensor-like-ad71471) discussion section where the same issue is addressed.\r\n\r\nTo more investigate this issue and speed up the analysis procedure, could you please give more details about your application and the stm32F3 board is a custom board or not.  Also, please detail more the relationship between the CapTouch™ Programmable Controller for Single-Electrode Capacitance Sensors AD7147 and your developed example.\r\n\r\nNow, as this issue is not directly related to some software component published within this repository (CMSIS, HAL, BSP, etc.) but rather to a user application, please allow me to close it.\r\n\r\nThank you for your comprehension. We are looking forward to reading from you again.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF3/issues/16"
+  },
+  {
+    "repo": "STM32CubeF3",
+    "issue_number": 13,
+    "title": "missing callback call in I2SEx_TxRxDMACplt() if DMA is in circular mode",
+    "state": "closed",
+    "labels": [
+      "duplicate",
+      "hal",
+      "needs clarification"
+    ],
+    "created_at": "2021-04-05T18:20:07Z",
+    "closed_at": "2021-07-02T11:15:33Z",
+    "body": "Problem in: https://github.com/STMicroelectronics/STM32CubeF3/blob/master/Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_i2s_ex.c\r\n\r\nin function `static void I2SEx_TxRxDMACplt(DMA_HandleTypeDef *hdma)`\r\n\r\nI think this callback logic (theres two copies of it inside the function):\r\n```\r\n /* Call user TxRx complete callback */\r\n#if (USE_HAL_I2S_REGISTER_CALLBACKS == 1U)\r\n        hi2s->TxRxCpltCallback(hi2s);\r\n#else\r\n        HAL_I2SEx_TxRxCpltCallback(hi2s);\r\n#endif /* USE_HAL_I2S_REGISTER_CALLBACKS */\r\n```\r\nis missing outside the scope of:\r\n```  \r\n/* if DMA is configured in DMA_NORMAL mode */\r\n  if (hdma->Init.Mode == DMA_NORMAL) {\r\n\r\n /* ... */\r\n\r\n}\r\n```\r\nI discovered this problem when trying to set up I2S full duplex DMA in circular mode on NUCLEO-F303RE. I found that \r\nthis callback:\r\n`void HAL_I2SEx_TxRxHalfCpltCallback(I2S_HandleTypeDef *hi2s)`\r\n was being called periodically (as expected), but this one:\r\n`void HAL_I2SEx_TxRxCpltCallback(I2S_HandleTypeDef *hi2s)`\r\nwas not.\r\n\r\nThis is how i fixed it:\r\n\r\n```\r\nstatic void I2SEx_TxRxDMACplt(DMA_HandleTypeDef *hdma)\r\n{\r\n\r\n   /* ... */\r\n\r\n  if (hdma->Init.Mode == DMA_NORMAL)\r\n  {\r\n\r\n    /* ... */\r\n\r\n  }\r\n// ++++++++++++++++++++++++++++++++++++++++++++++++++++++ START OF FIX\r\n  else if (hdma->Init.Mode == DMA_CIRCULAR)\r\n  {\r\n    /* Call user TxRx complete callback */\r\n#if (USE_HAL_I2S_REGISTER_CALLBACKS == 1U)\r\n    hi2s->TxRxCpltCallback(hi2s);\r\n#else\r\n    HAL_I2SEx_TxRxCpltCallback(hi2s);\r\n#endif /* USE_HAL_I2S_REGISTER_CALLBACKS */\r\n  }\r\n// ++++++++++++++++++++++++++++++++++++++++++++++++++++++ END OF FIX\r\n}\r\n```\r\nMy problem was actually fixed.\r\n",
+    "comments": [
+      {
+        "author": "ASELSTM",
+        "created_at": "2021-04-12T10:07:59Z",
+        "body": "Hi @lukasnee,\r\n\r\nThank you for this report.  If the issue is systematically reproducible on your side, would you please give us more details on how to reproduce it and if possible share the project so that we can reproduce the same behavior and give you an answer.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ASELSTM",
+        "created_at": "2021-05-18T08:38:45Z",
+        "body": "Hi @lukasnee,\r\n\r\nAny update regarding this issue to move this discussion forward?\r\n\r\nWith regards,"
+      },
+      {
+        "author": "lukasnee",
+        "created_at": "2021-06-28T22:45:48Z",
+        "body": "I don't understand what is unclear. If you try to use  full duplex (\"TxRx\") I2S in DMA Circular mode, you won't get a dma complete callback as you would expect. On the other hand, half complete callback fires which makes this bug really sneaky. Look at the code, this must have been an overlook. I also found a video where someone else discovered the same issue and there's also a thread in forum\r\n\r\nhttps://youtu.be/lNBrGOk0XzE?t=1383\r\n"
+      },
+      {
+        "author": "ASELSTM",
+        "created_at": "2021-07-02T11:15:33Z",
+        "body": "Hi @lukasnee,\r\n\r\nThank you for this detailed report. Please allow me to close this thread as answer has been posted within the pull request #15.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF3/issues/13"
+  },
+  {
+    "repo": "STM32CubeF3",
+    "issue_number": 12,
+    "title": "unused parameter warnings",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "created_at": "2021-03-05T12:10:08Z",
+    "closed_at": "2021-08-16T16:24:46Z",
+    "body": "there are some unused parameter warnings in the Driver code.\r\n\r\nFor example:\r\nin Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_ll_adc.h the function LL_ADC_DMA_GetRegAddr has a unused variable variable, if ADC_MULTIMODE_SUPPORT is undefined.\r\n\r\n#if defined(ADC_MULTIMODE_SUPPORT)\r\n....\r\n#else\r\n__STATIC_INLINE uint32_t LL_ADC_DMA_GetRegAddr(ADC_TypeDef *ADCx, uint32_t **Register**)\r\n{\r\n  /* Retrieve address of register DR */\r\n  return (uint32_t)&(ADCx->DR);\r\n}\r\n#endif",
+    "comments": [
+      {
+        "author": "RKOUSTM",
+        "created_at": "2021-03-08T11:10:08Z",
+        "body": "Hi @T5100,\r\n \r\nThank you for contribution. It has been transferred to our development teams. We will be back to you as soon as we get an answer. \r\n\r\nIn order to accept and analyze [this](https://github.com/STMicroelectronics/STM32CubeF3/pull/11) pull-request, please sign  the <a href='https://cla.st.com'>Contribution License Agreement</a>. \r\n\r\nThank you for you again for your contribution.\r\n\r\nWith regards"
+      },
+      {
+        "author": "RKOUSTM",
+        "created_at": "2021-03-08T11:48:01Z",
+        "body": "Hi @T5100,\r\n\r\nThank you for your contribution. The issue you pointed out has been confirmed, a fix will be made available in future release.\r\n\r\nThank you once again for your contribution.\r\n\r\nWith regards, "
+      },
+      {
+        "author": "RKOUSTM",
+        "created_at": "2021-03-08T11:48:15Z",
+        "body": "ST Internal Reference: 102614 "
+      },
+      {
+        "author": "RKOUSTM",
+        "created_at": "2021-08-16T16:24:28Z",
+        "body": "Hi @T5100,\r\n\r\nThe fix you requested has been implemented and is now available in the frame of the latest STM32CubeF3 FW package V1.11.3 release.\r\n\r\nThis issue can be closed now. Thank you again for your contribution.\r\n\r\nWith regards, "
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF3/issues/12"
+  },
+  {
+    "repo": "STM32CubeF3",
+    "issue_number": 7,
+    "title": "RXNE flag doesn't behave correctly while using HAL_SPI_Receive() in bidirectional mode",
+    "state": "closed",
+    "labels": [
+      "spotted before customer",
+      "hal"
+    ],
+    "created_at": "2021-02-08T12:41:19Z",
+    "closed_at": "2021-02-22T12:09:55Z",
+    "body": "**Caution**\r\nThe Issues are strictly limited for the reporting of problem encountered with the software provided in this project.\r\nFor any other problem related to the STM32 product, the performance, the hardware characteristics and boards, the tools the environment in general, please post a topic in the [ST Community/STM32 MCUs forum](https://community.st.com/s/group/0F90X000000AXsASAW/stm32-mcus).\r\n\r\n**Describe the set-up**\r\n * The board  - STM32F3DISCOVERY (DK32F303C$AX1)\r\n * IDE - STM32CubeIDE 1.5.1\r\n * HAL Driver: HAL Driver version number V1.5.5\r\n * Toolchain - STM32CubeIDE\r\n\r\n**Describe the bug**\r\nRXNE in flag doesn't behave correctly while using HAL_SPI_Receive() in bidirectional master mode. \r\n\r\n**How To Reproduce**\r\n1. Indicate the global behavior of your application project.\r\n\r\n    HAL_SPI_Recieve() causes the SPI hardware to send twice as many clock periods.\r\n\r\n2. The modules that you suspect to be the cause of the problem (Driver, BSP, MW ...).\r\n\r\n   HAL_SPI_Receive()\r\n\r\n3. How we can reproduce the problem.\r\n   \r\n    See the screenshot for parameter settings of SPI\r\n    \r\n\r\n**Screenshots**\r\nConfiguration of the SPI:\r\n![Screenshot from 2021-02-08 13-01-17](https://user-images.githubusercontent.com/44645955/107217436-73cf8b80-6a0e-11eb-8f10-d031e5f9d3bf.png)\r\n\r\nClock signal when RXNE is ignored (workaround)\r\n![8periods](https://user-images.githubusercontent.com/44645955/107220888-2efa2380-6a13-11eb-8bf4-0312fb8b1f69.jpg)\r\n\r\nClock signal when RXNE is not ignored (issue)\r\n![16periods](https://user-images.githubusercontent.com/44645955/107220933-3f120300-6a13-11eb-81af-e57e9b466ef6.jpg)\r\n\r\n\r\n\r\n\r\n\r\n",
+    "comments": [
+      {
+        "author": "ASELSTM",
+        "created_at": "2021-02-22T11:25:49Z",
+        "body": "Hi @Jaycobe96,\r\n\r\nThis issue is already known. It has been spotted internally and our development team has already dealt with it. Unfortunately, it is a Hardware limitation.\r\n\r\nThis is due to a synchronization problem during SPI deactivation which is not done at the right time and that leads to the generation of another clock cycle. \r\n\r\nThe SPI deactivation information should normally be received between the third and the seventh clock stroke, the master will then take this information into consideration and will then stop the transmission at the end of the eight clock stroke. \r\n\r\nThe information, is actually received only at the 8th clock stroke, which is too late to allow the master to stop the transmission at the right moment. So, another clock cycle is generated.\r\n\r\nOur development team has worked on a workaround in the HAL driver to deal with the issue. The reception function within the HAL takes into consideration the extra byte sent in an erroneous way. The FIFO is then flushed to keep only the useful information.\r\n\r\nIn order to rectify the issue of the extra clock cycle, we can suggest you a workaround so that only 8 clock trikes are generated. For that you can use a TIM which will compute the time taken by a frame to be sent and then to deactivate the SPI at the right moment.\r\n\r\nHope this would help you.\r\n\r\nWith regards.\r\n\r\n\r\n"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF3/issues/7"
+  },
+  {
+    "repo": "STM32CubeF3",
+    "issue_number": 6,
+    "title": "HAL_TIM_DMABurst_WriteStart does work after  V1.11.2",
+    "state": "closed",
+    "labels": [
+      "question",
+      "hal"
+    ],
+    "created_at": "2020-12-28T08:57:15Z",
+    "closed_at": "2021-08-16T11:42:45Z",
+    "body": "**Caution**\r\nThe Issues are strictly limited for the reporting of problem encountered with the software provided in this project.\r\nFor any other problem related to the STM32 product, the performance, the hardware characteristics and boards, the tools the environment in general, please post a topic in the [ST Community/STM32 MCUs forum](https://community.st.com/s/group/0F90X000000AXsASAW/stm32-mcus).\r\n\r\n**Describe the set-up**\r\n * STM32F302C8T6\r\n * STN32CubeIDE v1.5.1 \r\n\r\n**Describe the bug**\r\nAfter update this lib from   V1.11.1 to V1.11.2, the HAL_TIM_DMABurst_WriteStart function does not work as noraml.\r\n\r\n\r\n**How To Reproduce**\r\n1. use V1.11.1 and conf Timer and DMA as this:\r\n```\r\nstatic void MX_TIM16_Init(void)\r\n{\r\n\r\n    /* USER CODE BEGIN TIM16_Init 0 */\r\n\r\n    /* USER CODE END TIM16_Init 0 */\r\n\r\n    TIM_OC_InitTypeDef sConfigOC = {0};\r\n    TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};\r\n\r\n    /* USER CODE BEGIN TIM16_Init 1 */\r\n\r\n    /* USER CODE END TIM16_Init 1 */\r\n    htim16.Instance = TIM16;\r\n    htim16.Init.Prescaler = MOTOR_PSC;\r\n    htim16.Init.CounterMode = TIM_COUNTERMODE_UP;\r\n    htim16.Init.Period = MOTOR_ARR;\r\n    htim16.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;\r\n    htim16.Init.RepetitionCounter = MOTOR_PCR;\r\n    htim16.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;\r\n    if (HAL_TIM_Base_Init(&htim16) != HAL_OK) {\r\n        Error_Handler();\r\n    }\r\n    if (HAL_TIM_PWM_Init(&htim16) != HAL_OK) {\r\n        Error_Handler();\r\n    }\r\n    sConfigOC.OCMode = TIM_OCMODE_PWM1;\r\n    sConfigOC.Pulse = MOTOR_PUL;\r\n    sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;\r\n    sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;\r\n    sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;\r\n    sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;\r\n    sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;\r\n    if (HAL_TIM_PWM_ConfigChannel(&htim16, &sConfigOC, TIM_CHANNEL_1) != HAL_OK) {\r\n        Error_Handler();\r\n    }\r\n    sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;\r\n    sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;\r\n    sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;\r\n    sBreakDeadTimeConfig.DeadTime = 0;\r\n    sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;\r\n    sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;\r\n    sBreakDeadTimeConfig.BreakFilter = 0;\r\n    sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_DISABLE;\r\n    if (HAL_TIMEx_ConfigBreakDeadTime(&htim16, &sBreakDeadTimeConfig) != HAL_OK) {\r\n        Error_Handler();\r\n    }\r\n    /* USER CODE BEGIN TIM16_Init 2 */\r\n\r\n    /* USER CODE END TIM16_Init 2 */\r\n    HAL_TIM_MspPostInit(&htim16);\r\n}\r\n\r\n/**\r\n * Enable DMA controller clock\r\n */\r\nstatic void MX_DMA_Init(void)\r\n{\r\n\r\n    /* DMA controller clock enable */\r\n    __HAL_RCC_DMA1_CLK_ENABLE();\r\n\r\n    /* DMA interrupt init */\r\n    /* DMA1_Channel3_IRQn interrupt configuration */\r\n    HAL_NVIC_SetPriority(DMA1_Channel3_IRQn, 5, 0);\r\n    HAL_NVIC_EnableIRQ(DMA1_Channel3_IRQn);\r\n}\r\n```\r\n \r\n2. start Timer PWM and call HAL_TIM_DMABurst_WriteStart \r\n```\r\nHAL_TIM_PWM_Start(&htim16, TIM_CHANNEL_1);\r\nHAL_TIM_DMABurst_WriteStart(&htim16, TIM_DMABASE_ARR, TIM_DMA_UPDATE, (uint32_t *)gMotor_SRC_Buffer, TIM_DMABURSTLENGTH_3TRANSFERS);\r\n```\r\n\r\n3. in HAL_TIM_PeriodElapsedCallback call HAL_TIM_DMABurst_WriteStart again\r\n```\r\ncallback_cnt++;\r\nif (callback_cnt > 10000) {\r\n    HAL_TIM_DMABurst_WriteStop(&htim16, TIM_DMA_UPDATE);\r\n    HAL_TIM_PWM_Stop(&htim16, TIM_CHANNEL_1);\r\n} else {\r\n    HAL_TIM_DMABurst_WriteStart(&htim16, TIM_DMABASE_ARR, TIM_DMA_UPDATE, (uint32_t *)gMotor_SRC_Buffer, TIM_DMABURSTLENGTH_3TRANSFERS);\r\n}\r\n```\r\n\r\n3. switch to V1.11.2 and HAL_TIM_PeriodElapsedCallback will only Enetr 3 times\r\n\r\n\r\n",
+    "comments": [
+      {
+        "author": "tiantian1645",
+        "created_at": "2020-12-28T10:31:24Z",
+        "body": "`htim->DMABurstState = HAL_DMA_BURST_STATE_READY;` only  call in function like *Init and *Stop \r\nWhen enter `HAL_TIM_PeriodElapsedCallback` the `htim->DMABurstState` is `HAL_DMA_BURST_STATE_BUSY`\r\n\r\n\r\nP.S.\r\nIn `Drivers\\STM32F3xx_HAL_Driver\\Inc\\stm32f3xx_hal_tim.h` I found an unknown word `trom` \r\n```\r\n  1090,130: #define TIM_DMABURSTLENGTH_1TRANSFER       0x00000000U                          /*!< The transfer is done to 1 register starting trom TIMx_CR1 + TIMx_DCR.DBA   */\r\n  1091,131: #define TIM_DMABURSTLENGTH_2TRANSFERS      0x00000100U                          /*!< The transfer is done to 2 registers starting trom TIMx_CR1 + TIMx_DCR.DBA  */\r\n  1092,131: #define TIM_DMABURSTLENGTH_3TRANSFERS      0x00000200U                          /*!< The transfer is done to 3 registers starting trom TIMx_CR1 + TIMx_DCR.DBA  */\r\n  1093,131: #define TIM_DMABURSTLENGTH_4TRANSFERS      0x00000300U                          /*!< The transfer is done to 4 registers starting trom TIMx_CR1 + TIMx_DCR.DBA  */\r\n  1094,131: #define TIM_DMABURSTLENGTH_5TRANSFERS      0x00000400U                          /*!< The transfer is done to 5 registers starting trom TIMx_CR1 + TIMx_DCR.DBA  */\r\n  1095,131: #define TIM_DMABURSTLENGTH_6TRANSFERS      0x00000500U                          /*!< The transfer is done to 6 registers starting trom TIMx_CR1 + TIMx_DCR.DBA  */\r\n  1096,131: #define TIM_DMABURSTLENGTH_7TRANSFERS      0x00000600U                          /*!< The transfer is done to 7 registers starting trom TIMx_CR1 + TIMx_DCR.DBA  */\r\n  1097,131: #define TIM_DMABURSTLENGTH_8TRANSFERS      0x00000700U                          /*!< The transfer is done to 8 registers starting trom TIMx_CR1 + TIMx_DCR.DBA  */\r\n  1098,131: #define TIM_DMABURSTLENGTH_9TRANSFERS      0x00000800U                          /*!< The transfer is done to 9 registers starting trom TIMx_CR1 + TIMx_DCR.DBA  */\r\n  1099,132: #define TIM_DMABURSTLENGTH_10TRANSFERS     0x00000900U                          /*!< The transfer is done to 10 registers starting trom TIMx_CR1 + TIMx_DCR.DBA */\r\n  1100,132: #define TIM_DMABURSTLENGTH_11TRANSFERS     0x00000A00U                          /*!< The transfer is done to 11 registers starting trom TIMx_CR1 + TIMx_DCR.DBA */\r\n  1101,132: #define TIM_DMABURSTLENGTH_12TRANSFERS     0x00000B00U                          /*!< The transfer is done to 12 registers starting trom TIMx_CR1 + TIMx_DCR.DBA */\r\n  1102,132: #define TIM_DMABURSTLENGTH_13TRANSFERS     0x00000C00U                          /*!< The transfer is done to 13 registers starting trom TIMx_CR1 + TIMx_DCR.DBA */\r\n  1103,132: #define TIM_DMABURSTLENGTH_14TRANSFERS     0x00000D00U                          /*!< The transfer is done to 14 registers starting trom TIMx_CR1 + TIMx_DCR.DBA */\r\n  1104,132: #define TIM_DMABURSTLENGTH_15TRANSFERS     0x00000E00U                          /*!< The transfer is done to 15 registers starting trom TIMx_CR1 + TIMx_DCR.DBA */\r\n  1105,132: #define TIM_DMABURSTLENGTH_16TRANSFERS     0x00000F00U                          /*!< The transfer is done to 16 registers starting trom TIMx_CR1 + TIMx_DCR.DBA */\r\n  1106,132: #define TIM_DMABURSTLENGTH_17TRANSFERS     0x00001000U                          /*!< The transfer is done to 17 registers starting trom TIMx_CR1 + TIMx_DCR.DBA */\r\n  1107,132: #define TIM_DMABURSTLENGTH_18TRANSFERS     0x00001100U                          /*!< The transfer is done to 18 registers starting trom TIMx_CR1 + TIMx_DCR.DBA */\r\n```"
+      },
+      {
+        "author": "ASELSTM",
+        "created_at": "2021-01-05T11:43:39Z",
+        "body": "Hi @tiantian1645,\r\n\r\nThank you for this report. For a better understanding of the issue and in order to reproduce the same behavior, would you please share the whole IOC file if it is possible, so that we can use it to reproduce the issue. \r\n\r\nRegarding the unknown word **\"trom\"** you have found within the stm32f3xx_hal_tim.h driver, this is a typo and it should be replaced by **\"from\"**. An internal bug tracker will be raised to fix this. Thank you again for bringing this issue to our attention. \r\n\r\nWith regards,"
+      },
+      {
+        "author": "tiantian1645",
+        "created_at": "2021-01-06T02:12:48Z",
+        "body": "Hello:\r\n   Here is my ioc file https://pastebin.ubuntu.com/p/ZpDsp8ZZpz/\r\n   I use TIM16 CH1 as PWM output.\r\n   You can see another example in your _STM_ **TIM_DMABurst**.  \r\n   Or you can refer AN4776 _General-purpose timer cookbook for STM32 microcontrollers_  - **Section 5 Arbitrary waveform generation using timer DMA-burst feature**.\r\n    Please test before release.\r\nThank you"
+      },
+      {
+        "author": "ASELSTM",
+        "created_at": "2021-01-07T12:35:03Z",
+        "body": "Hi @tiantian1645,\r\n\r\nA new **DMABurstState** field has been added in the global structure definition of TIM_HandleTypeDef in order to manage DMA Burst operation state. Checks within HAL_TIM_DMABurst_MultiWriteStart and HAL_TIM_DMABurst_MultiWriteStop functions are now done on DMABurstState and no longer on the TIM operation state, htim->state. TIM operation state and DMA Burst operation state are now managed separately.\r\n\r\nActually, a `HAL_TIM_DMABurst_WriteStop `is required to enable once again a DMA Burst start write operation. Then, to fix the issue `HAL_TIM_PeriodElapsedCallback` should be updated as following : \r\n\r\n```diff\r\ncallback_cnt++;\r\nif (callback_cnt > 10000) {\r\n    HAL_TIM_DMABurst_WriteStop(&htim16, TIM_DMA_UPDATE);\r\n    HAL_TIM_PWM_Stop(&htim16, TIM_CHANNEL_1);\r\n} else {\r\n+   HAL_TIM_DMABurst_WriteStop(&htim16, TIM_DMA_UPDATE);\r\n    HAL_TIM_DMABurst_WriteStart(&htim16, TIM_DMABASE_ARR, TIM_DMA_UPDATE, (uint32_t *)gMotor_SRC_Buffer, TIM_DMABURSTLENGTH_3TRANSFERS);\r\n}\r\n```\r\n\r\nHope this will help you. \r\n\r\nWith regards,\r\n"
+      },
+      {
+        "author": "tiantian1645",
+        "created_at": "2021-01-09T07:14:46Z",
+        "body": "Hello: \r\n   What the hell??? Use stop timer code in call back hit myself?\r\n   Why do not I direct call `htim->DMABurstState = HAL_DMA_BURST_STATE_READY;`?\r\n   \r\nThan you."
+      },
+      {
+        "author": "ASELSTM",
+        "created_at": "2021-01-15T10:44:21Z",
+        "body": "Hi @tiantian1645,\r\n\r\nIndeed, it is also possible to make a direct call `htim->DMABurstState = HAL_DMA_BURST_STATE_READY;`  but it is not recommended. \r\n\r\nWith regards,"
+      },
+      {
+        "author": "ASELSTM",
+        "created_at": "2021-08-16T11:42:45Z",
+        "body": "Hi @tiantian1645,\r\n\r\nThe typos you reported has been fixed in the frame of latest version of the STM32CubeF3 published on GitHub.\r\n\r\nPlease allow me then to close this thread and thank you again for having reported.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF3/issues/6"
+  },
+  {
+    "repo": "STM32CubeF3",
+    "issue_number": 5,
+    "title": "STM32373C-EVAL hx8347i.h",
+    "state": "closed",
+    "labels": [
+      "question",
+      "projects"
+    ],
+    "created_at": "2020-08-06T07:57:11Z",
+    "closed_at": "2020-08-10T11:17:42Z",
+    "body": "Hello \r\n\r\nI need help with this...\r\n![image](https://user-images.githubusercontent.com/69297793/89505869-90bea400-d7ca-11ea-90b0-3b865f9a9648.png)\r\n![image](https://user-images.githubusercontent.com/69297793/89505981-af249f80-d7ca-11ea-995a-ad16c8222088.png)\r\n![image](https://user-images.githubusercontent.com/69297793/89506152-fc087600-d7ca-11ea-8ea7-06795ed63030.png)\r\n\r\n\r\nAs you can see I added the libraries (hx8347i.h and stm32373c_eval_lcd.h) to my project. However, it cannot be found. How can I fix this?\r\n\r\nThank you!\r\n\r\n",
+    "comments": [
+      {
+        "author": "ASELSTM",
+        "created_at": "2020-08-10T11:06:25Z",
+        "body": "Hi @lba934,\r\n\r\nPlease make sure that you have included the right path to the BSP/Components in your project.\r\n\r\nFor that open your project **properties** then click on the **C/C++ Build** tab and select **Settings** then **Include paths**.\r\nIf not present please add the following path `../../../../../../../Drivers/BSP/Components/Common` and adjust it with your tree structure.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF3/issues/5"
+  },
+  {
+    "repo": "STM32CubeF3",
+    "issue_number": 10,
+    "title": "Missing (PCD_HandleTypeDef *) casts cause build errors in C++ compilers when USB is used",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "wontfix",
+      "internal bug tracker",
+      "mw",
+      "usb"
+    ],
+    "created_at": "2020-06-06T10:42:58Z",
+    "closed_at": "2021-10-27T14:41:08Z",
+    "body": "Since `void*` is not implicitly convertible to other pointers, missing `(PCD_HandleTypeDef *)` casts cause build errors in C++ compiler (I used IAR EW for Arm 8.50.1) when USB is used. This affects the following files:\r\n* `Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.c` included in firmware packages downloaded by STM32CubeMX and copied to or referenced by user projects. Replace `PCD_HandleTypeDef *hpcd = pdev->pData;` with `PCD_HandleTypeDef *hpcd = (PCD_HandleTypeDef *)pdev->pData;` to fix it.\r\n* `usbd_conf.c` generated from `db/templates/usbdconf*_c.ftl` templates in STM32CubeMX installation directory. Replace `(HAL_PCD_.*\\()(pdev->pData)` with `$1\\(PCD_HandleTypeDef \\*\\)$2` using regular expressions to fix it in `HAL_PCD_*` function calls.",
+    "comments": [
+      {
+        "author": "CCASTM",
+        "created_at": "2021-02-15T08:12:58Z",
+        "body": "Ali,\r\nI have discovered this Issues, quite old !\r\nCan you check in a first step with Aymen if this problem has already been taken into account ?\r\nRegards\r\nChristophe"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2021-02-15T08:36:20Z",
+        "body": "Hi @pawelszramowski,\r\n\r\nThank you for your report. May I know the MCU target you are using? This way, the issue will be transferred to the appropriate repository and deeper analyzed.\r\n\r\nWith regards, "
+      },
+      {
+        "author": "pawelszramowski",
+        "created_at": "2021-02-15T23:32:43Z",
+        "body": "@ALABSTM, this is not related to a particular microcontroller. As I wrote, it affects files `%ProgramFiles%\\STMicroelectronics\\STM32Cube\\STM32CubeMX\\db\\templates\\usbdconf*_c.ftl` and `%UserProfile%\\STM32Cube\\Repository\\STM32Cube_FW_F3_V1.11.0\\Middlewares\\ST\\STM32_USB_Device_Library\\Class\\CDC\\Src\\usbd_cdc.c` thus project for any MCU generated using these files will be affected too."
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2021-02-17T08:56:37Z",
+        "body": "Hi @pawelszramowski,\r\n\r\nThank you for the precision. Indeed, the issue might impact more than one firmware in particular. I asked my question simply because with the way-of-work we defined, such issues are handled at `STM32Cube..` repository-level, not at this one's.\r\n\r\nOnce the issue confirmed and logged into our internal database, we will surely spread the fix to any other firmware impacted. I noticed you have mentioned the `STM32Cube_FW_F3_V1.11.0`. I will then transfer this issue to the `STM32CubeF3 repository`.\r\n\r\nThank you for your comprehension and thank you again for having reported the point.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2021-04-20T12:03:05Z",
+        "body": "Hi @pawelszramowski,\r\n\r\nThe issue you reported has been reproduced using the C++ compiler of EWARM **v8.32.4** (an even older version than the one you are using). Your report will be forwarded to our development teams. I will get back to you as soon as I have their feedback.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2021-04-20T13:31:29Z",
+        "body": "Hi @pawelszramowski,\r\n\r\nOur development teams confirmed the cast is missing. This will be logged into our internal database and a fix will be made available in the frame of a future release.\r\n\r\nWith regards, "
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2021-04-20T14:03:53Z",
+        "body": "ST Internal Reference: 105369"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2021-04-23T09:27:37Z",
+        "body": "ST Internal Reference: 105621"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2021-10-27T14:41:08Z",
+        "body": "Hi @pawelszramowski,\r\n\r\nI hope you are fine. Back to you about what you reported. Our development teams agreed to fix the point at USB Device library-level, **but not** at application-level as this would impact USB applications of all firmware packages and the Cube MX tool itself.\r\n\r\nThe fix has been published in the frame of **v2.9.0** of the [stm32_mw_usb_device](https://github.com/STMicroelectronics/stm32_mw_usb_device) library. Please notice that current version is **v2.10.0**.\r\n\r\nRegarding the STM32CubeF3 firmware, integrated USB Device library version is **v2.5.3**. Unfortunately, there is no plan to integrate a newer version. However, all **v2.y.z** versions are compatible. Hence, you can get latest updates from the link above and integrate them into your firmware package if needed.\r\n\r\nI hope all this helps. Please allow me to close this issue now. Thank you for your comprehension and thank you again for having reported.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF3/issues/10"
+  },
+  {
+    "repo": "STM32CubeF3",
+    "issue_number": 4,
+    "title": "assert_failed in tpl_main_c.ftl, signature mismatch",
+    "state": "closed",
+    "labels": [
+      "wontfix",
+      "cube mx"
+    ],
+    "created_at": "2020-01-21T20:04:17Z",
+    "closed_at": "2020-02-05T08:42:45Z",
+    "body": "**Describe the set-up**\r\n * STM32F303CB on custom board\r\n * freshest CubeMX, freshest CubeF3, last release of TrueStudio\r\n\r\n**Describe the bug**\r\nType mismatch due to inconsistent templates of CubeMX.\r\n\r\nCubeMX/db/templates/tpl_main_c.ftl near line 1126 contains a special case for \"stm32f0\", \"stm32f3\", \"stm32l4\" to use `void assert_failed(char *file, uint32_t line)` instead of `uint8_t*` like everywhere else.\r\n\r\nthis conflicts with what you generate from `stm32f3xx_hal_conf_h.ftl`: `void assert_failed(uint8_t* file, uint32_t line);`\r\n\r\n\r\n**How To Reproduce**\r\n1. Generate project for STM32F303CB\r\n\r\n**How To Fix**\r\n1. Remove the `stm32f3` from the special case in `tpl_main_c.ftl:1126` that picks `char*` signature for `assert_failed`, so `uint8_t*` is used consistently\r\n\r\n**Additional context**\r\nSome grep:\r\n```\r\nstm32f3xx_hal_conf_h.ftl:  * @param  expr If expr is false, it calls assert_failed function\r\nstm32f3xx_hal_conf_h.ftl:  #define assert_param(expr) ((expr) ? (void)0U : assert_failed((uint8_t *)__FILE__, __LINE__))\r\nstm32f3xx_hal_conf_h.ftl:  void assert_failed(uint8_t* file, uint32_t line);\r\n\r\ntpl_main_c.ftl:void assert_failed(char *file, uint32_t line)\r\ntpl_main_c.ftl:void assert_failed(uint8_t *file, uint32_t line)\r\n```",
+    "comments": [
+      {
+        "author": "crackwitz",
+        "created_at": "2020-01-21T20:06:36Z",
+        "body": "might I recommend just switching everything to the same signature... the `char*` special case lists f0,f3,l4, but corresponding files that use `char*` exist for f2,l4 but not f0 and not f3"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-02-05T08:42:42Z",
+        "body": "Hi Christoph,\r\n\r\nFirst, allow me to thank you for your contribution. However, aspects related to Cube MX tool are not handled at GitHub level. They are rather treated at **ST Community** level, precisely within the [Cube MX](https://community.st.com/s/topic/0TO0X000000BTr8WAG/stm32cubemx) dedicated section.\r\n\r\nThere, you may find posts that already raised the issue you are pointing out here. Otherwise, you can create a new post to submit your issue.\r\n\r\nPlease, allow me to close this issue. Thank you for your comprehension.\r\n\r\nWith regards,\r\n\r\n**PS:** For you information, the prototype to consider is the one using the `uint8_t *` type, **i.e.** `void assert_failed(uint8_t* file, uint32_t line);`. The one using the `char *` type is a deprecated one."
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF3/issues/4"
+  },
+  {
+    "repo": "STM32CubeF3",
+    "issue_number": 3,
+    "title": "Comment bug stm32f3xx_ll_opamp.h NONINVERT macros",
+    "state": "closed",
+    "labels": [
+      "enhancement",
+      "internal bug tracker",
+      "hal"
+    ],
+    "created_at": "2019-11-09T19:06:23Z",
+    "closed_at": "2020-12-02T14:20:26Z",
+    "body": "In the low-level opamp driver, PB11 and PA4 for OPAMP4 are swapped in the comments after the last two non-inverting macro definitions.\r\n\r\nstm32f3xx_ll_opamp.h:\r\n\r\n```diff\r\n-#define LL_OPAMP_INPUT_NONINVERT_IO2      (OPAMP_CSR_VPSEL_1)     /*!< OPAMP non inverting input connected to GPIO pin (pin PA3 for OPAMP1, pin PB0  for OPAMP2, pin PA1  for OPAMP3, pin PB11 for OPAMP4) */\r\n-#define LL_OPAMP_INPUT_NONINVERT_IO3      (OPAMP_CSR_VPSEL_0)     /*!< OPAMP non inverting input connected to GPIO pin (pin PA5 for OPAMP1, pin PB14 for OPAMP2, pin PA5  for OPAMP3, pin PA4  for OPAMP4) */\r\n+#define LL_OPAMP_INPUT_NONINVERT_IO2      (OPAMP_CSR_VPSEL_1)     /*!< OPAMP non inverting input connected to GPIO pin (pin PA3 for OPAMP1, pin PB0  for OPAMP2, pin PA1  for OPAMP3, pin PA4 for OPAMP4) */\r\n+#define LL_OPAMP_INPUT_NONINVERT_IO3      (OPAMP_CSR_VPSEL_0)     /*!< OPAMP non inverting input connected to GPIO pin (pin PA5 for OPAMP1, pin PB14 for OPAMP2, pin PA5  for OPAMP3, pin PB11  for OPAMP4) */\r\n```",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2019-11-11T13:56:32Z",
+        "body": "Hi Aquaid3,\r\n\r\nThank you for this message. It will be immediately forwarded to the development team in charge of the OPAMP driver. I will be back to you as soon as they confirm the issue. Thank you for your patience and thank you for your message once again.\r\n\r\nWith regards,\r\n\r\nPS: I took the initiative to add some formatting tags to your message. I hope you are okay with it."
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2019-11-11T15:11:12Z",
+        "body": "Hi Aquaid3,\r\n\r\nThe issue has been confirmed. The comments will be updated. The correction will be available in a future release. Thank you once more.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2019-11-11T15:20:00Z",
+        "body": "ST Internal Reference: 75493"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF3/issues/3"
+  },
+  {
+    "repo": "STM32CubeF3",
+    "issue_number": 2,
+    "title": "CDC does not transmit packets which length is an exact multiple of 64 bytes",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "spotted before customer",
+      "st community",
+      "mw",
+      "usb"
+    ],
+    "created_at": "2019-08-14T08:00:25Z",
+    "closed_at": "2019-08-20T07:56:48Z",
+    "body": "The issue was already reported in the communinty forum: https://community.st.com/s/question/0D50X0000BCMIR8SQP/bug-cdc-does-not-transmit-packets-which-length-is-an-exact-multiple-of-64-bytes\r\n\r\n**Describe the set-up**\r\nAny board implementing a Virtual COM Port using the USB CDC class\r\n\r\n**Describe the bug**\r\nWhen using USBD_CDC_SetTxBuffer followed by USBD_CDC_TransmitPacket with a packet of 64, 128, 192, etc. bytes, the data are not sent unless they are followed by another call to those functions with data length different than multiple of 64 bytes.\r\n\r\n**How To Reproduce**\r\nSend a packet of bytes which length is a multiple of 64 bytes using USBD_CDC_SetTxBuffer/USBD_CDC_TransmitPacket functions.\r\n\r\n\r\n**Additional context**\r\nA fix in the HAL library in explained in the thread below:\r\n\r\nhttps://community.st.com/s/question/0D50X00009XkXmgSAF/usb-cdc-breaks-on-heavy-load\r\n\r\n \r\n\r\nThe fix is in PCD_EP_ISR_Handler function of the stm32f3xx_hal_pcd.c file. In one of the last lines of the function:\r\n\r\n    if (ep->xfer_len == 0U)\r\n\r\nTo be replaced by:\r\n\r\n    if ((ep->xfer_len == 0U) && (ep->xfer_count < ep->maxpacket))\r\n\r\nThe last lines of the function code would look like:\r\n\r\n            /*multi-packet on the NON control IN endpoint*/\r\n            ep->xfer_count = PCD_GET_EP_TX_CNT(hpcd->Instance, ep->num);\r\n            ep->xfer_buff+=ep->xfer_count;\r\n           \r\n            /* Zero Length Packet? */\r\n            if ((ep->xfer_len == 0U) && (ep->xfer_count < ep->maxpacket))\r\n            {\r\n              /* TX COMPLETE */\r\n              HAL_PCD_DataInStageCallback(hpcd, ep->num);\r\n            }\r\n            else\r\n            {\r\n              HAL_PCD_EP_Transmit(hpcd, ep->num, ep->xfer_buff, ep->xfer_len);\r\n            }\r\n",
+    "comments": [
+      {
+        "author": "CCASTM",
+        "created_at": "2019-08-19T12:43:51Z",
+        "body": "Hello Julian,\r\nThank you to report this Issue with detailed explanation and improvement proposal.\r\n\r\nI will check with our colleagues from the development team as they could have been informed of your report in the ST Community and we will keep you informed of the analysis\r\n\r\nRegards\r\nChristophe\r\n"
+      },
+      {
+        "author": "bouattay",
+        "created_at": "2019-08-19T13:48:20Z",
+        "body": "Hello Julian,\r\nRequired ZLP to complete multi max packet size transfers is a known issue already fixed in our USB MW device lib. This should be visible to our customers in the next F3 release.\r\n\r\nRegards,\r\nAymen\r\n"
+      },
+      {
+        "author": "CCASTM",
+        "created_at": "2019-08-20T07:51:20Z",
+        "body": "Hello Julian,\r\nJust to confirm that the correction proposed is working fine.\r\nThe official MW version update is different but equivalent, it is already available in other STM32 series (F4, F7, L4 ...) and will be available in the next STM32F3 FW Package  publication at then end of 2019. \r\nIf you have no other question, we can close this Issue.\r\nRegards\r\nChristophe "
+      },
+      {
+        "author": "JulienTitan",
+        "created_at": "2019-08-20T07:56:48Z",
+        "body": "Hello Christophe and Aymen,\r\nThank you for all the replies. \r\nI don't have any further question and the release date makes sense to me. I agree we can close the issue.\r\nKind regards,\r\nJulien"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2019-11-29T15:59:51Z",
+        "body": "ST Internal Reference: 14144"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF3/issues/2"
+  },
+  {
+    "repo": "STM32CubeF3",
+    "issue_number": 1,
+    "title": "HRTIM_TIM_TypeDef is undefined",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "internal bug tracker",
+      "cmsis"
+    ],
+    "created_at": "2019-06-04T23:30:05Z",
+    "closed_at": "2019-09-26T09:21:05Z",
+    "body": "**Describe the set-up**\r\n * arm-none-eabi-gcc\r\n * `#include <stm32f3xx.h>`\r\n\r\n**Describe the bug**\r\n\r\n`HRTIM_TIM_TypeDef` is undefined. After cross referencing this with the RM you probably meant to use `HRTIM_Timerx_TypeDef`.\r\n\r\n**How To Reproduce**\r\n\r\nTrying to access `HRTIM1_TIMA` in any code will fail, since `HRTIM_TIM_TypeDef` is undefined:\r\n\r\n```c\r\n#include <stm32f3xx.h>\r\nHRTIM1_TIMA->TIMxCR = 0;\r\n```\r\n\r\n**Additional context**\r\n\r\n```diff\r\n-#define HRTIM1_TIMA         ((HRTIM_TIM_TypeDef *) HRTIM1_TIMA_BASE)\r\n-#define HRTIM1_TIMB         ((HRTIM_TIM_TypeDef *) HRTIM1_TIMB_BASE)\r\n-#define HRTIM1_TIMC         ((HRTIM_TIM_TypeDef *) HRTIM1_TIMC_BASE)\r\n-#define HRTIM1_TIMD         ((HRTIM_TIM_TypeDef *) HRTIM1_TIMD_BASE)\r\n-#define HRTIM1_TIME         ((HRTIM_TIM_TypeDef *) HRTIM1_TIME_BASE)\r\n+#define HRTIM1_TIMA         ((HRTIM_Timerx_TypeDef *) HRTIM1_TIMA_BASE)\r\n+#define HRTIM1_TIMB         ((HRTIM_Timerx_TypeDef *) HRTIM1_TIMB_BASE)\r\n+#define HRTIM1_TIMC         ((HRTIM_Timerx_TypeDef *) HRTIM1_TIMC_BASE)\r\n+#define HRTIM1_TIMD         ((HRTIM_Timerx_TypeDef *) HRTIM1_TIMD_BASE)\r\n+#define HRTIM1_TIME         ((HRTIM_Timerx_TypeDef *) HRTIM1_TIME_BASE)\r\n```\r\n\r\n[Full patch](https://github.com/modm-io/cmsis-header-stm32/blob/master/patches/f3.patch)\r\nRelated to https://github.com/STMicroelectronics/STM32CubeH7/issues/2.",
+    "comments": [
+      {
+        "author": "CCASTM",
+        "created_at": "2019-06-05T09:14:57Z",
+        "body": "Hello Niklas,\r\nThank you for your finding. This has been communicated to the development team and we will come back to you (a very first analysis confirms the problem, as mentioned the STM32H7 series)\r\nRegards,\r\nChristophe"
+      },
+      {
+        "author": "FVISTM",
+        "created_at": "2019-06-05T14:24:34Z",
+        "body": "Hello,\r\nNew internal Bugzilla tracker created (Ticket 67770 - [CMSIS Device] Wrong definition of HRTIM1_TIMx constants)"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2019-06-10T12:01:36Z",
+        "body": "ST Internal Reference: 67768"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2019-09-20T08:36:10Z",
+        "body": "Hi Salkinium,\r\n\r\nThis issue has been integrated to STM32CubeF3 v1.11.0 which will be available soon. This issue could be closed in this case.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF3/issues/1"
+  }
+]

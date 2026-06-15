@@ -1,0 +1,39 @@
+[
+  {
+    "id": "stm32h7s78-dk-bsp-issue-1",
+    "source_kind": "issue",
+    "repo": "stm32h7s78-dk-bsp",
+    "mcu_package": "stm32h7s78-dk-bsp",
+    "mcu_series": "H7",
+    "type": "issue",
+    "path": null,
+    "github_url": "https://github.com/STMicroelectronics/stm32h7s78-dk-bsp/issues/1",
+    "board": "STM32H7S78",
+    "category": null,
+    "component": null,
+    "example_name": null,
+    "issue_number": 1,
+    "issue_title": "README Broken link",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "documentation"
+    ],
+    "is_confirmed_bug": true,
+    "created_at": "2024-12-11T16:27:02Z",
+    "closed_at": "2024-12-20T09:00:54Z",
+    "ingest_version": "v2.0",
+    "clean_text": "Title: README Broken link\n\nBody:\nREADME.md\nhttps://github.com/STMicroelectronics/stm32-aps256xx ->\nhttps://github.com/STMicroelectronics/stm32-aps256\n\nComments:\n[ALABSTM - 2024-12-13T17:42:24Z]\nHi @marcalmp,\n\nThank you for the heads-up. We'll have this fixed soon enough hopefully.\n\nWith regards,\n\n[KRASTM - 2024-12-20T09:00:54Z]\nFixed in commit: https://github.com/STMicroelectronics/stm32h7s78-dk-bsp/commit/0dc1925f399439396aac825de83fbbd305202dc5",
+    "image_urls": [],
+    "images_count": 0,
+    "is_valid": true,
+    "rescue_applied": false,
+    "rescue_signal_count": 0,
+    "evidence_strength": "high",
+    "filter_invalid_reasons": [],
+    "layer": "Other",
+    "severity": "low",
+    "issue_kind": "bug_report",
+    "related_issue_ids": []
+  }
+]

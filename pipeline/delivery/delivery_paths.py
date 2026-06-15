@@ -58,6 +58,62 @@ for _r in [
 ]:
     _REPO_TO_SERIES[_r] = "stm32cubec0"
 
+# F0 sub-repos
+for _r in [
+    "stm32f0xx-hal-driver", "cmsis_device_f0",
+    "stm32f0xx-nucleo-bsp", "stm32f0discovery-bsp",
+    "32f072bdiscovery-bsp", "32f0508discovery-bsp",
+    "stm32091c-eval-bsp", "stm32072b-eval-bsp",
+]:
+    _REPO_TO_SERIES[_r] = "stm32cubef0"
+
+# F1 sub-repos
+for _r in [
+    "stm32f1xx-hal-driver", "cmsis_device_f1",
+    "stm32f1xx-nucleo-bsp", "stm32vldiscovery-bsp",
+    "stm3210c-eval-bsp", "stm3210e-eval-bsp",
+]:
+    _REPO_TO_SERIES[_r] = "stm32cubef1"
+
+# F2 sub-repos
+for _r in [
+    "stm32f2xx-hal-driver", "cmsis_device_f2",
+    "stm322xg-eval-bsp",
+]:
+    _REPO_TO_SERIES[_r] = "stm32cubef2"
+
+# F3 sub-repos
+for _r in [
+    "stm32f3xx-hal-driver", "cmsis_device_f3",
+    "stm32f3xx-nucleo-bsp", "stm32f3discovery-bsp",
+    "32f3348discovery-bsp", "stm32303e-eval-bsp",
+    "stm32373c-eval-bsp",
+]:
+    _REPO_TO_SERIES[_r] = "stm32cubef3"
+
+# F7 sub-repos
+for _r in [
+    "stm32f7xx-hal-driver", "cmsis_device_f7",
+    "stm32f7xx-nucleo-144-bsp", "stm32746g-discovery-bsp",
+    "stm32f769i-disco-bsp", "stm32756g-eval-bsp",
+    "stm32f769i-eval-bsp",
+]:
+    _REPO_TO_SERIES[_r] = "stm32cubef7"
+
+# H7RS sub-repos
+for _r in [
+    "stm32h7rsxx-hal-driver", "cmsis_device_h7rs",
+    "stm32h7s78-dk-bsp",
+]:
+    _REPO_TO_SERIES[_r] = "stm32cubeh7rs"
+
+# G0 sub-repos
+for _r in [
+    "stm32g0xx-hal-driver", "cmsis_device_g0",
+    "stm32g0xx-nucleo-bsp", "stm32g0c1e-ev-bsp",
+]:
+    _REPO_TO_SERIES[_r] = "stm32cubeg0"
+
 
 def repo_slug(repo: str) -> str:
     return str(repo).strip().lower()

@@ -1,0 +1,29 @@
+{
+  "issues": [
+    {
+      "id": "cmsis_device_c0-issue-1",
+      "url_base": "https://github.com/STMicroelectronics/",
+      "repo": "cmsis_device_c0",
+      "root_path": "issues",
+      "mcu_series": null,
+      "issue_number": 1,
+      "issue_title": "Initial value of SystemCoreClock incorrect",
+      "state": "closed",
+      "layer": "Other",
+      "component": null,
+      "issue_kind": "bug_report",
+      "severity": "medium",
+      "board": null,
+      "labels": [
+        "cmsis",
+        "internal bug tracker"
+      ],
+      "github_url": "https://github.com/STMicroelectronics/cmsis-device-c0/issues/1",
+      "is_valid": true,
+      "evidence_strength": "high",
+      "rescue_applied": false,
+      "delivery_template": "st_v2_structured_issue_card",
+      "st_ready_text": "Problem: Initial value of SystemCoreClock incorrect\nContext: repo=cmsis_device_c0, mcu_series=None, board=None, component=None, layer=Other, issue_kind=bug_report, severity=medium, evidence_strength=high, rescue_applied=False, state=closed, issue_number=1\nRoot cause: ST Internal Reference: 162796 Fixed in https://github.\nFix: SystemCoreClock is currently defined in system_stm32c0xx.\nConstraints: Validate against exact MCU/board configuration and CubeMX/CubeH7 version before applying.\nKeywords: bug_report, medium, cmsis, internal bug tracker, system_stm32c0xx, cmsis_device_c0, CMSIS_5, group__system__init__gr, STM32C0, HSISYS\n\nTechnical details:\nSystemCoreClock is currently defined in system_stm32c0xx.c [like this](https://github.com/STMicroelectronics/cmsis_device_c0/blob/v1.1.0/Source/Templates/system_stm32c0xx.c#L110): c uint32_t SystemCoreClock = 48000000UL; The variable SystemCoreClock holds the system core clock, which is the system clock frequency supplied to the processor core clock (see [here](https://arm-software.github.io/CMSIS_5/Core/html/group__system__init__gr.html#gae0c36a9591fe6e9c45ecb21a794f0f0f).) On the STM32C0, HSISYS is used as system clock source after startup from reset, with a division factor of four. This results in a system clock frequency of 12 MHz being supplied to the processor core clock. In my opinion, the current definition of SystemCoreClock is incorrect and it should be defined as like this: c uint32_t SystemCoreClock = 12000000UL;\n\nKey comments:\nST Internal Reference: 162796 Fixed in https://github.com/STMicroelectronics/cmsis_device_c0/commit/69479b8eaf42001c5ef32c93919155a56698604e"
+    }
+  ]
+}

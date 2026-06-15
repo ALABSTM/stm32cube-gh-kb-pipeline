@@ -1,0 +1,1822 @@
+[
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 73,
+    "title": "USB CDC HardFault is USB is not connected",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "wontfix",
+      "spotted before customer",
+      "usb",
+      "st usb"
+    ],
+    "created_at": "2025-10-31T20:05:16Z",
+    "closed_at": "2025-12-10T16:29:20Z",
+    "body": "When I work on one of my project based on STM32F411, I used this code to send data over USB:\n\n```\n// Send to USB\nif(USBD_CDC_SetTxBuffer(&hUsbDeviceFS, usb_data, rx_usb_cnt) == USBD_OK)\n{\n    // Send packet - no waiting\n    USBD_CDC_TransmitPacket(&hUsbDeviceFS);\n}\n```\nAnd it works just fine regardless if USB is connected or not. When I tried use the same code on STM32F103 MCU, exactly the same code caused HardFault. Turns out that it happens because function USBD_CDC_SetTxBuffer() slightly different. This is how this function looks like for F103 MCU:\n```\nuint8_t  USBD_CDC_SetTxBuffer(USBD_HandleTypeDef   *pdev, uint8_t  *pbuff, uint16_t length)\n{\n  USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef *) pdev->pClassData;\n\n  hcdc->TxBuffer = pbuff;\n  hcdc->TxLength = length;\n\n  return USBD_OK;\n}\n```\nAnd this is how it looks like for F411 MCU:\n```\nuint8_t USBD_CDC_SetTxBuffer(USBD_HandleTypeDef *pdev, uint8_t *pbuff, uint32_t length)\n{\n  USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef *)pdev->pClassDataCmsit[pdev->classId];\n\n  if (hcdc == NULL)\n  {\n    return (uint8_t)USBD_FAIL;\n  }\n\n  hcdc->TxBuffer = pbuff;\n  hcdc->TxLength = length;\n\n  return (uint8_t)USBD_OK;\n}\n```\nAs you can see, USB CDC for F411 MCU have null pointer check and return an error. As result this function can be safely called regardless in USB is connected and enumerated or not. Probably the same null pointer check should be included for F1 MCUs.",
+    "comments": [
+      {
+        "author": "MKISTM",
+        "created_at": "2025-11-03T16:36:36Z",
+        "body": "Hello @nickshl,\n\nThank you for your report. We are aware of this point.\nCurrently, STM32CubeF1 still supports an old version of the USB Device library, and its upgrade is planned for an upcoming release.\nWe will keep you informed.\n\nBR,\nMohamed."
+      },
+      {
+        "author": "MKISTM",
+        "created_at": "2025-12-10T16:29:20Z",
+        "body": "Hello @nickshl,\n\nCurrently, STM32CubeF1 still supports an old version of the USB Device library. \n\nBR,\nMohamed Chaker."
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/73"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 72,
+    "title": "为什么驱动文件里面的内容是空的？？？",
+    "state": "closed",
+    "labels": [
+      "needs clarification"
+    ],
+    "created_at": "2025-01-17T11:11:06Z",
+    "closed_at": "2025-01-22T11:00:04Z",
+    "body": "**Caution**\nThe Issues are strictly limited for the reporting of problem encountered with the software provided in this project.\nFor any other problem related to the STM32 product, the performance, the hardware characteristics and boards, the tools the environment in general, please post a topic in the [ST Community/STM32 MCUs forum](https://community.st.com/s/group/0F90X000000AXsASAW/stm32-mcus).\n\n**Describe the set-up**\n * The board (either ST RPN reference or your custom board).\n * IDE or at least the compiler and its version.\n\n**Additional context**\nIf you have a first analysis or a patch proposal, thank you to share your proposal.\n\n**Screenshots**\nIf applicable, add screenshots to help explain your problem.\n",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2025-01-20T10:27:50Z",
+        "body": "Hi @qq3521810385,\n\nWould you please rephrase your question using English language?\n\nWith regards, "
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2025-01-22T11:00:04Z",
+        "body": "Hi @qq3521810385,\n\nPlease allow me to close this issue. You can log another one if you want, in **English** please.\n\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/72"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 71,
+    "title": "There is not DAC Instances in the stm32f103xb.h",
+    "state": "closed",
+    "labels": [
+      "question",
+      "cmsis",
+      "dac"
+    ],
+    "created_at": "2024-10-25T07:11:28Z",
+    "closed_at": "2024-10-25T08:01:38Z",
+    "body": "Dear friends, I use MCU STM32F103C8. I was surprised, when I hadn`t seen DAC declaration in the file stm32f103xb.h. But this MCU have DAC module, and he works.\r\n",
+    "comments": [],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/71"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 70,
+    "title": "`CMSIS_device_header` is not exist",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "cube mx",
+      "rtos"
+    ],
+    "created_at": "2024-09-18T03:58:59Z",
+    "closed_at": "2024-09-18T04:46:36Z",
+    "body": "**Caution**\r\nThe Issues are strictly limited for the reporting of problem encountered with the software provided in this project.\r\nFor any other problem related to the STM32 product, the performance, the hardware characteristics and boards, the tools the environment in general, please post a topic in the [ST Community/STM32 MCUs forum](https://community.st.com/s/group/0F90X000000AXsASAW/stm32-mcus).\r\n\r\n**Describe the set-up**\r\n * STM32F103C8T6\r\n * STM32CubeMX + Cmake\r\n\r\n**Describe the bug**\r\nBuild fail `CMSIS_device_header` is not exist\r\n\r\n**How To Reproduce**\r\n1. CubeMX gen code\r\n\r\n2. Cmake open project\r\n\r\n**Additional context**\r\n[mcu.zip](https://github.com/user-attachments/files/17038367/mcu.zip)\r\n\r\n**Screenshots**\r\n![image](https://github.com/user-attachments/assets/72ab8c96-074b-4ef7-9d17-3abf218681e9)\r\n",
+    "comments": [
+      {
+        "author": "Coloryr",
+        "created_at": "2024-09-18T04:46:36Z",
+        "body": "same https://github.com/STMicroelectronics/stm32_mw_freertos/issues/5"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/70"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 69,
+    "title": "1.8.6 has a bug",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "cube mx",
+      "spotted before customer",
+      "mw",
+      "rtos"
+    ],
+    "created_at": "2024-09-05T01:32:13Z",
+    "closed_at": "2024-09-06T09:31:51Z",
+    "body": "FreeRTOS\\Source\\CMSIS_RTOS_V2\\cmsis_os2.c:33:10: fatal error: freertos_mpool.h: No such file or directory",
+    "comments": [
+      {
+        "author": "TOUNSTM",
+        "created_at": "2024-09-06T09:28:23Z",
+        "body": "See Also https://github.com/STMicroelectronics/STM32CubeF1/issues/68"
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2024-09-06T09:28:54Z",
+        "body": "See Also https://github.com/STMicroelectronics/stm32_mw_freertos/issues/5"
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2024-09-06T09:31:51Z",
+        "body": "Hello @18268159377,\r\n\r\nThank you for your report. This point is related to the CubeMX generation problem and not directly related to the firmware published in this repository. A fix will be available in the frame of STM32CubeMX release 6.13.0. As there is no impact on the software provided within this repository, please allow me to close this issue.\r\n\r\nThank you for your comprehension.\r\nWith regards,"
+      },
+      {
+        "author": "Coloryr",
+        "created_at": "2024-09-18T04:44:06Z",
+        "body": "How to get the `STM32CubeMX release 6.13.0`?"
+      },
+      {
+        "author": "konrin",
+        "created_at": "2024-11-08T13:09:48Z",
+        "body": "@TOUNSTM Hi! How to get around this problem without waiting for the IDE release? I already need to work with cmsis v2.\r\nCould you please provide steps to solve this problem?"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/69"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 68,
+    "title": "F1 series chips lack freertos_mpool.h and freertos_os2.h files",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "internal bug tracker",
+      "cube mx",
+      "spotted before customer",
+      "rtos"
+    ],
+    "created_at": "2024-08-17T07:08:35Z",
+    "closed_at": "2024-08-19T15:10:24Z",
+    "body": "After upgrading the F1 series package of STM32CubeIDE to version 1.8.6, I noticed that in newly created projects, the cmsis_os2.c file now includes references to freertos_mpool.h and freertos_os2.h. However, these two files are missing from the project.\r\n![image](https://github.com/user-attachments/assets/77a96e23-0a4b-4a0f-bf24-36a1565c4179)\r\n\r\nI managed to locate these files in the 1.8.6 package, but even after placing them in the project's CMSIS_RTOS_V2 directory, I encountered more errors.\r\n![image](https://github.com/user-attachments/assets/56597cce-6dc6-429f-b10f-3b769fc0cd4e)\r\n",
+    "comments": [
+      {
+        "author": "TOUNSTM",
+        "created_at": "2024-08-19T15:02:37Z",
+        "body": "ST Internal Reference: 188615"
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2024-08-19T15:10:24Z",
+        "body": "Hello @keysking,\r\n\r\nWe confirm the abnormal behavior you reported. It has been reported to our development teams. A fix will be available in the frame of STM32CubeMX release 6.13.0. As there is no impact on the software provided within this repository, please allow me to close this issue.\r\n\r\nThank you for your comprehension.\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/68"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 67,
+    "title": "SET_BIT, CLEAR_BIT and MODIFY_REG are not atomic",
+    "state": "closed",
+    "labels": [
+      "question",
+      "rtos"
+    ],
+    "created_at": "2023-11-09T13:20:07Z",
+    "closed_at": "2024-01-15T15:29:07Z",
+    "body": "In systems using RTOS, functions SET_BIT and CLEAR_BIT are not atomic.\r\n\r\nSince many macros from LL and HAL level are using SET_BIT and CLEAR_BIT functions, What is general recommendation in systems with RTOS?\r\nWe have also noticed implementation of ATOMIC_SET_BIT, ATOMIC_CLEAR_BIT, etc.  What is their intention, since they are mostly used only for UART driver?\r\n\r\nBest regards, \r\nIvan Sojic",
+    "comments": [
+      {
+        "author": "TOUNSTM",
+        "created_at": "2024-01-15T15:29:07Z",
+        "body": "Hello @IvanSojic,\r\n\r\nFirst of all, please excuse this late reply.\r\n\r\n1. SET_BIT and CLEAR_BIT macros are indeed not atomic\r\n2. In case of RTOS usage, it is customer application responsibility to manage the protection of shared resources by the different threads (via mutex).\r\n3. ATOMIC_SET_BIT and ATOMIC_CLEAR_BIT macros were introduced to handle the specific case where parallel processes in bare metal implementation may need to access the same register for interrupt control; this is the case of UART driver where you can run in parallel Rx & TX processes and all interrupts are being handle in CR1/CR3 registers causing side effects if accesses are not atomic.\r\n\r\nI hope this answers your question. Please allow me to close this issue.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/67"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 66,
+    "title": "cmsis_os.c:389:23: error: passing argument 5 of 'xTimerCreate' from incompatible pointer type",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "internal bug tracker",
+      "mw",
+      "rtos"
+    ],
+    "created_at": "2023-10-04T10:14:57Z",
+    "closed_at": "2024-08-02T12:46:41Z",
+    "body": "**Describe the set-up**\r\n- STM32F103ZGT6\r\n- Visual Studio Code\r\n- WSL2\r\n- Ubuntu based container\r\n\r\nCompiler\r\n> arm-none-eabi-gcc -v\r\n> Using built-in specs.\r\n> COLLECT_GCC=arm-none-eabi-g++\r\n> COLLECT_LTO_WRAPPER=/usr/lib/gcc/arm-none-eabi/12.2.1/lto-wrapper\r\n> Target: arm-none-eabi\r\n> Configured with: ../configure --build=x86_64-linux-gnu --prefix=/usr --includedir='/usr/lib/include' --mandir='/usr/lib/share/man' --infodir='/usr/lib/share/info' --sysconfdir=/etc --localstatedir=/var --disable-option-checking --disable-silent-rules --libdir='/usr/lib/lib/x86_64-linux-gnu' --libexecdir='/usr/lib/lib/x86_64-linux-gnu' --disable-maintainer-mode --disable-dependency-tracking --mandir=/usr/share/man --enable-languages=c,c++,lto --enable-multilib --disable-decimal-float --disable-libffi --disable-libgomp --disable-libmudflap --disable-libquadmath --disable-libssp --disable-libstdcxx-pch --disable-nls --disable-shared --disable-threads --enable-tls --build=x86_64-linux-gnu --target=arm-none-eabi --with-system-zlib --with-gnu-as --with-gnu-ld --with-pkgversion=15:12.2.rel1-1 --without-included-gettext --prefix=/usr/lib --infodir=/usr/share/doc/gcc-arm-none-eabi/info --htmldir=/usr/share/doc/gcc-arm-none-eabi/html --pdfdir=/usr/share/doc/gcc-arm-none-eabi/pdf --bindir=/usr/bin --libexecdir=/usr/lib --libdir=/usr/lib --disable-libstdc++-v3 --host=x86_64-linux-gnu --with-headers=no --without-newlib --with-multilib-list=rmprofile,aprofile ASFLAGS= CFLAGS='-g -O2 -ffile-prefix-map=/build/gcc-arm-none-eabi-8GAN2q/gcc-arm-none-eabi-12.2.rel1=. -fstack-protector-strong' CPPFLAGS='-Wdate-time -D_FORTIFY_SOURCE=2' CXXFLAGS='-g -O2 -ffile-prefix-map=/build/gcc-arm-none-eabi-8GAN2q/gcc-arm-none-eabi-12.2.rel1=. -fstack-protector-strong' DFLAGS=-frelease FCFLAGS='-g -O2 -ffile-prefix-map=/build/gcc-arm-none-eabi-8GAN2q/gcc-arm-none-eabi-12.2.rel1=. -fstack-protector-strong' FFLAGS='-g -O2 -ffile-prefix-map=/build/gcc-arm-none-eabi-8GAN2q/gcc-arm-none-eabi-12.2.rel1=. -fstack-protector-strong' GCJFLAGS='-g -O2 -ffile-prefix-map=/build/gcc-arm-none-eabi-8GAN2q/gcc-arm-none-eabi-12.2.rel1=. -fstack-protector-strong' LDFLAGS=-Wl,-z,relro OBJCFLAGS='-g -O2 -ffile-prefix-map=/build/gcc-arm-none-eabi-8GAN2q/gcc-arm-none-eabi-12.2.rel1=. -fstack-protector-strong' OBJCXXFLAGS='-g -O2 -ffile-prefix-map=/build/gcc-arm-none-eabi-8GAN2q/gcc-arm-none-eabi-12.2.rel1=. -fstack-protector-strong' INHIBIT_LIBC_CFLAGS=-DUSE_TM_CLONE_REGISTRY=0 AR_FOR_TARGET=arm-none-eabi-ar AS_FOR_TARGET=arm-none-eabi-as LD_FOR_TARGET=arm-none-eabi-ld NM_FOR_TARGET=arm-none-eabi-nm OBJDUMP_FOR_TARGET=arm-none-eabi-objdump RANLIB_FOR_TARGET=arm-none-eabi-ranlib READELF_FOR_TARGET=arm-none-eabi-readelf STRIP_FOR_TARGET=arm-none-eabi-strip SED=/bin/sed SHELL=/bin/sh BASH=/bin/bash CONFIG_SHELL=/bin/bash\r\n> Thread model: single\r\n> Supported LTO compression algorithms: zlib\r\n> gcc version 12.2.1 20221205 (15:12.2.rel1-1)\r\n\r\nSource file:\r\n\r\n * $Date:        5. February 2013\r\n * $Revision:    V1.02\r\n * Project:      CMSIS-RTOS API\r\n * Title:        cmsis_os.c\r\n\r\n**Describe the bug**\r\nIn `cmsis-os.c` file, the cast of `timer_def->ptimer` to `TaskFunction_t` type is wrong as `xTimerCreate` function expect a variable of type `TimerCallbackFunction_t`. See problem and correction below on the screenshot below.\r\n\r\nIt generate only a warning... but our goal is to deliver a warning-free software...\r\n\r\n**How To Reproduce**\r\nBuild the project with `-Werror` GCC flag.\r\n\r\n**Additional context**\r\nNot applicable.\r\n\r\n**Screenshots**\r\n![image](https://github.com/STMicroelectronics/STM32CubeF1/assets/26578378/c5c0a922-ff09-474d-a2d8-9bf446dd73e3)\r\n",
+    "comments": [
+      {
+        "author": "TOUNSTM",
+        "created_at": "2024-05-28T14:58:31Z",
+        "body": "ST Internal Reference: 182663"
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2024-08-02T12:46:42Z",
+        "body": "Fixed in 42472d601caa457b02d849c7de5f9792629ee324"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/66"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 65,
+    "title": "Reusing active timer for HAL Tick skips generation of its IRQHandler",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "invalid",
+      "cube mx",
+      "tim"
+    ],
+    "created_at": "2023-09-28T12:32:39Z",
+    "closed_at": "2024-06-24T15:58:31Z",
+    "body": "**Describe the set-up**\r\n```\r\nSTM32CubeIDE\r\n\r\nVersion: 1.9.0\r\nBuild: 12015_20220302_0855 (UTC)\r\n```\r\nwhich uses\r\n```\r\nSTM32CubeMX - STM32 Device Configuration Tool\r\n\r\nVersion: 6.5.0-RC4\r\nBuild: 20220225-1913 (UTC)\r\n\r\nCopyright (c) 2022 STMicroelectronics. All rights reserved\r\n```\r\n\r\n**Describe the bug**\r\n\r\nMoving the SYS timebase to a timer that was previously configured for something elese, but then disabled will cause an invalid configuration where the timer IRQs are not generated.\r\n\r\n**How To Reproduce**\r\n\r\nIssue is exclusive to the STM32CubeIDE Device Configuration Tool / STM32CubeMX code generation.\r\n\r\nIt is reproducible with an empty project.\r\n\r\n- start with a fresh project on F1 platform, for example STM32F103RG MCU\r\n\r\n  ![image](https://github.com/STMicroelectronics/STM32CubeF1/assets/106665537/22d6c311-b1dc-4e50-8b72-195ddc4d1da2)\r\n\r\n  ![image](https://github.com/STMicroelectronics/STM32CubeF1/assets/106665537/b6d6cfed-e1e5-4bee-bf5a-0ffec83954fb)\r\n\r\n- generate code using defaults\r\n\r\n- configure free timer (eg. TIM6, will be used for the rest of this example) for HAL timebase, generate code\r\n\r\n  ![image](https://github.com/STMicroelectronics/STM32CubeF1/assets/106665537/a6cbdeac-bb20-4e41-b833-c039eff86cda)\r\n\r\n- revert HAL back to systick, generate code\r\n\r\n  ![image](https://github.com/STMicroelectronics/STM32CubeF1/assets/106665537/1def6ff7-c558-4f6d-89d7-ff37311fb269)\r\n\r\n- manually configure the timer (TIM6), enable interrupts, generate code\r\n\r\n  ![image](https://github.com/STMicroelectronics/STM32CubeF1/assets/106665537/e684e406-e037-430f-b1ee-e21ce08214d1)\r\n\r\n  ![image](https://github.com/STMicroelectronics/STM32CubeF1/assets/106665537/10e9f62d-69ed-4568-bf57-1093bbf45bab)\r\n\r\n  As it was previously used for HAL, the timer gets configured with an interrupt priority of 15 (**this is also a bug**)\r\n\r\n  ![image](https://github.com/STMicroelectronics/STM32CubeF1/assets/106665537/3b605a13-63fc-4cdf-85ba-c87e6052e773)\r\n\r\n- disable the timer (TIM6), reuse it for HAL timebase source again, generate code\r\n\r\n  ![image](https://github.com/STMicroelectronics/STM32CubeF1/assets/106665537/fe4ce3b3-8fc8-4539-8075-63719f7704fd)\r\n\r\n  ![image](https://github.com/STMicroelectronics/STM32CubeF1/assets/106665537/44e42515-2dc1-4f8a-ba5c-a3aa22b10af8)\r\n\r\n  This will generate the `stm32f1x_hal_timebase_tim.c`, configured for the timer (TIM6), but its IRQ Handlers will get removed, causing the platform to hang in `Default_Handler` at start.\r\n\r\n  Notably, the following configuration line will be missing\r\n```\r\nNVIC.TIM6_IRQn=true\\:15\\:0\\:false\\:false\\:true\\:false\\:true\\:true\r\n```\r\n\r\n  One can recover from this configuration by\r\n  - reverting HAL to SysTick\r\n  - closing the Device Configuration Tool and reopening it back again\r\n  - configuring HAL to that timer\r\n  \r\n  Closing and reopening also seems to mitigate the interrupt priority assignment when manually configuring the timer, it will be configured as other devices (in a fresh project it should be 5).\r\n\r\nI could not reproduce it with the above procedure, but such changes may also cause the change of `TICK_INT_PRIORITY`\r\n\r\n**Additional context**\r\n\r\nThere are some other related bugs\r\n- https://community.st.com/t5/stm32cubeide-mcus/value-of-tick-int-priority-default-value-changed/td-p/136027\r\n- https://community.st.com/t5/stm32cubeide-mcus/tick-int-priority-affected-by-enabling-trace-outputs/m-p/588892/highlight/true#M20524\r\n",
+    "comments": [
+      {
+        "author": "tpecar-ltek",
+        "created_at": "2023-09-28T12:52:14Z",
+        "body": "Previously mentioned\r\n\r\n> I could not reproduce it with the above procedure, but such changes may also cause the change of `TICK_INT_PRIORITY`\r\n\r\nThere seems to be a code path / UI element in Device Configuration Tool that I do not know of, but if one manually changes the interrupt priority of the timer that is currently used as the HAL timebase, this will also update the `TICK_INT_PRIORITY`\r\n\r\n```diff\r\ndiff --git a/sw/app/Core/Inc/stm32f1xx_hal_conf.h b/sw/app/Core/Inc/stm32f1xx_hal_conf.h\r\nindex 2fc99ba..0c4f67e 100644\r\n--- a/sw/app/Core/Inc/stm32f1xx_hal_conf.h\r\n+++ b/sw/app/Core/Inc/stm32f1xx_hal_conf.h\r\n@@ -129,7 +129,7 @@\r\n   * @brief This is the HAL system configuration section\r\n   */\r\n #define  VDD_VALUE                    3300U /*!< Value of VDD in mv */\r\n-#define  TICK_INT_PRIORITY            0U    /*!< tick interrupt priority (lowest by default)  */\r\n+#define  TICK_INT_PRIORITY            15U    /*!< tick interrupt priority (lowest by default)  */\r\n #define  USE_RTOS                     0U\r\n #define  PREFETCH_ENABLE              1U\r\n\r\ndiff --git a/sw/app/app.ioc b/sw/app/app.ioc\r\nindex 1cb52d3..06ddb91 100644\r\n--- a/sw/app/app.ioc\r\n+++ b/sw/app/app.ioc\r\n@@ -196,7 +196,7 @@ NVIC.SavedPendsvIrqHandlerGenerated=true\r\n NVIC.SavedSvcallIrqHandlerGenerated=true\r\n NVIC.SavedSystickIrqHandlerGenerated=true\r\n NVIC.SysTick_IRQn=true\\:15\\:0\\:false\\:false\\:false\\:true\\:false\\:true\\:true\r\n-NVIC.TIM6_IRQn=true\\:0\\:0\\:false\\:false\\:true\\:false\\:false\\:true\\:true\r\n+NVIC.TIM6_IRQn=true\\:15\\:0\\:false\\:false\\:true\\:false\\:false\\:true\\:true\r\n NVIC.TimeBase=TIM6_IRQn\r\n NVIC.TimeBaseIP=TIM6\r\n NVIC.USART1_IRQn=true\\:5\\:0\\:true\\:false\\:false\\:true\\:true\\:true\\:true\r\n```"
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2023-10-03T08:56:14Z",
+        "body": "Hello @tpecar-ltek ,\r\n\r\nThank you for this report. We will get back to you as soon as we analyze it further. This may take some time. Thank you for your comprehension.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2024-06-24T15:58:31Z",
+        "body": "Hi @tpecar-ltek,\r\n\r\nI hope you are doing well. First of all, please excuse this delayed reply. Thank you for this detailed report and the many screenshots attached.\r\n\r\nI have tried to reproduce the above steps using STM32CubeMX **6.10.0** and encountered no issue. I have tried twice, once starting with a STM32**F1** as MCU and once with a STM32**F4**. The generated file `stm32f1xx_hal_timebase_tim.c` was the same the first time I had generated the code, and the third time, after I had disabled the timer and set it back as a time base for the system.\r\n\r\nIn your original description, you mentioned using **6.5.0-RC4**. I guess the issue has been solved in the meanwhile.\r\n\r\nPlease allow me to close this issue. Thank you for your comprehension and thank you again for the detailed report.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/65"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 64,
+    "title": "Compiler warning for unused parameters in stm32f1xx_ll_adc.h",
+    "state": "closed",
+    "labels": [
+      "internal bug tracker",
+      "hal",
+      "needs clarification"
+    ],
+    "created_at": "2023-08-11T22:37:13Z",
+    "closed_at": "2024-08-02T12:48:46Z",
+    "body": " Prevent unused argument compilation warnings (with some compilers) when using stm32f1xx_ll_adc.h\r\n\r\n**Potential solution**\r\n* A solution would be to use UNUSED macro\r\n![image](https://github.com/STMicroelectronics/STM32CubeF1/assets/103666553/a4a232a9-f08d-4464-a449-5897216e59f5)\r\n\r\n**Open topic**\r\nWhere would be a good place to redefine UNUSED macro?\r\nFor HAL it is done inside stm32f1xx_hal_def.h\r\n\r\n#if !defined(UNUSED)\r\n#define UNUSED(X) (void)X      /* To avoid gcc/g++ warnings */\r\n#endif /* UNUSED */\r\n",
+    "comments": [
+      {
+        "author": "RJMSTM",
+        "created_at": "2023-08-15T10:51:46Z",
+        "body": "Hello @IvanSojic,\r\n\r\nThank you for this report. We will get back to you as soon as we analyze it further. This may take some time. Thank you for your comprehension.\r\n\r\nWith Regards,"
+      },
+      {
+        "author": "RJMSTM",
+        "created_at": "2023-10-04T09:38:19Z",
+        "body": "Hello @Ivan,\r\n\r\nPlease can you precise the flags used in your example for better analysis? \r\n\r\nThanks,\r\nRania"
+      },
+      {
+        "author": "IvanSojic",
+        "created_at": "2023-10-28T16:13:23Z",
+        "body": "Hi @RJMSTM \r\nCurrently we have enabled \"-Wall -Wextra\" for gcc compiler.\r\nBest regards, Ivan"
+      },
+      {
+        "author": "RJMSTM",
+        "created_at": "2023-11-28T15:20:53Z",
+        "body": "Hello,\r\nfor LL drivers you can use in stm32f1xx_ll_adc.h \r\n \r\n` (void)(ADCxy_COMMON);`\r\n\r\nRegards,\r\nRania"
+      },
+      {
+        "author": "RJMSTM",
+        "created_at": "2024-06-25T09:49:31Z",
+        "body": "ST Internal Reference: 184950"
+      },
+      {
+        "author": "TOUNSTM",
+        "created_at": "2024-08-02T12:48:46Z",
+        "body": "Fixed in 42472d601caa457b02d849c7de5f9792629ee324"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/64"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 62,
+    "title": "No error actually, I had misinterpreted information.",
+    "state": "closed",
+    "labels": [],
+    "created_at": "2023-07-15T04:54:14Z",
+    "closed_at": "2023-07-22T22:11:06Z",
+    "body": "EDITED:\r\n\r\nIn the stm32f103xb header file at STM32CubeF1/Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h.\r\n\r\nI had raised an issue about FLASH_ACR_LATENCY macros.\r\nBecause there were definitions:\r\nFLASH_ACR_LATENCY_0, FLASH_ACR_LATENCY_1, and FLASH_ACR_LATENCY_2.\r\nWhich represent the bit masks but I erroneously interpreted as Flash wait state values 0WS, 1 WS, and 2 WS.\r\n",
+    "comments": [
+      {
+        "author": "Goodluck-Nkem",
+        "created_at": "2023-07-22T21:58:07Z",
+        "body": "UPDATE:\r\nI realized the above issue is in fact not an issue, but my misunderstanding of the definitions.\r\nI realized the FLASH_ACR_LATENCY macros were referring to the the bit masks, and not the flash wait states values.\r\nIn fact, no flash wait state macros were defined at all in the entire header.\r\nTherefore there is no error in your definitions.\r\nOnly useful omissions which caused my confusion.\r\n\r\nSo perhaps, you could add the following:\r\n#define FLASH_ACR_LATENCY_0WS (0x0UL << FLASH_ACR_LATENCY_Pos) /* 0 WS */\r\n#define FLASH_ACR_LATENCY_1WS (0x1UL << FLASH_ACR_LATENCY_Pos) /* 1 WS */\r\n#define FLASH_ACR_LATENCY_2WS (0x2UL << FLASH_ACR_LATENCY_Pos) /* 2 WS */\r\n\r\n"
+      },
+      {
+        "author": "Goodluck-Nkem",
+        "created_at": "2023-07-22T22:01:56Z",
+        "body": "So I will edit the original issue to show no problem, then close the issue."
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/62"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 59,
+    "title": "USB keyboard. LED control",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "wontfix",
+      "internal bug tracker",
+      "mw",
+      "usb"
+    ],
+    "created_at": "2023-05-20T06:34:38Z",
+    "closed_at": "2025-11-13T09:36:10Z",
+    "body": "Custom board and with MCU STM32F10[5-7]\r\nthe function USBH_HID_SetReport does not works correctly.\r\n\r\n**How To Reproduce**\r\n1. Indicate the global behavior of your application project.\r\n works with USB keyboard\r\n  write led status but does not changed.. but changed after press some keys\r\n\r\n2. The modules that you suspect to be the cause of the problem (Driver, BSP, MW ...).\r\n  module MW\r\n\r\n3. The use case that generates the problem.\r\n\r\n4. How we can reproduce the problem.\r\n write status of led by function USBH_HID_SetReport\r\n\r\n\r\n\r\n**Additional context**\r\ni have solution \r\n```\r\nbutiaev@butiaev-HP-Notebook:~/STM32Cube/STM32CubeF1$ git diff master\r\ndiff --git a/Middlewares/ST/STM32_USB_Host_Library/Class/HID/Src/usbh_hid.c b/Middlewares/ST/STM32_USB_Host_Library/Class/HID/Src/usbh_hid.c\r\nindex be9b308..2f7c360 100644\r\n--- a/Middlewares/ST/STM32_USB_Host_Library/Class/HID/Src/usbh_hid.c\r\n+++ b/Middlewares/ST/STM32_USB_Host_Library/Class/HID/Src/usbh_hid.c\r\n@@ -457,19 +457,17 @@ static USBH_StatusTypeDef USBH_HID_Process(USBH_HandleTypeDef *phost)\r\n #endif\r\n         }\r\n       }\r\n-      else\r\n+      /* IN Endpoint Stalled */\r\n+      else if (USBH_LL_GetURBState(phost, HID_Handle->InPipe) == USBH_URB_STALL)\r\n       {\r\n-        /* IN Endpoint Stalled */\r\n-        if (USBH_LL_GetURBState(phost, HID_Handle->InPipe) == USBH_URB_STALL)\r\n-        {\r\n-          /* Issue Clear Feature on interrupt IN endpoint */\r\n-          if (USBH_ClrFeature(phost, HID_Handle->ep_addr) == USBH_OK)\r\n-          {\r\n+        /* Issue Clear Feature on interrupt IN endpoint */\r\n+        if (USBH_ClrFeature(phost, HID_Handle->ep_addr) == USBH_OK) {\r\n             /* Change state to issue next IN token */\r\n             HID_Handle->state = HID_GET_DATA;\r\n           }\r\n         }\r\n-      }\r\n+      else if(phost->RequestState == CMD_WAIT)\r\n+        USBH_CtlReq(phost, 0, 0);\r\n       break;\r\n \r\n     default:\r\nbutiaev@butiaev-HP-Notebook:~/STM32Cube/STM32CubeF1$\r\n```\r\nMy project is firmfare https://github.com/alekseibutiaev/experience/tree/master/zxkeyboard & hardware https://github.com/alekseibutiaev/electronics/tree/master/ZX_Keyboard",
+    "comments": [
+      {
+        "author": "TOUNSTM",
+        "created_at": "2023-05-24T10:42:14Z",
+        "body": "Hello @alekseibutiaev,\r\n\r\nThank you for this report. We will get back to you as soon as we analyze it further. This may take some time. Thank you for your comprehension.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2023-07-12T16:05:14Z",
+        "body": "Hi @alekseibutiaev,\r\n\r\nThank you for this proposal. May I ask where is defined the `CMD_WAIT` macro you used in your code snippet above? Thanks.\r\n\r\nIn the meanwhile, please note that STM32CubeF1 firmware still integrates version **3.3.3** of the USB Host library, while version **3.5.1** has been published [here](https://github.com/STMicroelectronics/stm32_mw_usb_host/tree/master) since a couple of months. Would you mind giving it a try a see if the issue still persists?\r\n\r\nThe newer version is **backward compatible** and you can easily integrate it into your application manually. Please keep us informed.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "alekseibutiaev",
+        "created_at": "2023-07-13T14:17:25Z",
+        "body": "i found it in this file\r\nhttps://github.com/STMicroelectronics/STM32CubeF1/tree/master/Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_def.h:378"
+      },
+      {
+        "author": "alekseibutiaev",
+        "created_at": "2023-07-13T15:13:32Z",
+        "body": "just only try version 3.5.1 --- same problem, same solution"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2023-08-02T14:40:22Z",
+        "body": "Hi @alekseibutiaev,\r\n\r\nThank you for your reply. Your report will be forwarded to our development teams for further analysis.\r\n\r\nTo summarize:\r\n* The issue you are pointing out is related to the `USBH_HID_SetReport()` function.\r\n* However, the fix you are proposing is to be implemented in the `USBH_HID_Process()` function and more precisely in the lines of code below:\r\n\r\nhttps://github.com/STMicroelectronics/STM32CubeF1/blob/bdec2f6b0658b5725b41c96cb1f066c362acc4d0/Middlewares/ST/STM32_USB_Host_Library/Class/HID/Src/usbh_hid.c#L460-L473\r\n\r\n* The fix you are proposing is the following:\r\n\r\n```diff\r\n-      else\r\n-       {\r\n        /* IN Endpoint Stalled */\r\n-        if (USBH_LL_GetURBState(phost, HID_Handle->InPipe) == USBH_URB_STALL)\r\n+      else if (USBH_LL_GetURBState(phost, HID_Handle->InPipe) == USBH_URB_STALL)\r\n        {\r\n          /* Issue Clear Feature on interrupt IN endpoint */\r\n          if (USBH_ClrFeature(phost, HID_Handle->ep_addr) == USBH_OK)\r\n          {\r\n             /* Change state to issue next IN token */\r\n             HID_Handle->state = HID_GET_DATA;\r\n           }\r\n         }\r\n-      }\r\n+      else if (phost->RequestState == CMD_WAIT)\r\n+      {\r\n+        USBH_CtlReq(phost, 0, 0);\r\n+      }\r\n       break;\r\n```\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2023-08-02T14:53:15Z",
+        "body": "ST Internal Reference: 158663"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2025-07-31T15:17:38Z",
+        "body": "Hello @alekseibutiaev,\n\nI hope you are doing well. Unfortunately, our development team has no plan to address this point in the short run. Please allow me to close this issue. Thank you for your comprehension.\n\nWith regards, "
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/59"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 58,
+    "title": "HAL_RTC_Init() loses time",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "wontfix",
+      "internal bug tracker",
+      "spotted before customer",
+      "hal"
+    ],
+    "created_at": "2023-04-19T08:25:18Z",
+    "closed_at": "2023-08-01T15:07:24Z",
+    "body": "Same issue as https://github.com/STMicroelectronics/STM32CubeH7/issues/24. HAL_RTC_Init() is called on each reset which loses up to a second of time.",
+    "comments": [
+      {
+        "author": "RJMSTM",
+        "created_at": "2023-04-20T11:28:18Z",
+        "body": "Hello @net147,\r\n\r\nThank you for this report. We will get back to you as soon as we analyze it further. This may take some time. Thank you for your comprehension. \r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2023-05-26T11:12:27Z",
+        "body": "ST Internal Reference: 126464"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2023-05-26T11:15:40Z",
+        "body": "Hi @net147,\r\n\r\nThank you for this report. We are already studying a solution to this issue as STM32F1xx microcontrollers support a different version of RTC than supported by other STM32 microcontrollers.\r\n\r\nWe will keep you updated.\r\n\r\nWith regards, "
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2023-08-01T15:07:24Z",
+        "body": "Hi @net147,\r\n\r\nI hope you are fine. Back to you about this point you reported. Our development teams suggested, in the particular case of the STM32F1 series, the time loss shall be handled **at user application's level** rather than at HAL RTC driver's.\r\n\r\nAs explained in other posts, **during the RTC initialization**, the counter is **frozen**. Thus, the observed time loss. RTC initialization happens when executing  the `HAL_RTC_Init()` function. This function shall be executed **only once**, after a power reset for instance, as the RTC is not yet initialized or needs to be reinitialized.\r\n\r\nYou can refer to [this](https://github.com/STMicroelectronics/STM32CubeF1/tree/master/Projects/STM32VL-Discovery/Examples/RTC/RTC_LowPower_STANDBY) example showing **how to use the backup registers** to avoid executing  the `HAL_RTC_Init()` function in case the RTC peripheral has been already initialized.\r\n\r\nI hope this helps. Please allow me to close this issue. Thank you for your comprehension and thank you for your report again.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/58"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 57,
+    "title": "CubeMX TIM Remap with LL Generation",
+    "state": "closed",
+    "labels": [
+      "cube mx"
+    ],
+    "created_at": "2023-03-27T15:08:01Z",
+    "closed_at": "2023-04-11T11:00:52Z",
+    "body": "**Describe the set-up**\r\nSTM32F103C8, STM32F103RB\r\nCubeIDE 1.12.0, CubeMX 6.8.0-RC4\r\n\r\n**Describe the bug**\r\nConfiguring TIM3 as input capture on non-default channel pin (i.e TIM3_CH1 ~ PA6 default, remap available to PB4, PC6).\r\nWhen Driver Selector for TIM is set to HAL library it generates `__HAL_AFIO_REMAP_TIM3_PARTIAL();` or `__HAL_AFIO_REMAP_TIM3_ENABLE();` respectivelly.\r\nWhen Driver Selector is set to LL it doesn't generate the remap command, although it does generate GPIO initialization. (missing `LL_GPIO_AF_RemapPartial_TIM3()` or `LL_GPIO_AF_EnableRemap_TIM3()`)\r\n\r\n**How To Reproduce**\r\n1. New CubeMx / CubeIDE project\r\n2. Set PB4 pin as TIM3_CH1\r\n3. Configure TIM3: Trigger Source: TI1FP1, Channel 1: Input Capture direct mode, Channel 2: Input Capture indirect mode\r\n4. Project Manager tab -> Advanced Settings -> Driver Selector -> TIM -> Change from HAL to LL.\r\n5. Generate code.\r\n\r\nTo start the timer enable IT, enable Channels, enable Counter, but nothing happens because GPIO is not remapped at the configuration stage.\r\nOn the other hand HAL remaps GPIO beforehand and enabling timer with `HAL_TIM_IC_Start_IT(..)` does the job.\r\n\r\n**Additional context**\r\nLL generates Remap when configuring TIM channel as PWM Output.\r\n\r\n**Screenshots**\r\n![image](https://user-images.githubusercontent.com/9247937/227982022-e2831aa0-4700-4290-8b30-a09e19d1aad5.png)\r\n\r\n",
+    "comments": [
+      {
+        "author": "TOUNSTM",
+        "created_at": "2023-04-11T11:00:52Z",
+        "body": "Hi @viteo,\r\n\r\nThe point you reported is actually related to the CubeMX generation problem and not to the firmware published in this repository. Unfortunately, we don't treat aspect related to CubeMX tool in our GitHub repositories. They are rather treated at the [STM32CubeMX](https://community.st.com/s/topic/0TO0X000000BTr8WAG/stm32cubemx) dedicated page of the ST Community .\r\n\r\nSince this issue is not directly related to the STM32Cube firmware but rather to our ecosystem, please allow me then to close this thread. Thank you for your comprehension.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "viteo",
+        "created_at": "2023-04-11T11:41:37Z",
+        "body": "Did you forward this issue to your ecosystem? Or I should open this again?"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/57"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 56,
+    "title": "Update STM license to SLA0048?",
+    "state": "closed",
+    "labels": [
+      "question",
+      "documentation"
+    ],
+    "created_at": "2022-10-17T10:35:16Z",
+    "closed_at": "2023-06-22T16:03:04Z",
+    "body": "LICENSE.md describes some of the files as being licensed under SLA0044. If the same package is retrieved from st.com, the license presented is SLA0048. Should SLA0044 be updated to SLA0048, in this repo?",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2023-06-22T16:03:04Z",
+        "body": "Hi @stephenkilbaneadi,\r\n\r\nThank you for this question. Actually, the **SLA0048** is the license applicable to the overall firmware, while the **SLA0044** is specific to some components, as you pointed out. Hence, there is no typo and no need to change SLA0044 into SLA0048.\r\n\r\nThe **SLA0048** is particularly used when users download the firmware from www.st.com, as there is no possibility for them to browse the firmware content and check each component's individual license before downloading it in this case.\r\n\r\nOn the other hand, as browsing before downloading is possible on www.github.com, there is no need to display this \"global\" license. Users can directly check each component's license individually. The LICENSE.md file at the root of this repo simply makes it easier to have an overview at a glance.\r\n\r\nI hope this answers your question.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/56"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 52,
+    "title": "Typo in usbd_core.c",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "internal bug tracker",
+      "mw",
+      "usb"
+    ],
+    "created_at": "2022-08-01T19:25:32Z",
+    "closed_at": "2023-04-04T12:38:47Z",
+    "body": "In the function description of `USBD_DeInit`. There is a missing `e`.\r\n\r\nPlease see this commit https://github.com/STMicroelectronics/STM32CubeF1/commit/a188ada2a5aab5358cb0ce1e6e5ab77d7d0d014e\r\n\r\nI will PR it if it is not on the internal tracker.",
+    "comments": [
+      {
+        "author": "Devilbinder",
+        "created_at": "2022-08-04T20:11:37Z",
+        "body": "PR created #53. Assuming adding this to `To do` is a green lite."
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/52"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 51,
+    "title": "Refactor CMSIS includes",
+    "state": "closed",
+    "labels": [
+      "wontfix",
+      "cmsis",
+      "third party"
+    ],
+    "created_at": "2022-07-10T17:46:19Z",
+    "closed_at": "2022-07-12T16:46:32Z",
+    "body": "I came across redundant `else` statements and some `if` statements that can be reworked by flapping them, in the CMSIS include folder. I believe this will increase the readability and reduce the overall footprint of the code with regards to the amount of lines.   \r\n\r\nHere is a examples one of the many functions that do this.\r\n\r\nhttps://github.com/STMicroelectronics/STM32CubeF1/blob/218b5100dd9e4b9bb3b0aa7fc77467373e932025/Drivers/CMSIS/Include/core_cm1.h#L667\r\n\r\nThis can be refactored too:\r\n\r\n```c\r\n__STATIC_INLINE uint32_t __NVIC_GetEnableIRQ(IRQn_Type IRQn)\r\n{\r\n  if ((int32_t)(IRQn) >= 0)\r\n  {\r\n    return ((uint32_t)(((NVIC->ISER[0U] & (1UL << (((uint32_t)IRQn) & 0x1FUL))) != 0UL) ? 1UL : 0UL));\r\n  }\r\n    return (0U);\r\n}\r\n```\r\nIf this is of interest. I have a branch the can be summited as a PR https://github.com/Devilbinder/STM32CubeF1/tree/refactor.\r\n",
+    "comments": [
+      {
+        "author": "ASELSTM",
+        "created_at": "2022-07-12T16:46:32Z",
+        "body": "Hi @Devilbinder,\r\n\r\nThe files within CMSIS include folder are out of scope of STMicroelectronics as they are provided by ARM. All changes and updates to these files are not managed by our technical team but rather by ARM's team. Therefore, you may report this issue on [ARM](https://github.com/ARM-software) GitHub.\r\n\r\nPlease allow me then to close this issue and hank you for your contribution.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/51"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 50,
+    "title": "Error template with FatFs syscall.c",
+    "state": "closed",
+    "labels": [
+      "internal bug tracker",
+      "mw",
+      "fs"
+    ],
+    "created_at": "2022-06-14T01:13:26Z",
+    "closed_at": "2023-04-14T14:03:11Z",
+    "body": "Pack Version: 1.8.4\r\n\r\nThe generated template file cannot be used with FreeRTOS.\r\nThis problem occurs in the F1 chip. The H7 chip is normal.\r\nF1:\r\n![_~8MGSB{)7VLOVH4C773DNR](https://user-images.githubusercontent.com/26276037/173472620-f8cdcde5-118c-4217-8fe5-44ebc16036d0.png)\r\n\r\nH7:\r\n![EHSR C7R{`J(81IK2YSP{FD](https://user-images.githubusercontent.com/26276037/173472527-3802e380-fcb0-401d-a097-4c7f9b18ef2b.png)\r\n\r\n",
+    "comments": [
+      {
+        "author": "HBOSTM",
+        "created_at": "2023-02-10T09:30:02Z",
+        "body": "Hello @Coloryr ,\r\n\r\nThis point has been reported to our development teams for deeper analysis. We will get back to you as soon as we have updates.\r\n\r\nWith Regards,"
+      },
+      {
+        "author": "HBOSTM",
+        "created_at": "2023-02-10T09:31:31Z",
+        "body": "ST Internal Reference: 145227"
+      },
+      {
+        "author": "RJMSTM",
+        "created_at": "2023-04-14T14:03:03Z",
+        "body": "Hello @Coloryr \r\n\r\nThere is no plan to upgrade MW for legacy STM32 series.\r\n\r\nWith Regards,\r\nRania"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/50"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 49,
+    "title": "no memory pool implementation in cmisi_os2.c",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "invalid",
+      "internal bug tracker",
+      "mw",
+      "rtos"
+    ],
+    "created_at": "2022-06-10T04:09:08Z",
+    "closed_at": "2023-04-04T12:20:37Z",
+    "body": " such as：osMemoryPoolNew func is not implement, but defined in cmsis_os2.h\r\n\r\n```\r\n//  ==== Memory Pool Management Functions ====\r\n\r\n/// Create and Initialize a Memory Pool object.\r\n/// \\param[in]     block_count   maximum number of memory blocks in memory pool.\r\n/// \\param[in]     block_size    memory block size in bytes.\r\n/// \\param[in]     attr          memory pool attributes; NULL: default values.\r\n/// \\return memory pool ID for reference by other functions or NULL in case of error.\r\nosMemoryPoolId_t osMemoryPoolNew (uint32_t block_count, uint32_t block_size, const osMemoryPoolAttr_t *attr);\r\n```\r\n\r\nand in STM32Cube_FW_F1_V1.8.4\\Middlewares\\Third_Party\\FreeRTOS\\Source\\CMSIS_RTOS_V2\\cmsis_os1.c\r\n```\r\n#if (defined(osFeature_Pool) && (osFeature_Pool != 0))&& !defined(os1_Disable_Pool)\r\n\r\nosPoolId osPoolCreate (const osPoolDef_t *pool_def) {\r\n\r\n  if (pool_def == NULL) {\r\n    return NULL;\r\n  }\r\n  return osMemoryPoolNew(pool_def->pool_sz, pool_def->item_sz, &pool_def->attr);\r\n}\r\n```\r\nbut  osMemoryPoolNew can't link，\r\n\r\n\r\nso where is osMemoryPoolNew defined？\r\n\r\n\r\n",
+    "comments": [
+      {
+        "author": "HBOSTM",
+        "created_at": "2022-07-15T14:07:15Z",
+        "body": "ST Internal Reference: 131766"
+      },
+      {
+        "author": "HBOSTM",
+        "created_at": "2023-04-04T12:20:36Z",
+        "body": "Hi @xhlinux ,\r\n\r\nThe osMemoryPoolNew() API shall be defined by user application as requested in the cmsis_os2.h \r\nIt is a function wrapper and up to user to define the memory used in his application.\r\nOtherwise we aren't owner on FreeRTOS MW stack, So please allow me to close this issue and thank you for your contribution.\r\n\r\nWith Regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2025-04-25T14:09:27Z",
+        "body": "See also [STM32CubeF4#170](https://github.com/STMicroelectronics/STM32CubeF4/issues/170)"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/49"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 46,
+    "title": "CMSIS-Pack for STM32F10x series?",
+    "state": "closed",
+    "labels": [
+      "wontfix",
+      "third party"
+    ],
+    "created_at": "2022-05-05T08:25:17Z",
+    "closed_at": "2022-08-31T15:08:33Z",
+    "body": "Hi all,\r\n\r\nwhile there are CMSIS-Packs (see https://www.keil.com/dd2/pack/) for almost all ST series, there is none for STM32F10x. Same situation when creating a project in STM32CubeMX; the sources are manually added to MDK instead of using any CMSIS-Pack.\r\n\r\nIs there a specific reason behind it?\r\n\r\nThanks :)",
+    "comments": [
+      {
+        "author": "jankap",
+        "created_at": "2022-06-14T09:47:54Z",
+        "body": "Dear @ALABSTM, does the `To do` assignment mean, that you or your team will work on a pack? I was going to create it on my own but of course I'll wait if there are plans like that.\r\n\r\nThanks!"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2022-08-31T15:08:33Z",
+        "body": "Dear @jankap,\r\n\r\nFirst of all, please excuse this delayed reply. Sometimes, it takes some time to answer.\r\n\r\nI checked with our development teams and they said this issue is out of our scope. Indeed, the CMSIS packs available on Keil's [webpage](https://www.keil.com/dd2/pack/) are managed by their teams. You can reach out to their support [here](https://www.keil.com/support/).\r\n\r\nAs this topic is out of our scope, please allow me to close this thread. Thank you for your comprehension.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/46"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 43,
+    "title": "stm32f1xx_hal_iwdg.c:126:83: error: 'LSI_STARTUP_TIME' undeclared",
+    "state": "closed",
+    "labels": [
+      "hal"
+    ],
+    "created_at": "2022-03-21T12:26:12Z",
+    "closed_at": "2022-04-05T14:20:22Z",
+    "body": "**Caution**\r\nThe Issues are strictly limited for the reporting of problem encountered with the software provided in this project.\r\nFor any other problem related to the STM32 product, the performance, the hardware characteristics and boards, the tools the environment in general, please post a topic in the [ST Community/STM32 MCUs forum](https://community.st.com/s/group/0F90X000000AXsASAW/stm32-mcus).\r\n\r\n**Describe the set-up**\r\n * bluepill_f103c8\r\n * Platformio with the config:\r\n * platform = https://github.com/platformio/platform-ststm32.git\r\n * board = bluepill_f103c8\r\n * framework = stm32cube\r\n * according to the package.json:\r\n  \"name\": \"framework-stm32cubef1\",\r\n  \"version\": \"1.8.4\",\r\n  \"homepage\": \"https://github.com/STMicroelectronics/STM32CubeF1\"\r\n\r\n\r\n**Describe the bug**\r\nCompilation error:\r\n.platformio/packages/framework-stm32cubef1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_iwdg.c:126:83: error: 'LSI_STARTUP_TIME' undeclared (first use in this function); did you mean 'LSE_STARTUP_TIMEOUT'?\r\n\r\n\r\n**How To Reproduce**\r\n1. HAL_IWDG_MODULE_ENABLED should be defined\r\n2. As the compilation error says, the problem is in this line:\r\nhttps://github.com/STMicroelectronics/STM32CubeF1/blob/master/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_iwdg.c#L124\r\nLSI_STARTUP_TIME is not defined anywhere.\r\n\r\n**Additional context**\r\nthe quick fix was to add this line:\r\n#define LSI_STARTUP_TIME 85U\r\nbut I don't know exactly from where, and why this was missing,athough I could find the missing define under\r\nDrivers/CMSIS/Device/ST/STM32F1xx/Include/ headers.\r\n\r\n**Screenshots**\r\n-\r\n",
+    "comments": [
+      {
+        "author": "RKOUSTM",
+        "created_at": "2022-04-05T14:20:19Z",
+        "body": "Hi @Peck07,\r\n\r\nThank you for your report. We tried to reproduce the issue you described, but we couldn't notice the problem. You can refer to this [IWDG_Example](https://github.com/STMicroelectronics/STM32CubeF1/tree/master/Projects/STM3210C_EVAL/Examples/IWDG/IWDG_Example) on STM3210C_EVAL to reload the IWDG counter and to simulate a software fault by generating an MCU IWDG reset when a programmed time period has elapsed. The IDE proposed by ST (IAR, MDK-ARM and SW4STM32) for the IWDG Example all of them are working well.\r\n\r\nFor any other issue (e.g. related to documentation, to hardware, to ecosystem, to user application, etc.), you shall address your questions to the [ST Community](https://community.st.com/s/topiccatalog). There you shall look for the adequate topic and submit your question or remark.\r\n\r\nPlease allow me to close this issue now. Thank you for your comprehension and contribution.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/43"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 42,
+    "title": "Discrepancy in FLASH->ACR register LATENCY bits definition between CMSIS and Reference Manual",
+    "state": "closed",
+    "labels": [],
+    "created_at": "2022-02-22T05:16:32Z",
+    "closed_at": "2022-02-22T08:49:43Z",
+    "body": "In the device register content definitions within CMSIS, the possible options for the `LATENCY` bit field within the FLASH->ACR register are defined as follows:\r\nhttps://github.com/STMicroelectronics/STM32CubeF1/blob/156741e067c4acdf655d7f54f4d8129f6c5f97fc/Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xe.h#L11100-L11102\r\n\r\nHowever, the register definition within the reference manual RM0008 (Rev. 21), pg. 60, and programming manual PM0075 (Rev. 2), pg. 23-24, deviates from the code above regarding the possible values for the `LATENCY` bit field. The manuals specify values **0x0, 0x1, and 0x2** for zero, one and two wait states, whereas the code above gives values **0x1, 0x2 and 0x4**.\r\n\r\nWhich is correct? Either the manuals or the definitions within CMSIS need to be corrected.\r\n\r\n![Screen Shot 2022-02-21 at 9 15 10 PM](https://user-images.githubusercontent.com/55331709/155067475-1630ba3c-98b9-4fc8-8568-2c664f0d7887.png)",
+    "comments": [
+      {
+        "author": "a2k-hanlon",
+        "created_at": "2022-02-22T08:49:43Z",
+        "body": "My apologies, please disregard this issue. I have misunderstood the premise of these CMSIS definitions - they are simply defining each of the bit positions included in the bit field separately, not providing the valid values for the bitfield. Closing this issue now."
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/42"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 41,
+    "title": "HID code is not standards compliant",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "wontfix",
+      "spotted before customer",
+      "mw",
+      "usb"
+    ],
+    "created_at": "2022-02-18T05:23:58Z",
+    "closed_at": "2022-04-29T10:28:47Z",
+    "body": "\r\n**Describe the bug**\r\n\r\nIf an implementation using either the custom hid device class or the hid device class, and issues a GET_REPORT request on the control endpoint, an error will be returned instead of the required response.\r\n\r\nThe code here:\r\nhttps://github.com/STMicroelectronics/STM32CubeF1/blob/master/Middlewares/ST/STM32_USB_Device_Library/Class/CustomHID/Src/usbd_customhid.c#L445\r\n\r\nIs clearly missing a case for CUSTOM_HID_REQ_GET_REPORT.\r\n\r\nPage 51 of the USB HID v1.11 standard has a note that this is mandatory and must be supported by all devices.\r\n\r\nPage 25 of UM1734 (§ 5.2 claims that the HID class implementation in standards compliant when it is clearly not.",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2022-04-12T11:27:57Z",
+        "body": "Hi @jmgurney,\r\n\r\nThank you for having reported this point. Actually, version **2.11.0** of the USB Device library has just been released, which addresses your point, as you can see [here](https://github.com/STMicroelectronics/stm32_mw_usb_device/blob/master/Class/CustomHID/Src/usbd_customhid.c#L406).\r\n\r\nYou can get it from the [stm32_mw_usb_device](https://github.com/STMicroelectronics/stm32_mw_usb_device) repo and use its content to overwrite the same files in your STM32CubeF1 firmware package, as this version is **fully compatible** with older ones.\r\n\r\nUnfortunately, there is no plan in the near future to integrate this version into the STM32CubeF1 firmware. We will notify you, should there be any update. Please allow me to close this issue. Thank you for your comprehension.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "jmgurney",
+        "created_at": "2022-04-25T00:35:58Z",
+        "body": "Please keep this issue open until the firmware package has been updated. The reason I want this to remain open is so that other people who encounter this issue do not have to spend as long trying to figure out what is wrong with their devices.\r\n\r\nI do understand that you likely want to keep the number of issues that are open low on your package, but IMO, that should just encourage your management to update and properly maintain the firmware for the micro controllers that you sell, and claim are standards compliant."
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2022-04-29T10:28:47Z",
+        "body": "Hi @jmgurney,\r\n\r\nI can understand you point. However, even closed, the issue can still appear in search results. Please allow me to close it. It can always be reopened shall there be any update. Thank you for your comprehension.\r\n\r\nWith regards, "
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/41"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 39,
+    "title": "missing static in HAL_RCC_GetSysClockFreq()",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "created_at": "2022-01-03T13:31:51Z",
+    "closed_at": "2023-04-27T16:13:44Z",
+    "body": "Hi\r\nIn the function\r\n\r\n`uint32_t HAL_RCC_GetSysClockFreq(void)\r\n`\r\nare five const array\r\n\r\n```\r\n#if defined(RCC_CFGR2_PREDIV1SRC)\r\n  uint8_t const aPLLMULFactorTable[14U] = {0U, 0U, 4U, 5U, 6U, 7U, 8U, 9U, 0U, 0U, 0U, 0U, 0U, 13U};\r\n  uint8_t const aPredivFactorTable[16U] = {1U, 2U, 3U, 4U, 5U, 6U, 7U, 8U, 9U, 10U, 11U, 12U, 13U, 14U, 15U, 16U};\r\n#else\r\n  uint8_t const aPLLMULFactorTable[16U] = {2U, 3U, 4U, 5U, 6U, 7U, 8U, 9U, 10U, 11U, 12U, 13U, 14U, 15U, 16U, 16U};\r\n#if defined(RCC_CFGR2_PREDIV1)\r\n  uint8_t const aPredivFactorTable[16U] = {1U, 2U, 3U, 4U, 5U, 6U, 7U, 8U, 9U, 10U, 11U, 12U, 13U, 14U, 15U, 16U};\r\n#else\r\n  uint8_t const aPredivFactorTable[2U] = {1U, 2U};\r\n#endif /*RCC_CFGR2_PREDIV1*/\r\n\r\n```\r\nthey should bee static\r\n\r\nsame in \r\n\r\n```\r\nuint32_t HAL_RCCEx_GetPeriphCLKFreq(uint32_t PeriphClk)\r\n{\r\n#if defined(STM32F105xC) || defined(STM32F107xC)\r\n  uint8_t const aPLLMULFactorTable[14U] = {0U, 0U, 4U, 5U, 6U, 7U, 8U, 9U, 0U, 0U, 0U, 0U, 0U, 13U};\r\n  uint8_t const aPredivFactorTable[16U] = {1U, 2U, 3U, 4U, 5U, 6U, 7U, 8U, 9U, 10U, 11U, 12U, 13U, 14U, 15U, 16U};\r\n\r\n  uint32_t prediv1 = 0U, pllclk = 0U, pllmul = 0U;\r\n  uint32_t pll2mul = 0U, pll3mul = 0U, prediv2 = 0U;\r\n#endif /* STM32F105xC || STM32F107xC */\r\n#if defined(STM32F102x6) || defined(STM32F102xB) || defined(STM32F103x6) || \\\r\n    defined(STM32F103xB) || defined(STM32F103xE) || defined(STM32F103xG)\r\n  uint8_t const aPLLMULFactorTable[16U] = {2U, 3U, 4U, 5U, 6U, 7U, 8U, 9U, 10U, 11U, 12U, 13U, 14U, 15U, 16U, 16U};\r\n  uint8_t const aPredivFactorTable[2U] = {1U, 2U};\r\n\r\n  uint32_t prediv1 = 0U, pllclk = 0U, pllmul = 0U;\r\n#endif /* STM32F102x6 || STM32F102xB || STM32F103x6 || STM32F103xB || STM32F103xE || STM32F103xG */\r\n\r\n```\r\nPlease fix this",
+    "comments": [
+      {
+        "author": "RKOUSTM",
+        "created_at": "2022-01-07T14:16:59Z",
+        "body": "Hi @CanastraRF,\r\n\r\nThank you for your report. An internal tracker has been logged and a fix will be implemented and made available in the frame of a future release.\r\n\r\nThank you again for you report.\r\n\r\nWith regards, "
+      },
+      {
+        "author": "RKOUSTM",
+        "created_at": "2022-01-07T14:17:17Z",
+        "body": "ST Internal Reference: 120495"
+      },
+      {
+        "author": "RJMSTM",
+        "created_at": "2023-04-14T12:05:06Z",
+        "body": "Hello @CanastraRF \r\n\r\nThank you again for having reported this point. It has been fixed in the frame of version 1.8.5 of this firmware.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/39"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 38,
+    "title": "MMC DMA Reads/Writes Fail to Update DMA Direction",
+    "state": "closed",
+    "labels": [
+      "internal bug tracker",
+      "spotted before customer",
+      "hal"
+    ],
+    "created_at": "2021-10-13T21:06:02Z",
+    "closed_at": "2023-04-27T16:12:26Z",
+    "body": "In stm32f1xx_hal_mmc.c, `HAL_MMC_ReadBlocks_DMA `and `HAL_MMC_WriteBlocks_DMA`, the DMA direction is set in the DMA CCR register before starting the DMA transfer. However, this register cannot be updated without first disabling DMA (clearing the EN bit in the CCR register). This is not currently done in the driver and therefore the DMA direction is never updated between MMC reads and writes.\r\n```\r\nhmmc->hdmatx->Init.Direction = DMA_MEMORY_TO_PERIPH;\r\nMODIFY_REG(hmmc->hdmatx->Instance->CCR, DMA_CCR_DIR, hmmc->hdmatx->Init.Direction); // Fails to set because EN bit is set\r\n```\r\n\r\n```\r\n__HAL_DMA_DISABLE(hmmc->hdmatx);\r\nhmmc->hdmatx->Init.Direction = DMA_MEMORY_TO_PERIPH;\r\nMODIFY_REG(hmmc->hdmatx->Instance->CCR, DMA_CCR_DIR, hmmc->hdmatx->Init.Direction); // Works because EN bit was cleared above\r\n```\r\n\r\nThis issue can be overcome by having the application code disable DMA (call `__HAL_DMA_DISABLE(hdma)` before calling either `HAL_MMC_WriteBlocks_DMA `or `HAL_MMC_ReadBlocks_DMA`. However, the driver should be fixed so this is not required.",
+    "comments": [
+      {
+        "author": "RKOUSTM",
+        "created_at": "2021-12-20T09:27:00Z",
+        "body": "Hi @jhansen3141,\r\n\r\nThank you for your contribution. The reported point will be forwarded to our development teams. I will get to you as soon as they provide their feedback.\r\n\r\nThank you again for your contribution and for your patience.\r\n\r\nWith regards, "
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2022-01-30T08:35:38Z",
+        "body": "Hi @jhansen3141,\r\n\r\nThank you for this report. We will get back to you with a feedback as soon as possible. Please excuse the delay it may take us sometimes to reply. Thank you for your comprehension.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "RKOUSTM",
+        "created_at": "2022-02-28T15:02:55Z",
+        "body": "Hi @jhansen3141,\r\n\r\nThank you for your contribution. An update of the MMC HAL driver will take this problem into into account and it will be made available in the frame of a future release v1.8.5.\r\n\r\nThank you again for this contribution and thank you in advance for your patience.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "RKOUSTM",
+        "created_at": "2022-04-15T11:54:07Z",
+        "body": "ST Internal Reference: 110782"
+      },
+      {
+        "author": "RJMSTM",
+        "created_at": "2023-04-14T11:58:56Z",
+        "body": "Hello @jhansen3141 \r\n\r\nThank you again for having reported this point. It has been fixed in the frame of version 1.8.5 of this firmware.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/38"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 37,
+    "title": "MMC HAL driver fails to init",
+    "state": "closed",
+    "labels": [
+      "duplicate",
+      "st community",
+      "internal bug tracker",
+      "spotted before customer",
+      "hal"
+    ],
+    "created_at": "2021-10-07T20:13:43Z",
+    "closed_at": "2023-04-27T16:11:48Z",
+    "body": "The current MMC HAL driver fails to init due to not selecting the card before attempting to read the extended CSD register. \r\n\r\nIn `MMC_InitCard `in stm32f1xx_hal_mmc.c, the `HAL_MMC_GetCardCSD `function is called which in turn calls `MMC_ReadExtCSD `attempting to read the extended CSD register. However, this is done before the call to select the card which causes the `MMC_ReadExtCSD `function/command to fail. This appears to be an issue in several device HAL drivers in addition to the F1.\r\n\r\n**Current code in `MMC_InitCard`:**\r\n```\r\n  /* Get CSD parameters */\r\n  if (HAL_MMC_GetCardCSD(hmmc, &CSD) != HAL_OK)\r\n  {\r\n    return hmmc->ErrorCode;\r\n  }\r\n\r\n  /* Select the Card */\r\n  errorstate = SDMMC_CmdSelDesel(hmmc->Instance, (uint32_t)(((uint32_t)hmmc->MmcCard.RelCardAdd) << 16U));\r\n  if(errorstate != HAL_MMC_ERROR_NONE)\r\n  {\r\n    return errorstate;\r\n  }\r\n```\r\n\r\n**Change needed for fix in `MMC_InitCard`:**\r\n```\r\n  /* Select the Card */\r\n  errorstate = SDMMC_CmdSelDesel(hmmc->Instance, (uint32_t)(((uint32_t)hmmc->MmcCard.RelCardAdd) << 16U));\r\n  if(errorstate != HAL_MMC_ERROR_NONE)\r\n  {\r\n    return errorstate;\r\n  }\r\n\r\n  /* Get CSD parameters */\r\n  if (HAL_MMC_GetCardCSD(hmmc, &CSD) != HAL_OK)\r\n  {\r\n    return hmmc->ErrorCode;\r\n  }\r\n\r\n```",
+    "comments": [
+      {
+        "author": "RKOUSTM",
+        "created_at": "2021-10-19T09:29:46Z",
+        "body": "Hi @jhansen3141,\r\n\r\nThank you for your contribution. You are absolutely right about this point. \r\n\r\nActually, the point you raised has already been dealt and fixed internally. The fix will be made available in the frame of a future release. \r\n\r\nThank you again for your contribution. We are looking forward to reading from you again.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "RKOUSTM",
+        "created_at": "2021-10-19T09:31:28Z",
+        "body": "ST Internal Reference: 110782"
+      },
+      {
+        "author": "RKOUSTM",
+        "created_at": "2021-10-19T10:49:36Z",
+        "body": "Duplicate of [STM32CubeF4#73](https://github.com/STMicroelectronics/STM32CubeF4/issues/73)."
+      },
+      {
+        "author": "RJMSTM",
+        "created_at": "2023-04-27T16:11:45Z",
+        "body": "Hello @jhansen3141 \r\n\r\nThank you again for having reported this point. It has been fixed in the frame of version 1.8.5 of this firmware.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/37"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 34,
+    "title": "Memory address does not increase in UART DMA receive ",
+    "state": "closed",
+    "labels": [
+      "cube mx"
+    ],
+    "created_at": "2021-09-02T04:24:38Z",
+    "closed_at": "2021-10-25T17:23:53Z",
+    "body": "**Describe the set-up**\r\n * STM32F103RCT6\r\n * STM32CubeIDE  HAL v1.8.4\r\n\r\n**Describe the bug**\r\n1. Start UART DMA receive\r\n2. Send data with serial\r\n3. View data in HAL_UART_RxHalfCpltCallback/HAL_UART_RxCpltCallback\r\n4. Send `12 34 56 78 12 34 56 78 12 34 56 78 12 34 56 78` but dma receive buffer is `78 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00`\r\n\r\n**How To Reproduce**\r\n1. Indicate the global behavior of your application project.\r\nUse UART DMA receive and transmit like  https://github.com/MaJerle/stm32-usart-uart-dma-rx-tx\r\n\r\n2. The modules that you suspect to be the cause of the problem (Driver, BSP, MW ...).\r\nUART MSP Init \r\n\r\n3. The use case that generates the problem.\r\n\r\n4. How we can reproduce the problem.\r\nI upload a mina.c and a ioc file, you can use it and send 16 bytes from serial.\r\n\r\n**Additional context**\r\nJust  add HAL_UART_MspInit(&huart2) before start DMA , it works.\r\n```\r\n  /* Initialize all configured peripherals */\r\n  MX_GPIO_Init();\r\n  MX_USART2_UART_Init();\r\n  MX_DMA_Init();\r\n  /* USER CODE BEGIN 2 */\r\n\r\n  HAL_UART_MspInit(COMM_DEBUG_UART); // add this line fix\r\n\r\n  HAL_UART_Receive_DMA(COMM_DEBUG_UART, g_comm_debug_rx_dma_buffer, ARRAY_LEN(g_comm_debug_rx_dma_buffer));\r\n  __HAL_UART_ENABLE_IT(COMM_MAIN_UART, UART_IT_IDLE);\r\n```\r\n\r\n\r\n**Screenshots**\r\n![image](https://user-images.githubusercontent.com/26370840/131780966-b6a1d3ef-ae7c-465f-8d35-4955dab9d7cb.png)\r\n\r\n** ioc file **\r\n[F1_DMA_Test - .ioc.txt](https://github.com/STMicroelectronics/STM32CubeF1/files/7096024/F1_DMA_Test.-.ioc.txt)\r\n```\r\n#MicroXplorer Configuration settings - do not modify\r\nDma.Request0=USART2_RX\r\nDma.Request1=USART2_TX\r\nDma.RequestsNb=2\r\nDma.USART2_RX.0.Direction=DMA_PERIPH_TO_MEMORY\r\nDma.USART2_RX.0.Instance=DMA1_Channel6\r\nDma.USART2_RX.0.MemDataAlignment=DMA_MDATAALIGN_BYTE\r\nDma.USART2_RX.0.MemInc=DMA_MINC_ENABLE\r\nDma.USART2_RX.0.Mode=DMA_CIRCULAR\r\nDma.USART2_RX.0.PeriphDataAlignment=DMA_PDATAALIGN_BYTE\r\nDma.USART2_RX.0.PeriphInc=DMA_PINC_DISABLE\r\nDma.USART2_RX.0.Priority=DMA_PRIORITY_LOW\r\nDma.USART2_RX.0.RequestParameters=Instance,Direction,PeriphInc,MemInc,PeriphDataAlignment,MemDataAlignment,Mode,Priority\r\nDma.USART2_TX.1.Direction=DMA_MEMORY_TO_PERIPH\r\nDma.USART2_TX.1.Instance=DMA1_Channel7\r\nDma.USART2_TX.1.MemDataAlignment=DMA_MDATAALIGN_BYTE\r\nDma.USART2_TX.1.MemInc=DMA_MINC_ENABLE\r\nDma.USART2_TX.1.Mode=DMA_NORMAL\r\nDma.USART2_TX.1.PeriphDataAlignment=DMA_PDATAALIGN_BYTE\r\nDma.USART2_TX.1.PeriphInc=DMA_PINC_DISABLE\r\nDma.USART2_TX.1.Priority=DMA_PRIORITY_LOW\r\nDma.USART2_TX.1.RequestParameters=Instance,Direction,PeriphInc,MemInc,PeriphDataAlignment,MemDataAlignment,Mode,Priority\r\nFile.Version=6\r\nKeepUserPlacement=false\r\nMcu.Family=STM32F1\r\nMcu.IP0=DMA\r\nMcu.IP1=NVIC\r\nMcu.IP2=RCC\r\nMcu.IP3=SYS\r\nMcu.IP4=USART2\r\nMcu.IPNb=5\r\nMcu.Name=STM32F103R(C-D-E)Tx\r\nMcu.Package=LQFP64\r\nMcu.Pin0=PA2\r\nMcu.Pin1=PA3\r\nMcu.Pin2=PA13\r\nMcu.Pin3=PA14\r\nMcu.Pin4=VP_SYS_VS_Systick\r\nMcu.PinsNb=5\r\nMcu.ThirdPartyNb=0\r\nMcu.UserConstants=\r\nMcu.UserName=STM32F103RCTx\r\nMxCube.Version=6.3.0\r\nMxDb.Version=DB.6.0.30\r\nNVIC.BusFault_IRQn=true\\:0\\:0\\:false\\:false\\:true\\:false\\:false\r\nNVIC.DMA1_Channel6_IRQn=true\\:0\\:0\\:false\\:false\\:true\\:false\\:true\r\nNVIC.DMA1_Channel7_IRQn=true\\:0\\:0\\:false\\:false\\:true\\:false\\:true\r\nNVIC.DebugMonitor_IRQn=true\\:0\\:0\\:false\\:false\\:true\\:false\\:false\r\nNVIC.ForceEnableDMAVector=true\r\nNVIC.HardFault_IRQn=true\\:0\\:0\\:false\\:false\\:true\\:false\\:false\r\nNVIC.MemoryManagement_IRQn=true\\:0\\:0\\:false\\:false\\:true\\:false\\:false\r\nNVIC.NonMaskableInt_IRQn=true\\:0\\:0\\:false\\:false\\:true\\:false\\:false\r\nNVIC.PendSV_IRQn=true\\:0\\:0\\:false\\:false\\:true\\:false\\:false\r\nNVIC.PriorityGroup=NVIC_PRIORITYGROUP_4\r\nNVIC.SVCall_IRQn=true\\:0\\:0\\:false\\:false\\:true\\:false\\:false\r\nNVIC.SysTick_IRQn=true\\:15\\:0\\:false\\:false\\:true\\:false\\:true\r\nNVIC.UsageFault_IRQn=true\\:0\\:0\\:false\\:false\\:true\\:false\\:false\r\nPA13.Mode=Serial_Wire\r\nPA13.Signal=SYS_JTMS-SWDIO\r\nPA14.Mode=Serial_Wire\r\nPA14.Signal=SYS_JTCK-SWCLK\r\nPA2.Locked=true\r\nPA2.Mode=Asynchronous\r\nPA2.Signal=USART2_TX\r\nPA3.Locked=true\r\nPA3.Mode=Asynchronous\r\nPA3.Signal=USART2_RX\r\nPinOutPanel.RotationAngle=0\r\nProjectManager.AskForMigrate=true\r\nProjectManager.BackupPrevious=false\r\nProjectManager.CompilerOptimize=6\r\nProjectManager.ComputerToolchain=false\r\nProjectManager.CoupleFile=false\r\nProjectManager.CustomerFirmwarePackage=\r\nProjectManager.DefaultFWLocation=true\r\nProjectManager.DeletePrevious=true\r\nProjectManager.DeviceId=STM32F103RCTx\r\nProjectManager.FirmwarePackage=STM32Cube FW_F1 V1.8.4\r\nProjectManager.FreePins=false\r\nProjectManager.HalAssertFull=false\r\nProjectManager.HeapSize=0x200\r\nProjectManager.KeepUserCode=true\r\nProjectManager.LastFirmware=true\r\nProjectManager.LibraryCopy=1\r\nProjectManager.MainLocation=Core/Src\r\nProjectManager.NoMain=false\r\nProjectManager.PreviousToolchain=\r\nProjectManager.ProjectBuild=false\r\nProjectManager.ProjectFileName=F1_DMA_Test.ioc\r\nProjectManager.ProjectName=F1_DMA_Test\r\nProjectManager.RegisterCallBack=\r\nProjectManager.StackSize=0x400\r\nProjectManager.TargetToolchain=STM32CubeIDE\r\nProjectManager.ToolChainLocation=\r\nProjectManager.UnderRoot=true\r\nProjectManager.functionlistsort=1-SystemClock_Config-RCC-false-HAL-false,2-MX_GPIO_Init-GPIO-false-HAL-true,3-MX_USART2_UART_Init-USART2-false-HAL-true,4-MX_DMA_Init-DMA-false-HAL-true\r\nRCC.APB1Freq_Value=8000000\r\nRCC.APB2Freq_Value=8000000\r\nRCC.FamilyName=M\r\nRCC.IPParameters=APB1Freq_Value,APB2Freq_Value,FamilyName,PLLCLKFreq_Value,PLLMCOFreq_Value,TimSysFreq_Value\r\nRCC.PLLCLKFreq_Value=8000000\r\nRCC.PLLMCOFreq_Value=4000000\r\nRCC.TimSysFreq_Value=8000000\r\nUSART2.IPParameters=VirtualMode\r\nUSART2.VirtualMode=VM_ASYNC\r\nVP_SYS_VS_Systick.Mode=SysTick\r\nVP_SYS_VS_Systick.Signal=SYS_VS_Systick\r\nboard=custom\r\nisbadioc=false\r\n\r\n```\r\n\r\n** main.c **\r\n```C\r\n/* USER CODE BEGIN Header */\r\n/**\r\n  ******************************************************************************\r\n  * @file           : main.c\r\n  * @brief          : Main program body\r\n  ******************************************************************************\r\n  * @attention\r\n  *\r\n  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.\r\n  * All rights reserved.</center></h2>\r\n  *\r\n  * This software component is licensed by ST under BSD 3-Clause license,\r\n  * the \"License\"; You may not use this file except in compliance with the\r\n  * License. You may obtain a copy of the License at:\r\n  *                        opensource.org/licenses/BSD-3-Clause\r\n  *\r\n  ******************************************************************************\r\n  */\r\n/* USER CODE END Header */\r\n/* Includes ------------------------------------------------------------------*/\r\n#include \"main.h\"\r\n\r\n/* Private includes ----------------------------------------------------------*/\r\n/* USER CODE BEGIN Includes */\r\n\r\n/* USER CODE END Includes */\r\n\r\n/* Private typedef -----------------------------------------------------------*/\r\n/* USER CODE BEGIN PTD */\r\ntypedef enum {\r\n    e_serial_irq_dma_half,\r\n    e_serial_irq_dma_full,\r\n    e_serial_irq_idle,\r\n    e_serial_irq_idle_timeout,\r\n} e_serial_irq;\r\n\r\ntypedef struct {\r\n    uint16_t cur_pos;\r\n    uint16_t old_pos;\r\n    uint16_t dma_size;\r\n    uint8_t * p_dma_buffer;\r\n} s_serial_rx_dma;\r\n/* USER CODE END PTD */\r\n\r\n/* Private define ------------------------------------------------------------*/\r\n/* USER CODE BEGIN PD */\r\n#define COMM_DEBUG_UART (&huart2)\r\n\r\n/* USER CODE END PD */\r\n\r\n/* Private macro -------------------------------------------------------------*/\r\n/* USER CODE BEGIN PM */\r\n#define ARRAY_LEN(x) (sizeof(x) / sizeof((x)[0]))\r\n\r\n/* USER CODE END PM */\r\n\r\n/* Private variables ---------------------------------------------------------*/\r\nUART_HandleTypeDef huart2;\r\nDMA_HandleTypeDef hdma_usart2_rx;\r\nDMA_HandleTypeDef hdma_usart2_tx;\r\n\r\n/* USER CODE BEGIN PV */\r\n\r\n/* USER CODE END PV */\r\n\r\n/* Private function prototypes -----------------------------------------------*/\r\nvoid SystemClock_Config(void);\r\nstatic void MX_GPIO_Init(void);\r\nstatic void MX_USART2_UART_Init(void);\r\nstatic void MX_DMA_Init(void);\r\n/* USER CODE BEGIN PFP */\r\n\r\n/* USER CODE END PFP */\r\n\r\n/* Private user code ---------------------------------------------------------*/\r\n/* USER CODE BEGIN 0 */\r\nstatic uint8_t g_comm_debug_rx_dma_buffer[32];\r\nstatic s_serial_rx_dma g_comm_debug_dma_rx_info;\r\n\r\n/**\r\n * @brief  comm_debug 接收中断回调\r\n * @note   HAL_UART_RxHalfCpltCallback\r\n * @note   HAL_UART_RxCpltCallback\r\n * @note   USART2_IRQHandler\r\n * @param  irq_type 中断类型\r\n * @retval None\r\n */\r\nvoid comm_debug_IRQ_handle(e_serial_irq irq_type)\r\n{\r\n    s_serial_rx_dma * p_dma_info;\r\n\r\n    p_dma_info = &g_comm_debug_dma_rx_info;\r\n\r\n    /* Calculate current position in buffer */\r\n    p_dma_info->cur_pos = p_dma_info->dma_size - __HAL_DMA_GET_COUNTER(&hdma_usart2_rx);\r\n    if (p_dma_info->cur_pos == p_dma_info->old_pos && irq_type == e_serial_irq_dma_full) {\r\n    \tHAL_UART_Transmit(COMM_DEBUG_UART, &p_dma_info->p_dma_buffer[p_dma_info->old_pos], p_dma_info->dma_size - p_dma_info->old_pos, 10);\r\n        if (p_dma_info->cur_pos > 0) {\r\n        \tHAL_UART_Transmit(COMM_DEBUG_UART, &p_dma_info->p_dma_buffer[0], p_dma_info->cur_pos, 10);\r\n        }\r\n    }\r\n    if (p_dma_info->cur_pos != p_dma_info->old_pos) {    /* Check change in received data */\r\n        if (p_dma_info->cur_pos > p_dma_info->old_pos) { /* Current position is over previous one */\r\n            /* We are in \"linear\" mode */\r\n            /* Process data directly by subtracting \"pointers\" */\r\n        \tHAL_UART_Transmit(COMM_DEBUG_UART, &p_dma_info->p_dma_buffer[p_dma_info->old_pos], p_dma_info->cur_pos - p_dma_info->old_pos, 10);\r\n        } else {\r\n            /* We are in \"overflow\" mode */\r\n            /* First process data to the end of buffer */\r\n        \tHAL_UART_Transmit(COMM_DEBUG_UART, &p_dma_info->p_dma_buffer[p_dma_info->old_pos], p_dma_info->dma_size - p_dma_info->old_pos, 10);\r\n            /* Check and continue with beginning of buffer */\r\n            if (p_dma_info->cur_pos > 0) {\r\n            \tHAL_UART_Transmit(COMM_DEBUG_UART, &p_dma_info->p_dma_buffer[0], p_dma_info->cur_pos, 10);\r\n            }\r\n        }\r\n        p_dma_info->old_pos = p_dma_info->cur_pos; /* Save current position as old */\r\n    }\r\n\r\n    /* Check and manually update if we reached end of buffer */\r\n    if (p_dma_info->old_pos == p_dma_info->dma_size) {\r\n        p_dma_info->old_pos = 0;\r\n    }\r\n}\r\n\r\n/**\r\n * @brief  DMA接收一半中断回调\r\n * @param  argument: Not used\r\n * @retval None\r\n */\r\nvoid HAL_UART_RxHalfCpltCallback(UART_HandleTypeDef * huart)\r\n{\r\n    switch ((uint32_t)(huart->Instance)) {\r\n        case (uint32_t)USART2:\r\n            comm_debug_IRQ_handle(e_serial_irq_dma_half);\r\n            break;\r\n    }\r\n}\r\n\r\n/**\r\n * @brief  DMA接收完满中断回调\r\n * @param  argument: Not used\r\n * @retval None\r\n */\r\nvoid HAL_UART_RxCpltCallback(UART_HandleTypeDef * huart)\r\n{\r\n    switch ((uint32_t)(huart->Instance)) {\r\n        case (uint32_t)USART2:\r\n            comm_debug_IRQ_handle(e_serial_irq_dma_full);\r\n            break;\r\n    }\r\n}\r\n/* USER CODE END 0 */\r\n\r\n/**\r\n  * @brief  The application entry point.\r\n  * @retval int\r\n  */\r\nint main(void)\r\n{\r\n  /* USER CODE BEGIN 1 */\r\n\r\n  /* USER CODE END 1 */\r\n\r\n  /* MCU Configuration--------------------------------------------------------*/\r\n\r\n  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */\r\n  HAL_Init();\r\n\r\n  /* USER CODE BEGIN Init */\r\n\r\n  /* USER CODE END Init */\r\n\r\n  /* Configure the system clock */\r\n  SystemClock_Config();\r\n\r\n  /* USER CODE BEGIN SysInit */\r\n\r\n  /* USER CODE END SysInit */\r\n\r\n  /* Initialize all configured peripherals */\r\n  MX_GPIO_Init();\r\n  MX_USART2_UART_Init();\r\n  MX_DMA_Init();\r\n  /* USER CODE BEGIN 2 */\r\n\r\n  g_comm_debug_dma_rx_info.cur_pos = 0;\r\n  g_comm_debug_dma_rx_info.old_pos = ARRAY_LEN(g_comm_debug_rx_dma_buffer);\r\n  g_comm_debug_dma_rx_info.dma_size = ARRAY_LEN(g_comm_debug_rx_dma_buffer);\r\n  g_comm_debug_dma_rx_info.p_dma_buffer = g_comm_debug_rx_dma_buffer;\r\n\r\n  HAL_UART_MspInit(COMM_DEBUG_UART);\r\n  HAL_UART_Receive_DMA(COMM_DEBUG_UART, g_comm_debug_rx_dma_buffer, ARRAY_LEN(g_comm_debug_rx_dma_buffer));\r\n  __HAL_UART_ENABLE_IT(COMM_DEBUG_UART, UART_IT_IDLE);\r\n  /* USER CODE END 2 */\r\n\r\n  /* Infinite loop */\r\n  /* USER CODE BEGIN WHILE */\r\n  while (1)\r\n  {\r\n    /* USER CODE END WHILE */\r\n\r\n    /* USER CODE BEGIN 3 */\r\n  }\r\n  /* USER CODE END 3 */\r\n}\r\n\r\n/**\r\n  * @brief System Clock Configuration\r\n  * @retval None\r\n  */\r\nvoid SystemClock_Config(void)\r\n{\r\n  RCC_OscInitTypeDef RCC_OscInitStruct = {0};\r\n  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};\r\n\r\n  /** Initializes the RCC Oscillators according to the specified parameters\r\n  * in the RCC_OscInitTypeDef structure.\r\n  */\r\n  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;\r\n  RCC_OscInitStruct.HSIState = RCC_HSI_ON;\r\n  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;\r\n  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;\r\n  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)\r\n  {\r\n    Error_Handler();\r\n  }\r\n  /** Initializes the CPU, AHB and APB buses clocks\r\n  */\r\n  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK\r\n                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;\r\n  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;\r\n  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;\r\n  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;\r\n  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;\r\n\r\n  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)\r\n  {\r\n    Error_Handler();\r\n  }\r\n}\r\n\r\n/**\r\n  * @brief USART2 Initialization Function\r\n  * @param None\r\n  * @retval None\r\n  */\r\nstatic void MX_USART2_UART_Init(void)\r\n{\r\n\r\n  /* USER CODE BEGIN USART2_Init 0 */\r\n\r\n  /* USER CODE END USART2_Init 0 */\r\n\r\n  /* USER CODE BEGIN USART2_Init 1 */\r\n\r\n  /* USER CODE END USART2_Init 1 */\r\n  huart2.Instance = USART2;\r\n  huart2.Init.BaudRate = 115200;\r\n  huart2.Init.WordLength = UART_WORDLENGTH_8B;\r\n  huart2.Init.StopBits = UART_STOPBITS_1;\r\n  huart2.Init.Parity = UART_PARITY_NONE;\r\n  huart2.Init.Mode = UART_MODE_TX_RX;\r\n  huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;\r\n  huart2.Init.OverSampling = UART_OVERSAMPLING_16;\r\n  if (HAL_UART_Init(&huart2) != HAL_OK)\r\n  {\r\n    Error_Handler();\r\n  }\r\n  /* USER CODE BEGIN USART2_Init 2 */\r\n\r\n  /* USER CODE END USART2_Init 2 */\r\n\r\n}\r\n\r\n/**\r\n  * Enable DMA controller clock\r\n  */\r\nstatic void MX_DMA_Init(void)\r\n{\r\n\r\n  /* DMA controller clock enable */\r\n  __HAL_RCC_DMA1_CLK_ENABLE();\r\n\r\n  /* DMA interrupt init */\r\n  /* DMA1_Channel6_IRQn interrupt configuration */\r\n  HAL_NVIC_SetPriority(DMA1_Channel6_IRQn, 0, 0);\r\n  HAL_NVIC_EnableIRQ(DMA1_Channel6_IRQn);\r\n  /* DMA1_Channel7_IRQn interrupt configuration */\r\n  HAL_NVIC_SetPriority(DMA1_Channel7_IRQn, 0, 0);\r\n  HAL_NVIC_EnableIRQ(DMA1_Channel7_IRQn);\r\n\r\n}\r\n\r\n/**\r\n  * @brief GPIO Initialization Function\r\n  * @param None\r\n  * @retval None\r\n  */\r\nstatic void MX_GPIO_Init(void)\r\n{\r\n\r\n  /* GPIO Ports Clock Enable */\r\n  __HAL_RCC_GPIOA_CLK_ENABLE();\r\n\r\n}\r\n\r\n/* USER CODE BEGIN 4 */\r\n\r\n/* USER CODE END 4 */\r\n\r\n/**\r\n  * @brief  This function is executed in case of error occurrence.\r\n  * @retval None\r\n  */\r\nvoid Error_Handler(void)\r\n{\r\n  /* USER CODE BEGIN Error_Handler_Debug */\r\n  /* User can add his own implementation to report the HAL error return state */\r\n  __disable_irq();\r\n  while (1)\r\n  {\r\n  }\r\n  /* USER CODE END Error_Handler_Debug */\r\n}\r\n\r\n#ifdef  USE_FULL_ASSERT\r\n/**\r\n  * @brief  Reports the name of the source file and the source line number\r\n  *         where the assert_param error has occurred.\r\n  * @param  file: pointer to the source file name\r\n  * @param  line: assert_param error line source number\r\n  * @retval None\r\n  */\r\nvoid assert_failed(uint8_t *file, uint32_t line)\r\n{\r\n  /* USER CODE BEGIN 6 */\r\n  /* User can add his own implementation to report the file name and line number,\r\n     ex: printf(\"Wrong parameters value: file %s on line %d\\r\\n\", file, line) */\r\n  /* USER CODE END 6 */\r\n}\r\n#endif /* USE_FULL_ASSERT */\r\n\r\n/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/\r\n\r\n```\r\n\r\n",
+    "comments": [
+      {
+        "author": "tiantian1645",
+        "created_at": "2021-09-02T04:26:55Z",
+        "body": "And a similar problem in Timer trigger ADC1 DMA ,it will only get in HAL_ADC_ConvCpltCallback once, but there is no problem if changed to ADC3,."
+      },
+      {
+        "author": "ASELSTM",
+        "created_at": "2021-10-07T15:29:20Z",
+        "body": "Hi @tiantian1645,\r\n\r\nThis is unfortunately a CubeMX generation problem. To fix the issue you can change the order of the initialization functions generated by CubeMX by placing the DMA initialization before the UART initialization as following : \r\n\r\n```\r\n  /* Initialize all configured peripherals */\r\n  MX_GPIO_Init();\r\n  MX_DMA_Init();\r\n  MX_USART2_UART_Init();\r\n  /* USER CODE BEGIN 2 */\r\n```\r\n\r\nWould you please update the initialization sequence as described above in the code snippet and check back if you still have the erroneous behavior or not.\r\n\r\nWith regards,\r\n"
+      },
+      {
+        "author": "tiantian1645",
+        "created_at": "2021-10-08T07:47:39Z",
+        "body": "I had tried to  swap the initialization sequence but it does not work.\r\nI am not able to check back because I have resigned from this project."
+      },
+      {
+        "author": "ASELSTM",
+        "created_at": "2021-10-25T17:23:53Z",
+        "body": "Hi @tiantian1645,\r\n\r\nWe have implemented the proposed fix on the code you have provide and it works perfectly. As explained in the first comment, the point you reported is  related to the CubeMX generation problem and not to the firmware published in this repository.  Please allow me then to close this thread as we don't treat aspect related to CubeMX tool in our GitHub repositories.  Thank you for your comprehension and for your contribution. \r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/34"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 33,
+    "title": "Bad modification in stm32f1xx_hal_adc_ex.c",
+    "state": "closed",
+    "labels": [
+      "wontfix",
+      "internal bug tracker",
+      "hal"
+    ],
+    "created_at": "2021-08-01T19:39:49Z",
+    "closed_at": "2023-04-07T11:51:58Z",
+    "body": "In the newest version of stm32f1xx_hal_adc_ex.c in function\r\n\r\nHAL_ADCEx_MultiModeStart_DMA()\r\nHAL_ADCEx_MultiModeStop_DMA()\r\nHAL_ADCEx_MultiModeConfigChannel()\r\n\r\nADC_HandleTypeDef tmphadcSlave={0};\r\nis added.\r\nThis create a const in flash of ADC_HandleTypeDef and copy this to stack.\r\nA better solution is somthing like\r\nmemset(&tmphadcSlave, 0, sizeof(tmphadcSlave))\r\n\r\nImprovment:\r\nNo const in flash,\r\n",
+    "comments": [
+      {
+        "author": "ASELSTM",
+        "created_at": "2021-08-20T10:22:46Z",
+        "body": "ST Internal Reference: 112128"
+      },
+      {
+        "author": "ASELSTM",
+        "created_at": "2023-04-07T11:51:58Z",
+        "body": "Hi @CanastraRF,\r\n\r\nOur development team has unfortunately declined your proposal. According to them, the use of `memset()` would imply the use of C library within the HAL/LL drivers, which is not thread safe.\r\n\r\nPlease allow me thus to close this thread. Thank you for your comprehension.\r\n\r\nWith regards,\r\n\r\n"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/33"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 32,
+    "title": "stm32f1xx_hal_rtc.c -- inefficient code in HAL_RTC_Init() function",
+    "state": "closed",
+    "labels": [
+      "enhancement",
+      "internal bug tracker",
+      "hal"
+    ],
+    "created_at": "2021-06-18T21:06:11Z",
+    "closed_at": "2023-04-27T16:08:41Z",
+    "body": "The function HAL_RTC_Init() implemented in stm32f1xx_hal_rtc.c source file (v.1.8.0) has minor issue with using macro MODIFY_REG() against WRITE-ONLY registers RTC->PRLH and RTC->PRLL (see lines 381 & 382). It looks a bit odd and using WRITE_REG() macro instead of MODIFY_REG() could be a fix.\r\n",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2021-08-02T11:59:32Z",
+        "body": "Hi @a5021,\r\n\r\nThank you for this report. Your point is correct as the concerned registers are write-only as you mentioned. The lines eventually to be updated are:\r\n\r\nhttps://github.com/STMicroelectronics/STM32CubeF1/blob/c750eab6990cac35ab05020793b0221ecc1a8ce5/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rtc.c#L380-L382\r\n\r\nAnd the update could be:\r\n\r\n```diff\r\n-    MODIFY_REG(hrtc->Instance->PRLH, RTC_PRLH_PRL, (prescaler >> 16U));\r\n-    MODIFY_REG(hrtc->Instance->PRLL, RTC_PRLL_PRL, (prescaler & RTC_PRLL_PRL));\r\n+    WRITE_REG(hrtc->Instance->PRLH, ((prescaler >> 16U) & RTC_PRLH_PRL));\r\n+    WRITE_REG(hrtc->Instance->PRLL, (prescaler & RTC_PRLL_PRL));\r\n```\r\n\r\nYour report will be forwarded to our development teams. Thank you again.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2021-08-02T12:19:46Z",
+        "body": "ST Internal Reference: 111431"
+      },
+      {
+        "author": "RJMSTM",
+        "created_at": "2023-04-14T12:02:55Z",
+        "body": "Hello @a5021 \r\n\r\nThank you again for having reported this point. It has been fixed in the frame of version 1.8.5 of this firmware.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/32"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 30,
+    "title": "Purpose a fix to STM32F105 startup codes for proper initialization",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "question",
+      "internal bug tracker",
+      "cmsis"
+    ],
+    "created_at": "2021-02-25T16:21:26Z",
+    "closed_at": "2021-06-08T14:42:56Z",
+    "body": "**Describe the set-up**\r\n * The board: A custom STM32F105RCT6 development board from Taobao. board description (website in Chinese): https://item.taobao.com/item.htm?id=556036697936 . I can upload the schematic here if necessary, but any board should be okay to reproduce.\r\n * IDE: VSCode + PlatformIO (Core 5.1.0)\r\n   * Platform pack: ststm32 + my own support of STM32F105 series https://github.com/ttimasdf/platform-ststm32/tree/add-generic-stm32f105x\r\n   * Arduino Core: stm32duino + my own support of STM32F105 series https://github.com/ttimasdf/Arduino_Core_STM32/tree/variant-generic-stm32f105x\r\n\r\n**Describe the bug**\r\nThe `premain()` function provided by stm32duino is not properly called for HAL initialization. I've submitted a PR here stm32duino/Arduino_Core_STM32#1310 and been advised to also post the fix here. The only I can see is that it called something generated by the compiler. I refer to the startup code from lines below and submit the aforementioned PR. I'd be happy if anyone explain a little bit about why these lines are necessary for things to work 🙏 \r\n\r\nhttps://github.com/STMicroelectronics/STM32CubeF1/blob/003dfc9e6c2e424c19a25df3934afaf7fce660d6/Drivers/CMSIS/Device/ST/STM32F1xx/Source/Templates/gcc/startup_stm32f103xb.s#L92-L98\r\n\r\n**How To Reproduce**\r\n\r\nTODO: I'll add more detailed tomorrow \r\n\r\n<!--\r\n1. Indicate the global behavior of your application project.\r\n\r\n2. The modules that you suspect to be the cause of the problem (Driver, BSP, MW ...).\r\n\r\n3. The use case that generates the problem.\r\n\r\n4. How we can reproduce the problem.\r\n\r\n-->\r\n\r\n**Additional context**\r\n\r\nThe patch is available at ttimasdf/Arduino_Core_STM32@acbd6cd7c6e71a26512fe684f1d01edaa34deb70\r\n\r\n<!--\r\n\r\n**Screenshots**\r\nIf applicable, add screenshots to help explain your problem.\r\n\r\n-->\r\n",
+    "comments": [
+      {
+        "author": "ttimasdf",
+        "created_at": "2021-02-25T16:22:34Z",
+        "body": "Should I also submit an issue or PR here? https://github.com/STMicroelectronics/cmsis_device_f1"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2021-02-26T09:46:09Z",
+        "body": "Hi @ttimasdf,\r\n\r\nThank you for this contribution. It will be logged into our internal database and a fix will be made available in the frame of a future release.\r\n\r\nIn case you would like to create a p-r, it would be preferable that you push it to this repository to allow linking it to this issue. If you prefer to push it to the [cmsis_device_f1](https://github.com/STMicroelectronics/cmsis_device_f1) though, you can. I will transfer this issue there and link your p-r to it.\r\n\r\nRegarding your question, I will try to provide you with an answer as soon as possible.\r\n\r\nWith regards, "
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2021-02-26T10:02:09Z",
+        "body": "ST Internal Reference: 102149"
+      },
+      {
+        "author": "RKOUSTM",
+        "created_at": "2021-06-08T14:42:33Z",
+        "body": "Hi @ttimasdf,\r\n\r\nI hope you are fine.\r\n\r\nThe issue you reported has been fixed in the frame of version v1.8.4 of the STM32CubeF1 published recently on GitHub.\r\n\r\nThank you again for having reported.\r\n\r\nWith regards,  "
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/30"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 29,
+    "title": "Function LL_RTC_TIME_Init  confusion RTC_Format",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "created_at": "2021-02-05T15:33:23Z",
+    "closed_at": "2021-06-08T14:35:31Z",
+    "body": "Hello!\r\nI have a problem initializing RTC\r\nFor example, if you are using the BIN format.\r\nfunction LL_RTC_TIME_Init, first of all the time is checked for correctness\r\n\r\n if (RTC_Format == LL_RTC_FORMAT_BIN) {\r\n    assert_param (IS_LL_RTC_HOUR24 (RTC_TimeStruct-> Clock));\r\n    assert_param (IS_LL_RTC_MINUTES (RTC_TimeStruct-> Minutes));\r\n    assert_param (IS_LL_RTC_SECONDS (RTC_TimeStruct-> Seconds));\r\n  }\r\nLooks good\r\n\r\nBut then the inequality sign (! =) Is used\r\nand the time is converted from BCD to BIN even if it is already in BIN format.\r\n\r\n if (RTC_Format            !=         LL_RTC_FORMAT_BIN) {\r\n      counter_time = (uint32_t) (((uint32_t) RTC_TimeStruct-> Clock * 3600U) + \\\r\n                                ((uint32_t) RTC_TimeStruct-> Minutes * 60U) + \\\r\n                                ((uint32_t) RTC_TimeStruct-> Seconds));\r\n      LL_RTC_TIME_Set (RTCx, counter_time);\r\n    }\r\notherwise // (RTC_Format == LL_RTC_FORMAT_BIN)\r\n{\r\n      counter_time = (((uint32_t) (__ LL_RTC_CONVERT_BCD2BIN (RTC_TimeStruct-> Clock)) * 3600U) + \\\r\n                      ((uint32_t) (__ LL_RTC_CONVERT_BCD2BIN (RTC_TimeStruct-> Minutes)) * 60U) + \\\r\n                      ((uint32_t) (__ LL_RTC_CONVERT_BCD2BIN (RTC_TimeStruct-> Seconds))));\r\n      LL_RTC_TIME_Set (RTCx, counter_time);\r\n    }\r\n\r\n If you change the sign != to == then everything comes in the right place.\r\n\r\nThe same happens in LL_RTC_ALARM_Init",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2021-02-10T10:11:42Z",
+        "body": "Hello @AntonNeutron,\r\n\r\nLooks like we've missed that. Our apologies and thank you very much for having drawn out our attention upon.\r\n\r\nThis bug will be logged into our internal database and a fix will be made available soon enough hopefully. The two lines below, respectively located within functions `LL_RTC_TIME_Init()` and `LL_RTC_ALARM_Init()`, are impacted and shall be updated, as you pointed out. Thank you once more.\r\n\r\nWith regards,\r\n\r\nhttps://github.com/STMicroelectronics/STM32CubeF1/blob/276c4ab9537e83b9897badb68e02d9c4c46c5c22/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_ll_rtc.c#L248\r\n\r\nhttps://github.com/STMicroelectronics/STM32CubeF1/blob/276c4ab9537e83b9897badb68e02d9c4c46c5c22/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_ll_rtc.c#L322"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2021-02-10T10:31:58Z",
+        "body": "ST Internal Reference: 101170"
+      },
+      {
+        "author": "RKOUSTM",
+        "created_at": "2021-06-08T14:35:27Z",
+        "body": "Hi @AntonNeutron, \r\n\r\nI hope you are fine.\r\n\r\nThe issue you reported has been fixed in the frame of version v1.8.4 of the STM32CubeF1 published recently on GitHub.\r\n\r\nThank you again for having reported.\r\n\r\nWith regards, "
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/29"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 28,
+    "title": "BackupRegister macro at LL module",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "created_at": "2021-01-19T13:56:35Z",
+    "closed_at": "2021-06-08T14:34:46Z",
+    "body": "stm32f1xx_ll_rtc.h\r\n\r\n`\r\n#define LL_RTC_BKP_DR11                    (0x0000000BU)\r\n`\r\n\r\nstm32f1xx_hal_rtc_ex.h\r\n\r\n`\r\n#define RTC_BKP_DR11                        0x00000010U\r\n`\r\n\r\nTwo definitions are inconsistent",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2021-02-09T15:07:51Z",
+        "body": "Hi @cnxiaochun,\r\n\r\nThank you for this report. You are right. There is clearly an issue with the macros of the **LL** driver. All macros listed below shall be aligned with their equivalents in the HAL driver as in the example hereafter.\r\n\r\n```diff\r\n-#define LL_RTC_BKP_DR11 (0x0000000BU)\r\n+#define LL_RTC_BKP_DR11 (0x00000010U)\r\n```\r\n\r\nWith regards,\r\n\r\nhttps://github.com/STMicroelectronics/STM32CubeF1/blob/276c4ab9537e83b9897badb68e02d9c4c46c5c22/Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_rtc.h#L142-L173"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2021-02-09T15:28:19Z",
+        "body": "ST Internal Reference: 101139"
+      },
+      {
+        "author": "RKOUSTM",
+        "created_at": "2021-06-08T14:34:17Z",
+        "body": "Hi @cnxiaochun, \r\n\r\nI hope you are fine.\r\n\r\nThe issue you reported has been fixed in the frame of version v1.8.4 of the STM32CubeF1 published recently on GitHub.\r\n\r\nThank you again for having reported.\r\n\r\nWith regards, "
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/28"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 27,
+    "title": "No STM32F103RC support",
+    "state": "closed",
+    "labels": [],
+    "created_at": "2020-12-24T20:19:02Z",
+    "closed_at": "2020-12-25T02:31:06Z",
+    "body": "I'm new to STM32Cube, and I am building for a board that uses the STM32F103RC chip. However I do not see a configuration file for `stm32f103xc.h` in this `Include/`. Is this chip not supported?\r\n\r\nSorry if this is a silly question, I am not using stm32cube directly - I'm using it with the Zephyr RTOS, but when I tried to build for the STM32F103RC chip, the header was not found here.",
+    "comments": [
+      {
+        "author": "coderkalyan",
+        "created_at": "2020-12-25T02:31:06Z",
+        "body": "Never mind, I checked the documentation and it said I had to use the F103XE header."
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/27"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 26,
+    "title": "Error behavior of LL_GPIO_SetPinPull() in LL_GPIO_Init()",
+    "state": "closed",
+    "labels": [
+      "question",
+      "cube mx"
+    ],
+    "created_at": "2020-11-22T12:04:59Z",
+    "closed_at": "2021-02-08T13:46:15Z",
+    "body": "hello!\r\n\r\nI have used STM32CubeMX V6.1.0(STM32Cube FW_F1 V1.8.3) to generate STM32F103ZETx's gpio init code, and find that the gpio init function `LL_GPIO_Init()` will call `LL_GPIO_SetPinPull()`, even if when i set set pin as output mode.\r\n\r\nThat will cause a error set zero to GPIO->ODR, in such code:\r\n\r\n```C\r\nLL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_GPIOF);\r\n// init the pin as high level\r\nLL_GPIO_SetOutputPin(GPIOF, LED0_Pin);\r\n\r\n//config the pin\r\nGPIO_InitStruct.Pin = LED0_Pin;\r\nGPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;\r\nGPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;\r\nGPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;\r\nLL_GPIO_Init(GPIOF, &GPIO_InitStruct);\r\n\r\n//and here, the pin is set to low level by LL_GPIO_Init()\r\n```\r\n\r\ni think `LL_GPIO_SetPinPull()` shall be called only when the pin is setted to output mode.\r\n",
+    "comments": [
+      {
+        "author": "ASELSTM",
+        "created_at": "2021-01-05T09:50:18Z",
+        "body": "Hi @simaodangan,\r\n\r\nReferring to the reference manual  [RM0008](https://www.st.com/resource/en/reference_manual/cd00171190-stm32f101xx-stm32f102xx-stm32f103xx-stm32f105xx-and-stm32f107xx-advanced-arm-based-32-bit-mcus-stmicroelectronics.pdf) the **Table 20** shown below is describing the port bit configuration. Based on this table, in the **General purpose output mode**, configuring the ODR register to 0 or 1 is **mandatory** unlike the AF mode where it doesn’t matter to configure the ODR or not. Thus, the LL_GPIO_Init() should always call the LL_GPIO_SetPinPull() to configure the ODR.\r\n\r\n![Table_20_RM0008](https://user-images.githubusercontent.com/47858836/103631773-b7ccfd80-4f43-11eb-8827-debd27b1248c.png)\r\n\r\n\r\nActually, STM32F1 GPIO is a little different from the others STM32 platform. There is no PUPDR register to configure the pull-up/down when INPUT mode is selected, it rather depends on the ODR register value as described in the Table 20.  Thus, to maintain the driver compatibility with the rest of STM32 platforms, the LL_GPIO_SetPinPull() is kept and used to set the PULL in the ODR register.\r\n\r\nActually, STM32F1 GPIO is a little different from the others STM32 platform. There is no PUPDR register dedicated to configure the pull-up/down when INPUT mode is selected, it rather depends on the ODR register value as described in the Table 20. Thus, to maintain the driver compatibility with the rest of STM32 platforms, the LL_GPIO_SetPinPull() is kept and used to set the PULL in the ODR register.\r\n\r\nThat said, to fix the issue, you should call LL_GPIO_SetOutputPin() after LL_GPIO_Init() and not before. The code will be then as follows: \r\n\r\n```diff\r\nLL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_GPIOF);\r\n-// init the pin as high level\r\n-LL_GPIO_SetOutputPin(GPIOF, LED0_Pin);\r\n\r\n//config the pin\r\nGPIO_InitStruct.Pin = LED0_Pin;\r\nGPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;\r\nGPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;\r\nGPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;\r\nLL_GPIO_Init(GPIOF, &GPIO_InitStruct);\r\n\r\n+// init the pin as high level\r\n+LL_GPIO_SetOutputPin(GPIOF, LED0_Pin);\r\n```\r\n\r\nHope this would help you and thank you for your contribution.\r\n\r\nWith regards,\r\n"
+      },
+      {
+        "author": "simaodangan",
+        "created_at": "2021-01-10T04:45:12Z",
+        "body": "Thank you for your explanation.\r\n\r\nIf I call `LL_GPIO_SetOutputPin()`  after `LL_GPIO_Init()`, the pin will generate a Low-Level pulse between Hi-Z and High-Level, which is a illegal status and may damage the hardware when a break between two function calls.\r\n\r\nActually, I use STM32Cube to generate the code,  if I select \"GPIO mode\" as \"Output Open Drain\", and \"GPIO output level\" as \"High\". It doesn't work, and the code generated by cube  is like:\r\n\r\n```C\r\nLL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_GPIOF);\r\n\r\n//The config:  \"GPIO output level\" -> \"High\"\r\nLL_GPIO_SetOutputPin(GPIOF, LED0_Pin);\r\n\r\nGPIO_InitStruct.Pin = LED0_Pin;\r\nGPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;\r\nGPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;\r\nGPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;\r\nLL_GPIO_Init(GPIOF, &GPIO_InitStruct);\r\n\r\n//and here, the pin is set to LOW level by LL_GPIO_Init()\r\n```\r\n\r\nI solve this problem by selecting \"GPIO Pull-ip/Pull-down\" as \"Pull-up\". \r\nThe new code is like:\r\n\r\n```C\r\nLL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_GPIOF);\r\n\r\n//The config:  \"GPIO output level\" -> \"High\"\r\nLL_GPIO_SetOutputPin(GPIOF, LED0_Pin);\r\n\r\n//config the pin\r\nGPIO_InitStruct.Pin = LED0_Pin;\r\nGPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;\r\nGPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;\r\nGPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_OPENDRAIN;\r\n//additional code\r\nGPIO_InitStruct.Pull = LL_GPIO_PULL_UP;\r\nLL_GPIO_Init(GPIOF, &GPIO_InitStruct);\r\n\r\n//and here, the pin is set to HIGH level\r\n```\r\n\r\nI think the it is confused for the user of STM32Cube.\r\n"
+      },
+      {
+        "author": "ASELSTM",
+        "created_at": "2021-02-08T13:46:15Z",
+        "body": "Hi @simaodangan,\r\n\r\nPleased that the problem has been solved. \r\n\r\nActually, this is rather a Cube MX related issue and we don't treat aspects related to CubeMX tool at GitHub level, they are rather treated at ST Community level precisely within the [CubeMX](https://community.st.com/s/topic/0TO0X000000BTr8WAG/stm32cubemx) dedicated section. You can create a new post to submit your issue. \r\n\r\nAs this issue is not directly related to software component published within this repository (CMSIS, HAL, BSP, etc.) but rather to ecosystem (CubeMX tool), please allow me to close it.\r\n\r\nThank you for your comprehension and thank you again for your contribution. We are looking forward to reading from you again.\r\n\r\nWith regards,\r\n\r\n"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/26"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 25,
+    "title": "Conflicting types in USBD_LL_Transmit and USBD_LL_PrepareReceive",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "wontfix",
+      "spotted before customer",
+      "mw",
+      "usb"
+    ],
+    "created_at": "2020-11-22T01:56:01Z",
+    "closed_at": "2021-03-09T04:02:52Z",
+    "body": "**Describe the set-up**\r\nSTM32F103C8T6 Microcontroller. Initialization code generated with STM32CubeMX. USB configured as Device CDC Class. When generating the code \"add necessary files as reference\" checked, that is cube does not copy the libraries into the project folder.\r\n\r\n**Describe the bug**\r\nIn [usbd_conf_template.c](https://github.com/STMicroelectronics/STM32CubeF1/blob/master/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_conf_template.c) declaration of functions [USBD_LL_Transmit](https://github.com/STMicroelectronics/STM32CubeF1/blob/276c4ab9537e83b9897badb68e02d9c4c46c5c22/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_conf_template.c#L160) and [USBD_LL_PrepareReceive](https://github.com/STMicroelectronics/STM32CubeF1/blob/276c4ab9537e83b9897badb68e02d9c4c46c5c22/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_conf_template.c#L174) does not match with definitions of these functions in [stm32_mw_usb_device/Core/Inc/usbd_core.h](https://github.com/STMicroelectronics/stm32_mw_usb_device/blob/master/Core/Inc/usbd_core.h). Last argument has type `uint16_t size` in declaration and `uint32_t size` in definition. Causes compilation error.\r\n\r\n**How To Reproduce**\r\n1. Generate initialization code with STM32CubeMX enabling USB as Device CDC Class. Check \"add necessary files as reference\".\r\n2. Clone necessary libraries into your project\r\n```shell\r\ngit init\r\ngit submodule add https://github.com/ARM-software/CMSIS_5 libraries/CMSIS_5\r\ngit submodule add https://github.com/STMicroelectronics/cmsis_device_f1.git libraries/cmsis_device_f1\r\ngit submodule add https://github.com/STMicroelectronics/stm32f1xx_hal_driver.git libraries/stm32f1xx_hal_driver\r\ngit submodule add https://github.com/STMicroelectronics/stm32_mw_usb_device.git libraries/stm32_mw_usb_device\r\n```\r\n3. Compile project\r\n\r\n**Additional context**\r\nI tried to reproduce the issue on STM32L412 everything went fine `USBD_LL_Transmit` and `USBD_LL_PrepareReceive` matched.",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2021-01-19T16:06:24Z",
+        "body": "Hi @stansotn,\r\n\r\nThank you for reporting. You are absolutely right about this point. There is a type mismatch. Actually, this is an issue found in version **v2.5.3** of the USB Device library and fixed in version **v2.6.0**.\r\n\r\nCurrently, the STM32CubeF1 firmware supports the **v2.5.3** of the USB Device library. Unfortunately there is no plan to upgrade to the **v2.6.0**. I will check further with our development teams and let you know should there be any upgrade planned.\r\n\r\nThank you for your comprehension and thank you again for having reported this point.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2021-03-08T11:34:24Z",
+        "body": "Hi @stansotn,\r\n\r\nI hope you are fine. Please find the latest USB Device library release within the [stm32_mw_usb_device](https://github.com/STMicroelectronics/stm32_mw_usb_device) repository. Version **v2.6.0** and even version **v2.7.1** are available and **fully compatible** with the v2.5.3.\r\n\r\nThe purpose from this repository is double:\r\n1. to make updates and fixes available to users as soon as possible and get rid of delays introduced by any firmware package release.\r\n2. to allow users to profit from updates and fixes in case there is no upgrade plan for firmware packages they are using (like it is the case of the STM32CubeF1).\r\n\r\nAll you have to do is to overwrite the content of your [STM32_USB_Device_Library](https://github.com/STMicroelectronics/STM32CubeF1/tree/master/Middlewares/ST/STM32_USB_Device_Library) folder with the one of the above-mentioned repository. I hope this addresses your need. Please let me know should you face any issue. Thank you.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "stansotn",
+        "created_at": "2021-03-09T04:02:52Z",
+        "body": "@ALABSTM,\r\n\r\nThank you for addressing the issue! I will update my projects' submodules to the latest release tags and let you know if I find anything fishy:)\r\n"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/25"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 23,
+    "title": "Race condition in USB PCD control endpoint receive ISR",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "created_at": "2020-09-23T20:52:16Z",
+    "closed_at": "2021-10-19T15:43:13Z",
+    "body": "**Describe the set-up**\r\nTested with STM32F103C8T6. Same code can be found for F0 series and others.\r\n\r\n**Describe the bug**\r\nUsually, the procedure to return control to the host after a handled SETUP packet in USB is done by receiving 0 byte on the OUT control endpoint. For PMA assisted chips this results in a) an interrupt which confirms the finished receive operation followed by b) an interrupt for the next SETUP packet. In case it takes quite long to handle the a) interrupt (due to low interrupt priority for example) the length information of the SETUP packet will be overwritten. This is the relevant part from the code:\r\nhttps://github.com/STMicroelectronics/STM32CubeF1/blob/6ead386a08dea17f4dffbdbcd36c9979cb53588b/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pcd.c#L2130-L2174\r\nThe situation was already improved in 1.8.0 by avoiding the call of the user callback function in case of such an a) interrupt (see line 2157). However, the root issue remains and can lead to a race condition were a SETUP packet is received just between line 2152 and 2172 and the received byte count being overwritten in line 2172. This behavior can be proven by checking `(PCD_GET_ENDPOINT(hpcd->Instance, PCD_ENDP0) & USB_EP_SETUP) != 0` at line 2171.  \r\nI suggest to properly re-check the `USB_EP_SETUP` bit and avoid `PCD_SET_EP_RX_CNT()` and `PCD_SET_EP_RX_STATUS()` if set.",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-11-17T14:14:04Z",
+        "body": "Hi @daniel-starke,\r\n\r\nThank you for this report. Both issue description and suggested solution are clear. I will forward it to our development teams and get back to you as soon as I get their feedback.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-12-15T14:12:22Z",
+        "body": "Hi @daniel-starke,\r\n\r\nOur development teams confirmed the issue and approved your proposal. A fix will be made available in a future release. The below code snippet shows how an extra check will be added just before line [2172](https://github.com/STMicroelectronics/STM32CubeF1/blob/6ead386a08dea17f4dffbdbcd36c9979cb53588b/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pcd.c#L2172).\r\n\r\nThank you again for your contribution.\r\n\r\nWith regards,\r\n\r\n```diff\r\n+ if ((PCD_GET_ENDPOINT(hpcd->Instance, PCD_ENDP0) & USB_EP_SETUP) == 0U)\r\n+ {\r\n    PCD_SET_EP_RX_CNT(hpcd->Instance, PCD_ENDP0, ep->maxpacket);\r\n    PCD_SET_EP_RX_STATUS(hpcd->Instance, PCD_ENDP0, USB_EP_RX_VALID);\r\n+ }\r\n```"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-12-15T15:15:49Z",
+        "body": "ST Internal Reference: 98281"
+      },
+      {
+        "author": "daniel-starke",
+        "created_at": "2020-12-15T21:33:36Z",
+        "body": "This only improves the behavior but does not provides a complete solution. That is why I suggested a proper re-check of the bit and not just a simple check. Higher priority interrupts may still break the intended behavior here.  \r\nOne could disable interrupts during that code block for example, if this implies only a little performance overhead.  \r\nI haven't done any tests here so please re-evaluate the possible solutions."
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-12-18T17:17:59Z",
+        "body": "Hi @daniel-starke,\r\n\r\nThank you for this clarification. I forwarded your concern and proposal to our development teams. I hope to get back to you soon enough.\r\n\r\nWith regards, "
+      },
+      {
+        "author": "bouattay",
+        "created_at": "2020-12-21T14:52:29Z",
+        "body": "Hello Daniel-starke,\r\nLet me explain the proposed solution, so assuming device get interrupted during setup out status phase and host is faster and send  the next setup packet. The fix here should ensure to do not update the Rx countx while USB_EP_SETUP bit is set. From device side the second setup packet is ACKed, host advances the state to either data phase or status phase with IN or OUT packet, the device which is still blocked by the higher IT treatment, should just NAK the IN/OUT packets \r\n\r\nif ((PCD_GET_ENDPOINT(hpcd->Instance, PCD_ENDP0) & USB_EP_SETUP) == 0U) is even aligned with your comment\r\n\r\n>>I suggest to properly re-check the USB_EP_SETUP bit and avoid PCD_SET_EP_RX_CNT() and PCD_SET_EP_RX_STATUS() if set.\r\n\r\nRegards,\r\nAymen"
+      },
+      {
+        "author": "daniel-starke",
+        "created_at": "2020-12-21T21:02:44Z",
+        "body": "Hello Aymen,\r\nThank you for the re-evaluation. What I suspect is, that the initial issue will still arise if the device got stuck for a while in a higher priority interrupt which was just triggered before entering the line with `PCD_SET_EP_RX_CNT`, i.e. before the host sends the SETUP packet to the device. The device would fill the internal buffer, set the byte count, ACK the package and after that return from the higher priority interrupt to clear the byte count at the line in question. The setup message is lost and both sides are stuck in an inconsistent state."
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2021-10-19T15:43:13Z",
+        "body": "Hi @daniel-starke,\r\n\r\nThe fix described [above](https://github.com/STMicroelectronics/STM32CubeF1/issues/23#issuecomment-745310057) (plus a bundle of other fixes and enhancements) has been made available in the frame of **v1.8.4** of this firmware. Please allow me to close this issue. Thank you again for your contribution.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/23"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 22,
+    "title": "HAL_PCD_EP_Flush() fails with linking error for non OTG devices",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "spotted before customer",
+      "hal"
+    ],
+    "created_at": "2020-09-23T20:09:02Z",
+    "closed_at": "2020-10-27T15:34:58Z",
+    "body": "**Describe the set-up**\r\nUse the function HAL_PCD_EP_Flush() with a STM32F103 board.\r\n\r\n**Describe the bug**\r\nThe linker fails with\r\n\r\n    undefined reference to `USB_FlushTxFifo'\r\n\r\nand\r\n\r\n    undefined reference to `USB_FlushRxFifo'\r\n\r\nin function `HAL_PCD_EP_Flush`.\r\nThe function is defined here:\r\nhttps://github.com/STMicroelectronics/STM32CubeF1/blob/6ead386a08dea17f4dffbdbcd36c9979cb53588b/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pcd.c#L1857-L1873\r\n\r\nBut `USB_FlushTxFifo` and `USB_FlushRxFifo` are only declared and not defined for non-OTG devices.\r\nSee\r\nhttps://github.com/STMicroelectronics/STM32CubeF1/blob/6ead386a08dea17f4dffbdbcd36c9979cb53588b/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_ll_usb.c#L380\r\nand\r\nhttps://github.com/STMicroelectronics/STM32CubeF1/blob/6ead386a08dea17f4dffbdbcd36c9979cb53588b/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_ll_usb.c#L402\r\n\r\nThe declarations for the non-OTG variant can be found here without any matching function definition.\r\nhttps://github.com/STMicroelectronics/STM32CubeF1/blob/6ead386a08dea17f4dffbdbcd36c9979cb53588b/Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usb.h#L605-L606\r\n",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-10-27T15:28:13Z",
+        "body": "Hi @daniel-starke,\r\n\r\nThank you for this report. You are absolutely right. `USB_FlushTxFifo()` and `USB_FlushRxFifo()` functions were not defined for STM32F1 devicing not supporting OTG feature.\r\n\r\nActually this issue has already been detected and fixed. The fix is already available in the frame of the **v1.8.2** release published a couple of weeks ago. The linking error should disappear once you will upgrade to this version. \r\n\r\nBelow is how the `USB_FlushTxFifo()` has been defined for the non-OTG variants:\r\nhttps://github.com/STMicroelectronics/STM32CubeF1/blob/003dfc9e6c2e424c19a25df3934afaf7fce660d6/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_ll_usb.c#L1905-L1917\r\n\r\nThank you again for your contribution.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/22"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 21,
+    "title": "error: expected expression __HAL_TIM_SET_CAPTUREPOLARITY(__HANDLE__, __CHANNEL__, __POLARITY__)  ",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "duplicate",
+      "spotted before customer",
+      "hal"
+    ],
+    "created_at": "2020-08-19T06:13:41Z",
+    "closed_at": "2020-10-13T08:26:15Z",
+    "body": "When I use the function, I find MDK_ARM reports an error(error: expected expression ).Review the function,I find that  this function( TIM_RESET_CAPTUREPOLARITY ) uses  an extra ')`.\r\n",
+    "comments": [
+      {
+        "author": "ASELSTM",
+        "created_at": "2020-08-19T16:04:20Z",
+        "body": "Hi @ZhaoYandong00, \r\n\r\nThank you for your contribution.\r\n\r\nActually, the point you raised is already known. It has been internally fixed. The fix will be published in the frame of a future publication.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-10-13T08:25:13Z",
+        "body": "ST Internal Reference: 80370"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-10-13T08:25:57Z",
+        "body": "Duplicate of #18."
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/21"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 20,
+    "title": "STM3210C_EVAL: LCD module image corruption with BSP Example ",
+    "state": "closed",
+    "labels": [
+      "invalid",
+      "bsp"
+    ],
+    "created_at": "2020-07-21T01:01:16Z",
+    "closed_at": "2020-08-13T14:03:56Z",
+    "body": "\r\n**Setup**\r\n * STM3210C_EVAL (Checked on 3 different boards)\r\n * STM32CubeIDE 1.3\r\n * Project: STM32CubeF1\\Projects\\STM3210C_EVAL\\Examples\\BSP\r\n\r\n**Description of the bug**\r\nThe BSP Example initializes and setups the LCD module but the image is corrupted in the bottom section of the display. I have verified on 3 boards, no changes in the source code. Please see the attached image-1.\r\nI have verified the LCD module is working fine with [the demonstration firmware](https://www.st.com/content/st_com/en/products/embedded-software/mcu-mpu-embedded-software/stm32-embedded-software/stm32-standard-peripheral-library-expansion/stsw-stm32042.html) of STM3210C_EVAL board. Please see the attached image-2.\r\n\r\n**How To Reproduce**\r\n1. Import the project in STM32CubeIDE from location STM32CubeF1\\Projects\\STM3210C_EVAL\\Examples\\BSP.\r\n2. Build and Flash the Project. You should see image corruption on the LCD module.\r\n2. BSP and LCD modules - are cause for the issue.\r\n\r\n**Additional context**\r\nI am new to STM32 platform, won't be able to solve it at present but I can test the solution for you on my boards.\r\n\r\n**Screenshots**\r\n![Image-1 Corruption](https://user-images.githubusercontent.com/64938527/88000539-7ecad900-cb1b-11ea-8eb4-9c9cc6b87f42.jpeg)\r\n![Image-2 Demo Fw](https://user-images.githubusercontent.com/64938527/88000550-85f1e700-cb1b-11ea-94cd-93c76f5a9830.jpeg)\r\n\r\n",
+    "comments": [
+      {
+        "author": "RKOUSTM",
+        "created_at": "2020-08-13T14:02:27Z",
+        "body": "Hi @Patel-Arpan,\r\n\r\nWe are very pleased with the interest you show to our products. However, this public organization on GitHub is intended to promote co-development and issues posted here shall exclusively be related to the software published within the different repositories.\r\nFor any other issue (e.g. related to documentation, to hardware, to ecosystem, to user application, etc.), you shall address your questions to the [ST Community](https://community.st.com/s/topiccatalog). There you shall look for the adequate topic and submit your question or remark. \r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/20"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 19,
+    "title": "HAL_I2C_Master_Receive may unintentionally leave interrupts disabled on exit",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "spotted before customer",
+      "hal"
+    ],
+    "created_at": "2020-07-14T23:28:50Z",
+    "closed_at": "2020-10-12T15:59:56Z",
+    "body": "Function **HAL_I2C_Master_Receive** looks like it can return with error while previously disabled interrupts are not enabled as they would be in no error case.\r\n\r\nLine that blocks interrupts;\r\nhttps://github.com/STMicroelectronics/STM32CubeF1/blob/5ddefcd6a64e793087436cc4ed42abd1886952c1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_i2c.c#L1334\r\n\r\nLine that returns without enabling interrupts:\r\nhttps://github.com/STMicroelectronics/STM32CubeF1/blob/5ddefcd6a64e793087436cc4ed42abd1886952c1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_i2c.c#L1349",
+    "comments": [
+      {
+        "author": "ASELSTM",
+        "created_at": "2020-07-16T09:49:08Z",
+        "body": "Hi @kasjer,\r\n\r\nFirst of all we would like to thank you for your contribution.\r\n\r\nActually, the point you raised has already been discussed and fixed internally since a while, before we receive your request. The fix will be made available in the frame of a future release.\r\n\r\nWe cannot share a date for the moment. Stay tuned and thank you once more for your contribution and for your patience.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ASELSTM",
+        "created_at": "2020-07-16T09:50:11Z",
+        "body": "ST Internal Reference:  80693"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/19"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 18,
+    "title": "Syntax failure in stm32f1xx_hal_tim.h",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "spotted before customer",
+      "hal"
+    ],
+    "created_at": "2020-06-19T21:38:03Z",
+    "closed_at": "2020-06-22T12:52:43Z",
+    "body": "Using STM32F103C8T6 with STM32CubeIDE 1.3.0\r\n\r\nDuring Migration from STM32Cube_FW_F1_V1.3.0 to STM32Cube_FW_F1_V1.8.0 the compiler found a failure in  stm32f1xx_hal_tim.h:\r\n`../Application/User/IR_rec_drv.c: In function 'HAL_TIM_IC_CaptureCallback':\r\n../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h:1745:106: error: expected ':' before ')' token\r\n   (((__CHANNEL__) == TIM_CHANNEL_1) ? ((__HANDLE__)->Instance->CCER &= ~(TIM_CCER_CC1P | TIM_CCER_CC1NP))) :\\\r\n                                                                                                          ^\r\n../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h:1472:5: note: in expansion of macro 'TIM_RESET_CAPTUREPOLARITY'\r\n     TIM_RESET_CAPTUREPOLARITY((__HANDLE__), (__CHANNEL__));               \\\r\n     ^~~~~~~~~~~~~~~~~~~~~~~~~\r\n../Application/User/IR_rec_drv.c:184:13: note: in expansion of macro '__HAL_TIM_SET_CAPTUREPOLARITY'\r\n             __HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_4,TIM_INPUTCHANNELPOLARITY_RISING);\r\n             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~`\r\n\r\nI could solve the problem by removing one bracket at the end of line 1745 \r\n(macro TIM_RESET_CAPTUREPOLARITY):\r\noriginal:\r\n` (((__CHANNEL__) == TIM_CHANNEL_1) ? ((__HANDLE__)->Instance->CCER &= ~(TIM_CCER_CC1P | TIM_CCER_CC1NP))) :\\\r\n`\r\nmodified:\r\n`  (((__CHANNEL__) == TIM_CHANNEL_1) ? ((__HANDLE__)->Instance->CCER &= ~(TIM_CCER_CC1P | TIM_CCER_CC1NP)) :\\\r\n`\r\nThat's definitely one bracket too much there.\r\nI compared this macro now with earlier versions, first with STM32Cube_FW_F1_V1.3.0 but also with all other once between 1.3.0 and 1.8.0 and I found the failure happens in 1.8.0\r\nFurthermore, maybe there is more damaged in this macro (TIM_RESET_CAPTUREPOLARITY).\r\nThere is also a change in line 1747 which isn't listed in any release note. The macro was never changed from V1.3.0 til V1.7.0 but in V1.8.0 \r\nIt looks like an accidental deletion of a part of the line. I cannot test the function of this macro and the change because my project doesn't use channel3 of this timer but it looks like a failure for me. Maybe there is anyone in the community which knows the function of this macro and can confirm or reject this.\r\nHere is the comparison of the macro from V1.7.0 to V1.8.0:  \r\n![grafik](https://user-images.githubusercontent.com/67170232/85180848-c6441800-b284-11ea-965b-05d08ce60b63.png)\r\n\r\n(In general there is a restructure of the whole file in V1.8.0 therefore the line numbers differs very much from earlier version to V1.8.0)",
+    "comments": [
+      {
+        "author": "ASELSTM",
+        "created_at": "2020-06-22T12:52:43Z",
+        "body": "Hi @STMAndreas,\r\n\r\nFirst of all, we would like to thank you for your contribution.\r\n\r\nThe `TIM_RESET_CAPTUREPOLARITY` macro is used to reset an already set input capture polarity on a given channel which is the active edge of the input signal. The active edge can then be rising, falling or both depending on the TIM instance and the channel. \r\n\r\n```\r\n#define  TIM_INPUTCHANNELPOLARITY_RISING      0x00000000U                       /*!< Polarity for TIx source */\r\n#define  TIM_INPUTCHANNELPOLARITY_FALLING     TIM_CCER_CC1P                     /*!< Polarity for TIx source */\r\n#define  TIM_INPUTCHANNELPOLARITY_BOTHEDGE    (TIM_CCER_CC1P | TIM_CCER_CC1NP)  /*!< Polarity for TIx source */\r\n```\r\n\r\nIndeed, the  `TIM_RESET_CAPTUREPOLARITY` macro has been updated within release v1.8.0. In fact, input capture polarity on channel 3 can be whether rising or falling and never both edges. That's why the `TIM_CCER_CC3NP` was removed.\r\n\r\nThe compilation error, has been already spotted and fixed internally but not yet published. The fix will be available in the next release.\r\n\r\nSince the issue is already fixed, please allow me to close it. Thank you for your comprehension.\r\n\r\nWith regards,\r\n\r\n\r\n\r\n"
+      },
+      {
+        "author": "STMAndreas",
+        "created_at": "2020-06-22T14:11:48Z",
+        "body": "Hi @ASELSTM,\ncool! Thanks for the answer and explanation. \nSTM32F1 series is available since more than 15 years and there is still something to optimize 😀\nBest Regards\n\nGesendet von meinem iPhone.\n\n> Am 22.06.2020 um 14:53 schrieb ASELSTM <notifications@github.com>:\n> \n> ﻿\n> Hi @STMAndreas,\n> \n> First of all, we would like to thank you for your contribution.\n> \n> The TIM_RESET_CAPTUREPOLARITY macro is used to reset an already set input capture polarity on a given channel which is the active edge of the input signal. The active edge can then be rising, falling or both depending on the TIM instance and the channel.\n> \n> #define  TIM_INPUTCHANNELPOLARITY_RISING      0x00000000U                       /*!< Polarity for TIx source */\n> #define  TIM_INPUTCHANNELPOLARITY_FALLING     TIM_CCER_CC1P                     /*!< Polarity for TIx source */\n> #define  TIM_INPUTCHANNELPOLARITY_BOTHEDGE    (TIM_CCER_CC1P | TIM_CCER_CC1NP)  /*!< Polarity for TIx source */\n> Indeed, the TIM_RESET_CAPTUREPOLARITY macro has been updated within release v1.8.0. In fact, input capture polarity on channel 3 can be whether rising or falling and never both edges. That's why the TIM_CCER_CC3NP was removed.\n> \n> The compilation error, has been already spotted and fixed internally but not yet published. The fix will be available in the next release.\n> \n> Since the issue is already fixed, please allow me to close it. Thank you for your comprehension.\n> \n> With regards,\n> \n> —\n> You are receiving this because you were mentioned.\n> Reply to this email directly, view it on GitHub, or unsubscribe.\n"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-10-12T15:19:23Z",
+        "body": "ST Internal Reference: 80370"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/18"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 17,
+    "title": "gcc Startup files don't initialize stack pointer",
+    "state": "closed",
+    "labels": [
+      "duplicate",
+      "question",
+      "cmsis"
+    ],
+    "created_at": "2020-06-18T17:13:52Z",
+    "closed_at": "2020-07-27T15:22:18Z",
+    "body": "I'm not sure if that is an issue, because it seems too critical to be in the code for that long, but the stackpointer is not being set anywhere in the reset_Handler subrountine for any of the startup_stm32f1xxxx.s files in the gcc folder",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-06-19T10:37:30Z",
+        "body": "Hi @ftapajos,\r\n\r\nThank you for your question. It seems you will find your answer here (#5). Do not hesitate in case you still face an issue.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-07-22T14:31:12Z",
+        "body": "Hi @ftapajos,\r\n\r\nDid you find the answer you are looking for here (#5)?\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-07-27T15:22:18Z",
+        "body": "Hi @ftapajos,\r\n\r\nPlease allow me to close this issue. You can reopen it or open a new one in case you face any problem related to this subject.\r\n\r\nWith regards, "
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/17"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 14,
+    "title": "stm32f1xx's HAL_DMA_PollForTransfer can't be used for polling",
+    "state": "closed",
+    "labels": [
+      "invalid",
+      "hal"
+    ],
+    "created_at": "2020-06-14T19:48:49Z",
+    "closed_at": "2020-07-24T10:42:45Z",
+    "body": "The `HAL_DMA_PollForTransfer` function of stm32f1xx misleadingly always finishes the current DMA transfer on timeout, whether it is complete or not. This means that you can't actually poll for whether the transfer is done, because the act of calling `HAL_DMA_PollForTransfer` will finish it.\r\n\r\nEven if this is the intended behavior, please at the very least mention it in the documentation of the function.\r\n\r\n**Expected behavior**\r\n`HAL_DMA_PollForTransfer` does not set state to `HAL_DMA_STATE_READY` on timeout.\r\n",
+    "comments": [
+      {
+        "author": "RKOUSTM",
+        "created_at": "2020-06-19T08:18:47Z",
+        "body": "Hi @Tasssadar,\r\n\r\nThank you for reporting this issue. You request will be forwarded to our development teams. I will let you updated once they provide me with their answer.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "RKOUSTM",
+        "created_at": "2020-07-01T13:20:44Z",
+        "body": "Hi @Tasssadar,\r\n\r\nThank you for your contribution. Could you please confirm you are using the latest firmware version (STM32Cube FW F1 v1.8.0) and that the issue is systematically reproducible on your side?\r\n\r\nWith regards,"
+      },
+      {
+        "author": "Tasssadar",
+        "created_at": "2020-07-01T13:28:17Z",
+        "body": "I'm using platform.io and not the official tools, but it is coded like that here in this repository in master: https://github.com/STMicroelectronics/STM32CubeF1/blob/master/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_dma.c#L566"
+      },
+      {
+        "author": "RKOUSTM",
+        "created_at": "2020-07-06T15:32:48Z",
+        "body": "Hi @Tasssadar,\r\n\r\nI have checked with our development teams. They mentioned that for stm32f1xx_hal_dma.c driver code, there is no problem. However, timeout is not a blocking DMA error, and it is normal to come back to Ready state.\r\n\r\nIn order to allow a better understanding of the problem, could you please send us a code snippet allowing our development teams to reproduce (if useful),  so that our development teams can give help.\r\n\r\nThank you for your contribution.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "Tasssadar",
+        "created_at": "2020-07-06T15:41:05Z",
+        "body": "Yes, of course it is not an error. That's why it makes no sense to cut the current DMA transaction short and mark the state as ready, instead of keeping it \"busy\".\r\n\r\nHere's some pseudo code of what I was trying to do:\r\n\r\n```cpp\r\n// This method wants to start DMA transfer and wait for its completion\r\nvoid dma() {\r\n   HAL_DMA_Start(&dmaTxHandle,  ...);\r\n\r\n    while(dmaTxHandle.State != HAL_DMA_STATE_READY) {\r\n        // some other code and work here...\r\n\r\n        HAL_DMA_PollForTransfer_Really(&dmaTxHandle, HAL_DMA_FULL_TRANSFER, 0);\r\n    }\r\n\r\n    // DMA transfer is complete here! (except it's not)\r\n}\r\n```"
+      },
+      {
+        "author": "RKOUSTM",
+        "created_at": "2020-07-08T09:16:09Z",
+        "body": "Hi @Tasssadar,\r\n\r\nThank you for all these details. According to our development teams, when timeout is reached, it is better to free the DMA by setting it to HAL_DMA_STATE_READY  in order to start another transfer (of higher priority) or repeat the failed one.  \r\n\r\nThen, based on this point of view, there is no need to fix or update the code. Thank you for your comprehension.\r\n\r\nPlease allow me to close this issue now. Thank you again for your report.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "Tasssadar",
+        "created_at": "2020-07-08T09:32:36Z",
+        "body": "It is fine to have a function that does that of course, but the naming and documentation should clearly state that no matter what you do, `HAL_DMA_PollForTransfer` will always finish the DMA transfer instead of just checking the state (which is what polling means IMHO)."
+      },
+      {
+        "author": "RKOUSTM",
+        "created_at": "2020-07-24T10:24:00Z",
+        "body": "Hi @Tasssadar,\r\n\r\nFirst of all, I would like to thank you for your contribution.  However, according to our development teams, the ``Polling Transfer Mode`` should have a non-zero timeout duration. In your pseudo-code above, the function ``HAL_DMA_PollForTransfer_Really(&dmaTxHandle, HAL_DMA_FULL_TRANSFER, 0)`` must be updated with a Timeout duration different to zero to ensure complete transfer. Indeed, in case you need a fast timing for the DMA transfer, you can use a ``HAL_DMA_IRQHandler`` function for an interrupt request. So, thank you once more for your contribution. \r\n\r\nPlease, allow me to close this issue. Thank you for your comprehension.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/14"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 13,
+    "title": "Description of USB_ReadPMA is incorrect (copy/past error from USB_WritePMA)",
+    "state": "closed",
+    "labels": [
+      "enhancement",
+      "internal bug tracker",
+      "hal"
+    ],
+    "created_at": "2020-05-17T14:00:26Z",
+    "closed_at": "2020-10-12T15:59:00Z",
+    "body": "Description of function is incorrect it should be copy **from** PMA not user buffer\r\nhttps://github.com/STMicroelectronics/STM32CubeF1/blob/5ddefcd6a64e793087436cc4ed42abd1886952c1/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_ll_usb.c#L2538",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-05-26T11:26:15Z",
+        "body": "Hi @kasjer,\r\n\r\nThank you for having reported this point. You are right. It seems to be a \"copy-paste\" error. Your remark will be transmitted to our development teams to have this comment updated.\r\n\r\nWith regards, "
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-05-26T11:36:11Z",
+        "body": "ST Internal Reference: 87005"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/13"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 12,
+    "title": "extern uwTick : Missing from F1 variant stm32f1xx_hal.h",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "created_at": "2020-05-14T10:04:01Z",
+    "closed_at": "2020-10-12T15:58:16Z",
+    "body": "Issue first raised here https://github.com/stm32duino/Arduino_Core_STM32/issues/1064\r\n\r\n**Describe the bug** :\r\n\r\n```extern __IO uint32_t uwTick;```\r\n\r\nThis declaration is missing from F1 variant, present on all other variants.\r\n\r\nhttps://github.com/STMicroelectronics/STM32CubeF1/blob/5ddefcd6a64e793087436cc4ed42abd1886952c1/Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h#L59-L61\r\n\r\n**To Reproduce** :\r\n\r\nBy inspection\r\n\r\nSee as example:\r\nhttps://github.com/STMicroelectronics/STM32CubeF4/blob/5d01400afd60410f6e049cbd19179a67d44d53fd/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h#L200-L207\r\nand\r\nhttps://github.com/STMicroelectronics/STM32CubeF7/blob/08376dce1b404687e4a86b73077f396bccfc9cb5/Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h#L195-L201\r\n\r\n\r\n```\r\nSearching 2003 files for \"uwTick\" (case sensitive, whole word)\r\n\r\nC:\\Users\\geoma\\AppData\\Local\\Arduino15\\packages\\STM32\\hardware\\stm32\\1.8.0\\system\\Drivers\\STM32F0xx_HAL_Driver\\Inc\\stm32f0xx_hal.h:\r\n  531    * @{\r\n  532    */\r\n  533: extern __IO uint32_t uwTick;\r\n  534  extern uint32_t uwTickPrio;\r\n  535  extern HAL_TickFreqTypeDef uwTickFreq;\r\n\r\nC:\\Users\\geoma\\AppData\\Local\\Arduino15\\packages\\STM32\\hardware\\stm32\\1.8.0\\system\\Drivers\\STM32F2xx_HAL_Driver\\Inc\\stm32f2xx_hal.h:\r\n  174    * @{\r\n  175    */\r\n  176: extern __IO uint32_t uwTick;\r\n  177  extern uint32_t uwTickPrio;\r\n  178  extern HAL_TickFreqTypeDef uwTickFreq;\r\n\r\nC:\\Users\\geoma\\AppData\\Local\\Arduino15\\packages\\STM32\\hardware\\stm32\\1.8.0\\system\\Drivers\\STM32F3xx_HAL_Driver\\Inc\\stm32f3xx_hal.h:\r\n  889    * @{\r\n  890    */\r\n  891: extern __IO uint32_t uwTick;\r\n  892  extern uint32_t uwTickPrio;\r\n  893  extern HAL_TickFreqTypeDef uwTickFreq;\r\n\r\nC:\\Users\\geoma\\AppData\\Local\\Arduino15\\packages\\STM32\\hardware\\stm32\\1.8.0\\system\\Drivers\\STM32F4xx_HAL_Driver\\Inc\\stm32f4xx_hal.h:\r\n  203    * @{\r\n  204    */\r\n  205: extern __IO uint32_t uwTick;\r\n  206  extern uint32_t uwTickPrio;\r\n  207  extern HAL_TickFreqTypeDef uwTickFreq;\r\n\r\nC:\\Users\\geoma\\AppData\\Local\\Arduino15\\packages\\STM32\\hardware\\stm32\\1.8.0\\system\\Drivers\\STM32F7xx_HAL_Driver\\Inc\\stm32f7xx_hal.h:\r\n  197    * @{\r\n  198    */\r\n  199: extern __IO uint32_t uwTick;\r\n  200  extern uint32_t uwTickPrio;\r\n  201  extern HAL_TickFreqTypeDef uwTickFreq;\r\n\r\nC:\\Users\\geoma\\AppData\\Local\\Arduino15\\packages\\STM32\\hardware\\stm32\\1.8.0\\system\\Drivers\\STM32G0xx_HAL_Driver\\Inc\\stm32g0xx_hal.h:\r\n  716    * @{\r\n  717    */\r\n  718: extern __IO uint32_t uwTick;\r\n  719  extern uint32_t uwTickPrio;\r\n  720  extern uint32_t uwTickFreq;\r\n\r\nC:\\Users\\geoma\\AppData\\Local\\Arduino15\\packages\\STM32\\hardware\\stm32\\1.8.0\\system\\Drivers\\STM32G4xx_HAL_Driver\\Inc\\stm32g4xx_hal.h:\r\n  571    * @{\r\n  572    */\r\n  573: extern __IO uint32_t uwTick;\r\n  574  extern uint32_t uwTickPrio;\r\n  575  extern uint32_t uwTickFreq;\r\n\r\nC:\\Users\\geoma\\AppData\\Local\\Arduino15\\packages\\STM32\\hardware\\stm32\\1.8.0\\system\\Drivers\\STM32H7xx_HAL_Driver\\Inc\\stm32h7xx_hal.h:\r\n  965    * @{\r\n  966    */\r\n  967: extern __IO uint32_t uwTick;\r\n  968  extern uint32_t uwTickPrio;\r\n  969  extern HAL_TickFreqTypeDef uwTickFreq;\r\n\r\nC:\\Users\\geoma\\AppData\\Local\\Arduino15\\packages\\STM32\\hardware\\stm32\\1.8.0\\system\\Drivers\\STM32L0xx_HAL_Driver\\Inc\\stm32l0xx_hal.h:\r\n  355    * @{\r\n  356    */\r\n  357: extern __IO uint32_t uwTick;\r\n  358  /**\r\n  359    * @}\r\n\r\nC:\\Users\\geoma\\AppData\\Local\\Arduino15\\packages\\STM32\\hardware\\stm32\\1.8.0\\system\\Drivers\\STM32L1xx_HAL_Driver\\Inc\\stm32l1xx_hal.h:\r\n  909    * @{\r\n  910    */\r\n  911: extern __IO uint32_t uwTick;\r\n  912  extern uint32_t uwTickPrio;\r\n  913  extern uint32_t uwTickFreq;\r\n\r\nC:\\Users\\geoma\\AppData\\Local\\Arduino15\\packages\\STM32\\hardware\\stm32\\1.8.0\\system\\Drivers\\STM32L4xx_HAL_Driver\\Inc\\stm32l4xx_hal.h:\r\n  604    * @{\r\n  605    */\r\n  606: extern __IO uint32_t uwTick;\r\n  607  extern uint32_t uwTickPrio;\r\n  608  extern uint32_t uwTickFreq;\r\n\r\nC:\\Users\\geoma\\AppData\\Local\\Arduino15\\packages\\STM32\\hardware\\stm32\\1.8.0\\system\\Drivers\\STM32MP1xx_HAL_Driver\\Inc\\stm32mp1xx_hal.h:\r\n  710    * @{\r\n  711    */\r\n  712: extern __IO uint32_t uwTick;\r\n  713  extern uint32_t uwTickPrio;\r\n  714  extern HAL_TickFreqTypeDef uwTickFreq;\r\n\r\nC:\\Users\\geoma\\AppData\\Local\\Arduino15\\packages\\STM32\\hardware\\stm32\\1.8.0\\system\\Drivers\\STM32WBxx_HAL_Driver\\Inc\\stm32wbxx_hal.h:\r\n  629    * @{\r\n  630    */\r\n  631: extern __IO uint32_t uwTick;\r\n  632  extern uint32_t uwTickPrio;\r\n  633  extern uint32_t uwTickFreq;\r\n```\r\n",
+    "comments": [
+      {
+        "author": "ASELSTM",
+        "created_at": "2020-05-18T10:53:15Z",
+        "body": "Hi @geosmall,\r\n\r\nThe issue you pointed out has been confirmed, a fix will be implemented and made available in future release. Thank you once again for your contribution.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ASELSTM",
+        "created_at": "2020-05-18T11:06:53Z",
+        "body": "ST Internal Reference: 86528"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/12"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 11,
+    "title": "EEPROM Emulation library for STM32F1 -- Notice for a possible bug source.",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "internal bug tracker",
+      "projects"
+    ],
+    "created_at": "2020-03-06T14:06:31Z",
+    "closed_at": "2022-01-21T16:54:08Z",
+    "body": "Hello STMicroelectronics, Great libraries and support all over the Internet.\r\n\r\nI'm looking for EEPROM Emulation for my STM32 BluePill, And found the official documentation for that (AM2594) Which is a great document and well documented library.\r\n\r\nAnyway I'm planning to use more than 2 pages to store my rapid changing variable. So started to reverse engineer the existing library to write a more general library (independent of # of pages).\r\n\r\nWhile reverse Engineering : I found this [little line ](https://github.com/STMicroelectronics/STM32CubeF1/blob/441b2cbdc25aa50437a59c4bffe22b88e78942c9/Projects/STM32F103RB-Nucleo/Applications/EEPROM/EEPROM_Emulation/Src/eeprom.c#L312) that I can't understand as 'sensible' line : \r\n\r\nIt's in a routine for checking whether the page is fully erased or not.\r\n\r\nWhile it compares the address passed with a **Fixed defined Address** PAGE0_END_ADDRESS.\r\n\r\nSo when the address passed is PAGE1_BASE_ADDRESS it would definitely fail! As PAGE1_BASE_ADDRESS is greater than PAGE0_END_ADDRESS.\r\n\r\nProposed solution to solve this issue is (whole function) : \r\n\r\n``` cpp\r\nuint16_t EE_VerifyPageFullyErased(uint32_t Address)\r\n{\r\n  uint32_t readstatus = 1;\r\n  uint16_t addressvalue = 0x5555;\r\n  uint32_t endAddress = Address + (PAGE_SIZE - 1); \r\n\r\n  /* Check each active page address starting from end */\r\n  while (Address <= endAddress)\r\n  {\r\n    /* Get the current location content to be compared with virtual address */\r\n    addressvalue = (*(__IO uint16_t*)Address);\r\n\r\n    /* Compare the read address with the virtual address */\r\n    if (addressvalue != ERASED)\r\n    {\r\n      \r\n      /* In case variable value is read, reset readstatus flag */\r\n      readstatus = 0;\r\n\r\n      break;\r\n    }\r\n    /* Next address location */\r\n    Address = Address + 4;\r\n  }\r\n  \r\n  /* Return readstatus value: (0: Page not erased, 1: Page erased) */\r\n  return readstatus;\r\n}\r\n```\r\n\r\nThank you!",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-03-10T11:44:18Z",
+        "body": "Hi Hamza,\r\n\r\nThank you for your feedback. We are very pleased to hear such positive comments from our customers and users.\r\n\r\nThank you also for this issue you pointed out and the detailed solution you suggested. We are also very pleased to have such constructive comments to help us enhance the quality of our software.\r\n\r\nYour request will be forwarded to our development teams for analysis. We will be back to you as soon as they provide us with feedback.\r\n\r\nThank you for your patience and thank you again for your contribution.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-04-24T09:09:52Z",
+        "body": "Hi Hamza,\r\n\r\nI hope you are doing well. Our development teams confirmed the issue you pointed out. They also agreed on the fix you have suggested with some minor enhancements (mainly the addition of a `IS_EEPROM_PAGE_START_ADDRESS(__ADDRESS__)` macro to check the address passed as argument actually corresponds to `PAGE0_BASE_ADDRESS` or `PAGE1_BASE_ADDRESS`).\r\n\r\nThank you once again for your contribution. Take care and stay safe.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-04-24T09:23:33Z",
+        "body": "ST Internal Reference: 85353"
+      },
+      {
+        "author": "HamzaHajeir",
+        "created_at": "2020-04-24T13:24:15Z",
+        "body": "Hi @ALABSTM , \r\n\r\nIt's my pleasure to contribute in such a great project.\r\n\r\nNoted with thanks :) "
+      },
+      {
+        "author": "HamzaHajeir",
+        "created_at": "2020-12-30T14:00:21Z",
+        "body": "Hi @ALABSTM, Is it released to the main streamline ?"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2021-01-22T09:50:58Z",
+        "body": "Hi @HamzaHajeir,\r\n\r\nI hope you are fine. My apology, could you clarify your question please?\r\n\r\nThanks, "
+      },
+      {
+        "author": "HamzaHajeir",
+        "created_at": "2021-01-22T15:14:20Z",
+        "body": "Hi @ALABSTM, I meant it was around 9 months ago since the development team proposed the solution.\r\n\r\nWasn't it approved yet ?"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2021-02-22T13:51:54Z",
+        "body": "Hi @HamzaHajeir,\r\n\r\nI hope you are doing well. Your request has been approved and already logged in our internal database. Actually, there were other issues we had to handle in priority. We hope to fix the EEPROM emulation application and make it available soon.\r\n\r\nWe do apologize for the delay and the inconvenience and we thank you for your patience.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2022-01-21T17:03:40Z",
+        "body": "Hi @HamzaHajeir,\r\n\r\nI hope you are fine. We finally got the fix you proposed implemented and published via pull-request #40. Thank you again for your patience.\r\n\r\nPlease note, however, that the plan is to have EEPROM-related applications **moved from** the STM32CubeF1 firmware repo and from all others **to** the [X-CUBE-EEPRMA1](https://github.com/STMicroelectronics/X-CUBE-EEPRMA1/tree/main/Projects) repo. As you can see, **3** series are already supported (**F4**, **G4**, and **L0**). More are to be supported in the future, among which the **F1** series.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/11"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 10,
+    "title": "LL GPIO driver problem",
+    "state": "closed",
+    "labels": [
+      "wontfix",
+      "cube mx"
+    ],
+    "created_at": "2020-03-02T08:32:19Z",
+    "closed_at": "2020-03-31T17:36:52Z",
+    "body": "This is what CubeMX has generated for STM32F103VE mcu for LL GPIO driver:\r\n\r\n```    #define LL_GPIO_PIN_0                    ((GPIO_BSRR_BS0  << GPIO_PIN_MASK_POS) | 0x00000001U)  /*!< Select pin 0  */\r\n    #define LL_GPIO_PIN_1                    ((GPIO_BSRR_BS1  << GPIO_PIN_MASK_POS) | 0x00000002U)  /*!< Select pin 1  */\r\n    #define LL_GPIO_PIN_2                    ((GPIO_BSRR_BS2  << GPIO_PIN_MASK_POS) | 0x00000004U)  /*!< Select pin 2  */\r\n    #define LL_GPIO_PIN_3                    ((GPIO_BSRR_BS3  << GPIO_PIN_MASK_POS) | 0x00000008U)  /*!< Select pin 3  */\r\n    #define LL_GPIO_PIN_4                    ((GPIO_BSRR_BS4  << GPIO_PIN_MASK_POS) | 0x00000010U)  /*!< Select pin 4  */\r\n    #define LL_GPIO_PIN_5                    ((GPIO_BSRR_BS5  << GPIO_PIN_MASK_POS) | 0x00000020U)  /*!< Select pin 5  */\r\n    #define LL_GPIO_PIN_6                    ((GPIO_BSRR_BS6  << GPIO_PIN_MASK_POS) | 0x00000040U)  /*!< Select pin 6  */\r\n    #define LL_GPIO_PIN_7                    ((GPIO_BSRR_BS7  << GPIO_PIN_MASK_POS) | 0x00000080U)  /*!< Select pin 7  */\r\n    #define LL_GPIO_PIN_8                    ((GPIO_BSRR_BS8  << GPIO_PIN_MASK_POS) | 0x04000001U)  /*!< Select pin 8  */\r\n    #define LL_GPIO_PIN_9                    ((GPIO_BSRR_BS9  << GPIO_PIN_MASK_POS) | 0x04000002U)  /*!< Select pin 9  */\r\n    #define LL_GPIO_PIN_10                   ((GPIO_BSRR_BS10 << GPIO_PIN_MASK_POS) | 0x04000004U)  /*!< Select pin 10 */\r\n    #define LL_GPIO_PIN_11                   ((GPIO_BSRR_BS11 << GPIO_PIN_MASK_POS) | 0x04000008U)  /*!< Select pin 11 */\r\n    #define LL_GPIO_PIN_12                   ((GPIO_BSRR_BS12 << GPIO_PIN_MASK_POS) | 0x04000010U)  /*!< Select pin 12 */\r\n    #define LL_GPIO_PIN_13                   ((GPIO_BSRR_BS13 << GPIO_PIN_MASK_POS) | 0x04000020U)  /*!< Select pin 13 */\r\n    #define LL_GPIO_PIN_14                   ((GPIO_BSRR_BS14 << GPIO_PIN_MASK_POS) | 0x04000040U)  /*!< Select pin 14 */\r\n    #define LL_GPIO_PIN_15                   ((GPIO_BSRR_BS15 << GPIO_PIN_MASK_POS) | 0x04000080U)  /*!< Select pin 15 */\r\n    #define LL_GPIO_PIN_ALL                  (LL_GPIO_PIN_0  | LL_GPIO_PIN_1  | LL_GPIO_PIN_2  | \\\r\n                                              LL_GPIO_PIN_3  | LL_GPIO_PIN_4  | LL_GPIO_PIN_5  | \\\r\n                                              LL_GPIO_PIN_6  | LL_GPIO_PIN_7  | LL_GPIO_PIN_8  | \\\r\n                                              LL_GPIO_PIN_9  | LL_GPIO_PIN_10 | LL_GPIO_PIN_11 | \\\r\n                                              LL_GPIO_PIN_12 | LL_GPIO_PIN_13 | LL_GPIO_PIN_14 | \\\r\n                                              LL_GPIO_PIN_15)                                      /*!< Select all pins */\r\n```\r\n\r\nWhen I compile it in CubeIDE I get this warning:\r\n\r\n`large integer implicitly truncated to unsigned type [-Woverflow]`\r\n\r\nI am using latest version of libraries and CubeMX and CubeIDE.\r\n\r\nI had also some problems using pins with number 8 and bigger to control GPIO.\r\n\r\nRe-generation of code didn't solve the problem.",
+    "comments": [
+      {
+        "author": "nixmd",
+        "created_at": "2020-03-15T10:59:51Z",
+        "body": "LL_GPIO_IsInputPinSet function is also corrupted and returns garbage results."
+      },
+      {
+        "author": "ASELSTM",
+        "created_at": "2020-03-31T17:36:52Z",
+        "body": "Hi Mohammad Hossein Amir,\r\n\r\nFirst, allow me to thank you for your contribution. However, aspects related to Cube MX tool are not handled at GitHub level. They are rather treated at **ST Community** level, precisely within the Cube [MX ](https://community.st.com/s/topic/0TO0X000000BTr8WAG/stm32cubemx)dedicated section.\r\n\r\nThere, you may find posts that already raised the issue you are pointing out here. Otherwise, you can create a new post to submit your issue. Please, allow me to close this issue. Thank you for your comprehension.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/10"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 9,
+    "title": "HAL_PCD_EP_GetRxCount returns incorrect value for multi-packet transfers",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "created_at": "2020-01-18T18:59:33Z",
+    "closed_at": "2020-10-12T15:55:24Z",
+    "body": "**Describe the set-up**\r\n I'm using a Blue Pill STM32F103C8T6\r\nI'm running arm-none-eabi-gcc (Arch Repository) 9.2.0\r\nI am using the code from this repository\r\n\r\n**Describe the bug**\r\nHAL_PCD_EP_GetRxCount returns incorrect value for multi-packet transfers. It returns the value for the last packet in the transfer.\r\n\r\nstm32f1xx_hal_pcd.c line 2142 increases the value\r\n`ep->xfer_count += count;`\r\nhowever, when there is another paket to receive on line 2156 it calls\r\n`(void)HAL_PCD_EP_Receive(hpcd, ep->num, ep->xfer_buff, ep->xfer_len);`\r\nthen on line 1632, the HAL_PCD_EP_Receive function resets the ep->xfer_count\r\n`HAL_PCD_EP_Receive`\r\n\r\n**How To Reproduce**\r\nCreate a packet that uses the HAL USB drivers, then initiate an OUT transfer with a length greater then the endpoint size. \r\n\r\n\r\n\r\n**Additional context**\r\nA possible fix is to uncomment the resetting of the xfer_count in the HAL_PCD_EP_Receive\r\n\r\n\r\n```\r\n        if ((ep->xfer_len == 0U) || (count < ep->maxpacket))\r\n        {\r\n          /* RX COMPLETE */\r\n#if (USE_HAL_PCD_REGISTER_CALLBACKS == 1U)\r\n          hpcd->DataOutStageCallback(hpcd, ep->num);\r\n#else\r\n          HAL_PCD_DataOutStageCallback(hpcd, ep->num);\r\n#endif /* USE_HAL_PCD_REGISTER_CALLBACKS */\r\n          ep->xfer_count = 0; // Reset the xfer_count here\r\n        }\r\n\r\n```\r\n\r\n and adding it after the DataOutStageCallback call. \r\n\r\n```\r\n /*setup and start the Xfer */\r\n  ep->xfer_buff = pBuf;\r\n  ep->xfer_len = len;\r\n  //ep->xfer_count = 0U; // in stead of here\r\n  ep->is_in = 0U;\r\n  ep->num = ep_addr & EP_ADDR_MSK;\r\n```",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-02-03T11:56:30Z",
+        "body": "Hi André,\r\n\r\nThank you for having reported this point and thank you for all these details you provided. Please allow me to introduce @bouattay from our USB development teams who will answer your post.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "bouattay",
+        "created_at": "2020-02-05T08:59:41Z",
+        "body": "Hi André,\r\n\r\nYes I can confirm the reported issue, could you please check this proposal to avoid resetting xfer_count  \r\n\r\n        else\r\n        {\r\n          //(void)HAL_PCD_EP_Receive(hpcd, ep->num, ep->xfer_buff, ep->xfer_len);\r\n          (void)USB_EPStartXfer(hpcd->Instance, ep);\r\n        }\r\n\r\nThanks,\r\nAymen"
+      },
+      {
+        "author": "a-v-s",
+        "created_at": "2020-02-05T14:35:45Z",
+        "body": "The proposed change appears to work fine. \r\n\r\nThanks,\r\nAndré"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-03-04T10:08:31Z",
+        "body": "ST Internal Reference: 82061"
+      },
+      {
+        "author": "a-v-s",
+        "created_at": "2020-03-04T10:57:13Z",
+        "body": "The problem occurs on the F0 libraries as well. "
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/9"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 8,
+    "title": "tranmit -> transmit typo",
+    "state": "closed",
+    "labels": [
+      "enhancement",
+      "internal bug tracker",
+      "hal"
+    ],
+    "created_at": "2019-11-21T11:57:08Z",
+    "closed_at": "2020-10-12T15:48:30Z",
+    "body": "Here:\r\nhttps://github.com/STMicroelectronics/STM32CubeF1/blob/441b2cbdc25aa50437a59c4bffe22b88e78942c9/Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_can.h#L298-L302\r\n\r\nThere is a tranmit -> transmit typo in the comment. See PR #7 for details.\r\n\r\n```diff\r\n-#define ...  /*!< ... due to tranmit error    */\r\n+#define ...  /*!< ... due to transmit error    */\r\n```",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2019-11-21T12:02:14Z",
+        "body": "Hi Miklòs,\r\n\r\nThank you for your collaboration. I took the initiative to add the \"diff\" tag so that differences are correctly displayed in your comment.\r\n\r\nYour remark will be transmitted to our development teams to have this typo fixed in the frame of a future release. Thank you once more for this contribution.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "martonmiklos",
+        "created_at": "2019-11-21T12:23:22Z",
+        "body": "I was not aware of this code-diff markdown feature, so I learned something new again! Thanks for the hint. "
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2019-11-25T09:26:23Z",
+        "body": "ST Internal Reference: 76404"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/8"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 6,
+    "title": "HardFault in I2C_DMAXferCplt",
+    "state": "closed",
+    "labels": [
+      "bug",
+      "internal bug tracker",
+      "hal"
+    ],
+    "created_at": "2019-10-30T22:36:35Z",
+    "closed_at": "2020-01-27T14:50:47Z",
+    "body": "I2C tx data transfer initiated by HAL_I2C_Mem_Write_DMA completes with HardFault in I2C_DMAXferCplt routine if rx DMA is not configured before.\r\n\r\nThe issue is with possible NULL pointer hi2c->hdmatx or hi2c->hdmarx dereference in routines I2C_DMAXferCplt, I2C_DMAError, I2C_DMAAbort.\r\n\r\nIn case when only RX DMA or TX DMA is used and configured the following code breaks because only one pointer is set:\r\n\r\n  /* Clear Complete callback */\r\n\r\n  hi2c->hdmatx->XferCpltCallback = NULL;\r\n\r\n  hi2c->hdmarx->XferCpltCallback = NULL;\r\n",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2019-11-05T09:08:47Z",
+        "body": "Hi Dmitry,\r\n\r\nFirst of all, thank you for having pointed out this issue. It will be transferred to our development teams to check its relevancy.\r\n\r\nWe will be back to you as soon as we get an answer. Thank you for your patience, and for your contribution once more.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2019-11-06T08:55:53Z",
+        "body": "Hi Dmitry,\r\n\r\nWould you please indicate the FW version which you spotted this issue on? Are you using the latest FW version (v1.8.0)? Thank you for your answer.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "mdmikh",
+        "created_at": "2019-11-06T20:19:39Z",
+        "body": "The issue was found on v1.8.0. Previous version v1.7.0 has no such error as clear callback code was added later.\r\n\r\nThe fix is trivial:\r\n\r\n  /* Clear Complete callback */\r\n  if (hi2c->hdmatx != NULL)\r\n  {\r\n    hi2c->hdmatx->XferCpltCallback = NULL;\r\n  }\r\n  if (hi2c->hdmarx != NULL)\r\n  {\r\n    hi2c->hdmarx->XferCpltCallback = NULL;\r\n  }\r\n\r\nAffected routines I2C_DMAXferCplt, I2C_DMAError and I2C_DMAAbort"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2019-11-07T09:43:32Z",
+        "body": "Hi Dmitry,\r\n\r\nThank you for this precision. I will refer it to our development teams so they look closer into it.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2019-11-08T11:03:13Z",
+        "body": "Hi Dmitry,\r\n\r\nOur development teams confirmed the issue you pointed out. A fix will be officially published in the frame of a future release. We cannot commit on a precise date for the moment. However, we hope it will be soon enough.\r\n\r\nWe will try to provide you with a patch as soon the fix is implemented from our side. In the meanwhile, you can implement, from your side, the solution you suggested. Thank you once more for this contribution.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2019-11-08T11:03:55Z",
+        "body": "ST Internal Reference: 75370"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2019-12-12T14:44:13Z",
+        "body": "Hi Dmitry,\r\n\r\nA fix has been implemented. It will be published within version **1.24.2** of STM32Cube**F4** firmware package, which will be released soon.\r\n\r\nThis same fix apply to the F1 firmware. However, for this latter, we cannot share a date for the moment.\r\n\r\nThe fix consist in the replacement of the two lines shown below...\r\n```diff\r\n-  hi2c->hdmatx->XferCpltCallback = NULL;\r\n-  hi2c->hdmarx->XferCpltCallback = NULL;\r\n+  if (hi2c->hdmatx != NULL)\r\n+  {\r\n+    hi2c->hdmatx->XferCpltCallback = NULL;\r\n+  }\r\n+  if (hi2c->hdmarx != NULL)\r\n+  {\r\n+    hi2c->hdmarx->XferCpltCallback = NULL;\r\n+  }\r\n```\r\n... in the list of functions listed here:\r\nhttps://github.com/STMicroelectronics/STM32CubeF1/blob/441b2cbdc25aa50437a59c4bffe22b88e78942c9/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_i2c.c#L6648\r\nhttps://github.com/STMicroelectronics/STM32CubeF1/blob/441b2cbdc25aa50437a59c4bffe22b88e78942c9/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_i2c.c#L6780\r\nhttps://github.com/STMicroelectronics/STM32CubeF1/blob/441b2cbdc25aa50437a59c4bffe22b88e78942c9/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_i2c.c#L6809\r\nNote that for the case of the I2C_DMAAbort() function, you have to replace these two lines too:\r\n```diff\r\n-  hi2c->hdmatx->XferAbortCallback = NULL;\r\n-  hi2c->hdmarx->XferAbortCallback = NULL;\r\n+  if (hi2c->hdmatx != NULL)\r\n+  {\r\n+    hi2c->hdmatx->XferAbortCallback = NULL;\r\n+  }\r\n+  if (hi2c->hdmarx != NULL)\r\n+  {\r\n+    hi2c->hdmarx->XferAbortCallback = NULL;\r\n+  }\r\n```\r\nI hope this helps. Thank you once more for this contribution. If you have no other question about the subject, I think this issue can be closed now.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-01-27T14:50:47Z",
+        "body": "Hi Dmitry,\r\n\r\nWe hope you are doing well. STM32CubeF4 **v1.24.2** firmware package has been released two weeks ago. You can find the above described fix implemented within. This issue can be closed now.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "SpyrosMourelatos",
+        "created_at": "2020-03-23T12:05:18Z",
+        "body": "For real , you closed an issue because you patched it in an other irrelevant repository ,without patching it here ? You really owe my boss my daily wage multiplied by 2 "
+      },
+      {
+        "author": "Phisik",
+        "created_at": "2020-04-13T18:03:17Z",
+        "body": "> STM32CubeF4 v1.24.2 firmware package has been released two weeks ago. You can find the above described fix implemented within.\r\n\r\n\r\nHave you patched only STM32CubeF4??? I have faced exactly the same issued with STM32F103. I have the latest update of CubeIDE available on 2020-04-13.  And the problem still exists!\r\n\r\nSTM32CubeIDE\r\nVersion: 1.3.0\r\nBuild: 5720_20200220_1053 (UTC)"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-04-14T09:51:14Z",
+        "body": "Hi @DrunkenMastah, hi @Phisik,\r\n\r\nThe new F1 series' firmware has not been released yet and will not be in the near future. Unfortunately, we cannot share a date for the moment.\r\n\r\nIn the meanwhile, the fix released for the F4 series also applies to the F1. Users could port it to the F1 driver and avoid remaining stuck due to this bug. This is why we notified the STM32CubeF4 v1.24.2 publication here. This is also why we considered the issue as solved and closed it.\r\n\r\nRegarding CubeIDE and CubeMX, both use the currently available F1 series' driver. As this latter does not implement the fix, users will face the same issue.\r\n\r\nWe will do our best to publish the new STM32CubeF1 firmware as soon as possible. We count on your patience and comprehension.\r\n\r\nThank you,"
+      },
+      {
+        "author": "cl-wi",
+        "created_at": "2020-07-15T10:30:00Z",
+        "body": "Same problem in F0 FW."
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/6"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 5,
+    "title": "Broken reset handler for SMT32F103xE?",
+    "state": "closed",
+    "labels": [
+      "good first issue",
+      "question",
+      "st community",
+      "cmsis"
+    ],
+    "created_at": "2019-10-27T20:16:29Z",
+    "closed_at": "2020-02-08T16:26:38Z",
+    "body": "I think reset handler in `Drivers/CMSIS/Device/ST/STM32F1xx/Source/Templates/gcc/startup_stm32f103xe.s` might be missing code responsible for initializing stack pointer.\r\n```\r\nReset_Handler:\r\n  ldr sp, =_estack    /* <=== Missing? */\r\n\r\n/* Copy the data segment initializers from flash to SRAM */\r\n  movs r1, #0\r\n  b LoopCopyDataInit\r\n```\r\nI created a project for STM32F103ZET6 in STM32CubeMX (apparently up-to-date) and right away I noticed `malloc()` failing for larger buffer sizes (like 1kB). I noticed that `_sbrk()` was failing because of stack collision check. Turned out that SP register was set to near beginning of SRAM block (something like `0x2000014a`, basically right after BSS section). After adding this one line to reset handler everything started working nicely.\r\n\r\nIs this how it's supposed to work? I am totally new to all this, so feel free to ignore this report. I just thought I'd let you know of potential problem. Thanks!",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2019-10-29T10:25:49Z",
+        "body": "Hi Jim Von Moon,\r\n\r\nThank you for having sent this issue and, of course, we will take it into consideration. It will be forwarded to our development teams to check whether it is relevant or not.\r\n\r\nWe will be back to you as soon as we get an answer. So stay tuned and thank you in advance for your patience.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "mdmikh",
+        "created_at": "2019-10-30T22:38:11Z",
+        "body": "Actually first interrupt vector is used to set initial sp value so no explicit initialization is necessary."
+      },
+      {
+        "author": "ghost",
+        "created_at": "2019-10-31T09:28:37Z",
+        "body": "Yes, I think that's how it's supposed to work, but just a minute ago I created a new project in STM32CubeMX for STM32F103ZET6. The only thing I changed was enabling Serial Wire to be able to debug. Right after entering `main()` SP register was set to `0x200001f4`. After manually setting SP register to `_estack` in reset handler it's value is `0x2000fff8`."
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-01-15T11:03:09Z",
+        "body": "Hi JimVonMoon,\r\n\r\nI hope you are doing well. Please excuse the delay it took, but we finally got a feedback from our development teams.\r\n\r\nBelow are the details, hoping it answers your question:\r\n* Stack pointer initialization\r\n  The vector table contains the reset values of stack pointer and reset handler.\r\n  After reset, the vector table is mapped at address 0, and the SP register is initialized with the same value as in the vector table.\r\n  So technically there is no need to initialize the SP unless:\r\n  * The Reset_Handler is explicitly called in the code.\r\n  * The debugger is performing an emulated reset by setting the PC to the reset handler and forgetting about the SP default value.\r\n\r\n  References:\r\n  * http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0552a/BABIFJFG.html\r\n  * http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0552a/Ciheijba.html\r\n\r\n* Stack/Heap collision\r\n  STM32F103ZE has 64K RAM. this means 0x2000014a as SP value is far from the end of RAM (0x20010000).\r\n  Having a collision means either:\r\n  * The user functions are using too much local variables.\r\n  * The _estack value is wrong.\r\n\r\n  An easy test could be to check the generated linked file (.ld) by CubeMX.\r\n\r\nPlease do not hesitate if you need more details or support. I let @tarek-bochkati answer you upcoming questions in the frame of this thread.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ghost",
+        "created_at": "2020-02-08T16:26:38Z",
+        "body": "Hi again. Sorry for the delayed response, it was only recently I got some time to get back to my project. Thank you very much for the detailed answer. It seems in my case it was a problem with the debugger. Everything seems to run fine without it, no need to set SP manually. Thank you for help!"
+      },
+      {
+        "author": "tgree",
+        "created_at": "2020-07-04T07:19:55Z",
+        "body": "Actually, @ALABSTM that is not entirely correct.  The SP is *supposed* to be initialized based on the first interrupt vector entry.  However, in practice ST doesn't support that for all choices of address.  The ST boot loader validates the address first, and for some chips that have SRAMs aliased at both low (0x10000000) and high (0x20000000) addresses, the boot loader doesn't always support using the low addresses in the vector table.\r\n\r\nSee the following thread in community.st for more details of how I dealt with this and with how the __stack variable in the GCC startup script was very helpful in resolving the issue:\r\n\r\nhttps://community.st.com/s/question/0D50X0000CEr55SSQR/bfb2-with-exception-vector-stack-in-ccm-sram"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-07-22T14:59:53Z",
+        "body": "Hi @tgree,\r\n\r\nThank you for this comment. I read the analysis you posted on the community. It was very instructive. Thank you for the sharing.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-07-29T14:18:38Z",
+        "body": "Hi @tgree,\r\n\r\nJust to let you know, I forwarded you message and the post you shared on the community to our development teams. They said what you reported regarding the STM32G474CET microcontroller is a limitation of the  bootloader itself they are already aware of. It shall be reported in [this](https://www.st.com/resource/en/application_note/cd00167594-stm32-microcontroller-system-memory-boot-mode-stmicroelectronics.pdf) application note.\r\n\r\nWith regards,"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/5"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 4,
+    "title": "Multiple warning about unused parameters.",
+    "state": "closed",
+    "labels": [
+      "enhancement",
+      "wontfix",
+      "internal bug tracker",
+      "hal"
+    ],
+    "created_at": "2019-09-26T11:25:07Z",
+    "closed_at": "2020-12-02T10:58:58Z",
+    "body": "Is it possible to put \"attribute ((unused))\" before those params because it's annoying and fills the screen with useless info and I really want to be able to use the -Wall parameter.\r\n\r\n> In file included from C:\\Users\\tbyte\\AppData\\Local\\Arduino15\\packages\\STM32\\hardware\\stm32\\1.7.0\\cores\\arduino\\stm32\\HAL\\stm32yyxx_hal_tim_ex.c:5:\r\n> C:\\Users\\tbyte\\AppData\\Local\\Arduino15\\packages\\STM32\\hardware\\stm32\\1.7.0\\system/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.c: In function 'HAL_TIMEx_RemapConfig':\r\n> C:\\Users\\tbyte\\AppData\\Local\\Arduino15\\packages\\STM32\\hardware\\stm32\\1.7.0\\system/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.c:1734:60: warning: unused parameter 'htim' [-Wunused-parameter]\r\n>  HAL_StatusTypeDef HAL_TIMEx_RemapConfig(TIM_HandleTypeDef *htim, uint32_t Remap)\r\n>                                          ~~~~~~~~~~~~~~~~~~~^~~~\r\n> C:\\Users\\tbyte\\AppData\\Local\\Arduino15\\packages\\STM32\\hardware\\stm32\\1.7.0\\system/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.c:1734:75: warning: unused parameter 'Remap' [-Wunused-parameter]\r\n>  HAL_StatusTypeDef HAL_TIMEx_RemapConfig(TIM_HandleTypeDef *htim, uint32_t Remap)\r\n>                                                                   ~~~~~~~~~^~~~~\r\n> In file included from C:\\Users\\tbyte\\AppData\\Local\\Arduino15\\packages\\STM32\\hardware\\stm32\\1.7.0\\cores\\arduino\\stm32\\usb\\usb_device_ctlreq.c:3:\r\n> C:\\Users\\tbyte\\AppData\\Local\\Arduino15\\packages\\STM32\\hardware\\stm32\\1.7.0\\system/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c: In function 'USBD_CtlError':\r\n> C:\\Users\\tbyte\\AppData\\Local\\Arduino15\\packages\\STM32\\hardware\\stm32\\1.7.0\\system/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c:853:42: warning: unused parameter 'req' [-Wunused-parameter]\r\n>                     USBD_SetupReqTypedef *req)\r\n>                     ~~~~~~~~~~~~~~~~~~~~~~^~~\r\n> ",
+    "comments": [
+      {
+        "author": "ALABSTM",
+        "created_at": "2019-09-26T15:30:04Z",
+        "body": "Hi TByte007,\r\n\r\nOur development teams confirmed the issue you pointed out. The fix will be available in a future release. Thank you for your contribution.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2019-09-26T15:45:42Z",
+        "body": "ST Internal Reference: 72918"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2019-09-26T16:16:21Z",
+        "body": "ST Internal Reference: 72921"
+      },
+      {
+        "author": "TByte007",
+        "created_at": "2019-09-27T15:06:07Z",
+        "body": "Thank you !"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2019-12-12T14:59:09Z",
+        "body": "Hi Tbyte007,\r\n\r\nA fix to prevent the warning you are getting has been implemented on both TIM and USB drivers. It will be made available in the next STM32CubeF1 release. Unfortunately we cannot share a date for the moment.\r\n\r\nHere is how it has been handled in the case of the TIM:\r\n```diff\r\nHAL_StatusTypeDef HAL_TIMEx_RemapConfig(TIM_HandleTypeDef *htim, uint32_t Remap)\r\n{\r\n+  /* Prevent unused argument(s) compilation warning */\r\n+  UNUSED(htim);\r\n+  UNUSED(Remap);\r\n\r\n  return HAL_OK;\r\n}\r\n```\r\nI hope this answer helps. If you have no other question about this subject, I think this issue can be closed.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "thomask77",
+        "created_at": "2020-01-16T13:24:41Z",
+        "body": "Similar warnings occur in https://github.com/STMicroelectronics/STM32CubeH7\r\n\r\nWill it be fixed there also? Do we have to file another bug report?\r\n\r\nbest regards,\r\nThomas"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-02-03T12:11:00Z",
+        "body": "Hi Thomask77,\r\n\r\nRegarding the STM32CubeH7 firmware, the warning does not exist for the TIM function. The issue regarding the USB function, however, exists indeed as you mentioned.\r\n\r\nThis latter has been fixed in the USB Device Library v2.6.0. This new library revision shall be integrated to the next firmware revision (v1.7.0, normally) or to a later one. Hence, no need to file a new bug report, I think.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2020-12-02T10:58:58Z",
+        "body": "Hi @TByte007,\r\n\r\nI hope you are fine. You request has been addressed at the level of the TIM driver.\r\n\r\nFor the USB device library, the change has been implemented in the frame of version v2.6.0. Unfortunately, for the STM32CubeF1 there is no plan to upgrade from **v2.5.3**  to **v2.6.0**.\r\n\r\nPlease allow me to close this issue now and thank you for your comprehension.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2021-06-21T19:42:25Z",
+        "body": "Hi @TByte007,\r\n\r\nI came back to this issue and realized I did not provide you with the link to the [stm32_mw_usb_device](https://github.com/STMicroelectronics/stm32_mw_usb_device) repository where the USB Device library is published as a separate component.\r\n\r\nFor information, all **v2.\\*.\\*** versions are **backward compatible**. You can therefore even consider the use of the latest version **v2.8.0** published a couple of months ago. I hope this helps.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "TByte007",
+        "created_at": "2021-08-02T18:53:53Z",
+        "body": "> Hi @TByte007,\r\n> \r\n> I came back to this issue and realized I did not provide you with the link to the [stm32_mw_usb_device](https://github.com/STMicroelectronics/stm32_mw_usb_device) repository where the USB Device library is published as a separate component.\r\n> \r\n> For information, all **v2.*.*** versions are **backward compatible**. You can therefore even consider the use of the latest version **v2.8.0** published a couple of months ago. I hope this helps.\r\n> \r\n> With regards,\r\n\r\nI'm sorry  I was busy with a different project which took all my time. Thank you for your time and effort ! I'll test it as soon as I have some spare time."
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/4"
+  },
+  {
+    "repo": "STM32CubeF1",
+    "issue_number": 3,
+    "title": "update to cmsis os2",
+    "state": "closed",
+    "labels": [
+      "question",
+      "st community",
+      "cube mx",
+      "mw",
+      "rtos"
+    ],
+    "created_at": "2019-07-09T09:09:24Z",
+    "closed_at": "2019-09-17T11:10:10Z",
+    "body": "Hi,\r\n\r\nAre there any plans to update to a new freertos and cmsis os2?\r\n\r\nmany thanks\r\ncheers\r\nmathias\r\n",
+    "comments": [
+      {
+        "author": "CCASTM",
+        "created_at": "2019-07-10T13:54:25Z",
+        "body": "Hello Mathias,\r\nThe next release STM32CubeF1 FW Package (V1.8.0), expected in the second half of July 2019 will include the V10.0.1 FreeRTOS MW, including CMSIS-OS-V2\r\nRegards\r\nChristophe"
+      },
+      {
+        "author": "mgiaco",
+        "created_at": "2019-07-16T11:29:57Z",
+        "body": "okay that sounds really great i hope it will be published here.\r\nBest Regards,\r\nmathias"
+      },
+      {
+        "author": "mgiaco",
+        "created_at": "2019-07-22T13:05:41Z",
+        "body": "Many thanks for the update, the problem is that it is not possible to switch to CMSIS-OS-V2 in cube mx but I think that is a general issue.  Is there a roadmap for CubeMX ?  I found a issue for STM32F1 and ADC Code gerneration. Where is the right place to report that? "
+      },
+      {
+        "author": "jecaille",
+        "created_at": "2019-07-25T07:19:14Z",
+        "body": "Hi Mathias,\r\nThanks for reporting.\r\nPlease go to the st community group stm32mcu :\r\nhttps://community.st.com/s/group/0F90X000000AXsASAW/stm32-mcus\r\nBest regards,\r\nJérôme \r\n"
+      },
+      {
+        "author": "CCASTM",
+        "created_at": "2019-08-12T17:14:04Z",
+        "body": "Hello Mathias,\r\nI confirm that for the moment, you can use the FW PAckage as is (CMSIS and FreRTOS version have been updated) but the integration in CubeMX. is not yet available.\r\nIn the context of 13 different STM32 series, we are still working on the priority list for CubeMX, and the plan is not yet defined.\r\nRegards\r\nChristophe"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2019-09-16T08:51:57Z",
+        "body": "Hi Mathias,\r\n\r\nI hope you are doing well. As this issue is now related to CubeMX but not to the firmware published into this repository, would you agree to close it? Thank you in advance for your answer.\r\n\r\nAs you may know issues are exclusively reserved to aspects directly related to the firmware published into GitHub repository. Any other question could be submitted to the [ST Community](https://community.st.com/s/) and particularly under [\"STM32CubeMX\"](https://community.st.com/s/topic/0TO0X000000BTr8WAG/stm32cubemx) topic in case of a question as yours.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "mgiaco",
+        "created_at": "2019-09-25T08:28:20Z",
+        "body": "@ALABSTM \r\nIs there any way to report an issue for cubemx in any ticket system. Because I have the problem that for me i looks like no one is looking on a issue when reporting on ST Community. As an example i have reported that there is any problem when using ADC3 on F1 .... but nothing is happend. So no comment or hint or what else...\r\nhttps://community.st.com/s/question/0D50X0000AYtJRaSQN/latest-cubemx-and-latest-cubef1-generates-wrong-code-f%C3%BCr-adc3-with-ll-and-dma-can-someone-also-has-the-same-problem\r\n\r\nmany thanks\r\n\r\n"
+      },
+      {
+        "author": "ALABSTM",
+        "created_at": "2019-09-26T09:20:24Z",
+        "body": "Hi Mathias,\r\n\r\nAs far as I know, CubeMX-related issues are indeed reported on the ST Community. I just checked your post and found that someone has finally answered. We do apologize for the delays and we do our best to improve our response time.\r\n\r\nNow, regarding posting on the ST Community, topics have been created in order to better classify the posts received and to answer them more rapidly.\r\n\r\nAs for CubeMX-related issues, the dedicated topic is [STM32CubeMX](https://community.st.com/s/topic/0TO0X000000BTr8WAG/stm32cubemx). As you may notice, around 740 posts are listed under this topic till now. On the other hand, topic [STM32 MCUs](https://community.st.com/s/topic/0TO0X000000BSqSWAW/stm32-mcus) counts more than 7k posts. This makes the task longer to identify priority posts under this topic and answer them.\r\n\r\nThe most important now is that your request has been logged into our internal bug tracking system. Hopefully you receive an answer soon and have this issue fixed within a future CubeMX release.\r\n\r\nWith regards,"
+      },
+      {
+        "author": "mgiaco",
+        "created_at": "2019-10-01T05:48:57Z",
+        "body": "Okay many thanks"
+      }
+    ],
+    "github_url": "https://github.com/STMicroelectronics/STM32CubeF1/issues/3"
+  }
+]

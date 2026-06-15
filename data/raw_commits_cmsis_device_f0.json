@@ -1,0 +1,142 @@
+[
+  {
+    "repo": "cmsis_device_f0",
+    "sha": "dc7f8de5449bcb64d8d5b3b3ed6e61a7bd5c2190",
+    "author": "canmor",
+    "committer": "canmor",
+    "message": "Add support for HSI48 in SystemCoreClockUpdate",
+    "authored_at": "2022-11-11T08:32:43Z",
+    "committed_at": "2022-11-11T08:32:43Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-f0/commit/dc7f8de5449bcb64d8d5b3b3ed6e61a7bd5c2190",
+    "parents": [
+      "8b86197c7ab77ad029c34dc73cf6d4a1e12327d8"
+    ],
+    "stats": {
+      "additions": 9,
+      "deletions": 0,
+      "total": 9
+    },
+    "files_changed": [
+      {
+        "filename": "Source/Templates/system_stm32f0xx.c",
+        "status": "modified",
+        "additions": 9,
+        "deletions": 0,
+        "changes": 9,
+        "previous_filename": null,
+        "patch": "@@ -156,6 +156,8 @@ void SystemInit(void)\n   *           - If SYSCLK source is PLL, SystemCoreClock will contain the HSE_VALUE(**)\n   *             or HSI_VALUE(*) multiplied/divided by the PLL factors.\n   *\n+  *           - If SYSCLK source is HSI48, SystemCoreClock will contain the HSI48_VALUE(***)\n+  *\n   *         (*) HSI_VALUE is a constant defined in stm32f0xx_hal_conf.h file (default value\n   *             8 MHz) but the real value may vary depending on the variations\n   *             in voltage and temperature.\n@@ -165,6 +167,10 @@ void SystemInit(void)\n   *              is same as the real frequency of the crystal used. Otherwise, this function\n   *              may have wrong result.\n   *\n+  *         (***) HSI48_VALUE is a constant defined in stm32f0xx_hal_conf.h file (default value\n+  *             48 MHz) but the real value may vary depending on the variations\n+  *             in voltage and temperature.\n+  *\n   *         - The result of this function could be not correct when using fractional\n   *           value for HSE crystal.\n   *\n@@ -220,6 +226,9 @@ void SystemCoreClockUpdate (void)\n           STM32F091xC || STM32F098xx || STM32F030xC */\n       }\n       break;\n+    case RCC_CFGR_SWS_HSI48: /* HSI48 used as system clock */\n+      SystemCoreClock = HSI48_VALUE;\n+      break;\n     default: /* HSI used as system clock */\n       SystemCoreClock = HSI_VALUE;\n       break;"
+      }
+    ],
+    "linked_issue_numbers": [
+      1
+    ],
+    "pr_numbers": [
+      2
+    ]
+  },
+  {
+    "repo": "cmsis_device_f0",
+    "sha": "5a66735c90152ec4899770c06ddadd3645705406",
+    "author": "Kotbenek",
+    "committer": "Kotbenek",
+    "message": "Fix typo in README.md",
+    "authored_at": "2024-02-13T14:05:01Z",
+    "committed_at": "2024-02-13T14:05:01Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-f0/commit/5a66735c90152ec4899770c06ddadd3645705406",
+    "parents": [
+      "56cf85c7e2f8ecdf7f2093b77edab28c12ebe96d"
+    ],
+    "stats": {
+      "additions": 1,
+      "deletions": 1,
+      "total": 2
+    },
+    "files_changed": [
+      {
+        "filename": "README.md",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "changes": 2,
+        "previous_filename": null,
+        "patch": "@@ -1,4 +1,4 @@\n-# STM32CubeL0 CMSIS Device MCU Component\n+# STM32CubeF0 CMSIS Device MCU Component\n \n ![latest tag](https://img.shields.io/github/v/tag/STMicroelectronics/cmsis_device_f0.svg?color=brightgreen)\n "
+      }
+    ],
+    "linked_issue_numbers": [],
+    "pr_numbers": [
+      4
+    ]
+  },
+  {
+    "repo": "cmsis_device_f0",
+    "sha": "f6ff35a554b8b81e62b74c45c96e4d9a4b1da8a8",
+    "author": "canmor",
+    "committer": "canmor",
+    "message": "Add support for HSI48 in SystemCoreClockUpdate",
+    "authored_at": "2022-11-11T08:32:43Z",
+    "committed_at": "2025-03-06T07:47:13Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-f0/commit/f6ff35a554b8b81e62b74c45c96e4d9a4b1da8a8",
+    "parents": [
+      "f3174b2801bbca0b4481d7d8ea62c9d153ce6789"
+    ],
+    "stats": {
+      "additions": 3,
+      "deletions": 0,
+      "total": 3
+    },
+    "files_changed": [
+      {
+        "filename": "Source/Templates/system_stm32f0xx.c",
+        "status": "modified",
+        "additions": 3,
+        "deletions": 0,
+        "changes": 3,
+        "previous_filename": null,
+        "patch": "@@ -224,6 +224,9 @@ void SystemCoreClockUpdate (void)\n           STM32F091xC || STM32F098xx || STM32F030xC */\n \t  }\n       break;\n+    case RCC_CFGR_SWS_HSI48: /* HSI48 used as system clock */\n+      SystemCoreClock = HSI48_VALUE;\n+      break;\n     default: /* HSI used as system clock */\n       SystemCoreClock = HSI_VALUE;\n       break;"
+      }
+    ],
+    "linked_issue_numbers": [
+      1,
+      2
+    ],
+    "pr_numbers": [
+      5
+    ]
+  },
+  {
+    "repo": "cmsis_device_f0",
+    "sha": "9f6dc4b97b44207f48c17adc2908156da8367ad3",
+    "author": "canmor",
+    "committer": "canmor",
+    "message": "Fix error about HSI48 in SystemCoreClockUpdate\n\nHandle HSI48 only when it's applicable.",
+    "authored_at": "2025-03-06T08:52:33Z",
+    "committed_at": "2025-03-06T08:52:39Z",
+    "github_url": "https://github.com/STMicroelectronics/cmsis-device-f0/commit/9f6dc4b97b44207f48c17adc2908156da8367ad3",
+    "parents": [
+      "f6ff35a554b8b81e62b74c45c96e4d9a4b1da8a8"
+    ],
+    "stats": {
+      "additions": 2,
+      "deletions": 0,
+      "total": 2
+    },
+    "files_changed": [
+      {
+        "filename": "Source/Templates/system_stm32f0xx.c",
+        "status": "modified",
+        "additions": 2,
+        "deletions": 0,
+        "changes": 2,
+        "previous_filename": null,
+        "patch": "@@ -224,9 +224,11 @@ void SystemCoreClockUpdate (void)\n           STM32F091xC || STM32F098xx || STM32F030xC */\n \t  }\n       break;\n+#if defined(STM32F042x6) || defined(STM32F048xx) || defined(STM32F071xB) || defined(STM32F072xB) || defined(STM32F078xx) || defined(STM32F091xC) || defined(STM32F098xx)\n     case RCC_CFGR_SWS_HSI48: /* HSI48 used as system clock */\n       SystemCoreClock = HSI48_VALUE;\n       break;\n+#endif /* STM32F042x6 || STM32F048xx || STM32F071xB || STM32F072xB || STM32F078xx || STM32F091xC || STM32F098xx */\n     default: /* HSI used as system clock */\n       SystemCoreClock = HSI_VALUE;\n       break;"
+      }
+    ],
+    "linked_issue_numbers": [
+      1,
+      2
+    ],
+    "pr_numbers": [
+      5
+    ]
+  }
+]

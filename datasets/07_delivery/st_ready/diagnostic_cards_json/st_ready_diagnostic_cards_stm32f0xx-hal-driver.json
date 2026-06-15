@@ -1,0 +1,114 @@
+[
+  {
+    "id": "diag::stm32f0xx-hal-driver::issue::2",
+    "card_id": "diag_stm32f0xx-hal-driver_2",
+    "rootTagPath": "diagnostic_cards",
+    "delivery_template": "st_v1_diagnostic_card",
+    "repo_scope": "stm32f0xx-hal-driver",
+    "repo": "stm32f0xx-hal-driver",
+    "title": "Some errors of comment",
+    "label": "Some errors of comment",
+    "externalURL": "https://github.com/STMicroelectronics/stm32f0xx-hal-driver/issues/2",
+    "issue_number": 2,
+    "issue_title": "Some errors of comment",
+    "issue_state": "closed",
+    "issue_kind": null,
+    "severity": null,
+    "component": null,
+    "board": null,
+    "target_series": [
+      "STM32F0"
+    ],
+    "category": "technical_diagnosis",
+    "source_types": [
+      "resolver_case"
+    ],
+    "evidence_strength": "high",
+    "rescue_applied": false,
+    "resolution_status": "merged_fix",
+    "peripheral_tags": [],
+    "technical_pattern_tags": [
+      "version_regression",
+      "pinmux"
+    ],
+    "api_family_tags": [],
+    "version_tags": [],
+    "query_anchor_tags": [
+      "Some errors of comment",
+      "version_regression",
+      "pinmux"
+    ],
+    "query_aliases": [
+      "Some errors of comment"
+    ],
+    "clarification_questions_required": true,
+    "clarification_questions": [
+      "Which exact MCU part number and board are you using?"
+    ],
+    "symptom_summary": "Some errors of comment",
+    "affected_context": "repo=stm32f0xx-hal-driver, labels=duplicate, hal, issue_state=closed",
+    "likely_causes": [
+      "Fix likely integrated in mainline; prefer this as primary recommendation.",
+      "resolution_status=merged_fix, confidence=high, score=1."
+    ],
+    "confirmed_facts": [
+      "Resolver linkage status is merged_fix with confidence high",
+      "A linked commit or pull request exists for this issue path",
+      "A merged PR with changed-file evidence exists even if commit history is merge-heavy"
+    ],
+    "plausible_diagnosis": [
+      "A mainline fix likely exists, so local package drift is a plausible cause",
+      "Behavior may depend on the exact Cube or HAL version in use"
+    ],
+    "response_blocks": {
+      "facts_confirmed": [
+        "Resolver linkage status is merged_fix with confidence high",
+        "A linked commit or pull request exists for this issue path",
+        "A merged PR with changed-file evidence exists even if commit history is merge-heavy"
+      ],
+      "hypotheses": [
+        "A mainline fix likely exists, so local package drift is a plausible cause",
+        "Behavior may depend on the exact Cube or HAL version in use",
+        "Fix likely integrated in mainline; prefer this as primary recommendation.",
+        "resolution_status=merged_fix, confidence=high, score=1."
+      ],
+      "checks": [
+        "Review the linked fix path and compare your local source against Inc/stm32f0xx_hal_gpio_ex.h",
+        "Reproduce on a minimal project using the same board, Cube package, and middleware settings"
+      ]
+    },
+    "response_format": "facts_hypotheses_checks_with_clarifications",
+    "debug_checks": [
+      "Review the linked fix path and compare your local source against Inc/stm32f0xx_hal_gpio_ex.h",
+      "Reproduce on a minimal project using the same board, Cube package, and middleware settings"
+    ],
+    "possible_workarounds": [
+      "Test the candidate fix path or PR on an isolated branch before merging locally",
+      "Pin a known-good firmware package version while validating the issue scope"
+    ],
+    "constraints_or_limits": [
+      "Validate against the exact MCU series, board, package version, and local integration path"
+    ],
+    "evidence_refs": [
+      {
+        "type": "pull_request",
+        "url": "https://github.com/STMicroelectronics/stm32f0xx-hal-driver/pull/3",
+        "confidence": "high"
+      },
+      {
+        "type": "commit",
+        "url": "https://github.com/STMicroelectronics/stm32f0xx-hal-driver/commit/cc9f1c1003e00a4ca7b60bfa7a15bff8b858fd6e",
+        "confidence": "high"
+      }
+    ],
+    "keywords": [
+      "Some errors of comment",
+      "inc",
+      "USB",
+      "merged_fix",
+      "version_regression",
+      "pinmux"
+    ],
+    "st_ready_text": "Problem: Some errors of comment\nContext: repo=stm32f0xx-hal-driver, issue_number=2, target_series=STM32F0, source_types=resolver_case\nSymptoms: Some errors of comment\nQuery aliases: Some errors of comment\nResponse format: facts_confirmed -> hypotheses -> checks\nFacts confirmed: Resolver linkage status is merged_fix with confidence high | A linked commit or pull request exists for this issue path | A merged PR with changed-file evidence exists even if commit history is merge-heavy\nHypotheses: A mainline fix likely exists, so local package drift is a plausible cause | Behavior may depend on the exact Cube or HAL version in use | Fix likely integrated in mainline; prefer this as primary recommendation. | resolution_status=merged_fix, confidence=high, score=1.\nChecks: Review the linked fix path and compare your local source against Inc/stm32f0xx_hal_gpio_ex.h | Reproduce on a minimal project using the same board, Cube package, and middleware settings\nClarification questions (required): Which exact MCU part number and board are you using?\nLikely causes: Fix likely integrated in mainline; prefer this as primary recommendation. | resolution_status=merged_fix, confidence=high, score=1.\nConfirmed facts: Resolver linkage status is merged_fix with confidence high | A linked commit or pull request exists for this issue path | A merged PR with changed-file evidence exists even if commit history is merge-heavy\nPlausible diagnosis: A mainline fix likely exists, so local package drift is a plausible cause | Behavior may depend on the exact Cube or HAL version in use\nDebug actions: Review the linked fix path and compare your local source against Inc/stm32f0xx_hal_gpio_ex.h | Reproduce on a minimal project using the same board, Cube package, and middleware settings\nWorkaround: Test the candidate fix path or PR on an isolated branch before merging locally | Pin a known-good firmware package version while validating the issue scope\nConstraints: Validate against the exact MCU series, board, package version, and local integration path\nEvidence links: https://github.com/STMicroelectronics/stm32f0xx-hal-driver/pull/3 | https://github.com/STMicroelectronics/stm32f0xx-hal-driver/commit/cc9f1c1003e00a4ca7b60bfa7a15bff8b858fd6e\nKeywords: Some errors of comment inc USB merged_fix version_regression pinmux"
+  }
+]

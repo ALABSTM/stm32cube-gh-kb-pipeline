@@ -1,0 +1,160 @@
+[
+  {
+    "repo": "stm32f7xx-hal-driver",
+    "issue_number": 6,
+    "issue_title": "Bug found in  HAL_NAND_Read_Page_8b and HAL_NAND_Read_SpareArea_8b",
+    "issue_labels": [
+      "bug",
+      "duplicate",
+      "hal"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/6",
+    "linked_pr_numbers": [
+      7
+    ],
+    "linked_commit_shas": [
+      "303701c4646946296df96a9318a3409bff85cedd",
+      "46c6d4a81853b8e2d4e069b391d40ada42f6f67f"
+    ],
+    "linked_prs": [
+      {
+        "pr_number": 7,
+        "title": "Fix the bug that HAL_NAND_Read_Page_8b and HAL_NAND_Read_SpareArea_8b cannot read data normally.",
+        "state": "closed",
+        "merged": true,
+        "github_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/pull/7",
+        "changed_files_count": 1,
+        "merge_commit_sha": "ce69802454c75082fb3d2ee49028c5c017eaeff5"
+      }
+    ],
+    "linked_commits": [
+      {
+        "sha": "303701c4646946296df96a9318a3409bff85cedd",
+        "message": "Fix the bug that HAL_NAND_Read_Page_16b and HAL_NAND_Read_SpareArea_16b cannot read data normally.",
+        "committed_at": "2024-11-26T01:58:33Z",
+        "github_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/commit/303701c4646946296df96a9318a3409bff85cedd",
+        "pr_numbers": [
+          7
+        ],
+        "stats": {
+          "additions": 2,
+          "deletions": 2,
+          "total": 4
+        }
+      },
+      {
+        "sha": "46c6d4a81853b8e2d4e069b391d40ada42f6f67f",
+        "message": "Fix the bug that HAL_NAND_Read_Page_8b and HAL_NAND_Read_SpareArea_8b cannot read data normally.",
+        "committed_at": "2023-09-07T14:20:45Z",
+        "github_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/commit/46c6d4a81853b8e2d4e069b391d40ada42f6f67f",
+        "pr_numbers": [
+          7
+        ],
+        "stats": {
+          "additions": 2,
+          "deletions": 2,
+          "total": 4
+        }
+      }
+    ],
+    "evidence": {
+      "explicit_pr_numbers": [
+        7
+      ],
+      "explicit_commit_shas": [
+        "303701c4646946296df96a9318a3409bff85cedd",
+        "46c6d4a81853b8e2d4e069b391d40ada42f6f67f"
+      ],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [
+        "303701c4646946296df96a9318a3409bff85cedd",
+        "46c6d4a81853b8e2d4e069b391d40ada42f6f67f"
+      ],
+      "merge_like_commit_shas": [],
+      "merged_pr_count": 1,
+      "merged_pr_with_file_evidence": true,
+      "merged_pr_with_file_evidence_pr_numbers": [
+        7
+      ],
+      "merged_pr_changed_files_total": 1
+    },
+    "merged_pr_with_file_evidence": true,
+    "link_score": 1.0,
+    "link_confidence": "high",
+    "resolution_status": "merged_fix"
+  },
+  {
+    "repo": "stm32f7xx-hal-driver",
+    "issue_number": 14,
+    "issue_title": "8-Bit NOR devices cause hard fault on Hal_Nor_Init",
+    "issue_labels": [
+      "bug",
+      "wontfix",
+      "hal",
+      "internal bug tracker",
+      "fmc",
+      "nor"
+    ],
+    "issue_state": "closed",
+    "issue_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/issues/14",
+    "linked_pr_numbers": [
+      15
+    ],
+    "linked_commit_shas": [
+      "5836a061d4b95074121872075805a9add13d00c4"
+    ],
+    "linked_prs": [
+      {
+        "pr_number": 15,
+        "title": "[HAL][NOR] Fix support for 8-bit NOR that uses the AMD command set. C…",
+        "state": "closed",
+        "merged": false,
+        "github_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/pull/15",
+        "changed_files_count": 2,
+        "merge_commit_sha": "b794ca18d9a9fa5dd0494561ded9bbc838847724"
+      }
+    ],
+    "linked_commits": [
+      {
+        "sha": "5836a061d4b95074121872075805a9add13d00c4",
+        "message": "[HAL][NOR] Fix support for 8-bit NOR that uses the AMD command set. Changes should be backwards compatible.",
+        "committed_at": "2025-04-15T17:56:06Z",
+        "github_url": "https://github.com/STMicroelectronics/stm32f7xx-hal-driver/commit/5836a061d4b95074121872075805a9add13d00c4",
+        "pr_numbers": [
+          15
+        ],
+        "stats": {
+          "additions": 202,
+          "deletions": 168,
+          "total": 370
+        }
+      }
+    ],
+    "evidence": {
+      "explicit_pr_numbers": [
+        15
+      ],
+      "explicit_commit_shas": [
+        "26064f0d673088b3c607b6f58e07509f8b5c1a5d",
+        "5836a061d4b95074121872075805a9add13d00c4"
+      ],
+      "message_inferred_commit_shas": [],
+      "commits_via_linked_prs": [
+        "26064f0d673088b3c607b6f58e07509f8b5c1a5d",
+        "5836a061d4b95074121872075805a9add13d00c4"
+      ],
+      "merge_like_commit_shas": [
+        "26064f0d673088b3c607b6f58e07509f8b5c1a5d"
+      ],
+      "merged_pr_count": 0,
+      "merged_pr_with_file_evidence": false,
+      "merged_pr_with_file_evidence_pr_numbers": [],
+      "merged_pr_changed_files_total": 0
+    },
+    "merged_pr_with_file_evidence": false,
+    "link_score": 0.8,
+    "link_confidence": "medium",
+    "resolution_status": "candidate_fix"
+  }
+]

@@ -1,0 +1,237 @@
+[
+  {
+    "repo": "stm32f0xx-hal-driver",
+    "pr_number": 13,
+    "title": "[HAL][LL][SPI] Fix Misra-C 2012 Rule-8.13 violations and update HAL SPI driver to remove goto instruction",
+    "state": "open",
+    "merged": false,
+    "draft": false,
+    "author": "myfakemail0012",
+    "labels": [
+      "bug",
+      "hal",
+      "internal bug tracker",
+      "spi"
+    ],
+    "created_at": "2026-05-27T13:05:58Z",
+    "updated_at": "2026-06-03T13:02:19Z",
+    "closed_at": null,
+    "merged_at": null,
+    "body": "## Description\r\n\r\nThis pull request updates the STM32F0 SPI HAL/LL drivers with:\r\n- MISRA-C 2012 Rule-8.13 fixes by adding `const` qualifiers where applicable\r\n- HAL SPI driver update to remove `goto` instruction and avoid misplaced `__HAL_LOCK()` issue\r\n\r\n## Updated files\r\n\r\n- `Inc/stm32f0xx_hal_spi.h`\r\n- `Inc/stm32f0xx_ll_spi.h`\r\n- `Src/stm32f0xx_hal_spi.c`\r\n- `Src/stm32f0xx_ll_spi.c`\r\n\r\n## Notes\r\n\r\nThe changes were adapted by analogy with equivalent SPI updates already applied in STM32F3 HAL driver.",
+    "github_url": "https://github.com/STMicroelectronics/stm32f0xx-hal-driver/pull/13",
+    "head_ref": "SpiMisra",
+    "base_ref": "master",
+    "merge_commit_sha": "f7eac425977ef18b24890295e7a06bbd1a323e70",
+    "commits_count": 2,
+    "review_comments_count": 0,
+    "comments_count": 2,
+    "changed_files_count": 4,
+    "additions": 212,
+    "deletions": 247,
+    "linked_issue_numbers": [],
+    "files_changed": [
+      {
+        "filename": "Inc/stm32f0xx_hal_spi.h",
+        "status": "modified",
+        "additions": 10,
+        "deletions": 10,
+        "changes": 20,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/stm32f0xx-hal-driver/blob/dba9f45394786086fc40611dddf09ad81ed85ff5/Inc%2Fstm32f0xx_hal_spi.h",
+        "raw_url": "https://github.com/STMicroelectronics/stm32f0xx-hal-driver/raw/dba9f45394786086fc40611dddf09ad81ed85ff5/Inc%2Fstm32f0xx_hal_spi.h"
+      },
+      {
+        "filename": "Inc/stm32f0xx_ll_spi.h",
+        "status": "modified",
+        "additions": 54,
+        "deletions": 54,
+        "changes": 108,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/stm32f0xx-hal-driver/blob/dba9f45394786086fc40611dddf09ad81ed85ff5/Inc%2Fstm32f0xx_ll_spi.h",
+        "raw_url": "https://github.com/STMicroelectronics/stm32f0xx-hal-driver/raw/dba9f45394786086fc40611dddf09ad81ed85ff5/Inc%2Fstm32f0xx_ll_spi.h"
+      },
+      {
+        "filename": "Src/stm32f0xx_hal_spi.c",
+        "status": "modified",
+        "additions": 146,
+        "deletions": 181,
+        "changes": 327,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/stm32f0xx-hal-driver/blob/dba9f45394786086fc40611dddf09ad81ed85ff5/Src%2Fstm32f0xx_hal_spi.c",
+        "raw_url": "https://github.com/STMicroelectronics/stm32f0xx-hal-driver/raw/dba9f45394786086fc40611dddf09ad81ed85ff5/Src%2Fstm32f0xx_hal_spi.c"
+      },
+      {
+        "filename": "Src/stm32f0xx_ll_spi.c",
+        "status": "modified",
+        "additions": 2,
+        "deletions": 2,
+        "changes": 4,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/stm32f0xx-hal-driver/blob/dba9f45394786086fc40611dddf09ad81ed85ff5/Src%2Fstm32f0xx_ll_spi.c",
+        "raw_url": "https://github.com/STMicroelectronics/stm32f0xx-hal-driver/raw/dba9f45394786086fc40611dddf09ad81ed85ff5/Src%2Fstm32f0xx_ll_spi.c"
+      }
+    ]
+  },
+  {
+    "repo": "stm32f0xx-hal-driver",
+    "pr_number": 11,
+    "title": "Master",
+    "state": "closed",
+    "merged": false,
+    "draft": false,
+    "author": "SanySavkin",
+    "labels": [
+      "bug",
+      "hal",
+      "i2c"
+    ],
+    "created_at": "2025-10-29T09:49:01Z",
+    "updated_at": "2025-11-21T12:50:27Z",
+    "closed_at": "2025-11-21T12:50:27Z",
+    "merged_at": null,
+    "body": "Only one attempt to detect a device on the bus was performed because I2C_WaitOnFlagUntilTimeout returned an error if NACK was set.",
+    "github_url": "https://github.com/STMicroelectronics/stm32f0xx-hal-driver/pull/11",
+    "head_ref": "master",
+    "base_ref": "master",
+    "merge_commit_sha": null,
+    "commits_count": 1,
+    "review_comments_count": 0,
+    "comments_count": 2,
+    "changed_files_count": 1,
+    "additions": 3,
+    "deletions": 3,
+    "linked_issue_numbers": [],
+    "files_changed": [
+      {
+        "filename": "Src/stm32f0xx_hal_i2c.c",
+        "status": "modified",
+        "additions": 3,
+        "deletions": 3,
+        "changes": 6,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/stm32f0xx-hal-driver/blob/369811aa9a99e0a230bdf7773508975ea4384d05/Src%2Fstm32f0xx_hal_i2c.c",
+        "raw_url": "https://github.com/STMicroelectronics/stm32f0xx-hal-driver/raw/369811aa9a99e0a230bdf7773508975ea4384d05/Src%2Fstm32f0xx_hal_i2c.c"
+      }
+    ]
+  },
+  {
+    "repo": "stm32f0xx-hal-driver",
+    "pr_number": 10,
+    "title": "Master",
+    "state": "closed",
+    "merged": false,
+    "draft": false,
+    "author": "SanySavkin",
+    "labels": [],
+    "created_at": "2025-10-29T09:43:07Z",
+    "updated_at": "2025-10-29T09:43:11Z",
+    "closed_at": "2025-10-29T09:43:11Z",
+    "merged_at": null,
+    "body": "Only one attempt to detect a device on the bus was performed because I2C_WaitOnFlagUntilTimeout returned an error if NAC was set.",
+    "github_url": "https://github.com/STMicroelectronics/stm32f0xx-hal-driver/pull/10",
+    "head_ref": "master",
+    "base_ref": "master",
+    "merge_commit_sha": "cc688fc1638fee4ca66a569489ae88e8d7aac867",
+    "commits_count": 1,
+    "review_comments_count": 0,
+    "comments_count": 1,
+    "changed_files_count": 1,
+    "additions": 3,
+    "deletions": 3,
+    "linked_issue_numbers": [],
+    "files_changed": [
+      {
+        "filename": "Src/stm32f0xx_hal_i2c.c",
+        "status": "modified",
+        "additions": 3,
+        "deletions": 3,
+        "changes": 6,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/stm32f0xx-hal-driver/blob/369811aa9a99e0a230bdf7773508975ea4384d05/Src%2Fstm32f0xx_hal_i2c.c",
+        "raw_url": "https://github.com/STMicroelectronics/stm32f0xx-hal-driver/raw/369811aa9a99e0a230bdf7773508975ea4384d05/Src%2Fstm32f0xx_hal_i2c.c"
+      }
+    ]
+  },
+  {
+    "repo": "stm32f0xx-hal-driver",
+    "pr_number": 3,
+    "title": "Update stm32f0xx_hal_gpio_ex.h",
+    "state": "closed",
+    "merged": true,
+    "draft": false,
+    "author": "weycen",
+    "labels": [
+      "bug",
+      "hal",
+      "internal bug tracker"
+    ],
+    "created_at": "2021-07-09T06:12:45Z",
+    "updated_at": "2024-02-19T13:41:47Z",
+    "closed_at": "2021-07-16T14:48:56Z",
+    "merged_at": "2021-07-16T14:48:56Z",
+    "body": "Fixed some comment errors, Closes #2 \r\n\r\n## IMPORTANT INFORMATION\r\n\r\n### Contributor License Agreement (CLA)\r\n* The Pull Request feature will be considered by STMicroelectronics after the signature of a **Contributor License Agreement (CLA)** by the submitter.\r\n* If you did not sign such agreement, please follow the steps mentioned in the CONTRIBUTING.md file.\r\n",
+    "github_url": "https://github.com/STMicroelectronics/stm32f0xx-hal-driver/pull/3",
+    "head_ref": "master",
+    "base_ref": "master",
+    "merge_commit_sha": "2e12463022066050c5b8f32bf0250274b6d7368d",
+    "commits_count": 1,
+    "review_comments_count": 0,
+    "comments_count": 2,
+    "changed_files_count": 1,
+    "additions": 4,
+    "deletions": 4,
+    "linked_issue_numbers": [
+      2
+    ],
+    "files_changed": [
+      {
+        "filename": "Inc/stm32f0xx_hal_gpio_ex.h",
+        "status": "modified",
+        "additions": 4,
+        "deletions": 4,
+        "changes": 8,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/stm32f0xx-hal-driver/blob/cc9f1c1003e00a4ca7b60bfa7a15bff8b858fd6e/Inc%2Fstm32f0xx_hal_gpio_ex.h",
+        "raw_url": "https://github.com/STMicroelectronics/stm32f0xx-hal-driver/raw/cc9f1c1003e00a4ca7b60bfa7a15bff8b858fd6e/Inc%2Fstm32f0xx_hal_gpio_ex.h"
+      }
+    ]
+  },
+  {
+    "repo": "stm32f0xx-hal-driver",
+    "pr_number": 1,
+    "title": "fix(_gpio_ex.h): Fixed a clerical error of comment",
+    "state": "closed",
+    "merged": false,
+    "draft": false,
+    "author": "weycen",
+    "labels": [],
+    "created_at": "2021-05-08T01:05:25Z",
+    "updated_at": "2021-05-08T01:05:28Z",
+    "closed_at": "2021-05-08T01:05:28Z",
+    "merged_at": null,
+    "body": "Fixed a clerical error of comment, should USART3, not USART2\r\n\r\n## IMPORTANT INFORMATION\r\n\r\n### Contributor License Agreement (CLA)\r\n* The Pull Request feature will be considered by STMicroelectronics after the signature of a **Contributor License Agreement (CLA)** by the submitter.\r\n* If you did not sign such agreement, please follow the steps mentioned in the CONTRIBUTING.md file.\r\n",
+    "github_url": "https://github.com/STMicroelectronics/stm32f0xx-hal-driver/pull/1",
+    "head_ref": "patch-1",
+    "base_ref": "master",
+    "merge_commit_sha": "38185a9b7b886622b088faaf236ae98276712bfc",
+    "commits_count": 1,
+    "review_comments_count": 0,
+    "comments_count": 1,
+    "changed_files_count": 1,
+    "additions": 1,
+    "deletions": 1,
+    "linked_issue_numbers": [],
+    "files_changed": [
+      {
+        "filename": "Inc/stm32f0xx_hal_gpio_ex.h",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "changes": 2,
+        "previous_filename": null,
+        "blob_url": "https://github.com/STMicroelectronics/stm32f0xx-hal-driver/blob/e8cdc20bc199552ef74b637504b3fba04e8fb29c/Inc%2Fstm32f0xx_hal_gpio_ex.h",
+        "raw_url": "https://github.com/STMicroelectronics/stm32f0xx-hal-driver/raw/e8cdc20bc199552ef74b637504b3fba04e8fb29c/Inc%2Fstm32f0xx_hal_gpio_ex.h"
+      }
+    ]
+  }
+]

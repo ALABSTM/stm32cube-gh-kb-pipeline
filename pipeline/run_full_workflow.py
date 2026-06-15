@@ -23,6 +23,32 @@ from pipeline.similarity.compute_issue_similarity_v2 import main as similarity_m
 from shared.utils.paths import get_config_path
 
 
+def _enrich_pdf_figures_main() -> None:
+    """Run Alfred Vision on PDF figure crops (tasks generated during ingestion)."""
+    import sys
+    from pathlib import Path
+
+    script = Path(__file__).resolve().parents[1] / "pipeline_Automation" / "alfred" / "enrich_pdf_figures_with_alfred.py"
+    if not script.exists():
+        print(f"[SKIP] Alfred PDF enrichment script not found: {script}")
+        return
+
+    # Import and call main directly
+    sys.path.insert(0, str(script.parent))
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("enrich_pdf_figures", str(script))
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+
+    # Isolate sys.argv so the sub-script argparse doesn't see workflow args
+    original_argv = sys.argv
+    sys.argv = [str(script)]
+    try:
+        mod.main()
+    finally:
+        sys.argv = original_argv
+
+
 def load_config() -> dict:
     return __import__("json").loads(get_config_path().read_text(encoding="utf-8"))
 
@@ -71,6 +97,7 @@ STEPS = [
     ("Ingestion issue-pr-commit links", fetch_issue_pr_commit_links_main),
     ("Ingestion sync local repos", sync_local_repos_main),
     ("Ingestion files", fetch_files_main),
+    ("Alfred PDF figure descriptions", _enrich_pdf_figures_main),
     ("Cleaning issues", clean_issues_main),
     ("Cleaning files", clean_files_main),
     ("Enrichment issues V2", issues_to_docs_v2_main),
@@ -84,10 +111,12 @@ STEPS = [
 ]
 
 
-def main(skip_ingestion: bool = False, skip_chunking: bool = False, continue_on_error: bool = False, export_st_ready: bool = False) -> None:
+def main(skip_ingestion: bool = False, skip_chunking: bool = False, continue_on_error: bool = False, export_st_ready: bool = False, enrich_pdf: bool = True) -> None:
     steps = STEPS
     if skip_ingestion:
         steps = [step for step in steps if not step[0].startswith("Ingestion")]
+    if not enrich_pdf:
+        steps = [step for step in steps if not step[0].startswith("Alfred")]
     if skip_chunking:
         steps = [step for step in steps if not step[0].startswith("Chunking")]
     if export_st_ready:
@@ -123,6 +152,11 @@ if __name__ == "__main__":
         help="Skip local chunking (ST platform handles chunking at upload).",
     )
     parser.add_argument(
+        "--no-enrich-pdf",
+        action="store_true",
+        help="Skip Alfred Vision enrichment of PDF figures.",
+    )
+    parser.add_argument(
         "--continue-on-error",
         action="store_true",
         help="Continue running next steps when one step fails.",
@@ -138,4 +172,5 @@ if __name__ == "__main__":
         skip_chunking=args.skip_chunking,
         continue_on_error=args.continue_on_error,
         export_st_ready=args.export_st_ready,
+        enrich_pdf=not args.no_enrich_pdf,
     )

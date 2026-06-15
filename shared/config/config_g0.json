@@ -1,0 +1,27 @@
+{
+  "owner": "STMicroelectronics",
+  "repos": [
+    "STM32CubeG0",
+    "stm32g0xx-hal-driver",
+    "cmsis_device_g0",
+    "stm32g0xx-nucleo-bsp",
+    "stm32g0c1e-ev-bsp"
+  ],
+  "data_dir": "data",
+  "repos_dir": "GitHub_repos",
+  "auto_clone_missing_repos": true,
+  "repo_clone_urls": {
+    "stm32g0xx-hal-driver": "https://github.com/STMicroelectronics/stm32g0xx_hal_driver.git",
+    "cmsis_device_g0": "https://github.com/STMicroelectronics/cmsis_device_g0.git",
+    "stm32g0xx-nucleo-bsp": "https://github.com/STMicroelectronics/stm32g0xx-nucleo-bsp.git",
+    "stm32g0c1e-ev-bsp": "https://github.com/STMicroelectronics/stm32g0c1e-ev-bsp.git"
+  },
+  "linked_repo_refs": {},
+  "commit_pr_scope": "linked_or_merged",
+  "github_token_env": "GITHUB_TOKEN",
+  "rate_limits": {
+    "issues_sleep": 0.2,
+    "comments_sleep": 0.1
+  },
+  "ingest_version": "v1.0"
+}
