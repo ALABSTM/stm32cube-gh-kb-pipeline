@@ -90,6 +90,63 @@ def export_st_ready_diagnostic_cards_all() -> None:
         print(f"[ST-READY:json:diagnostic_cards] {repo}: exported {exported}/{total} -> {out_root}")
 
 
+def export_st_ready_issues_with_images_all() -> None:
+    """Export issues with image_urls field for Alfred enrichment."""
+    from pipeline.delivery.export_st_ready_issues_with_images import export_repo_json as export_with_images_repo_json
+    repos = load_config().get("repos", [])
+    for repo in repos:
+        try:
+            total, exported, out_root = export_with_images_repo_json(repo=repo, include_invalid=False, comments_chars=1200)
+        except FileNotFoundError as exc:
+            print(f"[ST-READY:json:issues_with_images] {repo}: skipped ({exc})")
+            continue
+        print(f"[ST-READY:json:issues_with_images] {repo}: exported {exported}/{total} -> {out_root}")
+
+
+def _enrich_alfred_images_main() -> None:
+    """Run Alfred Vision on issue images (st_ready_issues_with_images_*.json)."""
+    import sys
+    from pathlib import Path
+
+    script = Path(__file__).resolve().parents[1] / "pipeline_Automation" / "alfred" / "enrich_json_images_with_alfred.py"
+    if not script.exists():
+        print(f"[SKIP] Alfred images enrichment script not found: {script}")
+        return
+
+    by_series = Path(__file__).resolve().parents[1] / "datasets" / "07_delivery" / "st_ready" / "by_series"
+    if not by_series.exists():
+        print("[SKIP] by_series/ not found — run delivery first")
+        return
+
+    for series_dir in sorted(by_series.iterdir()):
+        if not series_dir.is_dir():
+            continue
+        issues_dir = series_dir / "issues_json"
+        if not issues_dir.exists():
+            continue
+        # Find with_images file
+        candidates = list(issues_dir.glob("st_ready_issues_with_images_*.json"))
+        candidates = [c for c in candidates if "alfred" not in c.name and "summary" not in c.name]
+        if not candidates:
+            continue
+
+        input_file = candidates[0]
+        print(f"  [ALFRED-IMG] {series_dir.name}: {input_file.name}")
+
+        original_argv = sys.argv
+        sys.argv = [str(script), "--input", str(input_file), "--inplace"]
+        try:
+            import importlib.util
+            spec = importlib.util.spec_from_file_location("enrich_json_images", str(script))
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            mod.main()
+        except Exception as exc:
+            print(f"  [WARN] Alfred images failed for {series_dir.name}: {exc}")
+        finally:
+            sys.argv = original_argv
+
+
 STEPS = [
     ("Ingestion issues", fetch_issues_main),
     ("Ingestion pull requests", fetch_prs_main),
@@ -125,6 +182,8 @@ def main(skip_ingestion: bool = False, skip_chunking: bool = False, continue_on_
             ("Delivery ST-ready files", export_st_ready_files_all),
             ("Delivery ST-ready resolver cases", export_st_ready_resolver_cases_all),
             ("Delivery ST-ready diagnostic cards", export_st_ready_diagnostic_cards_all),
+            ("Delivery ST-ready issues with images", export_st_ready_issues_with_images_all),
+            ("Alfred image descriptions", _enrich_alfred_images_main),
         ]
 
     for idx, (label, fn) in enumerate(steps, start=1):
