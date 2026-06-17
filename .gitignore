@@ -24,6 +24,31 @@ data/clean_*.json
 data/docs_*.json
 data/chunks_*.json
 data/*_sim.json
+data/*.json
+
+# Large dataset folders (regenerable from pipeline)
+datasets/01_raw/
+datasets/02_clean/
+datasets/03_enriched/
+datasets/04_similarity/
+datasets/05_chunked/
+datasets/06_evaluated/
+datasets/07_delivery/st_ready/by_series/
+datasets/07_delivery/st_ready/issues_json/
+datasets/07_delivery/st_ready/files_json/
+datasets/07_delivery/st_ready/resolver_cases_json/
+datasets/07_delivery/st_ready/diagnostic_cards_json/
+
+# Keep only test suite and summaries in delivery
+!datasets/07_delivery/st_ready/*.csv
+!datasets/07_delivery/st_ready/summary_*.json
 
 # Local generated reports
 datasets/07_delivery/st_ready/evaluation_report/
+
+# Large PDF outputs (regenerable with docs/generate_pdfs.py)
+docs/*.pdf
+docs/reports/*.pdf
+
+# GitHub repos local clones
+GitHub_repos/
