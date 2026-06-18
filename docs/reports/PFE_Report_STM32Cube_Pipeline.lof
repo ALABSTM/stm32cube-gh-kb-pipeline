@@ -1,0 +1,31 @@
+\babel@toc {french}{}\relax 
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Paradigme RAG appliqué au projet : de la question utilisateur à la réponse sourcée}}{12}{figure.2.1}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Vue d'ensemble du pipeline de preprocessing (7 stages)}}{21}{figure.4.1}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Architecture détaillée du pipeline : stages, fichiers intermédiaires et branchement Alfred}}{21}{figure.4.2}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Flux de données end-to-end : de la source GitHub à la réponse utilisateur}}{22}{figure.4.3}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Architecture de livraison et upload vers la Knowledge Base \#793}}{23}{figure.4.4}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Détail de l'étape d'ingestion : scripts et sorties}}{25}{figure.5.1}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Arbre de décision du nettoyage V3 : routage par type de fichier avec taux de réduction}}{27}{figure.5.2}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Détail du processus d'enrichissement et de calcul de similarité}}{30}{figure.5.3}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Génération des Resolver Cases et Diagnostic Cards}}{31}{figure.5.4}%
+\contentsline {figure}{\numberline {5.5}{\ignorespaces Les 4 types d'artefacts delivery et leurs relations vers la KB \#793}}{31}{figure.5.5}%
+\contentsline {figure}{\numberline {5.6}{\ignorespaces Intégration Alfred Vision AI pour la description automatique d'images}}{32}{figure.5.6}%
+\contentsline {figure}{\numberline {5.7}{\ignorespaces Architecture multi-agents du système ST GitHub Analyzer}}{33}{figure.5.7}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Complétude des données à l'ingestion}}{39}{figure.6.1}%
+\contentsline {figure}{\numberline {6.2}{\ignorespaces Qualité du nettoyage : couverture texte et classification par type de fichier}}{39}{figure.6.2}%
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Couverture métadonnées (layer, board, component) et succès des descriptions d'images}}{40}{figure.6.3}%
+\contentsline {figure}{\numberline {6.4}{\ignorespaces Proportion d'issues avec liens de similarité}}{41}{figure.6.4}%
+\contentsline {figure}{\numberline {6.5}{\ignorespaces Volumes de documents exportés par type de livraison}}{41}{figure.6.5}%
+\contentsline {figure}{\numberline {6.6}{\ignorespaces Dashboard qualité global du pipeline}}{44}{figure.6.6}%
+\contentsline {figure}{\numberline {6.7}{\ignorespaces Comparaison des scores par question : Alfred générique vs Persona KB (+39\%)}}{48}{figure.6.7}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {7.1}{\ignorespaces Architecture CI/CD : GitHub Actions + self-hosted runner}}{50}{figure.7.1}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {8.1}{\ignorespaces Évolution du Quality Index au fil des améliorations incrémentales}}{57}{figure.8.1}%
+\addvspace {10\p@ }

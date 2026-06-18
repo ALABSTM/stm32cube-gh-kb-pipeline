@@ -3,6 +3,7 @@ import argparse
 from pipeline.chunking.docs_to_chunks_files_v2 import main as chunks_files_v2_main
 from pipeline.chunking.docs_to_chunks_issues_v2 import main as chunks_issues_v2_main
 from pipeline.cleaning.clean_files import main as clean_files_main
+from pipeline.cleaning.clean_files_v3 import main as clean_files_v3_main
 from pipeline.cleaning.clean_issues import main as clean_issues_main
 from pipeline.delivery.export_st_ready_diagnostic_cards import export_repo_json as export_diagnostic_cards_repo_json
 from pipeline.delivery.export_st_ready_files import export_repo_json as export_files_repo_json
@@ -103,6 +104,69 @@ def export_st_ready_issues_with_images_all() -> None:
         print(f"[ST-READY:json:issues_with_images] {repo}: exported {exported}/{total} -> {out_root}")
 
 
+def _patch_pdf_descriptions_in_delivery() -> None:
+    """Patch PDF figure descriptions into delivery files (fix timing issue)."""
+    import re
+    from pathlib import Path
+
+    project_root = Path(__file__).resolve().parents[1]
+    data_dir = project_root / "data"
+    delivery_dir = project_root / "datasets" / "07_delivery" / "st_ready" / "by_series"
+    desc_file = data_dir / "pdf_image_descriptions.json"
+
+    if not desc_file.exists():
+        print("  [SKIP] No pdf_image_descriptions.json found")
+        return
+    if not delivery_dir.exists():
+        print("  [SKIP] No delivery files found")
+        return
+
+    import json
+    descriptions = json.loads(desc_file.read_text(encoding="utf-8"))
+    if not descriptions:
+        print("  [SKIP] Empty descriptions file")
+        return
+
+    pattern = re.compile(
+        r"Figure detected on page \d+, but no technical description is available yet for ([^\s]+:p\d+:f\d+)\."
+    )
+
+    total = 0
+    for series_dir in sorted(delivery_dir.iterdir()):
+        if not series_dir.is_dir():
+            continue
+        files_dir = series_dir / "files_json"
+        if not files_dir.exists():
+            continue
+        for json_file in sorted(files_dir.glob("st_ready_files_*.json")):
+            if "summary" in json_file.name:
+                continue
+            content = json_file.read_text(encoding="utf-8")
+            count = 0
+
+            def _replace(match):
+                nonlocal count
+                fig_id = match.group(1)
+                desc = descriptions.get(fig_id, "").strip()
+                if desc:
+                    count += 1
+                    # Escape for JSON string context
+                    desc = desc.replace("\\", "\\\\")
+                    desc = desc.replace('"', '\\"')
+                    desc = desc.replace("\n", "\\n")
+                    desc = desc.replace("\r", "\\r")
+                    desc = desc.replace("\t", "\\t")
+                    return desc
+                return match.group(0)
+
+            patched = pattern.sub(_replace, content)
+            if count > 0:
+                json_file.write_text(patched, encoding="utf-8")
+                total += count
+
+    print(f"  Patched {total} PDF figure descriptions across delivery files")
+
+
 def _enrich_alfred_images_main() -> None:
     """Run Alfred Vision on issue images (st_ready_issues_with_images_*.json)."""
     import sys
@@ -157,6 +221,7 @@ STEPS = [
     ("Alfred PDF figure descriptions", _enrich_pdf_figures_main),
     ("Cleaning issues", clean_issues_main),
     ("Cleaning files", clean_files_main),
+    ("Cleaning files V3", clean_files_v3_main),
     ("Enrichment issues V2", issues_to_docs_v2_main),
     ("Enrichment files V2", files_to_docs_v2_main), 
     ("Similarity issues V2", similarity_main),
@@ -182,6 +247,7 @@ def main(skip_ingestion: bool = False, skip_chunking: bool = False, continue_on_
             ("Delivery ST-ready files", export_st_ready_files_all),
             ("Delivery ST-ready resolver cases", export_st_ready_resolver_cases_all),
             ("Delivery ST-ready diagnostic cards", export_st_ready_diagnostic_cards_all),
+            ("Patch PDF descriptions into delivery", _patch_pdf_descriptions_in_delivery),
             ("Delivery ST-ready issues with images", export_st_ready_issues_with_images_all),
             ("Alfred image descriptions", _enrich_alfred_images_main),
         ]

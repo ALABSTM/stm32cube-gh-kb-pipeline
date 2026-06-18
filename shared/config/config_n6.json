@@ -1,0 +1,13 @@
+{
+  "owner": "STMicroelectronics",
+  "repos": ["STM32CubeN6"],
+  "data_dir": "data",
+  "repos_dir": "GitHub_repos",
+  "auto_clone_missing_repos": true,
+  "repo_clone_urls": {},
+  "linked_repo_refs": {},
+  "commit_pr_scope": "linked_or_merged",
+  "github_token_env": "GITHUB_TOKEN",
+  "rate_limits": {"issues_sleep": 0.2, "comments_sleep": 0.1},
+  "ingest_version": "v1.0"
+}

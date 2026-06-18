@@ -19,6 +19,22 @@ python -m pipeline.run_full_workflow --export-st-ready
 Options utiles :
 ```powershell
 python -m pipeline.run_full_workflow --skip-ingestion --continue-on-error
+python -m pipeline.run_full_workflow --export-st-ready --skip-chunking --continue-on-error
+```
+
+Pour une série spécifique (via variable d'environnement) :
+```powershell
+$env:STM32CUBE_CONFIG = "shared/config/config_f4.json"
+python -m pipeline.run_full_workflow --export-st-ready --skip-chunking --continue-on-error
+```
+
+Pipeline batch multi-séries :
+```powershell
+$series = @("g4", "l0", "l1", "l4")
+foreach ($s in $series) {
+    $env:STM32CUBE_CONFIG = "shared/config/config_$s.json"
+    python -m pipeline.run_full_workflow --export-st-ready --skip-chunking --continue-on-error
+}
 ```
 
 ---
@@ -38,8 +54,12 @@ python -m pipeline.ingestion.fetch_issue_pr_commit_links --repo STM32CubeH7
 ## 3. Cleaning
 
 ```powershell
+# V1 — Basic normalization
 python -m pipeline.cleaning.clean_issues
 python -m pipeline.cleaning.clean_files
+
+# V3 — Type-aware cleaning (HTML strip, CMSIS filter, license removal)
+python -m pipeline.cleaning.clean_files_v3
 ```
 
 ---
@@ -101,11 +121,31 @@ python -m pipeline.delivery.export_st_ready_diagnostic_cards --repo STM32CubeH7
 
 ## 8. Alfred — Enrichissement images
 
+### Images d'issues
 ```powershell
 python pipeline_Automation/alfred/enrich_json_images_with_alfred.py --input "datasets/07_delivery/st_ready/by_series/stm32cubeh7/issues_json/st_ready_issues_with_images_stm32cubeh7.json" --inplace
 ```
 
-Options :
+### Figures PDF
+```powershell
+python pipeline_Automation/alfred/enrich_pdf_figures_with_alfred.py
+python pipeline_Automation/alfred/enrich_pdf_figures_with_alfred.py --repo STM32CubeH7
+python pipeline_Automation/alfred/enrich_pdf_figures_with_alfred.py --max-figures 50
+```
+
+### Patch PDF descriptions dans les delivery files
+```powershell
+python pipeline_Automation/patch_pdf_descriptions_in_delivery.py --dry-run
+python pipeline_Automation/patch_pdf_descriptions_in_delivery.py
+```
+
+### Fix JSON corrompus (control characters)
+```powershell
+python pipeline_Automation/fix_corrupted_json_files.py
+python pipeline_Automation/fix_corrupted_json_deep.py
+```
+
+Options Alfred :
 - `--use-proxy` : utiliser le proxy ST (185.46.212.88:80)
 - `--no-replace-text` : ne pas remplacer [IMAGE ATTACHED] dans le texte
 - `--max-records N` : limiter à N records
@@ -204,13 +244,59 @@ python -m pipeline.evaluation.validate_schemas
 
 ---
 
+## 12. Upload Scripts Automatisés
+
+### Upload issues Alfred-enrichies (13 séries)
+```powershell
+python pipeline_Automation/upload/upload_alfred_issues_all_series.py --dry-run
+python pipeline_Automation/upload/upload_alfred_issues_all_series.py
+```
+
+### Upload files PDF-enrichies (13 séries)
+```powershell
+python pipeline_Automation/upload/upload_pdf_enriched_files_all_series.py --dry-run
+python pipeline_Automation/upload/upload_pdf_enriched_files_all_series.py
+```
+
+### Upload drivers sous-repos (8 nouvelles séries)
+```powershell
+.\pipeline_Automation\upload\Upload_All_Drivers.ps1
+```
+
+---
+
 ## Datasources IDs connus
 
-| Repo | Type | Datasource ID |
-|------|------|:-------------:|
-| STM32CubeH7 | Issues | 24406 |
-| STM32CubeH7 | Issues (ancien) | 19896 |
-| STM32CubeH5 | Issues | — |
-| STM32CubeF4 | Files | — |
+| Série | Issues | Files | Diagnostic | Resolver |
+|-------|:------:|:-----:|:----------:|:--------:|
+| STM32CubeC0 | 29193 | 29192 | 29212 | — |
+| STM32CubeF0 | 29195 | 29196 | 29213 | — |
+| STM32CubeF1 | 29197 | 29198 | 29214 | 29211 |
+| STM32CubeF2 | 29199 | 29200 | 29215 | — |
+| STM32CubeF3 | 29282 | 29283 | 29284 | — |
+| STM32CubeF4 | 28099 | 29042 (V3) | 28122 | 28118 |
+| STM32CubeF7 | 29276 | 29277 | 29278 | 29279 |
+| STM32CubeG0 | 29273 | 29274 | 29275 | — |
+| STM32CubeH5 | 28158 | 29043 (V3) | 28165 | 28164 |
+| STM32CubeH7 | 24406 | 29041 (V3) | 24408 | 24410 |
+| STM32CubeH7RS | 29270 | 29271 | 29272 | — |
+| STM32CubeU5 | 28167 | 29044 (V3) | 28170 | 28244 |
+| STM32CubeWL | 28171 | 29045 (V3) | 28173 | 28245 |
 
-> KB #793 = ST GitHub Analyzer Knowledge Base
+> KB #793 = ST GitHub Analyzer_Unstructured
+> Master config: `shared/config/config_all_series.json`
+
+---
+
+## 13. Configs Disponibles
+
+| Série | Config File |
+|-------|-------------|
+| H7 (default) | `shared/config/config.json` |
+| C0, F0–F7, G0 | `shared/config/config_<série>.json` |
+| H5, H7RS, U5, WL | `shared/config/config_<série>.json` |
+| G4, L0, L1, L4, L5 | `shared/config/config_<série>.json` (nouvelles) |
+| N6, U0, U3 | `shared/config/config_<série>.json` (nouvelles) |
+| WB, WB0, WBA, WL3 | `shared/config/config_<série>.json` (nouvelles) |
+
+**25 séries au total** — 13 en production, 12 configurées.
