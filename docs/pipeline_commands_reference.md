@@ -174,6 +174,28 @@ python pipeline_Automation/upload/Add_Data_Source_Files.py --kb 793 --operation 
 $params = '{"label": "{{repo}} - {{file_type}} - {{path}}", "externalURL": "{{github_url}}", "rootTagPath": "files"}'
 ```
 
+### Erreur ST Platform: `embedDocuments return EMPTY vectors`
+
+Cette erreur signifie que le backend ST a lance l'activation du datasource, mais que le processeur JSON n'a produit aucun texte a vectoriser. Le datasource reste alors bloque ou inactif apres rollback.
+
+Verifier en priorite :
+- Le fichier doit avoir une racine objet correspondant au processor param, par exemple `{"files": [...]}` pour les exports files.
+- Chaque element doit contenir un champ texte non vide, normalement `st_ready_text` dans les exports `st_ready_files_*`.
+- Les params doivent etre encodes en base64 dans PowerShell, surtout avec les templates `{{...}}`.
+- Si le datasource est deja bloque apres rollback, recreer un datasource JSON propre avec `--operation new`, puis refaire l'upload. Relancer `add` sur le meme datasource bloque repete souvent le rollback.
+
+Commande files recommandee :
+```powershell
+$params = '{"label": "{{repo}} - {{file_type}} - {{path}}", "externalURL": "{{github_url}}", "rootTagPath": "files"}'
+$b64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($params))
+python pipeline_Automation/upload/Add_Data_Source_Files.py --kb 793 --operation add --datasource-id <FILES_DATASOURCE_ID> --remote-user "abir.gharbi@st.com" --processor JSON --processor-params "base64:$b64" --json-root-mode auto --empty-json-policy skip --json-split-size 1000 --files "datasets/07_delivery/st_ready/files_json/st_ready_files_<repo>.json"
+```
+
+Si l'activation reste bloquee apres l'erreur, creer un nouveau datasource :
+```powershell
+python pipeline_Automation/upload/Add_Data_Source_Files.py --kb 793 --operation new --datasource-name "STready_<SERIES>_Files_JSON" --remote-user "abir.gharbi@st.com" --processor JSON --processor-params "base64:$b64" --json-root-mode auto --empty-json-policy skip --json-split-size 1000 --files "datasets/07_delivery/st_ready/files_json/st_ready_files_<repo>.json"
+```
+
 ### Params pour Resolver Cases
 ```powershell
 $params = '{"label": "{{repo}} resolver #{{issue_number}} - {{issue_title}}", "externalURL": "https://github.com/STMicroelectronics/{{repo}}/issues/{{issue_number}}", "rootTagPath": "resolver_cases"}'
@@ -257,6 +279,13 @@ python pipeline_Automation/upload/upload_alfred_issues_all_series.py
 python pipeline_Automation/upload/upload_pdf_enriched_files_all_series.py --dry-run
 python pipeline_Automation/upload/upload_pdf_enriched_files_all_series.py
 ```
+
+Retry prudent pour une seule serie apres rollback backend ST (`Cannot read properties of undefined (reading 'status')`) :
+```powershell
+python pipeline_Automation/upload/upload_pdf_enriched_files_all_series.py --only-series stm32cubef0 --json-split-size 200 --verbose
+```
+
+Si le datasource reste bloque apres plusieurs rollbacks, creer un nouveau datasource Files JSON pour la serie puis relancer l'upload vers ce nouvel ID. Cette erreur vient du backend async ST pendant le traitement/rollback, pas d'une erreur Python locale.
 
 ### Upload drivers sous-repos (8 nouvelles séries)
 ```powershell

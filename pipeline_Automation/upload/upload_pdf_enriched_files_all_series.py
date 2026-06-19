@@ -4,6 +4,7 @@ Upload PDF-enriched files to KB #793 for all 13 series.
 Usage:
     python pipeline_Automation/upload/upload_pdf_enriched_files_all_series.py --dry-run
     python pipeline_Automation/upload/upload_pdf_enriched_files_all_series.py
+    python pipeline_Automation/upload/upload_pdf_enriched_files_all_series.py --only-series stm32cubef0
 """
 
 import subprocess
@@ -37,6 +38,7 @@ SERIES_FILES_DATASOURCES = {
 # Processor params for files
 PROCESSOR_PARAMS = 'eyJsYWJlbCI6ICJ7e3JlcG99fSB7e2ZpbGVfdHlwZX19IC0ge3twYXRofX0iLCAiZXh0ZXJuYWxVUkwiOiAiaHR0cHM6Ly9naXRodWIuY29tL1NUTWljcm9lbGVjdHJvbmljcy97e3JlcG99fS97e3Jvb3RfZGlyfX0ve3tyb290X3JlZn19L3t7cGF0aF91cmx9fSIsICJyb290VGFnUGF0aCI6ICJmaWxlcyJ9'
 
+DEFAULT_JSON_SPLIT_SIZE = 200
 UPLOAD_DELAY_SEC = 5
 
 
@@ -64,7 +66,21 @@ def main():
     parser = argparse.ArgumentParser(description="Upload PDF-enriched files to KB")
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--verbose", action="store_true")
+    parser.add_argument(
+        "--only-series",
+        choices=sorted(SERIES_FILES_DATASOURCES),
+        help="Upload only one STM32Cube series, for targeted rollback retries.",
+    )
+    parser.add_argument(
+        "--json-split-size",
+        type=int,
+        default=DEFAULT_JSON_SPLIT_SIZE,
+        help=f"Maximum JSON records per split part. Default: {DEFAULT_JSON_SPLIT_SIZE} for PDF-enriched files.",
+    )
     args = parser.parse_args()
+
+    if args.json_split_size <= 0:
+        parser.error("--json-split-size must be > 0")
 
     print(f"Uploading PDF-enriched files to KB #{KB_ID}")
     print()
@@ -72,7 +88,11 @@ def main():
     uploaded = 0
     skipped = 0
 
-    for series, ds_id in SERIES_FILES_DATASOURCES.items():
+    selected_datasources = SERIES_FILES_DATASOURCES
+    if args.only_series:
+        selected_datasources = {args.only_series: SERIES_FILES_DATASOURCES[args.only_series]}
+
+    for series, ds_id in selected_datasources.items():
         files_json = find_files_json(series)
 
         if not files_json:
@@ -95,7 +115,9 @@ def main():
             "--remote-user", "abir.gharbi@st.com",
             "--processor", "JSON",
             "--processor-params", f"base64:{PROCESSOR_PARAMS}",
-            "--json-split-size", "1000",
+            "--json-root-mode", "auto",
+            "--empty-json-policy", "skip",
+            "--json-split-size", str(args.json_split_size),
             "--files", str(files_json),
         ]
         if args.verbose:

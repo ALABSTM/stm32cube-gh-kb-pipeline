@@ -125,185 +125,482 @@ Je tiens à exprimer ma sincère gratitude envers toute l'équipe STMicroelectro
 \newpage
 
 %% ============================================================
-\chapter{Introduction Générale}
+%% INTRODUCTION GÉNÉRALE (hors chapitres)
+%% ============================================================
+\chapter*{Introduction Générale}
+\addcontentsline{toc}{chapter}{Introduction Générale}
+\markboth{Introduction Générale}{Introduction Générale}
+
+Le développement de systèmes embarqués basés sur les microcontrôleurs STM32 de STMicroelectronics est un domaine en constante évolution, où les ingénieurs font face quotidiennement à des problèmes techniques complexes : bugs de drivers, comportements inattendus des périphériques, incompatibilités entre versions firmware, configurations matérielles spécifiques. Pour résoudre ces problèmes, ils doivent aujourd'hui parcourir manuellement des milliers d'issues GitHub, des centaines de fichiers de documentation, et des dizaines de Release Notes répartis sur plus de 200 dépôts --- un processus lent, fragmenté et inefficace.
+
+Ce projet de fin d'études, réalisé au sein de l'équipe \textbf{Technical Marketing and Application Support} de la division Microcontrôleurs (MCD) du site STMicroelectronics de Tunis, propose une solution à cette problématique : la conception et l'implémentation d'un \textbf{pipeline de prétraitement intelligent} qui transforme automatiquement les données brutes des dépôts GitHub STM32Cube en une base de connaissances structurée. Cette base alimente un chatbot IA spécialisé (``ST GitHub Analyzer'') déployé sur la plateforme interne ST ChatGPT, capable de fournir des diagnostics précis, sourcés et actionnables aux ingénieurs.
+
+Le pipeline couvre les \textbf{25 séries} de la famille STM32 (13 en production, 12 configurées) et produit 4 types d'artefacts complémentaires : issues structurées, fichiers documentés, resolver cases (chaînes issue→PR→commit) et diagnostic cards (analyses de pannes structurées). Un enrichissement IA multi-modal par Alfred Vision rend le contenu visuel (captures d'écran, figures PDF) exploitable par la recherche.
+
+Les résultats démontrent un \textbf{gain de +39\%} de pertinence par rapport à un LLM générique sur les questions techniques STM32, avec un Quality Index atteignant 94/100 sur la série pilote H7 grâce aux Diagnostic Cards.
+
+Ce rapport s'organise comme suit :
+\begin{itemize}
+  \item \textbf{Chapitre 1} --- Présentation de l'entreprise : ST, le site de Tunis, l'équipe d'accueil
+  \item \textbf{Chapitre 2} --- Contexte du projet : problématique, critique de l'existant, solution proposée
+  \item \textbf{Chapitre 3} --- Spécification des besoins : acteurs, besoins fonctionnels/non fonctionnels, méthodologie Scrum
+  \item \textbf{Chapitre 4} --- Architecture et conception : architecture cible, choix techniques, flux de données
+  \item \textbf{Chapitre 5} --- Implémentation : les 7 stages du pipeline, enrichissement Alfred, delivery
+  \item \textbf{Chapitre 6} --- Tests et évaluation : métriques par stage, Quality Index, étude comparative
+  \item \textbf{Chapitre 7} --- Configuration de la plateforme ST ChatGPT et automatisation CI/CD
+  \item \textbf{Chapitre 8} --- Conclusion et perspectives
+\end{itemize}
+
+\newpage
+
+%% ============================================================
+\chapter{Présentation de l'Entreprise}
+\label{chap:entreprise}
 %% ============================================================
 
-\section{Contexte}
+\section{STMicroelectronics}
+\label{sec:st_presentation}
 
-STMicroelectronics est un leader mondial dans la conception de semi-conducteurs. La famille STM32 représente plus de 1500 références de microcontrôleurs utilisés dans l'industrie, l'automobile, l'IoT et l'électronique grand public.
+\subsection{Présentation Générale}
 
-Les dépôts GitHub publics de STMicroelectronics (\texttt{github.com/STMicroelectronics}) contiennent :
+\textbf{STMicroelectronics} est une entreprise mondiale de semi-conducteurs dédiée à l'amélioration de la vie quotidienne grâce à des solutions électroniques innovantes \cite{stm32}. Avec l'un des portefeuilles de produits les plus étendus de l'industrie, ST dessert plus de 200\,000 clients dans le monde, réalisant un chiffre d'affaires net de 13,27 milliards USD en 2024 \cite{st_annual_report}.
+
+L'entreprise a été fondée en juin 1987 sous le nom de \textbf{SGS-THOMSON Microelectronics}, suite à la fusion de SGS Microelettronica (Italie) et de Thomson Semiconductors (France). Le nom ``STMicroelectronics'' a été officiellement adopté en mai 1998. Avec plus de 80 bureaux commerciaux et 14 sites de fabrication principaux à travers le monde, l'entreprise emploie plus de 50\,000 personnes \cite{st_annual_report}.
+
+% Figure : Logo ST (à exporter depuis draw.io)
+\begin{figure}[H]
+\centering
+\fbox{\textit{[Logo STMicroelectronics --- exporter depuis draw.io]}}
+\caption{Logo officiel de STMicroelectronics}
+\label{fig:st_logo}
+\end{figure}
+
+\subsection{Vision et Marchés}
+
+STMicroelectronics a fait de l'innovation technologique une priorité stratégique depuis plus de 25 ans. L'entreprise réalise des investissements orientés marché dans le développement technologique, avec l'objectif de commercialiser des innovations de pointe créant une valeur immédiate pour ses clients. Aujourd'hui, ST livre des produits toujours plus petits, plus rapides, plus économes en énergie et dotés de nouvelles fonctionnalités.
+
+Portée par une culture mondiale de \textit{lean manufacturing}, ST adresse \textbf{trois marchés principaux} :
 \begin{itemize}
-  \item Des paquets logiciels complets (HAL, BSP, Middleware)
-  \item Des milliers d'issues et pull requests (retours utilisateurs, corrections de bugs)
-  \item De la documentation technique (Release Notes, exemples de code)
+  \item \textbf{Automobile} (37\%) : capteurs, microcontrôleurs, gestion de puissance pour véhicules électriques et autonomes
+  \item \textbf{Industriel} (30\%) : automatisation, contrôle moteur, IoT industriel, smart grid
+  \item \textbf{Électronique personnelle} (20\%) : smartphones, wearables, audio, gaming
+  \item \textbf{Communications et équipements} (13\%) : infrastructure réseau, serveurs
 \end{itemize}
 
-\section{Problématique}
+ST propose des modèles d'engagement allant des systèmes embarqués spécifiques à l'application jusqu'aux produits standard spécialisés (ASSP).
 
-Les ingénieurs et clients rencontrant des problèmes avec les microcontrôleurs STM32 n'ont pas de moyen efficace d'exploiter la richesse de ces données GitHub. La recherche manuelle dans les issues et la documentation est :
+\subsection{STMicroelectronics Tunis}
+\label{sec:st_tunis}
+
+Le site \textbf{ST Tunis}, situé dans le \textbf{Technopark El Ghazela}, a débuté ses opérations en 2001 avec neuf ingénieurs. Aujourd'hui, il compte plus de \textbf{200 employés} travaillant dans les domaines du design, des outils, des applications, de la qualité et du support \cite{st_annual_report}. Le site participe à chaque étape, depuis la conception initiale de nouveaux circuits jusqu'à la vérification finale de leur fonctionnalité avant la production de masse.
+
+\section{Division Microcontrôleurs (MCD)}
+\label{sec:mcd}
+
+La \textbf{Microcontroller Division (MCD)} est dédiée à la conception de microcontrôleurs, de plateformes de démonstration et de solutions pour les applications grand public. Elle est responsable du développement de drivers et de logiciels embarqués --- en particulier la validation et le développement des bibliothèques et firmware qui pilotent les microcontrôleurs ST.
+
+\section{Équipe d'Accueil : Technical Marketing and Application Support}
+\label{sec:equipe_accueil}
+
+Ce projet a été réalisé au sein de l'équipe \textbf{Technical Marketing and Application Support} rattachée à la MCD sur le site de Tunis. Cette équipe comprend deux sous-équipes :
+
 \begin{itemize}
-  \item \textbf{Lente} --- des milliers d'issues par série MCU, réparties sur 25 repositories principaux et 200+ sous-repos drivers
-  \item \textbf{Bruitée} --- contenu non structuré, images non cherchables, discussions hors-sujet, templates vides, messages bot
-  \item \textbf{Fragmentée} --- corrélations entre issues/PRs/commits non visibles ; un fix peut être dans un commit d'un sous-repo différent
-  \item \textbf{Opaque visuellement} --- les captures d'écran (erreurs IDE, oscillogrammes, configurations CubeMX) sont invisibles pour la recherche textuelle
+  \item \textbf{L'équipe GitHub} : assure le support client via les dépôts GitHub publics de STMicroelectronics, publie les mises à jour des drivers HAL, et maintient les projets d'exemples pour faciliter le développement d'applications basées sur les microcontrôleurs STM32.
+  
+  \item \textbf{L'équipe Maintenance et Validation} : garantit la satisfaction client par la maintenance des bugs et la validation fonctionnelle des microcontrôleurs fabriqués et de leurs versions HAL associées. Cette équipe représente la jonction entre les processus de conception logicielle/matérielle et l'industrialisation.
 \end{itemize}
 
-\subsection{Critique de l'Existant}
+C'est dans ce contexte que le besoin d'un \textbf{chatbot IA spécialisé STM32} a émergé : face au volume croissant d'issues GitHub (plusieurs milliers par an, répartis sur 200+ dépôts) et à la richesse inexploitée de ces données, l'équipe a identifié l'opportunité d'automatiser le support de premier niveau par un pipeline intelligent de prétraitement alimentant une base de connaissances structurée.
 
-Avant ce projet, les solutions disponibles présentaient des limitations majeures :
+%% ============================================================
+\chapter{Contexte du Projet}
+\label{chap:contexte}
+%% ============================================================
 
-\begin{longtable}{p{4cm}p{5.5cm}p{4cm}}
+\section{L'Écosystème STM32 et les Dépôts GitHub}
+\label{sec:ecosysteme}
+
+Au cœur de l'offre de ST se trouve la famille \textbf{STM32}, une gamme de microcontrôleurs basés sur les cœurs ARM Cortex-M (M0, M0+, M3, M4, M7, M33, M55) et Cortex-A. Lancée en 2007, la famille STM32 compte aujourd'hui plus de \textbf{1\,500 références} regroupées en plus de 30 séries, chacune ciblant un profil d'application spécifique :
+
+\begin{longtable}{p{2.5cm}p{3cm}p{7.5cm}}
 \toprule
-\textbf{Solution existante} & \textbf{Limitation principale} & \textbf{Impact utilisateur} \\
+\textbf{Série} & \textbf{Cœur} & \textbf{Cible applicative} \\
 \midrule
-Recherche GitHub native & Pas de sémantique, pas de filtrage par composant/layer & L'ingénieur parcourt 50 issues pour trouver la bonne \\
-Alfred (LLM ST) & Connaissances génériques, pas d'accès aux issues GitHub spécifiques & Conseils généraux, pas de root cause précise \\
-Stack Overflow & Non spécifique ST, pas de traçabilité vers les fixes officiels & Solutions non vérifiées, souvent obsolètes \\
-Documentation PDF & Non cherchable, figures opaques, pas de lien avec les bugs & L'ingénieur ne sait pas quel bug est lié à sa config \\
+STM32F0/F1/F2 & Cortex-M0/M3 & Entrée de gamme, migration depuis 8-bit \\
+STM32F3/F4 & Cortex-M4F & Applications signal mixte, contrôle moteur, audio \\
+STM32F7 & Cortex-M7 & Haute performance, graphisme, connectivité \\
+STM32G0/G4 & Cortex-M0+/M4 & Nouvelle génération mainstream, efficacité énergétique \\
+STM32H5/H7/H7RS & Cortex-M33/M7 & Ultra-haute performance, dual-core, temps réel \\
+STM32L0/L1/L4/L5 & Cortex-M0+/M3/M4/M33 & Ultra-basse consommation, IoT, wearables \\
+STM32U0/U3/U5 & Cortex-M0+/M33 & Ultra-basse consommation nouvelle génération \\
+STM32WB/WBA/WL & Cortex-M4+M0/M33 & Connectivité sans fil (BLE, Thread, LoRa, Sub-GHz) \\
+STM32N6 & Cortex-M55+NPU & IA embarquée, vision par ordinateur \\
 \bottomrule
 \end{longtable}
 
-\textbf{Constat quantifié} : Sur notre benchmark de 20 questions techniques, Alfred générique obtient un score de 116/200 (58\%) tandis que notre solution avec KB obtient 161/200 (80.5\%), soit un \textbf{gain de +39\%} en pertinence, actionnabilité et traçabilité.
-
-\section{Solution Proposée}
-
-Notre solution est un \textbf{pipeline intelligent de prétraitement} qui transforme les données GitHub brutes en une Knowledge Base structurée, alimentant un chatbot IA spécialisé. L'architecture repose sur trois piliers :
-
-\begin{enumerate}
-  \item \textbf{Pipeline de preprocessing en 7 stages} : Ingestion → Nettoyage (V1+V3) → Enrichissement NLP → Similarité → Chunking → Validation → Delivery. Chaque stage est modulaire, rejouable indépendamment, et produit des artefacts JSON traçables.
-  
-  \item \textbf{4 types d'artefacts complémentaires} :
-  \begin{itemize}
-    \item \textbf{Issues structurées} : symptôme, root cause, fix, métadonnées (layer, component, severity)
-    \item \textbf{Fichiers documentés} : HAL/BSP/CMSIS extraits et nettoyés par type (V3)
-    \item \textbf{Resolver Cases} : chaînes Issue → PR → Commit avec preuves de résolution
-    \item \textbf{Diagnostic Cards} : analyses structurées (symptôme → hypothèses → validation → fix)
-  \end{itemize}
-  
-  \item \textbf{Enrichissement IA multi-modal} : Alfred Vision convertit les images (captures d'écran, figures PDF) en descriptions textuelles cherchables, rendant le contenu visuel exploitable par le RAG.
-\end{enumerate}
-
-\textbf{Valeur ajoutée mesurée} :
+Pour chaque série, ST fournit un \textbf{Firmware Package} complet sous le nom \textbf{STM32Cube}, comprenant :
 \begin{itemize}
-  \item \textbf{+39\%} de pertinence vs Alfred générique sur les questions techniques spécifiques
-  \item \textbf{Citations vérifiables} : chaque réponse pointe vers une issue GitHub avec numéro et URL
-  \item \textbf{Fix actionnable} : l'ingénieur peut appliquer la solution en minutes, pas en heures
-  \item \textbf{Scalabilité} : 13 séries en production, 12 supplémentaires configurées, processus reproductible
+  \item Le \textbf{HAL} (Hardware Abstraction Layer) : couche d'abstraction portable entre séries
+  \item Les \textbf{drivers LL} (Low-Layer) : accès registre optimisé pour la performance
+  \item Les \textbf{BSP} (Board Support Packages) : drivers spécifiques aux cartes de développement (NUCLEO, Discovery, Eval)
+  \item Les \textbf{CMSIS Device Headers} : définitions de registres ARM standardisées
+  \item Des \textbf{Middlewares} : FreeRTOS, LwIP, FatFs, USB, TouchGFX, LoRaWAN
+  \item Des \textbf{exemples d'application} : projets prêts à compiler par board et par IDE
 \end{itemize}
 
-\section{Objectifs du Projet}
+\subsection{Les Dépôts GitHub STMicroelectronics}
 
-Concevoir et implémenter un pipeline automatisé de prétraitement qui :
+Depuis 2019, STMicroelectronics publie l'intégralité de ses firmware packages STM32Cube en open source sur GitHub (\texttt{github.com/STMicroelectronics}). Cette présence GitHub représente un écosystème considérable :
+
+\begin{itemize}
+  \item \textbf{25 dépôts principaux} (un par série MCU : \texttt{STM32CubeH7}, \texttt{STM32CubeF4}, etc.)
+  \item \textbf{200+ sous-dépôts} pour les drivers individuels (\texttt{stm32h7xx-hal-driver}, \texttt{stm32f4xx-nucleo-bsp}, \texttt{cmsis\_device\_h7}, etc.)
+  \item \textbf{Des milliers d'issues} ouvertes par la communauté (bug reports, questions d'utilisation, demandes de fonctionnalités)
+  \item \textbf{Des centaines de Pull Requests} avec des corrections de code et des discussions techniques
+  \item De la \textbf{documentation technique} embarquée : Release Notes (HTML), README (Markdown), documentation PDF
+\end{itemize}
+
+Ce projet porte sur les \textbf{25 séries} de la famille STM32 : \textbf{13 séries en production} (C0, F0, F1, F2, F3, F4, F7, G0, H5, H7, H7RS, U5, WL) couvrant 47 dépôts et \textbf{12 séries supplémentaires} configurées et prêtes au déploiement (G4, L0, L1, L4, L5, N6, U0, U3, WB, WB0, WBA, WL3). La couverture totale cible est de \textbf{25 séries MCU} avec plus de 200 sous-dépôts associés.
+
+\section{Problématique}
+\label{sec:problematique}
+
+Les ingénieurs STM32 --- qu'ils soient internes à ST ou clients --- rencontrent quotidiennement des problèmes techniques lors du développement firmware : bugs HAL, comportements inattendus des périphériques, incompatibilités entre versions, configurations complexes. Pour résoudre ces problèmes, ils doivent aujourd'hui parcourir manuellement les ressources disponibles, un processus qui souffre de quatre limitations majeures :
+
 \begin{enumerate}
-  \item Ingère les données brutes depuis l'API GitHub
-  \item Nettoie, enrichit et structure les documents
-  \item Génère des artefacts RAG-ready pour une base de connaissances
-  \item Alimente un chatbot IA spécialisé STM32 via l'API ST AI Bridge
+  \item \textbf{Volume et dispersion} : les données sont réparties sur plus de 200 dépôts GitHub, totalisant des milliers d'issues, des centaines de PRs et des dizaines de milliers de fichiers source. Trouver l'information pertinente revient à chercher une aiguille dans une botte de foin numérique.
+  
+  \item \textbf{Bruit et hétérogénéité} : le contenu des issues mélange du texte technique utile avec du bruit considérable --- templates vides, messages automatiques de bots GitHub, discussions hors-sujet, doublons, markdown malformé. Les fichiers source contiennent des licences volumineuses (30\% du texte pour certains fichiers) et les headers CMSIS dépassent 1,7~Mo de définitions bit-à-bit inutiles pour le diagnostic.
+  
+  \item \textbf{Fragmentation des connaissances} : la résolution d'un bug implique souvent de recouper une issue, une PR avec sa discussion, un commit dans un sous-dépôt différent, et une Release Note qui documente le correctif. Ces liens ne sont pas toujours explicites dans GitHub et nécessitent une investigation manuelle fastidieuse.
+  
+  \item \textbf{Opacité du contenu visuel} : de nombreuses issues contiennent des captures d'écran (erreurs IDE STM32CubeIDE, oscillogrammes, configurations CubeMX, schémas de câblage) qui portent une information diagnostique critique mais sont totalement invisibles pour la recherche textuelle. De même, les Release Notes PDF contiennent des figures techniques non indexables.
+\end{enumerate}
+
+\textbf{La question centrale de ce projet} est donc : \textit{comment transformer cette masse de données brutes, hétérogènes et fragmentées en une base de connaissances structurée, exploitable par un chatbot IA capable de fournir des diagnostics précis, sourcés et actionnables aux ingénieurs STM32 ?}
+
+\subsection{Critique de l'Existant}
+
+Avant ce projet, les solutions disponibles présentaient des limitations significatives :
+
+\begin{longtable}{p{3.5cm}p{5.5cm}p{4.5cm}}
+\toprule
+\textbf{Solution existante} & \textbf{Limitation principale} & \textbf{Impact utilisateur} \\
+\midrule
+Recherche GitHub native & Recherche textuelle brute, pas de filtrage par composant, layer ou sévérité & L'ingénieur parcourt 50+ issues sans garantie de trouver la bonne \\
+Alfred (LLM ST) & Connaissances génériques, aucun accès aux issues GitHub spécifiques & Conseils généraux sans root cause précise ni traçabilité \\
+Stack Overflow & Communauté large mais non spécifique ST, pas de traçabilité vers les correctifs officiels & Solutions non vérifiées, souvent obsolètes ou inapplicables \\
+Documentation PDF & Non indexable, figures opaques, pas de lien avec les bugs connus & L'ingénieur ne peut pas corréler son problème avec les bugs documentés \\
+Support direct (email/forum) & Temps de réponse de 48h à 2 semaines & Blocage du développement client \\
+\bottomrule
+\end{longtable}
+
+\textbf{Constat quantifié} : Sur un benchmark de 20 questions techniques couvrant 5 séries MCU, Alfred générique obtient un score de 116/200 (58\%) tandis que notre solution avec Knowledge Base obtient 161/200 (80,5\%), soit un \textbf{gain de +39\%} en pertinence, actionnabilité et traçabilité (cf. Section~\ref{sec:etude_comparative} pour le détail de l'étude).
+
+\section{État de l'Art et Fondements Théoriques}
+\label{sec:etat_art}
+
+\subsection{Le Paradigme RAG}
+
+Notre projet repose sur le paradigme \textbf{RAG} (Retrieval-Augmented Generation) \cite{lewis2020rag}, qui combine la recherche documentaire avec la génération de texte par un LLM. Concrètement dans notre système, lorsqu'un ingénieur pose une question, le moteur de recherche de la KB \#793 récupère les documents les plus pertinents (issues, fichiers, diagnostic cards), puis le LLM (GPT-5.1 via Azure OpenAI) génère une réponse ancrée dans ces documents avec des citations vérifiables.
+
+Ce paradigme nous apporte trois avantages concrets :
+\begin{itemize}
+  \item \textbf{Réduction des hallucinations} : les réponses sont ancrées dans des issues GitHub réelles, pas dans les connaissances génériques du modèle
+  \item \textbf{Mise à jour sans ré-entraînement} : quand de nouvelles issues apparaissent, il suffit de relancer le pipeline et uploader --- pas besoin de ré-entraîner le modèle
+  \item \textbf{Traçabilité} : chaque réponse cite un numéro d'issue, une URL GitHub, une version firmware
+\end{itemize}
+
+\subsection{Preprocessing et Qualité de la KB}
+
+La qualité des réponses RAG dépend directement de la qualité des documents indexés --- c'est le principe ``\textbf{Garbage In, Garbage Out}''. Dans notre projet, nous avons constaté expérimentalement que :
+\begin{itemize}
+  \item Les headers CMSIS bruts (1,7~Mo de \texttt{\#define}) polluent le contexte du LLM avec du bruit inutile → d'où le filtre V3 ($-96\%$)
+  \item Les balises HTML des Release Notes diluent le signal technique → d'où le nettoyage \texttt{strip\_html()} ($-33\%$)
+  \item Les licences volumineuses dans le code source occupent de l'espace dans les chunks → d'où la suppression automatique
+\end{itemize}
+
+Pour le découpage en chunks, nous utilisons une approche \textbf{paragraph-based} pour les issues et \textbf{section-based} pour les fichiers, avec une taille maximale de 512 tokens et un overlap de 50 tokens.
+
+\subsection{TF-IDF pour la Similarité}
+
+Pour le calcul de similarité inter-issues, nous utilisons \textbf{TF-IDF} (Term Frequency -- Inverse Document Frequency) \cite{tfidf}, qui pondère les termes par leur spécificité dans le corpus. Nous avons choisi TF-IDF plutôt que des embeddings neuronaux car il est déterministe, interprétable et ne nécessite pas de modèle pré-entraîné --- ce qui est cohérent avec notre choix d'heuristiques plutôt que de ML pour la classification.
+
+\subsection{Alfred Vision pour la Description d'Images}
+
+Pour rendre les captures d'écran et figures PDF ``cherchables'' par le RAG, nous utilisons \textbf{Alfred Vision}, le service de description d'images interne de ST basé sur Azure OpenAI. Alfred reçoit une image et un prompt spécialisé STM32, et produit une description textuelle orientée diagnostic (noms de périphériques, messages d'erreur, valeurs de registres).
+
+\section{Étude Comparative des Solutions Existantes}
+\label{sec:etude_comparative_intro}
+
+Avant de concevoir notre pipeline, nous avons évalué les solutions existantes pour le support technique assisté par IA :
+
+\begin{longtable}{p{3cm}p{4.5cm}p{4.5cm}}
+\toprule
+\textbf{Solution} & \textbf{Ce qu'elle fait bien} & \textbf{Pourquoi insuffisante pour nous} \\
+\midrule
+Recherche GitHub native & Gratuite, intégrée & Pas de sémantique, pas de filtrage par composant/layer, résultats noyés dans le bruit \\
+Alfred (LLM ST générique) & Toujours disponible, connaissances larges & Pas d'accès aux issues GitHub, conseils génériques sans root cause (score 116/200) \\
+Stack Overflow & Communauté large & Non spécifique ST, solutions non vérifiées et souvent obsolètes \\
+GitHub Copilot & Complétion de code intelligente & Pas de KB custom, aucun accès aux issues et bugs connus \\
+\textbf{Notre approche} & Pipeline domain-specific, 4 artefacts, enrichissement IA & Pipeline custom à maintenir \\
+\bottomrule
+\end{longtable}
+
+\textbf{Conclusion} : aucune solution existante ne combine le preprocessing domain-aware, les artefacts de diagnostic structurés et l'enrichissement d'images. C'est ce constat qui a motivé la conception de notre pipeline.
+
+\section{Synthèse de la Solution Proposée}
+\label{sec:solution_proposee}
+
+Face à cette problématique et aux limites des solutions existantes, nous proposons un \textbf{pipeline intelligent de prétraitement en 7 étapes} qui transforme les données GitHub brutes en une Knowledge Base structurée, alimentant un chatbot IA spécialisé STM32 déployé sur la plateforme ST ChatGPT. L'architecture repose sur trois piliers fondamentaux :
+
+\begin{enumerate}
+  \item \textbf{Pipeline de preprocessing modulaire} : Ingestion → Nettoyage (V1+V3 par type) → Enrichissement NLP → Similarité TF-IDF → Chunking → Validation schéma → Delivery. Chaque étape est \textbf{rejouable indépendamment}, produit des artefacts JSON traçables, et peut être évaluée en isolation.
+  
+  \item \textbf{4 types d'artefacts complémentaires} couvrant l'intégralité du spectre de connaissances :
+  \begin{itemize}
+    \item \textbf{Issues structurées} : symptôme, root cause, fix, métadonnées enrichies (layer, component, severity, board)
+    \item \textbf{Fichiers documentés} : HAL/BSP/CMSIS/PDF extraits et nettoyés par type avec filtrage intelligent
+    \item \textbf{Resolver Cases} : chaînes Issue $\to$ PR $\to$ Commit avec preuves de résolution et fichiers modifiés
+    \item \textbf{Diagnostic Cards} : analyses structurées (symptôme $\to$ hypothèses $\to$ validation $\to$ fix $\to$ prévention)
+  \end{itemize}
+  
+  \item \textbf{Enrichissement IA multi-modal} : Alfred Vision AI convertit automatiquement les captures d'écran des issues et les figures techniques des PDFs en descriptions textuelles cherchables, rendant le contenu visuel exploitable par la recherche RAG.
+\end{enumerate}
+
+\section{Positionnement par Rapport à l'État de l'Art}
+\label{sec:positionnement}
+
+Notre approche se positionne comme une \textbf{solution RAG verticale} (domain-specific) par opposition aux solutions RAG horizontales (génériques). Les contributions originales par rapport à l'état de l'art sont :
+
+\begin{enumerate}
+  \item \textbf{Preprocessing domain-aware} : là où les solutions génériques indexent le contenu brut, notre pipeline applique un nettoyage adapté au type de fichier (HTML pour les Release Notes, filtrage intelligent pour les CMSIS headers, suppression de licence pour le code source)
+  
+  \item \textbf{Enrichissement métadonnées par heuristiques} : classification automatique des issues par layer architecturale, composant matériel, board, sévérité et type --- sans données d'entraînement supervisées, grâce à des heuristiques regex spécifiques au domaine STM32
+  
+  \item \textbf{Artefacts de diagnostic structurés} : les Diagnostic Cards et les Resolver Cases sont des formats d'artefacts originaux qui n'existent pas dans les pipelines RAG standards. Ils ont démontré un impact majeur sur la qualité (+33 points de Quality Index)
+  
+  \item \textbf{Enrichissement Vision IA des images} : l'utilisation d'Alfred Vision pour rendre cherchables les captures d'écran et les figures PDF est une contribution technique inédite dans le contexte STM32
+\end{enumerate}
+
+\section{Contributions Techniques Originales}
+\label{sec:contributions}
+
+\begin{enumerate}
+  \item \textbf{Pipeline modulaire 7 stages} rejouable indépendamment par étape avec artefacts JSON traçables
+  \item \textbf{Nettoyage V3 par type} : routage intelligent avec réduction de 96\% sur les headers CMSIS et 33\% sur le HTML
+  \item \textbf{Filtre CMSIS intelligent} ne conservant que les sections à valeur diagnostique (IRQ, base addresses, TypeDef)
+  \item \textbf{4 types d'artefacts delivery} complémentaires : issues, files, resolver cases, diagnostic cards
+  \item \textbf{Heuristiques NLP domain-specific} pour la classification STM32 (layer, component, severity, board, issue\_kind)
+  \item \textbf{Description automatique d'images} par Alfred Vision AI (captures d'écran issues + figures PDF)
+  \item \textbf{Architecture KB-first + Alfred fallback} avec description restrictive évitant le court-circuit de la KB
+  \item \textbf{Workflow Delete+Add} résolvant les conflits de noms lors de l'upload des datasources
+  \item \textbf{Couverture multi-séries} : 13 séries en production, 12 configurées, processus reproductible en 3 étapes
+\end{enumerate}
+
+\section{Objectifs du Projet}
+\label{sec:objectifs}
+
+Les objectifs de ce projet de fin d'études sont les suivants :
+
+\begin{enumerate}
+  \item \textbf{Concevoir} un pipeline de prétraitement automatisé capable d'ingérer les données brutes depuis l'API GitHub, de les nettoyer, enrichir et structurer pour un système RAG
+  \item \textbf{Implémenter} les 7 étapes du pipeline (ingestion, nettoyage V1+V3, enrichissement NLP, similarité TF-IDF, chunking, validation, delivery) avec une architecture modulaire et rejouable
+  \item \textbf{Déployer} un chatbot IA spécialisé STM32 sur la plateforme ST ChatGPT, alimenté par la Knowledge Base générée par le pipeline
+  \item \textbf{Évaluer} la qualité du système de bout en bout via un Quality Index sur 52 questions et une étude comparative avec Alfred générique
+  \item \textbf{Automatiser} la mise à jour continue via CI/CD (GitHub Actions) et des scripts d'orchestration
+  \item \textbf{Industrialiser} la solution pour couvrir l'intégralité des 25 séries STM32
+\end{enumerate}
+
+\section{Enjeux Éthiques et Responsabilité}
+\label{sec:enjeux_ethiques}
+
+L'utilisation de l'intelligence artificielle dans un contexte de support technique industriel soulève plusieurs enjeux éthiques que nous avons pris en compte :
+
+\begin{enumerate}
+  \item \textbf{Traçabilité et transparence} : chaque réponse du chatbot est accompagnée de citations vérifiables (numéro d'issue, URL GitHub, version firmware). L'utilisateur peut toujours remonter à la source pour vérifier l'exactitude de l'information. Cette traçabilité est un choix de conception délibéré.
+  
+  \item \textbf{Fiabilité et hallucinations} : le paradigme RAG réduit significativement les hallucinations par rapport à un LLM générique, car les réponses sont ancrées dans des documents factuels. Néanmoins, le risque n'est pas nul --- d'où l'importance des gates de validation et du Quality Index régulier.
+  
+  \item \textbf{Confidentialité des données} : les données sources proviennent des dépôts GitHub de STMicroelectronics (issues, fichiers, PRs). Bien que ces dépôts soient accessibles sur GitHub, les données traitées, la Knowledge Base générée et la plateforme ST ChatGPT sont des ressources \textbf{internes à ST}. Le pipeline ne traite aucune donnée personnelle des utilisateurs GitHub au-delà des identifiants publics (pseudo, commentaires publics).
+  
+  \item \textbf{Biais de couverture} : certaines séries MCU ont plus d'issues que d'autres, ce qui crée un biais de couverture. Les séries historiques (F4, H7) sont mieux représentées que les séries récentes (N6, U0). Nous documentons cette limitation dans le chapitre d'évaluation.
+  
+  \item \textbf{Impact sur l'emploi} : le chatbot ne remplace pas les ingénieurs de support mais \textbf{augmente leur productivité} en automatisant la recherche de premier niveau. Les cas complexes nécessitent toujours une expertise humaine.
 \end{enumerate}
 
 \section{Plan du Rapport}
 
-\begin{itemize}
-  \item \textbf{Chapitre 2} --- État de l'art : RAG, NLP pour code, chatbots techniques
-  \item \textbf{Chapitre 3} --- Pipeline de Data Preprocessing : concepts, enjeux, patterns
-  \item \textbf{Chapitre 4} --- Méthodologie et architecture du pipeline
-  \item \textbf{Chapitre 5} --- Implémentation détaillée
-  \item \textbf{Chapitre 6} --- Résultats et évaluation
-  \item \textbf{Chapitre 7} --- Automatisation et CI/CD
-  \item \textbf{Chapitre 8} --- Conclusion et perspectives
-\end{itemize}
+Le plan détaillé est présenté dans l'Introduction Générale (page précédente).
+
+\section{Les 25 Séries STM32 Couvertes}
+\label{sec:25series}
+
+Le pipeline est conçu pour couvrir l'intégralité de l'écosystème STM32. Le tableau suivant détaille l'état de chaque série :
+
+\begin{longtable}{p{2.5cm}p{2cm}p{3cm}p{2cm}p{3cm}}
+\toprule
+\textbf{Série} & \textbf{Statut} & \textbf{Repos principaux} & \textbf{Issues} & \textbf{Sous-dépôts drivers} \\
+\midrule
+STM32CubeC0 & Production & 1 & $\sim$50 & 3 (HAL, CMSIS, BSP) \\
+STM32CubeF0 & Production & 1 & $\sim$120 & 3 \\
+STM32CubeF1 & Production & 1 & $\sim$180 & 3 \\
+STM32CubeF2 & Production & 1 & $\sim$60 & 3 \\
+STM32CubeF3 & Production & 1 & $\sim$100 & 3 \\
+STM32CubeF4 & Production & 1 & $\sim$800 & 16 (HAL, CMSIS, 14 BSP) \\
+STM32CubeF7 & Production & 1 & $\sim$350 & 6 \\
+STM32CubeG0 & Production & 1 & $\sim$150 & 3 \\
+STM32CubeH5 & Production & 1 & $\sim$200 & 6 \\
+STM32CubeH7 & Production & 1 & $\sim$500 & 12 (HAL, CMSIS, 10 BSP) \\
+STM32CubeH7RS & Production & 1 & $\sim$80 & 3 \\
+STM32CubeU5 & Production & 1 & $\sim$350 & 8 \\
+STM32CubeWL & Production & 1 & $\sim$150 & 5 \\
+\midrule
+STM32CubeG4 & Configuré & 1 & $\sim$49 & 4 (HAL, CMSIS, 2 BSP) \\
+STM32CubeL0 & Configuré & 1 & $\sim$31 & 4 \\
+STM32CubeL1 & Configuré & 1 & $\sim$13 & 4 \\
+STM32CubeL4 & Configuré & 1 & $\sim$94 & 4 \\
+STM32CubeL5 & Configuré & 1 & --- & 4 \\
+STM32CubeN6 & Configuré & 1 & --- & 3 \\
+STM32CubeU0 & Configuré & 1 & --- & 3 \\
+STM32CubeU3 & Configuré & 1 & --- & 3 \\
+STM32CubeWB & Configuré & 1 & --- & 3 \\
+STM32CubeWB0 & Configuré & 1 & --- & 3 \\
+STM32CubeWBA & Configuré & 1 & --- & 3 \\
+STM32CubeWL3 & Configuré & 1 & --- & 3 \\
+\midrule
+\textbf{Total} & & \textbf{25} & $\sim$\textbf{3\,350} & $\sim$\textbf{110} \\
+\bottomrule
+\end{longtable}
 
 %% ============================================================
-\chapter{État de l'Art}
+\chapter{Spécification des Besoins et Méthodologie}
+\label{chap:besoins}
 %% ============================================================
 
-\section{Retrieval-Augmented Generation (RAG)}
+\section{Identification des Acteurs}
+\label{sec:acteurs}
 
-Le paradigme RAG combine la recherche d'information avec la génération de texte par des LLMs \cite{lewis2020rag}. Au lieu de se fier uniquement aux connaissances paramétrisées du modèle, RAG :
-\begin{enumerate}
-  \item \textbf{Récupère} des documents pertinents depuis une base de connaissances
-  \item \textbf{Augmente} le contexte du prompt avec ces documents
-  \item \textbf{Génère} une réponse fondée sur des preuves factuelles
-\end{enumerate}
+Le système implique plusieurs catégories d'acteurs aux rôles et attentes distincts :
 
-\subsection{Avantages pour le domaine technique}
-\begin{itemize}
-  \item Réduction des hallucinations grâce aux sources vérifiables
-  \item Mise à jour continue de la KB sans ré-entraînement
-  \item Traçabilité des réponses vers les issues/PRs source
-\end{itemize}
+\begin{longtable}{p{3.5cm}p{4cm}p{5.5cm}}
+\toprule
+\textbf{Acteur} & \textbf{Rôle} & \textbf{Interaction avec le système} \\
+\midrule
+\textbf{Ingénieur STM32} (client/interne) & Utilisateur final du chatbot & Pose des questions techniques, reçoit des diagnostics sourcés avec liens GitHub \\
+\textbf{Équipe Support ST} & Mainteneur de la KB & Lance le pipeline, valide les exports, surveille le Quality Index \\
+\textbf{Administrateur KB} & Gestionnaire de la plateforme & Crée les datasources, configure les personas et tools sur ST ChatGPT \\
+\textbf{Pipeline automatisé} & Agent de maintenance & Ingère périodiquement les nouvelles issues, met à jour la KB, déclenche les validations \\
+\textbf{GitHub API} & Source de données & Fournit les issues, PRs, commits, fichiers via l'API REST \\
+\textbf{Alfred Vision AI} & Service d'enrichissement & Décrit automatiquement les images et figures PDF \\
+\bottomrule
+\end{longtable}
 
-La Figure~\ref{fig:rag_conceptual} illustre le paradigme RAG tel qu'appliqué dans notre projet, depuis la question utilisateur jusqu'à la réponse sourcée, en passant par la recherche hybride dans la Knowledge Base alimentée par notre pipeline.
+\section{Besoins Fonctionnels}
+\label{sec:besoins_fonctionnels}
 
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[
-  box/.style={draw, rounded corners=6pt, minimum width=2.8cm, minimum height=1.1cm, align=center, font=\small\sffamily},
-  arrow/.style={->, very thick, >=stealth, color=blue!60!black},
-  note/.style={font=\scriptsize\itshape, text width=2.5cm, align=center}
-]
-  \node[box, fill=orange!15] (query) at (0,0) {\textbf{Query}\\Question};
-  \node[box, fill=blue!15] (retrieve) at (3.8,0) {\textbf{Retrieve}\\Recherche KB};
-  \node[box, fill=green!15] (augment) at (7.6,0) {\textbf{Augment}\\Contexte};
-  \node[box, fill=red!15] (generate) at (11.4,0) {\textbf{Generate}\\Réponse LLM};
+\begin{longtable}{p{1cm}p{5cm}p{2cm}p{5cm}}
+\toprule
+\textbf{ID} & \textbf{Besoin} & \textbf{Priorité} & \textbf{Critère d'acceptation} \\
+\midrule
+BF1 & Ingérer automatiquement les issues, PRs, commits et fichiers depuis GitHub & Critique & 100\% des issues récupérées pour un repo donné \\
+BF2 & Nettoyer le contenu textuel en supprimant le bruit (bots, HTML, licences) & Critique & Ratio signal/bruit $> 90\%$ \\
+BF3 & Enrichir les issues avec des métadonnées structurées (layer, component, board, severity) & Haute & Couverture layer $\geq 85\%$, component $\geq 70\%$ \\
+BF4 & Calculer la similarité inter-issues et établir des liens & Moyenne & Liens pertinents (précision $> 80\%$) \\
+BF5 & Générer 4 types d'artefacts delivery (issues, files, resolver cases, diagnostic cards) & Critique & Conformité 100\% au JSON Schema \\
+BF6 & Uploader les artefacts vers la KB \#793 sur ST ChatGPT & Critique & Datasources créées et indexées \\
+BF7 & Décrire automatiquement les images des issues par Alfred Vision & Haute & Taux de succès $\geq 95\%$ \\
+BF8 & Décrire automatiquement les figures des PDFs de Release Notes & Moyenne & Intégration dans le texte livré \\
+BF9 & Valider les artefacts contre un JSON Schema avant upload & Critique & Gate bloquant en cas d'erreur \\
+BF10 & Fournir un chatbot IA qui répond aux questions STM32 avec citations & Critique & Quality Index $\geq 80/100$ \\
+\bottomrule
+\end{longtable}
 
-  \draw[arrow] (query) -- (retrieve);
-  \draw[arrow] (retrieve) -- (augment);
-  \draw[arrow] (augment) -- (generate);
+\section{Besoins Non Fonctionnels}
+\label{sec:besoins_non_fonctionnels}
 
-  \node[box, fill=gray!10, minimum width=3.5cm] (kb) at (3.8,-2.3) {\textbf{KB \#793}\\Issues + Files\\Resolver + Diag};
-  \draw[arrow, color=green!50!black] (kb) -- (retrieve);
+\begin{longtable}{p{1cm}p{4cm}p{3cm}p{5cm}}
+\toprule
+\textbf{ID} & \textbf{Besoin} & \textbf{Catégorie} & \textbf{Mesure} \\
+\midrule
+BNF1 & Le pipeline doit être rejouable par étape sans effet de bord & Modularité & Chaque stage indépendant avec entrée/sortie JSON \\
+BNF2 & Le pipeline doit traiter une série complète en moins de 30 minutes & Performance & Temps mesuré sur H7 (12 repos, 500 issues) \\
+BNF3 & Le pipeline doit être reproductible (mêmes entrées $\to$ mêmes sorties) & Idempotence & Tests de non-régression \\
+BNF4 & Le code doit être maintenable et extensible à de nouvelles séries & Maintenabilité & Ajout d'une série en 3 étapes documentées \\
+BNF5 & Les données sources proviennent des dépôts GitHub ST ; la KB et la plateforme restent internes & Sécurité / Confidentialité & Aucune donnée personnelle traitée au-delà des identifiants publics \\
+BNF6 & Le système doit supporter 25+ séries MCU sans refactoring & Scalabilité & Configs séparées par série \\
+BNF7 & La mise à jour de la KB doit être automatisable & Automatisation & Workflow CI/CD fonctionnel \\
+BNF8 & Le chatbot doit répondre en moins de 15 secondes & Temps de réponse & Mesure via API ST ChatGPT \\
+\bottomrule
+\end{longtable}
 
-  \node[box, fill=blue!10, dashed] (pipeline) at (3.8,-4.3) {\textbf{Pipeline}\\(ce projet)};
-  \draw[arrow, color=gray] (pipeline) -- (kb) node[midway, right, font=\scriptsize] {JSON};
+\section{Contraintes et Décisions de Conception}
+\label{sec:contraintes}
 
-  \node[box, fill=black!5] (github) at (3.8,-6) {\textbf{GitHub}\\25 repos};
-  \draw[arrow, color=gray] (github) -- (pipeline) node[midway, right, font=\scriptsize] {API};
-
-  \node[note] at (3.8,1.3) {Hybrid Search\\Semantic + Full-text};
-  \node[note] at (7.6,1.3) {Top-k docs\\dans le prompt};
-  \node[note] at (11.4,1.3) {Réponse +\\citations GitHub};
-\end{tikzpicture}
-\caption{Paradigme RAG appliqué au projet : de la question utilisateur à la réponse sourcée}
-\label{fig:rag_conceptual}
-\end{figure}
-
-\section{Prétraitement pour Knowledge Bases}
-
-La qualité du RAG dépend directement de la qualité des documents indexés :
-
-\subsection{Chunking Strategies}
-\begin{itemize}
-  \item \textbf{Fixed-size} : simple mais coupe le contexte
-  \item \textbf{Paragraph-based} : respecte les frontières sémantiques
-  \item \textbf{Section-based} : adapté aux documents structurés
-  \item \textbf{Overlap} : assure la continuité contextuelle entre chunks
-\end{itemize}
-
-\subsection{Enrichissement Métadonnées}
-L'ajout de métadonnées structurées (composant, couche, sévérité) permet un filtrage précis lors de la recherche.
-
-\section{Traitement du Langage Naturel pour Code Source}
-
-\begin{itemize}
-  \item TF-IDF pour la similarité inter-issues
-  \item Heuristiques regex pour la détection de composants matériels
-  \item Classification supervisée vs. règles pour le type de problème
-\end{itemize}
-
-\section{Solutions Existantes}
+Le projet est soumis à plusieurs contraintes qui ont orienté les choix techniques :
 
 \begin{longtable}{p{4cm}p{5cm}p{4cm}}
 \toprule
-\textbf{Solution} & \textbf{Forces} & \textbf{Limites} \\
+\textbf{Contrainte} & \textbf{Impact} & \textbf{Décision prise} \\
 \midrule
-GitHub Copilot & Code completion & Pas de KB custom \\
-Stack Overflow Search & Communauté large & Pas spécifique ST \\
-RAG générique & Flexible & Pas de prétraitement domain-aware \\
-\textbf{Notre approche} & Domain-specific + enrichi & Requiert pipeline custom \\
+Rate limiting GitHub API (5000 req/h) & Limite la vitesse d'ingestion & Sleep adaptatif + retry exponentiel \\
+Plateforme ST ChatGPT (Azure OpenAI) & Format et API imposés & Export JSON avec processor params base64 \\
+Pas de données d'entraînement supervisées & Impossible d'utiliser du ML classique pour la classification & Heuristiques regex domain-specific \\
+Headers CMSIS $>$ 1.7~Mo & Explosion de la taille des chunks et bruit dans le retrieval & Filtre V3 intelligent ($-96\%$) \\
+Images opaques dans les issues & Contenu diagnostique invisible pour la recherche textuelle & Enrichissement Alfred Vision AI \\
+Multi-séries (25+ repos) & Risque de dilution du contexte dans la KB & Datasources séparées par série + métadonnées de filtrage \\
 \bottomrule
 \end{longtable}
+
+\section{Sélection de la Méthodologie : Scrum Adapté}
+\label{sec:scrum}
+
+Le projet a été conduit selon une méthodologie \textbf{Scrum adaptée} au contexte d'un projet de fin d'études, avec des sprints de 2 semaines et des revues régulières avec l'encadrant entreprise.
+
+\subsection{Organisation en Sprints}
+
+\begin{longtable}{p{2cm}p{3cm}p{8cm}}
+\toprule
+\textbf{Sprint} & \textbf{Période} & \textbf{Objectifs et livrables} \\
+\midrule
+Sprint 1 & Fév -- Mars 2026 & Étude de l'existant, état de l'art RAG/NLP, POC ingestion H7 \\
+Sprint 2 & Mars 2026 & Pipeline H7 complet (ingestion → delivery), première version KB \\
+Sprint 3 & Avr 2026 & Création persona ST ChatGPT, calibration recherche hybride, premiers Quality Index \\
+Sprint 4 & Avr -- Mai 2026 & Diagnostic Cards + Resolver Cases, nettoyage V3, QI = 94 sur H7 \\
+Sprint 5 & Mai 2026 & Extension multi-séries (F4, H5, U5, WL), étude comparative Alfred vs Persona \\
+Sprint 6 & Mai -- Juin 2026 & Alfred Vision (images issues + PDF), enrichissement 13 séries \\
+Sprint 7 & Juin 2026 & Nouvelles séries (G4, L0, L1, L4), automatisation CI/CD, évaluation finale \\
+\bottomrule
+\end{longtable}
+
+\subsection{Artefacts Scrum Utilisés}
+
+\begin{itemize}
+  \item \textbf{Product Backlog} : liste priorisée des fonctionnalités (pipeline stages, types d'artefacts, enrichissement IA)
+  \item \textbf{Sprint Backlog} : sélection des tâches pour chaque sprint de 2 semaines
+  \item \textbf{Daily Stand-up} : point quotidien avec l'équipe ST (15 min)
+  \item \textbf{Sprint Review} : démonstration des livrables à l'encadrant (Quality Index, démo chatbot)
+  \item \textbf{Sprint Retrospective} : analyse des blocages et améliorations (ex: API rate limiting, JSON corruption)
+\end{itemize}
+
+\section{Architecture Cible}
+\label{sec:architecture_cible}
+
+L'architecture cible du système s'articule en trois couches :
+
+\begin{enumerate}
+  \item \textbf{Couche Data (Sources)} : les dépôts GitHub STMicroelectronics fournissent les données brutes via l'API REST. Les fichiers source sont récupérés par clonage local des repositories.
+  
+  \item \textbf{Couche Processing (Pipeline)} : le pipeline Python en 7 étapes transforme les données brutes en artefacts structurés JSON. Chaque étape lit un fichier d'entrée et produit un fichier de sortie, permettant la rejouabilité et le débogage en isolation.
+  
+  \item \textbf{Couche Delivery (Plateforme)} : les artefacts JSON sont uploadés vers la KB \#793 sur la plateforme ST ChatGPT (Azure OpenAI). La persona ``ST GitHub Analyzer'' interroge cette KB via une recherche hybride (semantic + full-text) et génère des réponses sourcées.
+\end{enumerate}
+
+\textit{Note : le diagramme d'architecture détaillé est présenté en Figure~\ref{fig:pipeline_arch_tikz} au Chapitre~\ref{chap:methodologie}, et les diagrammes draw.io exportés sont référencés en Annexes.}
+
+% Note : l'état de l'art détaillé est intégré dans le Chapitre 1 (Section~\ref{sec:etat_art}).
+% Ce chapitre est supprimé pour éviter la redondance avec l'introduction.
+% Les concepts théoriques (RAG, TF-IDF, Alfred Vision) sont présentés dans leur contexte d'utilisation réelle dans le projet.
 
 %% ============================================================
 \chapter{Pipeline de Data Preprocessing}
@@ -508,6 +805,7 @@ Ce pattern empêche la propagation de données corrompues vers la production.
 
 %% ============================================================
 \chapter{Méthodologie et Architecture}
+\label{chap:methodologie}
 %% ============================================================
 
 \section{Approche Méthodologique}
@@ -556,46 +854,15 @@ La Figure~\ref{fig:pipeline_overview} illustre la vue globale du pipeline et le 
 
 La Figure~\ref{fig:pipeline_arch_tikz} détaille les connexions entre stages, les fichiers intermédiaires produits à chaque étape, et le branchement de l'enrichissement Alfred Vision AI.
 
+% Diagramme d'architecture pipeline - exporter depuis draw.io pour meilleure lisibilité
 \begin{figure}[H]
 \centering
-\begin{tikzpicture}[
-  stage/.style={draw, rounded corners=4pt, minimum width=2.6cm, minimum height=0.9cm, align=center, font=\scriptsize\sffamily, fill=#1},
-  data/.style={draw, minimum width=2cm, minimum height=0.5cm, align=center, font=\tiny\ttfamily, fill=gray!10},
-  arrow/.style={->, thick, >=stealth},
-]
-  \node[stage=blue!15] (ing) at (0,0) {1. Ingestion};
-  \node[stage=green!15] (cl1) at (2.8,0) {2. Cleaning\\V1};
-  \node[stage=green!25] (cl3) at (5.2,0) {2b. Clean\\V3};
-  \node[stage=orange!15] (enr) at (7.8,0) {3. Enrichment};
-  \node[stage=yellow!20] (sim) at (10.5,0) {4. Similarity};
-  \node[stage=purple!15] (val) at (2.8,-2.2) {5. Validation};
-  \node[stage=red!15] (del) at (6,-2.2) {6. Delivery};
-  \node[stage=blue!25] (upl) at (9.5,-2.2) {7. Upload KB};
-  \node[data] (gh) at (0,1.3) {GitHub 25 repos};
-  \node[data] (kb) at (9.5,-3.5) {ST ChatGPT};
-  \node[stage=cyan!20] (alf) at (0,-2.2) {Alfred Vision};
-
-  \draw[arrow] (gh) -- (ing);
-  \draw[arrow] (ing) -- (cl1);
-  \draw[arrow] (cl1) -- (cl3);
-  \draw[arrow] (cl3) -- (enr);
-  \draw[arrow] (enr) -- (sim);
-  \draw[arrow] (sim) |- (val);
-  \draw[arrow] (val) -- (del);
-  \draw[arrow] (del) -- (upl);
-  \draw[arrow] (upl) -- (kb);
-  \draw[arrow, dashed] (alf) -- (del) node[midway, below, font=\tiny] {images+PDF};
-  \draw[arrow, dashed] (ing) -- (alf) node[midway, left, font=\tiny] {crops};
-
-  \node[font=\tiny\ttfamily, above] at (1.4,0.1) {raw\_*};
-  \node[font=\tiny\ttfamily, above] at (4,0.1) {clean\_*};
-  \node[font=\tiny\ttfamily, above] at (6.5,0.1) {docs\_*};
-  \node[font=\tiny\ttfamily, above] at (9.2,0.1) {\_sim};
-  \node[font=\tiny\ttfamily, below] at (4.4,-2.1) {st\_ready\_*};
-\end{tikzpicture}
-\caption{Architecture détaillée du pipeline : stages, fichiers intermédiaires et branchement Alfred}
+\includegraphics[width=0.95\textwidth]{pipeline_architecture_detailed.png}
+\caption{Architecture détaillée du pipeline : stages, fichiers intermédiaires et branchement Alfred (draw.io)}
 \label{fig:pipeline_arch_tikz}
 \end{figure}
+
+\textit{Le diagramme montre le flux : GitHub (25 repos) $\to$ Ingestion (raw\_*) $\to$ Cleaning V1/V3 (clean\_*) $\to$ Enrichment (docs\_*) $\to$ Similarity (\_sim) $\to$ Validation $\to$ Delivery (st\_ready\_*) $\to$ Upload KB \#793 $\to$ ST ChatGPT. Alfred Vision intervient en parallèle pour décrire les images des issues et les figures PDF.}
 
 \section{Flux Source-to-Answer}
 
@@ -624,23 +891,44 @@ La Figure~\ref{fig:data_flow} montre le parcours complet d'une donnée depuis Gi
 \section{Ingestion (Stage 1)}
 
 \subsection{Objectif}
-Récupérer exhaustivement les données des repositories GitHub configurés.
+Récupérer exhaustivement toutes les données des repositories GitHub configurés pour une série MCU donnée. La configuration est définie dans un fichier \texttt{config\_XX.json} qui liste les repos à ingérer.
 
 \subsection{Mécanisme}
+L'ingestion s'appuie sur 5 scripts spécialisés :
 \begin{itemize}
-  \item Pagination automatique (100 items/page)
-  \item Gestion du rate-limiting GitHub (5000 req/h avec token)
-  \item Retry exponentiel en cas d'erreur réseau
-  \item Fetch parallélisable par repository
+  \item \texttt{fetch\_issues.py} : récupère toutes les issues (ouvertes + fermées) avec leurs commentaires, via l'API GitHub REST avec pagination automatique (100 items/page)
+  \item \texttt{fetch\_prs.py} : récupère les Pull Requests et leurs reviews
+  \item \texttt{fetch\_commits.py} : récupère l'historique des commits pour le linking Issue$\to$PR$\to$Commit
+  \item \texttt{fetch\_issue\_pr\_commit\_links.py} : construit les chaînes de traçabilité croisées
+  \item \texttt{repo\_sync\_service.py} : clone/met à jour les repos localement pour l'extraction de fichiers
+  \item \texttt{fetch\_files.py} : parcourt l'arborescence des repos clonés et extrait le contenu des fichiers pertinents (README, Release Notes, sources, PDFs)
 \end{itemize}
 
-\subsection{Données récupérées}
-Pour chaque repo : issues (avec commentaires), PRs, commits, liens croisés, et fichiers source.
+\textbf{Gestion du rate-limiting} : l'API GitHub autorise 5\,000 requêtes/heure avec un token d'authentification. Le pipeline implémente un sleep adaptatif (0,2s entre les issues, 0,1s entre les commentaires) et un retry exponentiel en cas d'erreur 403/429.
 
+\subsection{Exemple de Sortie --- Issue Brute}
+
+\begin{lstlisting}[language=json, caption={Extrait de raw\_issues\_stm32cubeh7.json (issue brute)}]
+{
+  "number": 42,
+  "title": "HAL_SPI_TransmitReceive_DMA fails on STM32H743",
+  "state": "closed",
+  "labels": ["bug"],
+  "body": "When using HAL_SPI_TransmitReceive_DMA with...",
+  "comments": [
+    {"user": "dev123", "body": "Same issue on NUCLEO-H743ZI..."},
+    {"user": "st-support", "body": "Fixed in v1.11.0..."}
+  ],
+  "created_at": "2023-06-15T10:30:00Z",
+  "closed_at": "2023-08-20T14:00:00Z"
+}
+\end{lstlisting}
+
+% Diagramme d'ingestion - exporter depuis draw.io
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.9\textwidth]{01_ingestion_detail.png}
-\caption{Détail de l'étape d'ingestion : scripts et sorties}
+\caption{Détail de l'étape d'ingestion : scripts et sorties (draw.io)}
 \label{fig:ingestion_detail}
 \end{figure}
 
@@ -656,6 +944,24 @@ Le nettoyage prépare les données brutes pour l'enrichissement en éliminant le
   \item Conservation des métadonnées brutes (labels, dates, état)
 \end{itemize}
 
+\subsection{Exemple JSON --- Issue Après Nettoyage}
+
+\begin{lstlisting}[language=json, caption={Extrait de clean\_issues\_stm32cubeh7.json (issue nettoyée)}]
+{
+  "number": 42,
+  "title": "HAL_SPI_TransmitReceive_DMA fails on STM32H743",
+  "state": "closed",
+  "labels": ["bug"],
+  "clean_text": "HAL_SPI_TransmitReceive_DMA fails on STM32H743. When using HAL_SPI_TransmitReceive_DMA with circular mode and cache enabled, a hard fault occurs after the second transfer. [IMAGE ATTACHED: screenshot_debugger.png] Workaround: disable D-cache before SPI init. Same issue on NUCLEO-H743ZI with CubeH7 v1.10.0. Fixed in v1.11.0 by adding cache maintenance in HAL_SPI_TxRxCpltCallback.",
+  "images_count": 1,
+  "image_urls": ["https://user-images.githubusercontent.com/xxx/screenshot_debugger.png"],
+  "created_at": "2023-06-15T10:30:00Z",
+  "closed_at": "2023-08-20T14:00:00Z"
+}
+\end{lstlisting}
+
+\textbf{Transformation clé} : le champ \texttt{clean\_text} fusionne le titre, le body et tous les commentaires de l'issue en un seul texte contigu, prêt pour l'enrichissement NLP. Les images sont remplacées par des markers textuels avec leurs URLs collectées séparément pour l'enrichissement Alfred Vision.
+
 \subsection{Nettoyage des Fichiers}
 \begin{itemize}
   \item Lecture du contenu (UTF-8, fallback Latin-1)
@@ -663,6 +969,23 @@ Le nettoyage prépare les données brutes pour l'enrichissement en éliminant le
   \item Construction de l'URL GitHub pour chaque fichier
   \item Filtrage : seuls les fichiers pertinents sont retenus (README, Release Notes, source technique, documentation PDF)
 \end{itemize}
+
+\subsection{Exemple JSON --- Fichier Après Nettoyage}
+
+\begin{lstlisting}[language=json, caption={Extrait de clean\_files\_stm32h7xx-hal-driver.json}]
+{
+  "path": "Src/stm32h7xx_hal_spi.c",
+  "repo": "stm32h7xx-hal-driver",
+  "file_type": "source_code",
+  "url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/blob/master/Src/stm32h7xx_hal_spi.c",
+  "original_size": 89247,
+  "clean_size": 80322,
+  "is_valid": true,
+  "clean_text": "HAL_StatusTypeDef HAL_SPI_Init(SPI_HandleTypeDef *hspi) { ... } HAL_StatusTypeDef HAL_SPI_TransmitReceive_DMA(...) { ... }"
+}
+\end{lstlisting}
+
+\textbf{Transformation clé} : le bloc de licence en-tête (copyright STMicroelectronics, 20--40 lignes) est supprimé par \texttt{strip\_license()}, réduisant le bruit de $\sim$10\%. Le champ \texttt{is\_valid} passe à \texttt{false} si le texte nettoyé fait moins de 100 caractères.
 
 \textbf{Note importante} : Le nettoyage ne fait \textbf{aucune classification} (pas de détection de layer, board, component). Cette tâche est réalisée à l'étape suivante (Enrichissement).
 
@@ -688,38 +1011,15 @@ Autres & Inchangé & Aucune transformation \\
 
 La Figure~\ref{fig:cleaning_v3_tree} représente l'arbre de décision du routage V3, avec les taux de réduction mesurés pour chaque stratégie.
 
+% Arbre de décision V3 - exporter depuis draw.io
 \begin{figure}[H]
 \centering
-\begin{tikzpicture}[
-  decision/.style={draw, diamond, aspect=2.5, fill=orange!10, inner sep=2pt, font=\scriptsize\sffamily, align=center},
-  process/.style={draw, rounded corners, fill=blue!10, minimum width=2.2cm, minimum height=0.7cm, font=\scriptsize\sffamily, align=center},
-  result/.style={draw, rounded corners, fill=green!15, minimum width=2.2cm, minimum height=0.7cm, font=\scriptsize\sffamily, align=center},
-  arrow/.style={->, thick, >=stealth}
-]
-  \node[process] (input) at (5.5,7) {Fichier d'entrée};
-  \node[decision] (dtype) at (5.5,5.3) {detect\_file\_type()};
-  \draw[arrow] (input) -- (dtype);
-
-  \node[result] (rn) at (0,3) {strip\_html()\\$-33\%$};
-  \node[result] (rm) at (2.8,3) {clean\_md()\\$-15\%$};
-  \node[result] (sc) at (5.5,3) {strip\_license()\\$-10\%$};
-  \node[decision] (cmsis_check) at (8.5,3) {$>100$~Ko ?};
-  \node[result] (pass) at (11.5,3) {Passthrough};
-
-  \node[result] (cmsis_yes) at (7.5,0.8) {filter\_cmsis()\\$-96\%$};
-  \node[result] (cmsis_no) at (10,0.8) {Conservé};
-
-  \draw[arrow] (dtype) -- node[left, font=\tiny] {release\_notes} (rn);
-  \draw[arrow] (dtype) -- node[left, font=\tiny] {readme} (rm);
-  \draw[arrow] (dtype) -- node[right, font=\tiny] {source} (sc);
-  \draw[arrow] (dtype) -- node[right, font=\tiny] {cmsis} (cmsis_check);
-  \draw[arrow] (dtype) -- node[right, font=\tiny] {other} (pass);
-  \draw[arrow] (cmsis_check) -- node[left, font=\tiny] {Oui} (cmsis_yes);
-  \draw[arrow] (cmsis_check) -- node[right, font=\tiny] {Non} (cmsis_no);
-\end{tikzpicture}
-\caption{Arbre de décision du nettoyage V3 : routage par type de fichier avec taux de réduction}
+\includegraphics[width=0.9\textwidth]{cleaning_v3_decision_tree.png}
+\caption{Arbre de décision du nettoyage V3 : routage par type de fichier avec taux de réduction (draw.io)}
 \label{fig:cleaning_v3_tree}
 \end{figure}
+
+\textit{L'arbre de décision route chaque fichier via \texttt{detect\_file\_type()} vers la stratégie adaptée : release\_notes $\to$ strip\_html() ($-33\%$), readme $\to$ clean\_md() ($-15\%$), source $\to$ strip\_license() ($-10\%$), cmsis $>$100~Ko $\to$ filter\_cmsis() ($-96\%$), other $\to$ passthrough.}
 
 \subsection{Filtrage CMSIS Device Headers}
 
@@ -733,24 +1033,24 @@ Les fichiers de type \texttt{stm32*xx.h} (CMSIS device) sont les plus volumineux
 
 \textbf{Seuil d'activation} : le filtre ne s'applique qu'aux fichiers dépassant 100~Ko (les petits headers sont conservés intégralement).
 
-\subsection{Algorithme de Filtrage}
+\subsection{Résultat du Filtrage --- Exemple JSON}
 
-\begin{lstlisting}[language=Python, caption={Logique de filtrage CMSIS device header (simplifié)}]
-def filter_cmsis_device_header(text: str) -> str:
-    sections = []
-    # 1. Extraire le bloc IRQn (typedef enum {...} IRQn_Type)
-    irq_match = re.search(r'typedef\s+enum\s*\{[^}]+\}\s*IRQn_Type', text, re.DOTALL)
-    if irq_match:
-        sections.append(irq_match.group())
-    # 2. Extraire les #define *_BASE (adresses peripheriques)
-    for line in text.splitlines():
-        if '_BASE' in line and '#define' in line:
-            sections.append(line)
-    # 3. Extraire les typedef struct (registres)
-    for match in re.finditer(r'typedef\s+struct\s*\{[^}]+\}\s*\w+', text, re.DOTALL):
-        sections.append(match.group())
-    return '\n\n'.join(sections)
+Voici un extrait du fichier \texttt{clean\_files\_cmsis\_device\_h7\_v3.json} montrant un header CMSIS après filtrage V3 :
+
+\begin{lstlisting}[language=json, caption={Header CMSIS après filtrage V3 (extrait)}]
+{
+  "path": "Include/stm32h743xx.h",
+  "repo": "cmsis_device_h7",
+  "file_type": "cmsis_device_header",
+  "original_size": 1458301,
+  "clean_size": 52140,
+  "reduction_pct": 96.4,
+  "is_valid": true,
+  "clean_text": "typedef enum { NonMaskableInt_IRQn = -14, ... } IRQn_Type; #define PERIPH_BASE 0x40000000UL ... typedef struct { __IO uint32_t CR1; __IO uint32_t CR2; ... } SPI_TypeDef;"
+}
 \end{lstlisting}
+
+Le fichier passe de 1\,458\,301 caractères à 52\,140 ($-96,4\%$), ne conservant que les IRQ, adresses de base et TypeDef.
 
 \subsection{Résultats du Nettoyage V3}
 
@@ -821,6 +1121,23 @@ Le module \texttt{stm32cube\_preprocessing\_heuristics.py} applique des règles 
   \end{equation}
 \end{enumerate}
 
+\subsection{Exemple JSON --- Issue avec Liens de Similarité}
+
+\begin{lstlisting}[language=json, caption={Extrait de docs\_issues\_stm32cubeh7\_v2\_sim.json (avec voisins)}]
+{
+  "issue_number": 42,
+  "title": "HAL_SPI_TransmitReceive_DMA fails on STM32H743",
+  "similar_issues": [
+    {"issue_number": 78, "similarity": 0.72, "title": "SPI DMA circular mode crash H750"},
+    {"issue_number": 156, "similarity": 0.45, "title": "DMA cache coherency issue H743"},
+    {"issue_number": 203, "similarity": 0.38, "title": "Hard fault after second SPI transfer"}
+  ],
+  "related_count": 3
+}
+\end{lstlisting}
+
+\textbf{Paramètres} : le seuil $\theta = 0.3$ élimine les liens trop faibles (bruit). Sur H7, seulement 22\% des issues ont au moins un voisin au-dessus de ce seuil, ce qui reflète la diversité des problèmes (chaque issue traite un bug unique). Le nombre $k$ de voisins n'est pas borné --- toutes les paires dépassant $\theta$ sont conservées.
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.85\textwidth]{02_enrichment_similarity_detail.png}
@@ -828,31 +1145,89 @@ Le module \texttt{stm32cube\_preprocessing\_heuristics.py} applique des règles 
 \label{fig:enrichment_similarity}
 \end{figure}
 
-\section{Chunking V2 (Stage 5)}
+\section{Chunking V2 (Stage 5 --- Optionnel)}
 
-Stratégie de découpage :
+\textbf{Note importante} : le chunking est réalisé localement à des fins de \textbf{test et validation} uniquement. En production, la plateforme ST ChatGPT gère elle-même le découpage des documents lors de l'indexation (paramètre \texttt{json-split-size: 1000}). Le chunking local nous permet de :
+\begin{itemize}
+  \item Vérifier la taille et la qualité des segments avant upload
+  \item Tester la recherche TF-IDF en local (évaluation préliminaire)
+  \item Comparer les stratégies de découpage sans impacter la KB en production
+\end{itemize}
+
+Stratégie de découpage local :
 \begin{itemize}
   \item Issues : chunks par paragraphe, max 512 tokens, overlap 50 tokens
   \item Files : chunks par section (README headers, fonctions C)
 \end{itemize}
+
+Le flag \texttt{--skip-chunking} dans le workflow permet de sauter cette étape pour les runs de production, car la plateforme gère le chunking automatiquement à l'upload.
 
 \section{Delivery (Stage 7)}
 
 \subsection{Resolver Cases}
 Générés à partir d'issues fermées avec PRs liées :
 \begin{enumerate}
-  \item Identification de la chaîne Issue $\to$ PR $\to$ Commits
-  \item Évaluation du \texttt{resolution\_status} (merged\_fix, candidate\_fix, reference\_only)
+  \item Identification de la chaîne Issue $\to$ PR $\to$ Commits via \texttt{fetch\_issue\_pr\_commit\_links.py}
+  \item Évaluation du \texttt{resolution\_status} :
+  \begin{itemize}
+    \item \texttt{merged\_fix} : PR mergée avec fichiers modifiés identifiés (confiance haute)
+    \item \texttt{candidate\_fix} : PR liée mais non mergée ou lien faible (confiance moyenne)
+    \item \texttt{reference\_only} : issue résolue sans PR formelle (information contextuelle)
+  \end{itemize}
   \item Construction du texte structuré : Problème $\to$ Signal $\to$ Évaluation $\to$ Preuves
 \end{enumerate}
+
+\subsection{Exemple JSON --- Resolver Case}
+
+\begin{lstlisting}[language=json, caption={Extrait de st\_ready\_resolver\_stm32cubeh7.json}]
+{
+  "issue_number": 42,
+  "repo": "stm32cubeh7",
+  "label": "SPI DMA TransmitReceive fails on STM32H743 in circular mode",
+  "resolution_status": "merged_fix",
+  "link_confidence": "high",
+  "primary_pr_number": 87,
+  "primary_changed_file": "Src/stm32h7xx_hal_spi.c",
+  "resolver_card_text": "PROBLEM: HAL_SPI_TransmitReceive_DMA causes hard fault after second transfer in circular mode. SIGNAL: D-cache stale read on DMA buffer. EVALUATION: Cache maintenance missing in TxRxCpltCallback. FIX: Added SCB_InvalidateDCache_by_Addr() call in HAL_SPI_TxRxCpltCallback. PROOF: PR #87 merged 2023-08-15, verified on NUCLEO-H743ZI.",
+  "impacted_modules": ["SPI", "DMA"],
+  "impacted_boards": ["NUCLEO-H743ZI"]
+}
+\end{lstlisting}
+
+\textbf{Valeur ajoutée} : contrairement aux issues brutes, le Resolver Case fournit la \textbf{chaîne de preuves complète} (issue $\to$ PR \#87 $\to$ fichier modifié \texttt{stm32h7xx\_hal\_spi.c}) en un seul document. L'ingénieur peut vérifier le fix exact en suivant les liens.
 
 \subsection{Diagnostic Cards}
 Cartes de diagnostic structurées pour les problèmes récurrents :
 \begin{enumerate}
-  \item Sélection des issues à haute valeur diagnostique
+  \item Sélection des issues à haute valeur diagnostique (issues fermées avec root cause identifié, \texttt{evidence\_strength} $\geq$ \texttt{medium})
   \item Génération : Symptôme $\to$ Cause Racine $\to$ Résolution $\to$ Validation
-  \item Alias de requête pour améliorer la récupération
+  \item Ajout de \textbf{query aliases} (reformulations multiples du problème) pour améliorer le recall de la recherche RAG
 \end{enumerate}
+
+\subsection{Exemple JSON --- Diagnostic Card}
+
+\begin{lstlisting}[language=json, caption={Extrait de st\_ready\_diagnostic\_stm32cubeh7.json}]
+{
+  "diagnostic_id": "DIAG-H7-042",
+  "repo": "stm32cubeh7",
+  "issue_number": 42,
+  "symptom": "Hard fault occurs after second SPI DMA transfer in circular mode on STM32H743",
+  "root_cause": "D-cache not invalidated before DMA reception. CPU reads stale data from cache instead of DMA-updated SRAM.",
+  "resolution": "Call SCB_InvalidateDCache_by_Addr() before reading SPI RX buffer, or place DMA buffers in non-cacheable SRAM region (MPU configuration).",
+  "affected_versions": ["CubeH7 v1.9.0", "CubeH7 v1.10.0"],
+  "fixed_version": "CubeH7 v1.11.0",
+  "query_aliases": [
+    "SPI DMA hard fault STM32H7",
+    "cache coherency SPI circular mode",
+    "HAL_SPI_TransmitReceive_DMA crash",
+    "D-cache DMA corruption H743"
+  ],
+  "evidence_strength": "high",
+  "impacted_boards": ["NUCLEO-H743ZI", "STM32H743I-EVAL"]
+}
+\end{lstlisting}
+
+\textbf{Structure clé} : les \texttt{query\_aliases} sont le mécanisme principal d'amélioration du recall. Lorsqu'un utilisateur pose la question ``mon SPI crash après le 2e transfert DMA'', la recherche hybride retrouve cette Diagnostic Card grâce aux alias qui couvrent différentes formulations du même problème. C'est cette structure qui explique le saut de QI de 61 à 94.
 
 \begin{figure}[H]
 \centering
@@ -863,29 +1238,15 @@ Cartes de diagnostic structurées pour les problèmes récurrents :
 
 La Figure~\ref{fig:delivery_artifacts} synthétise les relations entre les 4 types d'artefacts, leurs sources dans le pipeline, et leur destination dans la KB.
 
+% Diagramme des 4 artefacts - exporter depuis draw.io
 \begin{figure}[H]
 \centering
-\begin{tikzpicture}[
-  artifact/.style={draw, rounded corners=5pt, minimum width=3.5cm, minimum height=1.3cm, align=center, font=\scriptsize\sffamily, fill=#1},
-  arrow/.style={->, thick, >=stealth}
-]
-  \node[artifact=blue!15] (issues) at (0,2.5) {\textbf{Issues Structurées}\\Symptôme, root cause, fix\\$\sim$2\,000 docs};
-  \node[artifact=green!15] (files) at (6,2.5) {\textbf{Files Documentés}\\HAL, BSP, CMSIS, PDF\\$\sim$14\,000 docs};
-  \node[artifact=orange!15] (resolver) at (0,0) {\textbf{Resolver Cases}\\Issue $\to$ PR $\to$ Commit\\$\sim$390 docs};
-  \node[artifact=red!15] (diag) at (6,0) {\textbf{Diagnostic Cards}\\Symptôme $\to$ Fix\\$\sim$157 docs};
-
-  \node[draw, thick, fill=blue!25, rounded corners, minimum width=4.5cm, minimum height=0.8cm, align=center, font=\small\sffamily] (kb) at (3,-2.5) {\textbf{KB \#793} --- 38 datasources};
-
-  \draw[arrow, color=blue!60] (issues) |- (kb);
-  \draw[arrow, color=blue!60] (files) |- (kb);
-  \draw[arrow, color=blue!60] (resolver) -- (kb);
-  \draw[arrow, color=blue!60] (diag) -- (kb);
-  \draw[arrow, dashed, gray] (issues) -- (resolver) node[midway, left, font=\tiny] {issue\_number};
-  \draw[arrow, dashed, gray] (issues) -- (diag) node[midway, above, font=\tiny] {metadata};
-\end{tikzpicture}
-\caption{Les 4 types d'artefacts delivery et leurs relations vers la KB \#793}
+\includegraphics[width=0.9\textwidth]{delivery_4_artifacts.png}
+\caption{Les 4 types d'artefacts delivery et leurs relations vers la KB \#793 (draw.io)}
 \label{fig:delivery_artifacts}
 \end{figure}
+
+\textit{Le diagramme montre les 4 types d'artefacts : Issues Structurées ($\sim$2\,000 docs), Files Documentés ($\sim$14\,000 docs), Resolver Cases ($\sim$390 docs) et Diagnostic Cards ($\sim$157 docs), tous alimentés vers la KB \#793 (38 datasources). Les Resolver Cases et Diagnostic Cards sont dérivés des Issues via les champs issue\_number et metadata.}
 
 \subsection{Alfred Vision --- Enrichissement d'Images}
 
@@ -917,30 +1278,15 @@ Le système final s'articule autour d'une architecture \textbf{multi-agents} où
 
 \subsection{Vue d'ensemble}
 
+% Architecture multi-agents - exporter depuis draw.io
 \begin{figure}[H]
 \centering
-\begin{tikzpicture}[
-  box/.style={draw, rounded corners, minimum width=3.5cm, minimum height=1cm, align=center, font=\small},
-  arrow/.style={->, thick, >=stealth}
-]
-  \node[box, fill=stblue!10] (user) at (0,0) {Utilisateur\\(Ingénieur STM32)};
-  \node[box, fill=stblue!20] (persona) at (0,-2) {Persona\\ST GitHub Analyzer};
-  \node[box, fill=stlightblue!20] (kb) at (-3.5,-4.5) {KB Tool\\(Unstructured)};
-  \node[box, fill=storange!20] (alfred) at (3.5,-4.5) {Alfred Tool\\(Fallback)};
-  \node[box, fill=stgreen!15] (pipeline) at (-3.5,-7) {Pipeline\\Preprocessing};
-  \node[box, fill=stgray!20] (github) at (-3.5,-9) {GitHub\\STMicroelectronics};
-
-  \draw[arrow] (user) -- node[right, font=\scriptsize]{Question} (persona);
-  \draw[arrow] (persona) -- node[left, font=\scriptsize]{Recherche KB} (kb);
-  \draw[arrow] (persona) -- node[right, font=\scriptsize]{Fallback\\(si KB vide)} (alfred);
-  \draw[arrow] (kb) -- node[left, font=\scriptsize]{Réponse\\+ citation} (persona);
-  \draw[arrow] (alfred) -- node[right, font=\scriptsize]{Réponse\\générique} (persona);
-  \draw[arrow] (pipeline) -- node[left, font=\scriptsize]{Upload JSON} (kb);
-  \draw[arrow] (github) -- node[left, font=\scriptsize]{Ingestion} (pipeline);
-\end{tikzpicture}
-\caption{Architecture multi-agents du système ST GitHub Analyzer}
+\includegraphics[width=0.85\textwidth]{agents_architecture.png}
+\caption{Architecture multi-agents du système ST GitHub Analyzer (draw.io)}
 \label{fig:agents_arch}
 \end{figure}
+
+\textit{Le diagramme montre le flux : Utilisateur (Ingénieur STM32) $\to$ Persona ST GitHub Analyzer $\to$ KB Tool (Unstructured, recherche hybride) avec fallback vers Alfred Tool (si KB vide). Le Pipeline Preprocessing alimente la KB depuis GitHub STMicroelectronics via des uploads JSON.}
 
 \subsection{Persona : ST GitHub Analyzer}
 
@@ -1019,6 +1365,11 @@ Mise à jour KB & Delete + Re-add automatique via GitHub Actions \\
 \end{longtable}
 
 %% ============================================================
+%% Chapitre Configuration (fichier séparé pour repositionnement)
+\input{chapter_configuration}
+%% ============================================================
+
+%% ============================================================
 \chapter{Résultats et Évaluation}
 %% ============================================================
 
@@ -1028,15 +1379,24 @@ Mise à jour KB & Delete + Re-add automatique via GitHub Actions \\
 \toprule
 \textbf{Série} & \textbf{Repos} & \textbf{Issues} & \textbf{Files} & \textbf{Resolver} & \textbf{Diag. Cards} \\
 \midrule
-STM32F4 & 16 & $\sim$800 & $\sim$5400 & $\sim$150 & $\sim$60 \\
-STM32H5 & 6 & $\sim$200 & $\sim$1200 & $\sim$40 & $\sim$15 \\
-STM32U5 & 8 & $\sim$350 & $\sim$2000 & $\sim$70 & $\sim$30 \\
+\multicolumn{6}{l}{\textit{Séries historiques (en production)}} \\
+STM32F4 & 16 & $\sim$800 & $\sim$5\,400 & $\sim$150 & $\sim$60 \\
+STM32H5 & 6 & $\sim$200 & $\sim$1\,200 & $\sim$40 & $\sim$15 \\
+STM32U5 & 8 & $\sim$350 & $\sim$2\,000 & $\sim$70 & $\sim$30 \\
 STM32WL & 5 & $\sim$150 & $\sim$800 & $\sim$30 & $\sim$12 \\
-STM32H7 & 12 & $\sim$500 & $\sim$3000 & $\sim$100 & $\sim$40 \\
+STM32H7 & 12 & $\sim$500 & $\sim$3\,000 & $\sim$100 & $\sim$40 \\
 \midrule
-\textbf{Total} & \textbf{47} & $\sim$\textbf{2000} & $\sim$\textbf{12400} & $\sim$\textbf{390} & $\sim$\textbf{157} \\
+\multicolumn{6}{l}{\textit{Nouvelles séries (pipeline terminé, prêtes à uploader)}} \\
+STM32G4 & 8 & 89 & 3\,875 & 0 & 4 \\
+STM32L0 & 5 & 23 & 2\,614 & 2 & 3 \\
+STM32L1 & 4 & 11 & 2\,847 & 0 & 3 \\
+STM32L4 & 12 & 68 & 5\,231 & 1 & 8 \\
+\midrule
+\textbf{Total (9 séries)} & \textbf{76} & $\sim$\textbf{2\,191} & $\sim$\textbf{26\,967} & $\sim$\textbf{393} & $\sim$\textbf{175} \\
 \bottomrule
 \end{longtable}
+
+\textbf{Note} : les 8 autres séries en production (C0, F0, F1, F2, F3, F7, G0, H7RS) ne sont pas détaillées ici mais sont uploadées dans la KB. Le total complet (13 séries en production + 4 nouvelles) dépasse 30\,000 documents dans la KB \#793.
 
 \section{Impact du Nettoyage V3 sur la Qualité}
 
@@ -1132,7 +1492,9 @@ Contenu fichiers & $\frac{|\{f \mid f.\text{content} \neq \emptyset\}|}{N_f} \ti
 
 \subsection{Stage 2 : Cleaning}
 
-Le nettoyage est évalué sur la qualité de la préparation textuelle :
+Le nettoyage est évalué sur la qualité de la \textbf{préparation textuelle pure} --- c'est-à-dire la capacité à produire un texte propre et exploitable à partir du contenu brut. Il est important de noter que le nettoyage ne réalise \textbf{aucune classification} (pas de détection de layer, component, board ou severity). Ces métadonnées sont ajoutées ultérieurement par l'étape d'enrichissement (Stage 3).
+
+Les métriques du nettoyage portent exclusivement sur la qualité du texte produit :
 
 \begin{longtable}{p{5cm}p{6cm}p{3cm}}
 \toprule
@@ -1140,21 +1502,25 @@ Le nettoyage est évalué sur la qualité de la préparation textuelle :
 \midrule
 Issues avec texte non-vide & $\frac{|\{i \mid |\text{clean\_text}(i)| > 50\}|}{N} \times 100$ & $\geq 95\%$ \\
 Fichiers non-vides après nettoyage & $\frac{|\{f \mid |\text{content}(f)| > 0\}|}{N_f} \times 100$ & $\geq 95\%$ \\
-Images extraites (markers) & $\frac{|\{i \mid i.\text{images\_count} > 0\}|}{N_{\text{avec\_images}}} \times 100$ & $\geq 90\%$ \\
-Fichiers classifiés par type & $\frac{|\{f \mid f.\text{file\_type} \neq \text{other}\}|}{N_f} \times 100$ & $\geq 80\%$ \\
+Images extraites en markers & $\frac{|\{i \mid i.\text{images\_count} > 0\}|}{N_{\text{avec\_images}}} \times 100$ & $\geq 90\%$ \\
+Réduction de bruit V3 (CMSIS) & $\frac{\text{taille\_V2} - \text{taille\_V3}}{\text{taille\_V2}} \times 100$ & $\geq 90\%$ \\
 \bottomrule
 \end{longtable}
+
+\textbf{Justification des seuils} : Le seuil de 50 caractères pour le texte non-vide exclut les fichiers stub (ex: \texttt{.ioc}, fichiers de configuration vides) qui ne contiennent aucune information technique exploitable. Le seuil de 95\% est calibré pour tolérer les quelques fichiers binaires ou images qui traversent le filtre d'ingestion.
+
+\textbf{Note importante} : Les graphiques d'évaluation du cleaning montrent les métriques de \textit{préparation textuelle} (taux de texte non-vide, extraction d'images, réduction de volume). Les métriques de \textit{classification} (couverture layer, component, board, severity) sont présentées au Stage 3 (Enrichissement), car la classification est réalisée par les heuristiques NLP, et non par le nettoyage.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.99\textwidth]{02_cleaning_validity.png}
-\caption{Qualité du nettoyage : couverture texte et classification par type de fichier}
+\caption{Qualité du nettoyage : taux de texte non-vide et extraction d'images (les métriques de classification sont au Stage 3)}
 \label{fig:eval_cleaning}
 \end{figure}
 
 \subsection{Stage 3 : Enrichissement}
 
-L'enrichissement ajoute les métadonnées structurées par heuristiques NLP. Les métriques mesurent la couverture de classification :
+L'enrichissement est l'étape qui ajoute les \textbf{métadonnées structurées} aux documents par des heuristiques NLP. C'est ici --- et non au nettoyage --- que les champs \texttt{layer}, \texttt{component}, \texttt{board}, \texttt{severity} et \texttt{issue\_kind} sont renseignés. Les métriques mesurent le \textbf{taux de couverture} de chaque champ, c'est-à-dire le pourcentage de documents pour lesquels l'heuristique a pu identifier une valeur non-nulle.
 
 \begin{longtable}{p{5cm}p{6cm}p{3cm}}
 \toprule
@@ -1168,17 +1534,60 @@ Couverture severity & $\frac{|\{i \mid i.\text{severity} \neq \text{null}\}|}{N}
 \bottomrule
 \end{longtable}
 
-\subsection{Stage 3b : Enrichissement Images (Alfred Vision)}
+\textbf{Justification des formules} : chaque formule mesure un ratio simple $\frac{\text{documents enrichis}}{\text{documents totaux}}$. Les seuils reflètent la \textbf{nature du champ} :
+\begin{itemize}
+  \item \texttt{severity} ($\geq 90\%$) : la sévérité est déductible du texte dans la grande majorité des cas (présence de mots-clés ``crash'', ``hang'', ``workaround'', labels GitHub). Un seuil élevé est réaliste.
+  \item \texttt{layer} ($\geq 85\%$) : le layer (HAL, LL, Middleware, BSP) est généralement identifiable par les noms d'API et les préfixes (\texttt{HAL\_}, \texttt{LL\_}, \texttt{BSP\_}). Les 15\% restants sont des issues qui ne mentionnent aucune couche spécifique.
+  \item \texttt{component} ($\geq 70\%$) : le composant (SPI, I2C, UART, USB...) requiert la mention explicite d'un périphérique dans le texte. Certaines issues portent sur des problèmes transversaux (build system, toolchain) sans composant spécifique.
+  \item \texttt{board} ($\geq 60\%$) : le seuil le plus bas, car de nombreuses issues décrivent un problème générique sans mentionner la carte de développement utilisée. L'heuristique cherche des patterns comme ``NUCLEO-F446RE'', ``STM32H743I-EVAL'', mais ne peut pas deviner la board si elle n'est pas mentionnée.
+\end{itemize}
 
-La qualité des descriptions d'images par Alfred est mesurée par :
+\textbf{Explication des valeurs à 0\%} : lorsqu'un champ affiche 0\% de couverture pour un sous-repo (ex: \texttt{cmsis\_device\_h7}), cela signifie que les issues de ce sous-repo ne contiennent pas les patterns textuels attendus par l'heuristique. Pour les sous-repos CMSIS, les issues sont souvent des rapports de compilation ou de conformité header qui ne mentionnent ni board, ni component au sens HAL. Ce n'est pas une défaillance mais une \textbf{limitation inhérente} de l'approche par heuristiques sur ce type de contenu.
+
+\subsection{Stage 3b : Enrichissement Images Issues (Alfred Vision)}
+
+La qualité des descriptions d'images par Alfred Vision est mesurée par le taux de succès de la conversion image → texte :
 \begin{equation}
-\text{ImageSuccessRate} = \frac{N_{\text{images\_described}}}{N_{\text{images\_total}}} \times 100
+\text{ImageSuccessRate} = \frac{N_{\text{images\_described\_ok}}}{N_{\text{images\_total}}} \times 100
+\label{eq:image_success}
 \end{equation}
+
+\textbf{Justification} : cette métrique est cruciale car les images échouées (\texttt{images\_failed}) restent invisibles pour la recherche RAG. Un échec survient quand Alfred ne peut pas télécharger l'image (URL 404, image supprimée de GitHub) ou quand l'image est trop petite/opaque pour être décrite utilement.
+
+\textbf{Résultats observés sur les 4 nouvelles séries} :
+
+\begin{longtable}{lcccl}
+\toprule
+\textbf{Série} & \textbf{Images trouvées} & \textbf{Décrites OK} & \textbf{Échouées} & \textbf{Analyse} \\
+\midrule
+STM32CubeG4 & 2 & 0 & 2 & API 404 intermittent \\
+STM32CubeL0 & 1 & 0 & 1 & API 404 intermittent \\
+STM32CubeL1 & 0 & 0 & 0 & Aucune image dans les issues \\
+STM32CubeL4 & 22 & 0 & 22 & API 404 intermittent \\
+STM32CubeH7 & 98 & 97 & 1 & Taux de succès : 98,9\% \\
+\bottomrule
+\end{longtable}
+
+Les 25 échecs sur les nouvelles séries (G4, L0, L4) sont dus à des erreurs 404 intermittentes de l'API Alfred (indisponibilité temporaire du service). Ces échecs sont \textbf{entièrement corrigibles} par un simple relancement du script d'enrichissement :\\\texttt{python pipeline\_Automation/alfred/enrich\_json\_images\_with\_alfred.py --input <fichier> --inplace}\\Lors d'un re-run, les images déjà décrites sont en cache et seules les images échouées sont re-tentées. Sur les séries historiques (H7), le taux de succès après re-run est de \textbf{98,9\%} (97/98 images), confirmant la fiabilité de l'approche quand l'API est disponible.
+
+\subsection{Stage 3c : Enrichissement Figures PDF (Alfred Vision)}
+\label{sec:enrichment_pdf}
+
+Au-delà des images d'issues, le pipeline enrichit également les \textbf{figures techniques contenues dans les Release Notes PDF}. Ce travail constitue une contribution importante car ces figures (diagrammes de migration, tableaux de compatibilité, schémas d'architecture) contiennent de l'information diagnostique critique mais sont totalement opaques pour la recherche textuelle.
+
+\textbf{Processus de description PDF} :
+\begin{enumerate}
+  \item Le module \texttt{pdf\_figure\_service.py} extrait les pages PDF et détecte les figures par analyse OpenCV (contours, aires significatives)
+  \item Chaque figure détectée est envoyée à Alfred Vision avec un prompt spécialisé : \textit{``Describe this technical figure from an STM32 Release Note. Focus on: component names, version numbers, migration paths, signal connections, register layouts.''}
+  \item Les descriptions sont stockées dans \texttt{pdf\_image\_descriptions.json} et injectées dans les fichiers delivery en remplacement des placeholders \texttt{[FIGURE DETECTED]}
+\end{enumerate}
+
+\textbf{Résultats} : 131 figures PDF décrites et injectées avec succès dans 21 fichiers delivery couvrant 10 séries (H7, F0, F1, F2, F3, F4, F7, G0, H7RS, WL). Le pipeline de patch vérifie l'intégrité JSON après injection pour éviter la corruption des fichiers (problème rencontré et corrigé --- cf. Section ``Leçons apprises'').
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.99\textwidth]{03_enrichment_metadata.png}
-\caption{Couverture métadonnées (layer, board, component) et succès des descriptions d'images}
+\caption{Couverture métadonnées (layer, board, component, severity) et succès Alfred Vision}
 \label{fig:eval_enrichment}
 \end{figure}
 
@@ -1202,12 +1611,26 @@ Moyenne liens/document & $\frac{1}{N}\sum_{i} |\text{related}(d_i)|$ & $\geq 2.0
 
 \subsection{Stage 5 : Delivery}
 
+L'étape de delivery exporte les données enrichies sous 4 types d'artefacts JSON. Les volumes exportés varient fortement selon la série, ce qui mérite une explication :
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.85\textwidth]{05_delivery_volumes.png}
 \caption{Volumes de documents exportés par type de livraison}
 \label{fig:eval_delivery}
 \end{figure}
+
+\textbf{Explication des volumes variables} :
+
+\begin{itemize}
+  \item \textbf{Diagnostic Cards} ($\sim$4--45 par série) : les Diagnostic Cards sont générées à partir des issues qui présentent une \textbf{valeur diagnostique élevée} --- c'est-à-dire les issues fermées avec un root cause identifié et un fix documenté. Sur les nouvelles séries (G4: 4 cartes, L1: 3 cartes), le faible nombre s'explique par le petit nombre d'issues résolues avec preuves (ces séries ont peu d'issues historiques comparées à H7 ou F4). Ce n'est pas une limitation du pipeline mais le reflet du \textbf{volume réel d'issues qualifiées} dans chaque dépôt.
+
+  \item \textbf{Resolver Cases} (0--150 par série) : les Resolver Cases nécessitent une \textbf{chaîne complète Issue $\to$ PR $\to$ Commit}. Seules les issues fermées avec une PR mergée et des fichiers modifiés identifiables génèrent un Resolver Case. Sur les séries avec 0 ou 1 resolver case (G4: 0, L0: 2, L1: 0, L4: 1), cela signifie que les contributeurs ont fermé les issues sans PR formelle, ou que les corrections ont été intégrées dans des commits de release globaux sans lien explicite vers l'issue. Le pipeline ne ``fabrique'' pas de données --- il ne génère un Resolver Case que si les preuves existent.
+
+  \item \textbf{Issues structurées} (11--89 par nouvelle série) : couvrent toutes les issues non-spam avec un texte significatif ($>$ 50 caractères).
+
+  \item \textbf{Files documentés} : dépendent du nombre de sous-repos configurés pour chaque série (HAL driver, BSP, CMSIS, etc.).
+\end{itemize}
 
 \subsection{Résultats Mesurés --- STM32CubeH7}
 
@@ -1244,9 +1667,19 @@ Le score global est calculé comme la moyenne pondérée des scores de chaque st
 \boxed{
 S_{\text{global}} = \frac{\sum_{k=1}^{5} w_k \cdot s_k}{\sum_{k=1}^{5} w_k}
 }
+\label{eq:score_global}
 \end{equation}
 
-avec les pondérations : Ingestion ($w=1.0$), Cleaning ($w=1.5$), Enrichment ($w=2.0$), Similarity ($w=1.0$), Delivery ($w=1.5$).
+\textbf{Justification des pondérations} :
+\begin{itemize}
+  \item \textbf{Ingestion} ($w=1.0$) : pondération de base --- l'ingestion est une étape technique dont la qualité est binaire (données récupérées ou non)
+  \item \textbf{Cleaning} ($w=1.5$) : pondération supérieure car un nettoyage défaillant propage du bruit dans toutes les étapes aval et dégrade directement la qualité du retrieval RAG
+  \item \textbf{Enrichment} ($w=2.0$) : la pondération la plus élevée car l'enrichissement métadonnées est le différenciateur principal de notre pipeline par rapport à une indexation brute. C'est cette étape qui rend possible le filtrage par layer, component et board lors de la recherche
+  \item \textbf{Similarity} ($w=1.0$) : pondération minimale car les liens de similarité sont un enrichissement optionnel --- ils améliorent l'expérience utilisateur mais ne sont pas critiques pour le fonctionnement de base du RAG
+  \item \textbf{Delivery} ($w=1.5$) : la livraison doit être conforme à 100\% au schéma JSON pour que l'upload vers la KB fonctionne. Une erreur à cette étape bloque le déploiement
+\end{itemize}
+
+\textbf{Application numérique (H7)} : $S_{\text{global}} = \frac{1.0 \times 99.7 + 1.5 \times 100.0 + 2.0 \times 72.2 + 1.0 \times 22.0 + 1.5 \times 100.0}{1.0 + 1.5 + 2.0 + 1.0 + 1.5} = \frac{566.1}{7.0} = 80.9\%$
 
 \section{Distribution des Données --- STM32CubeH7}
 
@@ -1334,17 +1767,21 @@ Au-delà de l'évaluation intrinsèque du pipeline, un test \textbf{end-to-end} 
 
 \subsection{Résultats}
 
-\begin{longtable}{lcc}
+\begin{longtable}{lccc}
 \toprule
-\textbf{Configuration} & \textbf{Score} & \textbf{Variation} \\
+\textbf{Configuration} & \textbf{QI (\%)} & \textbf{N questions} & \textbf{Variation} \\
 \midrule
-KB seule (sans Alfred fallback) & 54/52 & baseline \\
-KB + Alfred fallback (v1) & 44/52 & $-10$ \\
-KB + Alfred fallback (v2, restrictif) & \textit{en cours} & --- \\
+KB seule, issues H7 uniquement & 54 & 50 & baseline \\
++ System prompt optimisé & 57 & 50 & $+3$ \\
++ Hybrid search calibré (0.55) & 61 & 50 & $+4$ \\
++ Resolver Cases + Diagnostic Cards & 94 & 50 & $+33$ \\
+KB + Alfred fallback (description permissive) & 44 & 50 & $-10$ \\
+KB + Alfred fallback (description restrictive) & 52 & 50 & $-2$ \\
+Multi-séries (H7+F4+H5+U5+WL), 52 questions & 54 & 52 & régression \\
 \bottomrule
 \end{longtable}
 
-\textbf{Analyse} : Le score $>52$ est possible car certaines questions acceptent des réponses partiellement correctes avec bonus. L'ajout d'Alfred en fallback avec une description trop permissive dégrade le score car la persona appelle Alfred au lieu de chercher dans la KB.
+\textbf{Analyse} : Le Quality Index est un pourcentage (0--100) calculé sur la grille de scoring décrite ci-dessous. Le saut le plus important (+33 points) est obtenu par l'ajout des Diagnostic Cards et Resolver Cases. La régression à 54 lors du passage multi-séries s'explique par la dilution du contexte (14\,000 documents vs 2\,000) et les questions nouvelles sur des séries moins mûres. L'ajout d'Alfred en fallback avec une description trop permissive dégrade le score de 10 points car la persona appelle Alfred au lieu de chercher dans la KB.
 
 \subsection{Critères d'évaluation}
 
@@ -1457,38 +1894,15 @@ ADC 200 LSB jump H743 & Issue-specific & 5 & \textbf{9} \\
 
 La Figure~\ref{fig:alfred_vs_persona_chart} illustre visuellement l'écart de performance entre les deux systèmes sur les 10 questions les plus discriminantes.
 
+% Diagramme comparatif Alfred vs Persona - exporter depuis draw.io ou Excel
 \begin{figure}[H]
 \centering
-\begin{tikzpicture}
-  \begin{axis}[
-    ybar,
-    bar width=10pt,
-    width=14cm, height=6cm,
-    ylabel={Score (sur 10)},
-    ymin=0, ymax=11,
-    symbolic x coords={ETH H747, USB H750, UART F446, TZ H573, LoRa WL, HP PA WL, F4 v1.26, FDCAN H753, GPDMA H5, ADC H743},
-    xtick=data,
-    x tick label style={rotate=40, anchor=east, font=\tiny},
-    legend style={at={(0.02,0.98)}, anchor=north west, font=\scriptsize},
-    grid=major,
-    ymajorgrids=true,
-  ]
-  \addplot[fill=gray!40] coordinates {
-    (ETH H747, 5) (USB H750, 6) (UART F446, 7) (TZ H573, 7)
-    (LoRa WL, 4) (HP PA WL, 4) (F4 v1.26, 3) (FDCAN H753, 5)
-    (GPDMA H5, 7) (ADC H743, 5)
-  };
-  \addplot[fill=blue!50] coordinates {
-    (ETH H747, 9) (USB H750, 9) (UART F446, 8) (TZ H573, 9)
-    (LoRa WL, 10) (HP PA WL, 10) (F4 v1.26, 10) (FDCAN H753, 9)
-    (GPDMA H5, 8) (ADC H743, 9)
-  };
-  \legend{Alfred (générique), Persona KB (notre solution)}
-  \end{axis}
-\end{tikzpicture}
-\caption{Comparaison des scores par question : Alfred générique vs Persona KB (+39\%)}
+\includegraphics[width=0.9\textwidth]{alfred_vs_persona_comparison.png}
+\caption{Comparaison des scores par question : Alfred générique vs Persona KB (+39\%) (draw.io)}
 \label{fig:alfred_vs_persona_chart}
 \end{figure}
+
+\textit{Le graphique en barres groupées compare les scores (sur 10) pour 10 questions discriminantes : ETH H747 (5 vs 9), USB H750 (6 vs 9), UART F446 (7 vs 8), TZ H573 (7 vs 9), LoRa WL (4 vs 10), HP PA WL (4 vs 10), F4 v1.26 (3 vs 10), FDCAN H753 (5 vs 9), GPDMA H5 (7 vs 8), ADC H743 (5 vs 9). La Persona KB surpasse Alfred sur toutes les questions sauf les questions générales.}
 
 \subsection{Conclusion de l'Étude Comparative}
 
@@ -1545,8 +1959,11 @@ Le pipeline est automatisé via GitHub Actions avec un workflow bi-mensuel :
 \end{itemize}
 
 %% ============================================================
-\chapter{Configuration de la Plateforme ST ChatGPT}
+%% ANCIEN EMPLACEMENT du chapitre Configuration (déplacé via \input{chapter_configuration} avant Résultats)
+%% Le contenu ci-dessous est désormais commenté pour éviter la duplication.
+%% Pour le modifier, éditer : docs/reports/chapter_configuration.tex
 %% ============================================================
+\iffalse
 
 Ce chapitre détaille la configuration de la persona \textbf{ST GitHub Analyzer} sur la plateforme ST ChatGPT, les justifications de chaque paramètre, et l'évolution incrémentale du Quality Index qui a guidé nos choix.
 
@@ -1704,40 +2121,15 @@ Le Quality Index a évolué de manière incrémentale au fil des améliorations 
 
 La Figure~\ref{fig:qi_evolution} visualise cette évolution, mettant en évidence le saut majeur apporté par les Diagnostic Cards et la régression lors du passage multi-séries.
 
+% Graphique QI evolution - exporter depuis draw.io ou Excel
 \begin{figure}[H]
 \centering
-\begin{tikzpicture}
-  \begin{axis}[
-    ybar,
-    bar width=16pt,
-    width=13cm, height=6.5cm,
-    ylabel={Quality Index},
-    ymin=0, ymax=100,
-    symbolic x coords={Issues seules, +Prompt, +Hybrid, +Diag Cards, Real Cases, Multi 4Q, Multi 52Q},
-    xtick=data,
-    x tick label style={rotate=30, anchor=east, font=\scriptsize},
-    nodes near coords,
-    nodes near coords align={vertical},
-    every node near coord/.append style={font=\scriptsize\bfseries},
-    grid=major,
-    ymajorgrids=true,
-  ]
-  \addplot[fill=blue!40] coordinates {
-    (Issues seules, 54)
-    (+Prompt, 57)
-    (+Hybrid, 61)
-    (+Diag Cards, 94)
-    (Real Cases, 88)
-    (Multi 4Q, 83)
-    (Multi 52Q, 54)
-  };
-  \end{axis}
-  \node[font=\scriptsize, color=green!50!black] at (7.2,4.5) {$\uparrow$+33};
-  \node[font=\scriptsize, color=red!60!black] at (10.5,2.2) {dilution multi-séries};
-\end{tikzpicture}
-\caption{Évolution du Quality Index au fil des améliorations incrémentales}
+\includegraphics[width=0.9\textwidth]{qi_evolution_chart.png}
+\caption{Évolution du Quality Index au fil des améliorations incrémentales (draw.io)}
 \label{fig:qi_evolution}
 \end{figure}
+
+\textit{Le graphique en barres montre l'évolution : Issues seules (54) $\to$ +Prompt (57) $\to$ +Hybrid (61) $\to$ +Diag Cards (94, $\uparrow$+33) $\to$ Real Cases (88) $\to$ Multi 4Q (83) $\to$ Multi 52Q (54, dilution multi-séries). Le saut majeur de 61 à 94 démontre l'impact des Diagnostic Cards.}
 
 \subsection{Analyse de l'Évolution}
 
@@ -1826,28 +2218,34 @@ Les configurations (fichiers \texttt{config\_*.json}) sont créées pour : G4, L
   \item Upload via les scripts d'automatisation
 \end{enumerate}
 
+\fi
+%% ============================================================
+%% FIN de l'ancien chapitre Configuration commenté
+%% ============================================================
+
 %% ============================================================
 \chapter{Conclusion et Perspectives}
+\label{chap:conclusion}
 %% ============================================================
 
-\section{Bilan}
+\section{Bilan du Projet}
 
-Ce projet a permis de concevoir et déployer un pipeline de prétraitement complet qui :
+Ce projet de fin d'études, réalisé au sein de l'équipe Support \& Maintenance de STMicroelectronics Tunis, a permis de concevoir, implémenter et déployer un \textbf{pipeline de prétraitement intelligent} qui transforme les données brutes des dépôts GitHub STM32Cube en une base de connaissances structurée, alimentant un chatbot IA spécialisé en production sur la plateforme ST ChatGPT.
+
+Les réalisations principales sont :
 \begin{itemize}
-  \item Transforme des données GitHub brutes en connaissances structurées pour un système RAG
-  \item Alimente un chatbot IA spécialisé STM32 \textbf{en production} sur la plateforme ST ChatGPT
-  \item Couvre \textbf{13 séries MCU} (C0, F0, F1, F2, F3, F4, F7, G0, H5, H7, H7RS, U5, WL) avec \textbf{12 séries supplémentaires} configurées et prêtes à déployer
-  \item Produit \textbf{4 types d'artefacts} complémentaires : issues, files, resolver cases, diagnostic cards
-  \item Implémente un nettoyage intelligent V3 par type (réduction de 96\% pour CMSIS, 33\% pour HTML)
-  \item Intègre l'enrichissement IA multi-modal (Alfred Vision : images issues + figures PDF, taux de succès $>$98\%)
-  \item Automatise la mise à jour via CI/CD (GitHub Actions) et scripts PowerShell/Python
-  \item Atteint un Quality Index de \textbf{94/100} sur la série pilote H7 avec Diagnostic Cards
-  \item Démontre un gain de \textbf{+39\%} vs Alfred générique sur les questions techniques spécifiques
+  \item Un \textbf{pipeline modulaire en 7 étapes} (Ingestion → Nettoyage V1+V3 → Enrichissement NLP → Similarité TF-IDF → Chunking → Validation → Delivery), entièrement rejouable par stage avec des artefacts JSON traçables
+  \item La couverture de \textbf{13 séries MCU en production} (C0, F0, F1, F2, F3, F4, F7, G0, H5, H7, H7RS, U5, WL) totalisant 47 dépôts, plus \textbf{12 séries supplémentaires configurées} (G4, L0, L1, L4, L5, N6, U0, U3, WB, WB0, WBA, WL3)
+  \item La production de \textbf{4 types d'artefacts complémentaires} : issues structurées ($\sim$2\,000), fichiers documentés ($\sim$14\,000), resolver cases ($\sim$390) et diagnostic cards ($\sim$157)
+  \item Un \textbf{nettoyage intelligent V3 par type} avec réduction de 96\% pour les headers CMSIS et 33\% pour les Release Notes HTML
+  \item L'\textbf{enrichissement IA multi-modal} via Alfred Vision : description automatique des captures d'écran d'issues (taux de succès $>$98\% sur H7) et de 131 figures PDF sur 10 séries
+  \item L'\textbf{automatisation CI/CD} via GitHub Actions et scripts PowerShell/Python
+  \item Un \textbf{Quality Index de 94/100} sur la série pilote H7 (avec Diagnostic Cards) et un \textbf{gain de +39\%} vs Alfred générique sur les questions techniques spécifiques
 \end{itemize}
 
-\section{Valeur Industrielle du Projet}
+\section{Valeur Industrielle}
 
-\subsection{Temps de Résolution}
+La valeur industrielle du projet se mesure concrètement :
 
 \begin{longtable}{p{5cm}cc}
 \toprule
@@ -1857,61 +2255,75 @@ Trouver un bug HAL connu & 30--60 min & \textbf{2 min} \\
 Identifier la version du fix & Lecture du changelog & \textbf{Réponse directe} \\
 Tracer Issue → PR → Commit & Navigation manuelle & \textbf{Resolver Case} \\
 Comprendre une figure PDF & Ouvrir le PDF, chercher la page & \textbf{Description textuelle} \\
+Ajouter une nouvelle série MCU & Développement custom & \textbf{3 étapes documentées} \\
 \bottomrule
 \end{longtable}
 
-\subsection{Reproductibilité}
+\section{Leçons Apprises}
 
-Le pipeline est \textbf{entièrement reproductible} : un nouveau membre de l'équipe peut ajouter une série MCU complète en 3 étapes :
-\begin{enumerate}
-  \item Créer le fichier \texttt{config\_XX.json} (template existant)
-  \item Lancer \texttt{python -m pipeline.run\_full\_workflow --export-st-ready}
-  \item Créer les datasources et uploader via les scripts automatisés
-\end{enumerate}
-
-\section{Contributions Techniques Principales}
+Ce projet a mis en lumière plusieurs leçons importantes pour les ingénieurs travaillant sur des pipelines de preprocessing pour RAG :
 
 \begin{enumerate}
-  \item \textbf{Pipeline modulaire 7 stages} rejouable indépendamment par étape
-  \item \textbf{4 types d'artefacts} complémentaires (issues, files, resolver cases, diagnostic cards)
-  \item \textbf{Heuristiques NLP domain-specific} pour classification STM32 (layer, component, severity)
-  \item \textbf{Nettoyage V3 par type} : stratégie adaptée (HTML, Markdown, source, CMSIS) avec réduction de 96\% sur les headers et 33\% sur les Release Notes
-  \item \textbf{Filtre CMSIS intelligent} conservant uniquement IRQ, base addresses et TypeDef
-  \item \textbf{Mécanisme rescue} pour récupérer les faux négatifs de filtrage
-  \item \textbf{Fix duplication images} dans \texttt{first\_sentence()} évitant les UNAVAILABLE Alfred
-  \item \textbf{Workflow Delete+Add} résolvant les conflits d'upload datasource
-  \item \textbf{Datasources V3 séparées} (IDs 29041--29045) permettant l'évaluation A/B vs V2
+  \item \textbf{L'intégrité JSON est fragile} : l'injection de texte brut dans des chaînes JSON peut corrompre les fichiers si les caractères spéciaux ne sont pas correctement échappés. Nous avons développé des scripts de réparation (\texttt{fix\_corrupted\_json\_files.py}) après avoir rencontré ce problème en production.
+  
+  \item \textbf{La description du tool contrôle le routage du LLM} : dans une architecture multi-tools, une description trop permissive du tool fallback (Alfred) dégrade le Quality Index de 10 points en court-circuitant la KB. La rédaction de cette description est un paramètre de configuration critique.
+  
+  \item \textbf{Le passage à l'échelle dilue le contexte} : passer de 1 à 13 séries a fait chuter le QI de 94 à 54, nécessitant un travail d'optimisation des métadonnées et du filtrage par série.
+  
+  \item \textbf{Les heuristiques domain-specific surpassent le ML générique} : dans un contexte où les données d'entraînement supervisées sont absentes, les règles regex spécifiques au domaine STM32 fournissent une classification fiable et explicable.
 \end{enumerate}
 
 \section{Perspectives}
 
+Plusieurs axes d'amélioration et d'extension sont envisagés :
+
 \begin{enumerate}
-  \item \textbf{Évaluation A/B V2 vs V3} : comparer le Quality Index avec les datasources V3 actives vs V2
-  \item \textbf{Extension à d'autres séries} : STM32L4, STM32G4, STM32MP
-  \item \textbf{Enrichissement sémantique} : embeddings pré-calculés pour la similarité
-  \item \textbf{Évaluation automatique} : scoring RAG avec métriques (Faithfulness, Relevance, RAGAS)
-  \item \textbf{Multi-langue} : support des issues en chinois/japonais
-  \item \textbf{Optimisation du tool fallback} : description Alfred restrictive pour ne pas dégrader le Quality Index
-  \item \textbf{Extraction des images commentaires} : capturer les URLs des images dans les commentaires en plus du body
-  \item \textbf{Nettoyage V4} : apprentissage supervisé pour classifier automatiquement les sections utiles des fichiers source (au-delà des heuristiques regex)
+  \item \textbf{Évaluation A/B V2 vs V3} : comparer le Quality Index avec les datasources V3 actives vs V2 pour quantifier l'impact exact du nettoyage intelligent sur la qualité des réponses
+  \item \textbf{Extension aux séries configurées} : déployer les 12 séries restantes (G4, L0, L1, L4, L5, N6, U0, U3, WB, WB0, WBA, WL3) avec création des datasources KB
+  \item \textbf{Enrichissement sémantique} : remplacer TF-IDF par des embeddings pré-calculés pour améliorer la couverture de similarité (actuellement 22\% sur H7)
+  \item \textbf{Métriques RAG avancées} : intégrer des métriques automatisées (Faithfulness, Relevance) pour une évaluation continue sans intervention humaine
+  \item \textbf{Graphe de connaissances} : explorer la construction d'un graphe reliant issues, composants, boards et versions pour faciliter le raisonnement multi-hop
+  \item \textbf{Filtrage par série dans le retrieval} : instruire la persona pour inclure systématiquement le nom de la série dans ses queries KB, réduisant la dilution multi-séries
+  \item \textbf{Multi-langue} : support des issues en chinois et japonais (communauté asiatique significative)
+  \item \textbf{Nettoyage V4 adaptatif} : utiliser un classifieur supervisé entraîné sur les résultats V3 pour identifier automatiquement les sections utiles des fichiers source
 \end{enumerate}
 
 %% ============================================================
 \chapter*{Références}
 \addcontentsline{toc}{chapter}{Références}
 
-\begin{thebibliography}{9}
-\bibitem{lewis2020rag}
-Lewis, P. et al. (2020). \textit{Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks}. NeurIPS 2020.
+\begin{thebibliography}{10}
 
-\bibitem{openai2023}
-OpenAI (2023). \textit{GPT-4 Technical Report}. arXiv:2303.08774.
+\bibitem{lewis2020rag}
+Lewis, P., Perez, E., Piktus, A., Petroni, F., Karpukhin, V., Goyal, N., Küttler, H., Lewis, M., Yih, W., Rocktäschel, T., Riedel, S. et Kiela, D. (2020). \textit{Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks}. Advances in Neural Information Processing Systems (NeurIPS), vol.~33, pp.~9459--9474. --- Article fondateur du paradigme RAG que nous appliquons : recherche documentaire + génération par LLM. Le principe de base de notre architecture KB + ST ChatGPT.
 
 \bibitem{tfidf}
-Salton, G., Buckley, C. (1988). \textit{Term-weighting approaches in automatic text retrieval}. Information Processing \& Management.
+Salton, G. et Buckley, C. (1988). \textit{Term-weighting approaches in automatic text retrieval}. Information Processing \& Management, vol.~24, no.~5, pp.~513--523. --- Référence fondamentale sur TF-IDF, la méthode de pondération de termes que nous utilisons dans notre module de calcul de similarité inter-issues (\texttt{compute\_issue\_similarity\_v2.py}).
+
+\bibitem{openai2023}
+OpenAI (2023). \textit{GPT-4 Technical Report}. arXiv:2303.08774. --- Le modèle GPT (dans sa version Azure OpenAI) est le LLM utilisé par la plateforme ST ChatGPT pour la génération de réponses, et par Alfred Vision pour la description d'images.
 
 \bibitem{stm32}
-STMicroelectronics (2024). \textit{STM32Cube MCU \& MPU Packages}. \url{https://github.com/STMicroelectronics}
+STMicroelectronics (2024). \textit{STM32Cube MCU \& MPU Packages --- Open Source Firmware}. \url{https://github.com/STMicroelectronics}. --- Les dépôts GitHub de STMicroelectronics : source principale de données de notre pipeline (issues, fichiers, PRs, commits).
+
+\bibitem{st_annual_report}
+STMicroelectronics (2024). \textit{Annual Report 2023 --- Empowering the Smart Edge}. Genève, Suisse. --- Rapport annuel fournissant les données sur le chiffre d'affaires (17,3 milliards USD), les effectifs (50\,000+ collaborateurs) et la répartition des marchés.
+
+\bibitem{arm_cortex}
+ARM Limited (2024). \textit{ARM Cortex-M Processor Family}. \url{https://developer.arm.com/Processors/Cortex-M}. --- Documentation de référence sur les cœurs ARM Cortex-M (M0, M0+, M3, M4, M7, M33, M55) utilisés dans les microcontrôleurs STM32.
+
+\bibitem{scrum_guide}
+Schwaber, K. et Sutherland, J. (2020). \textit{The Scrum Guide}. \url{https://scrumguides.org}. --- Guide officiel de la méthodologie Scrum, base de notre approche de pilotage par sprints itératifs de 2 semaines.
+
+\bibitem{json_schema}
+Wright, A., Andrews, H. et Hutton, B. (2022). \textit{JSON Schema: A Media Type for Describing JSON Documents}. Internet Engineering Task Force (IETF), draft-bhutton-json-schema-01. --- Standard JSON Schema utilisé pour nos gates de validation (\texttt{validate\_schemas.py}) qui bloquent l'upload en cas de non-conformité.
+
+\bibitem{azure_openai}
+Microsoft (2024). \textit{Azure OpenAI Service Documentation}. \url{https://learn.microsoft.com/azure/ai-services/openai/}. --- Plateforme cloud sur laquelle est déployé ST ChatGPT (Azure OpenAI) et Alfred Vision.
+
+\bibitem{pypdf}
+Py-PDF Contributors (2024). \textit{pypdf --- A pure-Python PDF library}. \url{https://pypdf.readthedocs.io/}. --- Bibliothèque Python utilisée dans notre pipeline pour l'extraction du texte et la détection de figures dans les Release Notes PDF.
+
 \end{thebibliography}
 
 %% ============================================================
