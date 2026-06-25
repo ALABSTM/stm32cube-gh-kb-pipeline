@@ -9,7 +9,7 @@ def load_all_repos() -> list[str]:
     seen: set[str] = set()
     all_repos: list[str] = []
     for cfg_file in sorted(CONFIG_DIR.glob("config*.json")):
-        cfg = json.loads(cfg_file.read_text(encoding="utf-8"))
+        cfg = json.loads(cfg_file.read_text(encoding="utf-8-sig"))
         for repo in cfg.get("repos", []):
             if repo not in seen:
                 seen.add(repo)

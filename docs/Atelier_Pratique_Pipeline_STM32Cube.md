@@ -85,6 +85,24 @@ Chaque série STM32 a un fichier de config sous `shared/config/config_<serie>.js
 
 ### 3.1 Workflow complet (une série)
 
+Commande recommandée atelier (pipeline + Alfred + upload KB en one-shot) :
+
+```powershell
+.\pipeline_Automation\workflow\Run_Single_Series_Full_Pipeline_And_Upload.ps1 -Series H7
+```
+
+Mode debug en 2 temps :
+
+```powershell
+# 1) Préparer tous les artefacts localement
+.\pipeline_Automation\workflow\Run_Single_Series_Full_Pipeline_And_Upload.ps1 -Series H7 -Mode Prepare
+
+# 2) Uploader vers KB après validation locale
+.\pipeline_Automation\workflow\Run_Single_Series_Full_Pipeline_And_Upload.ps1 -Series H7 -Mode Upload
+```
+
+Workflow Python direct (utile pour debug d'un stage précis) :
+
 ```powershell
 $env:STM32CUBE_CONFIG = "shared/config/config_h7.json"
 python -m pipeline.run_full_workflow --export-st-ready --continue-on-error
@@ -144,7 +162,11 @@ python pipeline_Automation/alfred/enrich_json_images_with_alfred.py `
   --inplace --use-proxy
 ```
 
-**Le fichier résultant** : `st_ready_issues_with_images_<repo>_with_alfred_image_text.json`
+**Le fichier résultant (version finale)** :
+`datasets/07_delivery/st_ready/by_series/stm32cubeh7/issues_json/st_ready_issues_with_images_stm32cubeh7.json`
+
+**Résumé Alfred généré** :
+`datasets/07_delivery/st_ready/by_series/stm32cubeh7/issues_json/st_ready_issues_with_images_stm32cubeh7__alfred_summary.json`
 
 > ⚠️ Seules les séries avec des images dans les issues ont un fichier `with_images`. Si le fichier n'existe pas, la série n'a pas d'images → pas besoin d'Alfred.
 
@@ -170,6 +192,17 @@ python pipeline_Automation/alfred/enrich_pdf_figures_with_alfred.py --repo STM32
 ---
 
 ## 5. Upload vers la Knowledge Base
+
+### 5.0 Commande atelier recommandée (mise à jour)
+
+Pour l'atelier pratique, utiliser en priorité le script workflow qui gère parent + drivers + validations + upload :
+
+```powershell
+.\pipeline_Automation\workflow\Run_Single_Series_Full_Pipeline_And_Upload.ps1 -Series H7
+```
+
+Le script sauvegarde automatiquement les IDs créés dans :
+`datasets/07_delivery/st_ready/by_series/stm32cubeh7/upload_datasource_ids_stm32cubeh7.json`
 
 ### 5.1 Architecture de la KB
 
@@ -317,3 +350,36 @@ python pipeline_Automation/upload/Get_Persona_KBs.py
 - **KB Management** : Interface web ST ChatGPT → Knowledge Bases → #793
 - **Persona** : "ST GitHub Analyzer" / client `mdrf_st_github_analyzer`
 - **Repo GitHub** : `github.com/abirGharbi-st/PFE_Chatbot_STM32Cube`
+
+---
+
+## 10. Slide prête — Démo Alfred (2 exemples H7)
+
+### Slide A — Exemple 1 (Issue #335)
+
+- Issue: How to resolve observed warning when -Wcast-align flag is used during compile time
+- Avant intégration: texte issue avec capture d'écran attachée
+- Après intégration dans `st_ready_text`:
+  `[IMAGE DESCRIPTION] Screenshot of an Eclipse/STM32CubeIDE project properties window on the Tool Settings tab...`
+- Description Alfred stockée en structuré (`image_analyses[0].description`):
+  `Screenshot of an Eclipse/STM32CubeIDE project properties or tool settings page focused on MCU/MPU GCC Linker > Miscellaneous...`
+- Impact RAG:
+  la capture devient searchable (flags, panneau Warnings/Miscellaneous, contexte build)
+
+### Slide B — Exemple 2 (Issue #333)
+
+- Issue: Fix compile time warnings without removing the set compiler flags
+- Après intégration dans `st_ready_text`:
+  `[IMAGE DESCRIPTION] Screenshot of the STM32CubeIDE "About" dialog window on Windows...`
+- Description Alfred stockée en structuré (`image_analyses[0].description`):
+  `Screenshot of the “About STM32CubeIDE” dialog on Windows. Visible details include Version 2.0.0 and Build 26820...`
+- Impact RAG:
+  la version exacte de l'outil devient récupérable dans la recherche (traceabilité du contexte)
+
+### Message clé à dire en soutenance
+
+Alfred enrichit deux niveaux:
+1. **Texte intégré** dans `st_ready_text` via `[IMAGE DESCRIPTION] ...` (utile pour retrieval direct)
+2. **Métadonnées détaillées** dans `image_analyses` (description + OCR + statut)
+
+Résultat: les screenshots et boîtes de dialogue deviennent exploitables par la KB comme du texte technique.

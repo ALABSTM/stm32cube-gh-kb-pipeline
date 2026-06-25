@@ -82,41 +82,23 @@ def main():
     total_replacements = 0
     files_patched = 0
 
-    # Find all st_ready_files_*.json in by_series/
-    for series_dir in sorted(DELIVERY_DIR.iterdir()):
-        if not series_dir.is_dir():
-            continue
-        files_dir = series_dir / "files_json"
-        if not files_dir.exists():
-            continue
+    # Find all file delivery JSONs, including driver/subrepo exports under drivers/*/files_json/.
+    patterns = ("st_ready_files_*.json", "*_pdf_enriched*.json")
+    candidates = []
+    for pattern in patterns:
+        candidates.extend(DELIVERY_DIR.rglob(pattern))
 
-        for json_file in sorted(files_dir.glob("st_ready_files_*.json")):
-            # Skip summary files
-            if "summary" in json_file.name:
-                continue
-
-            count = patch_file(json_file, descriptions, dry_run=args.dry_run)
-            if count > 0:
-                print(f"  {json_file.relative_to(PROJECT_ROOT)}: {count} descriptions injected")
-                total_replacements += count
-                files_patched += 1
-
-    # Also patch _pdf_enriched copies if they exist
-    for series_dir in sorted(DELIVERY_DIR.iterdir()):
-        if not series_dir.is_dir():
+    for json_file in sorted(set(candidates)):
+        if "summary" in json_file.name:
             continue
-        files_dir = series_dir / "files_json"
-        if not files_dir.exists():
+        if json_file.parent.name != "files_json":
             continue
 
-        for json_file in sorted(files_dir.glob("*_pdf_enriched*.json")):
-            if "summary" in json_file.name:
-                continue
-            count = patch_file(json_file, descriptions, dry_run=args.dry_run)
-            if count > 0:
-                print(f"  {json_file.relative_to(PROJECT_ROOT)}: {count} descriptions injected")
-                total_replacements += count
-                files_patched += 1
+        count = patch_file(json_file, descriptions, dry_run=args.dry_run)
+        if count > 0:
+            print(f"  {json_file.relative_to(PROJECT_ROOT)}: {count} descriptions injected")
+            total_replacements += count
+            files_patched += 1
 
     print("=" * 60)
     print(f"Total: {total_replacements} placeholders replaced in {files_patched} files")

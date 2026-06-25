@@ -321,7 +321,8 @@ def load_all_configs() -> list[dict]:
     configs = []
     seen_repos: set[str] = set()
     for cfg_file in sorted(CONFIG_DIR.glob("config*.json")):
-        cfg = json.loads(cfg_file.read_text(encoding="utf-8"))
+        # Accept both UTF-8 and UTF-8 with BOM to avoid config parsing failures.
+        cfg = json.loads(cfg_file.read_text(encoding="utf-8-sig"))
         # Deduplicate repos across configs
         new_repos = [r for r in cfg.get("repos", []) if r not in seen_repos]
         seen_repos.update(new_repos)
@@ -341,7 +342,8 @@ def clean_files_v3_for_repo(repo: str) -> None:
         print(f"[WARN] Input not found: {in_file}")
         return
 
-    files = json.loads(in_file.read_text(encoding="utf-8"))
+    # Be resilient to BOM in generated/edited JSON artifacts.
+    files = json.loads(in_file.read_text(encoding="utf-8-sig"))
     cleaned: list[dict] = []
     stats = {"total": 0, "html_stripped": 0, "md_cleaned": 0, "code_stripped": 0,
              "cmsis_filtered": 0, "meta_extracted": 0, "unchanged": 0, "empty_after_clean": 0}

@@ -1,3 +1,5 @@
+import os
+import json
 from pathlib import Path
 
 from shared.utils.paths import PROJECT_ROOT
@@ -85,8 +87,9 @@ for _r in [
 # F3 sub-repos
 for _r in [
     "stm32f3xx-hal-driver", "cmsis_device_f3",
-    "stm32f3xx-nucleo-bsp", "stm32f3discovery-bsp",
-    "32f3348discovery-bsp", "stm32303e-eval-bsp",
+    "stm32f3xx-nucleo-bsp", "stm32f3xx-nucleo-144-bsp",
+    "stm32f3xx-nucleo-32-bsp", "stm32f3discovery-bsp",
+    "32f3348discovery-bsp", "stm32303c-eval-bsp", "stm32303e-eval-bsp",
     "stm32373c-eval-bsp",
 ]:
     _REPO_TO_SERIES[_r] = "stm32cubef3"
@@ -117,6 +120,66 @@ for _r in [
 
 def repo_slug(repo: str) -> str:
     return str(repo).strip().lower()
+
+
+def _extract_repo_series_mapping(cfg: dict) -> dict[str, str]:
+    mapping: dict[str, str] = {}
+    repos = cfg.get("repos")
+    if not isinstance(repos, list) or not repos:
+        return mapping
+
+    series_repo = next((str(repo).strip() for repo in repos if str(repo).lower().startswith("stm32cube")), "")
+    if not series_repo:
+        return mapping
+    series_slug = repo_slug(series_repo)
+
+    for repo in repos:
+        repo_slug_value = repo_slug(repo)
+        if repo_slug_value and repo_slug_value != series_slug:
+            mapping[repo_slug_value] = series_slug
+
+    return mapping
+
+
+def _load_config_repo_series_map() -> dict[str, str]:
+    """Build repo -> parent series mapping from shared/config/config_*.json.
+
+    The static lists above are kept for backward compatibility, but configs are
+    the source of truth. This prevents newly added BSP sub-repos from being
+    exported as standalone series folders.
+    """
+    config_dir = PROJECT_ROOT / "shared" / "config"
+    mapping: dict[str, str] = {}
+
+    # If an active series config is selected for this run, use it first so
+    # shared repos (e.g., middleware/component repos) map to the current series.
+    active_cfg_env = os.getenv("STM32CUBE_CONFIG")
+    if active_cfg_env:
+        active_cfg_path = Path(active_cfg_env)
+        if not active_cfg_path.is_absolute():
+            active_cfg_path = (PROJECT_ROOT / active_cfg_path).resolve()
+        try:
+            active_cfg = json.loads(active_cfg_path.read_text(encoding="utf-8-sig"))
+            mapping.update(_extract_repo_series_mapping(active_cfg))
+        except (OSError, json.JSONDecodeError):
+            pass
+
+    for cfg_file in sorted(config_dir.glob("config*.json")):
+        if cfg_file.name == "config_all_series.json":
+            continue
+        try:
+            cfg = json.loads(cfg_file.read_text(encoding="utf-8-sig"))
+        except (OSError, json.JSONDecodeError):
+            continue
+
+        # Do not override active-series mapping with mappings from other series.
+        for repo_slug_value, series_slug in _extract_repo_series_mapping(cfg).items():
+            mapping.setdefault(repo_slug_value, series_slug)
+
+    return mapping
+
+
+_REPO_TO_SERIES.update(_load_config_repo_series_map())
 
 
 def get_repo_series_root(repo: str) -> Path:

@@ -4,176 +4,213 @@
     to the correct series datasources in KB #793.
 
 .DESCRIPTION
-    Scans by_series/<serie>/drivers/<driver>/ for JSON artifacts and uploads them
-    using --operation add to the datasource matching the series AND artifact type.
-    
-    Each artifact type (issues, files, diag_cards, resolver_cases) goes to its own datasource.
+    Reads datasource IDs from shared/config/config_all_series.json and scans
+    by_series/<series>/drivers/<driver>/ for JSON artifacts, then uploads them
+    with --operation add into the corresponding series-level datasource.
+
+    Skips series with null IDs. Skips empty JSON payloads.
+    For issues: prefers st_ready_issues_with_images_* (Alfred-enriched) over plain.
+    Auto-detects .venv\Scripts\python.exe if PythonExe not specified.
 #>
 
 param(
-    [string]$RemoteUser = "abir.gharbi@st.com",
-    [int]$KB = 793,
-    [int]$JsonSplitSize = 1000
+    [Parameter(Mandatory = $true)]
+    [string]$RemoteUser,
+
+    # Limit to specific series short names (e.g. "G4", "L0", "H7"). Default = all series with IDs.
+    [string[]]$SeriesFilter = @(),
+
+    [switch]$SkipIssues,
+    [switch]$SkipFiles,
+    [switch]$SkipDiagnostic,
+    [switch]$SkipResolver,
+
+    [int]$KbId = 793,
+    [int]$JsonSplitSize = 1000,
+
+    # Auto-detected from .venv\Scripts\python.exe if left empty
+    [string]$PythonExe = ""
 )
 
-$ErrorActionPreference = "Continue"
-Set-Location "c:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube"
+Set-StrictMode -Version Latest
+$ErrorActionPreference = "Stop"
 
-# === Datasource IDs per series per artifact type ===
-# Format: series -> { artifact_type -> datasource_id }
-$datasourceMap = @{
-    "stm32cubec0" = @{
-        "issues_json"           = 29193
-        "files_json"            = 29192
-        "diagnostic_cards_json" = 29212
-        "resolver_cases_json"   = 0  # empty - skip
+$ScriptDir    = $PSScriptRoot
+$RepoRoot     = (Resolve-Path (Join-Path $ScriptDir "..\..\")).Path
+Set-Location $RepoRoot
+
+# ---- Auto-detect Python venv ----
+if (-not $PythonExe) {
+    $venvPy    = Join-Path $RepoRoot ".venv\Scripts\python.exe"
+    $PythonExe = if (Test-Path $venvPy) { $venvPy } else { "python" }
+}
+Write-Host "Python  : $PythonExe"
+Write-Host "KB      : #$KbId"
+Write-Host "Remote  : $RemoteUser"
+Write-Host ""
+
+$Uploader    = Join-Path $RepoRoot "pipeline_Automation\upload\Add_Data_Source_Files.py"
+$ConfigFile  = Join-Path $RepoRoot "shared\config\config_all_series.json"
+$BySeriesRoot= Join-Path $RepoRoot "datasets\07_delivery\st_ready\by_series"
+
+if (-not (Test-Path $Uploader))   { throw "Uploader not found: $Uploader" }
+if (-not (Test-Path $ConfigFile)) { throw "Config not found: $ConfigFile" }
+
+# ---- Read IDs from config ----
+$Config = Get-Content $ConfigFile -Raw | ConvertFrom-Json
+
+# ---- Processor params (base64) per category ----
+function Get-ProcessorParams {
+    param([string]$Category)
+    $jsonStr = switch ($Category) {
+        "issues"           { '{"rootTagPath":"issues","externalURL":"{{github_url}}","label":"{{repo}} issue #{{issue_number}} - {{issue_title}}"}' }
+        "files"            { '{"rootTagPath":"files","externalURL":"{{github_url}}","label":"{{repo}} {{file_type}} - {{path}}"}' }
+        "diagnostic_cards" { '{"rootTagPath":"diagnostic_cards","externalURL":"{{externalURL}}","label":"{{repo}} diagnostic #{{issue_number}} - {{title}}"}' }
+        "resolver_cases"   { '{"rootTagPath":"resolver_cases","externalURL":"{{externalURL}}","label":"{{repo}} resolver #{{issue_number}} - {{issue_title}}"}' }
+        default { '{}' }
     }
-    "stm32cubef0" = @{
-        "issues_json"           = 29195
-        "files_json"            = 29196
-        "diagnostic_cards_json" = 29213
-        "resolver_cases_json"   = 0  # empty
-    }
-    "stm32cubef1" = @{
-        "issues_json"           = 29197
-        "files_json"            = 29198
-        "diagnostic_cards_json" = 29214
-        "resolver_cases_json"   = 29211
-    }
-    "stm32cubef2" = @{
-        "issues_json"           = 29199
-        "files_json"            = 29200
-        "diagnostic_cards_json" = 29215
-        "resolver_cases_json"   = 0  # empty
-    }
-    "stm32cubef3" = @{
-        "issues_json"           = 29282
-        "files_json"            = 29283
-        "diagnostic_cards_json" = 29284
-        "resolver_cases_json"   = 0  # empty
-    }
-    "stm32cubef7" = @{
-        "issues_json"           = 29276
-        "files_json"            = 29277
-        "diagnostic_cards_json" = 29278
-        "resolver_cases_json"   = 29279
-    }
-    "stm32cubeg0" = @{
-        "issues_json"           = 29273
-        "files_json"            = 29274
-        "diagnostic_cards_json" = 29275
-        "resolver_cases_json"   = 0  # empty
-    }
-    "stm32cubeh7rs" = @{
-        "issues_json"           = 29270
-        "files_json"            = 29271
-        "diagnostic_cards_json" = 29272
-        "resolver_cases_json"   = 0  # empty
+    $bytes = [System.Text.Encoding]::UTF8.GetBytes($jsonStr)
+    return "base64:" + [System.Convert]::ToBase64String($bytes)
+}
+
+# ---- Empty payload check ----
+function Test-JsonPayloadEmpty {
+    param([string]$Path, [string]$RootKey)
+    try {
+        $obj  = Get-Content $Path -Raw | ConvertFrom-Json
+        $prop = $obj.PSObject.Properties[$RootKey]
+        if ($null -eq $prop) { return $true }
+        $val  = $prop.Value
+        if ($null -eq $val)  { return $true }
+        if ($val -is [System.Collections.IEnumerable] -and -not ($val -is [string])) {
+            return @($val).Count -eq 0
+        }
+        return $false
+    } catch { return $true }
+}
+
+# ---- Upload one file ----
+function Invoke-Upload {
+    param([int]$DatasourceId, [string]$FilePath, [string]$ProcessorParams)
+    $cmdArgs = @(
+        $Uploader,
+        "--kb",               "$KbId",
+        "--remote-user",      $RemoteUser,
+        "--operation",        "add",
+        "--datasource-id",    "$DatasourceId",
+        "--processor",        "JSON",
+        "--processor-params", $ProcessorParams,
+        "--json-root-mode",   "auto",
+        "--empty-json-policy","skip",
+        "--json-split-size",  "$JsonSplitSize",
+        "--files",            $FilePath
+    )
+    Write-Host "  -> DS#$DatasourceId  $(Split-Path $FilePath -Leaf)" -ForegroundColor Cyan
+    & $PythonExe @cmdArgs
+    if ($LASTEXITCODE -ne 0) {
+        Write-Warning "  Upload returned exit code $LASTEXITCODE for: $(Split-Path $FilePath -Leaf)"
     }
 }
 
-# === Processor params (base64 encoded) ===
-$paramsIssues = '{"label": "{{repo}} issue #{{issue_number}} - {{issue_title}}", "externalURL": "https://github.com/STMicroelectronics/{{repo}}/issues/{{issue_number}}", "rootTagPath": "issues"}'
-$b64I = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($paramsIssues))
+# ---- Category definitions ----
+# Name = category key, Dir = subfolder under driver repo, Root = JSON root key, IdKey = key in config
+$Categories = @(
+    [PSCustomObject]@{ Name="issues";           Dir="issues_json";           Root="issues";           IdKey="issues"     }
+    [PSCustomObject]@{ Name="files";            Dir="files_json";            Root="files";            IdKey="files"      }
+    [PSCustomObject]@{ Name="diagnostic_cards"; Dir="diagnostic_cards_json"; Root="diagnostic_cards"; IdKey="diagnostic" }
+    [PSCustomObject]@{ Name="resolver_cases";   Dir="resolver_cases_json";   Root="resolver_cases";   IdKey="resolver"   }
+)
 
-$paramsFiles = '{"label": "{{repo}} {{file_type}} - {{path}}", "externalURL": "https://github.com/STMicroelectronics/{{repo}}/{{root_dir}}/{{root_ref}}/{{path_url}}", "rootTagPath": "files"}'
-$b64F = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($paramsFiles))
-
-$paramsDiag = '{"label": "{{label}}", "externalURL": "https://github.com/STMicroelectronics/{{repo}}/issues/{{evidence_refs[0].id}}"}'
-$b64D = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($paramsDiag))
-
-$paramsResolver = '{"label": "{{label}}", "externalURL": "https://github.com/STMicroelectronics/{{repo}}/issues/{{issue_number}}", "rootTagPath": "resolver_cases"}'
-$b64R = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($paramsResolver))
-
-# Map artifact type to processor params
-$artifactParams = @{
-    "issues_json"           = $b64I
-    "files_json"            = $b64F
-    "diagnostic_cards_json" = $b64D
-    "resolver_cases_json"   = $b64R
-}
-
-$bySeriesRoot = "datasets\07_delivery\st_ready\by_series"
+# ---- Series filter set ----
+$filterSet = @{}
+foreach ($s in $SeriesFilter) { $filterSet[$s.ToUpper()] = $true }
 
 $totalUploaded = 0
-$totalSkipped = 0
-$totalFailed = 0
-$uploadDelaySec = 5      # seconds between uploads to avoid API rate limit
-$retryCount = 2          # number of retries on failure
-$retryDelaySec = 30      # seconds to wait before retry (API cooldown)
+$totalSkipped  = 0
+$totalFailed   = 0
 
-foreach ($series in $datasourceMap.Keys) {
-    $seriesMap = $datasourceMap[$series]
-    $driversDir = Join-Path $bySeriesRoot "$series\drivers"
-    
-    if (-not (Test-Path $driversDir)) {
-        Write-Host "[SKIP] $series - no drivers/ folder" -ForegroundColor Yellow
-        continue
+# ---- Main loop: iterate series ----
+foreach ($prop in $Config.kb_datasource_ids.PSObject.Properties) {
+    $SeriesName = $prop.Name        # e.g. "STM32CubeG4"
+    $Ids        = $prop.Value
+    $SeriesKey  = $SeriesName.ToUpper()
+    $shortKey   = $SeriesKey -replace "STM32CUBE", ""    # "G4", "L0", etc.
+
+    # Apply series filter
+    if ($filterSet.Count -gt 0) {
+        if (-not ($filterSet.ContainsKey($SeriesKey) -or $filterSet.ContainsKey($shortKey))) {
+            continue
+        }
     }
 
-    $drivers = Get-ChildItem -Path $driversDir -Directory
-    Write-Host "`n========== $series ==========" -ForegroundColor Cyan
-    
-    foreach ($driver in $drivers) {
-        foreach ($artifactType in $artifactParams.Keys) {
-            $dsId = $seriesMap[$artifactType]
-            if ($dsId -eq 0) {
-                continue  # No datasource for this artifact type
+    $SeriesSlug = $SeriesName.ToLower()                   # "stm32cubeg4"
+    $DriversDir = Join-Path $BySeriesRoot "$SeriesSlug\drivers"
+
+    if (-not (Test-Path $DriversDir)) { continue }
+
+    $DriverRepos = @(Get-ChildItem $DriversDir -Directory -ErrorAction SilentlyContinue)
+    if ($DriverRepos.Count -eq 0) { continue }
+
+    Write-Host "=== $SeriesName  ($($DriverRepos.Count) driver(s)) ===" -ForegroundColor Magenta
+
+    foreach ($Cat in $Categories) {
+        # Skip flags
+        if ($SkipIssues    -and $Cat.Name -eq "issues")            { continue }
+        if ($SkipFiles     -and $Cat.Name -eq "files")             { continue }
+        if ($SkipDiagnostic -and $Cat.Name -eq "diagnostic_cards") { continue }
+        if ($SkipResolver  -and $Cat.Name -eq "resolver_cases")    { continue }
+
+        # Resolve datasource ID from config
+        $idProp = $Ids.PSObject.Properties[$Cat.IdKey]
+        if ($null -eq $idProp -or $null -eq $idProp.Value) {
+            Write-Host "  [NO ID ] $($Cat.Name) for $SeriesName - add to config_all_series.json first" -ForegroundColor DarkGray
+            continue
+        }
+        $DsId = [int]$idProp.Value
+        $pp   = Get-ProcessorParams -Category $Cat.Name
+
+        foreach ($DriverRepo in $DriverRepos) {
+            $catDir = Join-Path $DriverRepo.FullName $Cat.Dir
+            if (-not (Test-Path $catDir)) { continue }
+
+            # For issues: prefer with_images (Alfred-enriched), fallback to plain
+            if ($Cat.Name -eq "issues") {
+                $wiFiles = @(Get-ChildItem $catDir -Filter "st_ready_issues_with_images_*.json" -ErrorAction SilentlyContinue |
+                             Where-Object { $_.Name -notmatch "summary|alfred_summary" } | Sort-Object Name)
+                $files = if ($wiFiles.Count -gt 0) {
+                    $wiFiles
+                } else {
+                    @(Get-ChildItem $catDir -Filter "st_ready_issues_*.json" -ErrorAction SilentlyContinue |
+                      Where-Object { $_.Name -notmatch "summary|with_images" } | Sort-Object Name)
+                }
+            } else {
+                $glob  = "st_ready_$($Cat.Name)_*.json"
+                $files = @(Get-ChildItem $catDir -Filter $glob -ErrorAction SilentlyContinue |
+                           Where-Object { $_.Name -notmatch "summary" } | Sort-Object Name)
             }
 
-            $artifactDir = Join-Path $driver.FullName $artifactType
-            if (-not (Test-Path $artifactDir)) { continue }
-            
-            $jsonFiles = Get-ChildItem -Path $artifactDir -Filter "st_ready_*.json" | Where-Object { $_.Name -notmatch "summary" }
-            
-            foreach ($jsonFile in $jsonFiles) {
-                # Check if file is empty JSON
-                $content = Get-Content $jsonFile.FullName -Raw -ErrorAction SilentlyContinue
-                if ($content -match '^\s*\[\s*\]\s*$' -or $content -match '^\s*\{\s*"[^"]+"\s*:\s*\[\s*\]\s*\}\s*$') {
-                    Write-Host "  [EMPTY] $($driver.Name)/$artifactType/$($jsonFile.Name)" -ForegroundColor DarkGray
+            foreach ($f in $files) {
+                if (Test-JsonPayloadEmpty -Path $f.FullName -RootKey $Cat.Root) {
+                    Write-Host "  [EMPTY ] $($DriverRepo.Name)/$($Cat.Dir)/$($f.Name)" -ForegroundColor DarkYellow
                     $totalSkipped++
                     continue
                 }
-
-                $relativePath = $jsonFile.FullName.Replace((Get-Location).Path + "\", "")
-                $b64Param = $artifactParams[$artifactType]
-                
-                Write-Host "  [UPLOAD] $($driver.Name)/$artifactType -> DS#$dsId | $($jsonFile.Name)" -ForegroundColor Green
-                
-                $success = $false
-                for ($attempt = 1; $attempt -le ($retryCount + 1); $attempt++) {
-                    python pipeline_Automation/upload/Add_Data_Source_Files.py `
-                        --kb $KB --operation add --datasource-id $dsId `
-                        --remote-user $RemoteUser --processor JSON `
-                        --processor-params "base64:$b64Param" --json-split-size $JsonSplitSize `
-                        --files $relativePath
-                    
-                    if ($LASTEXITCODE -eq 0) {
-                        $success = $true
-                        break
-                    }
-                    
-                    if ($attempt -le $retryCount) {
-                        Write-Host "  [RETRY] Attempt $attempt failed, waiting ${retryDelaySec}s before retry..." -ForegroundColor Yellow
-                        Start-Sleep -Seconds $retryDelaySec
-                    }
-                }
-                
-                if ($success) {
+                try {
+                    Invoke-Upload -DatasourceId $DsId -FilePath $f.FullName -ProcessorParams $pp
                     $totalUploaded++
-                } else {
+                } catch {
+                    Write-Warning "  [FAIL] $($f.Name): $_"
                     $totalFailed++
-                    Write-Host "  [FAIL] Upload failed for $($jsonFile.Name) after $($retryCount + 1) attempts" -ForegroundColor Red
                 }
-                
-                # Throttle: pause between uploads to respect API rate limits
-                Start-Sleep -Seconds $uploadDelaySec
             }
         }
     }
+    Write-Host ""
 }
 
-Write-Host "`n====== SUMMARY ======" -ForegroundColor Cyan
-Write-Host "Uploaded: $totalUploaded" -ForegroundColor Green
-Write-Host "Skipped (empty): $totalSkipped" -ForegroundColor Yellow
-Write-Host "Failed: $totalFailed" -ForegroundColor Red
+Write-Host "====== SUMMARY ======" -ForegroundColor Cyan
+Write-Host "Uploaded : $totalUploaded" -ForegroundColor Green
+Write-Host "Skipped  : $totalSkipped"  -ForegroundColor Yellow
+if ($totalFailed -gt 0) {
+    Write-Host "Failed   : $totalFailed" -ForegroundColor Red
+}
