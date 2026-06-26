@@ -15,6 +15,7 @@ Cleaning strategies per file_type:
 """
 
 import json
+import os
 import re
 from pathlib import Path
 
@@ -333,6 +334,23 @@ def load_all_configs() -> list[dict]:
     return configs
 
 
+def load_target_configs() -> list[dict]:
+    """Load either the selected config (STM32CUBE_CONFIG) or all configs."""
+    selected = os.environ.get("STM32CUBE_CONFIG", "").strip()
+    if not selected:
+        return load_all_configs()
+
+    selected_path = Path(selected)
+    if not selected_path.exists():
+        # Fallback to all configs if env points to a missing file.
+        print(f"[WARN] STM32CUBE_CONFIG not found: {selected}. Falling back to all configs.")
+        return load_all_configs()
+
+    cfg = json.loads(selected_path.read_text(encoding="utf-8-sig"))
+    cfg["_source"] = selected_path.name
+    return [cfg]
+
+
 def clean_files_v3_for_repo(repo: str) -> None:
     """Read clean_files_{repo}.json, apply type-aware cleaning, write to _v3.json."""
     in_file = DATA_DIR / f"clean_files_{repo.lower()}.json"
@@ -382,10 +400,9 @@ def clean_files_v3_for_repo(repo: str) -> None:
         out_record["cleaned_length"] = len(cleaned_text)
         cleaned.append(out_record)
 
-    out_file.write_text(
-        json.dumps(cleaned, ensure_ascii=False, indent=2),
-        encoding="utf-8",
-    )
+    # Stream JSON to file to avoid large intermediate string allocation.
+    with out_file.open("w", encoding="utf-8") as fh:
+        json.dump(cleaned, fh, ensure_ascii=False, indent=2)
 
     print(f"[CLEAN_V3] {repo}: {stats['total']} files processed -> {out_file.name}")
     print(f"           HTML stripped: {stats['html_stripped']}, "
@@ -399,14 +416,14 @@ def clean_files_v3_for_repo(repo: str) -> None:
 
 
 def main() -> None:
-    configs = load_all_configs()
+    configs = load_target_configs()
 
     print("=" * 60)
-    print("CLEAN FILES V3 — Type-aware cleaning (ALL SERIES)")
+    print("CLEAN FILES V3 — Type-aware cleaning")
     print("=" * 60)
     print(f"Input:  data/clean_files_{{repo}}.json")
     print(f"Output: data/clean_files_{{repo}}_v3.json (NEW files)")
-    print(f"Configs found: {[c['_source'] for c in configs]}")
+    print(f"Configs selected: {[c['_source'] for c in configs]}")
     print("=" * 60)
 
     total_repos = 0

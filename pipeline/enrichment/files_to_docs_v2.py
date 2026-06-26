@@ -1,25 +1,18 @@
 import json
 
 from pipeline.enrichment.preprocessing_model import PreprocessingConfig, PreprocessingModelFilesV2
-from shared.utils.paths import DATA_DIR, get_config_path, CONFIG_DIR
+from shared.utils.paths import DATA_DIR, get_config_path
 
 
-def load_all_repos() -> list[str]:
-    """Load repos from all config files (config.json, config_f4.json, etc.)."""
-    seen: set[str] = set()
-    all_repos: list[str] = []
-    for cfg_file in sorted(CONFIG_DIR.glob("config*.json")):
-        cfg = json.loads(cfg_file.read_text(encoding="utf-8-sig"))
-        for repo in cfg.get("repos", []):
-            if repo not in seen:
-                seen.add(repo)
-                all_repos.append(repo)
-    return all_repos
+def load_selected_repos() -> list[str]:
+    """Load repos from the active config only (selected by workflow)."""
+    cfg = json.loads(get_config_path().read_text(encoding="utf-8-sig"))
+    return cfg.get("repos", [])
 
 
 def main() -> None:
-    cfg = json.loads(get_config_path().read_text(encoding="utf-8"))
-    repos = load_all_repos()
+    cfg = json.loads(get_config_path().read_text(encoding="utf-8-sig"))
+    repos = load_selected_repos()
     preprocess_version = cfg.get("preprocess_version", "v2.0")
 
     pp_config = PreprocessingConfig(version=preprocess_version)
@@ -42,7 +35,15 @@ def main() -> None:
 
         source_tag = "v3" if in_file == in_file_v3 else "v1"
         print(f"[V2] Generating docs_files for {repo} (source: clean_{source_tag})")
-        clean_files = json.loads(in_file.read_text(encoding="utf-8"))
+        raw = in_file.read_text(encoding="utf-8-sig")
+        if not raw.strip():
+            print(f"[WARN] Empty clean_files JSON, skipping: {in_file}")
+            continue
+        try:
+            clean_files = json.loads(raw)
+        except json.JSONDecodeError as exc:
+            print(f"[WARN] Invalid JSON in {in_file}: {exc}. Skipping.")
+            continue
 
         docs: list[dict] = []
         for file_obj in clean_files:

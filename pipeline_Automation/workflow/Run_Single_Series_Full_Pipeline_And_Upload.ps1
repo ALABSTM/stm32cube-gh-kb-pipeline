@@ -21,7 +21,7 @@
 
 param(
     [Parameter(Mandatory = $true)]
-    [ValidateSet("G4", "L0", "L1", "L4", "L5", "N6", "U0", "U3")]
+    [ValidateSet("G4", "L0", "L1", "L4", "L5", "N6", "U0", "U3", "WB", "WB0", "WBA", "WL3")]
     [string]$Series,
 
     [ValidateSet("Full", "Prepare", "Upload")]
@@ -67,6 +67,10 @@ $seriesMap = @{
     "N6" = @{ Slug = "stm32cuben6"; Repo = "STM32CubeN6"; Config = "shared/config/config_n6.json" }
     "U0" = @{ Slug = "stm32cubeu0"; Repo = "STM32CubeU0"; Config = "shared/config/config_u0.json" }
     "U3" = @{ Slug = "stm32cubeu3"; Repo = "STM32CubeU3"; Config = "shared/config/config_u3.json" }
+    "WB" = @{ Slug = "stm32cubewb"; Repo = "STM32CubeWB"; Config = "shared/config/config_wb.json" }
+    "WB0" = @{ Slug = "stm32cubewb0"; Repo = "STM32CubeWB0"; Config = "shared/config/config_wb0.json" }
+    "WBA" = @{ Slug = "stm32cubewba"; Repo = "STM32CubeWBA"; Config = "shared/config/config_wba.json" }
+    "WL3" = @{ Slug = "stm32cubewl3"; Repo = "STM32CubeWL3"; Config = "shared/config/config_wl3.json" }
 }
 
 $seriesInfo = $seriesMap[$Series]
@@ -442,7 +446,13 @@ function Invoke-UploadJsonAdd {
         throw "Invalid datasource ID for ${Label}: $DatasourceId"
     }
 
-    Assert-RequiredFile $FilePath
+    if (-not (Test-Path -LiteralPath $FilePath)) {
+        if ($AllowEmpty) {
+            Write-Host "[SKIP] $Label file not found (allowed empty): $FilePath" -ForegroundColor Yellow
+            return $DatasourceId
+        }
+        Assert-RequiredFile $FilePath
+    }
     if ((Test-JsonRootIsEmpty -Path $FilePath -RootKey $RootKey) -and $AllowEmpty) {
         Write-Host "[SKIP] $Label is empty: $FilePath" -ForegroundColor Yellow
         return $DatasourceId
@@ -592,6 +602,32 @@ function Invoke-UploadSeries {
         throw "Delivery root not found for ${Series}: $deliveryRoot. Run with -Mode Prepare first."
     }
 
+    # Reuse datasource IDs from the previous run when available.
+    # This makes reruns idempotent and avoids "datasource already exists" errors.
+    if (Test-Path -LiteralPath $idsOutput) {
+        try {
+            $saved = Get-Content -LiteralPath $idsOutput -Raw | ConvertFrom-Json
+            if ($null -ne $saved) {
+                if (($IssuesDatasourceId -le 0) -and ($saved.issues -as [int]) -gt 0) {
+                    $IssuesDatasourceId = [int]$saved.issues
+                }
+                if (($FilesDatasourceId -le 0) -and ($saved.files -as [int]) -gt 0) {
+                    $FilesDatasourceId = [int]$saved.files
+                }
+                if (($DiagnosticDatasourceId -le 0) -and ($saved.diagnostic -as [int]) -gt 0) {
+                    $DiagnosticDatasourceId = [int]$saved.diagnostic
+                }
+                if (($ResolverDatasourceId -le 0) -and ($saved.resolver -as [int]) -gt 0) {
+                    $ResolverDatasourceId = [int]$saved.resolver
+                }
+
+                Write-Host "[UPLOAD] Reusing datasource IDs from $idsOutput when available." -ForegroundColor DarkCyan
+            }
+        } catch {
+            Write-Host "[WARN] Could not parse saved datasource IDs from $idsOutput. Proceeding without reuse." -ForegroundColor Yellow
+        }
+    }
+
     $issuesFile = "$deliveryRoot/issues_json/st_ready_issues_with_images_$slug.json"
     $filesFile = "$deliveryRoot/files_json/st_ready_files_${slug}_v3.json"
     $diagnosticFile = "$deliveryRoot/diagnostic_cards_json/st_ready_diagnostic_cards_$slug.json"
@@ -601,6 +637,7 @@ function Invoke-UploadSeries {
     $driverFiles = @(Get-SubrepoDeliveryFiles -SubDirectory "files_json" -Pattern "st_ready_files_*.json")
     $driverDiagnosticFiles = @(Get-SubrepoDeliveryFiles -SubDirectory "diagnostic_cards_json" -Pattern "st_ready_diagnostic_cards_*.json")
     $driverResolverFiles = @(Get-SubrepoDeliveryFiles -SubDirectory "resolver_cases_json" -Pattern "st_ready_resolver_cases_*.json")
+    $driverIssueNonEmptyFiles = @(Get-NonEmptyJsonFiles -Files $driverIssueFiles -RootKey "issues")
     $driverDiagnosticNonEmptyFiles = @(Get-NonEmptyJsonFiles -Files $driverDiagnosticFiles -RootKey "diagnostic_cards")
     $driverResolverNonEmptyFiles = @(Get-NonEmptyJsonFiles -Files $driverResolverFiles -RootKey "resolver_cases")
 
@@ -639,13 +676,23 @@ function Invoke-UploadSeries {
             -RootKey "issues" `
             -DatasourceId $IssuesDatasourceId `
             -ProcessorParams $issuesParams
+    } elseif ((Test-JsonRootIsEmpty -Path $issuesFile -RootKey "issues") -and ($driverIssueNonEmptyFiles.Count -gt 0)) {
+        $firstIssueFile = $driverIssueNonEmptyFiles[0]
+        $ids.issues = Invoke-UploadJsonNew `
+            -Label "${Series} issues from driver/subrepo $($firstIssueFile.Directory.Parent.Name)" `
+            -FilePath $firstIssueFile.FullName `
+            -RootKey "issues" `
+            -DatasourceName "DB_STready_${Series}_Issues" `
+            -ProcessorParams $issuesParams
+        $driverIssueFiles = @($driverIssueFiles | Where-Object { $_.FullName -ne $firstIssueFile.FullName })
     } else {
         $ids.issues = Invoke-UploadJsonNew `
             -Label "${Series} issues" `
             -FilePath $issuesFile `
             -RootKey "issues" `
             -DatasourceName "DB_STready_${Series}_Issues" `
-            -ProcessorParams $issuesParams
+            -ProcessorParams $issuesParams `
+            -AllowEmpty
     }
 
     if ($FilesDatasourceId -gt 0) {

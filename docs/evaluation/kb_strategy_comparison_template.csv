@@ -112,3 +112,23 @@ R10,2026-06-25,S3_PRECISION,Q007,Q31. LPTIMER on U5 does not count during STOP2 
 R10,2026-06-25,S3_PRECISION,Q008,Q50. STM32WL long-range mode reaches only half the expected outdoor range,how_to,,0,0,0,0,60.758,No explicit source/citation list returned by API
 R10,2026-06-25,S3_PRECISION,Q009,Q13. STM32F4 enters HardFault when accessing backup registers without enabling PWR clock,error_message,,0,0,0,0,60.500,No explicit source/citation list returned by API
 R10,2026-06-25,S3_PRECISION,Q010,Q25. CRC peripheral on H5 produces different result than software implementation,how_to,,0,0,0,0,60.540,No explicit source/citation list returned by API
+R10,2026-06-25,S4_SEMANTIC_HEAVY,Q001,Q01. DMA transfer on STM32F4 corrupts data when source and destination are in same SRAM bank,how_to,,0,0,0,0,60.732,No explicit source/citation list returned by API
+R10,2026-06-25,S4_SEMANTIC_HEAVY,Q002,Q14. FDCAN message lost on STM32H5 when using hardware filters in range mode,how_to,,0,0,0,0,60.380,No explicit source/citation list returned by API
+R10,2026-06-25,S4_SEMANTIC_HEAVY,Q003,Q26. STM32U5 STOP2 current is 50uA instead of expected 2uA,how_to,,0,0,0,0,60.390,No explicit source/citation list returned by API
+R10,2026-06-25,S4_SEMANTIC_HEAVY,Q004,Q39. SubGHz radio on STM32WL does not transmit despite register configuration matching datasheet,api_symbol,,0,0,0,0,60.422,No explicit source/citation list returned by API
+R10,2026-06-25,S4_SEMANTIC_HEAVY,Q005,Q07. SPI DMA circular mode produces gap between frames on STM32F4,how_to,,0,0,0,0,60.396,No explicit source/citation list returned by API
+R10,2026-06-25,S4_SEMANTIC_HEAVY,Q006,Q20. DMA linked-list mode on H5 creates circular dependency and locks up,how_to,,0,0,0,0,60.349,No explicit source/citation list returned by API
+R10,2026-06-25,S4_SEMANTIC_HEAVY,Q007,Q31. LPTIMER on U5 does not count during STOP2 with LSE clock,how_to,,0,0,0,0,60.754,No explicit source/citation list returned by API
+R10,2026-06-25,S4_SEMANTIC_HEAVY,Q008,Q50. STM32WL long-range mode reaches only half the expected outdoor range,how_to,,0,0,0,0,60.668,No explicit source/citation list returned by API
+R10,2026-06-25,S4_SEMANTIC_HEAVY,Q009,Q13. STM32F4 enters HardFault when accessing backup registers without enabling PWR clock,error_message,,0,0,0,0,60.397,No explicit source/citation list returned by API
+R10,2026-06-25,S4_SEMANTIC_HEAVY,Q010,Q25. CRC peripheral on H5 produces different result than software implementation,how_to,,0,0,0,0,60.271,No explicit source/citation list returned by API
+R10,2026-06-25,S5_KEYWORD_HEAVY,Q001,Q01. DMA transfer on STM32F4 corrupts data when source and destination are in same SRAM bank,how_to,,0,0,0,0,60.286,No explicit source/citation list returned by API
+R10,2026-06-25,S5_KEYWORD_HEAVY,Q002,Q14. FDCAN message lost on STM32H5 when using hardware filters in range mode,how_to,,0,0,0,0,60.277,No explicit source/citation list returned by API
+R10,2026-06-25,S5_KEYWORD_HEAVY,Q003,Q26. STM32U5 STOP2 current is 50uA instead of expected 2uA,how_to,,0,0,0,0,60.267,No explicit source/citation list returned by API
+R10,2026-06-25,S5_KEYWORD_HEAVY,Q004,Q39. SubGHz radio on STM32WL does not transmit despite register configuration matching datasheet,api_symbol,,0,0,0,0,60.323,No explicit source/citation list returned by API
+R10,2026-06-25,S5_KEYWORD_HEAVY,Q005,Q07. SPI DMA circular mode produces gap between frames on STM32F4,how_to,,0,0,0,0,60.423,No explicit source/citation list returned by API
+R10,2026-06-25,S5_KEYWORD_HEAVY,Q006,Q20. DMA linked-list mode on H5 creates circular dependency and locks up,how_to,,0,0,0,0,60.291,No explicit source/citation list returned by API
+R10,2026-06-25,S5_KEYWORD_HEAVY,Q007,Q31. LPTIMER on U5 does not count during STOP2 with LSE clock,how_to,,0,0,0,0,60.478,No explicit source/citation list returned by API
+R10,2026-06-25,S5_KEYWORD_HEAVY,Q008,Q50. STM32WL long-range mode reaches only half the expected outdoor range,how_to,,0,0,0,0,60.293,No explicit source/citation list returned by API
+R10,2026-06-25,S5_KEYWORD_HEAVY,Q009,Q13. STM32F4 enters HardFault when accessing backup registers without enabling PWR clock,error_message,,0,0,0,0,60.409,No explicit source/citation list returned by API
+R10,2026-06-25,S5_KEYWORD_HEAVY,Q010,Q25. CRC peripheral on H5 produces different result than software implementation,how_to,,0,0,0,0,60.384,No explicit source/citation list returned by API
