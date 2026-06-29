@@ -84,6 +84,27 @@ def _score_label(pct):
     return "POOR"
 
 
+def _safe_pie(ax, values, labels, colors, title, autopct="%1.1f%%", startangle=90, explode=None):
+    """Draw a pie chart only when there is data; otherwise show a clear no-data panel."""
+    total = sum(float(v) for v in values)
+    if total <= 0:
+        ax.text(0.5, 0.5, "No data", ha="center", va="center", transform=ax.transAxes)
+        ax.axis("off")
+        ax.set_title(title)
+        return
+
+    kwargs = {
+        "labels": labels,
+        "colors": colors,
+        "autopct": autopct,
+        "startangle": startangle,
+    }
+    if explode is not None:
+        kwargs["explode"] = explode
+    ax.pie(values, **kwargs)
+    ax.set_title(title)
+
+
 # ============================================================
 # DATA COLLECTION
 # ============================================================
@@ -330,9 +351,13 @@ def chart_ingestion(metrics: dict, repo: str):
     total_files = metrics.get("files_total", 0)
     with_content = metrics.get("files_with_content", 0)
     without = total_files - with_content
-    ax.pie([with_content, without], labels=["With Content", "Empty"],
-           colors=[ST_GREEN, ST_RED], autopct="%1.1f%%", startangle=90)
-    ax.set_title(f"Files Content (N={total_files})")
+    _safe_pie(
+        ax=ax,
+        values=[with_content, without],
+        labels=["With Content", "Empty"],
+        colors=[ST_GREEN, ST_RED],
+        title=f"Files Content (N={total_files})",
+    )
 
     plt.tight_layout()
     plt.savefig(OUTPUT_DIR / "01_ingestion_completeness.png", dpi=150, bbox_inches="tight")
@@ -383,8 +408,14 @@ def chart_cleaning(metrics: dict, repo: str):
         labels_s = list(severity.keys())
         values_s = list(severity.values())
         colors_s = [sev_colors.get(l, ST_GRAY) for l in labels_s]
-        ax.pie(values_s, labels=labels_s, colors=colors_s, autopct="%1.0f%%", startangle=90)
-        ax.set_title("Issue Severity Distribution")
+        _safe_pie(
+            ax=ax,
+            values=values_s,
+            labels=labels_s,
+            colors=colors_s,
+            title="Issue Severity Distribution",
+            autopct="%1.0f%%",
+        )
     else:
         ax.text(0.5, 0.5, "No data", ha="center", va="center", transform=ax.transAxes)
 
@@ -419,11 +450,14 @@ def chart_enrichment(metrics: dict, repo: str):
     ax = axes[1]
     ok = metrics.get("images_with_desc", 0)
     fail = metrics.get("images_failed", 0)
-    if ok + fail > 0:
-        ax.pie([ok, fail], labels=[f"Success ({ok})", f"Failed ({fail})"],
-               colors=[ST_GREEN, ST_RED], autopct="%1.1f%%", startangle=90,
-               explode=(0, 0.05))
-    ax.set_title(f"Image Descriptions (N={metrics.get('images_total', 0)})")
+    _safe_pie(
+        ax=ax,
+        values=[ok, fail],
+        labels=[f"Success ({ok})", f"Failed ({fail})"],
+        colors=[ST_GREEN, ST_RED],
+        title=f"Image Descriptions (N={metrics.get('images_total', 0)})",
+        explode=(0, 0.05),
+    )
 
     # Desc length distribution info
     ax = axes[2]
@@ -463,10 +497,13 @@ def chart_similarity(metrics: dict, repo: str):
     else:
         with_rel = metrics.get("with_related", 0)
         without = metrics.get("without_related", 0)
-        ax.pie([with_rel, without],
-               labels=[f"With Related ({with_rel})", f"No Related ({without})"],
-               colors=[ST_LIGHT_BLUE, ST_GRAY], autopct="%1.1f%%", startangle=90)
-        ax.set_title(f"Issues with Similar Links (avg={metrics.get('avg_related_per_doc', 0)} per doc)")
+        _safe_pie(
+            ax=ax,
+            values=[with_rel, without],
+            labels=[f"With Related ({with_rel})", f"No Related ({without})"],
+            colors=[ST_LIGHT_BLUE, ST_GRAY],
+            title=f"Issues with Similar Links (avg={metrics.get('avg_related_per_doc', 0)} per doc)",
+        )
 
     plt.tight_layout()
     plt.savefig(OUTPUT_DIR / "04_similarity_coverage.png", dpi=150, bbox_inches="tight")

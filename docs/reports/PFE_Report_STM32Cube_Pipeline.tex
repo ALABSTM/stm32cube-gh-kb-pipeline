@@ -137,7 +137,7 @@ Ce projet de fin d'études, réalisé au sein de l'équipe \textbf{Technical Mar
 
 Le pipeline couvre les \textbf{25 séries} de la famille STM32 (13 en production, 12 configurées) et produit 4 types d'artefacts complémentaires : issues structurées, fichiers documentés, resolver cases (chaînes issue→PR→commit) et diagnostic cards (analyses de pannes structurées). Un enrichissement IA multi-modal par Alfred Vision rend le contenu visuel (captures d'écran, figures PDF) exploitable par la recherche.
 
-Les résultats démontrent un \textbf{gain de +39\%} de pertinence par rapport à un LLM générique sur les questions techniques STM32, avec un Quality Index atteignant 94/100 sur la série pilote H7 grâce aux Diagnostic Cards.
+Les résultats démontrent une \textbf{amélioration nette de la pertinence} par rapport à un LLM générique sur les questions techniques STM32, avec un Quality Index atteignant 94/100 sur la série pilote H7 grâce aux Diagnostic Cards.
 
 Ce rapport s'organise comme suit :
 \begin{itemize}
@@ -1458,6 +1458,10 @@ Pour la série H7, 26 fichiers sur 4\,731 sont exclus (0.5\%), principalement de
 
 L'évaluation quantitative du pipeline est réalisée par le script :\texttt{generate\_evaluation\_report.py} qui calcule des métriques à chaque étape de la chaîne de traitement.
 
+\subsection{Couverture des Données en Entrée}
+
+La lecture des résultats commence par la \textbf{complétude d'ingestion} (matière disponible), puis seulement par les scores par stage. Ce choix évite de conclure à tort qu'un stage est défaillant lorsque le signal d'entrée est incomplet.
+
 \subsection{Notation et Seuils}
 
 Chaque métrique est classifiée selon l'échelle :
@@ -1469,6 +1473,8 @@ Chaque métrique est classifiée selon l'échelle :
     \textbf{INSUFFISANT} & \text{si } p < 70\%
 \end{cases}
 \end{equation}
+
+\textbf{Justification méthodologique} : les formules de ce chapitre sont des \textbf{ratios de couverture/complétude}. Cette famille d'indicateurs est cohérente avec les dimensions ISO/IEC 25012 et ISO/IEC 25024 \cite{iso25012,iso25024}. Les seuils 95/85/70 sont des seuils opérationnels internes ST (et non une norme universelle) conservés pour la continuité des campagnes QI et la comparabilité temporelle.
 
 \subsection{Stage 1 : Ingestion}
 
@@ -1483,12 +1489,17 @@ Contenu fichiers & $\frac{|\{f \mid f.\text{content} \neq \emptyset\}|}{N_f} \ti
 \bottomrule
 \end{longtable}
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.95\textwidth]{01_ingestion_completeness.png}
-\caption{Complétude des données à l'ingestion}
-\label{fig:eval_ingestion}
-\end{figure}
+\textbf{Résumé sur un échantillon de séries} (sans graphique) :
+\begin{longtable}{lccccc}
+\toprule
+\textbf{Série} & \textbf{Issues body} & \textbf{Issues title} & \textbf{Issues labels} & \textbf{Files content} & \textbf{Lecture} \\
+\midrule
+STM32CubeH7 & 99.7\% & 100.0\% & 95.0\% & 100.0\% & Complétude très élevée \\
+STM32CubeWB & 100.0\% & 100.0\% & 100.0\% & 100.0\% & Complétude très élevée \\
+\bottomrule
+\end{longtable}
+
+Ce tableau suffit pour la section ingestion ; les graphiques détaillés sont conservés en annexe technique.
 
 \subsection{Stage 2 : Cleaning}
 
@@ -1554,6 +1565,33 @@ La qualité des descriptions d'images par Alfred Vision est mesurée par le taux
 
 \textbf{Justification} : cette métrique est cruciale car les images échouées (\texttt{images\_failed}) restent invisibles pour la recherche RAG. Un échec survient quand Alfred ne peut pas télécharger l'image (URL 404, image supprimée de GitHub) ou quand l'image est trop petite/opaque pour être décrite utilement.
 
+En pratique, nous suivons explicitement les deux compteurs opérationnels suivants :
+\begin{equation}
+N_{\text{images\_described\_ok}} \quad \text{et} \quad N_{\text{images\_failed}}
+\end{equation}
+et le taux d'échec associé :
+\begin{equation}
+\text{ImageFailRate} = \frac{N_{\text{images\_failed}}}{N_{\text{images\_total}}} \times 100
+\label{eq:image_fail}
+\end{equation}
+
+Cette vérification binaire (décrite vs échouée) est utilisée comme gate de fiabilité d'enrichissement avant upload KB.
+
+Nous définissons un indice de confiance opérationnel Alfred, directement lisible :
+\begin{equation}
+\text{Conf}_{\text{Alfred,images}} = 1 - \frac{N_{\text{images\_failed}}}{N_{\text{images\_total}}}
+= \frac{N_{\text{images\_described\_ok}}}{N_{\text{images\_total}}}
+\label{eq:alfred_conf_images}
+\end{equation}
+
+Cet indice mesure la \textbf{fiabilité de service} (disponibilité effective de descriptions), et non la qualité sémantique fine des descriptions. Cette approche est alignée avec la notion de mesure de fiabilité opérationnelle (taux de succès/échec) en ingénierie qualité \cite{iso25010}.
+
+\textbf{Exemples concrets} :
+\begin{itemize}
+  \item \textbf{Cas positif (H7)} : 97 descriptions valides sur 98 images d'issues (98.9\%), avec une seule erreur HTTP 404 transitoire.
+  \item \textbf{Cas négatif (WB)} : présence d'un placeholder PDF non résolu dans \texttt{st\_ready\_files\_stm32cubewb\_v3.json} (figure p13), dû à une troncature du texte empêchant le patch de remplacement ; ce cas est détecté automatiquement par la gate placeholders.
+\end{itemize}
+
 \textbf{Résultats observés sur les 4 nouvelles séries} :
 
 \begin{longtable}{lcccl}
@@ -1584,12 +1622,21 @@ Au-delà des images d'issues, le pipeline enrichit également les \textbf{figure
 
 \textbf{Résultats} : 131 figures PDF décrites et injectées avec succès dans 21 fichiers delivery couvrant 10 séries (H7, F0, F1, F2, F3, F4, F7, G0, H7RS, WL). Le pipeline de patch vérifie l'intégrité JSON après injection pour éviter la corruption des fichiers (problème rencontré et corrigé --- cf. Section ``Leçons apprises'').
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.99\textwidth]{03_enrichment_metadata.png}
-\caption{Couverture métadonnées (layer, board, component, severity) et succès Alfred Vision}
-\label{fig:eval_enrichment}
-\end{figure}
+Pour les figures PDF, la vérification opérationnelle suit aussi une logique \textit{described vs failed} :
+\begin{equation}
+\text{PdfFigureSuccessRate} = \frac{N_{\text{figures\_described\_ok}}}{N_{\text{figures\_detected}}} \times 100
+\label{eq:pdf_figure_success}
+\end{equation}
+
+et un contrôle de placeholders résiduels dans les livrables :
+\begin{equation}
+\text{PlaceholderRate} = \frac{N_{\text{placeholders\_non\_resolus}}}{N_{\text{figures\_detected}}} \times 100
+\label{eq:placeholder_rate}
+\end{equation}
+
+Un \texttt{PlaceholderRate} non nul signale un risque de perte d'information visuelle dans la KB et déclenche une action corrective (re-run Alfred ou patch ciblé).
+
+\textit{Note de lisibilité : les détails graphiques sont déplacés en annexe technique ; cette section conserve uniquement les tableaux et ratios nécessaires à la décision.}
 
 \subsection{Stage 4 : Similarité}
 
@@ -1602,23 +1649,13 @@ Moyenne liens/document & $\frac{1}{N}\sum_{i} |\text{related}(d_i)|$ & $\geq 2.0
 \bottomrule
 \end{longtable}
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.7\textwidth]{04_similarity_coverage.png}
-\caption{Proportion d'issues avec liens de similarité}
-\label{fig:eval_similarity}
-\end{figure}
+\textit{La visualisation de similarité est fournie en annexe technique ; ici, l'interprétation repose sur les métriques tabulaires.}
 
 \subsection{Stage 5 : Delivery}
 
 L'étape de delivery exporte les données enrichies sous 4 types d'artefacts JSON. Les volumes exportés varient fortement selon la série, ce qui mérite une explication :
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.85\textwidth]{05_delivery_volumes.png}
-\caption{Volumes de documents exportés par type de livraison}
-\label{fig:eval_delivery}
-\end{figure}
+\textit{Les volumes de delivery sont présentés en tableaux dans cette section ; les graphiques détaillés sont en annexe.}
 
 \textbf{Explication des volumes variables} :
 
@@ -1670,16 +1707,21 @@ S_{\text{global}} = \frac{\sum_{k=1}^{5} w_k \cdot s_k}{\sum_{k=1}^{5} w_k}
 \label{eq:score_global}
 \end{equation}
 
-\textbf{Justification des pondérations} :
+avec :
 \begin{itemize}
-  \item \textbf{Ingestion} ($w=1.0$) : pondération de base --- l'ingestion est une étape technique dont la qualité est binaire (données récupérées ou non)
-  \item \textbf{Cleaning} ($w=1.5$) : pondération supérieure car un nettoyage défaillant propage du bruit dans toutes les étapes aval et dégrade directement la qualité du retrieval RAG
-  \item \textbf{Enrichment} ($w=2.0$) : la pondération la plus élevée car l'enrichissement métadonnées est le différenciateur principal de notre pipeline par rapport à une indexation brute. C'est cette étape qui rend possible le filtrage par layer, component et board lors de la recherche
-  \item \textbf{Similarity} ($w=1.0$) : pondération minimale car les liens de similarité sont un enrichissement optionnel --- ils améliorent l'expérience utilisateur mais ne sont pas critiques pour le fonctionnement de base du RAG
-  \item \textbf{Delivery} ($w=1.5$) : la livraison doit être conforme à 100\% au schéma JSON pour que l'upload vers la KB fonctionne. Une erreur à cette étape bloque le déploiement
+  \item $s_1=S_{\text{ingestion}},\; w_1=1.0$
+  \item $s_2=S_{\text{cleaning}},\; w_2=1.5$
+  \item $s_3=S_{\text{enrichment}},\; w_3=2.0$
+  \item $s_4=S_{\text{similarity}},\; w_4=1.0$
+  \item $s_5=S_{\text{delivery}},\; w_5=1.5$
 \end{itemize}
 
-\textbf{Application numérique (H7)} : $S_{\text{global}} = \frac{1.0 \times 99.7 + 1.5 \times 100.0 + 2.0 \times 72.2 + 1.0 \times 22.0 + 1.5 \times 100.0}{1.0 + 1.5 + 2.0 + 1.0 + 1.5} = \frac{566.1}{7.0} = 80.9\%$
+\textbf{Application numérique (H7)} :
+\begin{equation}
+S_{\text{global}} = \frac{1.0\times99.7 + 1.5\times100.0 + 2.0\times72.2 + 1.0\times22.0 + 1.5\times100.0}{1.0+1.5+2.0+1.0+1.5} = \frac{566.1}{7.0} = 80.9\%
+\end{equation}
+
+Cette forme conserve la continuité historique des rapports précédents et facilite la comparaison temporelle.
 
 \section{Distribution des Données --- STM32CubeH7}
 
@@ -1746,12 +1788,7 @@ STM32H750B-DK & 7 & 20 \\
 
 La corrélation entre les boards les plus présentes dans les issues et dans les fichiers confirme que le pipeline capture bien l'écosystème complet autour de chaque carte de développement.
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.95\textwidth]{00_pipeline_dashboard.png}
-\caption{Dashboard qualité global du pipeline}
-\label{fig:dashboard}
-\end{figure}
+\textit{Le dashboard visuel est déplacé en annexe technique pour éviter les figures incomplètes dans le corps du chapitre.}
 
 \section{Quality Index --- Test End-to-End}
 
@@ -1860,11 +1897,11 @@ FDCAN filter H753 & Issue-specific & 5 & \textbf{9} \\
 GPDMA linked-list H5 & Architecture & 7 & \textbf{8} \\
 ADC 200 LSB jump H743 & Issue-specific & 5 & \textbf{9} \\
 \midrule
-\textbf{Total (sur 200)} & & \textbf{116} & \textbf{129*} \\
+\textbf{Total brut} & & \textbf{116/200} & \textbf{129/160} \\
 \bottomrule
 \end{longtable}
 
-\textit{*Score Persona calculé sur les 16 réponses obtenues (4 timeouts exclus). Score normalisé sur 20 questions : Persona = 129/160 $\times$ 200 = 161/200.}
+\textit{Lecture correcte : Alfred répond à 20/20 questions ; la Persona répond à 16/20 (4 timeouts). Le score qualité sur réponses obtenues est de 129/160 (=8.06/10) pour la Persona contre 116/200 (=5.80/10) pour Alfred. En score strict sur 20 questions (timeouts comptés à 0), la Persona est à 129/200 (=6.45/10).}
 
 \subsection{Analyse Qualitative}
 
@@ -1892,29 +1929,19 @@ ADC 200 LSB jump H743 & Issue-specific & 5 & \textbf{9} \\
 
 \textbf{F4 v1.26→v1.28 (score Alfred 3 vs Persona 10)} : Alfred donne des conseils génériques (``re-merge vos fichiers, vérifiez les callbacks''). La Persona cite le changement exact : l'API \texttt{HAL\_ETH\_SetMACFilterConfig()} inverse la sémantique du champ \texttt{BroadcastFilter} entre v1.26 et v1.28, ce qui bloque silencieusement le DHCP.
 
-La Figure~\ref{fig:alfred_vs_persona_chart} illustre visuellement l'écart de performance entre les deux systèmes sur les 10 questions les plus discriminantes.
-
-% Diagramme comparatif Alfred vs Persona - exporter depuis draw.io ou Excel
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.9\textwidth]{alfred_vs_persona_comparison.png}
-\caption{Comparaison des scores par question : Alfred générique vs Persona KB (+39\%) (draw.io)}
-\label{fig:alfred_vs_persona_chart}
-\end{figure}
-
-\textit{Le graphique en barres groupées compare les scores (sur 10) pour 10 questions discriminantes : ETH H747 (5 vs 9), USB H750 (6 vs 9), UART F446 (7 vs 8), TZ H573 (7 vs 9), LoRa WL (4 vs 10), HP PA WL (4 vs 10), F4 v1.26 (3 vs 10), FDCAN H753 (5 vs 9), GPDMA H5 (7 vs 8), ADC H743 (5 vs 9). La Persona KB surpasse Alfred sur toutes les questions sauf les questions générales.}
+\textit{Sur les 10 questions les plus discriminantes (ETH H747, USB H750, UART F446, TZ H573, LoRa WL, HP PA WL, F4 v1.26, FDCAN H753, GPDMA H5, ADC H743), la Persona dépasse Alfred sur la qualité technique des réponses lorsqu'une réponse est retournée.}
 
 \subsection{Conclusion de l'Étude Comparative}
 
-\begin{equation}
-\boxed{
-\text{Gain Persona vs Alfred} = \frac{161 - 116}{116} \times 100 = +38.8\%
-}
-\end{equation}
+Les résultats sont interprétés sur \textbf{deux axes} pour éviter un biais de comparaison lié aux timeouts :
+\begin{itemize}
+  \item \textbf{Qualité des réponses obtenues} : la Persona est supérieure sur les cas techniques spécifiques (issues/version/fix).
+  \item \textbf{Disponibilité de service} : Alfred répond systématiquement, tandis que la Persona a subi des timeouts durant la campagne.
+\end{itemize}
 
 L'étude démontre que :
 \begin{itemize}
-  \item La KB alimentée par le pipeline apporte un gain de \textbf{+39\%} sur les questions techniques spécifiques
+  \item La KB alimentée par le pipeline améliore la \textbf{qualité technique des réponses} sur les questions spécifiques
   \item La valeur ajoutée est maximale sur les questions \textbf{issue-specific} et \textbf{version-sensitive}
   \item Alfred reste pertinent comme \textbf{fallback} pour les questions générales et quand la KB n'a pas la réponse
   \item L'architecture optimale est \textbf{KB-first + Alfred fallback restrictif} (configuration actuelle)
@@ -2317,6 +2344,21 @@ Schwaber, K. et Sutherland, J. (2020). \textit{The Scrum Guide}. \url{https://sc
 
 \bibitem{json_schema}
 Wright, A., Andrews, H. et Hutton, B. (2022). \textit{JSON Schema: A Media Type for Describing JSON Documents}. Internet Engineering Task Force (IETF), draft-bhutton-json-schema-01. --- Standard JSON Schema utilisé pour nos gates de validation (\texttt{validate\_schemas.py}) qui bloquent l'upload en cas de non-conformité.
+
+\bibitem{iso25012}
+ISO/IEC (2008). \textit{ISO/IEC 25012:2008 --- Systems and software engineering -- SQuaRE -- Data quality model}. International Organization for Standardization. --- Référence du modèle de qualité des données (complétude, cohérence) utilisé pour justifier les métriques de couverture/complétude par ratios.
+
+\bibitem{iso25024}
+ISO/IEC (2015). \textit{ISO/IEC 25024:2015 --- Systems and software engineering -- SQuaRE -- Measurement of data quality}. International Organization for Standardization. --- Référence sur la mesure quantitative de la qualité des données, alignée avec nos indicateurs par stage.
+
+\bibitem{iso25010}
+ISO/IEC (2011). \textit{ISO/IEC 25010:2011 --- Systems and software engineering -- SQuaRE -- System and software quality models}. International Organization for Standardization. --- Référence du modèle de qualité (dont la fiabilité), utilisée pour cadrer les indicateurs de fiabilité opérationnelle Alfred.
+
+\bibitem{manning2008ir}
+Manning, C. D., Raghavan, P. et Schütze, H. (2008). \textit{Introduction to Information Retrieval}. Cambridge University Press. --- Référence de base sur le compromis précision/rappel et le réglage des seuils de récupération d'information.
+
+\bibitem{fawcett2006roc}
+Fawcett, T. (2006). \textit{An introduction to ROC analysis}. Pattern Recognition Letters, vol.~27, no.~8, pp.~861--874. --- Référence méthodologique pour la sélection et la justification de seuils décisionnels.
 
 \bibitem{azure_openai}
 Microsoft (2024). \textit{Azure OpenAI Service Documentation}. \url{https://learn.microsoft.com/azure/ai-services/openai/}. --- Plateforme cloud sur laquelle est déployé ST ChatGPT (Azure OpenAI) et Alfred Vision.

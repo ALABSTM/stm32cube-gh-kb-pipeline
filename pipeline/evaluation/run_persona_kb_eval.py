@@ -30,6 +30,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 CHAT_SERVICE = "chat"
 DEFAULT_PERSONA = "ST GitHub Analyzer"
+DEFAULT_STRATEGY_MATRIX = PROJECT_ROOT / "docs" / "evaluation" / "kb_strategy_matrix.csv"
 
 
 def is_proxy_tunnel_error(message: str) -> bool:
@@ -143,6 +144,11 @@ class EvalRow:
     run_id: str
     run_date: str
     strategy_id: str
+    persona: str
+    search_type: str
+    semantic_threshold: str
+    semantic_max_doc_count: str
+    fulltext_max_doc_count: str
     query_id: str
     query_text: str
     query_type: str
@@ -153,6 +159,20 @@ class EvalRow:
     hallucination: str
     latency_seconds: str
     notes: str
+
+
+def load_strategy_matrix(path: Path) -> dict[str, dict[str, str]]:
+    if not path.exists():
+        raise FileNotFoundError(f"Strategy matrix not found: {path}")
+
+    strategies: dict[str, dict[str, str]] = {}
+    with path.open("r", encoding="utf-8", newline="") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            sid = (row.get("strategy_id") or "").strip()
+            if sid:
+                strategies[sid] = row
+    return strategies
 
 
 def extract_text(response_json: dict[str, Any]) -> str:
@@ -339,8 +359,11 @@ def detect_hallucination(answer_text: str, forbidden_regex: str) -> str:
         return ""
 
 
-def write_run_artifacts(run_dir: Path, rows: list[dict[str, Any]]) -> None:
+def write_run_artifacts(run_dir: Path, rows: list[dict[str, Any]], manifest: dict[str, Any]) -> None:
     run_dir.mkdir(parents=True, exist_ok=True)
+
+    manifest_path = run_dir / "run_manifest.json"
+    manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
 
     raw_path = run_dir / "responses_raw.jsonl"
     with raw_path.open("w", encoding="utf-8") as f:
@@ -374,6 +397,11 @@ def upsert_evaluation_rows(output_csv: Path, new_rows: list[EvalRow]) -> None:
         "run_id",
         "run_date",
         "strategy_id",
+        "persona",
+        "search_type",
+        "semantic_threshold",
+        "semantic_max_doc_count",
+        "fulltext_max_doc_count",
         "query_id",
         "query_text",
         "query_type",
@@ -404,6 +432,11 @@ def upsert_evaluation_rows(output_csv: Path, new_rows: list[EvalRow]) -> None:
             "run_id": nr.run_id,
             "run_date": nr.run_date,
             "strategy_id": nr.strategy_id,
+            "persona": nr.persona,
+            "search_type": nr.search_type,
+            "semantic_threshold": nr.semantic_threshold,
+            "semantic_max_doc_count": nr.semantic_max_doc_count,
+            "fulltext_max_doc_count": nr.fulltext_max_doc_count,
             "query_id": nr.query_id,
             "query_text": nr.query_text,
             "query_type": nr.query_type,
@@ -434,6 +467,7 @@ def main() -> None:
     parser.add_argument("--run-id", required=True, help="Run identifier, e.g. R0")
     parser.add_argument("--strategy-id", required=True, help="Strategy identifier, e.g. S0_CURRENT")
     parser.add_argument("--persona", default=DEFAULT_PERSONA)
+    parser.add_argument("--strategy-matrix", default=str(DEFAULT_STRATEGY_MATRIX))
     parser.add_argument("--remote-user", default="abir.gharbi@st.com")
     parser.add_argument("--temperature", type=float, default=0.3)
     parser.add_argument("--max-retries", type=int, default=3)
@@ -455,6 +489,31 @@ def main() -> None:
 
     if not questions:
         raise ValueError("No valid questions to run.")
+
+    strategy_matrix = load_strategy_matrix(Path(args.strategy_matrix))
+    strategy = strategy_matrix.get(args.strategy_id)
+    if strategy is None:
+        raise ValueError(
+            f"Unknown strategy_id '{args.strategy_id}' in {args.strategy_matrix}. "
+            "Define the strategy first in kb_strategy_matrix.csv."
+        )
+
+    search_type = (strategy.get("search_type") or "").strip()
+    semantic_threshold = (strategy.get("semantic_threshold") or "").strip()
+    semantic_max_doc_count = (strategy.get("semantic_max_doc_count") or "").strip()
+    fulltext_max_doc_count = (strategy.get("fulltext_max_doc_count") or "").strip()
+
+    print("\n=== Strategy under test ===")
+    print(f"strategy_id: {args.strategy_id}")
+    print(f"persona: {args.persona}")
+    print(f"search_type: {search_type}")
+    print(f"semantic_threshold: {semantic_threshold}")
+    print(f"semantic_max_doc_count: {semantic_max_doc_count}")
+    print(f"fulltext_max_doc_count: {fulltext_max_doc_count}")
+    print(
+        "WARNING: this script does not change KB backend parameters automatically. "
+        "Before running, ensure the ST GitHub Analyzer persona is configured with exactly these values."
+    )
 
     run_date = datetime.now().strftime("%Y-%m-%d")
     run_dir = Path("docs/evaluation/runs") / f"{args.run_id}_{args.strategy_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
@@ -529,6 +588,11 @@ def main() -> None:
                 run_id=args.run_id,
                 run_date=run_date,
                 strategy_id=args.strategy_id,
+                persona=args.persona,
+                search_type=search_type,
+                semantic_threshold=semantic_threshold,
+                semantic_max_doc_count=semantic_max_doc_count,
+                fulltext_max_doc_count=fulltext_max_doc_count,
                 query_id=qid,
                 query_text=qtext,
                 query_type=qtype,
@@ -542,7 +606,30 @@ def main() -> None:
             )
         )
 
-    write_run_artifacts(run_dir, raw_rows)
+    manifest = {
+        "run_id": args.run_id,
+        "run_date": run_date,
+        "strategy_id": args.strategy_id,
+        "persona": args.persona,
+        "strategy_params": {
+            "search_type": search_type,
+            "semantic_threshold": semantic_threshold,
+            "semantic_max_doc_count": semantic_max_doc_count,
+            "fulltext_max_doc_count": fulltext_max_doc_count,
+        },
+        "questions_file": str(qpath),
+        "xlsx_sheet": args.xlsx_sheet,
+        "remote_user": args.remote_user,
+        "temperature": args.temperature,
+        "max_retries": args.max_retries,
+        "request_timeout": args.request_timeout,
+        "max_response_tokens": args.max_response_tokens,
+        "delay": args.delay,
+        "use_proxy": args.use_proxy,
+        "note": "Backend KB parameters must be set manually to match strategy_params before this run.",
+    }
+
+    write_run_artifacts(run_dir, raw_rows, manifest)
     upsert_evaluation_rows(Path(args.output_csv), eval_rows)
 
     print("\nRun completed.")

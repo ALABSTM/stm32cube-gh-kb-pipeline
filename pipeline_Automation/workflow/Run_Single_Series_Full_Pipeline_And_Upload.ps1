@@ -37,7 +37,9 @@ param(
     [int]$ResolverDatasourceId = 0,
     [switch]$SkipDrivers,
     [switch]$SkipSchemaValidation,
-    [switch]$ContinueOnWorkflowError
+    [switch]$ContinueOnWorkflowError,
+    [ValidateSet("Fail", "Warn", "Off")]
+    [string]$PlaceholderPolicy = "Fail"
 )
 
 Set-StrictMode -Version Latest
@@ -379,15 +381,36 @@ function Invoke-PrepareSeries {
         Invoke-Step "Schema validation" @("-m", "pipeline.evaluation.validate_schemas")
     }
 
-    Write-Host "`n===== Placeholder gate for $Series =====" -ForegroundColor Cyan
-    $placeholderMatches = Select-String -Path "$deliveryRoot/**/*.json" `
-        -Pattern "IMAGE DESCRIPTION UNAVAILABLE|\[FIGURE DETECTED\]|Figure detected on page" `
-        -ErrorAction SilentlyContinue
-    if ($placeholderMatches) {
-        $placeholderMatches | ForEach-Object { Write-Host $_.Line -ForegroundColor Red }
-        throw "Unresolved Alfred image/PDF placeholders found for $Series"
+    Write-Host "`n===== Placeholder gate for $Series (policy=$PlaceholderPolicy) =====" -ForegroundColor Cyan
+    if ($PlaceholderPolicy -ne "Off") {
+        $placeholderMatches = Select-String -Path "$deliveryRoot/**/*.json" `
+            -Pattern "IMAGE DESCRIPTION UNAVAILABLE|\[FIGURE DETECTED\]|Figure detected on page|no technical description is available yet" `
+            -ErrorAction SilentlyContinue
+
+        if ($placeholderMatches) {
+            $reportPath = Join-Path $deliveryRoot "alfred_placeholder_report_$slug.txt"
+            $placeholderLines = @($placeholderMatches | ForEach-Object { $_.Line })
+            $placeholderLines | Set-Content -LiteralPath $reportPath -Encoding UTF8
+
+            Write-Host "Found unresolved Alfred placeholders: $($placeholderLines.Count)" -ForegroundColor Yellow
+            Write-Host "Report: $reportPath" -ForegroundColor Yellow
+
+            $placeholderLines | Select-Object -First 5 | ForEach-Object { Write-Host $_ -ForegroundColor Red }
+            if ($placeholderLines.Count -gt 5) {
+                Write-Host "... ($($placeholderLines.Count - 5) more lines in report)" -ForegroundColor DarkYellow
+            }
+
+            if ($PlaceholderPolicy -eq "Fail") {
+                throw "Unresolved Alfred image/PDF placeholders found for $Series"
+            }
+
+            Write-Host "[WARN] Continuing despite unresolved placeholders (PlaceholderPolicy=Warn)" -ForegroundColor Yellow
+        } else {
+            Write-Host "OK: no unresolved Alfred image/PDF placeholders for $Series" -ForegroundColor Green
+        }
+    } else {
+        Write-Host "[SKIP] Placeholder gate disabled (PlaceholderPolicy=Off)" -ForegroundColor Yellow
     }
-    Write-Host "OK: no unresolved Alfred image/PDF placeholders for $Series" -ForegroundColor Green
 }
 
 function Invoke-UploadJsonNew {

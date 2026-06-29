@@ -7,14 +7,26 @@ from typing import Any, Dict, Optional
 import requests
 import urllib3
 
-from Get_Persona_KBs import (
-    apiKey,
-    clientAppName,
-    generate_token,
-    get_ST_GitHub_Analyzer_kb,
-    proxies,
-    url,
-)
+try:
+    # Works when executed as a module: python -m upload.Chat_With_Persona_KB
+    from .Get_Persona_KBs import (
+        apiKey,
+        clientAppName,
+        generate_token,
+        get_ST_GitHub_Analyzer_kb,
+        proxies,
+        url,
+    )
+except ImportError:
+    # Fallback for direct script execution.
+    from Get_Persona_KBs import (
+        apiKey,
+        clientAppName,
+        generate_token,
+        get_ST_GitHub_Analyzer_kb,
+        proxies,
+        url,
+    )
 
 # Disable SSL warnings because existing automation already uses verify=False.
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
