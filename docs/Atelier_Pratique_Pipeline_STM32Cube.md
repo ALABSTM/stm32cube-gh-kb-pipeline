@@ -7,6 +7,51 @@ Ce guide permet à l'équipe de **lancer, comprendre et maintenir** le pipeline 
 
 ---
 
+## 0. Mode Présentation (Comité / Direction)
+
+Si l'objectif est de présenter devant un public important, utiliser ce fil narratif court (10-15 min) :
+
+### 0.1 Message clé en 30 secondes
+
+Le pipeline transforme des signaux GitHub bruts et hétérogènes en artefacts support exploitables, traçables et uploadables dans la KB ST.
+
+### 0.2 Storyline recommandée (ordre des slides)
+
+1. **Pourquoi** : problème métier (support lent, données fragmentées, diagnostics non traçables).
+2. **Comment** : chaîne technique en 7 blocs (Ingestion → Upload KB).
+3. **Preuve** : gates qualité + exemples concrets avant/après.
+4. **Risque maîtrisé** : fallback, retries, idempotence upload, validations schéma.
+5. **Impact** : qualité réponse, traçabilité, reproductibilité opérationnelle.
+
+### 0.3 KPI à afficher (lisibles, non ambigus)
+
+| KPI | Définition | Pourquoi c'est important |
+|-----|------------|--------------------------|
+| Ingestion completeness | `% issues/files non vides` | Vérifie que la matière d'entrée existe |
+| Enrichment coverage | `% docs avec layer/component/board` | Mesure la valeur ajoutée du preprocessing |
+| Alfred success rate | `images décrites / images détectées` | Mesure la fiabilité multimodale |
+| Placeholder rate | `placeholders non résolus / figures détectées` | Détecte les trous de connaissance visuelle |
+| Quality Index | Score end-to-end sur jeu de questions | Mesure le niveau de service perçu |
+
+### 0.4 Go / No-Go opérationnel avant démo
+
+| Check | Critère Go |
+|-------|------------|
+| Schémas JSON | 100% valide |
+| Upload | Aucun échec bloquant |
+| Placeholders Alfred | 0 en mode strict (ou rapport explicite en mode Warn) |
+| Questions smoke test | Réponses cohérentes et sourcées |
+
+### 0.5 Script démo live (5 min)
+
+1. Lancer une série en `Prepare`.
+2. Montrer les artefacts `st_ready` générés.
+3. Lancer `Upload` et afficher les IDs datasource.
+4. Montrer 1 question technique et la source citée.
+5. Montrer 1 cas de garde-fou (placeholder/report) et la mitigation.
+
+---
+
 ## 1. Prérequis
 
 ### 1.1 Environnement
@@ -89,6 +134,12 @@ Commande recommandée atelier (pipeline + Alfred + upload KB en one-shot) :
 
 ```powershell
 .\pipeline_Automation\workflow\Run_Single_Series_Full_Pipeline_And_Upload.ps1 -Series H7
+```
+
+Commande démo recommandée (ne bloque pas la présentation si un placeholder subsiste, tout en gardant la traçabilité) :
+
+```powershell
+.\pipeline_Automation\workflow\Run_Single_Series_Full_Pipeline_And_Upload.ps1 -Series H7 -Mode Full -PlaceholderPolicy Warn
 ```
 
 Mode debug en 2 temps :
@@ -299,6 +350,16 @@ python pipeline_Automation/upload/Get_Persona_KBs.py
 | `--inplace` pour remplacer le fichier | Évite les doublons |
 | Vérifier 0 `[IMAGE DESCRIPTION UNAVAILABLE]` | Si présent = URL expirée ou rate limit |
 
+### 6.5 Présentation à fort enjeu (checklist)
+
+| Action | Statut attendu |
+|--------|----------------|
+| Préparer un run `Prepare` la veille | ✅ |
+| Générer les résumés `summary_*.json` | ✅ |
+| Vérifier `validate_schemas` | ✅ |
+| Préparer 3 exemples avant/après (raw → st_ready) | ✅ |
+| Préparer 1 cas d'échec + mitigation (transparence) | ✅ |
+
 ### 6.4 Git
 
 | Règle | Pourquoi |
@@ -318,6 +379,27 @@ python pipeline_Automation/upload/Get_Persona_KBs.py
              python -m pipeline.run_full_workflow --export-st-ready --continue-on-error
 □ 4. Vérifier datasets/07_delivery/st_ready/by_series/stm32cube<serie>/
      - issues_json/ ✓
+
+---
+
+## 8. Annexes utiles pour la présentation
+
+### 8.1 Exemple de comparaison “avant / après pipeline”
+
+- **Avant** : issue brute, commentaires longs, image non interprétée.
+- **Après** : card `st_ready` structurée avec contexte, contraintes, mots-clés, détails techniques.
+
+### 8.2 Risques et mitigations à annoncer explicitement
+
+| Risque | Effet | Mitigation |
+|-------|-------|------------|
+| Timeout API Alfred | Images non décrites | Re-run ciblé + cache + reporting |
+| Placeholder PDF tronqué | Perte d'info visuelle | Patch ciblé + gate placeholder |
+| Série peu documentée | Réponses incomplètes | Fallback Alfred + enrichissement continu |
+
+### 8.3 Message de clôture conseillé
+
+Le pipeline n'est pas seulement un ETL: c'est une chaîne qualité outillée, avec traçabilité des preuves, garde-fous explicites et boucle d'amélioration continue vers la production.
      - files_json/ ✓
      - diagnostic_cards_json/ ✓
      - resolver_cases_json/ ✓

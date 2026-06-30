@@ -131,35 +131,31 @@
 \contentsline {subsection}{\numberline {8.2.3}Datasources V3 en Production}{66}{subsection.8.2.3}%
 \contentsline {subsection}{\numberline {8.2.4}Filtre de Validité (is\_valid)}{67}{subsection.8.2.4}%
 \contentsline {section}{\numberline {8.3}Métriques d'Évaluation par Stage}{67}{section.8.3}%
-\contentsline {subsection}{\numberline {8.3.1}Couverture des Données en Entrée}{67}{subsection.8.3.1}%
-\contentsline {subsection}{\numberline {8.3.2}Notation et Seuils}{67}{subsection.8.3.2}%
-\contentsline {subsection}{\numberline {8.3.3}Stage 1 : Ingestion}{68}{subsection.8.3.3}%
-\contentsline {subsection}{\numberline {8.3.4}Stage 2 : Cleaning}{68}{subsection.8.3.4}%
-\contentsline {subsection}{\numberline {8.3.5}Stage 3 : Enrichissement}{69}{subsection.8.3.5}%
-\contentsline {subsection}{\numberline {8.3.6}Stage 3b : Enrichissement Images Issues (Alfred Vision)}{70}{subsection.8.3.6}%
-\contentsline {subsection}{\numberline {8.3.7}Stage 3c : Enrichissement Figures PDF (Alfred Vision)}{72}{subsection.8.3.7}%
-\contentsline {subsection}{\numberline {8.3.8}Stage 4 : Similarité}{72}{subsection.8.3.8}%
-\contentsline {subsection}{\numberline {8.3.9}Stage 5 : Delivery}{73}{subsection.8.3.9}%
-\contentsline {subsection}{\numberline {8.3.10}Résultats Mesurés --- STM32CubeH7}{73}{subsection.8.3.10}%
-\contentsline {section}{\numberline {8.4}Score Global du Pipeline}{74}{section.8.4}%
-\contentsline {section}{\numberline {8.5}Distribution des Données --- STM32CubeH7}{75}{section.8.5}%
-\contentsline {subsection}{\numberline {8.5.1}Distribution des Issues (296 issues)}{75}{subsection.8.5.1}%
-\contentsline {subsection}{\numberline {8.5.2}Distribution des Fichiers (4\,733 fichiers, 4\,707 valides)}{75}{subsection.8.5.2}%
-\contentsline {subsection}{\numberline {8.5.3}Boards les Plus Référencés}{76}{subsection.8.5.3}%
-\contentsline {section}{\numberline {8.6}Quality Index --- Test End-to-End}{76}{section.8.6}%
-\contentsline {subsection}{\numberline {8.6.1}Protocole}{76}{subsection.8.6.1}%
-\contentsline {subsection}{\numberline {8.6.2}Résultats}{76}{subsection.8.6.2}%
-\contentsline {subsection}{\numberline {8.6.3}Critères d'évaluation}{77}{subsection.8.6.3}%
-\contentsline {section}{\numberline {8.7}Performance de Recherche}{77}{section.8.7}%
-\contentsline {section}{\numberline {8.8}Étude Comparative : Alfred Générique vs Persona KB}{77}{section.8.8}%
-\contentsline {subsection}{\numberline {8.8.1}Protocole Expérimental}{78}{subsection.8.8.1}%
-\contentsline {subsection}{\numberline {8.8.2}Grille d'Évaluation}{78}{subsection.8.8.2}%
-\contentsline {subsection}{\numberline {8.8.3}Résultats par Catégorie}{78}{subsection.8.8.3}%
-\contentsline {subsection}{\numberline {8.8.4}Analyse Qualitative}{79}{subsection.8.8.4}%
-\contentsline {subsubsection}{Avantages de la Persona KB}{79}{subsection.8.8.4}%
-\contentsline {subsubsection}{Avantages d'Alfred (générique)}{80}{Item.103}%
-\contentsline {subsubsection}{Cas Emblématiques}{80}{Item.107}%
-\contentsline {subsection}{\numberline {8.8.5}Conclusion de l'Étude Comparative}{80}{subsection.8.8.5}%
+\contentsline {subsection}{\numberline {8.3.1}Cadre Méthodologique et Références}{67}{subsection.8.3.1}%
+\contentsline {subsection}{\numberline {8.3.2}Échelle de Notation et Justification des Seuils}{68}{subsection.8.3.2}%
+\contentsline {subsection}{\numberline {8.3.3}Stage 1 : Ingestion --- Complétude des Données Brutes}{68}{subsection.8.3.3}%
+\contentsline {subsection}{\numberline {8.3.4}Stage 2 : Cleaning --- Qualité de Préparation Textuelle}{70}{subsection.8.3.4}%
+\contentsline {subsection}{\numberline {8.3.5}Stage 3 : Enrichissement --- Classification par Heuristiques NLP}{70}{subsection.8.3.5}%
+\contentsline {subsection}{\numberline {8.3.6}Stage 3b : Enrichissement Alfred Vision --- Images d'Issues}{72}{subsection.8.3.6}%
+\contentsline {subsection}{\numberline {8.3.7}Stage 3c : Enrichissement Figures PDF}{73}{subsection.8.3.7}%
+\contentsline {subsection}{\numberline {8.3.8}Stage 4 : Similarité TF-IDF}{73}{subsection.8.3.8}%
+\contentsline {subsection}{\numberline {8.3.9}Stage 5 : Delivery --- Complétude des Artefacts Exportés}{74}{subsection.8.3.9}%
+\contentsline {subsection}{\numberline {8.3.10}Résumé des Scores par Stage --- Vue Synthétique}{75}{subsection.8.3.10}%
+\contentsline {section}{\numberline {8.4}Score Global du Pipeline --- Formule Recalculée}{75}{section.8.4}%
+\contentsline {subsection}{\numberline {8.4.1}Formule de Scoring}{75}{subsection.8.4.1}%
+\contentsline {subsection}{\numberline {8.4.2}Justification des Poids}{75}{subsection.8.4.2}%
+\contentsline {subsection}{\numberline {8.4.3}Application Numérique (STM32CubeH7)}{76}{subsection.8.4.3}%
+\contentsline {subsection}{\numberline {8.4.4}Interprétation et Comparaison}{76}{subsection.8.4.4}%
+\contentsline {section}{\numberline {8.5}Étude Comparative : Alfred Générique vs Persona KB}{77}{section.8.5}%
+\contentsline {subsection}{\numberline {8.5.1}Protocole Expérimental}{77}{subsection.8.5.1}%
+\contentsline {subsection}{\numberline {8.5.2}Grille de Scoring Détaillée}{78}{subsection.8.5.2}%
+\contentsline {subsection}{\numberline {8.5.3}Scorecard Comparative}{78}{subsection.8.5.3}%
+\contentsline {subsection}{\numberline {8.5.4}Métriques Comparatives Synthétiques}{79}{subsection.8.5.4}%
+\contentsline {subsection}{\numberline {8.5.5}Analyse par Catégorie de Questions}{79}{subsection.8.5.5}%
+\contentsline {section}{\numberline {8.6}Contribution de Chaque Étape au Résultat Final}{80}{section.8.6}%
+\contentsline {subsection}{\numberline {8.6.1}Chaîne de Valeur --- Du Brut au QI}{80}{subsection.8.6.1}%
+\contentsline {subsection}{\numberline {8.6.2}Impact Cumulatif sur le Quality Index}{81}{subsection.8.6.2}%
+\contentsline {subsection}{\numberline {8.6.3}Matrice Valeur × Effort par Étape}{81}{subsection.8.6.3}%
 \contentsline {chapter}{\numberline {9}Automatisation et CI/CD}{82}{chapter.9}%
 \contentsline {section}{\numberline {9.1}GitHub Actions --- Mise à Jour Automatique}{82}{section.9.1}%
 \contentsline {subsection}{\numberline {9.1.1}Architecture 2 Jobs}{82}{subsection.9.1.1}%

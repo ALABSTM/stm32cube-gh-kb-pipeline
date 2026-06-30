@@ -20,7 +20,11 @@
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {7.1}{\ignorespaces Évolution du Quality Index au fil des améliorations incrémentales (draw.io)}}{61}{figure.7.1}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {8.1}{\ignorespaces Qualité du nettoyage : taux de texte non-vide et extraction d'images (les métriques de classification sont au Stage 3)}}{69}{figure.8.1}%
+\contentsline {figure}{\numberline {8.1}{\ignorespaces Complétude d'ingestion par série --- toutes métriques au-dessus du seuil EXCELLENT}}{69}{figure.8.1}%
+\contentsline {figure}{\numberline {8.2}{\ignorespaces Couverture d'enrichissement STM32CubeH7 --- comparaison score vs seuil par champ}}{72}{figure.8.2}%
+\contentsline {figure}{\numberline {8.3}{\ignorespaces Décomposition du score global 86.4\% --- contribution pondérée de chaque stage}}{77}{figure.8.3}%
+\contentsline {figure}{\numberline {8.4}{\ignorespaces Comparaison Alfred vs Persona KB par catégorie de question}}{80}{figure.8.4}%
+\contentsline {figure}{\numberline {8.5}{\ignorespaces Évolution du Quality Index --- impact cumulatif de chaque amélioration}}{81}{figure.8.5}%
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {9.1}{\ignorespaces Architecture CI/CD : GitHub Actions + self-hosted runner}}{82}{figure.9.1}%
 \addvspace {10\p@ }

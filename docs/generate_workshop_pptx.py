@@ -238,24 +238,736 @@ def main():
     prs.slide_width = Inches(10)
     prs.slide_height = Inches(7.5)
 
-    # ========== SLIDE 1: Title ==========
+    # ══════════════════════════════════════════════════════════════════════
+    # SECTION 0 — TITLE & AGENDA
+    # ══════════════════════════════════════════════════════════════════════
+
     add_title_slide(
         prs,
-        "Pipeline de Prétraitement\nSTM32Cube → Knowledge Base",
-        "Atelier Pratique — Guide d'exécution complet"
+        "STM32Cube Preprocessing Pipeline\nFrom Raw GitHub Data to AI-Ready Knowledge",
+        "Practical Workshop — Full End-to-End Workflow"
     )
 
-    # ========== SLIDE 2: Agenda ==========
     add_content_slide(prs, "Agenda", [
-        "## 1. Vue d'ensemble du pipeline",
-        "## 2. Architecture du projet",
-        "## 3. Configuration d'une série",
-        "## 4. Étapes du pipeline (détail)",
-        "## 5. Enrichissement Alfred (images + PDF)",
-        "## 6. Upload vers la Knowledge Base",
-        "## 7. Scripts d'automatisation",
-        "## 8. Bonnes pratiques & dépannage",
+        "## 1. Executive Summary",
+        "## 2. Context & Business Need",
+        "## 3. Architecture Overview",
+        "## 4. End-to-End Pipeline Workflow",
+        "## 5. Preprocessing Deep Dive",
+        "## 6. ALFRED Vision Integration",
+        "## 7. Delivery & Upload to Knowledge Base",
+        "## 8. Quality Gates & Validation",
+        "## 9. Value Proposition & Impact",
+        "## 10. Live Demo & Hands-On",
+        "## 11. Conclusion & Next Steps",
     ])
+
+    # ══════════════════════════════════════════════════════════════════════
+    # SECTION 1 — EXECUTIVE SUMMARY
+    # ══════════════════════════════════════════════════════════════════════
+
+    add_section_slide(prs, "1. Executive Summary")
+
+    add_content_slide(prs, "What This Workshop Is About", [
+        "## Problem",
+        "• STM32 technical knowledge is fragmented across 25+ GitHub repos, 10k+ issues, PDFs, and images.",
+        "• Without structured preprocessing, AI assistants produce generic, unsourced, or inaccurate answers.",
+        "",
+        "## Solution",
+        "• A 7-stage automated pipeline that transforms raw GitHub signals into structured,",
+        "  traceable, upload-ready Knowledge Base artifacts for ST ChatGPT.",
+        "",
+        "## What You Will Learn",
+        "• How to configure, run, validate, and deploy the full pipeline for any STM32 series.",
+        "• How ALFRED Vision enriches images and PDF figures into searchable descriptions.",
+        "• How quality gates ensure production-grade reliability before each KB upload.",
+    ])
+
+    add_content_slide(prs, "Key Message — 30 Seconds", [
+        "## One sentence",
+        "• This pipeline turns scattered, heterogeneous GitHub data into AI-ready knowledge",
+        "  that makes STM32 support answers more relevant, traceable, and actionable.",
+        "",
+        "## By the numbers",
+        "• 25 MCU series configured | 19 fully processed with PDF enrichment",
+        "• 242 PDF figure descriptions generated via ALFRED Vision",
+        "• 4 artifact types per series: Issues, Files, Resolver Cases, Diagnostic Cards",
+        "• Quality Index: 94/100 on pilot series H7 with Diagnostic Cards",
+        "",
+        "## Impact",
+        "• KB-first answers are +39% more relevant than generic LLM on STM32 technical questions.",
+    ])
+
+    # ══════════════════════════════════════════════════════════════════════
+    # SECTION 2 — CONTEXT & BUSINESS NEED
+    # ══════════════════════════════════════════════════════════════════════
+
+    add_section_slide(prs, "2. Context & Business Need")
+
+    add_content_slide(prs, "The Problem Space", [
+        "## Current Challenges",
+        "• Customer support engineers spend significant time searching fragmented sources.",
+        "• Raw GitHub issues contain noise: off-topic, duplicates, short questions, images without text.",
+        "• PDF documentation contains critical figures that are invisible to text-based search.",
+        "• No automated link between issues, root causes, and resolutions.",
+        "",
+        "## Business Need",
+        "• A single AI-powered support interface (ST ChatGPT) that answers from verified, structured data.",
+        "• Traceability: every answer must link back to a source (issue, file, commit, figure).",
+        "• Scalability: the solution must work for all 25 STM32 series, not just one.",
+        "• Maintainability: adding a new series must be a simple configuration step.",
+    ])
+
+    add_table_slide(prs, "Pain Points vs. Pipeline Solution",
+        ["Pain Point", "Without Pipeline", "With Pipeline"],
+        [
+            ["Fragmented knowledge", "Manual search across repos", "Unified, structured KB artifacts"],
+            ["Images/figures not indexed", "Invisible to RAG", "ALFRED descriptions make them searchable"],
+            ["No root cause tracing", "Generic LLM guess", "Resolver Cases + Diagnostic Cards"],
+            ["Manual per-series work", "Hours of manual curation", "Automated multi-series batch"],
+            ["No quality control", "Silent failures", "Schema validation + placeholder gates"],
+        ]
+    )
+
+    # ══════════════════════════════════════════════════════════════════════
+    # SECTION 3 — ARCHITECTURE OVERVIEW
+    # ══════════════════════════════════════════════════════════════════════
+
+    add_section_slide(prs, "3. Architecture Overview")
+
+    add_content_slide(prs, "High-Level System Architecture", [
+        "## Three Layers",
+        "• DATA SOURCES: GitHub API (issues, PRs, commits, files), local repo clones, PDF documents.",
+        "• PROCESSING ENGINE: Python pipeline (ingestion → cleaning → enrichment → delivery).",
+        "• CONSUMPTION: ST ChatGPT persona backed by KB #793 with Hybrid search.",
+        "",
+        "## Key Design Principles",
+        "• Modular: each stage is independently runnable and testable.",
+        "• Idempotent: re-running any stage produces the same output.",
+        "• Config-driven: one JSON config per series, no code changes to add a new MCU family.",
+        "• Observable: summary files, stats scripts, and evaluation reports at every stage.",
+    ])
+
+    add_diagram_slide(prs, "Architecture — Data Flow", [
+        ("GITHUB API", "Issues, PRs, Commits, Links → raw JSON per repo"),
+        ("LOCAL CLONES", "Repository files: READMEs, Release Notes, PDFs, source code"),
+        ("PIPELINE ENGINE", "7 stages: Ingest → Clean → Enrich → Similarity → Chunk → Evaluate → Deliver"),
+        ("ALFRED VISION", "Image descriptions (issue screenshots) + PDF figure descriptions"),
+        ("ST-READY ARTIFACTS", "Structured JSON: issues, files, resolver_cases, diagnostic_cards"),
+        ("KB #793", "ST ChatGPT Knowledge Base — Hybrid semantic + full-text search"),
+        ("END USER", "Support engineer asks question → AI answers with source traceability"),
+    ])
+
+    add_content_slide(prs, "Project File Structure", [
+        "```PFE_Chatbot_STM32Cube/",
+        "```├── shared/config/             Config per series (config_h7.json, config_f4.json...)",
+        "```├── pipeline/",
+        "```│   ├── ingestion/             fetch_issues, fetch_files, fetch_prs, repo_sync",
+        "```│   ├── cleaning/              clean_issues, clean_files (normalize, extract images)",
+        "```│   ├── enrichment/            issues_to_docs_v2, files_to_docs_v2 (classify, tag)",
+        "```│   ├── similarity/            TF-IDF cosine → related_issue_ids",
+        "```│   ├── chunking/              docs_to_chunks (paragraph-based splitting)",
+        "```│   ├── delivery/              export_st_ready_* (4 artifact types)",
+        "```│   └── evaluation/            stats, TF-IDF search, schema validation",
+        "```├── pipeline_Automation/",
+        "```│   ├── alfred/                enrich_json_images, enrich_pdf_figures",
+        "```│   ├── upload/                Add_Data_Source_Files.py, datasource management",
+        "```│   └── workflow/              PowerShell orchestration scripts",
+        "```├── datasets/07_delivery/      Final ST-ready outputs organized by_series/",
+        "```└── data/                      Intermediate artifacts (not committed)",
+    ])
+
+    # ══════════════════════════════════════════════════════════════════════
+    # SECTION 4 — END-TO-END PIPELINE WORKFLOW
+    # ══════════════════════════════════════════════════════════════════════
+
+    add_section_slide(prs, "4. End-to-End Pipeline Workflow")
+
+    add_diagram_slide(prs, "Pipeline — 23 Steps in Sequence", [
+        ("1-6. INGESTION", "GitHub API calls + local repo sync + file collection (incl. PDFs)"),
+        ("7. ALFRED PDF", "Extract PDF figures, render pages, crop regions, generate tasks"),
+        ("8-9. CLEANING", "Normalize text, detect [IMAGE ATTACHED], structure content"),
+        ("10-11. ENRICHMENT", "Classify: layer, board, component, severity, is_valid, issue_kind"),
+        ("12. SIMILARITY", "TF-IDF cosine between issues → related_issue_ids field"),
+        ("13-17. EVAL", "Chunking + stats + TF-IDF search tests + schema validation"),
+        ("18-23. DELIVERY", "Export 4 artifact types + issues_with_images + ALFRED Vision"),
+    ])
+
+    add_content_slide(prs, "Running the Full Pipeline — One Command", [
+        "## Set the target series configuration",
+        "```$env:STM32CUBE_CONFIG = \"shared/config/config_h7.json\"",
+        "",
+        "## Launch the complete workflow with delivery",
+        "```python -m pipeline.run_full_workflow --export-st-ready --continue-on-error",
+        "",
+        "## What this executes (in order):",
+        "• Steps 1-6: Ingestion (issues, PRs, commits, links, repo sync, files)",
+        "• Step 7: ALFRED PDF figure extraction and task generation",
+        "• Steps 8-9: Cleaning (issues + files)",
+        "• Steps 10-11: Enrichment V2 (classification + tagging)",
+        "• Step 12: Similarity computation",
+        "• Steps 13-17: Chunking + evaluation + schema validation",
+        "• Steps 18-23: Delivery exports + ALFRED Vision on issue images",
+    ])
+
+    add_content_slide(prs, "Pipeline Control Flags", [
+        "## --export-st-ready",
+        "• Activates delivery steps (18-23): issues, files, resolver, diag, with_images, ALFRED",
+        "• Without this flag, pipeline stops after evaluation",
+        "",
+        "## --continue-on-error",
+        "• If one step fails (e.g., a sub-repo has no issues), continues to the next",
+        "• Essential for multi-repo series configurations",
+        "",
+        "## --skip-ingestion",
+        "• Skips GitHub API calls; uses existing raw_* files in data/",
+        "• Saves API rate limit when reprocessing",
+        "",
+        "## --no-enrich-pdf",
+        "• Skips ALFRED Vision on PDF figures (step 7)",
+        "• Use when PDFs are already enriched or proxy is unavailable",
+    ])
+
+    add_content_slide(prs, "Single-Series Full Workflow Script", [
+        "## Recommended command for workshop / production:",
+        "```.\\pipeline_Automation\\workflow\\Run_Single_Series_Full_Pipeline_And_Upload.ps1 -Series H7",
+        "",
+        "## What it orchestrates:",
+        "• 1. Configures environment for the target series",
+        "• 2. Runs full preprocessing pipeline with ALFRED PDF enrichment",
+        "• 3. Exports all ST-ready artifacts (parent + drivers)",
+        "• 4. Validates schemas and checks for unresolved placeholders",
+        "• 5. Patches ALFRED PDF descriptions into delivery files",
+        "• 6. Uploads to KB #793 with correct datasource routing",
+        "",
+        "## Placeholder safety modes:",
+        "• -PlaceholderPolicy Fail  → blocks upload if placeholders remain (production)",
+        "• -PlaceholderPolicy Warn  → warns but continues (demo / development)",
+    ])
+
+    # ══════════════════════════════════════════════════════════════════════
+    # SECTION 5 — PREPROCESSING DEEP DIVE
+    # ══════════════════════════════════════════════════════════════════════
+
+    add_section_slide(prs, "5. Preprocessing Deep Dive")
+
+    add_content_slide(prs, "Preprocessing — What Happens Before Delivery", [
+        "## Stage 1: Ingestion",
+        "• GitHub API: fetch issues (with labels, comments, timelines), PRs, commits, links.",
+        "• Local clone: sync repos to access files, PDFs, and source code.",
+        "• File collection: README, Release Notes, PDFs from Documentation/ folder.",
+        "",
+        "## Stage 2: Cleaning",
+        "• Normalize Markdown/HTML to clean text.",
+        "• Detect and tag embedded images: body images → [IMAGE ATTACHED].",
+        "• Extract structured fields from issues: title, body, comments, labels.",
+        "",
+        "## Stage 3: Enrichment V2",
+        "• Heuristic + rule-based classification:",
+        "  → layer (HAL/LL/Middleware/BSP/CubeMX), board, component, severity, issue_kind.",
+        "• Validity filtering: short/duplicate/wontfix → is_valid=false (with rescue mechanism).",
+    ])
+
+    add_content_slide(prs, "Preprocessing — Similarity & Chunking", [
+        "## Stage 4: Similarity",
+        "• Build TF-IDF vectors from enriched issue documents.",
+        "• Compute pairwise cosine similarity (threshold > 0.3).",
+        "• Add related_issue_ids field → helps retrieval of connected problems.",
+        "",
+        "## Stage 5: Chunking (local evaluation only)",
+        "• Paragraph-based splitting with token-limit awareness.",
+        "• Used for local TF-IDF search tests — the ST platform does its own chunking at upload.",
+        "",
+        "## Stage 6: Evaluation & Validation",
+        "• test_stats_issues_v2.py / test_stats_files_v2.py → distribution analysis.",
+        "• test_tfidf_search_*.py → retrieval quality on representative queries.",
+        "• validate_schemas.py → JSON contract compliance gate.",
+    ])
+
+    add_diagram_slide(prs, "Preprocessing Chain — Transformations", [
+        ("RAW ISSUES", "GitHub JSON: title, body, labels, comments, timeline events"),
+        ("CLEANED", "Normalized text, [IMAGE ATTACHED] tags, structured fields"),
+        ("ENRICHED", "layer, board, component, severity, is_valid, issue_kind, keywords"),
+        ("SIMILARITY", "related_issue_ids added (TF-IDF cosine links)"),
+        ("DELIVERY-READY", "st_ready_text, metadata, image_urls, resolver links"),
+    ])
+
+    add_diagram_slide(prs, "File Preprocessing Chain", [
+        ("RAW FILES", "Collected from repo: README.md, Release_Notes.html, PDF documents"),
+        ("PDF EXTRACTION", "PyPDF text + PyMuPDF page render + OpenCV figure detection"),
+        ("CLEANED FILES", "Normalized content, figure crops stored, task files generated"),
+        ("ENRICHED FILES", "file_type, board, component, category, content_extractor tagged"),
+        ("DELIVERY-READY", "st_ready_text with [FIGURE_DESCRIPTIONS] blocks injected"),
+    ])
+
+    # ══════════════════════════════════════════════════════════════════════
+    # SECTION 6 — ALFRED VISION INTEGRATION
+    # ══════════════════════════════════════════════════════════════════════
+
+    add_section_slide(prs, "6. ALFRED Vision Integration")
+
+    add_content_slide(prs, "ALFRED — Role in the Pipeline", [
+        "## What is ALFRED?",
+        "• ST's internal Vision AI API (api-ai-bridge.st.com).",
+        "• Analyzes images and generates structured textual descriptions.",
+        "",
+        "## Two distinct roles in the pipeline:",
+        "",
+        "## Role A: Issue Image Enrichment (Step 23)",
+        "• Input: st_ready_issues_with_images_*.json containing image_urls.",
+        "• Process: ALFRED analyzes each screenshot and writes a text description.",
+        "• Output: [IMAGE ATTACHED] → [IMAGE DESCRIPTION] <technical text>.",
+        "• Impact: screenshots become searchable by the RAG system.",
+        "",
+        "## Role B: PDF Figure Enrichment (Step 7)",
+        "• Input: Cropped figure PNGs from data/pdf_figures/<repo>/.",
+        "• Process: ALFRED describes each diagram/figure in technical context.",
+        "• Output: Descriptions stored in data/pdf_image_descriptions.json.",
+        "• Impact: PDF figures become searchable via [FIGURE_DESCRIPTIONS] blocks.",
+    ])
+
+    add_content_slide(prs, "ALFRED — Where It Fits in the Workflow", [
+        "## Integration Points:",
+        "",
+        "```[Ingestion] → [PDF figure crop + render] → ALFRED PDF (step 7)",
+        "```                                            ↓",
+        "```                                  pdf_image_descriptions.json",
+        "```                                            ↓",
+        "```[Cleaning → Enrichment] → files_to_docs_v2 → inject descriptions",
+        "```                                            ↓",
+        "```[Delivery] → export_st_ready_files_v3.json (with FIGURE_DESCRIPTIONS)",
+        "",
+        "```[Delivery] → export_issues_with_images → ALFRED Images (step 23)",
+        "```                                            ↓",
+        "```             [IMAGE ATTACHED] → [IMAGE DESCRIPTION] in-place",
+        "",
+        "## Key Implementation Detail:",
+        "• ALFRED operates in-place (modifies the JSON directly, no separate output file).",
+        "• PlaceholderPolicy gate checks for unresolved markers before upload.",
+    ])
+
+    add_content_slide(prs, "ALFRED — Concrete Examples (H7)", [
+        "## Example 1 — Issue #335 (STM32CubeH7)",
+        "• Topic: Warning observed with -Wcast-align flag during compilation.",
+        "• Before: Screenshot attached but invisible to text search.",
+        "• After: ALFRED describes Eclipse Tool Settings panel → flags become searchable.",
+        "",
+        "## Example 2 — Issue #333 (STM32CubeH7)",
+        "• Topic: Fix compile-time warnings without removing compiler flags.",
+        "• After: ALFRED extracts 'About STM32CubeIDE' dialog → version info traceable.",
+        "",
+        "## Example 3 — PDF Figure (H7 GettingStarted.pdf, page 3)",
+        "• Before: Figure 1 is a raster image in a PDF, invisible to retrieval.",
+        "• After: ALFRED describes the firmware component stack diagram.",
+        "• st_ready_text now contains the architecture description as searchable text.",
+    ])
+
+    add_table_slide(prs, "ALFRED Coverage Across Series",
+        ["Series", "Issues w/ Images", "Total Images", "ALFRED Success", "PDF Figures"],
+        [
+            ["H7", "53", "98", "97/98", "10"],
+            ["F4", "34", "62", "61/62", "11"],
+            ["WL", "23", "48", "48/48", "11"],
+            ["F7", "20", "26", "26/26", "11"],
+            ["WB", "—", "—", "—", "22"],
+            ["G0", "yes", "—", "OK", "13"],
+            ["H7RS", "—", "—", "—", "25"],
+            ["N6", "—", "—", "—", "15"],
+            ["... 19 series total", "", "", "", "242 total"],
+        ]
+    )
+
+    # ══════════════════════════════════════════════════════════════════════
+    # SECTION 7 — DELIVERY & UPLOAD
+    # ══════════════════════════════════════════════════════════════════════
+
+    add_section_slide(prs, "7. Delivery & Upload to KB")
+
+    add_content_slide(prs, "Four Artifact Types — ST-Ready JSON", [
+        "## 1. Issues (st_ready_issues_*.json)",
+        "• Structured support cards: title, body, context, layer, severity, related issues.",
+        "",
+        "## 2. Files (st_ready_files_*_v3.json)",
+        "• Documentation cards: README, Release Notes, PDFs with figure descriptions.",
+        "",
+        "## 3. Resolver Cases (st_ready_resolver_cases_*.json)",
+        "• Cause → Action pairs extracted from closed issues with confirmed fixes.",
+        "",
+        "## 4. Diagnostic Cards (st_ready_diagnostic_cards_*.json)",
+        "• Structured troubleshooting: symptoms, root cause, resolution, query aliases.",
+        "• Designed for high-precision retrieval on specific technical problems.",
+    ])
+
+    add_content_slide(prs, "Delivery Output Structure", [
+        "```datasets/07_delivery/st_ready/by_series/",
+        "```├── stm32cubeh7/",
+        "```│   ├── issues_json/",
+        "```│   │   ├── st_ready_issues_stm32cubeh7.json",
+        "```│   │   └── st_ready_issues_with_images_stm32cubeh7.json  (+ ALFRED enriched)",
+        "```│   ├── files_json/",
+        "```│   │   └── st_ready_files_stm32cubeh7_v3.json  (with PDF figure descriptions)",
+        "```│   ├── resolver_cases_json/",
+        "```│   │   └── st_ready_resolver_cases_stm32cubeh7.json",
+        "```│   ├── diagnostic_cards_json/",
+        "```│   │   └── st_ready_diagnostic_cards_stm32cubeh7.json",
+        "```│   ├── drivers/",
+        "```│   │   ├── stm32h7xx-hal-driver/issues_json/...",
+        "```│   │   ├── cmsis_device_h7/files_json/...",
+        "```│   │   └── ... (10+ sub-repo artifacts)",
+        "```│   └── upload_datasource_ids_stm32cubeh7.json",
+    ])
+
+    add_table_slide(prs, "KB #793 — Datasource Organization",
+        ["Series", "Issues DS", "Files DS", "Resolver DS", "Diag Cards DS"],
+        [
+            ["STM32H7", "#24406", "#29041", "#24410", "#24408"],
+            ["STM32F4", "#28099", "#29042", "#28118", "#28122"],
+            ["STM32H5", "#—", "#29043", "#—", "#—"],
+            ["STM32U5", "#—", "#29044", "#—", "#—"],
+            ["STM32WL", "#—", "#29045", "#—", "#—"],
+            ["... 13 series", "1 DS each", "1 DS each", "1 DS each", "1 DS each"],
+        ]
+    )
+
+    add_table_slide(prs, "Processor Params — JSON Upload Configuration",
+        ["Artifact Type", "rootTagPath", "Label Template", "ExternalURL Pattern"],
+        [
+            ["Issues", "issues", "{{repo}} issue #{{issue_number}} - {{issue_title}}", "github.com/.../issues/{{issue_number}}"],
+            ["Files", "files", "{{repo}} {{file_type}} - {{path}}", "github.com/.../{{root_ref}}/{{path_url}}"],
+            ["Resolver Cases", "resolver_cases", "{{label}}", "github.com/.../issues/{{issue_number}}"],
+            ["Diagnostic Cards", "—", "{{label}}", "github.com/.../issues/{{evidence_refs[0].id}}"],
+        ]
+    )
+
+    # ══════════════════════════════════════════════════════════════════════
+    # SECTION 8 — QUALITY GATES & VALIDATION
+    # ══════════════════════════════════════════════════════════════════════
+
+    add_section_slide(prs, "8. Quality Gates & Validation")
+
+    add_content_slide(prs, "Quality Gates — Before Upload", [
+        "## Gate 1: Schema Validation",
+        "• python -m pipeline.evaluation.validate_schemas",
+        "• Verifies all JSON outputs conform to shared/schemas/*.json contracts.",
+        "",
+        "## Gate 2: Placeholder Check",
+        "• Scans for unresolved [IMAGE ATTACHED] or [FIGURE... markers in delivery files.",
+        "• PlaceholderPolicy=Fail blocks upload; =Warn allows with explicit report.",
+        "",
+        "## Gate 3: Summary Coherence",
+        "• summary_*.json files report counts; must match payload size.",
+        "",
+        "## Gate 4: Smoke Test (post-upload)",
+        "• Ask 3 representative questions → verify answers cite correct sources.",
+        "• KB-first behavior validated (ALFRED fallback only when KB has no match).",
+    ])
+
+    add_table_slide(prs, "Go / No-Go Decision Matrix",
+        ["Gate", "Go Criterion", "Action if No-Go"],
+        [
+            ["Schema validation", "100% JSON valid", "Fix export or schema definition"],
+            ["Placeholder gate", "0 unresolved in strict mode", "Re-run ALFRED or apply targeted patch"],
+            ["Upload", "No blocking errors", "Retry with reused datasource IDs"],
+            ["Smoke test", "3 coherent, sourced answers", "Fix KB or tool description"],
+            ["Fallback behavior", "KB-first, then ALFRED", "Make tool description more restrictive"],
+        ]
+    )
+
+    add_table_slide(prs, "KPIs to Monitor",
+        ["KPI", "Measurement", "Decision It Supports"],
+        [
+            ["Ingestion completeness", "% non-empty issues/files", "Is the input material sufficient?"],
+            ["Enrichment coverage", "% docs with layer/component/board", "Does preprocessing add useful signal?"],
+            ["ALFRED success rate", "described / detected images", "Is visual content exploitable?"],
+            ["Placeholder rate", "unresolved / total figures", "Can we upload in strict mode?"],
+            ["Quality Index", "Score on test questions", "Is the final answer quality acceptable?"],
+        ]
+    )
+
+    # ══════════════════════════════════════════════════════════════════════
+    # SECTION 9 — VALUE PROPOSITION & IMPACT
+    # ══════════════════════════════════════════════════════════════════════
+
+    add_section_slide(prs, "9. Value Proposition & Impact")
+
+    add_content_slide(prs, "Before vs. After — Tangible Value", [
+        "## Without the Pipeline",
+        "• Raw issues: unstructured, noisy, images invisible, no links between problems.",
+        "• AI answers: generic, unsourced, sometimes incorrect.",
+        "• Maintenance: manual per-series curation, no repeatability.",
+        "",
+        "## With the Pipeline",
+        "• Structured cards: each issue has layer, board, component, severity, related issues.",
+        "• AI answers: sourced, traceable, with diagnostic logic and resolver actions.",
+        "• Maintenance: add a config, run one command, upload. Repeatable for 25+ series.",
+    ])
+
+    add_table_slide(prs, "Value Dimensions",
+        ["Dimension", "Description", "Evidence"],
+        [
+            ["Efficiency", "One-command processing for entire series", "23 steps automated, batch multi-series"],
+            ["Traceability", "Every answer links to a source", "github_url, evidence_refs in diagnostic cards"],
+            ["Robustness", "Quality gates prevent bad data from reaching KB", "Schema validation + placeholder gate"],
+            ["Scalability", "Config-driven, no code changes", "25 series configured, 200+ sub-repos"],
+            ["Maintainability", "Modular stages, clear interfaces", "Each stage independently testable/runnable"],
+            ["Explainability", "Diagnostic cards explain cause + resolution", "QI = 94/100 on H7 with cards"],
+        ]
+    )
+
+    add_content_slide(prs, "Strengths Relative to Business Context", [
+        "## Why this matters for STMicroelectronics",
+        "• Reduces time-to-answer for technical support queries on STM32 platform.",
+        "• Enables non-expert users to get expert-level technical guidance from AI.",
+        "• Makes visual information (screenshots, PDF figures) exploitable by RAG.",
+        "",
+        "## Competitive Advantages of This Approach",
+        "• End-to-end automation: no manual curation bottleneck.",
+        "• Multi-modal: text + images + PDF figures all enriched and indexed.",
+        "• Production-hardened: placeholder gates, retry logic, idempotent uploads.",
+        "• Open architecture: modular Python, PowerShell orchestration, standard JSON contracts.",
+    ])
+
+    # ══════════════════════════════════════════════════════════════════════
+    # SECTION 10 — INCIDENTS & GENERALIZED FIXES
+    # ══════════════════════════════════════════════════════════════════════
+
+    add_section_slide(prs, "10. Incidents Encountered & Generalized Fixes")
+
+    add_table_slide(prs, "From Incident to Systematic Improvement",
+        ["Incident", "Root Cause", "Fix Applied", "Generalized For All Series"],
+        [
+            ["Unresolved ALFRED placeholders", "Truncated figure IDs in WB delivery", "PlaceholderPolicy gate + sample report", "Same gate before every upload"],
+            ["PDF figures not resolved", "Timing: descriptions generated after delivery", "Patch script + re-injection step", "Pipeline step 7 + patch_pdf_descriptions"],
+            ["Evaluation chart crash (pie=0)", "Zero values in matplotlib pie chart", "_safe_pie() wrapper", "All evaluation reports handle empty data"],
+            ["Upload blocked by existing DS", "API rejects duplicate file names", "Reuse saved datasource IDs", "Idempotent workflow for all batch scripts"],
+            ["API timeouts during eval", "Rate limiting on ai-bridge", "Warning mode + separate validation", "Demo-safe without weakening production"],
+        ]
+    )
+
+    add_content_slide(prs, "Design Philosophy — Fail Forward", [
+        "## Every incident became a permanent improvement:",
+        "• Not patched for one series then forgotten.",
+        "• Turned into a reusable control, gate, or workflow improvement.",
+        "",
+        "## Examples of generalized mechanisms:",
+        "• PlaceholderPolicy parameter (Fail/Warn/Off) — available in every workflow script.",
+        "• _safe_pie() in evaluation reports — protects against zero-data series.",
+        "• upload_datasource_ids_<serie>.json — makes uploads idempotent and retryable.",
+        "• --continue-on-error — ensures one failed sub-repo doesn't block the entire series.",
+        "",
+        "## Lesson for new series:",
+        "• Any new series benefits from all historical fixes automatically.",
+        "• No special handling required — the pipeline is self-hardening.",
+    ])
+
+    # ══════════════════════════════════════════════════════════════════════
+    # SECTION 11 — LIVE DEMO
+    # ══════════════════════════════════════════════════════════════════════
+
+    add_section_slide(prs, "11. Live Demo & Hands-On")
+
+    add_content_slide(prs, "Demo Script — 5 Minutes", [
+        "## Step 1: Prepare a series",
+        "```.\\pipeline_Automation\\workflow\\Run_Single_Series_Full_Pipeline_And_Upload.ps1 -Series WB -Mode Prepare -PlaceholderPolicy Warn",
+        "",
+        "## Step 2: Show generated artifacts",
+        "• by_series/stm32cubewb/issues_json/, files_json/, diagnostic_cards_json/",
+        "",
+        "## Step 3: Show a quality gate",
+        "• validate_schemas output, placeholder report, summary_*.json counts",
+        "",
+        "## Step 4: Upload (or show saved datasource IDs)",
+        "• upload_datasource_ids_stm32cubewb.json",
+        "",
+        "## Step 5: Ask a technical question",
+        "• Show the answer + source citation from the Knowledge Base",
+    ])
+
+    add_content_slide(prs, "High-Stakes Presentation Checklist", [
+        "## Preparation (day before):",
+        "• Run a full Prepare on the target series — artifacts must be ready.",
+        "• Generate summary_*.json and validate schemas.",
+        "• Prepare 3 before/after examples (raw issue → structured st_ready card).",
+        "• Prepare 1 failure case with mitigation (shows transparency).",
+        "",
+        "## During the demo:",
+        "• Start with the single-command workflow.",
+        "• Show the file structure and explain what each artifact contains.",
+        "• Ask a real question in ST ChatGPT and show the sourced answer.",
+        "• Show a quality gate catching a problem (placeholder report).",
+        "",
+        "## Safety net:",
+        "• Use -PlaceholderPolicy Warn for known non-critical series.",
+        "• Have upload_datasource_ids pre-saved to avoid live API dependency.",
+    ])
+
+    # ══════════════════════════════════════════════════════════════════════
+    # SECTION 12 — CONCLUSION
+    # ══════════════════════════════════════════════════════════════════════
+
+    add_section_slide(prs, "12. Conclusion")
+
+    add_content_slide(prs, "Key Takeaways", [
+        "## Technical Value",
+        "• Industrialized transformation of heterogeneous GitHub data into structured KB artifacts.",
+        "• Multi-modal: text, images, and PDF figures all made searchable.",
+        "",
+        "## Quality Value",
+        "• Every artifact passes through validation, gates, and reports that make errors visible.",
+        "• Production-grade: strict mode ensures no garbage reaches the Knowledge Base.",
+        "",
+        "## Operational Value",
+        "• Incidents encountered were not patched ad-hoc — they became permanent controls.",
+        "• Adding a new series = 1 config file + 1 command. No code changes.",
+        "",
+        "## Business Value",
+        "• +39% relevance improvement over generic LLM on STM32 technical questions.",
+        "• Quality Index: 94/100 on pilot H7 series with Diagnostic Cards.",
+    ])
+
+    add_content_slide(prs, "Closing Message", [
+        "",
+        "",
+        "## This pipeline makes STM32 knowledge:",
+        "",
+        "•   MORE SEARCHABLE — text, images, and figures all indexed",
+        "",
+        "•   MORE TRACEABLE — every answer links to a verified source",
+        "",
+        "•   MORE MAINTAINABLE — config-driven, modular, self-hardening",
+        "",
+        "",
+        "## For ST ChatGPT and the engineers who depend on it.",
+    ])
+
+    add_title_slide(
+        prs,
+        "Thank You",
+        "Questions?"
+    )
+
+    # ══════════════════════════════════════════════════════════════════════
+    # SAVE
+    # ══════════════════════════════════════════════════════════════════════
+
+    output_path = Path(__file__).parent / "Atelier_Pratique_Pipeline_STM32Cube.pptx"
+    try:
+        prs.save(str(output_path))
+    except PermissionError:
+        output_path = output_path.with_name("Atelier_Pratique_Pipeline_STM32Cube_updated.pptx")
+        prs.save(str(output_path))
+        print("Warning: original PPTX is locked; saved an updated copy instead.")
+    print(f"✓ Presentation saved: {output_path}")
+
+
+if __name__ == "__main__":
+    main()
+
+
+    # ========== EXEC SLIDE A: Executive message ==========
+    add_content_slide(prs, "Message exécutif — Pourquoi ce pipeline compte", [
+        "## Problème métier",
+        "• Les connaissances STM32 sont dispersées : issues GitHub, PRs, commits, fichiers, PDFs et images.",
+        "• Sans structuration, le chatbot donne plus facilement des réponses génériques ou non sourcées.",
+        "",
+        "## Ce que fait le pipeline",
+        "• Transforme les données brutes en artefacts support exploitables et uploadables.",
+        "• Ajoute traçabilité, contexte technique, diagnostic cards et resolver cases.",
+        "• Rend les images et figures PDF exploitables via Alfred Vision.",
+        "",
+        "## Message clé",
+        "• Ce n'est pas seulement un ETL : c'est une chaîne qualité pour produire des réponses support plus fiables.",
+    ])
+
+    # ========== EXEC SLIDE B: Decision view ==========
+    add_table_slide(prs, "Vue décisionnelle — KPIs à regarder", 
+        ["KPI", "Mesure", "Décision associée"],
+        [
+            ["Ingestion completeness", "% issues/files non vides", "La matière d'entrée est-elle suffisante ?"],
+            ["Enrichment coverage", "% layer/component/board", "Le preprocessing ajoute-t-il du signal utile ?"],
+            ["Alfred success rate", "images décrites / images détectées", "Le contenu visuel est-il exploitable ?"],
+            ["Placeholder rate", "placeholders non résolus", "Peut-on uploader en mode strict ?"],
+            ["Quality Index", "score sur questions test", "La réponse finale est-elle meilleure ?"],
+        ]
+    )
+
+    # ========== EXEC SLIDE C: Go/No-Go ==========
+    add_table_slide(prs, "Go / No-Go avant une démo ou un upload", 
+        ["Gate", "Critère Go", "Action si No-Go"],
+        [
+            ["Schema validation", "100% JSON valides", "Corriger export ou schema"],
+            ["Placeholder gate", "0 placeholder en strict", "Re-run Alfred ou patch ciblé"],
+            ["Upload", "Aucun échec bloquant", "Retry / reuse datasource IDs"],
+            ["Smoke test", "3 réponses cohérentes", "Corriger KB/tool description"],
+            ["Fallback", "KB-first puis Alfred", "Rendre la description tool plus restrictive"],
+        ]
+    )
+
+    # ========== EXEC SLIDE C2: High-stakes checklist ==========
+    add_table_slide(prs, "Checklist présentation à fort enjeu", 
+        ["Action", "Résultat attendu", "Pourquoi"],
+        [
+            ["Run Prepare la veille", "Artefacts déjà disponibles", "Évite dépendance réseau pendant la démo"],
+            ["summary_*.json", "Counts cohérents", "Montre la maîtrise des volumes"],
+            ["validate_schemas", "100% valide", "Prouve que le livrable est uploadable"],
+            ["3 exemples avant/après", "Raw → st_ready", "Rend la valeur visible immédiatement"],
+            ["1 cas d'échec expliqué", "Mitigation prête", "Montre la robustesse et la transparence"],
+        ]
+    )
+
+    # ========== EXEC SLIDE D: Live demo script ==========
+    add_content_slide(prs, "Script démo live — 5 minutes", [
+        "## 1. Préparer une série",
+        "```./pipeline_Automation/workflow/Run_Single_Series_Full_Pipeline_And_Upload.ps1 -Series WB -Mode Prepare -PlaceholderPolicy Warn",
+        "",
+        "## 2. Montrer les artefacts générés",
+        "• by_series/<serie>/issues_json, files_json, diagnostic_cards_json, resolver_cases_json",
+        "",
+        "## 3. Montrer un gate qualité",
+        "• validate_schemas, placeholder report, summary counts",
+        "",
+        "## 4. Uploader / réutiliser les datasource IDs",
+        "• upload_datasource_ids_<serie>.json",
+        "",
+        "## 5. Poser une question technique",
+        "• Montrer réponse + source GitHub ou artefact KB cité",
+    ])
+
+    # ========== EXEC SLIDE E: Risks & mitigation ==========
+    add_table_slide(prs, "Risques connus et mitigations", 
+        ["Risque", "Impact", "Mitigation"],
+        [
+            ["Timeout API", "Évaluation incomplète", "Retries + run ciblé"],
+            ["Image/PDF non décrit", "Perte d'info visuelle", "Alfred re-run + placeholder gate"],
+            ["Datasource déjà existante", "Upload bloqué", "Reuse IDs ou suppression ciblée"],
+            ["Série peu documentée", "Réponse partielle", "Fallback Alfred restrictif"],
+            ["Trop de bruit retrieval", "Réponse diluée", "Calibrage Hybrid/threshold/doc count"],
+        ]
+    )
+
+    # ========== EXEC SLIDE F: Incidents generalized fixes ==========
+    add_table_slide(prs, "Imprévus rencontrés → corrections généralisées", 
+        ["Imprévu rencontré", "Correction faite", "Généralisation toutes séries"],
+        [
+            ["Placeholders Alfred restants", "Gate PlaceholderPolicy + rapport d'échantillons", "Même contrôle avant upload pour F4, H5, H7, U5, WL, WB..."],
+            ["Figures PDF non résolues", "Mapping data/pdf_image_descriptions.json + re-run ciblé", "Pipeline PDF figure enrichment commun à toutes les configs"],
+            ["Crash graphe stats vides", "Pie charts sécurisés si valeurs à zéro", "Rapports d'évaluation robustes même séries peu documentées"],
+            ["Upload interrompu par datasource existante", "Réutilisation/sauvegarde des datasource IDs", "Workflow idempotent pour relance batch multi-séries"],
+            ["Timeouts ou réponses incomplètes", "Mode warning + validation finale séparée", "Démo possible sans affaiblir le mode production strict"],
+        ]
+    )
+
+    # ========== EXEC SLIDE G: Before / after ==========
+    add_table_slide(prs, "Avant / Après pipeline — valeur visible", 
+        ["Avant", "Après", "Impact support"],
+        [
+            ["Issue brute longue", "st_ready_text structuré", "Réponse plus ciblée"],
+            ["Image attachée non interprétée", "[IMAGE DESCRIPTION] indexable", "Capture exploitable par le RAG"],
+            ["Fichier source isolé", "Contexte repo/path/type enrichi", "Traçabilité technique"],
+            ["Commentaires dispersés", "Diagnostic card + resolver case", "Cause/action plus faciles à extraire"],
+            ["Données par repo", "by_series + drivers routés", "Upload KB maintenable"],
+        ]
+    )
 
     # ========== SLIDE 3: Pipeline Overview Diagram ==========
     add_diagram_slide(prs, "Vue d'ensemble — Pipeline end-to-end", [
@@ -632,7 +1344,40 @@ def main():
         ]
     )
 
+    # ========== SLIDE 11c: Alfred demo examples ==========
+    add_content_slide(prs, "Démo Alfred — 2 exemples H7 prêts à montrer", [
+        "## Exemple 1 — Issue #335",
+        "• Sujet : warning observé avec le flag -Wcast-align pendant la compilation.",
+        "• Avant : capture d'écran attachée mais non exploitable par la recherche texte.",
+        "• Après : description Alfred intégrée dans st_ready_text et image_analyses.",
+        "• Impact : flags, panneau Tool Settings et contexte build deviennent recherchables.",
+        "",
+        "## Exemple 2 — Issue #333",
+        "• Sujet : corriger des warnings sans retirer les compiler flags.",
+        "• Alfred extrait le contexte visuel : fenêtre About STM32CubeIDE, version, build.",
+        "• Impact : la version exacte de l'outil devient traçable dans la KB.",
+        "",
+        "## Message à dire",
+        "• Alfred enrichit le texte pour le retrieval direct et les métadonnées pour l'audit.",
+    ])
+
     # ========== SLIDE 12: Upload KB ==========
+    add_content_slide(prs, "Commande atelier recommandée — série complète", [
+        "## Script prioritaire pour l'atelier",
+        "```.\\pipeline_Automation\\workflow\\Run_Single_Series_Full_Pipeline_And_Upload.ps1 -Series H7",
+        "",
+        "## Ce qu'il orchestre",
+        "• Préparation des artefacts parent + drivers.",
+        "• Validations locales avant upload.",
+        "• Upload KB et sauvegarde automatique des datasource IDs.",
+        "",
+        "## Fichier de sortie important",
+        "```datasets/07_delivery/st_ready/by_series/stm32cubeh7/upload_datasource_ids_stm32cubeh7.json",
+        "",
+        "## Pour démo avec placeholders connus",
+        "```.\\pipeline_Automation\\workflow\\Run_Single_Series_Full_Pipeline_And_Upload.ps1 -Series WB -Mode Prepare -PlaceholderPolicy Warn",
+    ])
+
     add_content_slide(prs, "Upload vers la Knowledge Base #793", [
         "## Script: pipeline_Automation/upload/Add_Data_Source_Files.py",
         "",
@@ -820,6 +1565,21 @@ def main():
         "```python pipeline_Automation/upload/Get_Persona_KBs.py",
     ])
 
+    # ========== SLIDE 18b: Closing message ==========
+    add_content_slide(prs, "Message de clôture — ce qu'il faut retenir", [
+        "## Valeur technique",
+        "• Transformation industrialisée de données GitHub hétérogènes en livrables KB structurés.",
+        "",
+        "## Valeur qualité",
+        "• Validations, gates et rapports rendent les erreurs visibles avant upload.",
+        "",
+        "## Valeur opérationnelle",
+        "• Les imprévus rencontrés ont été transformés en contrôles réutilisables pour toutes les séries.",
+        "",
+        "## Phrase finale",
+        "• Le pipeline rend la connaissance STM32 plus searchable, traçable et maintenable pour ST ChatGPT.",
+    ])
+
     # ========== SLIDE 19: Résumé Final ==========
     add_title_slide(
         prs,
@@ -829,7 +1589,12 @@ def main():
 
     # Save
     output_path = Path(__file__).parent / "Atelier_Pratique_Pipeline_STM32Cube.pptx"
-    prs.save(str(output_path))
+    try:
+        prs.save(str(output_path))
+    except PermissionError:
+        output_path = output_path.with_name("Atelier_Pratique_Pipeline_STM32Cube_updated.pptx")
+        prs.save(str(output_path))
+        print("Warning: original PPTX is locked; saved an updated copy instead.")
     print(f"✓ Presentation saved: {output_path}")
 
 
