@@ -18,7 +18,7 @@ def is_bsp_board_root(path: str) -> bool:
 def detect_file_type(path: str) -> str:
     p = path.replace("\\", "/").lower()
 
-    if p.startswith("documentation/") and p.endswith(".pdf"):
+    if p.startswith(("documentation/", "documentations/")) and p.endswith(".pdf"):
         return "documentation_pdf"
 
     if "release_notes" in p or "releasenotes" in p:

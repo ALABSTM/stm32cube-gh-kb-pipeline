@@ -110,7 +110,7 @@ def is_documentation_pdf(rel_path: Path) -> bool:
     parts = rel_path.parts
     if not parts:
         return False
-    if parts[0].lower() != "documentation":
+    if parts[0].lower() not in ("documentation", "documentations"):
         return False
     return rel_path.suffix.lower() == PDF_EXTENSION
 

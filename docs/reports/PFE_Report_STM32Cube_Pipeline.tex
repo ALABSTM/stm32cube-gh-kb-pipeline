@@ -19,6 +19,7 @@
 \usepackage{tocloft}
 \usepackage{enumitem}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{tikz}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
@@ -34,6 +35,19 @@
 \definecolor{stgray}{RGB}{200,200,200}
 \definecolor{codebg}{RGB}{245,245,245}
 \definecolor{codeframe}{RGB}{200,200,200}
+
+\lstdefinelanguage{json}{
+  basicstyle=\ttfamily\small,
+  showstringspaces=false,
+  breaklines=true,
+  string=[s]"",
+  stringstyle=\color{red!70!black},
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{gray},
+  morekeywords={true,false,null},
+  keywordstyle=\color{blue}
+}
 
 % Code listing style
 \lstset{
@@ -98,9 +112,9 @@ Abir GHARBI
 \begin{minipage}{0.45\textwidth}
 \begin{flushright}
 \textbf{Encadrant entreprise :}\\
-[Nom du tuteur ST]\\[0.5cm]
+{[Nom du tuteur ST]}\\[0.5cm]
 \textbf{Encadrant académique :}\\
-[Nom du tuteur académique]
+{[Nom du tuteur académique]}
 \end{flushright}
 \end{minipage}
 
@@ -393,7 +407,7 @@ Notre approche se positionne comme une \textbf{solution RAG verticale} (domain-s
   \item \textbf{4 types d'artefacts delivery} complémentaires : issues, files, resolver cases, diagnostic cards
   \item \textbf{Heuristiques NLP domain-specific} pour la classification STM32 (layer, component, severity, board, issue\_kind)
   \item \textbf{Description automatique d'images} par Alfred Vision AI (captures d'écran issues + figures PDF)
-  \item \textbf{Architecture KB-first + Alfred fallback} avec description restrictive évitant le court-circuit de la KB
+  \item \textbf{Architecture KB-first + NovaX fallback} avec description restrictive évitant le court-circuit de la KB
   \item \textbf{Workflow Delete+Add} résolvant les conflits de noms lors de l'upload des datasources
   \item \textbf{Couverture multi-séries} : 13 séries en production, 12 configurées, processus reproductible en 3 étapes
 \end{enumerate}
@@ -1286,7 +1300,7 @@ Le système final s'articule autour d'une architecture \textbf{multi-agents} où
 \label{fig:agents_arch}
 \end{figure}
 
-\textit{Le diagramme montre le flux : Utilisateur (Ingénieur STM32) $\to$ Persona ST GitHub Analyzer $\to$ KB Tool (Unstructured, recherche hybride) avec fallback vers Alfred Tool (si KB vide). Le Pipeline Preprocessing alimente la KB depuis GitHub STMicroelectronics via des uploads JSON.}
+\textit{Le diagramme montre le flux : Utilisateur (Ingénieur STM32) $\to$ Persona ST GitHub Analyzer $\to$ KB Tool (Unstructured, recherche hybride) avec fallback vers NovaX Tool (si la KB ne retourne aucun résultat pertinent). Le Pipeline Preprocessing alimente la KB depuis GitHub STMicroelectronics via des uploads JSON.}
 
 \subsection{Persona : ST GitHub Analyzer}
 
@@ -1301,7 +1315,7 @@ Modèle & GPT-4o (Azure OpenAI) \\
 Température & 0.2--0.3 (réponses factuelles) \\
 KB associée & KB \#793 (ST GitHub Analyzer) \\
 Tool principal & ST-GitHub-Analyzer-Unstructured (Hybrid Search) \\
-Tool fallback & Alfred (persona \texttt{st\_copilot}) \\
+Tool fallback & NovaX (STM32 Bugzilla + STCommunity Knowledge Articles) \\
 Search type & Hybrid (Semantic + Full-text) \\
 Semantic threshold & 0.55 \\
 Max documents & 20 (semantic) + 12 (full-text) \\
@@ -1325,9 +1339,9 @@ La recherche hybride combine :
   \item \textbf{Full-text} : correspondance exacte (``HAL\_SPI\_Transmit\_DMA'' $\to$ match direct)
 \end{enumerate}
 
-\subsection{Tool 2 : Alfred Fallback}
+\subsection{Tool 2 : NovaX Fallback}
 
-Quand la KB ne contient pas de réponse pertinente, la persona peut appeler \textbf{Alfred} (LLM ST généraliste) comme outil de secours.
+Quand la KB ne contient pas de réponse pertinente, la persona peut appeler \textbf{NovaX}, un agent STM32 basé sur STM32 Bugzilla et STCommunity Knowledge Articles.
 
 \textbf{Configuration critique} --- La description du tool doit \textbf{forcer la priorité KB} :
 
@@ -1335,7 +1349,7 @@ Quand la KB ne contient pas de réponse pertinente, la persona peut appeler \tex
 \textit{``I am a fallback assistant for STM32 firmware questions that are NOT covered by the Knowledge Base. The Knowledge Base is ALWAYS the primary source, search it FIRST for every question. Use this tool ONLY when the Knowledge Base returned no relevant result.''}
 \end{quote}
 
-\textbf{Risque identifié} : Si la description est trop permissive, la persona appelle Alfred au lieu de chercher dans la KB $\to$ réponses génériques $\to$ dégradation du Quality Index ($-10$ points observés).
+\textbf{Risque identifié} : Si la description est trop permissive, la persona appelle NovaX au lieu de chercher dans la KB $\to$ réponses générales non ancrées dans les artefacts GitHub $\to$ dégradation du Quality Index. NovaX doit rester un secours pour les questions hors couverture KB.
 
 \subsection{Stratégie de Réponse (System Prompt)}
 
@@ -1888,7 +1902,7 @@ Cette section présente une comparaison métrique rigoureuse entre trois configu
 \begin{enumerate}
   \item \textbf{Alfred (baseline)} : LLM généraliste ST sans accès KB GitHub
   \item \textbf{Persona KB seule} : persona avec KB \#793 alimentée par le pipeline
-  \item \textbf{Persona KB + Alfred fallback} : architecture optimale en production
+  \item \textbf{Persona KB + fallback restrictif} : architecture optimale en production, désormais implémentée avec NovaX
 \end{enumerate}
 
 \subsection{Protocole Expérimental}
@@ -1990,7 +2004,7 @@ Documentation (2 questions) & 5.0 & 4.0 & Persona limitée quand doc absente de 
   \item La KB améliore la qualité de \textbf{+39\%} sur les réponses obtenues (5.8 → 8.1/10)
   \item L'avantage est \textbf{maximal} (+56\%) sur les questions issue-specific et version-sensitive
   \item Alfred reste supérieur en \textbf{disponibilité} (100\% vs 80\%) et sur les questions \textbf{générales}
-  \item L'architecture optimale est \textbf{KB-first + Alfred fallback restrictif} (déjà en production)
+  \item L'architecture optimale est \textbf{KB-first + NovaX fallback restrictif} : KB d'abord, fallback seulement si la KB ne couvre pas la série, le périphérique ou le sujet
 \end{enumerate}
 
 % --- FIGURE : Comparaison visuelle ---
@@ -2043,29 +2057,42 @@ Delivery Diag Cards & Pas de diagnostic structuré & 157 diagnostic cards & \tex
 
 \subsection{Impact Cumulatif sur le Quality Index}
 
+La campagne la plus récente évalue les paramètres \textbf{Unstructured KB} sur un benchmark de 96 questions multi-séries. Contrairement aux premiers tests H7, cette campagne ne mesure plus seulement l'apport des artefacts du pipeline ; elle mesure le comportement du moteur de recherche KB lui-même : type de recherche, seuil sémantique, nombre de documents sémantiques et nombre de documents full-text.
+
+\begin{longtable}{p{2cm}p{2.2cm}ccccp{4cm}}
+\toprule
+\textbf{Stratégie} & \textbf{Search} & \textbf{Thr.} & \textbf{Sem. docs} & \textbf{FT docs} & \textbf{QI} & \textbf{Lecture} \\
+\midrule
+S0 Current & Hybrid & 0.55 & 25 & 12 & 65 & Équilibre précision/rappel \\
+\textbf{S1 Recall+} & Hybrid & 0.45 & 35 & 15 & \textbf{66} & Meilleur score mesuré \\
+S2 Precision+ & Hybrid & 0.65 & 18 & 8 & 63 & Trop restrictif \\
+S3 Semantic-heavy & Hybrid & 0.55 & 35 & 6 & 51 & Ancrage exact insuffisant \\
+S4 Fulltext-heavy & Hybrid & 0.55 & 15 & 20 & 47 & Reformulations mal couvertes \\
+S5 Semantic-only & Semantic & 0.55 & 25 & 0 & 41 & Ablation défavorable \\
+S6 Fulltext-only & Full-text & -- & 0 & 20 & N/A & Test en cours \\
+\bottomrule
+\end{longtable}
+
+\textbf{Interprétation} : S1 améliore légèrement le score global (+1 point vs S0) en augmentant le rappel. Cependant, l'écart faible entre S0 et S1 montre que le gain de couverture est presque compensé par l'augmentation du bruit. Les configurations S3, S4 et S5 démontrent que le système a besoin d'un équilibre réel entre sémantique et full-text : trop de sémantique perd les noms exacts d'API, trop de full-text perd les reformulations utilisateur.
+
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}
 \begin{axis}[
-    width=14cm, height=7cm,
-    xlabel={Configuration},
+  ybar,
+  width=13cm, height=6cm,
     ylabel={Quality Index (/100)},
-    ymin=35, ymax=100,
-    symbolic x coords={KB Issues, +Prompt, +Hybrid, +Resolver +Diag, +Multi-series, +Alfred permissif, +Alfred restrictif},
+  ymin=35, ymax=70,
+  symbolic x coords={S0,S1,S2,S3,S4,S5},
     xtick=data,
-    x tick label style={rotate=30, anchor=east, font=\small},
     nodes near coords,
     every node near coord/.append style={font=\small\bfseries},
-    enlargelimits=0.1,
+  enlarge x limits=0.15,
 ]
-\addplot[mark=*, thick, blue] coordinates {
-    (KB Issues,54) (+Prompt,57) (+Hybrid,61) (+Resolver +Diag,94) (+Multi-series,54) (+Alfred permissif,44) (+Alfred restrictif,52)
-};
+\addplot[fill=blue!55] coordinates {(S0,65) (S1,66) (S2,63) (S3,51) (S4,47) (S5,41)};
 \end{axis}
-\draw[thick, green!60!black, ->] (6.7,4.8) -- (6.7,3.8) node[midway, right, font=\scriptsize] {+33 pts (Diag Cards)};
-\draw[thick, red, ->] (9.5,3.0) -- (9.5,2.2) node[midway, right, font=\scriptsize] {-10 pts (Alfred permissif)};
 \end{tikzpicture}
-\caption{Évolution du Quality Index --- impact cumulatif de chaque amélioration}
+\caption{Comparaison des stratégies Unstructured KB sur 96 questions multi-séries}
 \label{fig:qi_evolution}
 \end{figure}
 
@@ -2081,7 +2108,7 @@ Diagnostic Cards & +33 pts & Moyen (2 sprints) & \textcolor{green!60!black}{\tex
 Hybrid Search & +4 pts & Faible (config) & \textcolor{green!60!black}{\textbf{Excellent}} \\
 System Prompt & +3 pts & Faible (texte) & \textcolor{green!60!black}{\textbf{Excellent}} \\
 Cleaning V3 & +3 pts estimé & Moyen (1 sprint) & Bon \\
-Alfred restrictif & +8 pts (récupéré) & Faible (description) & \textcolor{green!60!black}{\textbf{Excellent}} \\
+NovaX restrictif & Protège le routage KB-first & Faible (description) & \textcolor{green!60!black}{\textbf{Excellent}} \\
 PDF descriptions & +1 pt estimé & Élevé (CV + Alfred) & Acceptable \\
 \bottomrule
 \end{tabular}

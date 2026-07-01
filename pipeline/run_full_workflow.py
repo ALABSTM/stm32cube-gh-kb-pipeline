@@ -64,13 +64,18 @@ def export_st_ready_issues_all() -> None:
 def export_st_ready_files_all() -> None:
     repos = load_config().get("repos", [])
     for repo in repos:
-        total, exported, out_root = export_files_repo_json(
-            repo=repo,
-            include_invalid=False,
-            summary_max_chars=240,
-            technical_max_chars=4000,
-        )
-        print(f"[ST-READY:json:files] {repo}: exported {exported}/{total} -> {out_root}")
+        try:
+            total, exported, out_root = export_files_repo_json(
+                repo=repo,
+                include_invalid=False,
+                summary_max_chars=240,
+                technical_max_chars=4000,
+                use_v3=True,
+            )
+        except FileNotFoundError as exc:
+            print(f"[ST-READY:json:files] {repo}: skipped ({exc})")
+            continue
+        print(f"[ST-READY:json:files] {repo}: exported {exported}/{total} -> {out_root} [V3 clean]")
 
 
 def export_st_ready_resolver_cases_all() -> None:

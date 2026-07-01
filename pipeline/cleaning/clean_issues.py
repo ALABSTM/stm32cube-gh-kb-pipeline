@@ -18,6 +18,10 @@ def main() -> None:
         out_file = DATA_DIR / f"clean_issues_{repo.lower()}.json"
 
         print(f"Cleaning issues for {repo}")
+        if not raw_file.exists():
+            print(f"[WARN] raw_issues file not found: {raw_file}")
+            continue
+
         raw_issues = json.loads(raw_file.read_text(encoding="utf-8"))
         clean_issues = [build_clean_issue(issue) for issue in raw_issues]
 
