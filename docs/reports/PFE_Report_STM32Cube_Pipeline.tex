@@ -881,7 +881,7 @@ La Figure~\ref{fig:pipeline_overview} illustre la vue globale du pipeline et le 
 \draw[arrow] (valid) -- (deliv);
 \draw[arrow] (deliv) -- (upload);
 % Source
-\node[above=0.6cm of ing, font=\small] (gh) {\textbf{GitHub API}\\\scriptsize 25 séries, 200+ repos};
+\node[above=0.6cm of ing, font=\small, align=center] (gh) {\textbf{GitHub API}\\\scriptsize 25 séries, 200+ repos};
 \draw[arrow] (gh) -- (ing);
 \end{tikzpicture}
 \caption{Vue d'ensemble du pipeline de preprocessing (7 stages)}
@@ -1410,7 +1410,7 @@ Cartes de diagnostic structurées pour les problèmes récurrents :
 \centering
 \begin{tikzpicture}[node distance=0.8cm,
   box/.style={rectangle, draw=stblue, fill=stlightblue!40, text width=3cm, minimum height=0.8cm, align=center, font=\scriptsize\bfseries},
-  out/.style={rectangle, draw=stgreen, fill=stgreen!15, text width=3.2cm, minimum height=0.7cm, align=center, font=\scriptsize},
+  outbox/.style={rectangle, draw=stgreen, fill=stgreen!15, text width=3.2cm, minimum height=0.7cm, align=center, font=\scriptsize},
   arr/.style={-{Stealth[length=2mm]}, thick}
 ]
 \node[box] (issue) {Issue fermée\\\scriptsize avec root cause};
@@ -1419,8 +1419,8 @@ Cartes de diagnostic structurées pour les problèmes récurrents :
 \draw[arr] (issue) -- node[above, font=\tiny]{référence} (pr);
 \draw[arr] (pr) -- node[above, font=\tiny]{merge} (commit);
 % Outputs
-\node[out, below=1.2cm of issue, xshift=1cm] (resolver) {Resolver Case\\\scriptsize Issue$\to$PR$\to$Commit\\\scriptsize + fichiers modifiés};
-\node[out, below=1.2cm of commit, xshift=-1cm] (diag) {Diagnostic Card\\\scriptsize Symptôme$\to$Root Cause\\\scriptsize $\to$Fix$\to$Prévention};
+\node[outbox, below=1.2cm of issue, xshift=1cm] (resolver) {Resolver Case\\\scriptsize Issue$\to$PR$\to$Commit\\\scriptsize + fichiers modifiés};
+\node[outbox, below=1.2cm of commit, xshift=-1cm] (diag) {Diagnostic Card\\\scriptsize Symptôme$\to$Root Cause\\\scriptsize $\to$Fix$\to$Prévention};
 \draw[arr] (issue) -- (resolver);
 \draw[arr] (pr) -- (resolver);
 \draw[arr] (commit) -- (resolver);

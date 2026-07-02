@@ -1,0 +1,177 @@
+\babel@toc {french}{}\relax 
+\contentsline {chapter}{Remerciements}{1}{chapter*.1}%
+\contentsline {chapter}{Introduction Générale}{4}{chapter*.2}%
+\contentsline {chapter}{\numberline {1}Présentation de l'Entreprise}{6}{chapter.1}%
+\contentsline {section}{\numberline {1.1}STMicroelectronics}{6}{section.1.1}%
+\contentsline {subsection}{\numberline {1.1.1}Présentation Générale}{6}{subsection.1.1.1}%
+\contentsline {subsection}{\numberline {1.1.2}Vision et Marchés}{6}{subsection.1.1.2}%
+\contentsline {subsection}{\numberline {1.1.3}STMicroelectronics Tunis}{7}{subsection.1.1.3}%
+\contentsline {section}{\numberline {1.2}Division Microcontrôleurs (MCD)}{7}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Équipe d'Accueil : Technical Marketing and Application Support}{7}{section.1.3}%
+\contentsline {chapter}{\numberline {2}Contexte du Projet}{9}{chapter.2}%
+\contentsline {section}{\numberline {2.1}L'Écosystème STM32 et les Dépôts GitHub}{9}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Les Dépôts GitHub STMicroelectronics}{10}{subsection.2.1.1}%
+\contentsline {section}{\numberline {2.2}Problématique}{10}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Critique de l'Existant}{11}{subsection.2.2.1}%
+\contentsline {section}{\numberline {2.3}État de l'Art et Fondements Théoriques}{12}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Le Paradigme RAG}{12}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Preprocessing et Qualité de la KB}{12}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}TF-IDF pour la Similarité}{13}{subsection.2.3.3}%
+\contentsline {subsection}{\numberline {2.3.4}Alfred Vision pour la Description d'Images}{13}{subsection.2.3.4}%
+\contentsline {section}{\numberline {2.4}Étude Comparative des Solutions Existantes}{13}{section.2.4}%
+\contentsline {section}{\numberline {2.5}Synthèse de la Solution Proposée}{14}{section.2.5}%
+\contentsline {section}{\numberline {2.6}Positionnement par Rapport à l'État de l'Art}{15}{section.2.6}%
+\contentsline {section}{\numberline {2.7}Contributions Techniques Originales}{15}{section.2.7}%
+\contentsline {section}{\numberline {2.8}Objectifs du Projet}{16}{section.2.8}%
+\contentsline {section}{\numberline {2.9}Enjeux Éthiques et Responsabilité}{16}{section.2.9}%
+\contentsline {section}{\numberline {2.10}Plan du Rapport}{17}{section.2.10}%
+\contentsline {section}{\numberline {2.11}Les 25 Séries STM32 Couvertes}{17}{section.2.11}%
+\contentsline {chapter}{\numberline {3}Spécification des Besoins et Méthodologie}{19}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Identification des Acteurs}{19}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Besoins Fonctionnels}{19}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Besoins Non Fonctionnels}{20}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Contraintes et Décisions de Conception}{21}{section.3.4}%
+\contentsline {section}{\numberline {3.5}Sélection de la Méthodologie : Scrum Adapté}{22}{section.3.5}%
+\contentsline {subsection}{\numberline {3.5.1}Organisation en Sprints}{22}{subsection.3.5.1}%
+\contentsline {subsection}{\numberline {3.5.2}Artefacts Scrum Utilisés}{23}{subsection.3.5.2}%
+\contentsline {section}{\numberline {3.6}Architecture Cible}{23}{section.3.6}%
+\contentsline {chapter}{\numberline {4}Pipeline de Data Preprocessing}{24}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Qu'est-ce qu'un Pipeline de Preprocessing ?}{24}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Principes Fondamentaux}{24}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Analogie avec l'ETL Classique}{24}{subsection.4.1.2}%
+\contentsline {section}{\numberline {4.2}Enjeux du Preprocessing pour le RAG}{25}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Problème ``Garbage In, Garbage Out''}{25}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Exigences Spécifiques au Domaine Embedded}{25}{subsection.4.2.2}%
+\contentsline {section}{\numberline {4.3}Étapes Canoniques d'un Pipeline NLP}{26}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}1. Collecte (Data Ingestion)}{26}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}2. Nettoyage (Data Cleaning)}{26}{subsection.4.3.2}%
+\contentsline {subsection}{\numberline {4.3.3}3. Enrichissement (Feature Engineering)}{26}{subsection.4.3.3}%
+\contentsline {subsection}{\numberline {4.3.4}4. Mise en Relation (Linking \& Similarity)}{27}{subsection.4.3.4}%
+\contentsline {subsection}{\numberline {4.3.5}5. Découpage (Chunking)}{27}{subsection.4.3.5}%
+\contentsline {subsection}{\numberline {4.3.6}6. Validation et Export}{27}{subsection.4.3.6}%
+\contentsline {section}{\numberline {4.4}Notre Pipeline : Mapping Théorie $\to $ Implémentation}{27}{section.4.4}%
+\contentsline {section}{\numberline {4.5}Métriques de Qualité d'un Pipeline}{28}{section.4.5}%
+\contentsline {section}{\numberline {4.6}Patterns d'Architecture Pipeline}{28}{section.4.6}%
+\contentsline {subsection}{\numberline {4.6.1}Pattern Batch vs Streaming}{28}{subsection.4.6.1}%
+\contentsline {subsection}{\numberline {4.6.2}Pattern ``Rejouable par Stage''}{29}{subsection.4.6.2}%
+\contentsline {subsection}{\numberline {4.6.3}Pattern ``Gate de Qualité''}{29}{subsection.4.6.3}%
+\contentsline {chapter}{\numberline {5}Méthodologie et Architecture}{30}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Approche Méthodologique}{30}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Architecture Globale}{30}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Choix Techniques}{30}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Diagramme de Flux de Données}{31}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Flux Source-to-Answer}{32}{section.5.5}%
+\contentsline {section}{\numberline {5.6}Architecture de Delivery et Upload KB}{33}{section.5.6}%
+\contentsline {chapter}{\numberline {6}Implémentation}{34}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Ingestion (Stage 1)}{34}{section.6.1}%
+\contentsline {subsection}{\numberline {6.1.1}Objectif}{34}{subsection.6.1.1}%
+\contentsline {subsection}{\numberline {6.1.2}Mécanisme}{34}{subsection.6.1.2}%
+\contentsline {subsection}{\numberline {6.1.3}Exemple de Sortie --- Issue Brute}{34}{subsection.6.1.3}%
+\contentsline {section}{\numberline {6.2}Nettoyage (Stage 2)}{35}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}Nettoyage des Issues}{35}{subsection.6.2.1}%
+\contentsline {subsection}{\numberline {6.2.2}Exemple JSON --- Issue Après Nettoyage}{36}{subsection.6.2.2}%
+\contentsline {subsection}{\numberline {6.2.3}Nettoyage des Fichiers}{36}{subsection.6.2.3}%
+\contentsline {subsection}{\numberline {6.2.4}Exemple JSON --- Fichier Après Nettoyage}{36}{subsection.6.2.4}%
+\contentsline {section}{\numberline {6.3}Nettoyage V3 --- Nettoyage Intelligent par Type (Stage 2b)}{37}{section.6.3}%
+\contentsline {subsection}{\numberline {6.3.1}Stratégies de Nettoyage par Type}{37}{subsection.6.3.1}%
+\contentsline {subsection}{\numberline {6.3.2}Filtrage CMSIS Device Headers}{39}{subsection.6.3.2}%
+\contentsline {subsection}{\numberline {6.3.3}Résultat du Filtrage --- Exemple JSON}{39}{subsection.6.3.3}%
+\contentsline {subsection}{\numberline {6.3.4}Résultats du Nettoyage V3}{40}{subsection.6.3.4}%
+\contentsline {subsection}{\numberline {6.3.5}Compatibilité et Non-Régression}{40}{subsection.6.3.5}%
+\contentsline {section}{\numberline {6.4}Enrichissement V2 (Stage 3)}{40}{section.6.4}%
+\contentsline {subsection}{\numberline {6.4.1}Heuristiques de Classification}{40}{subsection.6.4.1}%
+\contentsline {subsection}{\numberline {6.4.2}Exemple de Classification}{40}{subsection.6.4.2}%
+\contentsline {section}{\numberline {6.5}Similarité (Stage 4)}{41}{section.6.5}%
+\contentsline {subsection}{\numberline {6.5.1}Algorithme}{41}{subsection.6.5.1}%
+\contentsline {subsection}{\numberline {6.5.2}Exemple JSON --- Issue avec Liens de Similarité}{41}{subsection.6.5.2}%
+\contentsline {section}{\numberline {6.6}Chunking V2 (Stage 5 --- Optionnel)}{42}{section.6.6}%
+\contentsline {section}{\numberline {6.7}Delivery (Stage 7)}{43}{section.6.7}%
+\contentsline {subsection}{\numberline {6.7.1}Resolver Cases}{43}{subsection.6.7.1}%
+\contentsline {subsection}{\numberline {6.7.2}Exemple JSON --- Resolver Case}{43}{subsection.6.7.2}%
+\contentsline {subsection}{\numberline {6.7.3}Diagnostic Cards}{44}{subsection.6.7.3}%
+\contentsline {subsection}{\numberline {6.7.4}Exemple JSON --- Diagnostic Card}{44}{subsection.6.7.4}%
+\contentsline {subsection}{\numberline {6.7.5}Alfred Vision --- Enrichissement d'Images}{45}{subsection.6.7.5}%
+\contentsline {section}{\numberline {6.8}Architecture Agents --- Persona ST ChatGPT}{46}{section.6.8}%
+\contentsline {subsection}{\numberline {6.8.1}Vue d'ensemble}{46}{subsection.6.8.1}%
+\contentsline {subsection}{\numberline {6.8.2}Persona : ST GitHub Analyzer}{47}{subsection.6.8.2}%
+\contentsline {subsection}{\numberline {6.8.3}Tool 1 : KB Unstructured (Recherche Hybride)}{47}{subsection.6.8.3}%
+\contentsline {subsection}{\numberline {6.8.4}Tool 2 : NovaX Fallback}{47}{subsection.6.8.4}%
+\contentsline {subsection}{\numberline {6.8.5}Stratégie de Réponse (System Prompt)}{48}{subsection.6.8.5}%
+\contentsline {subsection}{\numberline {6.8.6}Pipeline comme Agent de Maintenance}{48}{subsection.6.8.6}%
+\contentsline {chapter}{\numberline {7}Configuration de la Plateforme ST ChatGPT}{49}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Architecture de la Plateforme}{49}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Configuration du Tool KB}{49}{section.7.2}%
+\contentsline {subsection}{\numberline {7.2.1}Paramètres Retenus}{49}{subsection.7.2.1}%
+\contentsline {subsection}{\numberline {7.2.2}Justification : Recherche Hybride}{50}{subsection.7.2.2}%
+\contentsline {subsection}{\numberline {7.2.3}Justification : Seuil Sémantique à 0.55}{50}{subsection.7.2.3}%
+\contentsline {subsection}{\numberline {7.2.4}Justification : 20 Documents Sémantiques + 12 Full-text}{52}{subsection.7.2.4}%
+\contentsline {subsection}{\numberline {7.2.5}Définition : Search Type (Hybrid)}{52}{subsection.7.2.5}%
+\contentsline {subsection}{\numberline {7.2.6}Tool Description}{53}{subsection.7.2.6}%
+\contentsline {section}{\numberline {7.3}Configuration du Tool NovaX (Fallback)}{54}{section.7.3}%
+\contentsline {subsection}{\numberline {7.3.1}Problème Identifié}{54}{subsection.7.3.1}%
+\contentsline {subsection}{\numberline {7.3.2}Fix : NovaX comme Fallback Strictement Secondaire}{54}{subsection.7.3.2}%
+\contentsline {subsection}{\numberline {7.3.3}Impact Mesuré}{54}{subsection.7.3.3}%
+\contentsline {section}{\numberline {7.4}System Prompt de la Persona}{55}{section.7.4}%
+\contentsline {section}{\numberline {7.5}Évolution Incrémentale du Quality Index}{55}{section.7.5}%
+\contentsline {subsection}{\numberline {7.5.1}Chronologie des Tests}{55}{subsection.7.5.1}%
+\contentsline {subsection}{\numberline {7.5.2}Analyse de l'Évolution}{57}{subsection.7.5.2}%
+\contentsline {subsubsection}{Phase 1 : Issues seules (QI = 54)}{57}{subsection.7.5.2}%
+\contentsline {subsubsection}{Phase 2 : Ajout des Resolver Cases et Diagnostic Cards (QI = 94)}{57}{subsection.7.5.2}%
+\contentsline {subsubsection}{Phase 3 : Passage multi-séries (QI = 54)}{58}{subsection.7.5.2}%
+\contentsline {subsection}{\numberline {7.5.3}Raisonnement de Chaque Amélioration}{58}{subsection.7.5.3}%
+\contentsline {section}{\numberline {7.6}Couverture Actuelle et Future}{59}{section.7.6}%
+\contentsline {subsection}{\numberline {7.6.1}13 Séries en Production}{59}{subsection.7.6.1}%
+\contentsline {subsection}{\numberline {7.6.2}4 Nouvelles Séries Exportées (Pipeline Terminé)}{59}{subsection.7.6.2}%
+\contentsline {subsection}{\numberline {7.6.3}8 Séries Configurées (Prêtes à Lancer)}{60}{subsection.7.6.3}%
+\contentsline {chapter}{\numberline {8}Résultats et Évaluation}{61}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Couverture des Données}{61}{section.8.1}%
+\contentsline {section}{\numberline {8.2}Impact du Nettoyage V3 sur la Qualité}{62}{section.8.2}%
+\contentsline {subsection}{\numberline {8.2.1}Comparaison V2 vs V3 --- Réduction de Bruit}{62}{subsection.8.2.1}%
+\contentsline {subsection}{\numberline {8.2.2}Explication de l'Amélioration}{62}{subsection.8.2.2}%
+\contentsline {subsection}{\numberline {8.2.3}Datasources V3 en Production}{62}{subsection.8.2.3}%
+\contentsline {subsection}{\numberline {8.2.4}Filtre de Validité (is\_valid)}{63}{subsection.8.2.4}%
+\contentsline {section}{\numberline {8.3}Métriques d'Évaluation par Stage}{63}{section.8.3}%
+\contentsline {subsection}{\numberline {8.3.1}Cadre Méthodologique et Références}{63}{subsection.8.3.1}%
+\contentsline {subsection}{\numberline {8.3.2}Échelle de Notation et Justification des Seuils}{64}{subsection.8.3.2}%
+\contentsline {subsection}{\numberline {8.3.3}Stage 1 : Ingestion --- Complétude des Données Brutes}{64}{subsection.8.3.3}%
+\contentsline {subsection}{\numberline {8.3.4}Stage 2 : Cleaning --- Qualité de Préparation Textuelle}{66}{subsection.8.3.4}%
+\contentsline {subsection}{\numberline {8.3.5}Stage 3 : Enrichissement --- Classification par Heuristiques NLP}{66}{subsection.8.3.5}%
+\contentsline {subsection}{\numberline {8.3.6}Stage 3b : Enrichissement Alfred Vision --- Images d'Issues}{68}{subsection.8.3.6}%
+\contentsline {subsection}{\numberline {8.3.7}Stage 3c : Enrichissement Figures PDF}{70}{subsection.8.3.7}%
+\contentsline {subsection}{\numberline {8.3.8}Méthode de Calcul de la Similarité Alfred--Contexte}{70}{subsection.8.3.8}%
+\contentsline {subsubsection}{Prétraitement}{71}{subsection.8.3.8}%
+\contentsline {subsubsection}{Score Lexical $L$}{71}{subsection.8.3.8}%
+\contentsline {subsubsection}{Similarité Sémantique Légère $S$}{71}{equation.8.7}%
+\contentsline {subsubsection}{Pénalité de Contradiction $P_{\text {contrad}}$}{72}{equation.8.10}%
+\contentsline {subsubsection}{Résultats Décomposés}{72}{equation.8.11}%
+\contentsline {subsection}{\numberline {8.3.9}Synthèse de Confiance Alfred}{73}{subsection.8.3.9}%
+\contentsline {subsection}{\numberline {8.3.10}Stage 4 : Similarité TF-IDF}{74}{subsection.8.3.10}%
+\contentsline {subsection}{\numberline {8.3.11}Stage 5 : Delivery --- Complétude des Artefacts Exportés}{74}{subsection.8.3.11}%
+\contentsline {subsection}{\numberline {8.3.12}Résumé des Scores par Stage --- Vue Synthétique}{76}{subsection.8.3.12}%
+\contentsline {section}{\numberline {8.4}Score Global du Pipeline --- Formule Recalculée}{76}{section.8.4}%
+\contentsline {subsection}{\numberline {8.4.1}Formule de Scoring}{76}{subsection.8.4.1}%
+\contentsline {subsection}{\numberline {8.4.2}Justification des Poids}{76}{subsection.8.4.2}%
+\contentsline {subsection}{\numberline {8.4.3}Application Numérique (STM32CubeH7)}{77}{subsection.8.4.3}%
+\contentsline {subsection}{\numberline {8.4.4}Interprétation et Comparaison}{78}{subsection.8.4.4}%
+\contentsline {section}{\numberline {8.5}Étude Comparative : Alfred Générique vs Persona KB}{78}{section.8.5}%
+\contentsline {subsection}{\numberline {8.5.1}Protocole Expérimental}{79}{subsection.8.5.1}%
+\contentsline {subsection}{\numberline {8.5.2}Grille de Scoring Détaillée}{79}{subsection.8.5.2}%
+\contentsline {subsection}{\numberline {8.5.3}Scorecard Comparative}{80}{subsection.8.5.3}%
+\contentsline {subsection}{\numberline {8.5.4}Métriques Comparatives Synthétiques}{80}{subsection.8.5.4}%
+\contentsline {subsection}{\numberline {8.5.5}Analyse par Catégorie de Questions}{81}{subsection.8.5.5}%
+\contentsline {section}{\numberline {8.6}Contribution de Chaque Étape au Résultat Final}{81}{section.8.6}%
+\contentsline {subsection}{\numberline {8.6.1}Chaîne de Valeur --- Du Brut au QI}{82}{subsection.8.6.1}%
+\contentsline {subsection}{\numberline {8.6.2}Impact Cumulatif sur le Quality Index}{82}{subsection.8.6.2}%
+\contentsline {subsection}{\numberline {8.6.3}Matrice Valeur × Effort par Étape}{84}{subsection.8.6.3}%
+\contentsline {chapter}{\numberline {9}Automatisation et CI/CD}{85}{chapter.9}%
+\contentsline {section}{\numberline {9.1}GitHub Actions --- Mise à Jour Automatique}{85}{section.9.1}%
+\contentsline {subsection}{\numberline {9.1.1}Architecture 2 Jobs}{85}{subsection.9.1.1}%
+\contentsline {subsection}{\numberline {9.1.2}Déclenchement}{85}{subsection.9.1.2}%
+\contentsline {subsection}{\numberline {9.1.3}Sécurité et Robustesse}{85}{subsection.9.1.3}%
+\contentsline {chapter}{\numberline {10}Conclusion et Perspectives}{87}{chapter.10}%
+\contentsline {section}{\numberline {10.1}Bilan du Projet}{87}{section.10.1}%
+\contentsline {section}{\numberline {10.2}Valeur Industrielle}{88}{section.10.2}%
+\contentsline {section}{\numberline {10.3}Leçons Apprises}{88}{section.10.3}%
+\contentsline {section}{\numberline {10.4}Perspectives}{88}{section.10.4}%
+\contentsline {chapter}{Références}{90}{chapter*.3}%
+\contentsline {chapter}{Annexes}{93}{chapter*.5}%

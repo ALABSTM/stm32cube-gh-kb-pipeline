@@ -166,3 +166,437 @@
 \@writefile{toc}{\contentsline {section}{\numberline {5.1}Approche Méthodologique}{30}{section.5.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {5.2}Architecture Globale}{30}{section.5.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {5.3}Choix Techniques}{30}{section.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.4}Diagramme de Flux de Données}{31}{section.5.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.1}{\ignorespaces Vue d'ensemble du pipeline de preprocessing (7 stages)}}{31}{figure.5.1}\protected@file@percent }
+\newlabel{fig:pipeline_overview}{{5.1}{31}{Vue d'ensemble du pipeline de preprocessing (7 stages)}{figure.5.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5.2}{\ignorespaces Architecture détaillée du pipeline : stages, fichiers intermédiaires et branchement Alfred}}{32}{figure.5.2}\protected@file@percent }
+\newlabel{fig:pipeline_arch_tikz}{{5.2}{32}{Architecture détaillée du pipeline : stages, fichiers intermédiaires et branchement Alfred}{figure.5.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.5}Flux Source-to-Answer}{32}{section.5.5}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.3}{\ignorespaces Flux de données end-to-end : de la source GitHub à la réponse utilisateur}}{32}{figure.5.3}\protected@file@percent }
+\newlabel{fig:data_flow}{{5.3}{32}{Flux de données end-to-end : de la source GitHub à la réponse utilisateur}{figure.5.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.6}Architecture de Delivery et Upload KB}{33}{section.5.6}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.4}{\ignorespaces Architecture de livraison et upload vers la Knowledge Base \#793}}{33}{figure.5.4}\protected@file@percent }
+\newlabel{fig:delivery_upload}{{5.4}{33}{Architecture de livraison et upload vers la Knowledge Base \#793}{figure.5.4}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {6}Implémentation}{34}{chapter.6}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {section}{\numberline {6.1}Ingestion (Stage 1)}{34}{section.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1.1}Objectif}{34}{subsection.6.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1.2}Mécanisme}{34}{subsection.6.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1.3}Exemple de Sortie --- Issue Brute}{34}{subsection.6.1.3}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.1}Extrait de raw\_issues\_stm32cubeh7.json (issue brute)}{35}{lstlisting.6.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6.1}{\ignorespaces Détail de l'étape d'ingestion : scripts et sorties}}{35}{figure.6.1}\protected@file@percent }
+\newlabel{fig:ingestion_detail}{{6.1}{35}{Détail de l'étape d'ingestion : scripts et sorties}{figure.6.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.2}Nettoyage (Stage 2)}{35}{section.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.1}Nettoyage des Issues}{35}{subsection.6.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.2}Exemple JSON --- Issue Après Nettoyage}{36}{subsection.6.2.2}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.2}Extrait de clean\_issues\_stm32cubeh7.json (issue nettoyée)}{36}{lstlisting.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.3}Nettoyage des Fichiers}{36}{subsection.6.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.4}Exemple JSON --- Fichier Après Nettoyage}{36}{subsection.6.2.4}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.3}Extrait de clean\_files\_stm32h7xx-hal-driver.json}{36}{lstlisting.6.3}\protected@file@percent }
+\gdef \LT@xiv {\LT@entry 
+    {1}{111.58464pt}\LT@entry 
+    {1}{111.58464pt}\LT@entry 
+    {1}{182.71652pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.3}Nettoyage V3 --- Nettoyage Intelligent par Type (Stage 2b)}{37}{section.6.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.1}Stratégies de Nettoyage par Type}{37}{subsection.6.3.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6.2}{\ignorespaces Arbre de décision du nettoyage V3 : routage par type de fichier avec taux de réduction}}{38}{figure.6.2}\protected@file@percent }
+\newlabel{fig:cleaning_v3_tree}{{6.2}{38}{Arbre de décision du nettoyage V3 : routage par type de fichier avec taux de réduction}{figure.6.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.2}Filtrage CMSIS Device Headers}{39}{subsection.6.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.3}Résultat du Filtrage --- Exemple JSON}{39}{subsection.6.3.3}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.4}Header CMSIS après filtrage V3 (extrait)}{39}{lstlisting.6.4}\protected@file@percent }
+\gdef \LT@xv {\LT@entry 
+    {1}{154.26378pt}\LT@entry 
+    {1}{65.66743pt}\LT@entry 
+    {1}{65.66743pt}\LT@entry 
+    {1}{72.4644pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.4}Résultats du Nettoyage V3}{40}{subsection.6.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.5}Compatibilité et Non-Régression}{40}{subsection.6.3.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.4}Enrichissement V2 (Stage 3)}{40}{section.6.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4.1}Heuristiques de Classification}{40}{subsection.6.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4.2}Exemple de Classification}{40}{subsection.6.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.5}Similarité (Stage 4)}{41}{section.6.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5.1}Algorithme}{41}{subsection.6.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5.2}Exemple JSON --- Issue avec Liens de Similarité}{41}{subsection.6.5.2}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.5}Extrait de docs\_issues\_stm32cubeh7\_v2\_sim.json (avec voisins)}{41}{lstlisting.6.5}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6.3}{\ignorespaces Détail du processus d'enrichissement et de calcul de similarité}}{42}{figure.6.3}\protected@file@percent }
+\newlabel{fig:enrichment_similarity}{{6.3}{42}{Détail du processus d'enrichissement et de calcul de similarité}{figure.6.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.6}Chunking V2 (Stage 5 --- Optionnel)}{42}{section.6.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.7}Delivery (Stage 7)}{43}{section.6.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.7.1}Resolver Cases}{43}{subsection.6.7.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.7.2}Exemple JSON --- Resolver Case}{43}{subsection.6.7.2}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.6}Extrait de st\_ready\_resolver\_stm32cubeh7.json}{43}{lstlisting.6.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.7.3}Diagnostic Cards}{44}{subsection.6.7.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.7.4}Exemple JSON --- Diagnostic Card}{44}{subsection.6.7.4}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6.7}Extrait de st\_ready\_diagnostic\_stm32cubeh7.json}{44}{lstlisting.6.7}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6.4}{\ignorespaces Génération des Resolver Cases et Diagnostic Cards}}{45}{figure.6.4}\protected@file@percent }
+\newlabel{fig:resolver_diagnostic}{{6.4}{45}{Génération des Resolver Cases et Diagnostic Cards}{figure.6.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.5}{\ignorespaces Les 4 types d'artefacts delivery et leurs relations vers la KB \#793}}{45}{figure.6.5}\protected@file@percent }
+\newlabel{fig:delivery_artifacts}{{6.5}{45}{Les 4 types d'artefacts delivery et leurs relations vers la KB \#793}{figure.6.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.7.5}Alfred Vision --- Enrichissement d'Images}{45}{subsection.6.7.5}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6.6}{\ignorespaces Intégration Alfred Vision AI pour la description automatique d'images}}{46}{figure.6.6}\protected@file@percent }
+\newlabel{fig:alfred}{{6.6}{46}{Intégration Alfred Vision AI pour la description automatique d'images}{figure.6.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.8}Architecture Agents --- Persona ST ChatGPT}{46}{section.6.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.8.1}Vue d'ensemble}{46}{subsection.6.8.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6.7}{\ignorespaces Architecture multi-agents du système ST GitHub Analyzer}}{46}{figure.6.7}\protected@file@percent }
+\newlabel{fig:agents_arch}{{6.7}{46}{Architecture multi-agents du système ST GitHub Analyzer}{figure.6.7}{}}
+\gdef \LT@xvi {\LT@entry 
+    {1}{140.0374pt}\LT@entry 
+    {1}{253.84842pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.8.2}Persona : ST GitHub Analyzer}{47}{subsection.6.8.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.8.3}Tool 1 : KB Unstructured (Recherche Hybride)}{47}{subsection.6.8.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.8.4}Tool 2 : NovaX Fallback}{47}{subsection.6.8.4}\protected@file@percent }
+\gdef \LT@xvii {\LT@entry 
+    {1}{125.81102pt}\LT@entry 
+    {1}{268.0748pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.8.5}Stratégie de Réponse (System Prompt)}{48}{subsection.6.8.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.8.6}Pipeline comme Agent de Maintenance}{48}{subsection.6.8.6}\protected@file@percent }
+\gdef \LT@xviii {\LT@entry 
+    {1}{154.26378pt}\LT@entry 
+    {1}{125.81102pt}\LT@entry 
+    {1}{125.81102pt}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {7}Configuration de la Plateforme ST ChatGPT}{49}{chapter.7}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{chap:configuration}{{7}{49}{Configuration de la Plateforme ST ChatGPT}{chapter.7}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.1}Architecture de la Plateforme}{49}{section.7.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7.2}Configuration du Tool KB}{49}{section.7.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.1}Paramètres Retenus}{49}{subsection.7.2.1}\protected@file@percent }
+\gdef \LT@xix {\LT@entry 
+    {1}{97.35826pt}\LT@entry 
+    {1}{154.26378pt}\LT@entry 
+    {1}{154.26378pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.2}Justification : Recherche Hybride}{50}{subsection.7.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.3}Justification : Seuil Sémantique à 0.55}{50}{subsection.7.2.3}\protected@file@percent }
+\newlabel{sec:seuil_semantique}{{7.2.3}{50}{Justification : Seuil Sémantique à 0.55}{subsection.7.2.3}{}}
+\gdef \LT@xx {\LT@entry 
+    {1}{68.9055pt}\LT@entry 
+    {1}{68.9055pt}\LT@entry 
+    {1}{38.14638pt}\LT@entry 
+    {1}{71.09529pt}\LT@entry 
+    {1}{60.3132pt}\LT@entry 
+    {1}{35.48595pt}\LT@entry 
+    {1}{134.34692pt}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.1}{\ignorespaces Quality Index des stratégies Unstructured KB sur 96 questions --- S1 maximise le rappel, S0 reste le point d'équilibre courant}}{52}{figure.7.1}\protected@file@percent }
+\newlabel{fig:kb_strategy_qi}{{7.1}{52}{Quality Index des stratégies Unstructured KB sur 96 questions --- S1 maximise le rappel, S0 reste le point d'équilibre courant}{figure.7.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.4}Justification : 20 Documents Sémantiques + 12 Full-text}{52}{subsection.7.2.4}\protected@file@percent }
+\newlabel{sec:max_documents}{{7.2.4}{52}{Justification : 20 Documents Sémantiques + 12 Full-text}{subsection.7.2.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.5}Définition : Search Type (Hybrid)}{52}{subsection.7.2.5}\protected@file@percent }
+\newlabel{sec:search_type}{{7.2.5}{52}{Définition : Search Type (Hybrid)}{subsection.7.2.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2.6}Tool Description}{53}{subsection.7.2.6}\protected@file@percent }
+\gdef \LT@xxi {\LT@entry 
+    {1}{188.09442pt}\LT@entry 
+    {1}{93.49397pt}\LT@entry 
+    {1}{122.74933pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.3}Configuration du Tool NovaX (Fallback)}{54}{section.7.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3.1}Problème Identifié}{54}{subsection.7.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3.2}Fix : NovaX comme Fallback Strictement Secondaire}{54}{subsection.7.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3.3}Impact Mesuré}{54}{subsection.7.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7.4}System Prompt de la Persona}{55}{section.7.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7.5}Évolution Incrémentale du Quality Index}{55}{section.7.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.5.1}Chronologie des Tests}{55}{subsection.7.5.1}\protected@file@percent }
+\gdef \LT@xxii {\LT@entry 
+    {1}{80.28644pt}\LT@entry 
+    {1}{159.95424pt}\LT@entry 
+    {1}{35.48595pt}\LT@entry 
+    {1}{23.74715pt}\LT@entry 
+    {1}{103.04872pt}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.2}{\ignorespaces Évolution du Quality Index au fil des améliorations incrémentales}}{57}{figure.7.2}\protected@file@percent }
+\newlabel{fig:qi_config_evolution}{{7.2}{57}{Évolution du Quality Index au fil des améliorations incrémentales}{figure.7.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.5.2}Analyse de l'Évolution}{57}{subsection.7.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Phase 1 : Issues seules (QI = 54)}{57}{subsection.7.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Phase 2 : Ajout des Resolver Cases et Diagnostic Cards (QI = 94)}{57}{subsection.7.5.2}\protected@file@percent }
+\gdef \LT@xxiii {\LT@entry 
+    {1}{125.81102pt}\LT@entry 
+    {1}{154.26378pt}\LT@entry 
+    {1}{125.81102pt}}
+\@writefile{toc}{\contentsline {subsubsection}{Phase 3 : Passage multi-séries (QI = 54)}{58}{subsection.7.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.5.3}Raisonnement de Chaque Amélioration}{58}{subsection.7.5.3}\protected@file@percent }
+\gdef \LT@xxiv {\LT@entry 
+    {1}{106.4561pt}\LT@entry 
+    {1}{48.17033pt}\LT@entry 
+    {1}{46.65404pt}\LT@entry 
+    {1}{39.46413pt}\LT@entry 
+    {1}{62.46542pt}\LT@entry 
+    {1}{43.15211pt}\LT@entry 
+    {1}{49.23395pt}}
+\gdef \LT@xxv {\LT@entry 
+    {1}{91.69583pt}\LT@entry 
+    {1}{46.65404pt}\LT@entry 
+    {1}{39.46413pt}\LT@entry 
+    {1}{62.46542pt}\LT@entry 
+    {1}{82.29393pt}\LT@entry 
+    {1}{92.43317pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.6}Couverture Actuelle et Future}{59}{section.7.6}\protected@file@percent }
+\newlabel{sec:couverture}{{7.6}{59}{Couverture Actuelle et Future}{section.7.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.6.1}13 Séries en Production}{59}{subsection.7.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.6.2}4 Nouvelles Séries Exportées (Pipeline Terminé)}{59}{subsection.7.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.6.3}8 Séries Configurées (Prêtes à Lancer)}{60}{subsection.7.6.3}\protected@file@percent }
+\gdef \LT@xxvi {\LT@entry 
+    {1}{101.03793pt}\LT@entry 
+    {1}{48.17033pt}\LT@entry 
+    {1}{50.5767pt}\LT@entry 
+    {1}{57.32506pt}\LT@entry 
+    {1}{62.46542pt}\LT@entry 
+    {1}{82.29393pt}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {8}Résultats et Évaluation}{61}{chapter.8}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{chap:resultats_evaluation}{{8}{61}{Résultats et Évaluation}{chapter.8}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.1}Couverture des Données}{61}{section.8.1}\protected@file@percent }
+\gdef \LT@xxvii {\LT@entry 
+    {1}{154.26378pt}\LT@entry 
+    {1}{52.5276pt}\LT@entry 
+    {1}{44.82764pt}\LT@entry 
+    {1}{52.01361pt}}
+\gdef \LT@xxviii {\LT@entry 
+    {1}{68.93054pt}\LT@entry 
+    {1}{97.82483pt}\LT@entry 
+    {1}{55.34909pt}\LT@entry 
+    {1}{132.71074pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.2}Impact du Nettoyage V3 sur la Qualité}{62}{section.8.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2.1}Comparaison V2 vs V3 --- Réduction de Bruit}{62}{subsection.8.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2.2}Explication de l'Amélioration}{62}{subsection.8.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2.3}Datasources V3 en Production}{62}{subsection.8.2.3}\protected@file@percent }
+\citation{iso25012}
+\citation{iso25024}
+\citation{iso25010}
+\citation{manning2008ir}
+\citation{fawcett2006roc}
+\citation{lewis2020rag}
+\gdef \LT@xxix {\LT@entry 
+    {1}{125.81102pt}\LT@entry 
+    {1}{125.81102pt}\LT@entry 
+    {1}{168.49014pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2.4}Filtre de Validité (is\_valid)}{63}{subsection.8.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {8.3}Métriques d'Évaluation par Stage}{63}{section.8.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3.1}Cadre Méthodologique et Références}{63}{subsection.8.3.1}\protected@file@percent }
+\citation{iso25024}
+\citation{manning2008ir}
+\citation{fawcett2006roc}
+\citation{iso25024}
+\citation{iso25024}
+\citation{iso25024}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3.2}Échelle de Notation et Justification des Seuils}{64}{subsection.8.3.2}\protected@file@percent }
+\newlabel{sec:seuils_notation}{{8.3.2}{64}{Échelle de Notation et Justification des Seuils}{subsection.8.3.2}{}}
+\newlabel{eq:score_scale}{{8.2}{64}{Échelle de Notation et Justification des Seuils}{equation.8.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3.3}Stage 1 : Ingestion --- Complétude des Données Brutes}{64}{subsection.8.3.3}\protected@file@percent }
+\newlabel{sec:eval_ingestion}{{8.3.3}{64}{Stage 1 : Ingestion --- Complétude des Données Brutes}{subsection.8.3.3}{}}
+\gdef \LT@xxx {\LT@entry 
+    {1}{140.0374pt}\LT@entry 
+    {1}{168.49014pt}\LT@entry 
+    {1}{83.13188pt}\LT@entry 
+    {1}{54.67912pt}}
+\gdef \LT@xxxi {\LT@entry 
+    {1}{154.78455pt}\LT@entry 
+    {1}{48.54663pt}\LT@entry 
+    {1}{48.54663pt}\LT@entry 
+    {1}{48.54663pt}\LT@entry 
+    {1}{48.54663pt}\LT@entry 
+    {1}{94.29933pt}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.1}{\ignorespaces Complétude d'ingestion par série --- toutes métriques au-dessus du seuil EXCELLENT}}{65}{figure.8.1}\protected@file@percent }
+\newlabel{fig:eval_ingestion_chart}{{8.1}{65}{Complétude d'ingestion par série --- toutes métriques au-dessus du seuil EXCELLENT}{figure.8.1}{}}
+\citation{iso25012}
+\citation{iso25012}
+\gdef \LT@xxxii {\LT@entry 
+    {1}{154.26378pt}\LT@entry 
+    {1}{168.49014pt}\LT@entry 
+    {1}{68.9055pt}\LT@entry 
+    {1}{54.67912pt}}
+\gdef \LT@xxxiii {\LT@entry 
+    {1}{154.26378pt}\LT@entry 
+    {1}{75.42897pt}\LT@entry 
+    {1}{74.99016pt}\LT@entry 
+    {1}{89.1617pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3.4}Stage 2 : Cleaning --- Qualité de Préparation Textuelle}{66}{subsection.8.3.4}\protected@file@percent }
+\newlabel{sec:eval_cleaning}{{8.3.4}{66}{Stage 2 : Cleaning --- Qualité de Préparation Textuelle}{subsection.8.3.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3.5}Stage 3 : Enrichissement --- Classification par Heuristiques NLP}{66}{subsection.8.3.5}\protected@file@percent }
+\newlabel{sec:eval_enrichment}{{8.3.5}{66}{Stage 3 : Enrichissement --- Classification par Heuristiques NLP}{subsection.8.3.5}{}}
+\gdef \LT@xxxiv {\LT@entry 
+    {1}{125.81102pt}\LT@entry 
+    {1}{154.26378pt}\LT@entry 
+    {1}{68.9055pt}\LT@entry 
+    {1}{97.35826pt}}
+\citation{fawcett2006roc}
+\gdef \LT@xxxv {\LT@entry 
+    {1}{177.17204pt}\LT@entry 
+    {1}{48.54663pt}\LT@entry 
+    {1}{46.2081pt}\LT@entry 
+    {1}{105.07446pt}\LT@entry 
+    {1}{210.31064pt}\LT@entry 
+    {1}{0.0pt}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.2}{\ignorespaces Couverture d'enrichissement STM32CubeH7 --- comparaison score vs seuil par champ}}{68}{figure.8.2}\protected@file@percent }
+\newlabel{fig:eval_enrichment_chart}{{8.2}{68}{Couverture d'enrichissement STM32CubeH7 --- comparaison score vs seuil par champ}{figure.8.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3.6}Stage 3b : Enrichissement Alfred Vision --- Images d'Issues}{68}{subsection.8.3.6}\protected@file@percent }
+\newlabel{sec:eval_alfred_images}{{8.3.6}{68}{Stage 3b : Enrichissement Alfred Vision --- Images d'Issues}{subsection.8.3.6}{}}
+\newlabel{eq:alfred_conf}{{8.3}{68}{Stage 3b : Enrichissement Alfred Vision --- Images d'Issues}{equation.8.3}{}}
+\citation{fawcett2006roc}
+\gdef \LT@xxxvi {\LT@entry 
+    {1}{226.04626pt}\LT@entry 
+    {1}{39.37694pt}\LT@entry 
+    {1}{35.11964pt}\LT@entry 
+    {1}{41.50142pt}\LT@entry 
+    {1}{140.13118pt}}
+\citation{lewis2020rag}
+\newlabel{eq:alfred_coherence_score}{{8.4}{69}{Stage 3b : Enrichissement Alfred Vision --- Images d'Issues}{equation.8.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3.7}Stage 3c : Enrichissement Figures PDF}{70}{subsection.8.3.7}\protected@file@percent }
+\newlabel{sec:eval_alfred_pdf}{{8.3.7}{70}{Stage 3c : Enrichissement Figures PDF}{subsection.8.3.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3.8}Méthode de Calcul de la Similarité Alfred--Contexte}{70}{subsection.8.3.8}\protected@file@percent }
+\newlabel{sec:eval_alfred_similarity_method}{{8.3.8}{70}{Méthode de Calcul de la Similarité Alfred--Contexte}{subsection.8.3.8}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Prétraitement}{71}{subsection.8.3.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Score Lexical $L$}{71}{subsection.8.3.8}\protected@file@percent }
+\newlabel{eq:alfred_lexical_grounding}{{8.6}{71}{Score Lexical $L$}{equation.8.6}{}}
+\newlabel{eq:alfred_issue_lexical}{{8.7}{71}{Score Lexical $L$}{equation.8.7}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Similarité Sémantique Légère $S$}{71}{equation.8.7}\protected@file@percent }
+\newlabel{eq:alfred_semantic_lite}{{8.8}{71}{Similarité Sémantique Légère $S$}{equation.8.8}{}}
+\newlabel{eq:alfred_jaccard}{{8.9}{71}{Similarité Sémantique Légère $S$}{equation.8.9}{}}
+\citation{reimers2019sentence}
+\newlabel{eq:alfred_trigram_cosine}{{8.10}{72}{Similarité Sémantique Légère $S$}{equation.8.10}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Pénalité de Contradiction $P_{\text  {contrad}}$}{72}{equation.8.10}\protected@file@percent }
+\newlabel{eq:alfred_contradiction_lite}{{8.11}{72}{Pénalité de Contradiction $P_{\text {contrad}}$}{equation.8.11}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Résultats Décomposés}{72}{equation.8.11}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {8.12}{\ignorespaces Décomposition des métriques de cohérence Alfred par source visuelle}}{72}{table.8.12}\protected@file@percent }
+\newlabel{tab:alfred_coherence_decomposition}{{8.12}{72}{Décomposition des métriques de cohérence Alfred par source visuelle}{table.8.12}{}}
+\gdef \LT@xxxvii {\LT@entry 
+    {1}{97.35826pt}\LT@entry 
+    {1}{112.18799pt}\LT@entry 
+    {1}{113.36177pt}\LT@entry 
+    {1}{47.24141pt}\LT@entry 
+    {1}{140.0374pt}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.3}{\ignorespaces Confiance contextuelle Alfred selon la source visuelle --- seuil d'alerte $S_{\text  {coh}} < 0.12$}}{73}{figure.8.3}\protected@file@percent }
+\newlabel{fig:alfred_contextual_trust}{{8.3}{73}{Confiance contextuelle Alfred selon la source visuelle --- seuil d'alerte $S_{\text {coh}} < 0.12$}{figure.8.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3.9}Synthèse de Confiance Alfred}{73}{subsection.8.3.9}\protected@file@percent }
+\newlabel{sec:eval_alfred_synthesis}{{8.3.9}{73}{Synthèse de Confiance Alfred}{subsection.8.3.9}{}}
+\newlabel{eq:alfred_contextual_trust}{{8.12}{73}{Synthèse de Confiance Alfred}{equation.8.12}{}}
+\gdef \LT@xxxviii {\LT@entry 
+    {1}{154.26378pt}\LT@entry 
+    {1}{168.49014pt}\LT@entry 
+    {1}{83.13188pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3.10}Stage 4 : Similarité TF-IDF}{74}{subsection.8.3.10}\protected@file@percent }
+\newlabel{sec:eval_similarity}{{8.3.10}{74}{Stage 4 : Similarité TF-IDF}{subsection.8.3.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3.11}Stage 5 : Delivery --- Complétude des Artefacts Exportés}{74}{subsection.8.3.11}\protected@file@percent }
+\newlabel{sec:eval_delivery}{{8.3.11}{74}{Stage 5 : Delivery --- Complétude des Artefacts Exportés}{subsection.8.3.11}{}}
+\gdef \LT@xxxix {\LT@entry 
+    {1}{107.78629pt}\LT@entry 
+    {1}{46.7859pt}\LT@entry 
+    {1}{52.65947pt}\LT@entry 
+    {1}{62.46542pt}\LT@entry 
+    {1}{82.29393pt}}
+\gdef \LT@xl {\LT@entry 
+    {1}{149.73297pt}\LT@entry 
+    {1}{62.20143pt}\LT@entry 
+    {1}{239.62204pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3.12}Résumé des Scores par Stage --- Vue Synthétique}{76}{subsection.8.3.12}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {8.16}{\ignorespaces Scores de qualité par stage avec confiance Alfred séparée --- STM32CubeH7 et campagne multimodale}}{76}{table.8.16}\protected@file@percent }
+\newlabel{tab:eval_scores_h7_v2}{{8.16}{76}{Scores de qualité par stage avec confiance Alfred séparée --- STM32CubeH7 et campagne multimodale}{table.8.16}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.4}Score Global du Pipeline --- Formule Recalculée}{76}{section.8.4}\protected@file@percent }
+\newlabel{sec:score_global}{{8.4}{76}{Score Global du Pipeline --- Formule Recalculée}{section.8.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.4.1}Formule de Scoring}{76}{subsection.8.4.1}\protected@file@percent }
+\newlabel{eq:score_global_v2}{{8.14}{76}{Formule de Scoring}{equation.8.14}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.4.2}Justification des Poids}{76}{subsection.8.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.4.3}Application Numérique (STM32CubeH7)}{77}{subsection.8.4.3}\protected@file@percent }
+\newlabel{eq:score_calcul}{{8.16}{77}{Application Numérique (STM32CubeH7)}{equation.8.16}{}}
+\gdef \LT@xli {\LT@entry 
+    {1}{268.19pt}\LT@entry 
+    {1}{47.24141pt}\LT@entry 
+    {1}{93.39542pt}\LT@entry 
+    {1}{154.26378pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.4.4}Interprétation et Comparaison}{78}{subsection.8.4.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {8.4}{\ignorespaces Décomposition du score global 87.1\% --- contribution pondérée de chaque stage, avec Alfred séparé par source visuelle}}{78}{figure.8.4}\protected@file@percent }
+\newlabel{fig:score_decomposition}{{8.4}{78}{Décomposition du score global 87.1\% --- contribution pondérée de chaque stage, avec Alfred séparé par source visuelle}{figure.8.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.5}Étude Comparative : Alfred Générique vs Persona KB}{78}{section.8.5}\protected@file@percent }
+\newlabel{sec:comparative_study}{{8.5}{78}{Étude Comparative : Alfred Générique vs Persona KB}{section.8.5}{}}
+\gdef \LT@xlii {\LT@entry 
+    {1}{125.81102pt}\LT@entry 
+    {1}{268.0748pt}}
+\gdef \LT@xliii {\LT@entry 
+    {1}{140.0374pt}\LT@entry 
+    {1}{38.48659pt}\LT@entry 
+    {1}{211.16928pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.5.1}Protocole Expérimental}{79}{subsection.8.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.5.2}Grille de Scoring Détaillée}{79}{subsection.8.5.2}\protected@file@percent }
+\gdef \LT@xliv {\LT@entry 
+    {1}{97.35826pt}\LT@entry 
+    {1}{83.13188pt}\LT@entry 
+    {1}{59.23848pt}\LT@entry 
+    {1}{59.23848pt}\LT@entry 
+    {1}{39.74324pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.5.3}Scorecard Comparative}{80}{subsection.8.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.5.4}Métriques Comparatives Synthétiques}{80}{subsection.8.5.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {8.22}{\ignorespaces Scorecard comparative Alfred vs Persona KB --- métriques clés}}{80}{table.8.22}\protected@file@percent }
+\newlabel{tab:scorecard_comparative}{{8.22}{80}{Scorecard comparative Alfred vs Persona KB --- métriques clés}{table.8.22}{}}
+\gdef \LT@xlv {\LT@entry 
+    {1}{125.81102pt}\LT@entry 
+    {1}{81.10117pt}\LT@entry 
+    {1}{90.51413pt}\LT@entry 
+    {1}{168.49014pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.5.5}Analyse par Catégorie de Questions}{81}{subsection.8.5.5}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {8.5}{\ignorespaces Comparaison Alfred vs Persona KB par catégorie de question}}{81}{figure.8.5}\protected@file@percent }
+\newlabel{fig:comparative_chart}{{8.5}{81}{Comparaison Alfred vs Persona KB par catégorie de question}{figure.8.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.6}Contribution de Chaque Étape au Résultat Final}{81}{section.8.6}\protected@file@percent }
+\newlabel{sec:value_chain}{{8.6}{81}{Contribution de Chaque Étape au Résultat Final}{section.8.6}{}}
+\gdef \LT@xlvi {\LT@entry 
+    {1}{83.13188pt}\LT@entry 
+    {1}{97.35826pt}\LT@entry 
+    {1}{111.58464pt}\LT@entry 
+    {1}{125.81102pt}}
+\gdef \LT@xlvii {\LT@entry 
+    {1}{68.9055pt}\LT@entry 
+    {1}{74.59596pt}\LT@entry 
+    {1}{38.14638pt}\LT@entry 
+    {1}{71.09529pt}\LT@entry 
+    {1}{60.3132pt}\LT@entry 
+    {1}{35.48595pt}\LT@entry 
+    {1}{125.81102pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.6.1}Chaîne de Valeur --- Du Brut au QI}{82}{subsection.8.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.6.2}Impact Cumulatif sur le Quality Index}{82}{subsection.8.6.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {8.6}{\ignorespaces Comparaison des stratégies Unstructured KB sur 96 questions multi-séries}}{83}{figure.8.6}\protected@file@percent }
+\newlabel{fig:qi_evolution}{{8.6}{83}{Comparaison des stratégies Unstructured KB sur 96 questions multi-séries}{figure.8.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.6.3}Matrice Valeur × Effort par Étape}{84}{subsection.8.6.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {8.26}{\ignorespaces ROI de chaque amélioration du pipeline sur le Quality Index}}{84}{table.8.26}\protected@file@percent }
+\newlabel{tab:roi_pipeline}{{8.26}{84}{ROI de chaque amélioration du pipeline sur le Quality Index}{table.8.26}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {9}Automatisation et CI/CD}{85}{chapter.9}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {section}{\numberline {9.1}GitHub Actions --- Mise à Jour Automatique}{85}{section.9.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {9.1}{\ignorespaces Architecture CI/CD : GitHub Actions + self-hosted runner}}{85}{figure.9.1}\protected@file@percent }
+\newlabel{fig:cicd}{{9.1}{85}{Architecture CI/CD : GitHub Actions + self-hosted runner}{figure.9.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.1.1}Architecture 2 Jobs}{85}{subsection.9.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.1.2}Déclenchement}{85}{subsection.9.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.1.3}Sécurité et Robustesse}{85}{subsection.9.1.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {10}Conclusion et Perspectives}{87}{chapter.10}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{chap:conclusion}{{10}{87}{Conclusion et Perspectives}{chapter.10}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {10.1}Bilan du Projet}{87}{section.10.1}\protected@file@percent }
+\gdef \LT@xlviii {\LT@entry 
+    {1}{154.26378pt}\LT@entry 
+    {1}{177.2693pt}\LT@entry 
+    {1}{140.60464pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {10.2}Valeur Industrielle}{88}{section.10.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {10.3}Leçons Apprises}{88}{section.10.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {10.4}Perspectives}{88}{section.10.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{Références}{90}{chapter*.3}\protected@file@percent }
+\bibcite{lewis2020rag}{1}
+\bibcite{tfidf}{2}
+\bibcite{openai2023}{3}
+\bibcite{stm32}{4}
+\bibcite{st_annual_report}{5}
+\bibcite{arm_cortex}{6}
+\bibcite{scrum_guide}{7}
+\bibcite{json_schema}{8}
+\bibcite{iso25012}{9}
+\bibcite{iso25024}{10}
+\bibcite{iso25010}{11}
+\bibcite{manning2008ir}{12}
+\bibcite{fawcett2006roc}{13}
+\bibcite{azure_openai}{14}
+\bibcite{pypdf}{15}
+\bibcite{reimers2019sentence}{16}
+\@writefile{toc}{\contentsline {chapter}{Annexes}{93}{chapter*.5}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {10.1}Pipeline complet}{93}{lstlisting.10.1}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {10.2}Enrichissement Alfred}{94}{lstlisting.10.2}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {10.3}Upload vers KB \#793}{94}{lstlisting.10.3}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {10.4}Validation et evaluation}{95}{lstlisting.10.4}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {10.5}Ajout d'une nouvelle serie (ex: G4)}{95}{lstlisting.10.5}\protected@file@percent }
+\gdef \@abspage@last{97}
