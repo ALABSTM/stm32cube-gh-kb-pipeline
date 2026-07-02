@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.6.9)  1 JUL 2026 14:48
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.6.9)  2 JUL 2026 16:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -551,6 +551,18 @@ LaTeX Info: Redefining \Relbar on input line 970.
 LaTeX Info: Redefining \[ on input line 2950.
 LaTeX Info: Redefining \] on input line 2951.
 )
+(C:\Users\gharbiab\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+(C:\Users\gharbiab\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\amsfonts.st
+y
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+))
 (C:\Users\gharbiab\AppData\Local\Programs\MiKTeX\tex/latex/pgf/frontendlayer\ti
 kz.sty
 (C:\Users\gharbiab\AppData\Local\Programs\MiKTeX\tex/latex/pgf/basiclayer\pgf.s
@@ -1012,42 +1024,43 @@ File: tikzlibrarycalc.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 y
 Package: setspace 2022/12/04 v6.7b set line spacing
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 62.
+Package hyperref Info: Option `colorlinks' set `true' on input line 76.
 Package french3.ldf Info: Setting StandardItemizeEnv=true for
 (french3.ldf)             compatibility with enumitem package,
-(french3.ldf)             reported on input line 72.
+(french3.ldf)             reported on input line 86.
 Package french3.ldf Info: Setting StandardEnumerateEnv=true for
 (french3.ldf)             compatibility with enumitem package,
-(french3.ldf)             reported on input line 72.
+(french3.ldf)             reported on input line 86.
 
 (C:\Users\gharbiab\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-
 pdftex.def
 File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count370
-) (PFE_Report_STM32Cube_Pipeline.aux)
+) (PFE_Report_STM32Cube_Pipeline.aux
+Package babel Info: 'french' activates 'french' shorthands.
+(babel)             Reported on input line 11.
+)
 \openout1 = `PFE_Report_STM32Cube_Pipeline.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 72.
-LaTeX Font Info:    ... okay on input line 72.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 72.
-LaTeX Font Info:    ... okay on input line 72.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 72.
-LaTeX Font Info:    ... okay on input line 72.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 72.
-LaTeX Font Info:    ... okay on input line 72.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 72.
-LaTeX Font Info:    ... okay on input line 72.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 72.
-LaTeX Font Info:    ... okay on input line 72.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 72.
-LaTeX Font Info:    ... okay on input line 72.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 72.
-LaTeX Font Info:    ... okay on input line 72.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 72.
-LaTeX Font Info:    ... okay on input line 72.
-Package babel Info: 'french' activates 'french' shorthands.
-(babel)             Reported on input line 72.
-LaTeX Info: Redefining \degres on input line 72.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 86.
+LaTeX Font Info:    ... okay on input line 86.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 86.
+LaTeX Font Info:    ... okay on input line 86.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 86.
+LaTeX Font Info:    ... okay on input line 86.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 86.
+LaTeX Font Info:    ... okay on input line 86.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 86.
+LaTeX Font Info:    ... okay on input line 86.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 86.
+LaTeX Font Info:    ... okay on input line 86.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 86.
+LaTeX Font Info:    ... okay on input line 86.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 86.
+LaTeX Font Info:    ... okay on input line 86.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 86.
+LaTeX Font Info:    ... okay on input line 86.
+LaTeX Info: Redefining \degres on input line 86.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -1109,7 +1122,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 s.cfg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-Package hyperref Info: Link coloring ON on input line 72.
+Package hyperref Info: Link coloring ON on input line 86.
  (PFE_Report_STM32Cube_Pipeline.out) (PFE_Report_STM32Cube_Pipeline.out)
 \@outlinefile=\write4
 \openout4 = `PFE_Report_STM32Cube_Pipeline.out'.
@@ -1118,6 +1131,17 @@ Package hyperref Info: Link coloring ON on input line 72.
 Package pgfplots notification 'compat/show suggested version=true': document ha
 s been generated with the most recent feature set (\pgfplotsset{compat=1.18}).
 
+LaTeX Font Info:    Trying to load font information for U+msa on input line 110
+.
+(C:\Users\gharbiab\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 110
+.
+
+(C:\Users\gharbiab\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
 [1
 
 {C:/Users/gharbiab/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
@@ -1125,80 +1149,49 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.121 \newpage
+l.135 \newpage
                [1
 
-] (PFE_Report_STM32Cube_Pipeline.toc [2]
-Package babel Info: 'french' activates 'french' shorthands.
-(babel)             Reported on input line 67.
-
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[3]
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[4]
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[5])
+] (PFE_Report_STM32Cube_Pipeline.toc)
 \tf@toc=\write5
 \openout5 = `PFE_Report_STM32Cube_Pipeline.toc'.
 
-
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[6] (PFE_Report_STM32Cube_Pipeline.lof)
+ [2]
+(PFE_Report_STM32Cube_Pipeline.lof)
 \tf@lof=\write6
 \openout6 = `PFE_Report_STM32Cube_Pipeline.lof'.
 
- [7] [8
+ [3] [4
 
-] [9]
+]
+Package babel Info: 'french' activates 'french' shorthands.
+(babel)             Reported on input line 168.
+ [5]
 Chapitre 1.
 
-LaTeX Warning: Citation `stm32' on page 10 undefined on input line 166.
+LaTeX Warning: Citation `stm32' on page 6 undefined on input line 180.
 
 
-LaTeX Warning: Citation `st_annual_report' on page 10 undefined on input line 1
-66.
+LaTeX Warning: Citation `st_annual_report' on page 6 undefined on input line 18
+0.
 
 
-LaTeX Warning: Citation `st_annual_report' on page 10 undefined on input line 1
-68.
+LaTeX Warning: Citation `st_annual_report' on page 6 undefined on input line 18
+2.
 
-[10
+[6
 
 
 pdfTeX warning (ext4): destination with the same identifier (name{figure.1.1}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.185   \item \textbf
+l.199   \item \textbf
                      {Industriel} (30\%) : automatisation, contrÃ´le moteur,...
 ]
 
-LaTeX Warning: Citation `st_annual_report' on page 11 undefined on input line 1
-95.
+LaTeX Warning: Citation `st_annual_report' on page 7 undefined on input line 20
+9.
 
 
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
@@ -1207,7 +1200,7 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[11]
+[7]
 
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
 (fancyhdr)                Make it at least 14.61858pt, for example:
@@ -1215,549 +1208,549 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[12]
+[8]
 Chapitre 2.
 
-Overfull \hbox (18.75584pt too wide) in paragraph at lines 229--229
+Overfull \hbox (18.75584pt too wide) in paragraph at lines 243--243
 []|\T1/cmr/m/n/12 STM32F0/F1/F2| 
  []
 
 
-Overfull \hbox (2.4446pt too wide) in paragraph at lines 232--232
+Overfull \hbox (2.4446pt too wide) in paragraph at lines 246--246
 []|\T1/cmr/m/n/12 STM32G0/G4| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 232--232
+Underfull \hbox (badness 10000) in paragraph at lines 246--246
 []|\T1/cmr/m/n/12 Cortex-
  []
 
 
-Overfull \hbox (37.34717pt too wide) in paragraph at lines 233--233
+Overfull \hbox (37.34717pt too wide) in paragraph at lines 247--247
 []|\T1/cmr/m/n/12 STM32H5/H7/H7RS| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 233--234
+Underfull \hbox (badness 10000) in paragraph at lines 247--248
 []|\T1/cmr/m/n/12 Ultra-haute per-for-mance, dual-core,
  []
 
 
-Overfull \hbox (36.86397pt too wide) in paragraph at lines 234--234
+Overfull \hbox (36.86397pt too wide) in paragraph at lines 248--248
 []|\T1/cmr/m/n/12 STM32L0/L1/L4/L5| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 234--234
+Underfull \hbox (badness 10000) in paragraph at lines 248--248
 []|\T1/cmr/m/n/12 Cortex-
  []
 
 
-Overfull \hbox (13.82306pt too wide) in paragraph at lines 234--234
+Overfull \hbox (13.82306pt too wide) in paragraph at lines 248--248
 \T1/cmr/m/n/12 M0+/M3/M4/M33| 
  []
 
 
-Underfull \hbox (badness 5008) in paragraph at lines 234--235
+Underfull \hbox (badness 5008) in paragraph at lines 248--249
 []|\T1/cmr/m/n/12 Ultra-basse consom-ma-tion, IoT, wea-
  []
 
 
-Overfull \hbox (22.17589pt too wide) in paragraph at lines 235--235
+Overfull \hbox (22.17589pt too wide) in paragraph at lines 249--249
 []|\T1/cmr/m/n/12 STM32U0/U3/U5| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 235--235
+Underfull \hbox (badness 10000) in paragraph at lines 249--249
 []|\T1/cmr/m/n/12 Cortex-
  []
 
 
-Overfull \hbox (47.12808pt too wide) in paragraph at lines 236--236
+Overfull \hbox (47.12808pt too wide) in paragraph at lines 250--250
 []|\T1/cmr/m/n/12 STM32WB/WBA/WL| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 236--236
+Underfull \hbox (badness 10000) in paragraph at lines 250--250
 []|\T1/cmr/m/n/12 Cortex-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 237--237
+Underfull \hbox (badness 10000) in paragraph at lines 251--251
 []|\T1/cmr/m/n/12 Cortex-
  []
 
 
-Overfull \hbox (16.73776pt too wide) in paragraph at lines 241--243
+Overfull \hbox (16.73776pt too wide) in paragraph at lines 255--257
 []\T1/cmr/m/n/12 Pour chaque sé-rie, ST four-nit un \T1/cmr/bx/n/12 Firm-ware P
 a-ckage \T1/cmr/m/n/12 com-plet sous le nom \T1/cmr/bx/n/12 STM32Cube\T1/cmr/m/
 n/12 ,
  []
 
-[13
+[9
 
 ]
-Overfull \hbox (15.77817pt too wide) in paragraph at lines 253--254
+Overfull \hbox (15.77817pt too wide) in paragraph at lines 267--268
 []\T1/cmr/m/n/12 Depuis 2019, ST-Mi-croe-lec-tro-nics pu-blie l'in-té-gra-lité 
 de ses firm-ware pa-ckages STM32Cube
  []
 
 
-Overfull \hbox (76.61743pt too wide) in paragraph at lines 257--258
+Overfull \hbox (76.61743pt too wide) in paragraph at lines 271--272
 []\T1/cmr/bx/n/12 200+ sous-dépôts \T1/cmr/m/n/12 pour les dri-vers in-di-vi-du
 els (\T1/cmtt/m/n/12 stm32h7xx-hal-driver\T1/cmr/m/n/12 , \T1/cmtt/m/n/12 stm32
 f4xx-nucleo-bsp\T1/cmr/m/n/12 ,
  []
 
-[14]
-Underfull \hbox (badness 10000) in paragraph at lines 288--288
+[10]
+Underfull \hbox (badness 10000) in paragraph at lines 302--302
 []|\T1/cmr/bx/n/12 Solution exis-
  []
 
 
-Underfull \hbox (badness 1708) in paragraph at lines 290--290
+Underfull \hbox (badness 1708) in paragraph at lines 304--304
 []|\T1/cmr/m/n/12 Recherche Gi-tHub
  []
 
 
-Underfull \hbox (badness 5231) in paragraph at lines 290--290
+Underfull \hbox (badness 5231) in paragraph at lines 304--304
 \T1/cmr/m/n/12 de fil-trage par com-po-sant,
  []
 
 
-Underfull \hbox (badness 1997) in paragraph at lines 291--292
+Underfull \hbox (badness 1997) in paragraph at lines 305--306
 []|\T1/cmr/m/n/12 Conseils gé-né-raux sans
  []
 
 
-Underfull \hbox (badness 1888) in paragraph at lines 292--293
+Underfull \hbox (badness 1888) in paragraph at lines 306--307
 []|\T1/cmr/m/n/12 Solutions non vé-ri-fiées,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 293--293
+Underfull \hbox (badness 10000) in paragraph at lines 307--307
 []|\T1/cmr/m/n/12 Documentation
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 293--293
+Underfull \hbox (badness 10000) in paragraph at lines 307--307
 []|\T1/cmr/m/n/12 Non in-dexable, fi-gures
  []
 
 
-Underfull \hbox (badness 4454) in paragraph at lines 293--293
+Underfull \hbox (badness 4454) in paragraph at lines 307--307
 \T1/cmr/m/n/12 opaques, pas de lien avec
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 293--294
+Underfull \hbox (badness 10000) in paragraph at lines 307--308
 \T1/cmr/m/n/12 cor-ré-ler son pro-blème
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 294--294
+Underfull \hbox (badness 10000) in paragraph at lines 308--308
 []|\T1/cmr/m/n/12 Support di-rect
  []
 
 
-Underfull \hbox (badness 3396) in paragraph at lines 294--295
+Underfull \hbox (badness 3396) in paragraph at lines 308--309
 []|\T1/cmr/m/n/12 Blocage du dé-ve-lop-pe-
  []
 
-ignored error: Infinite glue shrinkage found in box being split [15]
+ignored error: Infinite glue shrinkage found in box being split [11]
 
-LaTeX Warning: Reference `sec:etude_comparative' on page 16 undefined on input 
-line 298.
-
-
-LaTeX Warning: Citation `lewis2020rag' on page 16 undefined on input line 305.
-
-[16]
-
-LaTeX Warning: Citation `tfidf' on page 17 undefined on input line 327.
+LaTeX Warning: Reference `sec:etude_comparative' on page 12 undefined on input 
+line 312.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 342--342
+LaTeX Warning: Citation `lewis2020rag' on page 12 undefined on input line 319.
+
+[12]
+
+LaTeX Warning: Citation `tfidf' on page 13 undefined on input line 341.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 356--356
 []|\T1/cmr/m/n/12 Recherche Gi-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 342--343
+Underfull \hbox (badness 10000) in paragraph at lines 356--357
 \T1/cmr/m/n/12 de fil-trage par com-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 342--343
+Underfull \hbox (badness 10000) in paragraph at lines 356--357
 \T1/cmr/m/n/12 po-sant/layer, ré-sul-tats
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 343--343
+Underfull \hbox (badness 10000) in paragraph at lines 357--357
 []|\T1/cmr/m/n/12 Toujours dis-po-nible,
  []
 
 
-Underfull \hbox (badness 1546) in paragraph at lines 343--344
+Underfull \hbox (badness 1546) in paragraph at lines 357--358
 []|\T1/cmr/m/n/12 Pas d'ac-cès aux is-sues
  []
 
 
-Underfull \hbox (badness 3354) in paragraph at lines 343--344
+Underfull \hbox (badness 3354) in paragraph at lines 357--358
 \T1/cmr/m/n/12 Gi-tHub, conseils gé-né-
  []
 
 
-Underfull \hbox (badness 1845) in paragraph at lines 343--344
+Underfull \hbox (badness 1845) in paragraph at lines 357--358
 \T1/cmr/m/n/12 riques sans root cause
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 346--346
+Underfull \hbox (badness 10000) in paragraph at lines 360--360
 []|\T1/cmr/bx/n/12 Notre ap-
  []
 
 
-Underfull \hbox (badness 4846) in paragraph at lines 346--346
+Underfull \hbox (badness 4846) in paragraph at lines 360--360
 \T1/cmr/m/n/12 4 ar-te-facts, en-ri-chis-se-
  []
 
-ignored error: Infinite glue shrinkage found in box being split [17]
-Overfull \hbox (3.71443pt too wide) in paragraph at lines 360--362
+ignored error: Infinite glue shrinkage found in box being split [13]
+Overfull \hbox (3.71443pt too wide) in paragraph at lines 374--376
 []\T1/cmr/bx/n/12 4 types d'ar-te-facts com-plé-men-taires \T1/cmr/m/n/12 cou-v
 rant l'in-té-gra-lité du spectre de connais-
  []
 
-[18] [19] [20]
-Underfull \hbox (badness 2073) in paragraph at lines 443--443
+[14] [15] [16]
+Underfull \hbox (badness 2073) in paragraph at lines 457--457
 []|\T1/cmr/bx/n/12 Repos prin-ci-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 443--444
+Underfull \hbox (badness 10000) in paragraph at lines 457--458
 []|\T1/cmr/bx/n/12 Sous-dépôts
  []
 
 
-Overfull \hbox (7.83078pt too wide) in paragraph at lines 445--445
+Overfull \hbox (7.83078pt too wide) in paragraph at lines 459--459
 []|\T1/cmr/m/n/12 STM32CubeC0| 
  []
 
 
-Overfull \hbox (7.01291pt too wide) in paragraph at lines 446--446
+Overfull \hbox (7.01291pt too wide) in paragraph at lines 460--460
 []|\T1/cmr/m/n/12 STM32CubeF0| 
  []
 
 
-Overfull \hbox (7.01291pt too wide) in paragraph at lines 447--447
+Overfull \hbox (7.01291pt too wide) in paragraph at lines 461--461
 []|\T1/cmr/m/n/12 STM32CubeF1| 
  []
 
 
-Overfull \hbox (7.01291pt too wide) in paragraph at lines 448--448
+Overfull \hbox (7.01291pt too wide) in paragraph at lines 462--462
 []|\T1/cmr/m/n/12 STM32CubeF2| 
  []
 
 
-Overfull \hbox (7.01291pt too wide) in paragraph at lines 449--449
+Overfull \hbox (7.01291pt too wide) in paragraph at lines 463--463
 []|\T1/cmr/m/n/12 STM32CubeF3| 
  []
 
 
-Overfull \hbox (7.01291pt too wide) in paragraph at lines 450--450
+Overfull \hbox (7.01291pt too wide) in paragraph at lines 464--464
 []|\T1/cmr/m/n/12 STM32CubeF4| 
  []
 
 
-Underfull \hbox (badness 1577) in paragraph at lines 450--451
+Underfull \hbox (badness 1577) in paragraph at lines 464--465
 []|\T1/cmr/m/n/12 16 (HAL, CM-
  []
 
 
-Overfull \hbox (7.01291pt too wide) in paragraph at lines 451--451
+Overfull \hbox (7.01291pt too wide) in paragraph at lines 465--465
 []|\T1/cmr/m/n/12 STM32CubeF7| 
  []
 
 
-Overfull \hbox (8.56393pt too wide) in paragraph at lines 452--452
+Overfull \hbox (8.56393pt too wide) in paragraph at lines 466--466
 []|\T1/cmr/m/n/12 STM32CubeG0| 
  []
 
 
-Overfull \hbox (8.15292pt too wide) in paragraph at lines 453--453
+Overfull \hbox (8.15292pt too wide) in paragraph at lines 467--467
 []|\T1/cmr/m/n/12 STM32CubeH5| 
  []
 
 
-Overfull \hbox (8.15292pt too wide) in paragraph at lines 454--454
+Overfull \hbox (8.15292pt too wide) in paragraph at lines 468--468
 []|\T1/cmr/m/n/12 STM32CubeH7| 
  []
 
 
-Underfull \hbox (badness 1577) in paragraph at lines 454--455
+Underfull \hbox (badness 1577) in paragraph at lines 468--469
 []|\T1/cmr/m/n/12 12 (HAL, CM-
  []
 
 
-Overfull \hbox (23.3242pt too wide) in paragraph at lines 455--455
+Overfull \hbox (23.3242pt too wide) in paragraph at lines 469--469
 []|\T1/cmr/m/n/12 STM32CubeH7RS| 
  []
 
 
-Overfull \hbox (8.15292pt too wide) in paragraph at lines 456--456
+Overfull \hbox (8.15292pt too wide) in paragraph at lines 470--470
 []|\T1/cmr/m/n/12 STM32CubeU5| 
  []
 
 
-Overfull \hbox (12.88231pt too wide) in paragraph at lines 457--457
+Overfull \hbox (12.88231pt too wide) in paragraph at lines 471--471
 []|\T1/cmr/m/n/12 STM32CubeWL| 
  []
 
 
-Overfull \hbox (8.56393pt too wide) in paragraph at lines 459--459
+Overfull \hbox (8.56393pt too wide) in paragraph at lines 473--473
 []|\T1/cmr/m/n/12 STM32CubeG4| 
  []
 
 
-Overfull \hbox (6.68661pt too wide) in paragraph at lines 460--460
+Overfull \hbox (6.68661pt too wide) in paragraph at lines 474--474
 []|\T1/cmr/m/n/12 STM32CubeL0| 
  []
 
 
-Overfull \hbox (6.68661pt too wide) in paragraph at lines 461--461
+Overfull \hbox (6.68661pt too wide) in paragraph at lines 475--475
 []|\T1/cmr/m/n/12 STM32CubeL1| 
  []
 
 
-Overfull \hbox (6.68661pt too wide) in paragraph at lines 462--462
+Overfull \hbox (6.68661pt too wide) in paragraph at lines 476--476
 []|\T1/cmr/m/n/12 STM32CubeL4| 
  []
 
 
-Overfull \hbox (6.68661pt too wide) in paragraph at lines 463--463
+Overfull \hbox (6.68661pt too wide) in paragraph at lines 477--477
 []|\T1/cmr/m/n/12 STM32CubeL5| 
  []
 
 
-Overfull \hbox (8.15292pt too wide) in paragraph at lines 464--464
+Overfull \hbox (8.15292pt too wide) in paragraph at lines 478--478
 []|\T1/cmr/m/n/12 STM32CubeN6| 
  []
 
 
-Overfull \hbox (8.15292pt too wide) in paragraph at lines 465--465
+Overfull \hbox (8.15292pt too wide) in paragraph at lines 479--479
 []|\T1/cmr/m/n/12 STM32CubeU0| 
  []
 
 
-Overfull \hbox (8.15292pt too wide) in paragraph at lines 466--466
+Overfull \hbox (8.15292pt too wide) in paragraph at lines 480--480
 []|\T1/cmr/m/n/12 STM32CubeU3| 
  []
 
 
-Overfull \hbox (13.86124pt too wide) in paragraph at lines 467--467
+Overfull \hbox (13.86124pt too wide) in paragraph at lines 481--481
 []|\T1/cmr/m/n/12 STM32CubeWB| 
  []
 
 
-Overfull \hbox (19.7348pt too wide) in paragraph at lines 468--468
+Overfull \hbox (19.7348pt too wide) in paragraph at lines 482--482
 []|\T1/cmr/m/n/12 STM32CubeWB0| 
  []
 
 
-Overfull \hbox (22.66742pt too wide) in paragraph at lines 469--469
+Overfull \hbox (22.66742pt too wide) in paragraph at lines 483--483
 []|\T1/cmr/m/n/12 STM32CubeWBA| 
  []
 
 
-Overfull \hbox (18.75587pt too wide) in paragraph at lines 470--470
+Overfull \hbox (18.75587pt too wide) in paragraph at lines 484--484
 []|\T1/cmr/m/n/12 STM32CubeWL3| 
  []
 
-ignored error: Infinite glue shrinkage found in box being split [21] [22]
+ignored error: Infinite glue shrinkage found in box being split [17] [18]
 Chapitre 3.
 
-Underfull \hbox (badness 10000) in paragraph at lines 490--490
+Underfull \hbox (badness 10000) in paragraph at lines 504--504
 []|\T1/cmr/bx/n/12 Ingénieur
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 490--490
+Underfull \hbox (badness 10000) in paragraph at lines 504--504
 \T1/cmr/bx/n/12 STM32
  []
 
 
-Underfull \hbox (badness 7047) in paragraph at lines 490--490
+Underfull \hbox (badness 7047) in paragraph at lines 504--504
 []|\T1/cmr/m/n/12 Utilisateur fi-nal du
  []
 
 
-Underfull \hbox (badness 1845) in paragraph at lines 491--491
+Underfull \hbox (badness 1845) in paragraph at lines 505--505
 []|\T1/cmr/bx/n/12 Équipe Sup-port
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 492--492
+Underfull \hbox (badness 10000) in paragraph at lines 506--506
 []|\T1/cmr/bx/n/12 Administrateur
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 495--495
+Underfull \hbox (badness 10000) in paragraph at lines 509--509
 []|\T1/cmr/m/n/12 Service d'en-ri-chis-se-
  []
 
 
-Underfull \hbox (badness 4242) in paragraph at lines 495--496
+Underfull \hbox (badness 4242) in paragraph at lines 509--510
 []|\T1/cmr/m/n/12 Décrit au-to-ma-ti-que-ment les
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 506--506
+Underfull \hbox (badness 10000) in paragraph at lines 520--520
 []|\T1/cmr/m/n/12 Ingérer au-to-ma-ti-que-ment
  []
 
 
-Underfull \hbox (badness 2846) in paragraph at lines 507--507
+Underfull \hbox (badness 2846) in paragraph at lines 521--521
 []|\T1/cmr/m/n/12 Nettoyer le contenu tex-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 508--508
+Underfull \hbox (badness 10000) in paragraph at lines 522--522
 \T1/cmr/m/n/12 mé-ta-don-nées struc-tu-rées
  []
 
 
-Underfull \hbox (badness 1552) in paragraph at lines 508--508
+Underfull \hbox (badness 1552) in paragraph at lines 522--522
 \T1/cmr/m/n/12 (layer, com-ponent, board,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 511--511
+Underfull \hbox (badness 10000) in paragraph at lines 525--525
 []|\T1/cmr/m/n/12 Uploader les ar-te-facts
  []
 
 
-Underfull \hbox (badness 1655) in paragraph at lines 511--512
+Underfull \hbox (badness 1655) in paragraph at lines 525--526
 []|\T1/cmr/m/n/12 Datasources créées et in-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 512--512
+Underfull \hbox (badness 10000) in paragraph at lines 526--526
 []|\T1/cmr/m/n/12 Décrire au-to-ma-ti-que-ment
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 513--513
+Underfull \hbox (badness 10000) in paragraph at lines 527--527
 []|\T1/cmr/m/n/12 Décrire au-to-ma-ti-que-ment
  []
 
 
-Underfull \hbox (badness 2772) in paragraph at lines 513--513
+Underfull \hbox (badness 2772) in paragraph at lines 527--527
 \T1/cmr/m/n/12 les fi-gures des PDFs de
  []
 
 
-Underfull \hbox (badness 4181) in paragraph at lines 514--514
+Underfull \hbox (badness 4181) in paragraph at lines 528--528
 \T1/cmr/m/n/12 un JSON Schema avant
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 515--515
+Underfull \hbox (badness 10000) in paragraph at lines 529--529
 []|\T1/cmr/m/n/12 Fournir un chat-bot IA
  []
 
 
-Underfull \hbox (badness 1062) in paragraph at lines 515--515
+Underfull \hbox (badness 1062) in paragraph at lines 529--529
 \T1/cmr/m/n/12 qui ré-pond aux ques-tions
  []
 
-[23
+[19
 
 ]
-Overfull \hbox (2.21198pt too wide) in paragraph at lines 526--526
+Overfull \hbox (2.21198pt too wide) in paragraph at lines 540--540
 []|\T1/cmr/m/n/12 BNF1| 
  []
 
 
-Underfull \hbox (badness 5189) in paragraph at lines 526--526
+Underfull \hbox (badness 5189) in paragraph at lines 540--540
 \T1/cmr/m/n/12 re-jouable par étape
  []
 
 
-Overfull \hbox (2.21198pt too wide) in paragraph at lines 527--527
+Overfull \hbox (2.21198pt too wide) in paragraph at lines 541--541
 []|\T1/cmr/m/n/12 BNF2| 
  []
 
 
-Overfull \hbox (2.21198pt too wide) in paragraph at lines 528--528
+Overfull \hbox (2.21198pt too wide) in paragraph at lines 542--542
 []|\T1/cmr/m/n/12 BNF3| 
  []
 
 
-Overfull \hbox (2.21198pt too wide) in paragraph at lines 529--529
+Overfull \hbox (2.21198pt too wide) in paragraph at lines 543--543
 []|\T1/cmr/m/n/12 BNF4| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 529--529
+Underfull \hbox (badness 10000) in paragraph at lines 543--543
 []|\T1/cmr/m/n/12 Le code doit être
  []
 
 
-Underfull \hbox (badness 1708) in paragraph at lines 529--529
+Underfull \hbox (badness 1708) in paragraph at lines 543--543
 \T1/cmr/m/n/12 sible à de nou-velles
  []
 
 
-Underfull \hbox (badness 4886) in paragraph at lines 529--530
+Underfull \hbox (badness 4886) in paragraph at lines 543--544
 []|\T1/cmr/m/n/12 Ajout d'une sé-rie en 3
  []
 
 
-Overfull \hbox (2.21198pt too wide) in paragraph at lines 530--530
+Overfull \hbox (2.21198pt too wide) in paragraph at lines 544--544
 []|\T1/cmr/m/n/12 BNF5| 
  []
 
 
-Underfull \hbox (badness 2582) in paragraph at lines 530--530
+Underfull \hbox (badness 2582) in paragraph at lines 544--544
 []|\T1/cmr/m/n/12 Les don-nées sources
  []
 
 
-Underfull \hbox (badness 4156) in paragraph at lines 530--530
+Underfull \hbox (badness 4156) in paragraph at lines 544--544
 \T1/cmr/m/n/12 pro-viennent des dé-
  []
 
 
-Overfull \hbox (2.21198pt too wide) in paragraph at lines 531--531
+Overfull \hbox (2.21198pt too wide) in paragraph at lines 545--545
 []|\T1/cmr/m/n/12 BNF6| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 531--531
+Underfull \hbox (badness 10000) in paragraph at lines 545--545
 \T1/cmr/m/n/12 por-ter 25+ sé-ries
  []
 
 
-Overfull \hbox (2.21198pt too wide) in paragraph at lines 532--532
+Overfull \hbox (2.21198pt too wide) in paragraph at lines 546--546
 []|\T1/cmr/m/n/12 BNF7| 
  []
 
 
-Overfull \hbox (2.21198pt too wide) in paragraph at lines 533--533
+Overfull \hbox (2.21198pt too wide) in paragraph at lines 547--547
 []|\T1/cmr/m/n/12 BNF8| 
  []
 
 
-Underfull \hbox (badness 2173) in paragraph at lines 533--533
+Underfull \hbox (badness 2173) in paragraph at lines 547--547
 []|\T1/cmr/m/n/12 Le chat-bot doit ré-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 533--533
+Underfull \hbox (badness 10000) in paragraph at lines 547--547
 []|\T1/cmr/m/n/12 Temps de ré-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 533--534
+Underfull \hbox (badness 10000) in paragraph at lines 547--548
 []|\T1/cmr/m/n/12 Mesure via API ST
  []
 
@@ -1769,53 +1762,53 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[24]
-Underfull \hbox (badness 10000) in paragraph at lines 547--547
+[20]
+Underfull \hbox (badness 10000) in paragraph at lines 561--561
 []|\T1/cmr/m/n/12 Plateforme ST
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 547--547
+Underfull \hbox (badness 10000) in paragraph at lines 561--561
 \T1/cmr/m/n/12 ChatGPT (Azure
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 547--548
+Underfull \hbox (badness 10000) in paragraph at lines 561--562
 []|\T1/cmr/m/n/12 Export JSON avec
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 547--548
+Underfull \hbox (badness 10000) in paragraph at lines 561--562
 \T1/cmr/m/n/12 pro-ces-sor pa-rams
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 548--548
+Underfull \hbox (badness 10000) in paragraph at lines 562--562
 []|\T1/cmr/m/n/12 Pas de don-nées
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 548--549
+Underfull \hbox (badness 10000) in paragraph at lines 562--563
 []|\T1/cmr/m/n/12 Heuristiques re-gex
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 549--549
+Underfull \hbox (badness 10000) in paragraph at lines 563--563
 []|\T1/cmr/m/n/12 Headers CM-SIS $\OML/cmm/m/it/12 >$
  []
 
 
-Underfull \hbox (badness 2762) in paragraph at lines 549--550
+Underfull \hbox (badness 2762) in paragraph at lines 563--564
 []|\T1/cmr/m/n/12 Filtre V3 in-tel-li-gent
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 551--551
+Underfull \hbox (badness 10000) in paragraph at lines 565--565
 []|\T1/cmr/m/n/12 Risque de di-lu-tion du
  []
 
 
-Underfull \hbox (badness 2922) in paragraph at lines 551--552
+Underfull \hbox (badness 2922) in paragraph at lines 565--566
 []|\T1/cmr/m/n/12 Datasources sé-pa-rées
  []
 
@@ -1827,7 +1820,7 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[25]
+[21]
 ignored error: Infinite glue shrinkage found in box being split
 
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
@@ -1836,14 +1829,10 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[26]
+[22]
 
-LaTeX Warning: Reference `fig:pipeline_arch_tikz' on page 27 undefined on input
- line 599.
-
-
-LaTeX Warning: Reference `chap:methodologie' on page 27 undefined on input line
- 599.
+LaTeX Warning: Reference `fig:pipeline_arch_tikz' on page 23 undefined on input
+ line 613.
 
 
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
@@ -1852,157 +1841,140 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[27]
+[23]
 Chapitre 4.
 
-Underfull \hbox (badness 4686) in paragraph at lines 632--632
+Underfull \hbox (badness 4686) in paragraph at lines 646--646
 []|\T1/cmr/m/n/12 Cleaning + En-rich-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 632--633
+Underfull \hbox (badness 10000) in paragraph at lines 646--647
 []|\T1/cmr/m/n/12 Normalisation, clas-si-fi-ca-tion
  []
 
-[28
+[24
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 658--658
+Underfull \hbox (badness 10000) in paragraph at lines 672--672
 []|\T1/cmr/m/n/12 Vocabulaire tech-nique
  []
 
 
-Underfull \hbox (badness 1184) in paragraph at lines 661--662
+Underfull \hbox (badness 1184) in paragraph at lines 675--676
 \T1/cmr/m/n/12 connexion contiennent des in-for-ma-tions cri-
  []
 
 
-LaTeX Warning: Citation `lewis2020rag' on page 29 undefined on input line 668.
+LaTeX Warning: Citation `lewis2020rag' on page 25 undefined on input line 682.
 
-[29] [30]
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 739.
-
+[25] [26]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\to' on input line 739.
+(hyperref)                removing `math shift' on input line 753.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 739.
+(hyperref)                removing `\to' on input line 753.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 745--745
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 753.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 759--759
 []|\T1/cmr/bx/n/12 Étape Ca-no-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 747--748
+Underfull \hbox (badness 10000) in paragraph at lines 761--762
 []|\T1/cmtt/m/n/12 fetch_issues.py\T1/cmr/m/n/12 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 747--748
+Underfull \hbox (badness 10000) in paragraph at lines 761--762
 \T1/cmtt/m/n/12 fetch_files.py\T1/cmr/m/n/12 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 748--749
+Underfull \hbox (badness 10000) in paragraph at lines 762--763
 []|\T1/cmtt/m/n/12 clean_issues.py\T1/cmr/m/n/12 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 748--749
+Underfull \hbox (badness 10000) in paragraph at lines 762--763
 \T1/cmtt/m/n/12 clean_files.py \T1/cmr/m/n/12 (V1),
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 748--749
+Underfull \hbox (badness 10000) in paragraph at lines 762--763
 \T1/cmtt/m/n/12 clean_files_v3.py \T1/cmr/m/n/12 (V3 par
  []
 
 
-Underfull \hbox (badness 6268) in paragraph at lines 749--749
+Underfull \hbox (badness 6268) in paragraph at lines 763--763
 []|\T1/cmr/m/n/12 Stage 3 (En-rich-
  []
 
 
-Underfull \hbox (badness 2941) in paragraph at lines 749--750
+Underfull \hbox (badness 2941) in paragraph at lines 763--764
 \T1/cmr/m/n/12 ris-tiques NLP (layer, se-ve-rity,
  []
 
 
-Overfull \hbox (14.48825pt too wide) in paragraph at lines 750--751
+Overfull \hbox (14.48825pt too wide) in paragraph at lines 764--765
 []|\T1/cmtt/m/n/12 compute_issue_similarity_v2.py
  []
 
 
-Underfull \hbox (badness 4819) in paragraph at lines 752--752
+Underfull \hbox (badness 4819) in paragraph at lines 766--766
 []|\T1/cmr/m/n/12 Stage 6 (Eva-lua-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 752--753
+Underfull \hbox (badness 10000) in paragraph at lines 766--767
 []|\T1/cmtt/m/n/12 validate_schemas.py\T1/cmr/m/n/12 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 753--754
+Underfull \hbox (badness 10000) in paragraph at lines 767--768
 []|\T1/cmtt/m/n/12 export_st_ready_*.py \T1/cmr/m/n/12 --- 4
  []
 
-ignored error: Infinite glue shrinkage found in box being split [31] [32]
-[33]
+ignored error: Infinite glue shrinkage found in box being split [27] [28]
+[29]
 Chapitre 5.
 
-Underfull \hbox (badness 10000) in paragraph at lines 840--840
+Underfull \hbox (badness 10000) in paragraph at lines 854--854
 []|\T1/cmr/m/n/12 Architecture mo-du-
  []
 
-ignored error: Infinite glue shrinkage found in box being split [34
+ignored error: Infinite glue shrinkage found in box being split [30
 
 ]
 
-LaTeX Warning: Reference `fig:pipeline_overview' on page 35 undefined on input 
-line 846.
-
-<../diagrams/presentation/exported/01_pipeline_overview.png, id=601, 2835.59375
-pt x 1428.33624pt>
-File: ../diagrams/presentation/exported/01_pipeline_overview.png Graphic file (
-type png)
-<use ../diagrams/presentation/exported/01_pipeline_overview.png>
-Package pdftex.def Info: ../diagrams/presentation/exported/01_pipeline_overview
-.png  used on input line 850.
-(pdftex.def)             Requested size: 432.48051pt x 217.8373pt.
-
-LaTeX Warning: Reference `fig:pipeline_arch_tikz' on page 35 undefined on input
- line 855.
+LaTeX Warning: Reference `fig:pipeline_overview' on page 31 undefined on input 
+line 860.
 
 
-LaTeX Warning: File `pipeline_architecture_detailed.png' not found on input lin
-e 860.
+! LaTeX Error: Not allowed in LR mode.
 
-
-! Package pdftex.def Error: File `pipeline_architecture_detailed.png' not found
-: using draft setting.
-
-See the pdftex.def package documentation for explanation.
+See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.860 ...idth]{pipeline_architecture_detailed.png}
-                                                  
-Try typing  <return>  to proceed.
+l.884 ...l] (gh) {\textbf{GitHub API}\\\scriptsize
+                                                   25 sÃ©ries, 200+ repos};
+You've lost some text.  Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
  
 Here is how much of TeX's memory you used:
- 36283 strings out of 467871
- 830769 string characters out of 5416925
- 1379523 words of memory out of 5000000
- 64336 multiletter control sequences out of 15000+600000
- 643051 words of font info for 72 fonts, out of 8000000 for 9000
+ 36842 strings out of 467871
+ 836744 string characters out of 5416925
+ 1380143 words of memory out of 5000000
+ 65003 multiletter control sequences out of 15000+600000
+ 647430 words of font info for 85 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,12n,94p,752b,731s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,11n,94p,752b,785s stack positions out of 10000i,1000n,20000p,200000b,200000s
 !  ==> Fatal error occurred, no output PDF file produced!

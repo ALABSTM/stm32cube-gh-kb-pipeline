@@ -1,7 +1,13 @@
 import json
 from collections import Counter
 
-from shared.utils.paths import DATA_DIR
+from shared.utils.paths import DATA_DIR, get_config_path
+
+
+def get_default_repo() -> str:
+    cfg = json.loads(get_config_path().read_text(encoding="utf-8-sig"))
+    repos = cfg.get("repos", [])
+    return next((repo for repo in repos if str(repo).lower().startswith("stm32cube")), repos[0])
 
 
 def print_counter(title: str, counter: Counter, max_items: int | None = None) -> None:
@@ -12,8 +18,15 @@ def print_counter(title: str, counter: Counter, max_items: int | None = None) ->
         print(f"{k!r}: {v}")
 
 
-def main(repo: str = "STM32CubeH7") -> None:
-    path = DATA_DIR / f"docs_files_{repo.lower()}_v2.json"
+def main(repo: str | None = None) -> None:
+    if repo is None:
+        repo = get_default_repo()
+    path = DATA_DIR / f"docs_files_{repo.lower()}_v3.json"
+    if not path.exists():
+        path = DATA_DIR / f"docs_files_{repo.lower()}_v2.json"
+    if not path.exists():
+        print(f"[WARN] Stats files skipped; input not found: {path}")
+        return
     docs = json.loads(path.read_text(encoding="utf-8"))
 
     file_types = Counter(d.get("file_type") for d in docs)

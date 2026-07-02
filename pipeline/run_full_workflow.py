@@ -57,7 +57,11 @@ def load_config() -> dict:
 def export_st_ready_issues_all() -> None:
     repos = load_config().get("repos", [])
     for repo in repos:
-        total, exported, out_root = export_issues_repo_json(repo=repo, include_invalid=False, comments_chars=1200)
+        try:
+            total, exported, out_root = export_issues_repo_json(repo=repo, include_invalid=False, comments_chars=1200)
+        except FileNotFoundError as exc:
+            print(f"[ST-READY:json:issues] {repo}: skipped ({exc})")
+            continue
         print(f"[ST-READY:json:issues] {repo}: exported {exported}/{total} -> {out_root}")
 
 
@@ -81,7 +85,11 @@ def export_st_ready_files_all() -> None:
 def export_st_ready_resolver_cases_all() -> None:
     repos = load_config().get("repos", [])
     for repo in repos:
-        total, exported, out_root = export_resolver_cases_repo_json(repo=repo, include_reference_only=False)
+        try:
+            total, exported, out_root = export_resolver_cases_repo_json(repo=repo, include_reference_only=False)
+        except FileNotFoundError as exc:
+            print(f"[ST-READY:json:resolver_cases] {repo}: skipped ({exc})")
+            continue
         print(f"[ST-READY:json:resolver_cases] {repo}: exported {exported}/{total} -> {out_root}")
 
 
@@ -177,6 +185,8 @@ def _enrich_alfred_images_main() -> None:
     import sys
     from pathlib import Path
 
+    from pipeline.delivery.delivery_paths import get_repo_series_root
+
     script = Path(__file__).resolve().parents[1] / "pipeline_Automation" / "alfred" / "enrich_json_images_with_alfred.py"
     if not script.exists():
         print(f"[SKIP] Alfred images enrichment script not found: {script}")
@@ -187,7 +197,18 @@ def _enrich_alfred_images_main() -> None:
         print("[SKIP] by_series/ not found — run delivery first")
         return
 
-    for series_dir in sorted(by_series.iterdir()):
+    series_dirs = set()
+    for repo in load_config().get("repos", []):
+        repo_root = get_repo_series_root(repo)
+        if repo_root.parent.name == "drivers":
+            series_dirs.add(repo_root.parent.parent)
+        else:
+            series_dirs.add(repo_root)
+
+    if not series_dirs:
+        series_dirs = {path for path in by_series.iterdir() if path.is_dir()}
+
+    for series_dir in sorted(series_dirs):
         if not series_dir.is_dir():
             continue
         issues_dir = series_dir / "issues_json"

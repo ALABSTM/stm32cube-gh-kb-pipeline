@@ -132,29 +132,29 @@
                                                   "diagnostic":  29655
                                               },
                               "STM32CubeL4":  {
-                                                  "issues":  null,
-                                                  "files":  null,
+                                                  "issues":  29659,
+                                                  "files":  29660,
                                                   "diagnostic":  29708,
                                                   "resolver":  29709
                                               },
                               "STM32CubeL5":  {
-                                                  "issues":  null,
-                                                  "files":  null,
+                                                  "issues":  29764,
+                                                  "files":  29765,
                                                   "diagnostic":  null
                                               },
                               "STM32CubeN6":  {
-                                                  "issues":  null,
-                                                  "files":  null,
+                                                  "issues":  29772,
+                                                  "files":  29773,
                                                   "diagnostic":  null
                                               },
                               "STM32CubeU0":  {
-                                                  "issues":  null,
-                                                  "files":  null,
+                                                  "issues":  29890,
+                                                  "files":  29891,
                                                   "diagnostic":  null
                                               },
                               "STM32CubeU3":  {
-                                                  "issues":  null,
-                                                  "files":  null,
+                                                  "issues":  29907,
+                                                  "files":  29908,
                                                   "diagnostic":  null
                                               },
                               "STM32CubeU5":  {
@@ -169,13 +169,13 @@
                                                   "diagnostic":  null
                                               },
                               "STM32CubeWB0":  {
-                                                   "issues":  null,
-                                                   "files":  null,
+                                                   "issues":  29932,
+                                                   "files":  29934,
                                                    "diagnostic":  null
                                                },
                               "STM32CubeWBA":  {
-                                                   "issues":  null,
-                                                   "files":  null,
+                                                   "issues":  29939,
+                                                   "files":  29940,
                                                    "diagnostic":  null
                                                },
                               "STM32CubeWL":  {
@@ -185,8 +185,8 @@
                                                   "resolver":  28245
                                               },
                               "STM32CubeWL3":  {
-                                                   "issues":  null,
-                                                   "files":  null,
+                                                   "issues":  29946,
+                                                   "files":  29947,
                                                    "diagnostic":  null
                                                }
                           },

@@ -861,7 +861,29 @@ La Figure~\ref{fig:pipeline_overview} illustre la vue globale du pipeline et le 
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.95\textwidth]{01_pipeline_overview.png}
+\begin{tikzpicture}[node distance=1.4cm, auto,
+  stage/.style={rectangle, draw=stblue, fill=stlightblue, text width=2.8cm, minimum height=1cm, align=center, font=\small\bfseries},
+  arrow/.style={-{Stealth[length=3mm]}, thick, draw=stblue}
+]
+\node[stage] (ing) {1. Ingestion\\\scriptsize fetch\_issues/files};
+\node[stage, right=of ing] (clean) {2. Cleaning\\\scriptsize V1 + V3 par type};
+\node[stage, right=of clean] (enrich) {3. Enrichissement\\\scriptsize NLP + Alfred};
+\node[stage, right=of enrich] (sim) {4. Similarité\\\scriptsize TF-IDF cosine};
+\node[stage, below=1.2cm of ing] (chunk) {5. Chunking\\\scriptsize §/section, 512 tok};
+\node[stage, right=of chunk] (valid) {6. Validation\\\scriptsize JSON Schema gate};
+\node[stage, right=of valid] (deliv) {7. Delivery\\\scriptsize 4 artefacts JSON};
+\node[stage, right=of deliv, fill=storange!30, draw=storange] (upload) {Upload KB\\\scriptsize \#793 ST ChatGPT};
+\draw[arrow] (ing) -- (clean);
+\draw[arrow] (clean) -- (enrich);
+\draw[arrow] (enrich) -- (sim);
+\draw[arrow] (sim) |- (chunk);
+\draw[arrow] (chunk) -- (valid);
+\draw[arrow] (valid) -- (deliv);
+\draw[arrow] (deliv) -- (upload);
+% Source
+\node[above=0.6cm of ing, font=\small] (gh) {\textbf{GitHub API}\\\scriptsize 25 séries, 200+ repos};
+\draw[arrow] (gh) -- (ing);
+\end{tikzpicture}
 \caption{Vue d'ensemble du pipeline de preprocessing (7 stages)}
 \label{fig:pipeline_overview}
 \end{figure}
@@ -871,8 +893,40 @@ La Figure~\ref{fig:pipeline_arch_tikz} détaille les connexions entre stages, le
 % Diagramme d'architecture pipeline - exporter depuis draw.io pour meilleure lisibilité
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.95\textwidth]{pipeline_architecture_detailed.png}
-\caption{Architecture détaillée du pipeline : stages, fichiers intermédiaires et branchement Alfred (draw.io)}
+\begin{tikzpicture}[node distance=0.9cm, auto,
+  box/.style={rectangle, draw=stblue, fill=stlightblue!50, text width=3.2cm, minimum height=0.8cm, align=center, font=\scriptsize},
+  file/.style={rectangle, draw=gray, fill=codebg, text width=3cm, minimum height=0.6cm, align=center, font=\scriptsize\ttfamily},
+  alfred/.style={rectangle, draw=storange, fill=storange!20, text width=3cm, minimum height=0.8cm, align=center, font=\scriptsize\bfseries},
+  arr/.style={-{Stealth[length=2mm]}, thick}
+]
+\node[box] (ing) {Stage 1: Ingestion};
+\node[file, below=0.4cm of ing] (raw) {raw\_issues/files\_*.json};
+\node[box, below=0.6cm of raw] (clean) {Stage 2: Cleaning V1+V3};
+\node[file, below=0.4cm of clean] (clf) {clean\_*\_v3.json};
+\node[box, below=0.6cm of clf] (enr) {Stage 3: Enrichissement};
+\node[file, below=0.4cm of enr] (docs) {docs\_*\_v2.json};
+\node[box, below=0.6cm of docs] (sim) {Stage 4: Similarité};
+\node[file, below=0.4cm of sim] (simf) {docs\_*\_sim.json};
+\node[box, below=0.6cm of simf] (del) {Stage 7: Delivery};
+\node[file, below=0.4cm of del] (stready) {st\_ready\_*.json};
+% Alfred branch
+\node[alfred, right=2.5cm of enr] (alf) {Alfred Vision AI\\images + PDF figures};
+\node[file, below=0.4cm of alf] (alff) {pdf\_image\_descriptions.json\\issues\_with\_images.json};
+% Arrows
+\draw[arr] (ing) -- (raw);
+\draw[arr] (raw) -- (clean);
+\draw[arr] (clean) -- (clf);
+\draw[arr] (clf) -- (enr);
+\draw[arr] (enr) -- (docs);
+\draw[arr] (docs) -- (sim);
+\draw[arr] (sim) -- (simf);
+\draw[arr] (simf) -- (del);
+\draw[arr] (del) -- (stready);
+\draw[arr, dashed, storange] (enr) -- (alf);
+\draw[arr, dashed, storange] (alf) -- (alff);
+\draw[arr, dashed, storange] (alff) |- (del);
+\end{tikzpicture}
+\caption{Architecture détaillée du pipeline : stages, fichiers intermédiaires et branchement Alfred}
 \label{fig:pipeline_arch_tikz}
 \end{figure}
 
@@ -884,7 +938,21 @@ La Figure~\ref{fig:data_flow} montre le parcours complet d'une donnée depuis Gi
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.95\textwidth]{03_data_flow_source_to_answer.png}
+\begin{tikzpicture}[node distance=1.2cm,
+  block/.style={rectangle, draw=stblue, fill=stlightblue!40, text width=2.5cm, minimum height=0.9cm, align=center, font=\scriptsize\bfseries},
+  arr/.style={-{Stealth[length=2.5mm]}, thick, draw=stblue}
+]
+\node[block] (gh) {GitHub\\\scriptsize 25 repos STM32};
+\node[block, right=1cm of gh] (pipe) {Pipeline\\\scriptsize 7 stages Python};
+\node[block, right=1cm of pipe] (kb) {KB \#793\\\scriptsize 38 datasources};
+\node[block, right=1cm of kb] (llm) {GPT-5.1\\\scriptsize Azure OpenAI};
+\node[block, right=1cm of llm] (user) {Ingénieur\\\scriptsize Question STM32};
+\draw[arr] (gh) -- node[above, font=\tiny]{API REST} (pipe);
+\draw[arr] (pipe) -- node[above, font=\tiny]{JSON upload} (kb);
+\draw[arr] (kb) -- node[above, font=\tiny]{Hybrid search} (llm);
+\draw[arr] (llm) -- node[above, font=\tiny]{Réponse sourcée} (user);
+\draw[arr, dashed, gray] (user) to[bend right=25] node[below, font=\tiny]{Question} (llm);
+\end{tikzpicture}
 \caption{Flux de données end-to-end : de la source GitHub à la réponse utilisateur}
 \label{fig:data_flow}
 \end{figure}
@@ -893,7 +961,29 @@ La Figure~\ref{fig:data_flow} montre le parcours complet d'une donnée depuis Gi
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{02_delivery_kb_upload.png}
+\begin{tikzpicture}[node distance=1cm,
+  box/.style={rectangle, draw=stblue, fill=stlightblue!40, text width=2.8cm, minimum height=0.8cm, align=center, font=\scriptsize\bfseries},
+  ds/.style={rectangle, draw=stgreen, fill=stgreen!15, text width=2.2cm, minimum height=0.7cm, align=center, font=\scriptsize},
+  arr/.style={-{Stealth[length=2.5mm]}, thick}
+]
+\node[box] (issues) {Issues structurées\\\scriptsize $\sim$2\,000 docs};
+\node[box, below=0.5cm of issues] (files) {Files documentés\\\scriptsize $\sim$14\,000 docs};
+\node[box, below=0.5cm of files] (resolver) {Resolver Cases\\\scriptsize $\sim$390 docs};
+\node[box, below=0.5cm of resolver] (diag) {Diagnostic Cards\\\scriptsize $\sim$157 docs};
+\node[ds, right=2cm of issues] (dsi) {DS Issues\\\scriptsize par série};
+\node[ds, right=2cm of files] (dsf) {DS Files\\\scriptsize par série};
+\node[ds, right=2cm of resolver] (dsr) {DS Resolver\\\scriptsize par série};
+\node[ds, right=2cm of diag] (dsd) {DS Diagnostic\\\scriptsize par série};
+\node[rectangle, draw=storange, fill=storange!20, text width=2.5cm, minimum height=1.5cm, align=center, font=\small\bfseries, right=1.8cm of dsf] (kb) {KB \#793\\\scriptsize 38 datasources\\\scriptsize Hybrid Search};
+\draw[arr] (issues) -- (dsi);
+\draw[arr] (files) -- (dsf);
+\draw[arr] (resolver) -- (dsr);
+\draw[arr] (diag) -- (dsd);
+\draw[arr] (dsi) -- (kb);
+\draw[arr] (dsf) -- (kb);
+\draw[arr] (dsr) -- (kb);
+\draw[arr] (dsd) -- (kb);
+\end{tikzpicture}
 \caption{Architecture de livraison et upload vers la Knowledge Base \#793}
 \label{fig:delivery_upload}
 \end{figure}
@@ -941,8 +1031,35 @@ L'ingestion s'appuie sur 5 scripts spécialisés :
 % Diagramme d'ingestion - exporter depuis draw.io
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{01_ingestion_detail.png}
-\caption{Détail de l'étape d'ingestion : scripts et sorties (draw.io)}
+\begin{tikzpicture}[node distance=0.8cm,
+  script/.style={rectangle, draw=stblue, fill=stlightblue!40, text width=3.5cm, minimum height=0.7cm, align=center, font=\scriptsize\ttfamily},
+  output/.style={rectangle, draw=gray, fill=codebg, text width=3.5cm, minimum height=0.6cm, align=center, font=\scriptsize\ttfamily},
+  arr/.style={-{Stealth[length=2mm]}, thick}
+]
+\node[script] (fi) {fetch\_issues.py};
+\node[output, right=1.5cm of fi] (ri) {raw\_issues\_*.json};
+\node[script, below=0.5cm of fi] (ff) {fetch\_files.py};
+\node[output, right=1.5cm of ff] (rf) {raw\_files\_*.json};
+\node[script, below=0.5cm of ff] (fp) {fetch\_prs.py};
+\node[output, right=1.5cm of fp] (rp) {raw\_prs\_*.json};
+\node[script, below=0.5cm of fp] (fc) {fetch\_commits.py};
+\node[output, right=1.5cm of fc] (rc) {raw\_commits\_*.json};
+\node[script, below=0.5cm of fc] (fl) {fetch\_links.py};
+\node[output, right=1.5cm of fl] (rl) {issue\_pr\_commit\_links.json};
+\draw[arr] (fi) -- (ri);
+\draw[arr] (ff) -- (rf);
+\draw[arr] (fp) -- (rp);
+\draw[arr] (fc) -- (rc);
+\draw[arr] (fl) -- (rl);
+% GitHub source
+\node[left=1.2cm of fi, font=\small\bfseries, align=center] (api) {GitHub\\API REST};
+\draw[arr, dashed] (api) -- (fi);
+\draw[arr, dashed] (api) |- (ff);
+\draw[arr, dashed] (api) |- (fp);
+\draw[arr, dashed] (api) |- (fc);
+\draw[arr, dashed] (api) |- (fl);
+\end{tikzpicture}
+\caption{Détail de l'étape d'ingestion : scripts et sorties}
 \label{fig:ingestion_detail}
 \end{figure}
 
@@ -1028,8 +1145,32 @@ La Figure~\ref{fig:cleaning_v3_tree} représente l'arbre de décision du routage
 % Arbre de décision V3 - exporter depuis draw.io
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{cleaning_v3_decision_tree.png}
-\caption{Arbre de décision du nettoyage V3 : routage par type de fichier avec taux de réduction (draw.io)}
+\begin{tikzpicture}[node distance=1cm,
+  decision/.style={diamond, draw=stblue, fill=stlightblue!30, text width=2cm, align=center, font=\scriptsize, inner sep=1pt},
+  action/.style={rectangle, draw=stgreen, fill=stgreen!15, text width=2.8cm, minimum height=0.7cm, align=center, font=\scriptsize},
+  arr/.style={-{Stealth[length=2mm]}, thick}
+]
+\node[rectangle, draw=stblue, fill=stlightblue!40, font=\scriptsize\bfseries, text width=3cm, align=center] (start) {detect\_file\_type(f)};
+\node[decision, below=0.8cm of start] (rn) {Release\\Notes?};
+\node[action, right=2cm of rn] (a1) {strip\_html()\\\scriptsize $-33\%$};
+\node[decision, below=1cm of rn] (md) {README\\(.md)?};
+\node[action, right=2cm of md] (a2) {clean\_markdown()\\\scriptsize $-15\%$};
+\node[decision, below=1cm of md] (src) {Source\\(.c/.h)?};
+\node[action, right=2cm of src] (a3) {strip\_license()\\\scriptsize $-10\%$};
+\node[decision, below=1cm of src] (cmsis) {CMSIS\\$>$100Ko?};
+\node[action, right=2cm of cmsis] (a4) {filter\_cmsis()\\\scriptsize $-96\%$};
+\node[action, below=0.8cm of cmsis] (a5) {passthrough\\\scriptsize inchangé};
+\draw[arr] (start) -- (rn);
+\draw[arr] (rn) -- node[above, font=\tiny]{oui} (a1);
+\draw[arr] (rn) -- node[left, font=\tiny]{non} (md);
+\draw[arr] (md) -- node[above, font=\tiny]{oui} (a2);
+\draw[arr] (md) -- node[left, font=\tiny]{non} (src);
+\draw[arr] (src) -- node[above, font=\tiny]{oui} (a3);
+\draw[arr] (src) -- node[left, font=\tiny]{non} (cmsis);
+\draw[arr] (cmsis) -- node[above, font=\tiny]{oui} (a4);
+\draw[arr] (cmsis) -- node[left, font=\tiny]{non} (a5);
+\end{tikzpicture}
+\caption{Arbre de décision du nettoyage V3 : routage par type de fichier avec taux de réduction}
 \label{fig:cleaning_v3_tree}
 \end{figure}
 
@@ -1154,7 +1295,29 @@ Le module \texttt{stm32cube\_preprocessing\_heuristics.py} applique des règles 
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.85\textwidth]{02_enrichment_similarity_detail.png}
+\begin{tikzpicture}[node distance=0.8cm,
+  box/.style={rectangle, draw=stblue, fill=stlightblue!40, text width=3cm, minimum height=0.7cm, align=center, font=\scriptsize\bfseries},
+  meta/.style={rectangle, draw=gray, fill=codebg, text width=2.2cm, minimum height=0.5cm, align=center, font=\tiny\ttfamily},
+  arr/.style={-{Stealth[length=2mm]}, thick}
+]
+\node[box] (input) {clean\_issues\_*.json};
+\node[box, below=1cm of input] (heur) {Heuristiques NLP\\\scriptsize regex domain-specific};
+\node[meta, right=1.5cm of heur, yshift=0.8cm] (m1) {layer: HAL/BSP/...};
+\node[meta, right=1.5cm of heur, yshift=0.2cm] (m2) {component: SPI/I2C};
+\node[meta, right=1.5cm of heur, yshift=-0.4cm] (m3) {severity: high/med};
+\node[meta, right=1.5cm of heur, yshift=-1cm] (m4) {board: NUCLEO-*};
+\node[box, below=1.2cm of heur] (tfidf) {TF-IDF Vectorisation\\\scriptsize scikit-learn};
+\node[box, below=0.8cm of tfidf] (cosine) {Cosine Similarity\\\scriptsize seuil $\theta = 0.3$};
+\node[box, below=0.8cm of cosine] (output) {docs\_*\_v2\_sim.json};
+\draw[arr] (input) -- (heur);
+\draw[arr] (heur) -- (m1);
+\draw[arr] (heur) -- (m2);
+\draw[arr] (heur) -- (m3);
+\draw[arr] (heur) -- (m4);
+\draw[arr] (heur) -- (tfidf);
+\draw[arr] (tfidf) -- (cosine);
+\draw[arr] (cosine) -- (output);
+\end{tikzpicture}
 \caption{Détail du processus d'enrichissement et de calcul de similarité}
 \label{fig:enrichment_similarity}
 \end{figure}
@@ -1245,7 +1408,25 @@ Cartes de diagnostic structurées pour les problèmes récurrents :
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{03_delivery_resolver_diagnostic.png}
+\begin{tikzpicture}[node distance=0.8cm,
+  box/.style={rectangle, draw=stblue, fill=stlightblue!40, text width=3cm, minimum height=0.8cm, align=center, font=\scriptsize\bfseries},
+  out/.style={rectangle, draw=stgreen, fill=stgreen!15, text width=3.2cm, minimum height=0.7cm, align=center, font=\scriptsize},
+  arr/.style={-{Stealth[length=2mm]}, thick}
+]
+\node[box] (issue) {Issue fermée\\\scriptsize avec root cause};
+\node[box, right=2.5cm of issue] (pr) {PR liée\\\scriptsize mergée};
+\node[box, right=2.5cm of pr] (commit) {Commit\\\scriptsize fichiers modifiés};
+\draw[arr] (issue) -- node[above, font=\tiny]{référence} (pr);
+\draw[arr] (pr) -- node[above, font=\tiny]{merge} (commit);
+% Outputs
+\node[out, below=1.2cm of issue, xshift=1cm] (resolver) {Resolver Case\\\scriptsize Issue$\to$PR$\to$Commit\\\scriptsize + fichiers modifiés};
+\node[out, below=1.2cm of commit, xshift=-1cm] (diag) {Diagnostic Card\\\scriptsize Symptôme$\to$Root Cause\\\scriptsize $\to$Fix$\to$Prévention};
+\draw[arr] (issue) -- (resolver);
+\draw[arr] (pr) -- (resolver);
+\draw[arr] (commit) -- (resolver);
+\draw[arr] (issue) -- (diag);
+\draw[arr] (commit) -- (diag);
+\end{tikzpicture}
 \caption{Génération des Resolver Cases et Diagnostic Cards}
 \label{fig:resolver_diagnostic}
 \end{figure}
@@ -1255,8 +1436,22 @@ La Figure~\ref{fig:delivery_artifacts} synthétise les relations entre les 4 typ
 % Diagramme des 4 artefacts - exporter depuis draw.io
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{delivery_4_artifacts.png}
-\caption{Les 4 types d'artefacts delivery et leurs relations vers la KB \#793 (draw.io)}
+\begin{tikzpicture}[node distance=0.7cm,
+  art/.style={rectangle, draw=stblue, fill=stlightblue!40, text width=3.5cm, minimum height=0.7cm, align=center, font=\scriptsize\bfseries},
+  kb/.style={rectangle, draw=storange, fill=storange!20, text width=2.5cm, minimum height=2cm, align=center, font=\small\bfseries},
+  arr/.style={-{Stealth[length=2mm]}, thick}
+]
+\node[art] (iss) {Issues Structurées\\\scriptsize $\sim$2\,000 docs};
+\node[art, below=0.4cm of iss] (fil) {Files Documentés\\\scriptsize $\sim$14\,000 docs};
+\node[art, below=0.4cm of fil] (res) {Resolver Cases\\\scriptsize $\sim$390 docs};
+\node[art, below=0.4cm of res] (dia) {Diagnostic Cards\\\scriptsize $\sim$157 docs};
+\node[kb, right=3cm of fil, yshift=-0.3cm] (kb) {KB \#793\\\scriptsize 38 DS\\\scriptsize Hybrid Search};
+\draw[arr] (iss.east) -- ++(1,0) |- (kb.west |- iss);
+\draw[arr] (fil) -- (kb);
+\draw[arr] (res.east) -- ++(1,0) |- (kb.west |- res);
+\draw[arr] (dia.east) -- ++(1,0) |- (kb.south west);
+\end{tikzpicture}
+\caption{Les 4 types d'artefacts delivery et leurs relations vers la KB \#793}
 \label{fig:delivery_artifacts}
 \end{figure}
 
@@ -1281,7 +1476,23 @@ Le pipeline intègre \textbf{Alfred Vision AI}, un service LLM interne ST, pour 
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{05_alfred_vision_integration.png}
+\begin{tikzpicture}[node distance=1cm,
+  box/.style={rectangle, draw=stblue, fill=stlightblue!40, text width=2.8cm, minimum height=0.8cm, align=center, font=\scriptsize\bfseries},
+  alf/.style={rectangle, draw=storange, fill=storange!20, text width=2.8cm, minimum height=0.8cm, align=center, font=\scriptsize\bfseries},
+  arr/.style={-{Stealth[length=2.5mm]}, thick}
+]
+\node[box] (issue) {Issue avec images\\\scriptsize [IMAGE ATTACHED]};
+\node[box, below=1.5cm of issue] (pdf) {PDF Release Notes\\\scriptsize figures détectées};
+\node[alf, right=2.5cm of issue, yshift=-0.75cm] (alfred) {Alfred Vision AI\\\scriptsize Azure OpenAI\\\scriptsize prompt STM32};
+\node[box, right=2.5cm of alfred] (desc) {Description textuelle\\\scriptsize orientée diagnostic};
+\node[box, below=0.8cm of desc] (inject) {Injection dans\\\scriptsize st\_ready\_text};
+\draw[arr] (issue) -- (alfred);
+\draw[arr] (pdf) -- (alfred);
+\draw[arr] (alfred) -- (desc);
+\draw[arr] (desc) -- (inject);
+% Labels
+\node[above=0.3cm of alfred, font=\tiny, gray] {API image + prompt};
+\end{tikzpicture}
 \caption{Intégration Alfred Vision AI pour la description automatique d'images}
 \label{fig:alfred}
 \end{figure}
@@ -1295,8 +1506,23 @@ Le système final s'articule autour d'une architecture \textbf{multi-agents} où
 % Architecture multi-agents - exporter depuis draw.io
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.85\textwidth]{agents_architecture.png}
-\caption{Architecture multi-agents du système ST GitHub Analyzer (draw.io)}
+\begin{tikzpicture}[node distance=1.2cm,
+  agent/.style={rectangle, draw=stblue, fill=stlightblue!40, text width=3cm, minimum height=1cm, align=center, font=\scriptsize\bfseries, rounded corners=3pt},
+  tool/.style={rectangle, draw=stgreen, fill=stgreen!15, text width=3cm, minimum height=0.8cm, align=center, font=\scriptsize},
+  arr/.style={-{Stealth[length=2.5mm]}, thick}
+]
+\node[agent] (user) {Ingénieur STM32\\\scriptsize Question technique};
+\node[agent, right=2cm of user] (persona) {Persona\\\scriptsize ST GitHub Analyzer\\\scriptsize GPT-5.1};
+\node[tool, above right=0.8cm and 2cm of persona] (kb) {Tool KB Unstructured\\\scriptsize Hybrid Search\\\scriptsize KB \#793};
+\node[tool, below right=0.8cm and 2cm of persona] (nova) {Tool NovaX\\\scriptsize Fallback restrictif\\\scriptsize Bugzilla + Community};
+\node[agent, left=2cm of user, yshift=-1.5cm] (pipe) {Pipeline\\\scriptsize Agent maintenance\\\scriptsize 7 stages};
+\draw[arr] (user) -- (persona);
+\draw[arr] (persona) -- node[above, font=\tiny]{ALWAYS FIRST} (kb);
+\draw[arr, dashed, gray] (persona) -- node[below, font=\tiny]{ONLY if KB empty} (nova);
+\draw[arr] (kb) -- node[right, font=\tiny]{docs} (persona);
+\draw[arr, storange, dashed] (pipe) |- node[below, font=\tiny]{upload JSON} (kb);
+\end{tikzpicture}
+\caption{Architecture multi-agents du système ST GitHub Analyzer}
 \label{fig:agents_arch}
 \end{figure}
 
@@ -1385,6 +1611,7 @@ Mise à jour KB & Delete + Re-add automatique via GitHub Actions \\
 
 %% ============================================================
 \chapter{Résultats et Évaluation}
+\label{chap:resultats_evaluation}
 %% ============================================================
 
 \section{Couverture des Données}
@@ -1688,19 +1915,33 @@ Board & 45.3\% & $\geq 60\%$ & \textcolor{red}{\textbf{INSUFFISANT}} & --14.7 pt
 
 \textbf{Problème résolu} : les captures d'écran dans les issues GitHub sont des images opaques pour la recherche textuelle. Sans description, une question ``quelle version de CubeIDE cause le warning'' ne trouvera jamais la réponse si elle est visible uniquement dans un screenshot.
 
-\textbf{Métrique principale} (alignée ISO/IEC 25010 --- Fiabilité opérationnelle) :
+\textbf{Point méthodologique important} : le taux de succès d'Alfred ne suffit pas à mesurer la qualité. Une réponse Alfred peut être techniquement produite par l'API mais rester faiblement ancrée dans le contexte de l'image. L'évaluation distingue donc deux niveaux :
+\begin{enumerate}
+  \item la \textbf{fiabilité opérationnelle}, qui mesure si Alfred a répondu sans erreur ;
+  \item la \textbf{confiance contextuelle}, qui mesure si la description produite est cohérente avec le texte source entourant l'image.
+\end{enumerate}
+
+\textbf{Fiabilité opérationnelle} (alignée ISO/IEC 25010 --- disponibilité et fiabilité du service) :
 \begin{equation}
-\text{Conf}_{\text{Alfred,images}} = \frac{N_{\text{images\_described\_ok}}}{N_{\text{images\_total}}} \times 100
+T_{\text{op}} = \frac{N_{\text{réponses\_ok}}}{N_{\text{images\_soumises}}} \times 100
 \label{eq:alfred_conf}
 \end{equation}
 
-\textbf{Seuil visé} : $\geq 95\%$ (basé sur la disponibilité de service standard SLA industriel \cite{iso25010}).
+\textbf{Confiance contextuelle} : pour éviter de considérer une description comme fiable uniquement parce qu'elle existe, le script \texttt{validate\_alfred\_coherence.py} compare la sortie Alfred au contexte textuel de l'image : corps de l'issue, texte ST-ready, ou texte de page PDF. Le score combine trois signaux :
+\begin{equation}
+S_{\text{coh}} =
+\left(\frac{\alpha L + \beta S}{\alpha + \beta}\right)
+\times (1 - \gamma P_{\text{contrad}})
+\label{eq:alfred_coherence_score}
+\end{equation}
 
-\textbf{Résultats par série} :
+où $L$ est l'ancrage lexical entre description/OCR et contexte, $S$ la similarité sémantique légère (Jaccard de tokens et similarité par trigrammes), et $P_{\text{contrad}}$ la probabilité de contradiction estimée. Dans la campagne mesurée, les poids sont $\alpha=0.4$, $\beta=0.6$ et $\gamma=0.8$. Un élément est marqué \textbf{à risque} si $S_{\text{coh}} < 0.12$. Ce seuil n'est pas une note académique universelle : c'est un seuil d'alerte opérationnel, choisi pour isoler les descriptions presque non ancrées ou contradictoires, conformément à la logique de sélection de seuils discutée par Fawcett \cite{fawcett2006roc}.
+
+\textbf{Résultats par série --- fiabilité opérationnelle} :
 
 \begin{longtable}{lcccc}
 \toprule
-\textbf{Série} & $N_{\text{total}}$ & $N_{\text{OK}}$ & $N_{\text{échec}}$ & $\text{Conf}_{\text{Alfred}}$ \\
+\textbf{Série} & $N_{\text{total}}$ & $N_{\text{OK}}$ & $N_{\text{échec}}$ & $T_{\text{op}}$ \\
 \midrule
 STM32CubeH7 & 98 & 97 & 1 & \textbf{98.9\%} \textcolor{green!60!black}{EXCELLENT} \\
 STM32CubeF4 & 62 & 61 & 1 & \textbf{98.4\%} \textcolor{green!60!black}{EXCELLENT} \\
@@ -1713,7 +1954,9 @@ STM32CubeL4 & 22 & 0 & 22 & 0\% (API 404 transitoire) \\
 \bottomrule
 \end{longtable}
 
-\textbf{Interprétation} : sur les séries où l'API Alfred est disponible (pas de coupure 404 transitoire), le taux de succès est de \textbf{99.1\%}. Les échecs G4/L4 sont des indisponibilités temporaires du service (corrigibles par relancement). Cela démontre que l'enrichissement Alfred est \textbf{fiable en régime permanent} et que la valeur ajoutée (screenshots deviennent cherchables) est garantie.
+\textbf{Résultats de cohérence contextuelle} : sur un échantillon multi-séries de \textbf{200 images d'issues} déjà enrichies, \textbf{199/200} analyses ont le statut \texttt{ok}. Le score moyen $S_{\text{coh}}$ est de \textbf{0.5021}, avec un ancrage lexical moyen élevé ($L=0.9357$), un recouvrement description--contexte de \textbf{0.9316}, un recouvrement OCR--contexte de \textbf{0.9430}, et une contradiction moyenne faible à modérée ($P_{\text{contrad}}=0.1567$). Seulement \textbf{3/200} images sont sous le seuil d'alerte, soit \textbf{1.5\%} de cas à risque.
+
+\textbf{Interprétation} : pour les images d'issues, Alfred ne se contente pas de produire une réponse ; les descriptions sont majoritairement \textbf{ancrées dans le contexte de l'issue}. Ce résultat est important pour le RAG \cite{lewis2020rag} : le texte ajouté à la KB ne doit pas seulement être lisible, il doit rester fidèle au symptôme, au log ou à la capture d'écran qui motive l'issue. La principale faiblesse résiduelle vient des cas où l'image contient peu de texte technique ou où le contexte de l'issue est trop court pour vérifier automatiquement la description.
 
 \subsection{Stage 3c : Enrichissement Figures PDF}
 \label{sec:eval_alfred_pdf}
@@ -1733,6 +1976,154 @@ STM32CubeL4 & 22 & 0 & 22 & 0\% (API 404 transitoire) \\
   \item \textbf{PlaceholderRate} : 0\% après patch (aucun placeholder résiduel détecté par la gate de validation)
   \item Couverture : 19/25 séries (76\%) possèdent des PDFs avec figures extractibles
 \end{itemize}
+
+\textbf{Mais la confiance contextuelle est plus faible que pour les issues}. Sur les \textbf{242 figures PDF} évaluées, le score moyen $S_{\text{coh}}$ est de \textbf{0.1825}. Le score lexical moyen est \textbf{0.1971}, la similarité sémantique moyenne \textbf{0.1961}, et \textbf{141/242} figures (\textbf{58.26\%}) sont sous le seuil d'alerte de cohérence. Le taux de contradiction reste faible ($P_{\text{contrad}}=0.0309$), ce qui indique que le problème principal n'est pas l'hallucination contradictoire mais le \textbf{manque d'ancrage mesurable} entre la description Alfred et le texte de page disponible.
+
+\textbf{Analyse de cause} : les figures PDF sont souvent des schémas, blocs ou diagrammes dont les libellés ne sont pas répétés dans le texte de page extrait par \texttt{pypdf}. La description Alfred peut donc être visuellement utile mais difficile à valider automatiquement par simple comparaison au contexte textuel voisin. À l'inverse, les screenshots d'issues contiennent souvent des logs, erreurs IDE ou extraits de configuration également mentionnés dans le corps de l'issue, ce qui explique leur meilleur ancrage.
+
+\textbf{Décision qualité} : les figures PDF sont conservées car elles enrichissent la couverture multimodale, mais elles doivent être distinguées des images d'issues dans l'évaluation. Le rapport ne conclut donc pas à une confiance homogène d'Alfred ; il conclut à une \textbf{fiabilité opérationnelle excellente} et à une \textbf{confiance contextuelle forte pour les images d'issues, perfectible pour les figures PDF}. Les prochaines itérations doivent améliorer le contexte transmis à Alfred (titre de section, légende détectée, texte avant/après page, nom du document PDF) avant de durcir le seuil de validation.
+
+\subsection{Méthode de Calcul de la Similarité Alfred--Contexte}
+\label{sec:eval_alfred_similarity_method}
+
+L'évaluation Alfred ne repose pas sur une annotation humaine de vérité terrain, mais sur une mesure automatique de \textbf{cohérence contextuelle}. Pour chaque image, le validateur compare la description générée par Alfred avec le contexte textuel disponible : le texte de l'issue pour les captures GitHub, ou le texte de page pour les figures extraites des PDFs. Cette approche mesure un \textbf{taux de confiance contextuelle}, et non une accuracy supervisée.
+
+La chaîne de calcul est implémentée dans \texttt{pipeline/evaluation/validate\_alfred\_coherence.py}. Dans la campagne reportée, le mode utilisé est \texttt{lite} : aucun modèle externe lourd n'est requis. Les métriques reposent sur des techniques NLP déterministes : tokenisation avec filtrage de stopwords, recouvrement lexical, similarité de Jaccard, similarité cosinus sur trigrammes de caractères, et pénalité légère de contradiction par analyse de polarité.
+
+\subsubsection{Prétraitement}
+
+Le texte est d'abord tokenisé par regex (\texttt{[A-Za-z][A-Za-z0-9\_\textbackslash{}-/]\{2,\}}). Les mots génériques sont supprimés : articles (\texttt{the}, \texttt{and}), termes méta (\texttt{image}, \texttt{description}, \texttt{figure}, \texttt{github}), et connecteurs français courants. Seuls les termes techniques significatifs sont conservés (ex: \texttt{STM32}, \texttt{SPI}, \texttt{HAL}, \texttt{DMA}, \texttt{USB}).
+
+\subsubsection{Score Lexical $L$}
+
+Le score lexical mesure l'ancrage de la description Alfred dans le contexte source :
+
+\begin{equation}
+L =
+\frac{|T_{\text{Alfred}} \cap T_{\text{contexte}}|}
+{|T_{\text{Alfred}}|}
+\label{eq:alfred_lexical_grounding}
+\end{equation}
+
+où $T_{\text{Alfred}}$ est l'ensemble des tokens significatifs de la description, et $T_{\text{contexte}}$ l'ensemble des tokens du contexte. Pour les images d'issues, si un texte OCR a été extrait de l'image, il est intégré avec un poids secondaire :
+
+\begin{equation}
+L_{\text{issue}} = 0.7 \times L_{\text{description}} + 0.3 \times L_{\text{OCR}}
+\label{eq:alfred_issue_lexical}
+\end{equation}
+
+\subsubsection{Similarité Sémantique Légère $S$}
+
+La similarité sémantique en mode \texttt{lite} combine deux signaux complémentaires, sans dépendance à un modèle pré-entraîné :
+
+\begin{equation}
+S = 0.7 \times J + 0.3 \times C
+\label{eq:alfred_semantic_lite}
+\end{equation}
+
+avec $J$ la similarité de Jaccard entre les ensembles de tokens :
+
+\begin{equation}
+J =
+\frac{|T_{\text{Alfred}} \cap T_{\text{contexte}}|}
+{|T_{\text{Alfred}} \cup T_{\text{contexte}}|}
+\label{eq:alfred_jaccard}
+\end{equation}
+
+et $C$ la similarité cosinus entre les vecteurs de fréquences de trigrammes de caractères :
+
+\begin{equation}
+C =
+\frac{\vec{A} \cdot \vec{B}}{\|\vec{A}\| \times \|\vec{B}\|}
+\label{eq:alfred_trigram_cosine}
+\end{equation}
+
+Les trigrammes de caractères (ex: \texttt{stm} $\to$ \texttt{tm3} $\to$ \texttt{m32}) tolèrent les variations morphologiques mineures et capturent la proximité lexicale au-delà de l'identité stricte des tokens. Jaccard, de son côté, quantifie la proportion de vocabulaire technique partagé.
+
+\textbf{Mode avancé disponible} : le script supporte aussi \texttt{sentence-transformers/all-MiniLM-L6-v2} \cite{reimers2019sentence} pour une similarité par embeddings, activable via \texttt{-{}-semantic-mode auto}. Ce mode n'a pas été requis pour la campagne actuelle, mais reste disponible pour les itérations futures.
+
+\subsubsection{Pénalité de Contradiction $P_{\text{contrad}}$}
+
+En mode \texttt{lite}, la probabilité de contradiction est estimée par analyse de polarité. Le script détecte les mots négatifs (\texttt{not}, \texttt{failed}, \texttt{disabled}, \texttt{error}, \texttt{missing}) et positifs (\texttt{works}, \texttt{fixed}, \texttt{enabled}, \texttt{correct}) dans les deux textes. Si le contexte et la description Alfred présentent des polarités opposées sur des tokens partagés, une probabilité de contradiction est attribuée :
+
+\begin{equation}
+P_{\text{contrad}} =
+\begin{cases}
+0.6 \times O + 0.4 \times \frac{m_p + m_h}{2} & \text{si polarités opposées et } O \geq 0.2 \\
+0.15 \times O & \text{si même polarité et } O \geq 0.1 \\
+0 & \text{sinon}
+\end{cases}
+\label{eq:alfred_contradiction_lite}
+\end{equation}
+
+où $O$ est le ratio de tokens partagés (overlap), et $m_p$, $m_h$ les magnitudes de polarité respectives du contexte et de la description. Le mode avancé NLI utilise \texttt{MoritzLaurer/DeBERTa-v3-base-mnli-fever-anli} pour une classification entailment/neutre/contradiction, non activé dans cette campagne.
+
+\subsubsection{Résultats Décomposés}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Source} & \textbf{N} & $\overline{L}$ & $\overline{J}$ & $\overline{P}_{\text{contrad}}$ & $\overline{S}_{\text{coh}}$ & \textbf{Cas à risque} \\
+\midrule
+Images d'issues & 200 & 0.9357 & -- & 0.1567 & 0.5021 & 3/200 (1.5\%) \\
+Figures PDF & 242 & 0.1971 & 0.1961 & 0.0309 & 0.1825 & 141/242 (58.3\%) \\
+\bottomrule
+\end{tabular}
+\caption{Décomposition des métriques de cohérence Alfred par source visuelle}
+\label{tab:alfred_coherence_decomposition}
+\end{table}
+
+L'écart entre les deux sources est significatif : les images d'issues obtiennent un ancrage lexical moyen de \textbf{0.9357} contre seulement \textbf{0.1971} pour les figures PDF. L'explication est structurelle : le texte des issues mentionne les mêmes erreurs, logs, et identifiants de périphériques que la capture d'écran. Les figures PDF (schémas d'architecture, tableaux de migration) contiennent des libellés rarement répétés dans le texte de page extrait par \texttt{pypdf}.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    width=11cm, height=6cm,
+    ymin=0, ymax=110,
+    ylabel={Confiance contextuelle $T_{\text{ctx}}$ (\%)},
+    symbolic x coords={Images issues, Figures PDF, Total Alfred},
+    xtick=data,
+    nodes near coords,
+    every node near coord/.append style={font=\small\bfseries},
+    bar width=0.9cm,
+    enlarge x limits=0.25,
+]
+\addplot[fill=green!55!black] coordinates {(Images issues,98.5)};
+\addplot[fill=orange!70] coordinates {(Figures PDF,41.7)};
+\addplot[fill=blue!45] coordinates {(Total Alfred,67.4)};
+\end{axis}
+\end{tikzpicture}
+\caption{Confiance contextuelle Alfred selon la source visuelle --- seuil d'alerte $S_{\text{coh}} < 0.12$}
+\label{fig:alfred_contextual_trust}
+\end{figure}
+
+\textbf{Fichiers de preuve} : le CSV détaillé est disponible dans \texttt{docs/evaluation/alfred\_coherence\_report.csv} (442 lignes, une par image évaluée) et le résumé JSON dans \texttt{docs/evaluation/alfred\_coherence\_summary.json}.
+
+\subsection{Synthèse de Confiance Alfred}
+\label{sec:eval_alfred_synthesis}
+
+La campagne Alfred est donc évaluée avec deux métriques complémentaires : le \textbf{succès opérationnel}, qui vérifie que le service retourne une description exploitable, et le \textbf{taux de confiance contextuelle}, défini comme la proportion d'éléments dont le score $S_{\text{coh}}$ reste au-dessus du seuil d'alerte $0.12$.
+
+\begin{equation}
+T_{\text{ctx}} = \frac{N_{S_{\text{coh}} \geq 0.12}}{N_{\text{évalués}}} \times 100
+\label{eq:alfred_contextual_trust}
+\end{equation}
+
+\begin{longtable}{p{3cm}cccp{4.5cm}}
+\toprule
+\textbf{Source visuelle} & \textbf{Éléments évalués} & \textbf{Score moyen $S_{\text{coh}}$} & \textbf{$T_{\text{ctx}}$} & \textbf{Décision qualité} \\
+\midrule
+Images d'issues & 200 & 0.5021 & \textbf{98.5\%} & Conserver en production : descriptions fortement ancrées dans le contexte de l'issue \\
+Figures PDF & 242 & 0.1825 & \textbf{41.7\%} & Conserver avec réserve : utile pour le recall multimodal, mais contexte PDF à enrichir \\
+\midrule
+\textbf{Total Alfred} & \textbf{442} & \textbf{0.3270} & \textbf{67.4\%} & Fiabilité API élevée, confiance contextuelle hétérogène selon la source \\
+\bottomrule
+\end{longtable}
+
+Cette distinction répond à un point critique de l'évaluation : Alfred n'est pas validé uniquement parce qu'il produit du texte. Pour chaque description, le pipeline vérifie si le contenu ajouté à la KB reste cohérent avec le contexte d'origine de l'image. Cette mesure protège le système RAG contre deux risques : l'ajout de descriptions visuellement plausibles mais non vérifiables, et l'augmentation artificielle du volume textuel qui dégraderait la précision de recherche. Elle montre aussi où se situe l'effort futur : les images d'issues sont suffisamment fiables pour la production, tandis que les figures PDF nécessitent davantage de contexte documentaire avant d'être considérées comme pleinement matures.
 
 \subsection{Stage 4 : Similarité TF-IDF}
 \label{sec:eval_similarity}
@@ -1799,14 +2190,18 @@ STM32CubeL4 & 89 & 1\,450 & 1 & 7 \\
 \midrule
 1. Ingestion & 99.7\% & 1.0 & $\geq 95\%$ & \textcolor{green!60!black}{\textbf{EXCELLENT}} \\
 2. Cleaning & 100.0\% & 1.5 & $\geq 95\%$ & \textcolor{green!60!black}{\textbf{EXCELLENT}} \\
-3. Enrichissement & 72.2\% & \textbf{2.0} & $\geq 85\%$ & \textcolor{orange}{\textbf{ACCEPTABLE}} \\
+3a. Enrichissement heuristique & 72.2\% & 1.4 & $\geq 85\%$ & \textcolor{orange}{\textbf{ACCEPTABLE}} \\
+3b. Alfred images d'issues & 98.5\% & 0.4 & $\geq 95\%$ & \textcolor{green!60!black}{\textbf{EXCELLENT}} \\
+3c. Alfred figures PDF & 41.7\% & 0.2 & $\geq 70\%$ & \textcolor{red}{\textbf{INSUFFISANT}} \\
 4. Similarité & 22.0\% & 0.5 & $\geq 70\%$ & \textcolor{red}{\textbf{INSUFFISANT}} \\
 5. Delivery & 100.0\% & \textbf{2.0} & $\geq 95\%$ & \textcolor{green!60!black}{\textbf{EXCELLENT}} \\
 \bottomrule
 \end{tabular}
-\caption{Scores de qualité par stage --- STM32CubeH7 (poids mis à jour)}
+\caption{Scores de qualité par stage avec confiance Alfred séparée --- STM32CubeH7 et campagne multimodale}
 \label{tab:eval_scores_h7_v2}
 \end{table}
+
+La séparation du Stage 3 en trois sous-composantes évite une moyenne trompeuse. Les heuristiques NLP mesurent la structuration des métadonnées, les images d'issues mesurent la capacité d'Alfred à rendre les screenshots cherchables, et les figures PDF mesurent un cas plus difficile où le contexte textuel extrait du document est souvent insuffisant. Les poids conservent le total du Stage 3 à $2.0$ : $1.4$ pour l'enrichissement déterministe, $0.4$ pour les images d'issues déjà matures, et $0.2$ pour les figures PDF encore exploratoires.
 
 \section{Score Global du Pipeline --- Formule Recalculée}
 \label{sec:score_global}
@@ -1817,10 +2212,12 @@ Le score global est calculé comme la \textbf{moyenne pondérée} des scores de 
 
 \begin{equation}
 \boxed{
-S_{\text{global}} = \frac{\sum_{k=1}^{5} w_k \cdot s_k}{\sum_{k=1}^{5} w_k} = \frac{w_1 s_1 + w_2 s_2 + w_3 s_3 + w_4 s_4 + w_5 s_5}{w_1 + w_2 + w_3 + w_4 + w_5}
+S_{\text{global}} = \frac{\sum_k w_k \cdot s_k}{\sum_k w_k}
 }
 \label{eq:score_global_v2}
 \end{equation}
+
+avec $k \in \{\text{ingestion}, \text{cleaning}, \text{enrichissement}, \text{Alfred issues}, \text{Alfred PDF}, \text{similarité}, \text{delivery}\}$. Cette formulation rend explicite la contribution multimodale d'Alfred sans la confondre avec l'enrichissement heuristique classique.
 
 \subsection{Justification des Poids}
 
@@ -1830,7 +2227,9 @@ S_{\text{global}} = \frac{\sum_{k=1}^{5} w_k \cdot s_k}{\sum_{k=1}^{5} w_k} = \f
 \midrule
 Ingestion & 1.0 & Étape prérequise mais sans transformation intellectuelle --- collecte brute \\
 Cleaning & 1.5 & Transformation significative mais déterministe (regex, strip HTML) \\
-Enrichissement & \textbf{2.0} & Étape à plus haute valeur ajoutée : classification NLP + Alfred Vision. Directement corrélée au QI (+33 points via Diagnostic Cards) \\
+Enrichissement heuristique & \textbf{1.4} & Classification NLP explicable (layer, component, severity, board), utilisée pour filtrage et re-ranking \\
+Alfred images d'issues & \textbf{0.4} & Enrichissement multimodal mature : 98.5\% des descriptions restent au-dessus du seuil de confiance contextuelle \\
+Alfred figures PDF & \textbf{0.2} & Enrichissement utile mais encore exploratoire : le contexte PDF limite la validation automatique \\
 Similarité & \textbf{0.5} & Impact optionnel : les liens de similarité enrichissent mais ne sont pas critiques pour le retrieval. Score réduit de 1.0 à 0.5 car un score bas n'impacte pas la qualité perçue \\
 Delivery & \textbf{2.0} & Étape finale critique : les artefacts produits (issues, files, resolver, diag cards) sont la matière première directe de la KB. Un échec ici = aucune donnée uploadée \\
 \bottomrule
@@ -1838,7 +2237,7 @@ Delivery & \textbf{2.0} & Étape finale critique : les artefacts produits (issue
 
 \textbf{Modification par rapport à la version précédente} :
 \begin{itemize}
-  \item Enrichissement : \textbf{maintenu à 2.0} (déjà la valeur précédente) --- justifié par la corrélation directe avec le QI
+  \item Enrichissement : \textbf{maintenu à 2.0 au total}, mais séparé en heuristiques NLP ($1.4$), Alfred issues ($0.4$) et Alfred PDF ($0.2$) pour rendre visible la confiance multimodale
   \item Delivery : \textbf{augmenté de 1.5 à 2.0} --- car c'est l'étape qui produit les Diagnostic Cards (+33 points QI)
   \item Similarité : \textbf{réduit de 1.0 à 0.5} --- car un score bas (22\%) n'a pas d'impact mesurable sur le QI, et un poids élevé pénaliserait injustement le score global
 \end{itemize}
@@ -1846,11 +2245,11 @@ Delivery & \textbf{2.0} & Étape finale critique : les artefacts produits (issue
 \subsection{Application Numérique (STM32CubeH7)}
 
 \begin{equation}
-S_{\text{global}} = \frac{1.0 \times 99.7 + 1.5 \times 100.0 + 2.0 \times 72.2 + 0.5 \times 22.0 + 2.0 \times 100.0}{1.0 + 1.5 + 2.0 + 0.5 + 2.0}
+S_{\text{global}} = \frac{1.0 \times 99.7 + 1.5 \times 100.0 + 1.4 \times 72.2 + 0.4 \times 98.5 + 0.2 \times 41.7 + 0.5 \times 22.0 + 2.0 \times 100.0}{7.0}
 \end{equation}
 
 \begin{equation}
-S_{\text{global}} = \frac{99.7 + 150.0 + 144.4 + 11.0 + 200.0}{7.0} = \frac{605.1}{7.0} = \boxed{86.4\%}
+S_{\text{global}} = \frac{99.7 + 150.0 + 101.1 + 39.4 + 8.3 + 11.0 + 200.0}{7.0} = \frac{609.5}{7.0} = \boxed{87.1\%}
 \label{eq:score_calcul}
 \end{equation}
 
@@ -1861,11 +2260,12 @@ S_{\text{global}} = \frac{99.7 + 150.0 + 144.4 + 11.0 + 200.0}{7.0} = \frac{605.
 \textbf{Version scoring} & \textbf{Score} & \textbf{Verdict} & \textbf{Différence} \\
 \midrule
 Ancienne formule ($w_4=1.0, w_5=1.5$) & 80.9\% & ACCEPTABLE & Pénalisé par Similarité (poids élevé, score bas) \\
-\textbf{Nouvelle formule} ($w_4=0.5, w_5=2.0$) & \textbf{86.4\%} & \textbf{BON} & Reflète mieux la valeur réelle de chaque stage \\
+Formule pondérée précédente ($w_4=0.5, w_5=2.0$) & 86.4\% & BON & Reflète mieux la valeur réelle de chaque stage \\
+\textbf{Formule finale avec Alfred séparé} & \textbf{87.1\%} & \textbf{BON} & Intègre la confiance contextuelle issue/PDF sans masquer la faiblesse PDF \\
 \bottomrule
 \end{longtable}
 
-\textbf{Gain de +5.5 points} : ce gain n'est pas artificiel. Il reflète le fait que le stage Similarité (score bas mais sans impact opérationnel) pesait trop dans l'ancienne formule, et que la Delivery (score parfait, impact maximal sur le QI) était sous-pondérée.
+\textbf{Gain de +6.2 points par rapport à l'ancienne formule} : ce gain n'est pas artificiel. Il reflète le fait que le stage Similarité (score bas mais sans impact opérationnel) pesait trop dans l'ancienne formule, que la Delivery (score parfait, impact maximal sur le QI) était sous-pondérée, et que la confiance Alfred doit être lue séparément selon la source visuelle. Le score global reste volontairement borné au verdict \textbf{BON}, car les figures PDF n'atteignent pas encore le niveau de maturité des images d'issues.
 
 % --- FIGURE : Décomposition du score global ---
 \begin{figure}[H]
@@ -1885,13 +2285,15 @@ Ancienne formule ($w_4=1.0, w_5=1.5$) & 80.9\% & ACCEPTABLE & Pénalisé par Sim
 ]
 \addplot[fill=blue!40] coordinates {(14.2,Score Global)};
 \addplot[fill=green!40] coordinates {(21.4,Score Global)};
-\addplot[fill=orange!60] coordinates {(20.6,Score Global)};
+\addplot[fill=orange!60] coordinates {(14.4,Score Global)};
+\addplot[fill=cyan!45] coordinates {(5.6,Score Global)};
+\addplot[fill=yellow!55] coordinates {(1.2,Score Global)};
 \addplot[fill=red!30] coordinates {(1.6,Score Global)};
 \addplot[fill=purple!40] coordinates {(28.6,Score Global)};
-\legend{Ingestion (14.2\%), Cleaning (21.4\%), Enrichissement (20.6\%), Similarité (1.6\%), Delivery (28.6\%)}
+\legend{Ingestion (14.2\%), Cleaning (21.4\%), Enrichissement (14.4\%), Alfred issues (5.6\%), Alfred PDF (1.2\%), Similarité (1.6\%), Delivery (28.6\%)}
 \end{axis}
 \end{tikzpicture}
-\caption{Décomposition du score global 86.4\% --- contribution pondérée de chaque stage}
+\caption{Décomposition du score global 87.1\% --- contribution pondérée de chaque stage, avec Alfred séparé par source visuelle}
 \label{fig:score_decomposition}
 \end{figure}
 
@@ -2047,7 +2449,7 @@ Cette section démontre la \textbf{valeur ajoutée mesurable} de chaque étape d
 Ingestion & Données absentes & $C_{\text{body}} = 99.7\%$ & Sans ingestion → 0 document en KB \\
 Cleaning V3 & Bruit dilue le signal & $-96.4\%$ volume CMSIS & +31\% densité signal/chunk \\
 Enrichissement & Texte non structuré & 72.2\% couverture métadonnées & Classification → facettes de recherche \\
-Alfred Vision & Images opaques & 99.1\% taux description & Screenshots deviennent cherchables \\
+Alfred Vision & Images opaques & 99.1\% succès H7/F4/WL/F7 ; 1.5\% images d'issues à risque & Screenshots cherchables et cohérents ; figures PDF à améliorer \\
 Similarité & Issues isolées & 22\% avec liens & Related issues dans la réponse (optionnel) \\
 Delivery Issues & KB vide & 2\,000 issues structurées & QI baseline = 54 (issues seules) \\
 Delivery Resolver & Pas de traçabilité fix & 390 resolver cases & Chaîne Issue→PR→Fix vérifiable \\
@@ -2126,7 +2528,22 @@ Le pipeline est automatisé via GitHub Actions avec un workflow bi-mensuel :
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{06_cicd_automation.png}
+\begin{tikzpicture}[node distance=1cm,
+  job/.style={rectangle, draw=stblue, fill=stlightblue!40, text width=3.5cm, minimum height=1cm, align=center, font=\scriptsize\bfseries, rounded corners=3pt},
+  trigger/.style={rectangle, draw=storange, fill=storange!20, text width=3cm, minimum height=0.7cm, align=center, font=\scriptsize},
+  arr/.style={-{Stealth[length=2.5mm]}, thick}
+]
+\node[trigger] (cron) {Cron bi-mensuel\\\scriptsize 1er et 15 du mois};
+\node[trigger, below=0.4cm of cron] (manual) {workflow\_dispatch\\\scriptsize manuel};
+\node[job, right=2.5cm of cron, yshift=-0.4cm] (job1) {Job 1 --- Pipeline\\\scriptsize ubuntu-latest (cloud)\\\scriptsize Ingestion + Export};
+\node[job, right=2.5cm of job1] (job2) {Job 2 --- Upload\\\scriptsize self-hosted (PC local)\\\scriptsize Delete + Add KB};
+\node[rectangle, draw=stgreen, fill=stgreen!15, text width=2.5cm, align=center, font=\scriptsize, below=0.8cm of job1] (gate) {Gate Validation\\\scriptsize JSON Schema};
+\draw[arr] (cron) -- (job1);
+\draw[arr] (manual) -| (job1);
+\draw[arr] (job1) -- (job2);
+\draw[arr] (job1) -- (gate);
+\draw[arr, dashed, red] (gate) -- node[right, font=\tiny]{FAIL $\to$ bloque} ++(0,-0.8);
+\end{tikzpicture}
 \caption{Architecture CI/CD : GitHub Actions + self-hosted runner}
 \label{fig:cicd}
 \end{figure}
@@ -2432,7 +2849,7 @@ Les réalisations principales sont :
   \item La couverture de \textbf{13 séries MCU en production} (C0, F0, F1, F2, F3, F4, F7, G0, H5, H7, H7RS, U5, WL) totalisant 47 dépôts, plus \textbf{12 séries supplémentaires configurées} (G4, L0, L1, L4, L5, N6, U0, U3, WB, WB0, WBA, WL3)
   \item La production de \textbf{4 types d'artefacts complémentaires} : issues structurées ($\sim$2\,000), fichiers documentés ($\sim$14\,000), resolver cases ($\sim$390) et diagnostic cards ($\sim$157)
   \item Un \textbf{nettoyage intelligent V3 par type} avec réduction de 96\% pour les headers CMSIS et 33\% pour les Release Notes HTML
-  \item L'\textbf{enrichissement IA multi-modal} via Alfred Vision : description automatique des captures d'écran d'issues (taux de succès $>$98\% sur H7) et de 131 figures PDF sur 10 séries
+  \item L'\textbf{enrichissement IA multi-modal} via Alfred Vision : description automatique des captures d'écran d'issues (taux de succès $>$98\% sur H7, F4, WL et F7), évaluation de cohérence sur 200 images d'issues (seulement 1.5\% à risque), et 242 figures PDF détectées sur 19 séries avec une confiance contextuelle encore perfectible
   \item L'\textbf{automatisation CI/CD} via GitHub Actions et scripts PowerShell/Python
   \item Un \textbf{Quality Index de 94/100} sur la série pilote H7 (avec Diagnostic Cards) et un \textbf{gain de +39\%} vs Alfred générique sur les questions techniques spécifiques
 \end{itemize}
@@ -2532,6 +2949,9 @@ Microsoft (2024). \textit{Azure OpenAI Service Documentation}. \url{https://lear
 
 \bibitem{pypdf}
 Py-PDF Contributors (2024). \textit{pypdf --- A pure-Python PDF library}. \url{https://pypdf.readthedocs.io/}. --- Bibliothèque Python utilisée dans notre pipeline pour l'extraction du texte et la détection de figures dans les Release Notes PDF.
+
+\bibitem{reimers2019sentence}
+Reimers, N. et Gurevych, I. (2019). \textit{Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks}. Proceedings of EMNLP-IJCNLP, pp.~3982--3992. --- Référence pour le mode avancé de similarité sémantique par embeddings, disponible mais non activé dans la campagne actuelle.
 
 \end{thebibliography}
 
