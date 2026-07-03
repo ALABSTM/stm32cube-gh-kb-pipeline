@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.6.9)  2 JUL 2026 17:10
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.6.9)  3 JUL 2026 16:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1152,34 +1152,68 @@ been already used, duplicate ignored
 l.135 \newpage
                [1
 
-] (PFE_Report_STM32Cube_Pipeline.toc)
+] (PFE_Report_STM32Cube_Pipeline.toc [2]
+Package babel Info: 'french' activates 'french' shorthands.
+(babel)             Reported on input line 68.
+
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[3]
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[4]
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[5]
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[6])
 \tf@toc=\write5
 \openout5 = `PFE_Report_STM32Cube_Pipeline.toc'.
 
- [2]
-(PFE_Report_STM32Cube_Pipeline.lof)
+
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[7] (PFE_Report_STM32Cube_Pipeline.lof
+Overfull \hbox (4.00488pt too wide) in paragraph at lines 8--8
+ \T1/cmr/m/n/12 orange), l'en-fant le plus proche est re-trouvé puis son chunk 
+pa-rent (3000 car.) 
+ []
+
+[8])
 \tf@lof=\write6
 \openout6 = `PFE_Report_STM32Cube_Pipeline.lof'.
 
- [3] [4
+ [9] [10
 
-]
-Package babel Info: 'french' activates 'french' shorthands.
-(babel)             Reported on input line 168.
- [5]
+] [11]
 Chapitre 1.
-
-LaTeX Warning: Citation `stm32' on page 6 undefined on input line 180.
-
-
-LaTeX Warning: Citation `st_annual_report' on page 6 undefined on input line 18
-0.
-
-
-LaTeX Warning: Citation `st_annual_report' on page 6 undefined on input line 18
-2.
-
-[6
+[12
 
 
 pdfTeX warning (ext4): destination with the same identifier (name{figure.1.1}) 
@@ -1190,9 +1224,13 @@ l.199   \item \textbf
                      {Industriel} (30\%) : automatisation, contrÃ´le moteur,...
 ]
 
-LaTeX Warning: Citation `st_annual_report' on page 7 undefined on input line 20
-9.
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
+[13]
 
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
 (fancyhdr)                Make it at least 14.61858pt, for example:
@@ -1200,44 +1238,16 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[7]
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[8]
+[14]
 Chapitre 2.
 
-Overfull \hbox (18.75584pt too wide) in paragraph at lines 243--243
+Overfull \hbox (18.75584pt too wide) in paragraph at lines 245--245
 []|\T1/cmr/m/n/12 STM32F0/F1/F2| 
  []
 
 
-Overfull \hbox (2.4446pt too wide) in paragraph at lines 246--246
+Overfull \hbox (2.4446pt too wide) in paragraph at lines 248--248
 []|\T1/cmr/m/n/12 STM32G0/G4| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 246--246
-[]|\T1/cmr/m/n/12 Cortex-
- []
-
-
-Overfull \hbox (37.34717pt too wide) in paragraph at lines 247--247
-[]|\T1/cmr/m/n/12 STM32H5/H7/H7RS| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 247--248
-[]|\T1/cmr/m/n/12 Ultra-haute per-for-mance, dual-core,
- []
-
-
-Overfull \hbox (36.86397pt too wide) in paragraph at lines 248--248
-[]|\T1/cmr/m/n/12 STM32L0/L1/L4/L5| 
  []
 
 
@@ -1246,28 +1256,18 @@ Underfull \hbox (badness 10000) in paragraph at lines 248--248
  []
 
 
-Overfull \hbox (13.82306pt too wide) in paragraph at lines 248--248
-\T1/cmr/m/n/12 M0+/M3/M4/M33| 
+Overfull \hbox (37.34717pt too wide) in paragraph at lines 249--249
+[]|\T1/cmr/m/n/12 STM32H5/H7/H7RS| 
  []
 
 
-Underfull \hbox (badness 5008) in paragraph at lines 248--249
-[]|\T1/cmr/m/n/12 Ultra-basse consom-ma-tion, IoT, wea-
+Underfull \hbox (badness 10000) in paragraph at lines 249--250
+[]|\T1/cmr/m/n/12 Ultra-haute per-for-mance, dual-core,
  []
 
 
-Overfull \hbox (22.17589pt too wide) in paragraph at lines 249--249
-[]|\T1/cmr/m/n/12 STM32U0/U3/U5| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 249--249
-[]|\T1/cmr/m/n/12 Cortex-
- []
-
-
-Overfull \hbox (47.12808pt too wide) in paragraph at lines 250--250
-[]|\T1/cmr/m/n/12 STM32WB/WBA/WL| 
+Overfull \hbox (36.86397pt too wide) in paragraph at lines 250--250
+[]|\T1/cmr/m/n/12 STM32L0/L1/L4/L5| 
  []
 
 
@@ -1276,481 +1276,499 @@ Underfull \hbox (badness 10000) in paragraph at lines 250--250
  []
 
 
+Overfull \hbox (13.82306pt too wide) in paragraph at lines 250--250
+\T1/cmr/m/n/12 M0+/M3/M4/M33| 
+ []
+
+
+Underfull \hbox (badness 5008) in paragraph at lines 250--251
+[]|\T1/cmr/m/n/12 Ultra-basse consom-ma-tion, IoT, wea-
+ []
+
+
+Overfull \hbox (22.17589pt too wide) in paragraph at lines 251--251
+[]|\T1/cmr/m/n/12 STM32U0/U3/U5| 
+ []
+
+
 Underfull \hbox (badness 10000) in paragraph at lines 251--251
 []|\T1/cmr/m/n/12 Cortex-
  []
 
 
-Overfull \hbox (16.73776pt too wide) in paragraph at lines 255--257
+Overfull \hbox (47.12808pt too wide) in paragraph at lines 252--252
+[]|\T1/cmr/m/n/12 STM32WB/WBA/WL| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 252--252
+[]|\T1/cmr/m/n/12 Cortex-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 253--253
+[]|\T1/cmr/m/n/12 Cortex-
+ []
+
+ignored error: Infinite glue shrinkage found in box being split [15
+
+]
+Overfull \hbox (16.73776pt too wide) in paragraph at lines 257--259
 []\T1/cmr/m/n/12 Pour chaque sé-rie, ST four-nit un \T1/cmr/bx/n/12 Firm-ware P
 a-ckage \T1/cmr/m/n/12 com-plet sous le nom \T1/cmr/bx/n/12 STM32Cube\T1/cmr/m/
 n/12 ,
  []
 
-[9
 
-]
-Overfull \hbox (15.77817pt too wide) in paragraph at lines 267--268
+Overfull \hbox (15.77817pt too wide) in paragraph at lines 269--270
 []\T1/cmr/m/n/12 Depuis 2019, ST-Mi-croe-lec-tro-nics pu-blie l'in-té-gra-lité 
 de ses firm-ware pa-ckages STM32Cube
  []
 
 
-Overfull \hbox (76.61743pt too wide) in paragraph at lines 271--272
+Overfull \hbox (76.61743pt too wide) in paragraph at lines 273--274
 []\T1/cmr/bx/n/12 200+ sous-dépôts \T1/cmr/m/n/12 pour les dri-vers in-di-vi-du
 els (\T1/cmtt/m/n/12 stm32h7xx-hal-driver\T1/cmr/m/n/12 , \T1/cmtt/m/n/12 stm32
 f4xx-nucleo-bsp\T1/cmr/m/n/12 ,
  []
 
-[10]
-Underfull \hbox (badness 10000) in paragraph at lines 302--302
+[16]
+Underfull \hbox (badness 10000) in paragraph at lines 306--306
 []|\T1/cmr/bx/n/12 Solution exis-
  []
 
 
-Underfull \hbox (badness 1708) in paragraph at lines 304--304
+Underfull \hbox (badness 1708) in paragraph at lines 308--308
 []|\T1/cmr/m/n/12 Recherche Gi-tHub
  []
 
 
-Underfull \hbox (badness 5231) in paragraph at lines 304--304
+Underfull \hbox (badness 5231) in paragraph at lines 308--308
 \T1/cmr/m/n/12 de fil-trage par com-po-sant,
  []
 
 
-Underfull \hbox (badness 1997) in paragraph at lines 305--306
+Underfull \hbox (badness 1997) in paragraph at lines 309--310
 []|\T1/cmr/m/n/12 Conseils gé-né-raux sans
  []
 
 
-Underfull \hbox (badness 1888) in paragraph at lines 306--307
+Underfull \hbox (badness 1888) in paragraph at lines 310--311
 []|\T1/cmr/m/n/12 Solutions non vé-ri-fiées,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 307--307
+Underfull \hbox (badness 10000) in paragraph at lines 311--311
 []|\T1/cmr/m/n/12 Documentation
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 307--307
+Underfull \hbox (badness 10000) in paragraph at lines 311--311
 []|\T1/cmr/m/n/12 Non in-dexable, fi-gures
  []
 
 
-Underfull \hbox (badness 4454) in paragraph at lines 307--307
+Underfull \hbox (badness 4454) in paragraph at lines 311--311
 \T1/cmr/m/n/12 opaques, pas de lien avec
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 307--308
+Underfull \hbox (badness 10000) in paragraph at lines 311--312
 \T1/cmr/m/n/12 cor-ré-ler son pro-blème
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 308--308
+Underfull \hbox (badness 10000) in paragraph at lines 312--312
 []|\T1/cmr/m/n/12 Support di-rect
  []
 
 
-Underfull \hbox (badness 3396) in paragraph at lines 308--309
+Underfull \hbox (badness 3396) in paragraph at lines 312--313
 []|\T1/cmr/m/n/12 Blocage du dé-ve-lop-pe-
  []
 
-ignored error: Infinite glue shrinkage found in box being split [11]
-
-LaTeX Warning: Reference `sec:etude_comparative' on page 12 undefined on input 
-line 312.
-
-
-LaTeX Warning: Citation `lewis2020rag' on page 12 undefined on input line 319.
-
-[12]
-
-LaTeX Warning: Citation `tfidf' on page 13 undefined on input line 341.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 356--356
+ignored error: Infinite glue shrinkage found in box being split [17] [18]
+Underfull \hbox (badness 10000) in paragraph at lines 360--360
 []|\T1/cmr/m/n/12 Recherche Gi-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 356--357
+Underfull \hbox (badness 10000) in paragraph at lines 360--361
 \T1/cmr/m/n/12 de fil-trage par com-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 356--357
+Underfull \hbox (badness 10000) in paragraph at lines 360--361
 \T1/cmr/m/n/12 po-sant/layer, ré-sul-tats
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 357--357
+Underfull \hbox (badness 10000) in paragraph at lines 361--361
 []|\T1/cmr/m/n/12 Toujours dis-po-nible,
  []
 
 
-Underfull \hbox (badness 1546) in paragraph at lines 357--358
+Underfull \hbox (badness 1546) in paragraph at lines 361--362
 []|\T1/cmr/m/n/12 Pas d'ac-cès aux is-sues
  []
 
 
-Underfull \hbox (badness 3354) in paragraph at lines 357--358
+Underfull \hbox (badness 3354) in paragraph at lines 361--362
 \T1/cmr/m/n/12 Gi-tHub, conseils gé-né-
  []
 
 
-Underfull \hbox (badness 1845) in paragraph at lines 357--358
+Underfull \hbox (badness 1845) in paragraph at lines 361--362
 \T1/cmr/m/n/12 riques sans root cause
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 360--360
+Underfull \hbox (badness 10000) in paragraph at lines 364--364
 []|\T1/cmr/bx/n/12 Notre ap-
  []
 
 
-Underfull \hbox (badness 4846) in paragraph at lines 360--360
+Underfull \hbox (badness 4846) in paragraph at lines 364--364
 \T1/cmr/m/n/12 4 ar-te-facts, en-ri-chis-se-
  []
 
-ignored error: Infinite glue shrinkage found in box being split [13]
-Overfull \hbox (3.71443pt too wide) in paragraph at lines 374--376
+ignored error: Infinite glue shrinkage found in box being split [19]
+Overfull \hbox (3.71443pt too wide) in paragraph at lines 378--380
 []\T1/cmr/bx/n/12 4 types d'ar-te-facts com-plé-men-taires \T1/cmr/m/n/12 cou-v
 rant l'in-té-gra-lité du spectre de connais-
  []
 
-[14] [15] [16]
-Underfull \hbox (badness 2073) in paragraph at lines 457--457
+[20] [21] [22]
+Underfull \hbox (badness 2073) in paragraph at lines 461--461
 []|\T1/cmr/bx/n/12 Repos prin-ci-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 457--458
+Underfull \hbox (badness 10000) in paragraph at lines 461--462
 []|\T1/cmr/bx/n/12 Sous-dépôts
  []
 
 
-Overfull \hbox (7.83078pt too wide) in paragraph at lines 459--459
+Overfull \hbox (7.83078pt too wide) in paragraph at lines 463--463
 []|\T1/cmr/m/n/12 STM32CubeC0| 
  []
 
 
-Overfull \hbox (7.01291pt too wide) in paragraph at lines 460--460
+Overfull \hbox (7.01291pt too wide) in paragraph at lines 464--464
 []|\T1/cmr/m/n/12 STM32CubeF0| 
  []
 
 
-Overfull \hbox (7.01291pt too wide) in paragraph at lines 461--461
+Overfull \hbox (7.01291pt too wide) in paragraph at lines 465--465
 []|\T1/cmr/m/n/12 STM32CubeF1| 
  []
 
 
-Overfull \hbox (7.01291pt too wide) in paragraph at lines 462--462
+Overfull \hbox (7.01291pt too wide) in paragraph at lines 466--466
 []|\T1/cmr/m/n/12 STM32CubeF2| 
  []
 
 
-Overfull \hbox (7.01291pt too wide) in paragraph at lines 463--463
+Overfull \hbox (7.01291pt too wide) in paragraph at lines 467--467
 []|\T1/cmr/m/n/12 STM32CubeF3| 
  []
 
 
-Overfull \hbox (7.01291pt too wide) in paragraph at lines 464--464
+Overfull \hbox (7.01291pt too wide) in paragraph at lines 468--468
 []|\T1/cmr/m/n/12 STM32CubeF4| 
  []
 
 
-Underfull \hbox (badness 1577) in paragraph at lines 464--465
+Underfull \hbox (badness 1577) in paragraph at lines 468--469
 []|\T1/cmr/m/n/12 16 (HAL, CM-
  []
 
 
-Overfull \hbox (7.01291pt too wide) in paragraph at lines 465--465
+Overfull \hbox (7.01291pt too wide) in paragraph at lines 469--469
 []|\T1/cmr/m/n/12 STM32CubeF7| 
  []
 
 
-Overfull \hbox (8.56393pt too wide) in paragraph at lines 466--466
+Overfull \hbox (8.56393pt too wide) in paragraph at lines 470--470
 []|\T1/cmr/m/n/12 STM32CubeG0| 
  []
 
 
-Overfull \hbox (8.15292pt too wide) in paragraph at lines 467--467
+Overfull \hbox (8.15292pt too wide) in paragraph at lines 471--471
 []|\T1/cmr/m/n/12 STM32CubeH5| 
  []
 
 
-Overfull \hbox (8.15292pt too wide) in paragraph at lines 468--468
+Overfull \hbox (8.15292pt too wide) in paragraph at lines 472--472
 []|\T1/cmr/m/n/12 STM32CubeH7| 
  []
 
 
-Underfull \hbox (badness 1577) in paragraph at lines 468--469
+Underfull \hbox (badness 1577) in paragraph at lines 472--473
 []|\T1/cmr/m/n/12 12 (HAL, CM-
  []
 
 
-Overfull \hbox (23.3242pt too wide) in paragraph at lines 469--469
+Overfull \hbox (23.3242pt too wide) in paragraph at lines 473--473
 []|\T1/cmr/m/n/12 STM32CubeH7RS| 
  []
 
 
-Overfull \hbox (8.15292pt too wide) in paragraph at lines 470--470
+Overfull \hbox (8.15292pt too wide) in paragraph at lines 474--474
 []|\T1/cmr/m/n/12 STM32CubeU5| 
  []
 
 
-Overfull \hbox (12.88231pt too wide) in paragraph at lines 471--471
+Overfull \hbox (12.88231pt too wide) in paragraph at lines 475--475
 []|\T1/cmr/m/n/12 STM32CubeWL| 
  []
 
 
-Overfull \hbox (8.56393pt too wide) in paragraph at lines 473--473
+Overfull \hbox (8.56393pt too wide) in paragraph at lines 477--477
 []|\T1/cmr/m/n/12 STM32CubeG4| 
  []
 
 
-Overfull \hbox (6.68661pt too wide) in paragraph at lines 474--474
+Overfull \hbox (6.68661pt too wide) in paragraph at lines 478--478
 []|\T1/cmr/m/n/12 STM32CubeL0| 
  []
 
 
-Overfull \hbox (6.68661pt too wide) in paragraph at lines 475--475
+Overfull \hbox (6.68661pt too wide) in paragraph at lines 479--479
 []|\T1/cmr/m/n/12 STM32CubeL1| 
  []
 
 
-Overfull \hbox (6.68661pt too wide) in paragraph at lines 476--476
+Overfull \hbox (6.68661pt too wide) in paragraph at lines 480--480
 []|\T1/cmr/m/n/12 STM32CubeL4| 
  []
 
 
-Overfull \hbox (6.68661pt too wide) in paragraph at lines 477--477
+Overfull \hbox (6.68661pt too wide) in paragraph at lines 481--481
 []|\T1/cmr/m/n/12 STM32CubeL5| 
  []
 
 
-Overfull \hbox (8.15292pt too wide) in paragraph at lines 478--478
+Overfull \hbox (8.15292pt too wide) in paragraph at lines 482--482
 []|\T1/cmr/m/n/12 STM32CubeN6| 
  []
 
 
-Overfull \hbox (8.15292pt too wide) in paragraph at lines 479--479
+Overfull \hbox (8.15292pt too wide) in paragraph at lines 483--483
 []|\T1/cmr/m/n/12 STM32CubeU0| 
  []
 
 
-Overfull \hbox (8.15292pt too wide) in paragraph at lines 480--480
+Overfull \hbox (8.15292pt too wide) in paragraph at lines 484--484
 []|\T1/cmr/m/n/12 STM32CubeU3| 
  []
 
 
-Overfull \hbox (13.86124pt too wide) in paragraph at lines 481--481
+Overfull \hbox (13.86124pt too wide) in paragraph at lines 485--485
 []|\T1/cmr/m/n/12 STM32CubeWB| 
  []
 
 
-Overfull \hbox (19.7348pt too wide) in paragraph at lines 482--482
+Overfull \hbox (19.7348pt too wide) in paragraph at lines 486--486
 []|\T1/cmr/m/n/12 STM32CubeWB0| 
  []
 
 
-Overfull \hbox (22.66742pt too wide) in paragraph at lines 483--483
+Overfull \hbox (22.66742pt too wide) in paragraph at lines 487--487
 []|\T1/cmr/m/n/12 STM32CubeWBA| 
  []
 
 
-Overfull \hbox (18.75587pt too wide) in paragraph at lines 484--484
+Overfull \hbox (18.75587pt too wide) in paragraph at lines 488--488
 []|\T1/cmr/m/n/12 STM32CubeWL3| 
  []
 
-ignored error: Infinite glue shrinkage found in box being split [17] [18]
+ignored error: Infinite glue shrinkage found in box being split [23] [24]
 Chapitre 3.
 
-Underfull \hbox (badness 10000) in paragraph at lines 504--504
+Underfull \hbox (badness 10000) in paragraph at lines 508--508
 []|\T1/cmr/bx/n/12 Ingénieur
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 504--504
+Underfull \hbox (badness 10000) in paragraph at lines 508--508
 \T1/cmr/bx/n/12 STM32
  []
 
 
-Underfull \hbox (badness 7047) in paragraph at lines 504--504
+Underfull \hbox (badness 7047) in paragraph at lines 508--508
 []|\T1/cmr/m/n/12 Utilisateur fi-nal du
  []
 
 
-Underfull \hbox (badness 1845) in paragraph at lines 505--505
+Underfull \hbox (badness 1845) in paragraph at lines 509--509
 []|\T1/cmr/bx/n/12 Équipe Sup-port
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 506--506
+Underfull \hbox (badness 10000) in paragraph at lines 510--510
 []|\T1/cmr/bx/n/12 Administrateur
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 509--509
+Underfull \hbox (badness 10000) in paragraph at lines 513--513
 []|\T1/cmr/m/n/12 Service d'en-ri-chis-se-
  []
 
 
-Underfull \hbox (badness 4242) in paragraph at lines 509--510
+Underfull \hbox (badness 4242) in paragraph at lines 513--514
 []|\T1/cmr/m/n/12 Décrit au-to-ma-ti-que-ment les
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 520--520
+Underfull \hbox (badness 10000) in paragraph at lines 524--524
 []|\T1/cmr/m/n/12 Ingérer au-to-ma-ti-que-ment
  []
 
 
-Underfull \hbox (badness 2846) in paragraph at lines 521--521
+Underfull \hbox (badness 2846) in paragraph at lines 525--525
 []|\T1/cmr/m/n/12 Nettoyer le contenu tex-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 522--522
+Underfull \hbox (badness 10000) in paragraph at lines 526--526
 \T1/cmr/m/n/12 mé-ta-don-nées struc-tu-rées
  []
 
 
-Underfull \hbox (badness 1552) in paragraph at lines 522--522
+Underfull \hbox (badness 1552) in paragraph at lines 526--526
 \T1/cmr/m/n/12 (layer, com-ponent, board,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 525--525
+Underfull \hbox (badness 10000) in paragraph at lines 529--529
 []|\T1/cmr/m/n/12 Uploader les ar-te-facts
  []
 
 
-Underfull \hbox (badness 1655) in paragraph at lines 525--526
+Underfull \hbox (badness 1655) in paragraph at lines 529--530
 []|\T1/cmr/m/n/12 Datasources créées et in-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 526--526
+Underfull \hbox (badness 10000) in paragraph at lines 530--530
 []|\T1/cmr/m/n/12 Décrire au-to-ma-ti-que-ment
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 527--527
+Underfull \hbox (badness 10000) in paragraph at lines 531--531
 []|\T1/cmr/m/n/12 Décrire au-to-ma-ti-que-ment
  []
 
 
-Underfull \hbox (badness 2772) in paragraph at lines 527--527
+Underfull \hbox (badness 2772) in paragraph at lines 531--531
 \T1/cmr/m/n/12 les fi-gures des PDFs de
  []
 
 
-Underfull \hbox (badness 4181) in paragraph at lines 528--528
+Underfull \hbox (badness 4181) in paragraph at lines 532--532
 \T1/cmr/m/n/12 un JSON Schema avant
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 529--529
+Underfull \hbox (badness 10000) in paragraph at lines 533--533
 []|\T1/cmr/m/n/12 Fournir un chat-bot IA
  []
 
 
-Underfull \hbox (badness 1062) in paragraph at lines 529--529
+Underfull \hbox (badness 1062) in paragraph at lines 533--533
 \T1/cmr/m/n/12 qui ré-pond aux ques-tions
  []
 
-[19
+[25
 
 ]
-Overfull \hbox (2.21198pt too wide) in paragraph at lines 540--540
+Overfull \hbox (2.21198pt too wide) in paragraph at lines 544--544
 []|\T1/cmr/m/n/12 BNF1| 
  []
 
 
-Underfull \hbox (badness 5189) in paragraph at lines 540--540
+Underfull \hbox (badness 5189) in paragraph at lines 544--544
 \T1/cmr/m/n/12 re-jouable par étape
  []
 
 
-Overfull \hbox (2.21198pt too wide) in paragraph at lines 541--541
+Overfull \hbox (2.21198pt too wide) in paragraph at lines 545--545
 []|\T1/cmr/m/n/12 BNF2| 
  []
 
 
-Overfull \hbox (2.21198pt too wide) in paragraph at lines 542--542
+Overfull \hbox (2.21198pt too wide) in paragraph at lines 546--546
 []|\T1/cmr/m/n/12 BNF3| 
  []
 
 
-Overfull \hbox (2.21198pt too wide) in paragraph at lines 543--543
+Overfull \hbox (2.21198pt too wide) in paragraph at lines 547--547
 []|\T1/cmr/m/n/12 BNF4| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 543--543
+Underfull \hbox (badness 10000) in paragraph at lines 547--547
 []|\T1/cmr/m/n/12 Le code doit être
  []
 
 
-Underfull \hbox (badness 1708) in paragraph at lines 543--543
+Underfull \hbox (badness 1708) in paragraph at lines 547--547
 \T1/cmr/m/n/12 sible à de nou-velles
  []
 
 
-Underfull \hbox (badness 4886) in paragraph at lines 543--544
+Underfull \hbox (badness 4886) in paragraph at lines 547--548
 []|\T1/cmr/m/n/12 Ajout d'une sé-rie en 3
  []
 
 
-Overfull \hbox (2.21198pt too wide) in paragraph at lines 544--544
+Overfull \hbox (2.21198pt too wide) in paragraph at lines 548--548
 []|\T1/cmr/m/n/12 BNF5| 
  []
 
 
-Underfull \hbox (badness 2582) in paragraph at lines 544--544
+Underfull \hbox (badness 2582) in paragraph at lines 548--548
 []|\T1/cmr/m/n/12 Les don-nées sources
  []
 
 
-Underfull \hbox (badness 4156) in paragraph at lines 544--544
+Underfull \hbox (badness 4156) in paragraph at lines 548--548
 \T1/cmr/m/n/12 pro-viennent des dé-
  []
 
 
-Overfull \hbox (2.21198pt too wide) in paragraph at lines 545--545
+Overfull \hbox (2.21198pt too wide) in paragraph at lines 549--549
 []|\T1/cmr/m/n/12 BNF6| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 545--545
+Underfull \hbox (badness 10000) in paragraph at lines 549--549
 \T1/cmr/m/n/12 por-ter 25+ sé-ries
  []
 
 
-Overfull \hbox (2.21198pt too wide) in paragraph at lines 546--546
+Overfull \hbox (2.21198pt too wide) in paragraph at lines 550--550
 []|\T1/cmr/m/n/12 BNF7| 
  []
 
 
-Overfull \hbox (2.21198pt too wide) in paragraph at lines 547--547
+Overfull \hbox (2.21198pt too wide) in paragraph at lines 551--551
 []|\T1/cmr/m/n/12 BNF8| 
  []
 
 
-Underfull \hbox (badness 2173) in paragraph at lines 547--547
+Underfull \hbox (badness 2173) in paragraph at lines 551--551
 []|\T1/cmr/m/n/12 Le chat-bot doit ré-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 547--547
+Underfull \hbox (badness 10000) in paragraph at lines 551--551
 []|\T1/cmr/m/n/12 Temps de ré-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 547--548
+Underfull \hbox (badness 10000) in paragraph at lines 551--552
 []|\T1/cmr/m/n/12 Mesure via API ST
  []
 
@@ -1762,53 +1780,53 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[20]
-Underfull \hbox (badness 10000) in paragraph at lines 561--561
+[26]
+Underfull \hbox (badness 10000) in paragraph at lines 565--565
 []|\T1/cmr/m/n/12 Plateforme ST
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 561--561
+Underfull \hbox (badness 10000) in paragraph at lines 565--565
 \T1/cmr/m/n/12 ChatGPT (Azure
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 561--562
+Underfull \hbox (badness 10000) in paragraph at lines 565--566
 []|\T1/cmr/m/n/12 Export JSON avec
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 561--562
+Underfull \hbox (badness 10000) in paragraph at lines 565--566
 \T1/cmr/m/n/12 pro-ces-sor pa-rams
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 562--562
+Underfull \hbox (badness 10000) in paragraph at lines 566--566
 []|\T1/cmr/m/n/12 Pas de don-nées
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 562--563
+Underfull \hbox (badness 10000) in paragraph at lines 566--567
 []|\T1/cmr/m/n/12 Heuristiques re-gex
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 563--563
+Underfull \hbox (badness 10000) in paragraph at lines 567--567
 []|\T1/cmr/m/n/12 Headers CM-SIS $\OML/cmm/m/it/12 >$
  []
 
 
-Underfull \hbox (badness 2762) in paragraph at lines 563--564
+Underfull \hbox (badness 2762) in paragraph at lines 567--568
 []|\T1/cmr/m/n/12 Filtre V3 in-tel-li-gent
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 565--565
+Underfull \hbox (badness 10000) in paragraph at lines 569--569
 []|\T1/cmr/m/n/12 Risque de di-lu-tion du
  []
 
 
-Underfull \hbox (badness 2922) in paragraph at lines 565--566
+Underfull \hbox (badness 2922) in paragraph at lines 569--570
 []|\T1/cmr/m/n/12 Datasources sé-pa-rées
  []
 
@@ -1820,7 +1838,7 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[21]
+[27]
 ignored error: Infinite glue shrinkage found in box being split
 
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
@@ -1829,7 +1847,7 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[22]
+[28]
 
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
 (fancyhdr)                Make it at least 14.61858pt, for example:
@@ -1837,254 +1855,221 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[23]
+[29]
 Chapitre 4.
 
-Underfull \hbox (badness 4686) in paragraph at lines 646--646
+Underfull \hbox (badness 4686) in paragraph at lines 650--650
 []|\T1/cmr/m/n/12 Cleaning + En-rich-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 646--647
+Underfull \hbox (badness 10000) in paragraph at lines 650--651
 []|\T1/cmr/m/n/12 Normalisation, clas-si-fi-ca-tion
  []
 
-[24
+[30
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 672--672
+Underfull \hbox (badness 10000) in paragraph at lines 676--676
 []|\T1/cmr/m/n/12 Vocabulaire tech-nique
  []
 
 
-Underfull \hbox (badness 1184) in paragraph at lines 675--676
+Underfull \hbox (badness 1184) in paragraph at lines 679--680
 \T1/cmr/m/n/12 connexion contiennent des in-for-ma-tions cri-
  []
 
-
-LaTeX Warning: Citation `lewis2020rag' on page 25 undefined on input line 682.
-
-[25] [26]
+[31] [32]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 753.
+(hyperref)                removing `math shift' on input line 757.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\to' on input line 753.
+(hyperref)                removing `\to' on input line 757.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 753.
+(hyperref)                removing `math shift' on input line 757.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 759--759
+Underfull \hbox (badness 10000) in paragraph at lines 763--763
 []|\T1/cmr/bx/n/12 Étape Ca-no-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 761--762
+Underfull \hbox (badness 10000) in paragraph at lines 765--766
 []|\T1/cmtt/m/n/12 fetch_issues.py\T1/cmr/m/n/12 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 761--762
+Underfull \hbox (badness 10000) in paragraph at lines 765--766
 \T1/cmtt/m/n/12 fetch_files.py\T1/cmr/m/n/12 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 762--763
+Underfull \hbox (badness 10000) in paragraph at lines 766--767
 []|\T1/cmtt/m/n/12 clean_issues.py\T1/cmr/m/n/12 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 762--763
+Underfull \hbox (badness 10000) in paragraph at lines 766--767
 \T1/cmtt/m/n/12 clean_files.py \T1/cmr/m/n/12 (V1),
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 762--763
+Underfull \hbox (badness 10000) in paragraph at lines 766--767
 \T1/cmtt/m/n/12 clean_files_v3.py \T1/cmr/m/n/12 (V3 par
  []
 
 
-Underfull \hbox (badness 6268) in paragraph at lines 763--763
+Underfull \hbox (badness 6268) in paragraph at lines 767--767
 []|\T1/cmr/m/n/12 Stage 3 (En-rich-
  []
 
 
-Underfull \hbox (badness 2941) in paragraph at lines 763--764
+Underfull \hbox (badness 2941) in paragraph at lines 767--768
 \T1/cmr/m/n/12 ris-tiques NLP (layer, se-ve-rity,
  []
 
 
-Overfull \hbox (14.48825pt too wide) in paragraph at lines 764--765
+Overfull \hbox (14.48825pt too wide) in paragraph at lines 768--769
 []|\T1/cmtt/m/n/12 compute_issue_similarity_v2.py
  []
 
 
-Underfull \hbox (badness 4819) in paragraph at lines 766--766
+Underfull \hbox (badness 10000) in paragraph at lines 769--770
+[]|\T1/cmtt/m/n/12 docs_to_chunks_*_v2.py \T1/cmr/m/n/12 ---
+ []
+
+
+Underfull \hbox (badness 5908) in paragraph at lines 769--770
+\T1/cmr/m/n/12 va-li-da-tion lo-cale ; en pro-duc-
+ []
+
+
+Underfull \hbox (badness 3199) in paragraph at lines 769--770
+\T1/cmr/m/n/12 tion, dé-cou-page \T1/cmtt/m/n/12 PARENT_CHILD
+ []
+
+
+Underfull \hbox (badness 4819) in paragraph at lines 770--770
 []|\T1/cmr/m/n/12 Stage 6 (Eva-lua-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 766--767
+Underfull \hbox (badness 10000) in paragraph at lines 770--771
 []|\T1/cmtt/m/n/12 validate_schemas.py\T1/cmr/m/n/12 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 767--768
+Underfull \hbox (badness 10000) in paragraph at lines 771--772
 []|\T1/cmtt/m/n/12 export_st_ready_*.py \T1/cmr/m/n/12 --- 4
  []
 
-ignored error: Infinite glue shrinkage found in box being split [27] [28]
-[29]
+ignored error: Infinite glue shrinkage found in box being split [33] [34]
+[35]
 Chapitre 5.
-
-Underfull \hbox (badness 10000) in paragraph at lines 854--854
-[]|\T1/cmr/m/n/12 Architecture mo-du-
- []
-
-ignored error: Infinite glue shrinkage found in box being split [30
+[36
 
 ]
-Overfull \hbox (15.85031pt too wide) in paragraph at lines 886--887
- [][] 
+Underfull \hbox (badness 2512) in paragraph at lines 869--869
+[]|\T1/cmr/bx/n/12 Interprétation dans le
  []
 
 
-Overfull \hbox (12.36787pt too wide) in paragraph at lines 903--903
- [][]\T1/cmtt/m/n/8 raw_issues/files_*.json 
+Underfull \hbox (badness 4518) in paragraph at lines 871--871
+[]|\T1/cmr/bx/n/12 Business Un-
  []
 
 
-Overfull \hbox (29.36372pt too wide) in paragraph at lines 914--914
- [][]\T1/cmtt/m/n/8 pdf_image_descriptions.json 
+Underfull \hbox (badness 2134) in paragraph at lines 871--871
+[]|\T1/cmr/m/n/12 Cadrage du pro-blème de
  []
 
 
-Overfull \hbox (12.36787pt too wide) in paragraph at lines 914--914
- []\T1/cmtt/m/n/8 issues_with_images.json 
+Underfull \hbox (badness 1394) in paragraph at lines 871--872
+\T1/cmr/m/n/12 duc-tion du temps de re-
  []
 
 
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[31
-pdfTeX warning (ext4): destination with the same identifier (name{figure.5.1}) 
-has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.932 
-      ]
-Overfull \hbox (55.379pt too wide) in paragraph at lines 955--956
- [][] 
+Underfull \hbox (badness 1158) in paragraph at lines 871--872
+\T1/cmr/m/n/12 li-da-tion des connais-sances
  []
 
 
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[32
-pdfTeX warning (ext4): destination with the same identifier (name{figure.5.2}) 
-has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.990 
-      
-pdfTeX warning (ext4): destination with the same identifier (name{figure.5.3}) 
-has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.990 
-      ]
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[33
-pdfTeX warning (ext4): destination with the same identifier (name{figure.5.4}) 
-has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.992 \chapter
-              {ImplÃ©mentation}]
-Chapitre 6.
-
-Overfull \hbox (34.632pt too wide) in paragraph at lines 1005--1006
-[]\T1/cmtt/m/n/12 fetch_commits.py \T1/cmr/m/n/12 : ré-cu-père l'his-to-rique d
-es com-mits pour le lin-king Issue$\OMS/cmsy/m/n/12 !$\T1/cmr/m/n/12 PR$\OMS/cm
-sy/m/n/12 !$\T1/cmr/m/n/12 Commit 
- []
-
-Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
-nput line 1015.
-[34
-
-]
-Overfull \hbox (10.88838pt too wide) in paragraph at lines 1048--1048
- [][]\T1/cmtt/m/n/8 issue_pr_commit_links.json 
+Underfull \hbox (badness 1292) in paragraph at lines 872--872
+[]|\T1/cmr/bx/n/12 Data Un-ders-
  []
 
 
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[35
-pdfTeX warning (ext4): destination with the same identifier (name{figure.6.1}) 
-has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.1080 ...es\_stm32cubeh7.json (issue nettoyÃ©e)}]
-                                                  ]
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[36]
-Underfull \hbox (badness 10000) in paragraph at lines 1135--1136
-[]|\T1/cmr/m/n/12 Suppression ba-lises HTML,
+Underfull \hbox (badness 10000) in paragraph at lines 872--873
+\T1/cmr/m/n/12 mits, fi-chiers, Re-lease
  []
 
 
-Underfull \hbox (badness 7326) in paragraph at lines 1136--1137
-[]|\T1/cmr/m/n/12 Suppression badges CI, liens
+Underfull \hbox (badness 10000) in paragraph at lines 872--873
+\T1/cmr/m/n/12 Notes, cap-tures, fi-gures
  []
 
 
-Overfull \hbox (17.71172pt too wide) in paragraph at lines 1137--1137
-[]|\T1/cmtt/m/n/12 clean_source_code()| 
+Underfull \hbox (badness 2197) in paragraph at lines 872--873
+\T1/cmr/m/n/12 PDF ; vo-lume, bruit, hé-
  []
 
 
-Underfull \hbox (badness 1552) in paragraph at lines 1137--1138
-\T1/cmr/m/n/12 right), conser-va-tion code tech-
+Underfull \hbox (badness 10000) in paragraph at lines 872--873
+\T1/cmr/m/n/12 té-ro-gé-néité, mé-ta-don-nées
  []
 
 
-Overfull \hbox (73.27315pt too wide) in paragraph at lines 1138--1138
-[]|\T1/cmtt/m/n/12 filter_cmsis_device_header()| 
+Underfull \hbox (badness 2426) in paragraph at lines 873--874
+[]|\T1/cmr/m/n/12 Stages 1--3, 5--7 : in-ges-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1138--1139
-[]|\T1/cmr/m/n/12 Filtrage in-tel-li-gent (voir ci-
+Underfull \hbox (badness 4927) in paragraph at lines 874--874
+[]|\T1/cmr/bx/n/12 Modeling \T1/cmr/m/it/12 (ré-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 874--874
+[]|\T1/cmr/m/n/12 Conception al-go-rith-mique
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 874--874
+\T1/cmr/m/n/12 et struc-tu-ra-tion orien-tée
+ []
+
+
+Underfull \hbox (badness 6691) in paragraph at lines 874--875
+\T1/cmr/m/n/12 heu-ris-tiques mé-ta-don-nées,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 874--875
+\T1/cmr/m/n/12 stra-té-gie de chun-king
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 874--875
+\T1/cmtt/m/n/12 PARENT_CHILD\T1/cmr/m/n/12 , for-mats
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 874--875
+\T1/cmr/m/n/12 d'ar-te-facts KB-ready,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 876--877
+\T1/cmr/m/n/12 KB #793, per-sona ST
+ []
+
+
+Underfull \hbox (badness 6893) in paragraph at lines 876--877
+\T1/cmr/m/n/12 ChatGPT, re-cherche hy-
  []
 
 ignored error: Infinite glue shrinkage found in box being split
@@ -2103,13 +2088,37 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[38
-pdfTeX warning (ext4): destination with the same identifier (name{figure.6.2}) 
-has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.1178 
-       ]
+[38]
+Underfull \hbox (badness 5563) in paragraph at lines 896--896
+[]|\T1/cmr/bx/n/12 Valeur im-
+ []
+
+
+Overfull \hbox (2.95003pt too wide) in paragraph at lines 898--898
+[]|\T1/cmtt/m/n/12 PARENT_CHILD| 
+ []
+
+
+Overfull \hbox (3.48534pt too wide) in paragraph at lines 903--903
+[]|\T1/cmtt/m/n/12 embeddingsBatchSize| 
+ []
+
+
+Underfull \hbox (badness 3919) in paragraph at lines 903--904
+[]|\T1/cmr/m/n/12 Nombre d'em-bed-dings cal-cu-lés
+ []
+
+
+Underfull \hbox (badness 1888) in paragraph at lines 918--918
+[]|\T1/cmr/m/n/12 Cible de re-cherche (mat-
+ []
+
+
+Underfull \hbox (badness 2521) in paragraph at lines 920--920
+[]|\T1/cmr/m/n/12 Indexé (em-bed-
+ []
+
+ignored error: Infinite glue shrinkage found in box being split
 
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
 (fancyhdr)                Make it at least 14.61858pt, for example:
@@ -2118,13 +2127,393 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
 [39]
-Overfull \hbox (12.60246pt too wide) in paragraph at lines 1230--1231
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[40]
+Overfull \hbox (11.46324pt too wide) in paragraph at lines 990--991
+\T1/cmr/m/n/12 phase \T1/cmr/m/it/12 Mo-de-ling \T1/cmr/m/n/12 (com-pa-ti-bi-li
+té sé-man-tique). \T1/cmr/bx/n/12 Lien éva-lua-tion \T1/cmr/m/n/12 : la den-sit
+é in-for-ma-tion/chunk
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[41
+pdfTeX warning (ext4): destination with the same identifier (name{figure.5.1}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.991 
+      ]
+Underfull \hbox (badness 10000) in paragraph at lines 1020--1020
+[]|\T1/cmr/bx/n/12 Paramètre
+ []
+
+
+Underfull \hbox (badness 3271) in paragraph at lines 1020--1020
+[]|\T1/cmr/bx/n/12 Décision pi-pe-
+ []
+
+
+Underfull \hbox (badness 2343) in paragraph at lines 1020--1021
+[]|\T1/cmr/bx/n/12 Valeur ajou-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1022--1022
+[]|\T1/cmtt/m/n/12 PARENT_CHILD
+ []
+
+
+Underfull \hbox (badness 7649) in paragraph at lines 1022--1022
+\T1/cmr/m/n/12 contexte sur pa-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1022--1022
+[]|\T1/cmr/m/n/12 Unités auto-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1022--1022
+\T1/cmr/m/n/12 suffisantes,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1022--1022
+\T1/cmr/m/n/12 termes dis-cri-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1022--1023
+[]|\T1/cmr/m/n/12 Compatibilité
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1022--1023
+\T1/cmr/m/it/12 small-to-big\T1/cmr/m/n/12 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1023--1023
+[]|\T1/cmr/m/n/12 Embeddings sen-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1023--1023
+[]|\T1/cmr/m/n/12 Nettoyage V3,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1023--1023
+\T1/cmr/m/n/12 den-sité sé-man-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1023--1023
+\T1/cmr/m/n/12 tique, Al-fred
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1023--1024
+[]|\T1/cmr/m/n/12 Contenu
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1023--1024
+\T1/cmr/m/n/12 embedding-
+ []
+
+
+Overfull \hbox (12.93459pt too wide) in paragraph at lines 1024--1024
+[]|\T1/cmtt/m/n/12 jobBatchSize=60| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1024--1024
+[]|\T1/cmr/m/n/12 Documents bor-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1024--1024
+\T1/cmr/m/n/12 nés, comptes
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1024--1025
+[]|\T1/cmr/m/n/12 Indexation
+ []
+
+
+Overfull \hbox (56.14903pt too wide) in paragraph at lines 1025--1025
+[]|\T1/cmtt/m/n/12 embeddingsBatchSize=20| 
+ []
+
+
+Underfull \hbox (badness 4181) in paragraph at lines 1025--1025
+[]|\T1/cmr/m/n/12 Artefacts dé-cou-
+ []
+
+ignored error: Infinite glue shrinkage found in box being split
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[42]
+Underfull \hbox (badness 10000) in paragraph at lines 1038--1038
+[]|\T1/cmr/bx/n/12 Preprocessing RAG
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1040--1040
+[]|\T1/cmr/m/n/12 Générique (strip ba-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1041--1042
+[]|\T1/cmr/m/n/12 Heuristiques domain-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1041--1042
+\T1/cmr/m/n/12 specific (layer, com-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1044--1045
+[]|\T1/cmr/m/n/12 Chaîne
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1044--1045
+\T1/cmr/m/n/12 Issue$\OMS/cmsy/m/n/12 !$\T1/cmr/m/n/12 PR$\OMS/cmsy/m/n/12 !$\T
+1/cmr/m/n/12 Commit
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1045--1045
+[]|\T1/cmr/m/n/12 Compatibilité chun-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1045--1046
+[]|\T1/cmr/m/n/12 Conçue pour
+ []
+
+ignored error: Infinite glue shrinkage found in box being split
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[43]
+Underfull \hbox (badness 10000) in paragraph at lines 1071--1071
+[]|\T1/cmr/m/n/12 Architecture mo-du-
+ []
+
+
+Overfull \hbox (15.85031pt too wide) in paragraph at lines 1103--1104
+ [][] 
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[44]
+Overfull \hbox (12.36787pt too wide) in paragraph at lines 1120--1120
+ [][]\T1/cmtt/m/n/8 raw_issues/files_*.json 
+ []
+
+
+Overfull \hbox (29.36372pt too wide) in paragraph at lines 1131--1131
+ [][]\T1/cmtt/m/n/8 pdf_image_descriptions.json 
+ []
+
+
+Overfull \hbox (12.36787pt too wide) in paragraph at lines 1131--1131
+ []\T1/cmtt/m/n/8 issues_with_images.json 
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[45
+pdfTeX warning (ext4): destination with the same identifier (name{figure.5.2}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.1151 
+       
+pdfTeX warning (ext4): destination with the same identifier (name{figure.5.3}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.1151 
+       ]
+Overfull \hbox (55.379pt too wide) in paragraph at lines 1172--1173
+ [][] 
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[46
+pdfTeX warning (ext4): destination with the same identifier (name{figure.5.4}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.1209 \chapter
+               {ImplÃ©mentation}
+pdfTeX warning (ext4): destination with the same identifier (name{figure.5.5}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.1209 \chapter
+               {ImplÃ©mentation}]
+Chapitre 6.
+
+Overfull \hbox (34.632pt too wide) in paragraph at lines 1224--1225
+[]\T1/cmtt/m/n/12 fetch_commits.py \T1/cmr/m/n/12 : ré-cu-père l'his-to-rique d
+es com-mits pour le lin-king Issue$\OMS/cmsy/m/n/12 !$\T1/cmr/m/n/12 PR$\OMS/cm
+sy/m/n/12 !$\T1/cmr/m/n/12 Commit 
+ []
+
+[47
+
+]
+Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
+nput line 1234.
+
+Overfull \hbox (10.88838pt too wide) in paragraph at lines 1267--1267
+ [][]\T1/cmtt/m/n/8 issue_pr_commit_links.json 
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[48
+pdfTeX warning (ext4): destination with the same identifier (name{figure.6.1}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.1296   \item C
+                onservation des mÃ©tadonnÃ©es brutes (labels, dates, Ã©tat)]
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[49]
+Underfull \hbox (badness 10000) in paragraph at lines 1358--1359
+[]|\T1/cmr/m/n/12 Suppression ba-lises HTML,
+ []
+
+
+Underfull \hbox (badness 7326) in paragraph at lines 1359--1360
+[]|\T1/cmr/m/n/12 Suppression badges CI, liens
+ []
+
+
+Overfull \hbox (17.71172pt too wide) in paragraph at lines 1360--1360
+[]|\T1/cmtt/m/n/12 clean_source_code()| 
+ []
+
+
+Underfull \hbox (badness 1552) in paragraph at lines 1360--1361
+\T1/cmr/m/n/12 right), conser-va-tion code tech-
+ []
+
+
+Overfull \hbox (73.27315pt too wide) in paragraph at lines 1361--1361
+[]|\T1/cmtt/m/n/12 filter_cmsis_device_header()| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1361--1362
+[]|\T1/cmr/m/n/12 Filtrage in-tel-li-gent (voir ci-
+ []
+
+ignored error: Infinite glue shrinkage found in box being split
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[50]
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[51]
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[52
+pdfTeX warning (ext4): destination with the same identifier (name{figure.6.2}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.1407   \item \textbf
+                      {Ã‰numÃ©ration IRQ} : liste des vecteurs d'interruptio...
+]
+ignored error: Infinite glue shrinkage found in box being split
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[53]
+Overfull \hbox (12.60246pt too wide) in paragraph at lines 1453--1454
 []\T1/cmr/m/n/12 Fichiers d'en-trée : \T1/cmtt/m/n/12 clean_files_<repo>.json \
 T1/cmr/m/n/12 (V1) ou \T1/cmtt/m/n/12 clean_files_<repo>_v3.json
  []
 
 
-Overfull \hbox (1.4305pt too wide) in paragraph at lines 1239--1241
+Overfull \hbox (1.4305pt too wide) in paragraph at lines 1464--1466
 []\T1/cmr/m/n/12 Le mo-dule \T1/cmtt/m/n/12 stm32cube_preprocessing_heuristics.
 py \T1/cmr/m/n/12 ap-plique des règles ba-sées sur : 
  []
@@ -2136,21 +2525,13 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[40]
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[41]
-Overfull \hbox (0.71904pt too wide) in paragraph at lines 1303--1303
+[54]
+Overfull \hbox (0.71904pt too wide) in paragraph at lines 1530--1530
  [][]\T1/cmr/bx/n/8 clean_issues_*.json 
  []
 
 
-Overfull \hbox (5.9772pt too wide) in paragraph at lines 1311--1311
+Overfull \hbox (5.9772pt too wide) in paragraph at lines 1538--1538
  [][]\T1/cmr/bx/n/8 docs_*_v2_sim.json 
  []
 
@@ -2161,15 +2542,22 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[42
+[55]
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[56
 pdfTeX warning (ext4): destination with the same identifier (name{figure.6.3}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.1347   \item I
-                dentification de la chaÃ®ne Issue $\to$ PR $\to$ Commits via...
-]
-Overfull \hbox (34.12286pt too wide) in paragraph at lines 1347--1348
+l.1574 
+       ]
+Overfull \hbox (34.12286pt too wide) in paragraph at lines 1578--1579
 []\T1/cmr/m/n/12 Identification de la chaîne Is-sue $\OMS/cmsy/m/n/12 !$ \T1/cm
 r/m/n/12 PR $\OMS/cmsy/m/n/12 !$ \T1/cmr/m/n/12 Com-mits via \T1/cmtt/m/n/12 fe
 tch_issue_pr_commit_links.py 
@@ -2182,7 +2570,7 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[43]
+[57]
 
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
 (fancyhdr)                Make it at least 14.61858pt, for example:
@@ -2190,44 +2578,66 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[44]
-Overfull \hbox (11.6277pt too wide) in paragraph at lines 1475--1476
+[58]
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[59
+pdfTeX warning (ext4): destination with the same identifier (name{figure.6.4}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.1700   \item A
+                lfred Vision tÃ©lÃ©charge chaque image et produit une descri...
+
+pdfTeX warning (ext4): destination with the same identifier (name{figure.6.5}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.1700   \item A
+                lfred Vision tÃ©lÃ©charge chaque image et produit une descri...
+]
+Overfull \hbox (11.6277pt too wide) in paragraph at lines 1706--1707
 []\T1/cmr/bx/n/12 Fix ap-pli-qué \T1/cmr/m/n/12 : La fonc-tion \T1/cmtt/m/n/12 
 first_sentence() \T1/cmr/m/n/12 sup-prime les mar-kers \T1/cmtt/m/n/12 [IMAGE A
 TTACHED]
  []
 
 
+Overfull \hbox (89.82762pt too wide) in paragraph at lines 1755--1756
+ [][] 
+ []
+
+
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
 (fancyhdr)                Make it at least 14.61858pt, for example:
 (fancyhdr)                \setlength{\headheight}{14.61858pt}.
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[45
-pdfTeX warning (ext4): destination with the same identifier (name{figure.6.4}) 
+[60
+pdfTeX warning (ext4): destination with the same identifier (name{figure.6.6}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.1476 
+l.1761 
        
-pdfTeX warning (ext4): destination with the same identifier (name{figure.6.5}) 
+pdfTeX warning (ext4): destination with the same identifier (name{figure.6.7}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.1476 
+l.1761 
        ]
-Overfull \hbox (89.82762pt too wide) in paragraph at lines 1524--1525
- [][] 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1543--1544
+Underfull \hbox (badness 10000) in paragraph at lines 1774--1775
 []|\T1/cmr/m/n/12 ST-GitHub-Analyzer-Unstructured (Hy-brid
  []
 
 
-Underfull \hbox (badness 2662) in paragraph at lines 1544--1545
+Underfull \hbox (badness 2662) in paragraph at lines 1775--1776
 []|\T1/cmr/m/n/12 NovaX (STM32 Bug-zilla + ST-Com-mu-nity
  []
 
@@ -2238,19 +2648,8 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[46
-pdfTeX warning (ext4): destination with the same identifier (name{figure.6.6}) 
-has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.1549 \end{longtable}
-                      
-pdfTeX warning (ext4): destination with the same identifier (name{figure.6.7}) 
-has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.1549 \end{longtable}
-                      ]
+[61]
+ignored error: Infinite glue shrinkage found in box being split
 
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
 (fancyhdr)                Make it at least 14.61858pt, for example:
@@ -2258,7 +2657,7 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[47] (chapter_configuration.tex
+[62] (chapter_configuration.tex
 
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
 (fancyhdr)                Make it at least 14.61858pt, for example:
@@ -2266,7 +2665,7 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[48]
+[63]
 Chapitre 7.
 
 Underfull \hbox (badness 10000) in paragraph at lines 26--27
@@ -2278,7 +2677,7 @@ Underfull \hbox (badness 3439) in paragraph at lines 29--30
 []|\T1/cmr/m/n/12 Semantic seul, Full-
  []
 
-ignored error: Infinite glue shrinkage found in box being split [49
+ignored error: Infinite glue shrinkage found in box being split [64
 
 ]
 Underfull \hbox (badness 2351) in paragraph at lines 48--48
@@ -2290,7 +2689,7 @@ Underfull \hbox (badness 2310) in paragraph at lines 49--50
 \T1/cmr/m/n/12 reur Ether-net'' vs ``LwIP
  []
 
-[50]
+[65]
 Underfull \hbox (badness 10000) in paragraph at lines 67--68
 []|\T1/cmr/m/n/12 Équilibre pré-ci-
  []
@@ -2372,7 +2771,7 @@ Overfull \hbox (21.95464pt too wide) in alignment at lines 63--75
 
 Package pgfplots info on input line 93: Using 'lua backend=false' for axis: x c
 oord trafo unsupported.
-[51] [52
+[66] [67
 pdfTeX warning (ext4): destination with the same identifier (name{figure.7.1}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
@@ -2439,8 +2838,8 @@ Overfull \hbox (33.54147pt too wide) in paragraph at lines 132--133
 or descriptions,
  []
 
-[53]
-ignored error: Infinite glue shrinkage found in box being split [54]
+[68]
+ignored error: Infinite glue shrinkage found in box being split [69]
 Overfull \hbox (22.03058pt too wide) in paragraph at lines 183--184
 []\T1/cmr/bx/n/12 Identité \T1/cmr/m/n/12 : ``You are ST Gi-tHub Ana-ly-zer, a 
 tech-ni-cal as-sis-tant spe-cia-li-zed in STM32Cube
@@ -2476,10 +2875,10 @@ Underfull \hbox (badness 10000) in paragraph at lines 217--218
 []|\T1/cmr/m/n/12 Ablation sans
  []
 
-[55]
+[70]
 Package pgfplots info on input line 240: Using 'lua backend=false' for axis: x 
 coord trafo unsupported.
- [56] [57
+ [71] [72
 pdfTeX warning (ext4): destination with the same identifier (name{figure.7.2}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
@@ -2522,463 +2921,17 @@ Underfull \hbox (badness 5771) in paragraph at lines 301--301
 []|\T1/cmr/m/n/12 Rendre les fi-gures PDF
  []
 
-ignored error: Infinite glue shrinkage found in box being split [58] [59]
+ignored error: Infinite glue shrinkage found in box being split [73] [74]
 Overfull \hbox (19.61458pt too wide) in paragraph at lines 360--361
 []\T1/cmr/m/n/12 Exécution du pi-pe-line : \T1/cmtt/m/n/12 python -m pipeline.r
 un_full_workflow --export-st-ready 
  []
 
-) [60]
+) (chapter_evaluation.tex [75]
 Chapitre 8.
-
-Underfull \hbox (badness 1622) in paragraph at lines 1654--1654
-[]|\T1/cmr/m/n/12 Volume to-tal cor-pus files
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1655--1655
-[]|\T1/cmr/m/n/12 Fichiers ex-clus
- []
-
-[61
-
-]
-ignored error: Infinite glue shrinkage found in box being split
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[62]
-Overfull \hbox (49.15207pt too wide) in paragraph at lines 1700--1701
-[]\T1/cmr/m/n/12 L'évaluation quan-ti-ta-tive du pi-pe-line est réa-li-sée par 
-le script \T1/cmtt/m/n/12 generate_evaluation_report.py
- []
-
-
-Underfull \hbox (badness 2512) in paragraph at lines 1708--1708
-[]|\T1/cmr/bx/n/12 Standard / Ré-fé-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1708--1708
-[]|\T1/cmr/bx/n/12 Dimension cou-
- []
-
-
-LaTeX Warning: Citation `iso25012' on page 63 undefined on input line 1710.
-
-
-Underfull \hbox (badness 2343) in paragraph at lines 1710--1710
-[]|\T1/cmr/m/n/12 Qualité des don-nées
- []
-
-
-LaTeX Warning: Citation `iso25024' on page 63 undefined on input line 1711.
-
-
-Underfull \hbox (badness 2393) in paragraph at lines 1711--1711
-[]|\T1/cmr/m/n/12 Mesure qua-lité don-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1711--1712
-[]|\T1/cmr/m/n/12 Ratios de cou-ver-
- []
-
-
-LaTeX Warning: Citation `iso25010' on page 63 undefined on input line 1712.
-
-
-LaTeX Warning: Citation `manning2008ir' on page 63 undefined on input line 1713
-.
-
-
-Underfull \hbox (badness 1590) in paragraph at lines 1713--1714
-[]|\T1/cmr/m/n/12 Seuils Pre-ci-sion@k, TF-IDF,
- []
-
-
-LaTeX Warning: Citation `fawcett2006roc' on page 63 undefined on input line 171
-4.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1714--1715
-[]|\T1/cmr/m/n/12 Justification mé-tho-do-lo-gique
- []
-
-
-LaTeX Warning: Citation `lewis2020rag' on page 63 undefined on input line 1715.
-
-
-ignored error: Infinite glue shrinkage found in box being split
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[63]
-
-LaTeX Warning: Citation `iso25024' on page 64 undefined on input line 1735.
-
-
-LaTeX Warning: Citation `manning2008ir' on page 64 undefined on input line 1736
-.
-
-
-LaTeX Warning: Citation `fawcett2006roc' on page 64 undefined on input line 173
-7.
-
-
-Underfull \hbox (badness 2582) in paragraph at lines 1751--1751
-[]|\T1/cmr/bx/n/12 Formule (ISO 25024 ---
- []
-
-
-LaTeX Warning: Citation `iso25024' on page 64 undefined on input line 1753.
-
-
-LaTeX Warning: Citation `iso25024' on page 64 undefined on input line 1754.
-
-
-LaTeX Warning: Citation `iso25024' on page 64 undefined on input line 1756.
-
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[64]
-Package pgfplots info on input line 1791: Using 'lua backend=false' for axis: x
- coord trafo unsupported.
-
-Overfull \hbox (15.85493pt too wide) in paragraph at lines 1799--1800
- [][] 
- []
-
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[65
-pdfTeX warning (ext4): destination with the same identifier (name{figure.8.1}) 
-has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.1809 \textbf{Valeur ajoutÃ©e mesurable}
-                                          : le nettoyage V3 rÃ©duit le volum...
-]
-
-LaTeX Warning: Citation `iso25012' on page 66 undefined on input line 1815.
-
-
-LaTeX Warning: Citation `iso25012' on page 66 undefined on input line 1816.
-
-
-Underfull \hbox (badness 1622) in paragraph at lines 1830--1830
-[]|\T1/cmr/m/n/12 Volume to-tal cor-pus files
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1847--1848
-[]|\T1/cmr/bx/n/12 Justification
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1849--1850
-[]|\T1/cmr/m/n/12 Tolérance
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1850--1851
-[]|\T1/cmr/m/n/12 Déductible des
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1851--1851
-[]|\T1/cmr/m/n/12 Couverture com-
- []
-
-
-Underfull \hbox (badness 2608) in paragraph at lines 1851--1852
-[]|\T1/cmr/m/n/12 Issues trans-ver-
- []
-
-
-Underfull \hbox (badness 7133) in paragraph at lines 1851--1852
-\T1/cmr/m/n/12 sales sans pé-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1853--1854
-[]|\T1/cmr/m/n/12 Mots-clés tou-
- []
-
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[66]
-
-LaTeX Warning: Citation `fawcett2006roc' on page 67 undefined on input line 185
-9.
-
-
-Overfull \hbox (132.06776pt too wide) in alignment at lines 1869--1881
- [] [] [] [] [] [] 
- []
-
-ignored error: Infinite glue shrinkage found in box being split
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[67]
-Package pgfplots info on input line 1901: Using 'lua backend=false' for axis: x
- coord trafo unsupported.
-
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[68
-pdfTeX warning (ext4): destination with the same identifier (name{figure.8.2}) 
-has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.1931 \begin{equation}
-                       ]
-
-LaTeX Warning: Citation `fawcett2006roc' on page 69 undefined on input line 193
-8.
-
-
-Overfull \hbox (26.93134pt too wide) in alignment at lines 1942--1955
- [] [] [] [] [] 
- []
-
-
-LaTeX Warning: Citation `lewis2020rag' on page 69 undefined on input line 1959.
-
-
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[69]
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[70]
-Overfull \hbox (69.14311pt too wide) in paragraph at lines 1991--1992
-[]\T1/cmr/m/n/12 La chaîne de cal-cul est im-plé-men-tée dans \T1/cmtt/m/n/12 p
-ipeline/evaluation/validate_alfred_coherence.py\T1/cmr/m/n/12 .
- []
-
-
-Overfull \hbox (1.90343pt too wide) in paragraph at lines 1995--1996
-\T1/cmr/m/n/12 gé-né-riques sont sup-pri-més : ar-ticles (\T1/cmtt/m/n/12 the\T
-1/cmr/m/n/12 , \T1/cmtt/m/n/12 and\T1/cmr/m/n/12 ), termes méta (\T1/cmtt/m/n/1
-2 image\T1/cmr/m/n/12 , \T1/cmtt/m/n/12 description\T1/cmr/m/n/12 , \T1/cmtt/m/
-n/12 figure\T1/cmr/m/n/12 ,
- []
-
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[71]
-
-LaTeX Warning: Citation `reimers2019sentence' on page 72 undefined on input lin
-e 2043.
-
-
-Overfull \hbox (61.0683pt too wide) in paragraph at lines 2043--2044
-[]\T1/cmr/bx/n/12 Mode avancé dis-po-nible \T1/cmr/m/n/12 : le script sup-porte
- aussi \T1/cmtt/m/n/12 sentence-transformers/all-MiniLM-L6-v2
- []
-
-
-Overfull \hbox (160.18295pt too wide) in paragraph at lines 2059--2060
-\T1/cmr/m/n/12 pec-tives du contexte et de la des-crip-tion. Le mode avancé NLI
- uti-lise \T1/cmtt/m/n/12 MoritzLaurer/DeBERTa-v3-base-mnli-fever-anli
- []
-
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[72
-pdfTeX warning (ext4): destination with the same identifier (name{table.8.12}) 
-has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.2078 
-       ]
-Package pgfplots info on input line 2093: Using 'lua backend=false' for axis: x
- coord trafo unsupported.
-
-Overfull \hbox (116.74786pt too wide) in paragraph at lines 2103--2104
-[]\T1/cmr/bx/n/12 Fichiers de preuve \T1/cmr/m/n/12 : le CSV dé-taillé est dis-
-po-nible dans \T1/cmtt/m/n/12 docs/evaluation/alfred_coherence_report.csv
- []
-
-
-Overfull \hbox (123.77296pt too wide) in paragraph at lines 2103--2104
-\T1/cmr/m/n/12 (442 lignes, une par image éva-luée) et le ré-sumé JSON dans \T1
-/cmtt/m/n/12 docs/evaluation/alfred_coherence_summary.json\T1/cmr/m/n/12 . 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2117--2117
-[]|\T1/cmr/bx/n/12 Source vi-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2119--2120
-[]|\T1/cmr/m/n/12 Conserver en pro-duc-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2119--2120
-\T1/cmr/m/n/12 tion : des-crip-tions
- []
-
-
-Underfull \hbox (badness 1558) in paragraph at lines 2119--2120
-\T1/cmr/m/n/12 for-te-ment an-crées dans
- []
-
-
-Underfull \hbox (badness 2103) in paragraph at lines 2120--2121
-\T1/cmr/m/n/12 ti-mo-dal, mais contexte
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2122--2123
-[]|\T1/cmr/m/n/12 Fiabilité API éle-vée,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2122--2123
-\T1/cmr/m/n/12 confiance contex-tuelle
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2122--2123
-\T1/cmr/m/n/12 hé-té-ro-gène se-lon la
- []
-
-
-Overfull \hbox (54.94272pt too wide) in alignment at lines 2115--2124
- [] [] [] [] [] 
- []
-
-ignored error: Infinite glue shrinkage found in box being split
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[73
-pdfTeX warning (ext4): destination with the same identifier (name{figure.8.3}) 
-has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.2124 \end{longtable}
-                      ]
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[74]
-Overfull \hbox (3.11223pt too wide) in paragraph at lines 2187--2200
- [][] 
- []
-
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[75]
-Overfull \hbox (30.0885pt too wide) in paragraph at lines 2220--2221
-[]\T1/cmr/m/n/12 avec $\OML/cmm/m/it/12 k \OMS/cmsy/m/n/12 2 f[]\OML/cmm/m/it/1
-2 ; []; []; []; []; []; []\OMS/cmsy/m/n/12 g$\T1/cmr/m/n/12 .
- []
-
-ignored error: Infinite glue shrinkage found in box being split
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
 [76
-pdfTeX warning (ext4): destination with the same identifier (name{table.8.16}) 
-has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.2236 \end{longtable}
-                      ]
-Overfull \hbox (45.44186pt too wide) detected at line 2249
-[][][]\OML/cmm/m/it/12 S[] \OT1/cmr/m/n/12 = []
- []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 2262--2263
-[]|\T1/cmr/m/n/12 Pénalisé par Si-mi-la-rité
- []
-
-
-Underfull \hbox (badness 6792) in paragraph at lines 2263--2264
-[]|\T1/cmr/m/n/12 Reflète mieux la va-leur
- []
-
-
-Overfull \hbox (107.8465pt too wide) in alignment at lines 2258--2266
- [] [] [] [] 
- []
-
+]
 
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
 (fancyhdr)                Make it at least 14.61858pt, for example:
@@ -2987,16 +2940,6 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
 [77]
-Package pgfplots info on input line 2285: Using 'lua backend=false' for axis: s
-tacked plots unsupported (yet).
-Package pgfplots info on input line 2285: Using 'lua backend=false' for axis: x
- coord trafo unsupported.
-
-
-Package pgfplots Warning: Axis range for axis y is approximately empty; enlargi
-ng it (it is [0.0:0.0]) on input line 2294.
-
- [warning /pgfplots/warning/approx empty range enlarged]
 
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
 (fancyhdr)                Make it at least 14.61858pt, for example:
@@ -3004,60 +2947,10 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[78
-pdfTeX warning (ext4): destination with the same identifier (name{figure.8.4}) 
-has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.2308 \end{enumerate}
-                      ]
-Underfull \hbox (badness 5175) in paragraph at lines 2331--2331
-[]|\T1/cmr/m/n/12 Citation is-sue Gi-tHub
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2332--2332
-[]|\T1/cmr/m/n/12 Fonction HAL exacte
- []
-
-
-Underfull \hbox (badness 3138) in paragraph at lines 2333--2333
-[]|\T1/cmr/m/n/12 Fix ac-tion-nable im-mé-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2334--2334
-[]|\T1/cmr/m/n/12 Information version-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2335--2335
-[]|\T1/cmr/m/n/12 Workaround STM32-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2351--2351
-[]|\T1/cmr/m/n/12 WL +22dBm
- []
-
-
-Underfull \hbox (badness 2503) in paragraph at lines 2354--2354
-[]|\T1/cmr/m/n/12 ADC 200 LSB
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2357--2357
-[]|\T1/cmr/m/n/12 HAL Be-ha-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2366--2366
-[]|\T1/cmr/bx/n/12 Score
- []
-
-
-Overfull \hbox (4.68774pt too wide) in paragraph at lines 2366--2366
-\T1/cmr/bx/n/12 moyen/réponse| 
+[78]
+Overfull \hbox (5.8996pt too wide) in paragraph at lines 145--146
+\T1/cmr/m/n/12 tourné par la branche sé-man-tique. Contrôle le com-pro-mis pré-
+ci-sion/rappel. 
  []
 
 
@@ -3068,219 +2961,48 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
 [79]
-Overfull \hbox (72.14285pt too wide) in paragraph at lines 2374--2387
- [][] 
+Underfull \hbox (badness 3557) in paragraph at lines 157--157
+[]|\T1/cmr/m/n/12 Recouvrement lexi-cal Al-
  []
 
 
-Underfull \hbox (badness 1755) in paragraph at lines 2398--2398
-[]|\T1/cmr/m/n/12 Migration/Version (3
+Underfull \hbox (badness 10000) in paragraph at lines 158--158
+[]|\T1/cmr/m/n/12 Cosinus (tri-
  []
 
 
-Underfull \hbox (badness 7221) in paragraph at lines 2398--2399
-[]|\T1/cmr/m/n/12 Version-specific info im-pos-
+Underfull \hbox (badness 10000) in paragraph at lines 159--159
+[]|\T1/cmr/m/n/12 Similarité inter-issues
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2400--2400
-[]|\T1/cmr/m/n/12 Documentation (2
+Underfull \hbox (badness 7379) in paragraph at lines 161--161
+[]|\T1/cmr/m/n/12 Confiance contex-
  []
 
 
-Overfull \hbox (10.67235pt too wide) in alignment at lines 2393--2402
- [] [] [] [] 
+Underfull \hbox (badness 1924) in paragraph at lines 162--162
+[]|\T1/cmr/m/n/12 Score glo-bal pon-
  []
 
 
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[80
-pdfTeX warning (ext4): destination with the same identifier (name{table.8.22}) 
-has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.2402 \end{longtable}
-                      ]
-Package pgfplots info on input line 2428: Using 'lua backend=false' for axis: x
- coord trafo unsupported.
-
-Underfull \hbox (badness 5189) in paragraph at lines 2447--2447
-[]|\T1/cmr/bx/n/12 Problème ré-
+Underfull \hbox (badness 10000) in paragraph at lines 185--186
+[]|\T1/cmr/m/n/12 Seuils nu-mé-riques spé-ci-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2447--2447
-[]|\T1/cmr/bx/n/12 Métrique d'im-
+Underfull \hbox (badness 3861) in paragraph at lines 186--186
+[]|\T1/cmr/m/n/12 Méthode de me-sure
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2447--2448
-[]|\T1/cmr/bx/n/12 Preuve quan-ti-ta-
+Underfull \hbox (badness 5050) in paragraph at lines 187--187
+[]|\T1/cmr/m/n/12 Modèle qua-lité sys-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2449--2449
-[]|\T1/cmr/m/n/12 Données ab-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2450--2450
-[]|$\OMS/cmsy/m/n/12 ^^@\OT1/cmr/m/n/12 96\OML/cmm/m/it/12 :\OT1/cmr/m/n/12 4%$
- \T1/cmr/m/n/12 vo-lume
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2450--2451
-[]|\T1/cmr/m/n/12 +31% den-sité si-
- []
-
-
-Overfull \hbox (6.16864pt too wide) in paragraph at lines 2451--2451
-[]|\T1/cmr/m/n/12 Enrichissement| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2451--2451
-[]|\T1/cmr/m/n/12 72.2% cou-ver-ture
- []
-
-
-Underfull \hbox (badness 3525) in paragraph at lines 2451--2452
-[]|\T1/cmr/m/n/12 Classification \TS1/cmr/m/n/12 ^^Y \T1/cmr/m/n/12 fa-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2452--2452
-[]|\T1/cmr/m/n/12 99.1% suc-cès
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2452--2452
-\T1/cmr/m/n/12 H7/F4/WL/F7 ;
- []
-
-
-Underfull \hbox (badness 2035) in paragraph at lines 2452--2452
-\T1/cmr/m/n/12 1.5% images d'is-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2452--2453
-[]|\T1/cmr/m/n/12 Screenshots cher-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2454--2454
-[]|\T1/cmr/m/n/12 Delivery
- []
-
-
-Underfull \hbox (badness 4279) in paragraph at lines 2455--2455
-[]|\T1/cmr/m/n/12 Delivery Re-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2455--2456
-[]|\T1/cmr/m/n/12 Chaîne Is-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2455--2456
-\T1/cmr/m/n/12 sue\TS1/cmr/m/n/12 ^^Y\T1/cmr/m/n/12 PR\TS1/cmr/m/n/12 ^^Y\T1/cm
-r/m/n/12 Fix vé-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2456--2456
-[]|\T1/cmr/m/n/12 157 diag-nos-tic
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2456--2457
-[]|\T1/cmr/bx/n/12 QI +33 points
- []
-
-
-Package fancyhdr Warning: \headheight is too small (14.5pt): 
-(fancyhdr)                Make it at least 14.61858pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.61858pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
-
-[81
-pdfTeX warning (ext4): destination with the same identifier (name{figure.8.5}) 
-has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.2458 \end{longtable}
-                      ]
-Underfull \hbox (badness 10000) in paragraph at lines 2468--2469
-[]|\T1/cmr/m/n/12 Équilibre pré-ci-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2469--2469
-[]|\T1/cmr/bx/n/12 S1 Re-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2470--2470
-[]|\T1/cmr/m/n/12 S2 Pre-ci-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2471--2471
-[]|\T1/cmr/m/n/12 S3
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2471--2471
-\T1/cmr/m/n/12 Semantic-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2472--2472
-[]|\T1/cmr/m/n/12 S4
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2472--2472
-\T1/cmr/m/n/12 Fulltext-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2472--2473
-[]|\T1/cmr/m/n/12 Reformulations mal
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2473--2473
-[]|\T1/cmr/m/n/12 S5
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2473--2473
-\T1/cmr/m/n/12 Semantic-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2474--2474
-[]|\T1/cmr/m/n/12 S6
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2474--2474
-\T1/cmr/m/n/12 Fulltext-
- []
-
-
-Overfull \hbox (19.10919pt too wide) in alignment at lines 2464--2476
- [] [] [] [] [] [] [] 
+Underfull \hbox (badness 10000) in paragraph at lines 188--188
+[]|\T1/cmr/m/n/12 Compromis pre-ci-
  []
 
 ignored error: Infinite glue shrinkage found in box being split
@@ -3291,9 +3013,35 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[82]
-Package pgfplots info on input line 2493: Using 'lua backend=false' for axis: x
- coord trafo unsupported.
+[80]
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[81]
+Underfull \hbox (badness 7379) in paragraph at lines 232--233
+[]|\T1/cmr/m/n/12 Identifiable par pré-fixes API
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 235--235
+[]|\T1/cmtt/m/n/12 body \T1/cmr/m/n/12 (com-plé-
+ []
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 241.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\tau' on input line 241.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 241.
 
 
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
@@ -3302,13 +3050,18 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
-[83
-pdfTeX warning (ext4): destination with the same identifier (name{figure.8.6}) 
-has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.2520 
-       ]
+[82]
+Package pgfplots info on input line 300: Using 'lua backend=false' for axis: x 
+coord trafo unsupported.
+
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[83]
 
 Package fancyhdr Warning: \headheight is too small (14.5pt): 
 (fancyhdr)                Make it at least 14.61858pt, for example:
@@ -3317,70 +3070,509 @@ Package fancyhdr Warning: \headheight is too small (14.5pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
 
 [84
-pdfTeX warning (ext4): destination with the same identifier (name{table.8.26}) 
+pdfTeX warning (ext4): destination with the same identifier (name{figure.8.1}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.2522 \chapter
-               {Automatisation et CI/CD}]
-Chapitre 9.
+l.344 ... --- Classification par Heuristiques NLP}
+                                                  ]
+Package pgfplots info on input line 379: Using 'lua backend=false' for axis: x 
+coord trafo unsupported.
+
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
 [85
+pdfTeX warning (ext4): destination with the same identifier (name{figure.8.2}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.394 \textbf{RÃ©sultat STM32CubeH7}
+                                    ~: couverture~= 22.0\%, densitÃ© moyenne...
+]
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[86]
+Overfull \hbox (45.44186pt too wide) detected at line 449
+[][][]\OML/cmm/m/it/12 S[] \OT1/cmr/m/n/12 = []
+ []
+
+
+Underfull \hbox (badness 1803) in paragraph at lines 464--465
+[]|\T1/cmr/m/n/12 Classification ex-ploi-tée pour fil-trage et re-
+ []
+
+
+Underfull \hbox (badness 5446) in paragraph at lines 465--466
+[]|\T1/cmr/m/n/12 Enrichissement mul-ti-mo-dal ma-ture (98.5%
+ []
+
+
+Overfull \hbox (12.6667pt too wide) in paragraph at lines 472--473
+[]\T1/cmr/m/n/12 Le score glo-bal reste au ver-dict \T1/cmr/bx/n/12 BON \T1/cmr
+/m/n/12 plu-tôt qu'EX-CELLENT car deux sous-composantes
+ []
+
+Package pgfplots info on input line 488: Using 'lua backend=false' for axis: st
+acked plots unsupported (yet).
+Package pgfplots info on input line 488: Using 'lua backend=false' for axis: x 
+coord trafo unsupported.
+
+Package pgfplots Warning: Axis range for axis y is approximately empty; enlargi
+ng it (it is [0.0:0.0]) on input line 497.
+
+ [warning /pgfplots/warning/approx empty range enlarged]
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[87
+pdfTeX warning (ext4): destination with the same identifier (name{table.8.10}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.502 
+      ]
+Overfull \hbox (104.38452pt too wide) in paragraph at lines 538--539
+[]\T1/cmr/m/n/12 L'évaluation de co-hé-rence est im-plé-men-tée dans \T1/cmtt/m
+/n/12 pipeline/evaluation/validate_alfred_coherence.py\T1/cmr/m/n/12 .
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[88
+pdfTeX warning (ext4): destination with the same identifier (name{figure.8.3}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.540 \subsubsection{PrÃ©traitement}
+                                    ]
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[89]
+Package pgfplots info on input line 631: Using 'lua backend=false' for axis: x 
+coord trafo unsupported.
+
+Underfull \hbox (badness 1521) in paragraph at lines 650--651
+[]|\T1/cmr/m/n/12 Contiennent des sché-mas blocs, ta-
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[90
+pdfTeX warning (ext4): destination with the same identifier (name{table.8.13}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.655 \end{longtable}
+                     
+pdfTeX warning (ext4): destination with the same identifier (name{figure.8.4}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.655 \end{longtable}
+                     ]
+Underfull \hbox (badness 5050) in paragraph at lines 672--673
+[]|\T1/cmr/bx/n/12 Baseline \T1/cmr/m/n/12 : is-sues struc-tu-rées
+ []
+
+
+Underfull \hbox (badness 5622) in paragraph at lines 674--674
+[]|\T1/cmr/m/n/12 + Hy-brid search
+ []
+
+
+Underfull \hbox (badness 1917) in paragraph at lines 677--678
+\T1/cmr/m/n/12 inter-séries, nou-velles ques-tions
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 678--678
+[]|\T1/cmr/m/n/12 S0 Ba-lan-ced
+ []
+
+ignored error: Infinite glue shrinkage found in box being split
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[91]
+Overfull \hbox (41.4247pt too wide) in paragraph at lines 692--693
+\T1/cmr/m/n/12 DMA hard fault'', ``cache co-he-rency SPI cir-cu-lar mo-de'', ``
+HAL_SPI_TransmitReceive_DMA
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[92]
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 719.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\times' on input line 719.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 719.
+
+Package pgfplots info on input line 755: Using 'lua backend=false' for axis: x 
+coord trafo unsupported.
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[93
+pdfTeX warning (ext4): destination with the same identifier (name{table.8.16}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.764 
+      ]
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[94
+pdfTeX warning (ext4): destination with the same identifier (name{figure.8.5}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.792 \subsection{Ã‰volution vers NovaX}
+                                        ]
+ignored error: Infinite glue shrinkage found in box being split
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[95]
+Underfull \hbox (badness 10000) in paragraph at lines 842--843
+[]|\T1/cmr/bx/n/12 Dimension qua-lité (ISO
+ []
+
+
+Underfull \hbox (badness 5175) in paragraph at lines 844--844
+[]|\T1/cmr/m/n/12 Citation is-sue Gi-tHub
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 845--845
+[]|\T1/cmr/m/n/12 Fonction HAL exacte
+ []
+
+
+Underfull \hbox (badness 3138) in paragraph at lines 846--846
+[]|\T1/cmr/m/n/12 Fix ac-tion-nable im-mé-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 847--847
+[]|\T1/cmr/m/n/12 Information version-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 848--848
+[]|\T1/cmr/m/n/12 Workaround STM32-
+ []
+
+
+Overfull \hbox (10.86194pt too wide) in paragraph at lines 859--870
+ [][] 
+ []
+
+
+Underfull \hbox (badness 1755) in paragraph at lines 881--881
+[]|\T1/cmr/m/n/12 Migration/Version (3
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[96
+pdfTeX warning (ext4): destination with the same identifier (name{table.8.20}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.885 \end{longtable}
+                     ]
+Package pgfplots info on input line 902: Using 'lua backend=false' for axis: x 
+coord trafo unsupported.
+
+Underfull \hbox (badness 10000) in paragraph at lines 931--932
+[]|\T1/cmr/m/n/12 Équilibre pré-ci-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 932--932
+[]|\T1/cmr/bx/n/12 S1 Re-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 933--933
+[]|\T1/cmr/m/n/12 S2 Pre-ci-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 934--934
+[]|\T1/cmr/m/n/12 S3 Sem-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 935--935
+[]|\T1/cmr/m/n/12 S4 FT-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 935--936
+[]|\T1/cmr/m/n/12 Reformulations mal
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 936--936
+[]|\T1/cmr/m/n/12 S5 Sem-
+ []
+
+
+Underfull \hbox (badness 1533) in paragraph at lines 936--937
+[]|\T1/cmr/m/n/12 Ablation : perte du
+ []
+
+ignored error: Infinite glue shrinkage found in box being split
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[97
+pdfTeX warning (ext4): destination with the same identifier (name{figure.8.6}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.938 \end{longtable}
+                     ]
+Package pgfplots info on input line 954: Using 'lua backend=false' for axis: x 
+coord trafo unsupported.
+
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[98
+pdfTeX warning (ext4): destination with the same identifier (name{figure.8.7}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.986 \end{longtable}
+                     ]
+Underfull \hbox (badness 10000) in paragraph at lines 999--999
+[]|\T1/cmr/m/n/12 Progression in-cré-men-tale
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1003--1004
+[]|\T1/cmr/m/n/12 CSV et JSON dans
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[99]
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 1028.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\leftrightarrow' on input line 1028.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 1028.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 1028.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\leftrightarrow' on input line 1028.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 1028.
+
+
+Underfull \hbox (badness 2197) in paragraph at lines 1036--1036
+[]|\T1/cmr/bx/n/12 Norme / Ré-fé-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1040--1040
+[]|\T1/cmr/m/n/12 Fiabilité sys-
+ []
+
+
+Underfull \hbox (badness 2875) in paragraph at lines 1042--1043
+[]|\T1/cmr/m/n/12 Stage 4 + co-hé-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1043--1043
+[]|\T1/cmr/m/n/12 Recouvrement
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1045--1045
+[]|\T1/cmr/m/n/12 Synthèse pi-pe-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1046--1046
+[]|\T1/cmr/m/n/12 Calibration em-pi-
+ []
+
+
+Underfull \hbox (badness 7030) in paragraph at lines 1046--1047
+[]|\T1/cmr/m/n/12 Classification ver-
+ []
+
+ignored error: Infinite glue shrinkage found in box being split
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[100])
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[101]
+
+Package fancyhdr Warning: \headheight is too small (14.5pt): 
+(fancyhdr)                Make it at least 14.61858pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.61858pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.11858pt}.
+
+[102]
+Chapitre 9.
+[103
 
 
 pdfTeX warning (ext4): destination with the same identifier (name{figure.9.1}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.2569   \item \texttt
+l.2810   \item \texttt
                       {--continue-on-error} permet de complÃ©ter les sÃ©ries...
-] [86]
+] [104]
 Chapitre 10.
 
-Underfull \hbox (badness 10000) in paragraph at lines 2868--2868
+Underfull \hbox (badness 10000) in paragraph at lines 3109--3109
 []|\T1/cmr/m/n/12 Comprendre une fi-gure
  []
 
 
-Overfull \hbox (16.89362pt too wide) in alignment at lines 2861--2871
+Overfull \hbox (16.89362pt too wide) in alignment at lines 3102--3112
  [] [] [] 
  []
 
-[87
+[105
 
 ]
-Overfull \hbox (10.08887pt too wide) in paragraph at lines 2878--2879
+Overfull \hbox (10.08887pt too wide) in paragraph at lines 3119--3120
 \T1/cmr/m/n/12 pés. Nous avons dé-ve-loppé des scripts de ré-pa-ra-tion (\T1/cm
 tt/m/n/12 fix_corrupted_json_files.py\T1/cmr/m/n/12 )
  []
 
-[88] [89] [90
+[106] [107] [108
 
 ]
-Underfull \hbox (badness 2293) in paragraph at lines 2912--2913
+Underfull \hbox (badness 2293) in paragraph at lines 3153--3154
 \T1/cmr/m/it/12 re-trie-val\T1/cmr/m/n/12 . In-for-ma-tion Pro-ces-sing & Ma-na
 -ge-ment, vol. 24, no. 5, pp. 513--
  []
 
 
-Underfull \hbox (badness 1062) in paragraph at lines 2912--2913
+Underfull \hbox (badness 1062) in paragraph at lines 3153--3154
 \T1/cmr/m/n/12 523. --- Ré-fé-rence fon-da-men-tale sur TF-IDF, la mé-thode de 
 pon-dé-ra-tion de
  []
 
-[91
+[109
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 2948--2949
+Underfull \hbox (badness 10000) in paragraph at lines 3189--3190
 []\T1/cmr/m/n/12 Microsoft (2024). \T1/cmr/m/it/12 Azure Ope-nAI Ser-vice Do-cu
 -men-ta-tion\T1/cmr/m/n/12 . [][]$\T1/cmtt/m/n/12 https : / / learn .
  []
 
-[92]
-
-LaTeX Warning: Reference `fig:cicd' on page 93 undefined on input line 2971.
-
-
-Overfull \hbox (107.0371pt too wide) in paragraph at lines 2985--2986
+[110] [111]
+Overfull \hbox (107.0371pt too wide) in paragraph at lines 3229--3230
 \T1/cmr/m/n/12 (File $\OMS/cmsy/m/n/12 !$ \T1/cmr/m/n/12 Ex-port as $\OMS/cmsy/
 m/n/12 !$ \T1/cmr/m/n/12 PNG, 150 DPI) dans le dos-sier \T1/cmtt/m/n/12 docs/di
 agrams/{presentation,technical}/exported/\T1/cmr/m/n/12 . 
@@ -3394,82 +3586,136 @@ File: lstlang1.sty 2025/11/14 1.11b listings language file
 (C:\Users\gharbiab\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.st
 y
 File: lstlang1.sty 2025/11/14 1.11b listings language file
-) [93
+) [112
 
-] [94] [95] [96] (PFE_Report_STM32Cube_Pipeline.aux)
+] [113] [114] [115] [116] [117]
+
+Package enumitem Warning: Negative labelwidth. This does not make much
+(enumitem)                sense, on input line 3433.
+
+LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <12> not available
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 3435.
+
+Overfull \hbox (8.70232pt too wide) in paragraph at lines 3439--3440
+\T1/cmr/m/n/12 Combinaison d'une re-cherche sé-man-tique (em-bed-dings) et full
+-text (cor-res-pon-dance exacte),
+ []
+
+[118]
+ignored error: Infinite glue shrinkage found in box being split [119]
+Underfull \hbox (badness 10000) in paragraph at lines 3499--3499
+[]|\T1/cmr/m/n/12 Chunking
+ []
+
+
+Underfull \hbox (badness 2809) in paragraph at lines 3499--3499
+[]|\T1/cmr/m/n/12 Section + fi-gure +
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 3500--3500
+[]|\T1/cmr/m/n/12 Embeddings
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 3501--3501
+[]|\T1/cmr/m/n/12 Tailles de lots
+ []
+
+
+Underfull \hbox (badness 2809) in paragraph at lines 3503--3503
+[]|\T1/cmr/m/n/12 Section + fi-gure +
+ []
+
+
+Underfull \hbox (badness 4454) in paragraph at lines 3505--3505
+[]|\T1/cmr/m/n/12 Annexe H + com-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 3506--3506
+[]|\T1/cmr/m/n/12 Gates JSON
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 3507--3507
+[]|\T1/cmr/m/n/12 Section + exemple
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 3508--3508
+[]|\T1/cmr/m/n/12 Section + exemple
+ []
+
+ignored error: Infinite glue shrinkage found in box being split [120] [121]
+(PFE_Report_STM32Cube_Pipeline.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
  ***********
 
 
-LaTeX Warning: There were undefined references.
-
-
 LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
-
-Package rerunfilecheck Warning: File `PFE_Report_STM32Cube_Pipeline.out' has ch
-anged.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `PFE_Report_STM32Cube_Pipeline.out':
-
-(rerunfilecheck)             Before: 15EFF7BC60ED9E9F4735509FE5C72E26;33949
-(rerunfilecheck)             After:  7EE58533428F5D08A7150F20FD614E02;37112.
+Package rerunfilecheck Info: File `PFE_Report_STM32Cube_Pipeline.out' has not c
+hanged.
+(rerunfilecheck)             Checksum: 128B075D9BACDEF47AD762793B80C455;43608.
  ) 
 Here is how much of TeX's memory you used:
- 39350 strings out of 467871
- 879564 string characters out of 5416925
- 1755764 words of memory out of 5000000
- 66962 multiletter control sequences out of 15000+600000
- 652000 words of font info for 100 fonts, out of 8000000 for 9000
+ 39711 strings out of 467871
+ 885295 string characters out of 5416925
+ 1762477 words of memory out of 5000000
+ 67174 multiletter control sequences out of 15000+600000
+ 655556 words of font info for 111 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  84i,19n,94p,984b,2507s stack positions out of 10000i,1000n,20000p,200000b,200000s
- <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\t
-cbx1440.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec
-/dpi600\ecrm1095.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jk
+ <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\e
+crm1095.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec
+/dpi600\ecit1095.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jk
 nappen/ec/dpi450\ectt0800.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/
 ljfour/jknappen/ec/dpi600\ecit1200.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\
 fonts/pk/ljfour/jknappen/ec/dpi600\ectt1095.pk> <C:\Users\gharbiab\AppData\Loca
-l\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm0600.pk> <C:\Users\gharbiab\App
-Data\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt0800.pk> <C:\Users\gha
-rbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx0800.pk> <C:\
-Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1095
+l\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt0800.pk> <C:\Users\gharbiab\App
+Data\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1095.pk> <C:\Users\gha
+rbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm0600.pk> <C:\
+Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx0600
 .pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600
-\tctt1200.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/
-ec/dpi600\ecrm0800.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/
-jknappen/ec/dpi600\ectt1200.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/p
-k/ljfour/jknappen/ec/dpi600\eccc1200.pk> <C:\Users\gharbiab\AppData\Local\MiKTe
-X\fonts/pk/ljfour/jknappen/ec/dpi600\ecti1200.pk> <C:\Users\gharbiab\AppData\Lo
-cal\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1440.pk> <C:\Users\gharbiab\A
-ppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1200.pk> <C:\Users\g
-harbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1200.pk> <C
-:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx12
+\ecbx0800.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/
+ec/dpi600\tctt1200.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/
+jknappen/ec/dpi600\ecrm0800.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/p
+k/ljfour/jknappen/ec/dpi600\ecti1095.pk> <C:\Users\gharbiab\AppData\Local\MiKTe
+X\fonts/pk/ljfour/jknappen/ec/dpi600\ecbi1095.pk> <C:\Users\gharbiab\AppData\Lo
+cal\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\eccc1200.pk> <C:\Users\gharbiab\A
+ppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecti1200.pk> <C:\Users\g
+harbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1440.pk> <C
+:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm12
 00.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi6
-00\ecrm2074.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappe
-n/ec/dpi600\ecbx2488.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfou
-r/jknappen/ec/dpi600\ecrm1440.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts
-/pk/ljfour/jknappen/ec/dpi600\ecbx1728.pk><C:/Users/gharbiab/AppData/Local/Prog
-rams/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/gharbiab/AppDat
-a/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/gha
-rbiab/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><
-C:/Users/gharbiab/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
-cmmi6.pfb><C:/Users/gharbiab/AppData/Local/Programs/MiKTeX/fonts/type1/public/a
-msfonts/cm/cmmi8.pfb><C:/Users/gharbiab/AppData/Local/Programs/MiKTeX/fonts/typ
-e1/public/amsfonts/cm/cmr10.pfb><C:/Users/gharbiab/AppData/Local/Programs/MiKTe
-X/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/gharbiab/AppData/Local/Pro
-grams/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Users/gharbiab/AppData
-/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/gharbi
-ab/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/
-Users/gharbiab/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cms
-y6.pfb><C:/Users/gharbiab/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsf
-onts/cm/cmsy8.pfb><C:/Users/gharbiab/AppData/Local/Programs/MiKTeX/fonts/type1/
-public/amsfonts/symbols/msam10.pfb>
-Output written on PFE_Report_STM32Cube_Pipeline.pdf (97 pages, 930901 bytes).
+00\ectt1200.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappe
+n/ec/dpi600\ecrm1200.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts/pk/ljfou
+r/jknappen/ec/dpi600\ecbx1200.pk> <C:\Users\gharbiab\AppData\Local\MiKTeX\fonts
+/pk/ljfour/jknappen/ec/dpi600\ecrm2074.pk> <C:\Users\gharbiab\AppData\Local\MiK
+TeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx2488.pk> <C:\Users\gharbiab\AppData\
+Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1440.pk> <C:\Users\gharbiab
+\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1728.pk><C:/Users/
+gharbiab/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pf
+b><C:/Users/gharbiab/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/
+cm/cmmi10.pfb><C:/Users/gharbiab/AppData/Local/Programs/MiKTeX/fonts/type1/publ
+ic/amsfonts/cm/cmmi12.pfb><C:/Users/gharbiab/AppData/Local/Programs/MiKTeX/font
+s/type1/public/amsfonts/cm/cmmi6.pfb><C:/Users/gharbiab/AppData/Local/Programs/
+MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/gharbiab/AppData/Loca
+l/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/gharbiab/A
+ppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users
+/gharbiab/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb
+><C:/Users/gharbiab/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/c
+m/cmr8.pfb><C:/Users/gharbiab/AppData/Local/Programs/MiKTeX/fonts/type1/public/
+amsfonts/cm/cmsy10.pfb><C:/Users/gharbiab/AppData/Local/Programs/MiKTeX/fonts/t
+ype1/public/amsfonts/cm/cmsy6.pfb><C:/Users/gharbiab/AppData/Local/Programs/MiK
+TeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/gharbiab/AppData/Local/P
+rograms/MiKTeX/fonts/type1/public/amsfonts/symbols/msam10.pfb>
+Output written on PFE_Report_STM32Cube_Pipeline.pdf (122 pages, 1137750 bytes).
+
 PDF statistics:
- 2854 PDF objects out of 2984 (max. 8388607)
- 684 named destinations out of 1000 (max. 500000)
- 1221 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 3687 PDF objects out of 4296 (max. 8388607)
+ 828 named destinations out of 1000 (max. 500000)
+ 1565 words of extra memory for PDF output out of 10000 (max. 10000000)
 

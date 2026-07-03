@@ -234,6 +234,8 @@ C'est dans ce contexte que le besoin d'un \textbf{chatbot IA spécialisé STM32}
 \section{L'Écosystème STM32 et les Dépôts GitHub}
 \label{sec:ecosysteme}
 
+\textit{\small\textbf{\textcolor{stblue}{Phase CRISP-DM :}} Data Understanding (analyse des sources de données brutes), avec un ancrage en Business Understanding pour le cadrage de l'écosystème STM32.}\par\smallskip
+
 Au cœur de l'offre de ST se trouve la famille \textbf{STM32}, une gamme de microcontrôleurs basés sur les cœurs ARM Cortex-M (M0, M0+, M3, M4, M7, M33, M55) et Cortex-A. Lancée en 2007, la famille STM32 compte aujourd'hui plus de \textbf{1\,500 références} regroupées en plus de 30 séries, chacune ciblant un profil d'application spécifique :
 
 \begin{longtable}{p{2.5cm}p{3cm}p{7.5cm}}
@@ -278,6 +280,8 @@ Ce projet porte sur les \textbf{25 séries} de la famille STM32 : \textbf{13 sé
 
 \section{Problématique}
 \label{sec:problematique}
+
+\textit{\small\textbf{\textcolor{stblue}{Phase CRISP-DM :}} Business Understanding (formulation du problème métier et des objectifs de support).}\par\smallskip
 
 Les ingénieurs STM32 --- qu'ils soient internes à ST ou clients --- rencontrent quotidiennement des problèmes techniques lors du développement firmware : bugs HAL, comportements inattendus des périphériques, incompatibilités entre versions, configurations complexes. Pour résoudre ces problèmes, ils doivent aujourd'hui parcourir manuellement les ressources disponibles, un processus qui souffre de quatre limitations majeures :
 
@@ -762,7 +766,7 @@ Collecte & Stage 1 (Ingestion) & \texttt{fetch\_issues.py}, \texttt{fetch\_files
 Nettoyage & Stage 2 (Cleaning) & \texttt{clean\_issues.py}, \texttt{clean\_files.py} (V1), \texttt{clean\_files\_v3.py} (V3 par type) \\
 Enrichissement & Stage 3 (Enrichment) & \texttt{issues\_to\_docs\_v2.py} --- heuristiques NLP (layer, severity, board, component) \\
 Mise en Relation & Stage 4 (Similarity) & \texttt{compute\_issue\_similarity\_v2.py} --- TF-IDF cosine, top-$k$ voisins \\
-Découpage & Stage 5 (Chunking) & \texttt{docs\_to\_chunks\_*\_v2.py} --- paragraphe/section, max 512 tokens \\
+Découpage & Stage 5 (Chunking) & \texttt{docs\_to\_chunks\_*\_v2.py} --- validation locale ; en production, découpage \texttt{PARENT\_CHILD} (1000/3000) par la plateforme \\
 Validation & Stage 6 (Evaluation) & \texttt{validate\_schemas.py}, \texttt{test\_stats\_*\_v2.py} \\
 Export & Stage 7 (Delivery) & \texttt{export\_st\_ready\_*.py} --- 4 types d'artefacts JSON \\
 \bottomrule
@@ -830,6 +834,219 @@ Le projet suit une approche itérative :
   \item \textbf{Phase 2} : Extension multi-séries (F4, H5, U5, WL)
   \item \textbf{Phase 3} : Enrichissement IA (Alfred Vision) et évaluation
 \end{enumerate}
+
+%% ============================================================
+\section{Adaptation de CRISP-DM au Projet}
+\label{sec:crispdm_adaptation}
+%% ============================================================
+
+Le projet est piloté par la méthodologie \textbf{CRISP-DM} (\textit{Cross-Industry Standard Process for Data Mining}). Cependant, CRISP-DM a été conçu à l'origine pour des projets de \textit{data mining} et d'apprentissage supervisé, où la phase centrale (\textit{Modeling}) consiste à entraîner un modèle prédictif. Or, \textbf{notre projet n'entraîne aucun modèle prédictif} : il s'agit d'un projet \textbf{orienté données} (data-centric) et \textbf{orienté recherche documentaire} (retrieval-centric). Cette section explicite l'adaptation de CRISP-DM à ce contexte particulier, et justifie pourquoi cette réinterprétation est appropriée.
+
+\subsection{Nature du Projet : Data-Centric et Retrieval-Centric}
+\label{sec:crispdm_nature}
+
+Le c\oe ur du projet n'est pas la prédiction mais la \textbf{transformation et la structuration de connaissances} pour un système de recherche existant (RAG déployé sur la plateforme ST ChatGPT). La valeur ne provient pas d'un modèle appris sur des données étiquetées, mais de la \textbf{qualité du prétraitement} et de la \textbf{compatibilité des artefacts produits} avec l'architecture de retrieval imposée par la plateforme.
+
+En conséquence, la phase \textit{Modeling} de CRISP-DM ne peut pas être interprétée au sens classique (entraînement d'un classifieur ou d'un régresseur). Nous la réinterprétons comme une phase de \textbf{conception algorithmique et de structuration orientée retrieval} regroupant :
+\begin{itemize}
+  \item la conception de la similarité \textbf{TF-IDF} inter-issues (définie en Section~\ref{sec:def_similarity}) et le choix du seuil décisionnel~;
+  \item les \textbf{heuristiques} de classification des métadonnées (layer, component, board, severity)~;
+  \item la \textbf{stratégie de chunking} compatible avec le découpage \texttt{PARENT\_CHILD} de la plateforme (Section~\ref{sec:contraintes_plateforme})~;
+  \item la \textbf{compatibilité avec le retrieval hybride} (semantic + full-text)~;
+  \item le \textbf{routage de fallback} KB-first (KB $\to$ NovaX)~;
+  \item la conception des \textbf{formats d'artefacts KB-ready} (issues, files, resolver cases, diagnostic cards).
+\end{itemize}
+
+\textbf{Justification de l'adaptation} : cette réinterprétation est appropriée car elle respecte l'esprit de CRISP-DM (un processus itératif de valorisation des données) tout en reflétant honnêtement la réalité technique du projet. Prétendre qu'un modèle supervisé existe serait un contresens méthodologique~; à l'inverse, ignorer la phase \textit{Modeling} masquerait les décisions de conception les plus importantes (seuils, chunking, formats). Nous conservons donc les six phases de CRISP-DM comme \textbf{principe organisateur}, en explicitant la nature de chaque phase dans notre contexte.
+
+\subsection{Correspondance CRISP-DM \texorpdfstring{$\rightarrow$}{->} Pipeline}
+\label{sec:crispdm_mapping}
+
+Le tableau suivant établit la correspondance explicite entre les six phases de CRISP-DM et les étapes réelles de notre pipeline :
+
+\begin{longtable}{p{3cm}p{5cm}p{5cm}}
+\toprule
+\textbf{Phase CRISP-DM} & \textbf{Interprétation dans le projet} & \textbf{Étapes / livrables} \\
+\midrule
+\textbf{Business Understanding} & Cadrage du problème de support STM32 et objectifs métier & Ch.~\ref{chap:contexte} : problématique, réduction du temps de recherche, traçabilité, consolidation des connaissances GitHub \\
+\textbf{Data Understanding} & Analyse du corpus brut GitHub & Ch.~\ref{chap:contexte} : issues, PRs, commits, fichiers, Release Notes, captures, figures PDF ; volume, bruit, hétérogénéité, métadonnées manquantes \\
+\textbf{Data Preparation} & Prétraitement multi-stage & Stages 1--3, 5--7 : ingestion, nettoyage V1/V3, enrichissement, chunking, validation, delivery \\
+\textbf{Modeling} \textit{(réinterprété)} & Conception algorithmique et structuration orientée retrieval & Similarité TF-IDF + seuil, heuristiques métadonnées, stratégie de chunking \texttt{PARENT\_CHILD}, formats d'artefacts KB-ready, routage KB-first \\
+\textbf{Evaluation} & Mesure de qualité end-to-end & Ch.~\ref{chap:resultats_evaluation} : Quality Index, métriques par stage, confiance Alfred, étude comparative \\
+\textbf{Deployment} & Mise en production sur la plateforme & Ch.~\ref{chap:configuration} + CI/CD : upload KB \#793, persona ST ChatGPT, recherche hybride, workflow automatisé \\
+\bottomrule
+\end{longtable}
+
+\textbf{Lecture} : la phase \textit{Modeling} ne produit pas un modèle entraîné mais un ensemble de \textbf{décisions de conception} (seuils, découpage, formats) qui déterminent comment la connaissance est structurée pour être exploitable par le retrieval de la plateforme. Chaque section technique du rapport rappelle explicitement la phase CRISP-DM à laquelle elle appartient.
+
+%% ============================================================
+\section{Contraintes de la Plateforme de Retrieval et Adaptation du Pipeline}
+\label{sec:contraintes_plateforme}
+%% ============================================================
+
+Un point méthodologique essentiel de ce projet est que \textbf{l'architecture de retrieval n'a pas été conçue par le projet}. La plateforme ST ChatGPT impose une configuration d'indexation et de recherche \textbf{préexistante et non modifiable}. Le pipeline de prétraitement a donc été \textbf{conçu pour s'adapter à ces paramètres imposés}, et non l'inverse. Cette section définit chaque paramètre, explique la contrainte qu'il impose, décrit ce que le pipeline a dû faire pour être compatible, et démontre la valeur ajoutée de chaque choix. Cette section relève de la phase \textbf{Modeling} de CRISP-DM (conception orientée retrieval, cf. Section~\ref{sec:crispdm_adaptation}).
+
+\subsection{Paramètres Imposés par la Plateforme}
+\label{sec:params_plateforme}
+
+La configuration d'indexation de la KB \#793 est fixée par la plateforme :
+
+\begin{longtable}{p{4cm}p{2.5cm}p{6cm}}
+\toprule
+\textbf{Paramètre} & \textbf{Valeur imposée} & \textbf{Signification} \\
+\midrule
+\texttt{chunkStrategy} & \texttt{PARENT\_CHILD} & Découpage hiérarchique à deux niveaux (parent contextuel, enfant précis) \\
+\texttt{childChunkSize} & 1000 & Taille (caractères) des chunks enfants indexés pour la recherche \\
+\texttt{parentChunkSize} & 3000 & Taille (caractères) des chunks parents restitués comme contexte \\
+Modèle d'embedding & \texttt{AdaV2} & \texttt{text-embedding-ada-002} : vectorisation sémantique (1536 dimensions) \\
+\texttt{jobBatchSize} & 60 & Nombre de documents traités par lot d'indexation \\
+\texttt{embeddingsBatchSize} & 20 & Nombre d'embeddings calculés par appel d'API \\
+\bottomrule
+\end{longtable}
+
+\textbf{Position méthodologique} : ces valeurs sont des \textbf{données d'entrée} du projet. Le pipeline ne les redéfinit pas ; il structure la connaissance de façon à ce que le retrieval de la plateforme soit le plus performant possible \textit{sous ces contraintes}.
+
+\subsection{Découpage PARENT\_CHILD}
+\label{sec:parent_child}
+
+\textbf{Définition} : la stratégie \texttt{PARENT\_CHILD} (aussi appelée \textit{small-to-big retrieval}) découpe chaque document en deux niveaux. Les \textbf{chunks enfants} (petits, 1000 caractères) sont vectorisés et indexés : ils servent de \textbf{cibles de recherche} précises. Les \textbf{chunks parents} (plus grands, 3000 caractères) englobent plusieurs enfants et sont \textbf{restitués comme contexte} au LLM lorsqu'un enfant correspond à la requête.
+
+\begin{longtable}{p{3cm}p{5cm}p{5cm}}
+\toprule
+ & \textbf{Chunk enfant (1000)} & \textbf{Chunk parent (3000)} \\
+\midrule
+Rôle & Cible de recherche (matching précis) & Contexte restitué au LLM \\
+Avantage & Précision : match sur un passage exact & Complétude : contexte suffisant pour répondre \\
+Indexé (embeddings)~? & Oui & Non (restitué seulement) \\
+\bottomrule
+\end{longtable}
+
+\textbf{Contrainte imposée} : le retrieval matche sur des fragments de 1000 caractères mais répond avec 3000 caractères. Un découpage aveugle (coupe au milieu d'une phrase, d'une fonction ou d'un log) produit des chunks enfants non auto-suffisants, dont l'embedding est bruité, et des chunks parents incohérents.
+
+\textbf{Ce que le pipeline a dû faire} :
+\begin{itemize}
+  \item Produire des \textbf{unités documentaires auto-suffisantes} (une issue = un symptôme + root cause + fix ; une diagnostic card = un problème complet) dont le sens survit à un découpage à 1000/3000 caractères.
+  \item \textbf{Placer les termes discriminants en tête} de document (titre, périphérique, code d'erreur), pour qu'ils tombent dans le premier chunk enfant.
+  \item \textbf{Éviter les documents monolithiques} : un header CMSIS brut de 1,4~Mo générerait des centaines de chunks enfants sans valeur diagnostique --- d'où le filtrage V3 ($-96\%$).
+  \item Structurer les artefacts pour que chaque \textbf{chunk parent reste thématiquement cohérent} (pas de mélange de deux issues dans un même parent).
+\end{itemize}
+
+\textbf{Valeur ajoutée} : nos artefacts (issues structurées, diagnostic cards) sont naturellement compatibles avec le \textit{small-to-big retrieval} car ils sont déjà organisés en unités sémantiques bornées. Le pipeline transforme du texte brut fragmenté en documents dont la granularité correspond à celle attendue par \texttt{PARENT\_CHILD}.
+
+\textbf{Lien CRISP-DM} : phase \textit{Modeling} (conception du découpage) et \textit{Data Preparation} (production des unités). \textbf{Lien évaluation} : cette compatibilité contribue au saut de Quality Index apporté par les Diagnostic Cards ($+33$ points, cf. Section~\ref{sec:evolution_incrementale}), car leurs \textit{query aliases} augmentent la probabilité qu'un chunk enfant corresponde à une reformulation utilisateur.
+
+La Figure~\ref{fig:parent_child_flow} illustre ce flux : l'artefact ST-ready est découpé en chunks enfants (1000~caractères) indexés par AdaV2 ; à la requête, l'enfant le plus proche est retrouvé, puis son chunk parent (3000~caractères) est restitué comme contexte au LLM.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  box/.style={rectangle, draw=stblue, fill=stlightblue!35, text width=2.6cm, minimum height=1cm, align=center, font=\scriptsize\bfseries, rounded corners=2pt},
+  parent/.style={rectangle, draw=storange, fill=storange!10, text width=3.1cm, minimum height=1.9cm, align=center, font=\tiny\bfseries},
+  child/.style={rectangle, draw=stgreen!70!black, fill=stgreen!18, text width=2.6cm, minimum height=0.5cm, align=center, font=\tiny},
+  idx/.style={rectangle, draw=stblue, fill=stlightblue!25, text width=2.9cm, minimum height=1.1cm, align=center, font=\tiny},
+  qry/.style={rectangle, draw=gray, fill=codebg, text width=2.9cm, minimum height=1cm, align=center, font=\tiny},
+  llm/.style={rectangle, draw=storange, fill=storange!25, text width=2.9cm, minimum height=1.1cm, align=center, font=\scriptsize\bfseries, rounded corners=2pt},
+  arr/.style={-{Stealth[length=2mm]}, thick, draw=stblue},
+  arro/.style={-{Stealth[length=2mm]}, thick, draw=storange},
+  arrd/.style={-{Stealth[length=2mm]}, thick, dashed, draw=storange}
+]
+% Indexation (hors-ligne)
+\node[box] (doc) at (0,0) {Artefact ST-ready\\\scriptsize issue / file / diag card};
+\node[parent] (parent) at (4.4,0) {};
+\node[font=\tiny\bfseries, align=center] at (4.4,-0.75) {Chunk parent\\(3000 car.)};
+\node[child] (c1) at (4.4,0.45) {Chunk enfant (1000)};
+\node[child] (c2) at (4.4,-0.05) {Chunk enfant (1000)};
+\node[idx] (index) at (9,0) {Index vectoriel\\AdaV2 (1536-d)\\KB \#793};
+% Retrieval (en ligne)
+\node[qry] (query) at (9,-3) {Requête utilisateur\\$\to$ embedding AdaV2};
+\node[llm] (llm) at (4.4,-3) {Chunk parent restitué\\$\to$ LLM GPT-5.1};
+% Arrows
+\draw[arr] (doc) -- node[above, font=\tiny]{découpage} (parent);
+\draw[arr] (parent) to[bend left=12] node[above, font=\tiny, align=center]{indexation\\des enfants} (index);
+\draw[arro] (query) -- node[right, font=\tiny]{1. match enfant} (index);
+\draw[arrd] (index) to[bend left=12] node[below, font=\tiny, align=center]{2. parent du\\meilleur enfant} (parent);
+\draw[arro] (parent) -- node[left, font=\tiny]{3. restitution} (llm);
+\end{tikzpicture}
+\caption{Flux \texttt{PARENT\_CHILD} : les chunks enfants (1000~car.) sont indexés par AdaV2 (phase hors-ligne, flèches bleues) ; à la requête (phase en ligne, flèches orange), l'enfant le plus proche est retrouvé puis son chunk parent (3000~car.) est restitué comme contexte au LLM.}
+\label{fig:parent_child_flow}
+\end{figure}
+
+\subsection{Embeddings AdaV2 et Qualité Sémantique du Contenu}
+\label{sec:adav2}
+
+\textbf{Définition} : \texttt{AdaV2} (\texttt{text-embedding-ada-002}) est le modèle d'embedding utilisé par la plateforme pour vectoriser les chunks enfants. Il projette chaque texte dans un espace vectoriel de 1536 dimensions, où la proximité (similarité cosinus, définie en Section~\ref{sec:def_similarity}) reflète la proximité sémantique. \textbf{À distinguer du modèle de génération} (GPT-5.1), qui rédige la réponse finale : AdaV2 sert uniquement à l'\textbf{indexation et la recherche sémantique}.
+
+\textbf{Contrainte imposée} : la qualité du retrieval sémantique dépend directement de la qualité des embeddings. Or un embedding est \textbf{dilué} par le bruit : si un chunk contient 70\% de balises HTML, de licence ou de \texttt{\#define} bit-à-bit, le vecteur résultant représente majoritairement du bruit, et la recherche sémantique devient imprécise.
+
+\textbf{Ce que le pipeline a dû faire} :
+\begin{itemize}
+  \item \textbf{Maximiser la densité sémantique} de chaque chunk (nettoyage V3 : $-96\%$ CMSIS, $-33\%$ HTML) pour que l'embedding capture le signal technique et non le bruit structurel.
+  \item \textbf{Préserver intacts les identifiants techniques} (noms d'API, registres, codes d'erreur) qui portent le sens diagnostique et doivent apparaître dans le texte vectorisé.
+  \item \textbf{Enrichir le contenu visuel} (Alfred Vision) : une capture d'écran non décrite est invisible pour AdaV2 ; sa description textuelle la rend indexable sémantiquement.
+\end{itemize}
+
+\textbf{Valeur ajoutée} : le pipeline produit un contenu \textbf{« embedding-friendly »} --- dense, propre, technique --- qui exploite pleinement la capacité de discrimination sémantique d'AdaV2. C'est le lien direct entre le nettoyage V3 et la qualité du retrieval.
+
+\textbf{Lien CRISP-DM} : \textit{Data Preparation} (nettoyage, enrichissement) au service de la phase \textit{Modeling} (compatibilité sémantique). \textbf{Lien évaluation} : la densité information/chunk augmentée de $+31\%$ (Section~\ref{sec:eval_stage2}) améliore directement la pertinence des embeddings AdaV2.
+
+\subsection{Tailles de Lots (Batch Sizes) et Débit d'Indexation}
+\label{sec:batch_sizes}
+
+\textbf{Définitions} :
+\begin{itemize}
+  \item \texttt{jobBatchSize = 60} : la plateforme indexe les documents par lots de 60. C'est l'unité de traitement d'un \textit{job} d'ingestion.
+  \item \texttt{embeddingsBatchSize = 20} : les embeddings AdaV2 sont calculés par appels groupés de 20 textes, pour optimiser le débit de l'API de vectorisation.
+\end{itemize}
+
+\textbf{Contrainte imposée} : ces tailles de lots déterminent le \textbf{débit} et la \textbf{stabilité} de l'indexation. Des documents trop volumineux ou en nombre imprévisible peuvent provoquer des dépassements de quota, des timeouts, ou une indexation partielle instable.
+
+\textbf{Ce que le pipeline a dû faire} :
+\begin{itemize}
+  \item Produire des documents de \textbf{taille bornée et prévisible} (un header CMSIS de 1,4~Mo saturerait plusieurs lots à lui seul --- d'où le filtrage V3).
+  \item Générer des artefacts en \textbf{comptes maîtrisés par datasource et par série}, pour que l'upload se répartisse proprement en lots de 60.
+  \item Exporter un \textbf{JSON par type d'artefact} découpable en unités homogènes, compatibles avec le calcul d'embeddings par groupes de 20.
+  \item Adopter un workflow d'upload \textbf{Delete + Add} qui réindexe proprement sans conflit, garantissant une indexation déterministe.
+\end{itemize}
+
+\textbf{Valeur ajoutée} : en normalisant la taille et le nombre des documents, le pipeline assure une \textbf{indexation stable et reproductible} de la KB \#793, sans dépassement de débit ni indexation partielle. Le respect implicite des tailles de lots est un effet direct de la discipline de taille imposée par le nettoyage et la structuration.
+
+\textbf{Lien CRISP-DM} : phase \textit{Deployment} (upload et indexation) préparée dès la \textit{Data Preparation}. \textbf{Lien évaluation} : la stabilité d'indexation conditionne la reproductibilité des campagnes de Quality Index (Section~\ref{sec:evolution_incrementale}).
+
+\subsection{Synthèse : Contrainte Plateforme \texorpdfstring{$\rightarrow$}{->} Décision Pipeline \texorpdfstring{$\rightarrow$}{->} Valeur}
+\label{sec:synthese_contraintes}
+
+\begin{longtable}{p{2.8cm}p{3.5cm}p{3.2cm}p{2.8cm}}
+\toprule
+\textbf{Paramètre plateforme} & \textbf{Contrainte} & \textbf{Décision pipeline} & \textbf{Valeur ajoutée} \\
+\midrule
+\texttt{PARENT\_CHILD} (1000/3000) & Match sur enfants, contexte sur parents & Unités auto-suffisantes, termes discriminants en tête & Compatibilité \textit{small-to-big}, recall accru \\
+\texttt{AdaV2} & Embeddings sensibles au bruit & Nettoyage V3, densité sémantique, Alfred Vision & Contenu embedding-friendly, retrieval précis \\
+\texttt{jobBatchSize=60} & Indexation par lots & Documents bornés, comptes maîtrisés & Indexation stable \\
+\texttt{embeddingsBatchSize=20} & Vectorisation groupée & Artefacts découpables homogènes & Débit maîtrisé, pas de timeout \\
+\bottomrule
+\end{longtable}
+
+\textbf{Conclusion} : le pipeline n'invente pas l'architecture de retrieval~; il \textbf{adapte le prétraitement et la structuration de la connaissance} à une configuration de plateforme imposée. Sa valeur ne réside pas dans la définition des paramètres (fixés par la plateforme) mais dans la \textbf{production d'artefacts optimalement compatibles} avec ces paramètres, ce qui améliore la qualité finale du retrieval et du support.
+
+\subsection{Valeur du Pipeline par Rapport à un Preprocessing RAG Standard}
+\label{sec:valeur_vs_standard}
+
+Un preprocessing RAG standard se limite généralement à : découper le texte brut, calculer les embeddings, indexer. Notre pipeline se distingue sur plusieurs axes, tout en restant compatible avec la même plateforme :
+
+\begin{longtable}{p{4cm}p{4.5cm}p{4.5cm}}
+\toprule
+\textbf{Aspect} & \textbf{Preprocessing RAG standard} & \textbf{Notre pipeline} \\
+\midrule
+Nettoyage & Générique (strip basique) & Par type (V3) : HTML, CMSIS, licences \\
+Métadonnées & Absentes ou minimales & Heuristiques domain-specific (layer, component, board, severity) \\
+Unités documentaires & Chunks bruts & Artefacts structurés (issues, files, resolver, diagnostic) \\
+Contenu visuel & Ignoré & Décrit par Alfred Vision (issues + PDF) \\
+Traçabilité & Faible & Chaîne Issue$\to$PR$\to$Commit (resolver cases) \\
+Compatibilité chunking & Fortuite & Conçue pour \texttt{PARENT\_CHILD} \\
+\bottomrule
+\end{longtable}
+
+\textbf{Valeur des artefacts structurés} : les 4 types d'artefacts ne sont pas des chunks bruts mais des unités de connaissance conçues pour le retrieval. Les \textbf{diagnostic cards} (Symptôme $\to$ Root Cause $\to$ Fix) et les \textbf{resolver cases} (Issue $\to$ PR $\to$ Commit) apportent respectivement le raisonnement diagnostique et la traçabilité du correctif --- deux dimensions absentes d'un preprocessing générique et directement responsables du gain de Quality Index mesuré (Section~\ref{sec:evolution_incrementale}).
 
 \section{Architecture Globale}
 
@@ -994,6 +1211,8 @@ La Figure~\ref{fig:data_flow} montre le parcours complet d'une donnée depuis Gi
 
 \section{Ingestion (Stage 1)}
 
+\textit{\small\textbf{\textcolor{stblue}{Phase CRISP-DM :}} Data Preparation (collecte exhaustive des données brutes, préalable à toute transformation).}\par\smallskip
+
 \subsection{Objectif}
 Récupérer exhaustivement toutes les données des repositories GitHub configurés pour une série MCU donnée. La configuration est définie dans un fichier \texttt{config\_XX.json} qui liste les repos à ingérer.
 
@@ -1065,6 +1284,8 @@ L'ingestion s'appuie sur 5 scripts spécialisés :
 
 \section{Nettoyage (Stage 2)}
 
+\textit{\small\textbf{\textcolor{stblue}{Phase CRISP-DM :}} Data Preparation (élimination du bruit textuel et normalisation).}\par\smallskip
+
 Le nettoyage prépare les données brutes pour l'enrichissement en éliminant le bruit textuel :
 
 \subsection{Nettoyage des Issues}
@@ -1121,6 +1342,8 @@ Le nettoyage prépare les données brutes pour l'enrichissement en éliminant le
 \textbf{Note importante} : Le nettoyage ne fait \textbf{aucune classification} (pas de détection de layer, board, component). Cette tâche est réalisée à l'étape suivante (Enrichissement).
 
 \section{Nettoyage V3 --- Nettoyage Intelligent par Type (Stage 2b)}
+
+\textit{\small\textbf{\textcolor{stblue}{Phase CRISP-DM :}} Data Preparation (nettoyage adaptatif par type de fichier au service de la qualité des embeddings AdaV2).}\par\smallskip
 
 Le nettoyage V1/V2 appliquait une stratégie uniforme à tous les fichiers. Or les sources ingérées sont hétérogènes : Release Notes en HTML, README en Markdown avec badges, fichiers source C avec licences volumineuses, et headers CMSIS de plus d'1~Mo. La version 3 introduit un \textbf{nettoyage par type} qui adapte la stratégie au contenu réel de chaque fichier.
 
@@ -1234,6 +1457,8 @@ Le V3 n'écrase jamais les sorties V1/V2 :
 
 \section{Enrichissement V2 (Stage 3)}
 
+\textit{\small\textbf{\textcolor{stblue}{Phase CRISP-DM :}} Data Preparation dominante, avec une composante Modeling (conception des heuristiques de classification).}\par\smallskip
+
 \subsection{Heuristiques de Classification}
 
 Le module \texttt{stm32cube\_preprocessing\_heuristics.py} applique des règles basées sur :
@@ -1259,6 +1484,8 @@ Le module \texttt{stm32cube\_preprocessing\_heuristics.py} applique des règles 
 \end{lstlisting}
 
 \section{Similarité (Stage 4)}
+
+\textit{\small\textbf{\textcolor{stblue}{Phase CRISP-DM :}} Modeling (conception de la mesure de similarité TF-IDF et du seuil décisionnel).}\par\smallskip
 
 \subsection{Algorithme}
 \begin{enumerate}
@@ -1324,22 +1551,26 @@ Le module \texttt{stm32cube\_preprocessing\_heuristics.py} applique des règles 
 
 \section{Chunking V2 (Stage 5 --- Optionnel)}
 
-\textbf{Note importante} : le chunking est réalisé localement à des fins de \textbf{test et validation} uniquement. En production, la plateforme ST ChatGPT gère elle-même le découpage des documents lors de l'indexation (paramètre \texttt{json-split-size: 1000}). Le chunking local nous permet de :
+\textit{\small\textbf{\textcolor{stblue}{Phase CRISP-DM :}} Data Preparation, avec une composante Modeling (adaptation au découpage \texttt{PARENT\_CHILD} imposé par la plateforme, cf. Section~\ref{sec:parent_child}).}\par\smallskip
+
+\textbf{Note importante} : le chunking est réalisé localement à des fins de \textbf{test et validation} uniquement. En production, la plateforme ST ChatGPT gère elle-même le découpage lors de l'indexation, selon la stratégie \texttt{PARENT\_CHILD} imposée (chunks enfants de 1000 caractères indexés, chunks parents de 3000 caractères restitués --- cf. Section~\ref{sec:parent_child}). Le chunking local nous permet de :
 \begin{itemize}
   \item Vérifier la taille et la qualité des segments avant upload
   \item Tester la recherche TF-IDF en local (évaluation préliminaire)
-  \item Comparer les stratégies de découpage sans impacter la KB en production
+  \item Vérifier que nos artefacts restent auto-suffisants sous un découpage à 1000/3000 caractères
 \end{itemize}
 
-Stratégie de découpage local :
+Stratégie de découpage local (approximation du comportement plateforme) :
 \begin{itemize}
-  \item Issues : chunks par paragraphe, max 512 tokens, overlap 50 tokens
+  \item Issues : chunks par paragraphe, alignés sur des unités sémantiques auto-suffisantes
   \item Files : chunks par section (README headers, fonctions C)
 \end{itemize}
 
-Le flag \texttt{--skip-chunking} dans le workflow permet de sauter cette étape pour les runs de production, car la plateforme gère le chunking automatiquement à l'upload.
+Le flag \texttt{--skip-chunking} dans le workflow permet de sauter cette étape pour les runs de production, car la plateforme applique elle-même le découpage \texttt{PARENT\_CHILD} à l'upload. Le rôle du pipeline n'est donc pas de découper, mais de \textbf{produire des documents dont le découpage plateforme préserve la cohérence sémantique} (Section~\ref{sec:contraintes_plateforme}).
 
 \section{Delivery (Stage 7)}
+
+\textit{\small\textbf{\textcolor{stblue}{Phase CRISP-DM :}} Data Preparation (production des artefacts finaux), charnière vers la phase Deployment (upload KB).}\par\smallskip
 
 \subsection{Resolver Cases}
 Générés à partir d'issues fermées avec PRs liées :
@@ -1610,9 +1841,14 @@ Mise à jour KB & Delete + Re-add automatique via GitHub Actions \\
 %% ============================================================
 
 %% ============================================================
-\chapter{Résultats et Évaluation}
-\label{chap:resultats_evaluation}
+%% Chapitre Évaluation (fichier séparé pour réécriture académique)
+\input{chapter_evaluation}
 %% ============================================================
+
+%% ============================================================
+%% ANCIEN CHAPITRE ÉVALUATION COMMENTÉ (remplacé par chapter_evaluation.tex)
+%% ============================================================
+\iffalse
 
 \section{Couverture des Données}
 
@@ -1798,7 +2034,7 @@ STM32CubeG4 (45 issues) & 100.0\% & 100.0\% & 97.8\% & 100.0\% & \textcolor{gree
 \draw[dashed, red, thick] (0.8,1.05) -- (11.2,1.05) node[right, font=\scriptsize, red] {Seuil EXCELLENT (95\%)};
 \end{tikzpicture}
 \caption{Complétude d'ingestion par série --- toutes métriques au-dessus du seuil EXCELLENT}
-\label{fig:eval_ingestion_chart}
+\label{fig:eval_ingestion_chart_dead}
 \end{figure}
 
 \subsection{Stage 2 : Cleaning --- Qualité de Préparation Textuelle}
@@ -1907,7 +2143,7 @@ Board & 45.3\% & $\geq 60\%$ & \textcolor{red}{\textbf{INSUFFISANT}} & --14.7 pt
 \node[red, font=\scriptsize] at (12.5,3.45) {Seuil};
 \end{tikzpicture}
 \caption{Couverture d'enrichissement STM32CubeH7 --- comparaison score vs seuil par champ}
-\label{fig:eval_enrichment_chart}
+\label{fig:eval_enrichment_chart_dead}
 \end{figure}
 
 \subsection{Stage 3b : Enrichissement Alfred Vision --- Images d'Issues}
@@ -2294,7 +2530,7 @@ Formule pondérée précédente ($w_4=0.5, w_5=2.0$) & 86.4\% & BON & Reflète m
 \end{axis}
 \end{tikzpicture}
 \caption{Décomposition du score global 87.1\% --- contribution pondérée de chaque stage, avec Alfred séparé par source visuelle}
-\label{fig:score_decomposition}
+\label{fig:score_decomposition_dead}
 \end{figure}
 
 \section{Étude Comparative : Alfred Générique vs Persona KB}
@@ -2432,11 +2668,11 @@ Documentation (2 questions) & 5.0 & 4.0 & Persona limitée quand doc absente de 
 \end{axis}
 \end{tikzpicture}
 \caption{Comparaison Alfred vs Persona KB par catégorie de question}
-\label{fig:comparative_chart}
+\label{fig:comparative_chart_dead}
 \end{figure}
 
 \section{Contribution de Chaque Étape au Résultat Final}
-\label{sec:value_chain}
+\label{sec:value_chain_dead}
 
 Cette section démontre la \textbf{valeur ajoutée mesurable} de chaque étape du pipeline, en montrant comment chacune contribue au Quality Index final.
 
@@ -2495,7 +2731,7 @@ S6 Fulltext-only & Full-text & -- & 0 & 20 & N/A & Test en cours \\
 \end{axis}
 \end{tikzpicture}
 \caption{Comparaison des stratégies Unstructured KB sur 96 questions multi-séries}
-\label{fig:qi_evolution}
+\label{fig:qi_evolution_dead}
 \end{figure}
 
 \subsection{Matrice Valeur × Effort par Étape}
@@ -2515,8 +2751,13 @@ PDF descriptions & +1 pt estimé & Élevé (CV + Alfred) & Acceptable \\
 \bottomrule
 \end{tabular}
 \caption{ROI de chaque amélioration du pipeline sur le Quality Index}
-\label{tab:roi_pipeline}
+\label{tab:roi_pipeline_dead}
 \end{table}
+
+\fi
+%% ============================================================
+%% FIN ANCIEN CHAPITRE ÉVALUATION COMMENTÉ
+%% ============================================================
 
 %% ============================================================
 \chapter{Automatisation et CI/CD}
@@ -2737,7 +2978,7 @@ La Figure~\ref{fig:qi_evolution} visualise cette évolution, mettant en évidenc
 \centering
 \includegraphics[width=0.9\textwidth]{qi_evolution_chart.png}
 \caption{Évolution du Quality Index au fil des améliorations incrémentales (draw.io)}
-\label{fig:qi_evolution}
+\label{fig:qi_evolution_dead2}
 \end{figure}
 
 \textit{Le graphique en barres montre l'évolution : Issues seules (54) $\to$ +Prompt (57) $\to$ +Hybrid (61) $\to$ +Diag Cards (94, $\uparrow$+33) $\to$ Real Cases (88) $\to$ Multi 4Q (83) $\to$ Multi 52Q (54, dilution multi-séries). Le saut majeur de 61 à 94 démontre l'impact des Diagnostic Cards.}
@@ -2953,6 +3194,9 @@ Py-PDF Contributors (2024). \textit{pypdf --- A pure-Python PDF library}. \url{h
 \bibitem{reimers2019sentence}
 Reimers, N. et Gurevych, I. (2019). \textit{Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks}. Proceedings of EMNLP-IJCNLP, pp.~3982--3992. --- Référence pour le mode avancé de similarité sémantique par embeddings, disponible mais non activé dans la campagne actuelle.
 
+\bibitem{neelakantan2022embeddings}
+Neelakantan, A., Xu, T., Puri, R., Radford, A., Han, J. M., Tworek, J., Yuan, Q., Tezak, N., Kim, J. W., Hallacy, C. et al. (2022). \textit{Text and Code Embeddings by Contrastive Pre-Training}. arXiv:2201.10005. --- Référence des embeddings OpenAI (famille \texttt{text-embedding-ada-002}, dit \texttt{AdaV2}) utilisés par la plateforme ST ChatGPT pour l'indexation sémantique de la KB \#793. Le pipeline produit un contenu propre et dense afin d'exploiter la capacité de discrimination sémantique de ce modèle.
+
 \end{thebibliography}
 
 %% ============================================================
@@ -3082,5 +3326,190 @@ python pipeline_Automation/upload/upload_pdf_enriched_files_all_series.py
   ]
 }
 \end{lstlisting}
+
+\section*{D. Exemple JSON --- Issue Structurée (Extrait)}
+
+\begin{lstlisting}[language=json]
+{
+  "issue_number": 42,
+  "repo": "stm32cubeh7",
+  "title": "HAL_SPI_TransmitReceive_DMA fails on STM32H743",
+  "layer": "HAL",
+  "component": "SPI",
+  "board": "NUCLEO-H743ZI",
+  "issue_kind": "bug_report",
+  "severity": "high",
+  "evidence_strength": "high",
+  "st_ready_text": "Symptom: hard fault after 2nd SPI DMA transfer... Root cause: D-cache not invalidated... Fix: SCB_InvalidateDCache_by_Addr().",
+  "source_url": "https://github.com/STMicroelectronics/STM32CubeH7/issues/42"
+}
+\end{lstlisting}
+
+\section*{E. Exemple JSON --- Fichier Documenté (Extrait)}
+
+\begin{lstlisting}[language=json]
+{
+  "path": "Src/stm32h7xx_hal_spi.c",
+  "repo": "stm32h7xx-hal-driver",
+  "file_type": "source_code",
+  "original_size": 89247,
+  "clean_size": 80322,
+  "is_valid": true,
+  "url": "https://github.com/STMicroelectronics/stm32h7xx-hal-driver/blob/master/Src/stm32h7xx_hal_spi.c",
+  "st_ready_text": "HAL_StatusTypeDef HAL_SPI_Init(...) {...} HAL_SPI_TransmitReceive_DMA(...) {...}"
+}
+\end{lstlisting}
+
+\section*{F. Exemple JSON --- Diagnostic Card (Extrait)}
+
+\begin{lstlisting}[language=json]
+{
+  "diagnostic_id": "DIAG-H7-042",
+  "repo": "stm32cubeh7",
+  "symptom": "Hard fault after 2nd SPI DMA transfer (circular mode, H743)",
+  "root_cause": "D-cache not invalidated before DMA reception (stale read).",
+  "resolution": "SCB_InvalidateDCache_by_Addr() before reading RX buffer, or non-cacheable SRAM (MPU).",
+  "affected_versions": ["CubeH7 v1.9.0", "CubeH7 v1.10.0"],
+  "fixed_version": "CubeH7 v1.11.0",
+  "query_aliases": [
+    "SPI DMA hard fault STM32H7",
+    "cache coherency SPI circular mode",
+    "D-cache DMA corruption H743"
+  ],
+  "evidence_strength": "high"
+}
+\end{lstlisting}
+
+\section*{G. Exemple de Fichier de Configuration (Extrait)}
+
+Chaque série dispose d'un fichier \texttt{config\_XX.json} listant les dépôts à ingérer et les paramètres d'export. Extrait représentatif :
+
+\begin{lstlisting}[language=json]
+{
+  "series": "STM32CubeH7",
+  "primary_repo": "STM32CubeH7",
+  "repos": [
+    "stm32h7xx-hal-driver",
+    "cmsis_device_h7",
+    "stm32h743i-eval-bsp",
+    "stm32h745i-disco-bsp"
+  ],
+  "kb_id": 793,
+  "export": { "st_ready": true, "skip_chunking": true }
+}
+\end{lstlisting}
+
+Le fichier \texttt{config\_all\_series.json} associe chaque série aux identifiants de datasources KB (issues, files, resolver, diagnostic) utilisés lors de l'upload.
+
+\section*{H. Extrait d'Automatisation --- Workflow CI/CD}
+
+Le workflow GitHub Actions déclenche le pipeline (cloud) puis l'upload (self-hosted). Extrait représentatif :
+
+\begin{lstlisting}[language=bash, caption={Workflow bi-mensuel (extrait YAML)}]
+name: STM32Cube KB Update
+on:
+  schedule:
+    - cron: '0 3 1,15 * *'   # 1er et 15 du mois, 03h UTC
+  workflow_dispatch:
+    inputs:
+      series: { description: 'Serie a traiter', required: false }
+jobs:
+  pipeline:               # Job 1 - cloud
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pipeline.run_full_workflow
+             --export-st-ready --skip-chunking --continue-on-error
+  upload:                 # Job 2 - self-hosted (gate + Delete+Add)
+    needs: pipeline
+    runs-on: self-hosted
+    steps:
+      - run: python -m pipeline.evaluation.validate_schemas
+      - run: python pipeline_Automation/upload/upload_alfred_issues_all_series.py
+\end{lstlisting}
+
+\section*{I. Glossaire}
+
+\begin{description}[leftmargin=0cm, style=nextline]
+  \item[RAG (Retrieval-Augmented Generation)] Paradigme combinant recherche documentaire et génération par LLM : les documents pertinents sont récupérés puis fournis au modèle comme contexte.
+  \item[Chunking \texttt{PARENT\_CHILD}] Découpage hiérarchique à deux niveaux : les chunks enfants (petits) servent de cibles de recherche, les chunks parents (grands) sont restitués comme contexte (cf. Figure~\ref{fig:parent_child_flow}).
+  \item[Chunk enfant / parent] Enfant : fragment de 1000 caractères indexé (vectorisé). Parent : fragment de 3000 caractères englobant, restitué au LLM lorsqu'un enfant correspond.
+  \item[Embedding] Représentation vectorielle d'un texte dans un espace où la proximité reflète la proximité sémantique.
+  \item[AdaV2 (\texttt{text-embedding-ada-002})] Modèle d'embedding (1536 dimensions) utilisé par la plateforme pour l'indexation sémantique de la KB \#793.
+  \item[Recherche hybride] Combinaison d'une recherche sémantique (embeddings) et full-text (correspondance exacte), fusionnées par union.
+  \item[Seuil sémantique] Score minimal de similarité vectorielle pour qu'un document soit retourné (0.55 en configuration courante).
+  \item[TF-IDF] Pondération de termes par leur spécificité dans le corpus, utilisée pour la similarité inter-issues (cf. Section~\ref{sec:def_similarity}).
+  \item[Similarité cosinus] Mesure de l'angle entre deux vecteurs textuels (cf. Section~\ref{sec:def_similarity}).
+  \item[Similarité de Jaccard] Proportion de vocabulaire partagé entre deux ensembles de tokens (cf. Section~\ref{sec:def_similarity}).
+  \item[Alfred Vision] Service LLM interne ST de description d'images, convertissant captures d'écran et figures PDF en descriptions textuelles indexables.
+  \item[NovaX] Tool de fallback restrictif (Bugzilla + STCommunity) appelé uniquement si la KB ne couvre pas la question, pour protéger le routage KB-first.
+  \item[KB (Knowledge Base)] Base de connaissances \#793 sur la plateforme ST ChatGPT, alimentée par les artefacts du pipeline.
+  \item[Datasource] Source de données au sein de la KB, par série et par type d'artefact.
+  \item[Resolver Case] Artefact traçant la chaîne Issue $\to$ PR $\to$ Commit avec preuve de résolution.
+  \item[Diagnostic Card] Artefact structuré (Symptôme $\to$ Root Cause $\to$ Fix $\to$ Prévention) avec query aliases.
+  \item[Query alias] Reformulation alternative d'un problème, ajoutée pour améliorer le rappel du retrieval.
+  \item[Gate de validation] Contrôle JSON Schema bloquant l'upload si un artefact est malformé.
+  \item[Quality Index (QI)] Métrique end-to-end de qualité des réponses du chatbot (cf. Section~\ref{sec:def_quality_index}).
+  \item[Confiance contextuelle] Proportion de descriptions Alfred dont l'ancrage au contexte dépasse le seuil d'alerte (cf. Section~\ref{sec:def_confiance_contextuelle}).
+  \item[\texttt{jobBatchSize} / \texttt{embeddingsBatchSize}] Tailles de lots plateforme (60 documents par job d'indexation, 20 embeddings par appel API), cf. Section~\ref{sec:batch_sizes}.
+\end{description}
+
+\section*{J. Liste des Acronymes}
+
+\begin{longtable}{p{3cm}p{10.5cm}}
+\toprule
+\textbf{Acronyme} & \textbf{Signification} \\
+\midrule
+RAG & Retrieval-Augmented Generation \\
+KB & Knowledge Base \\
+LLM & Large Language Model \\
+NLP & Natural Language Processing \\
+TF-IDF & Term Frequency -- Inverse Document Frequency \\
+BM25 & Best Matching 25 (fonction de ranking full-text) \\
+NLI & Natural Language Inference \\
+OCR & Optical Character Recognition \\
+HAL & Hardware Abstraction Layer \\
+LL & Low-Layer (drivers) \\
+BSP & Board Support Package \\
+CMSIS & Cortex Microcontroller Software Interface Standard \\
+MCU & Microcontroller Unit \\
+DMA & Direct Memory Access \\
+SPI & Serial Peripheral Interface \\
+IRQ & Interrupt Request \\
+PR & Pull Request \\
+API & Application Programming Interface \\
+JSON & JavaScript Object Notation \\
+PDF & Portable Document Format \\
+CI/CD & Continuous Integration / Continuous Deployment \\
+QI & Quality Index \\
+ISO/IEC & International Organization for Standardization / International Electrotechnical Commission \\
+DPMO & Defects Per Million Opportunities \\
+CRISP-DM & Cross-Industry Standard Process for Data Mining \\
+\bottomrule
+\end{longtable}
+
+\section*{K. Vue d'Ensemble des Notions Techniques}
+
+Cette table garantit que chaque notion technique dispose d'au moins un support explicatif (définition, figure, exemple ou entrée de glossaire) :
+
+\begin{longtable}{p{3.5cm}p{4cm}p{5cm}}
+\toprule
+\textbf{Notion} & \textbf{Type de support} & \textbf{Localisation} \\
+\midrule
+Chunking \texttt{PARENT\_CHILD} & Section + figure + glossaire & Sec.~\ref{sec:parent_child}, Fig.~\ref{fig:parent_child_flow} \\
+Embeddings AdaV2 & Section + glossaire + réf. & Sec.~\ref{sec:adav2}, \cite{neelakantan2022embeddings} \\
+Tailles de lots (batch) & Section + glossaire & Sec.~\ref{sec:batch_sizes} \\
+Recherche hybride & Section + glossaire & Sec.~\ref{sec:search_type} \\
+Alfred Vision & Section + figure + glossaire & Fig.~\ref{fig:alfred}, Sec.~\ref{sec:eval_alfred_complete} \\
+NovaX fallback & Section + glossaire & Sec.~\ref{sec:eval_fallback} \\
+Upload KB (workflow) & Annexe H + commandes B & Annexes B, H \\
+Gates JSON Schema & Section + glossaire & Pattern « Gate de Qualité » \\
+Resolver Cases & Section + exemple JSON & Sec.~Delivery, Annexe C \\
+Diagnostic Cards & Section + exemple JSON & Sec.~Delivery, Annexe F \\
+CI/CD automation & Chapitre + figure + annexe & Fig.~\ref{fig:cicd}, Annexe H \\
+TF-IDF / cosinus / Jaccard & Définitions + glossaire & Sec.~\ref{sec:def_similarity} \\
+Quality Index & Définition + évolution & Sec.~\ref{sec:def_quality_index}, \ref{sec:evolution_incrementale} \\
+\bottomrule
+\end{longtable}
 
 \end{document}

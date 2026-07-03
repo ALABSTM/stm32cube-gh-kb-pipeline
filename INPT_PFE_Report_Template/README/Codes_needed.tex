@@ -1,0 +1,218 @@
+%This file includes codes for different elements you will need: figures, tables, lists...
+
+%This file is not compiled, it's only for documentation.
+%Copy the codes you want and test them in the chapter files.
+
+%if you want symbols and other text styles, visit this link: 
+
+https://www.cmor-faculty.rice.edu/~heinken/latex/symbols.pdf
+
+% 1 - Content division
+
+\chapter{Comes first}, then \section{}, then \subsection{}, then \subsubsection{}.
+
+% 2 - Text formatting:
+
+Use \textbf{For bold text}
+
+Use \textit{For italic text}
+
+\underline{This text is underlined.}
+
+\st{This text is struck out.}
+
+\textsc{This text is capitalized.}
+
+Use \paragraph{To start a paragraph}
+
+Use \centering To center a figure or any element
+
+Some characters like "\%", "\$" and "\&" are significant in Latex code, so to include them in normal text, use the "\" like shown.
+
+%Documentation: https://www.overleaf.com/learn/latex/Bold%2C_italics_and_underlining
+
+
+
+
+% 3 - Figure:
+
+\begin{figure}[H] 
+    \centering
+    \includegraphics[width=7cm]{Logos/Logo_INPT.png}
+    \caption{My caption}
+    %\label{fig:my_label} %Optional (If you want to reference the figure in later chapters)
+\end{figure}
+
+%you can include two figures as well
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=7cm]{Logos/Logo_ANRT.jpg}\hfill
+    \includegraphics[width=7cm]{Logos/Logo_INPT.png}
+    \caption{Caption}
+\end{figure}
+
+%[width=7cm] you control the size of the image. other options include: 
+%[height=7cm] or [scale=0.5] (means half the size of the original image)
+
+
+%Documentation: https://www.overleaf.com/learn/latex/Inserting_Images
+
+
+
+% 4 - Table:
+
+%Simple table without borders:
+
+\begin{tabular}{ll}
+  First & Second \\
+  Third & Fourth
+\end{tabular}
+
+
+%More complex table with borders:
+
+\begin{tabular}{|l|c|r|} \hline
+  Left aligned column & Centered column & Right aligned column \\ \hline
+  Text & Text & Text \\ \hline
+\end{tabular}
+
+%Scoring table example:
+
+\begin{center}
+  \begin{tabular}{ | c | c | c | c | } \hline
+    \bf{Group} &
+    \bf{Add. constraints} &
+    \bf{Points} &
+    \bf{Req. groups} \\ \hline
+    $1$ & $b = a + 1$ & $30$ & --- \\ \hline
+    $2$ & $n \le 1\,000$ & $10$ & examples \\ \hline
+    $3$ & $n \le 10^7$ & $20$ & $2$ \\ \hline
+    $4$ & --- & $40$ & $1$, $3$ \\ \hline
+  \end{tabular}
+\end{center}
+
+%Example of a short table
+
+% {5cm} is the cell length, you can change it to suit your own table
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|m{5cm}|m{10cm}|}
+        \hline
+          Column1 & Column2 \\
+        \hline
+          Element11 & Element21 \\
+        \hline
+          Element12 & Element22 \\
+        \hline
+          Element13 & Element23 \\
+        \hline
+    \end{tabular}
+    \caption{Table Example}
+\end{table}
+
+
+%Example of a long table (that spans 2 pages or more), Latex will automatically split the table when it reaches the end of the page:
+
+\begin{longtable}[c]{| m{4.4cm} | m{11cm} |}
+\caption{Long table}\\
+ \hline
+
+ Cell & Description  \\ 
+ \hline
+ \endfirsthead
+
+ \hline
+ 
+ Cell & Description  \\ 
+ \hline
+ \endhead
+
+        \hline
+          Element11 & Element21 \\
+        \hline
+          Element12 & Element22 \\
+        \hline
+          Element13 & Element23 \\
+        \hline
+          Element14 & Element24 \\
+        \hline
+          Element15 & Element25 \\
+        \hline
+          Element16 & Element26 \\
+        \hline
+          Element17 & Element27 \\
+        \hline
+          Element18 & Element28 \\
+        \hline
+          Element19 & Element29 \\
+        \hline
+          Element110 & Element210 \\
+        \hline
+          Element111 & Element211 \\
+        \hline
+          Element112 & Element212 \\
+        \hline
+          Element113 & Element213 \\
+        \hline
+          Element114 & Element214 \\
+        \hline
+
+ \end{longtable}
+
+%Documentation: https://www.overleaf.com/learn/latex/Tables
+
+
+
+
+% 5 - Lists:
+
+%To start an unnumbered list, use:
+
+\begin{itemize}
+    \item 
+    \item 
+    \item 
+\end{itemize}
+
+%To start a numbered list, use:
+
+\begin{enumerate}
+    \item 
+    \item 
+    \item 
+\end{enumerate}
+
+%Documentation: https://www.overleaf.com/learn/latex/Lists
+
+
+
+% 6 - Code scripts or terminal
+
+%Say you have a script or terminal command you want to include, you use the following code:
+
+    \lstset{style=mystyle} %this style is already defined in Packages.tex
+    
+    \begin{lstlisting}[language=bash, caption= code caption]
+    
+    root@eve-ng:~# mkdir -p /opt/unetlab/addons/qemu/timos-20.10.R12
+
+    \end{lstlisting}
+
+%Documentation: https://www.overleaf.com/learn/latex/Code_listing
+
+
+% 7 - Math
+
+%Some math formulas for you, test them in your chapters:
+
+These are inline formulas: $x$, $a_i^2 + b_i^2 \le a_{i+1}^2$. Afterwards...
+
+These are centered formulas: $$x,$$ $$a_i^2 + b_i^2 \le a_{i+1}^2.$$ Afterwards...
+
+Some complex formula: $$P(|S - E[S]| \ge t) \le 2 \exp \left( -\frac{2 t^2 n^2}{\sum_{i = 1}^n (b_i - a_i)^2} \right).$$
+
+%Also you can use the first link for math symbols and other useful stuff:
+
+https://www.cmor-faculty.rice.edu/~heinken/latex/symbols.pdf

@@ -17,11 +17,220 @@ Le pipeline transforme des signaux GitHub bruts et hétérogènes en artefacts s
 
 ### 0.2 Storyline recommandée (ordre des slides)
 
-1. **Pourquoi** : problème métier (support lent, données fragmentées, diagnostics non traçables).
-2. **Comment** : chaîne technique en 7 blocs (Ingestion → Upload KB).
-3. **Preuve** : gates qualité + exemples concrets avant/après.
-4. **Risque maîtrisé** : fallback, retries, idempotence upload, validations schéma.
-5. **Impact** : qualité réponse, traçabilité, reproductibilité opérationnelle.
+1. **Vue d'ensemble** : le pipeline en une image (7 blocs, entrée GitHub, sortie KB).
+2. **Le problème des images** : captures opaques → solution Alfred Vision.
+3. **Connexion Alfred + NovaX** : architecture multi-agents KB-first.
+4. **Zoom Cleaning → Enrichment** : d'où viennent les fichiers `docs_*`, V3 type-aware.
+5. **Preuve** : gates qualité + exemples concrets avant/après.
+6. **Impact** : Quality Index, confiance contextuelle, traçabilité.
+
+### 0.3 Slide 1 — Vue d'Ensemble du Pipeline (3 min)
+
+**Message clé** : Le pipeline transforme des données brutes GitHub en artefacts structurés pour un chatbot IA spécialisé STM32.
+
+**Schéma à montrer** :
+
+```
+┌─────────────┐    ┌───────────┐    ┌──────────────┐    ┌────────────┐    ┌──────────┐    ┌────────────┐    ┌──────────┐
+│ 1. Ingestion│───▶│2. Cleaning│───▶│3. Enrichment │───▶│4. Similarité│───▶│5. Chunking│───▶│6. Validation│───▶│7. Delivery│
+│ fetch_*     │    │ V1 + V3   │    │ NLP + Alfred │    │ TF-IDF     │    │ 512 tok   │    │ JSON Schema│    │ 4 types  │
+└─────────────┘    └───────────┘    └──────────────┘    └────────────┘    └──────────┘    └────────────┘    └──────────┘
+      ▲                                                                                                          │
+      │                                                                                                          ▼
+ GitHub API                                                                                                 KB #793
+ 25 séries                                                                                             ST ChatGPT
+ 200+ repos                                                                                            GPT-5.1
+```
+
+**Points à dire** :
+- 25 séries STM32 (13 en production, 12 configurées)
+- 4 types d'artefacts produits : Issues, Files, Resolver Cases, Diagnostic Cards
+- Pipeline modulaire : chaque stage rejouable indépendamment (`--skip-ingestion`, `--skip-chunking`)
+- Artefacts traçables : chaque document final cite sa source GitHub
+
+**Chiffres à afficher** :
+| Donnée | Valeur |
+|--------|--------|
+| Séries couvertes | 25 (13 prod, 12 config) |
+| Repos GitHub | 200+ |
+| Issues traitées | ~3 350 |
+| Files documentés | ~14 000 |
+| Diagnostic Cards | ~157 |
+| Resolver Cases | ~390 |
+| KB Datasources | 38 |
+
+### 0.4 Slide 2 — Le Problème des Images et la Solution Alfred (3 min)
+
+**Message clé** : Les captures d'écran dans les issues sont invisibles pour la recherche textuelle. Alfred Vision les rend cherchables.
+
+**Avant/Après** :
+
+```
+AVANT (opaque pour le RAG) :
+─────────────────────────────
+Issue #42: "HAL_SPI fails on H743"
+Body: "See screenshot below"
+[IMAGE ATTACHED: screenshot_debugger.png]    ← invisible pour la recherche !
+
+APRÈS (cherchable par le RAG) :
+─────────────────────────────
+Issue #42: "HAL_SPI fails on H743"  
+Body: "See screenshot below"
+[IMAGE DESCRIPTION] The screenshot shows STM32CubeIDE debugger with a hard fault
+at address 0x08001234 in HAL_SPI_TxRxCpltCallback. The call stack shows DMA IRQ
+handler triggered from SPI1 peripheral. D-cache is enabled in MPU config panel.
+```
+
+**Résultats mesurés** :
+| Source | Évalués | Confiance contextuelle |
+|--------|---------|----------------------|
+| Images d'issues GitHub | 200 | **98.5%** |
+| Figures PDF | 242 | **41.7%** |
+| Total Alfred | 442 | **67.4%** |
+
+**Explication** : la confiance des images d'issues est très élevée car le texte de l'issue mentionne les mêmes erreurs/logs que la capture. Les figures PDF sont plus difficiles car le contexte de page est souvent insuffisant.
+
+**Fiabilité opérationnelle** : 99.1% de succès sur les séries stabilisées (H7, F4, WL, F7).
+
+### 0.5 Slide 3 — Architecture Multi-Agents : Alfred + NovaX (2 min)
+
+**Message clé** : L'architecture est KB-first. La Knowledge Base est TOUJOURS interrogée en premier.
+
+**Schéma** :
+
+```
+                    ┌─────────────────────────────────┐
+                    │  Persona: ST GitHub Analyzer     │
+     Question      │  (GPT-5.1 via Azure OpenAI)      │
+  ──────────────▶  │                                   │
+  Ingénieur STM32  └─────────┬───────────────┬─────────┘
+                             │               │
+                    ALWAYS   │               │  ONLY if KB empty
+                    FIRST    ▼               ▼
+              ┌──────────────────┐    ┌──────────────────┐
+              │ Tool KB #793     │    │ Tool NovaX       │
+              │ Unstructured     │    │ Fallback         │
+              │ Hybrid Search    │    │ Bugzilla +       │
+              │ (Semantic + FT)  │    │ STCommunity      │
+              └──────────────────┘    └──────────────────┘
+                       ▲
+                       │ Upload JSON (pipeline)
+              ┌──────────────────┐
+              │ Pipeline 7 stages│
+              │ Agent maintenance│
+              └──────────────────┘
+```
+
+**Points à dire** :
+- **KB Tool** : recherche hybride (semantic 0.55 threshold + full-text) dans 38 datasources
+- **NovaX Tool** : fallback UNIQUEMENT quand la KB ne retourne rien de pertinent
+- **Leçon critique** : une description NovaX trop permissive → QI chute de 10 points (la persona court-circuite la KB)
+- **Solution** : description restrictive qui force la priorité KB
+
+**Paramètres KB retenus** :
+| Paramètre | Valeur |
+|-----------|--------|
+| Search Type | Hybrid (Semantic + Full-text) |
+| Semantic Threshold | 0.55 |
+| Semantic Max Docs | 25 |
+| Full-text Max Docs | 12 |
+| Modèle LLM | GPT-5.1 |
+
+### 0.6 Slide 4 — Zoom : Cleaning → Enrichment (le cœur du pipeline) (5 min)
+
+**Message clé** : C'est entre le nettoyage et l'enrichissement que la donnée brute devient exploitable par le RAG. Le V3 adapte la stratégie au type de fichier.
+
+#### Partie A : Cleaning V3 — Nettoyage Type-Aware
+
+**Le problème** : un fichier Release Notes HTML et un header CMSIS de 1.7 Mo ne se nettoient pas de la même façon.
+
+**Arbre de décision V3** :
+
+```
+raw_files_*.json
+       │
+       ▼
+┌──────────────────┐
+│ detect_file_type()│
+└────────┬─────────┘
+         │
+    ┌────┼────────────────┬──────────────────┬────────────────────┐
+    ▼    ▼                ▼                  ▼                    ▼
+Release  README          Source             CMSIS > 100Ko        Autre
+Notes    (.md)           (.c/.h)            (stm32*xx.h)
+    │    │                │                  │                    │
+    ▼    ▼                ▼                  ▼                    ▼
+strip_   clean_          strip_             filter_cmsis()       passthrough
+html()   markdown()      license()          (IRQ + base addr     (inchangé)
+(-33%)   (-15%)          (-10%)             + TypeDef only)
+                                            (-96% !)
+```
+
+**Exemple concret CMSIS** :
+```
+stm32h743xx.h : 1 458 301 caractères → 52 140 caractères (-96.4%)
+Ne conserve que : IRQn_Type enum, PERIPH_BASE defines, TypeDef structs
+```
+
+**Résultat** : `clean_files_<repo>_v3.json` (+31% de densité signal/chunk)
+
+#### Partie B : Enrichissement — D'où viennent les `docs_*`
+
+**Pour les issues** (`issues_to_docs_v2.py`) :
+
+```
+clean_issues_<repo>.json
+         │
+         ▼
+┌─────────────────────────────────────────────────┐
+│ Heuristiques NLP (regex domain-specific STM32)  │
+│                                                  │
+│  • layer      → HAL / BSP / CMSIS / MW / APP   │
+│  • component  → SPI / I2C / UART / DMA / USB   │
+│  • severity   → high / medium / low            │
+│  • board      → NUCLEO-H743ZI / STM32H750B-DK  │
+│  • issue_kind → bug_report / question / feature │
+│  • is_valid   → true/false (filtrage spam)      │
+└─────────────────────────────────────────────────┘
+         │
+         ▼
+docs_issues_<repo>_v2.json
+```
+
+**Couverture mesurée (H7, 296 docs)** :
+| Champ | Score | Seuil | Verdict |
+|-------|-------|-------|---------|
+| Validité | 86.4% | ≥85% | BON |
+| Layer | 88.2% | ≥85% | BON |
+| Severity | 100% | ≥90% | EXCELLENT |
+| Component | 72.6% | ≥70% | ACCEPTABLE |
+| Board | 45.3% | ≥60% | INSUFFISANT (signal absent des données) |
+
+**Pour les fichiers** (`files_to_docs_v2.py`) :
+
+```
+clean_files_<repo>_v3.json
+         │
+         ▼
+┌─────────────────────────────────────────────────┐
+│ Classification par type + extraction métadonnées│
+│                                                  │
+│  • file_type  → source_code / release_notes /   │
+│                 readme / cmsis_device_header /   │
+│                 documentation_pdf               │
+│  • board      → détecté depuis le path BSP     │
+│  • component  → détecté depuis le nom fichier  │
+│  • example_name → nom du projet exemple        │
+│  • is_valid   → true si clean_text > 100 car.  │
+└─────────────────────────────────────────────────┘
+         │
+         ▼
+docs_files_<repo>_v3.json
+```
+
+**Puis la similarité** : `compute_issue_similarity_v2.py` ajoute les voisins TF-IDF → `docs_issues_<repo>_v2_sim.json`
+
+**Puis la delivery** : les `docs_*` sont transformés en 4 types d'artefacts ST-ready avec texte structuré, métadonnées, et URLs GitHub.
 
 ### 0.3 KPI à afficher (lisibles, non ambigus)
 

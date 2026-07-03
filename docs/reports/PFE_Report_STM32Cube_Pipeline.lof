@@ -1,32 +1,34 @@
 \babel@toc {french}{}\relax 
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {1.1}{\ignorespaces Logo officiel de STMicroelectronics}}{6}{figure.1.1}%
+\contentsline {figure}{\numberline {1.1}{\ignorespaces Logo officiel de STMicroelectronics}}{12}{figure.1.1}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Vue d'ensemble du pipeline de preprocessing (7 stages)}}{31}{figure.5.1}%
-\contentsline {figure}{\numberline {5.2}{\ignorespaces Architecture détaillée du pipeline : stages, fichiers intermédiaires et branchement Alfred}}{32}{figure.5.2}%
-\contentsline {figure}{\numberline {5.3}{\ignorespaces Flux de données end-to-end : de la source GitHub à la réponse utilisateur}}{32}{figure.5.3}%
-\contentsline {figure}{\numberline {5.4}{\ignorespaces Architecture de livraison et upload vers la Knowledge Base \#793}}{33}{figure.5.4}%
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Flux \texttt {PARENT\_CHILD} : les chunks enfants (1000~car.) sont indexés par AdaV2 (phase hors-ligne, flèches bleues) ; à la requête (phase en ligne, flèches orange), l'enfant le plus proche est retrouvé puis son chunk parent (3000~car.) est restitué comme contexte au LLM.}}{41}{figure.5.1}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Vue d'ensemble du pipeline de preprocessing (7 stages)}}{45}{figure.5.2}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Architecture détaillée du pipeline : stages, fichiers intermédiaires et branchement Alfred}}{45}{figure.5.3}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Flux de données end-to-end : de la source GitHub à la réponse utilisateur}}{46}{figure.5.4}%
+\contentsline {figure}{\numberline {5.5}{\ignorespaces Architecture de livraison et upload vers la Knowledge Base \#793}}{46}{figure.5.5}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {6.1}{\ignorespaces Détail de l'étape d'ingestion : scripts et sorties}}{35}{figure.6.1}%
-\contentsline {figure}{\numberline {6.2}{\ignorespaces Arbre de décision du nettoyage V3 : routage par type de fichier avec taux de réduction}}{38}{figure.6.2}%
-\contentsline {figure}{\numberline {6.3}{\ignorespaces Détail du processus d'enrichissement et de calcul de similarité}}{42}{figure.6.3}%
-\contentsline {figure}{\numberline {6.4}{\ignorespaces Génération des Resolver Cases et Diagnostic Cards}}{45}{figure.6.4}%
-\contentsline {figure}{\numberline {6.5}{\ignorespaces Les 4 types d'artefacts delivery et leurs relations vers la KB \#793}}{45}{figure.6.5}%
-\contentsline {figure}{\numberline {6.6}{\ignorespaces Intégration Alfred Vision AI pour la description automatique d'images}}{46}{figure.6.6}%
-\contentsline {figure}{\numberline {6.7}{\ignorespaces Architecture multi-agents du système ST GitHub Analyzer}}{46}{figure.6.7}%
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Détail de l'étape d'ingestion : scripts et sorties}}{48}{figure.6.1}%
+\contentsline {figure}{\numberline {6.2}{\ignorespaces Arbre de décision du nettoyage V3 : routage par type de fichier avec taux de réduction}}{52}{figure.6.2}%
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Détail du processus d'enrichissement et de calcul de similarité}}{56}{figure.6.3}%
+\contentsline {figure}{\numberline {6.4}{\ignorespaces Génération des Resolver Cases et Diagnostic Cards}}{59}{figure.6.4}%
+\contentsline {figure}{\numberline {6.5}{\ignorespaces Les 4 types d'artefacts delivery et leurs relations vers la KB \#793}}{59}{figure.6.5}%
+\contentsline {figure}{\numberline {6.6}{\ignorespaces Intégration Alfred Vision AI pour la description automatique d'images}}{60}{figure.6.6}%
+\contentsline {figure}{\numberline {6.7}{\ignorespaces Architecture multi-agents du système ST GitHub Analyzer}}{60}{figure.6.7}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {7.1}{\ignorespaces Quality Index des stratégies Unstructured KB sur 96 questions --- S1 maximise le rappel, S0 reste le point d'équilibre courant}}{52}{figure.7.1}%
-\contentsline {figure}{\numberline {7.2}{\ignorespaces Évolution du Quality Index au fil des améliorations incrémentales}}{57}{figure.7.2}%
+\contentsline {figure}{\numberline {7.1}{\ignorespaces Quality Index des stratégies Unstructured KB sur 96 questions --- S1 maximise le rappel, S0 reste le point d'équilibre courant}}{67}{figure.7.1}%
+\contentsline {figure}{\numberline {7.2}{\ignorespaces Évolution du Quality Index au fil des améliorations incrémentales}}{72}{figure.7.2}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {8.1}{\ignorespaces Complétude d'ingestion par série --- toutes métriques au-dessus du seuil EXCELLENT}}{65}{figure.8.1}%
-\contentsline {figure}{\numberline {8.2}{\ignorespaces Couverture d'enrichissement STM32CubeH7 --- comparaison score vs seuil par champ}}{68}{figure.8.2}%
-\contentsline {figure}{\numberline {8.3}{\ignorespaces Confiance contextuelle Alfred selon la source visuelle --- seuil d'alerte $S_{\text {coh}} < 0.12$}}{73}{figure.8.3}%
-\contentsline {figure}{\numberline {8.4}{\ignorespaces Décomposition du score global 87.1\% --- contribution pondérée de chaque stage, avec Alfred séparé par source visuelle}}{78}{figure.8.4}%
-\contentsline {figure}{\numberline {8.5}{\ignorespaces Comparaison Alfred vs Persona KB par catégorie de question}}{81}{figure.8.5}%
-\contentsline {figure}{\numberline {8.6}{\ignorespaces Comparaison des stratégies Unstructured KB sur 96 questions multi-séries}}{83}{figure.8.6}%
+\contentsline {figure}{\numberline {8.1}{\ignorespaces Complétude d'ingestion par série~: toutes métriques au-dessus du seuil EXCELLENT}}{84}{figure.8.1}%
+\contentsline {figure}{\numberline {8.2}{\ignorespaces Couverture d'enrichissement STM32CubeH7~: score vs seuil par champ}}{85}{figure.8.2}%
+\contentsline {figure}{\numberline {8.3}{\ignorespaces Décomposition du score global 87.1\%~: contribution pondérée de chaque stage}}{88}{figure.8.3}%
+\contentsline {figure}{\numberline {8.4}{\ignorespaces Confiance contextuelle Alfred --- seuil d'alerte $\tau = 0.12$}}{90}{figure.8.4}%
+\contentsline {figure}{\numberline {8.5}{\ignorespaces Évolution du Quality Index~: le saut majeur (+33) provient des Diagnostic Cards, la régression ($-34$) de la dilution multi-séries}}{94}{figure.8.5}%
+\contentsline {figure}{\numberline {8.6}{\ignorespaces Comparaison Alfred vs Persona KB par catégorie de question}}{97}{figure.8.6}%
+\contentsline {figure}{\numberline {8.7}{\ignorespaces Comparaison des stratégies de retrieval KB sur 96 questions}}{98}{figure.8.7}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {9.1}{\ignorespaces Architecture CI/CD : GitHub Actions + self-hosted runner}}{85}{figure.9.1}%
+\contentsline {figure}{\numberline {9.1}{\ignorespaces Architecture CI/CD : GitHub Actions + self-hosted runner}}{103}{figure.9.1}%
 \addvspace {10\p@ }

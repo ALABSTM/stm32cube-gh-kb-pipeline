@@ -43,12 +43,7 @@ datasets/07_delivery/st_ready/diagnostic_cards_json/
 !datasets/07_delivery/st_ready/*.csv
 !datasets/07_delivery/st_ready/summary_*.json
 
-# Local generated reports
-datasets/07_delivery/st_ready/evaluation_report/
 
-# Large PDF outputs (regenerable with docs/generate_pdfs.py)
-docs/*.pdf
-docs/reports/*.pdf
 
 # GitHub repos local clones
 GitHub_repos/
