@@ -1,55 +1,157 @@
-# ============================================================
-# Automated KB Update - Runs every 2 weeks
-# ============================================================
-# This workflow keeps the ST GitHub Analyzer persona always up-to-date
-# by re-ingesting GitHub data, preprocessing, and uploading to KB #793.
-#
-# Trigger: bi-weekly (1st and 15th of each month at 3:00 UTC)
-#          + manual dispatch for on-demand runs
-# ============================================================
-
 name: Auto Update KB
 
 on:
   schedule:
-    # Every 2 weeks: 1st and 15th of each month at 03:00 UTC
     - cron: '0 3 1,15 * *'
   workflow_dispatch:
     inputs:
       series:
-        description: 'MCU series to process (comma-separated: f4,h5,h7,u5,wl)'
+        description: 'Comma-separated series (G4,L0,L1,L4,L5,N6,U0,U3,WB,WB0,WBA,WL3)'
         required: false
-        default: 'f4,h5,h7,u5,wl'
-      skip_ingestion:
-        description: 'Skip GitHub ingestion (reuse cached raw data)'
+        default: 'G4,L0,L1,L4,L5,N6,U0,U3,WB,WB0,WBA,WL3'
+      mode:
+        description: 'Execution mode for per-series script'
+        type: choice
+        required: false
+        options:
+          - Full
+          - Prepare
+          - Upload
+        default: Full
+      skip_drivers:
+        description: 'Skip driver/subrepo uploads'
         type: boolean
         default: false
-      skip_upload:
-        description: 'Skip KB upload (dry-run mode)'
+      skip_schema_validation:
+        description: 'Skip schema validation gate'
         type: boolean
         default: false
+      continue_on_workflow_error:
+        description: 'Continue inside run_full_workflow when one repo fails'
+        type: boolean
+        default: false
+      placeholder_policy:
+        description: 'Policy for unresolved Alfred placeholders'
+        type: choice
+        required: false
+        options:
+          - Fail
+          - Warn
+          - Off
+        default: Fail
+      max_parallel:
+        description: 'Maximum series jobs in parallel'
+        required: false
+        default: '1'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: auto-update-kb-${{ github.ref }}
+  cancel-in-progress: false
 
 env:
   PYTHON_VERSION: '3.12'
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  ST_CHATGPT_API_KEY: ${{ secrets.ST_CHATGPT_API_KEY }}
-  ST_REMOTE_USER: ${{ secrets.ST_REMOTE_USER }}
+  DEFAULT_SERIES: 'G4,L0,L1,L4,L5,N6,U0,U3,WB,WB0,WBA,WL3'
+  DEFAULT_MODE: 'Full'
+  DEFAULT_PLACEHOLDER_POLICY: 'Fail'
+  DEFAULT_MAX_PARALLEL: '1'
 
 jobs:
-  # ================================================================
-  # JOB 1: Ingestion + Preprocessing (runs on GitHub-hosted runner)
-  # ================================================================
-  pipeline:
-    name: Ingestion + Preprocessing
+  prepare:
+    name: Prepare matrix inputs
     runs-on: ubuntu-latest
-    timeout-minutes: 90
     outputs:
-      series: ${{ steps.config.outputs.series }}
-      skip_upload: ${{ steps.config.outputs.skip_upload }}
+      series_json: ${{ steps.normalize.outputs.series_json }}
+      mode: ${{ steps.normalize.outputs.mode }}
+      skip_drivers: ${{ steps.normalize.outputs.skip_drivers }}
+      skip_schema_validation: ${{ steps.normalize.outputs.skip_schema_validation }}
+      continue_on_workflow_error: ${{ steps.normalize.outputs.continue_on_workflow_error }}
+      placeholder_policy: ${{ steps.normalize.outputs.placeholder_policy }}
+      max_parallel: ${{ steps.normalize.outputs.max_parallel }}
+    steps:
+      - name: Normalize workflow inputs
+        id: normalize
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            raw_series='${{ inputs.series }}'
+            mode='${{ inputs.mode }}'
+            skip_drivers='${{ inputs.skip_drivers }}'
+            skip_schema='${{ inputs.skip_schema_validation }}'
+            continue_err='${{ inputs.continue_on_workflow_error }}'
+            placeholder='${{ inputs.placeholder_policy }}'
+            max_parallel='${{ inputs.max_parallel }}'
+          else
+            raw_series='${{ env.DEFAULT_SERIES }}'
+            mode='${{ env.DEFAULT_MODE }}'
+            skip_drivers='false'
+            skip_schema='false'
+            continue_err='false'
+            placeholder='${{ env.DEFAULT_PLACEHOLDER_POLICY }}'
+            max_parallel='${{ env.DEFAULT_MAX_PARALLEL }}'
+          fi
 
+          series_json=$(RAW_SERIES="$raw_series" python - <<'PY'
+import json
+import os
+
+allowed = {
+    "G4", "L0", "L1", "L4", "L5", "N6", "U0", "U3", "WB", "WB0", "WBA", "WL3"
+}
+raw = os.environ.get("RAW_SERIES", "")
+items = [s.strip().upper() for s in raw.split(",") if s.strip()]
+
+if not items:
+    items = sorted(allowed)
+
+seen = set()
+normalized = []
+for s in items:
+    if s not in allowed:
+        raise SystemExit(f"Unsupported series '{s}'. Allowed: {', '.join(sorted(allowed))}")
+    if s in seen:
+        continue
+    seen.add(s)
+    normalized.append(s)
+
+print(json.dumps(normalized))
+PY
+)
+
+          if [ -z "$max_parallel" ]; then
+            max_parallel='1'
+          fi
+
+          echo "series_json=$series_json" >> "$GITHUB_OUTPUT"
+          echo "mode=$mode" >> "$GITHUB_OUTPUT"
+          echo "skip_drivers=$skip_drivers" >> "$GITHUB_OUTPUT"
+          echo "skip_schema_validation=$skip_schema" >> "$GITHUB_OUTPUT"
+          echo "continue_on_workflow_error=$continue_err" >> "$GITHUB_OUTPUT"
+          echo "placeholder_policy=$placeholder" >> "$GITHUB_OUTPUT"
+          echo "max_parallel=$max_parallel" >> "$GITHUB_OUTPUT"
+
+  run-series:
+    name: ${{ format('Series {0} ({1})', matrix.series, needs.prepare.outputs.mode) }}
+    needs: prepare
+    runs-on: self-hosted
+    timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      max-parallel: ${{ fromJSON(needs.prepare.outputs.max_parallel) }}
+      matrix:
+        series: ${{ fromJSON(needs.prepare.outputs.series_json) }}
+    env:
+      ST_CHATGPT_API_KEY: ${{ secrets.ST_CHATGPT_API_KEY }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Enable long paths (Windows)
+        shell: pwsh
+        run: git config --system core.longpaths true
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -58,200 +160,56 @@ jobs:
           cache: 'pip'
 
       - name: Install dependencies
+        shell: pwsh
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Determine series
-        id: config
+      - name: Run single-series full pipeline + upload
+        shell: pwsh
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "series=${{ github.event.inputs.series }}" >> $GITHUB_OUTPUT
-            echo "skip_ingestion=${{ github.event.inputs.skip_ingestion }}" >> $GITHUB_OUTPUT
-            echo "skip_upload=${{ github.event.inputs.skip_upload }}" >> $GITHUB_OUTPUT
-          else
-            echo "series=f4,h5,h7,u5,wl" >> $GITHUB_OUTPUT
-            echo "skip_ingestion=false" >> $GITHUB_OUTPUT
-            echo "skip_upload=false" >> $GITHUB_OUTPUT
-          fi
+          $script = "pipeline_Automation/workflow/Run_Single_Series_Full_Pipeline_And_Upload.ps1"
+          $args = @(
+            "-Series", "${{ matrix.series }}",
+            "-Mode", "${{ needs.prepare.outputs.mode }}",
+            "-RemoteUser", "${{ secrets.ST_REMOTE_USER }}",
+            "-KbId", "793",
+            "-JsonSplitSize", "1000",
+            "-PlaceholderPolicy", "${{ needs.prepare.outputs.placeholder_policy }}"
+          )
 
-      # ========================================
-      # STAGE 1: Ingestion + Preprocessing
-      # ========================================
-      - name: Run pipeline (all series)
-        run: |
-          IFS=',' read -ra SERIES <<< "${{ steps.config.outputs.series }}"
-          
-          ARGS="--series ${SERIES[*]} --export-st-ready --skip-chunking --continue-on-error"
-          
-          if [ "${{ steps.config.outputs.skip_ingestion }}" = "true" ]; then
-            ARGS="$ARGS --skip-ingestion"
-          fi
-          
-          python -m pipeline_Automation.workflow.run_all_series $ARGS
+          if ("${{ needs.prepare.outputs.skip_drivers }}" -eq "true") {
+            $args += "-SkipDrivers"
+          }
+          if ("${{ needs.prepare.outputs.skip_schema_validation }}" -eq "true") {
+            $args += "-SkipSchemaValidation"
+          }
+          if ("${{ needs.prepare.outputs.continue_on_workflow_error }}" -eq "true") {
+            $args += "-ContinueOnWorkflowError"
+          }
 
-      # ========================================
-      # Archive artifacts (passed to upload job)
-      # ========================================
-      - name: Upload delivery artifacts
+          & $script @args
+
+      - name: Upload series artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: st-ready-delivery-${{ github.run_number }}
+          name: st-ready-${{ matrix.series }}-${{ github.run_number }}
           path: datasets/07_delivery/st_ready/by_series/
+          if-no-files-found: warn
           retention-days: 30
 
-      - name: Pipeline summary
+      - name: Series summary
+        if: always()
+        shell: pwsh
         run: |
-          echo "## Pipeline Completed" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Parameter | Value |" >> $GITHUB_STEP_SUMMARY
-          echo "|-----------|-------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Series | ${{ steps.config.outputs.series }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Skip Ingestion | ${{ steps.config.outputs.skip_ingestion }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Run | #${{ github.run_number }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Date | $(date -u '+%Y-%m-%d %H:%M UTC') |" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Artifacts uploaded. Upload job will push to KB #793." >> $GITHUB_STEP_SUMMARY
-
-  # ================================================================
-  # JOB 2: Upload to KB (runs on self-hosted runner with ST network)
-  # ================================================================
-  upload:
-    name: Upload to KB #793
-    needs: pipeline
-    if: needs.pipeline.outputs.skip_upload != 'true'
-    runs-on: self-hosted
-    timeout-minutes: 60
-
-    steps:
-      - name: Enable long paths (Windows)
-        run: git config --system core.longpaths true
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          sparse-checkout: |
-            pipeline_Automation/upload
-            shared
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install requests
-
-      - name: Download delivery artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: st-ready-delivery-${{ github.run_number }}
-          path: datasets/07_delivery/st_ready/by_series/
-
-      - name: Clear existing datasources before re-upload
-        run: |
-          IFS=',' read -ra SERIES <<< "${{ needs.pipeline.outputs.series }}"
-          
-          # Datasource ID registry
-          declare -A DS_ISSUES=( [f4]=28099 [h5]=28158 [h7]=19896 [u5]=28167 [wl]=28171 )
-          declare -A DS_FILES=(  [f4]=28103 [h5]=28163 [h7]=21824 [u5]=28168 [wl]=28172 )
-          declare -A DS_RESOLVER=( [f4]=28118 [h5]=28164 [h7]=20403 [u5]=28244 [wl]=28245 )
-          declare -A DS_DIAGNOSTIC=( [f4]=28122 [h5]=28165 [h7]=23768 [u5]=28170 [wl]=28173 )
-          
-          UPLOADER="pipeline_Automation/upload/Add_Data_Source_Files.py"
-          
-          for s in "${SERIES[@]}"; do
-            if [ -z "${DS_ISSUES[$s]:-}" ]; then
-              continue
-            fi
-            
-            echo "=== Deleting existing content for ${s^^} ==="
-            
-            for DS_ID in ${DS_ISSUES[$s]} ${DS_FILES[$s]} ${DS_RESOLVER[$s]} ${DS_DIAGNOSTIC[$s]}; do
-              python $UPLOADER \
-                --kb 793 \
-                --operation delete \
-                --datasource-id $DS_ID \
-                --remote-user "$ST_REMOTE_USER" || echo "  (delete returned non-zero for DS $DS_ID, continuing)"
-            done
-          done
-
-      - name: Upload all series to KB
-        run: |
-          IFS=',' read -ra SERIES <<< "${{ needs.pipeline.outputs.series }}"
-          
-          # Datasource ID registry (same as delete step)
-          declare -A DS_ISSUES=( [f4]=28099 [h5]=28158 [h7]=19896 [u5]=28167 [wl]=28171 )
-          declare -A DS_FILES=(  [f4]=28103 [h5]=28163 [h7]=21824 [u5]=28168 [wl]=28172 )
-          declare -A DS_RESOLVER=( [f4]=28118 [h5]=28164 [h7]=20403 [u5]=28244 [wl]=28245 )
-          declare -A DS_DIAGNOSTIC=( [f4]=28122 [h5]=28165 [h7]=23768 [u5]=28170 [wl]=28173 )
-          
-          UPLOADER="pipeline_Automation/upload/Add_Data_Source_Files.py"
-          
-          for s in "${SERIES[@]}"; do
-            BASE="datasets/07_delivery/st_ready/by_series/stm32cube${s}"
-            
-            if [ -z "${DS_ISSUES[$s]:-}" ]; then
-              echo "=== Skipping ${s^^} (no datasource IDs registered) ==="
-              continue
-            fi
-            
-            echo "=== Uploading ${s^^} ==="
-            
-            # Issues
-            if ls ${BASE}/issues_json/st_ready_issues_*.json 1>/dev/null 2>&1; then
-              python $UPLOADER \
-                --kb 793 \
-                --operation add \
-                --datasource-id ${DS_ISSUES[$s]} \
-                --files ${BASE}/issues_json/st_ready_issues_stm32cube${s}.json \
-                --json-split-size 1000 \
-                --remote-user "$ST_REMOTE_USER"
-            fi
-            
-            # Files
-            if ls ${BASE}/files_json/st_ready_files_*.json 1>/dev/null 2>&1; then
-              python $UPLOADER \
-                --kb 793 \
-                --operation add \
-                --datasource-id ${DS_FILES[$s]} \
-                --files ${BASE}/files_json/st_ready_files_stm32cube${s}.json \
-                --json-split-size 1000 \
-                --remote-user "$ST_REMOTE_USER"
-            fi
-            
-            # Resolver Cases
-            if ls ${BASE}/resolver_cases_json/st_ready_resolver_cases_*.json 1>/dev/null 2>&1; then
-              python $UPLOADER \
-                --kb 793 \
-                --operation add \
-                --datasource-id ${DS_RESOLVER[$s]} \
-                --files ${BASE}/resolver_cases_json/st_ready_resolver_cases_stm32cube${s}.json \
-                --json-split-size 1000 \
-                --remote-user "$ST_REMOTE_USER"
-            fi
-            
-            # Diagnostic Cards
-            if ls ${BASE}/diagnostic_cards_json/st_ready_diagnostic_cards_*.json 1>/dev/null 2>&1; then
-              python $UPLOADER \
-                --kb 793 \
-                --operation add \
-                --datasource-id ${DS_DIAGNOSTIC[$s]} \
-                --files ${BASE}/diagnostic_cards_json/st_ready_diagnostic_cards_stm32cube${s}.json \
-                --json-split-size 1000 \
-                --remote-user "$ST_REMOTE_USER"
-            fi
-          done
-
-      - name: Upload summary
-        run: |
-          echo "## KB Upload Summary" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Parameter | Value |" >> $GITHUB_STEP_SUMMARY
-          echo "|-----------|-------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Series | ${{ needs.pipeline.outputs.series }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| KB | #793 |" >> $GITHUB_STEP_SUMMARY
-          echo "| Run | #${{ github.run_number }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Date | $(date -u '+%Y-%m-%d %H:%M UTC') |" >> $GITHUB_STEP_SUMMARY
+          "## Series ${{ matrix.series }}" >> $env:GITHUB_STEP_SUMMARY
+          "" >> $env:GITHUB_STEP_SUMMARY
+          "| Parameter | Value |" >> $env:GITHUB_STEP_SUMMARY
+          "|---|---|" >> $env:GITHUB_STEP_SUMMARY
+          "| Mode | ${{ needs.prepare.outputs.mode }} |" >> $env:GITHUB_STEP_SUMMARY
+          "| Skip Drivers | ${{ needs.prepare.outputs.skip_drivers }} |" >> $env:GITHUB_STEP_SUMMARY
+          "| Skip Schema Validation | ${{ needs.prepare.outputs.skip_schema_validation }} |" >> $env:GITHUB_STEP_SUMMARY
+          "| Continue On Workflow Error | ${{ needs.prepare.outputs.continue_on_workflow_error }} |" >> $env:GITHUB_STEP_SUMMARY
+          "| Placeholder Policy | ${{ needs.prepare.outputs.placeholder_policy }} |" >> $env:GITHUB_STEP_SUMMARY
+          "| Date | $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss K') |" >> $env:GITHUB_STEP_SUMMARY

@@ -1,262 +1,317 @@
-# Automatisation KB — Documentation Technique
+# GitHub Actions Automation — Detailed Guide
 
-## Vue d'ensemble
+This document explains in detail how the workflow file works:
 
-Le système d'automatisation maintient la Knowledge Base (KB #793) du persona **ST GitHub Analyzer** à jour en exécutant périodiquement :
+- `.github/workflows/auto_update_kb.yml`
 
-1. **Ingestion** des données GitHub (issues, PRs, fichiers)
-2. **Preprocessing** (nettoyage, enrichissement, similarity, delivery)
-3. **Validation** des schémas JSON
-4. **Upload** vers la plateforme ST AI Bridge
+It reflects the current implementation based on the per-series PowerShell orchestrator:
 
----
-
-## Architecture
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                    Déclencheurs                                  │
-├─────────────────────────────────────────────────────────────────┤
-│  • Cron (1er et 15 de chaque mois, 03:00 UTC)                  │
-│  • Manuel (GitHub Actions "Run workflow")                       │
-│  • Local (PowerShell script)                                    │
-└───────────────────────────┬─────────────────────────────────────┘
-                            │
-                            ▼
-┌─────────────────────────────────────────────────────────────────┐
-│              Pipeline Orchestrator                               │
-│  pipeline_Automation/workflow/run_all_series.py                  │
-├─────────────────────────────────────────────────────────────────┤
-│  Pour chaque série MCU (F4, H5, H7, U5, WL) :                  │
-│    1. Swap config_<series>.json → config.json                   │
-│    2. Exécute pipeline/run_full_workflow.py                      │
-│    3. Restaure config.json original                             │
-└───────────────────────────┬─────────────────────────────────────┘
-                            │
-                            ▼
-┌─────────────────────────────────────────────────────────────────┐
-│              Stages du Pipeline                                  │
-├─────────────────────────────────────────────────────────────────┤
-│  Stage 1: Ingestion (fetch issues, PRs, commits, files)         │
-│  Stage 2: Cleaning  (normalisation, détection file_type)        │
-│  Stage 3: Enrichment V2 (docs_issues, docs_files)               │
-│  Stage 4: Similarity (related_issue_ids)                        │
-│  Stage 5: Export ST-ready delivery JSON                         │
-└───────────────────────────┬─────────────────────────────────────┘
-                            │
-                            ▼
-┌─────────────────────────────────────────────────────────────────┐
-│              Validation Gate                                     │
-│  pipeline/evaluation/validate_schemas.py                        │
-├─────────────────────────────────────────────────────────────────┤
-│  Vérifie chaque JSON contre shared/schemas/*.schema.json        │
-│  ❌ Si validation échoue → upload bloqué                        │
-└───────────────────────────┬─────────────────────────────────────┘
-                            │
-                            ▼
-┌─────────────────────────────────────────────────────────────────┐
-│              Upload KB #793                                      │
-│  pipeline_Automation/upload/Add_Data_Source_Files.py             │
-├─────────────────────────────────────────────────────────────────┤
-│  API: https://api-ai-bridge.st.com/chatgpt/api/client-apps      │
-│  Auth: HMAC-SHA1(clientAppName + service + apiKey + ts + nonce)  │
-│  Split: 1000 items par requête (--json-split-size)              │
-└─────────────────────────────────────────────────────────────────┘
-```
+- `pipeline_Automation/workflow/Run_Single_Series_Full_Pipeline_And_Upload.ps1`
 
 ---
 
-## Fichiers clés
+## 1) Purpose
 
-| Fichier | Rôle |
-|---------|------|
-| `.github/workflows/auto_update_kb.yml` | GitHub Actions — exécution cloud bi-mensuelle |
-| `pipeline_Automation/workflow/run_all_series.py` | Orchestrateur Python multi-séries |
-| `pipeline_Automation/workflow/Run_Full_Auto_Update_KB.ps1` | Script local PowerShell (même logique) |
-| `pipeline_Automation/upload/Add_Data_Source_Files.py` | Client d'upload vers ST AI Bridge API |
-| `shared/config/config_<series>.json` | Configuration par série MCU |
+The workflow automates full KB refresh for STM32Cube series.
 
----
+For each selected series, it runs:
 
-## Registre des Datasources (KB #793)
+1. repository sync and submodule audit/fix
+2. preprocessing pipeline
+3. ST-ready exports (issues/files/resolver/diagnostic)
+4. Alfred enrichments (images/PDF patches)
+5. schema validation and placeholder policy gate
+6. upload to KB #793
 
-Chaque série MCU a **4 datasources** dans la Knowledge Base :
+The workflow supports both:
 
-| Série | Issues | Files | Resolver Cases | Diagnostic Cards |
-|-------|--------|-------|----------------|------------------|
-| **F4** | 28099 | 28103 | 28118 | 28122 |
-| **H5** | 28158 | 28163 | 28164 | 28165 |
-| **H7** | 19896 | 21824 | 20403 | 23768 |
-| **U5** | 28167 | 28168 | 28244 | 28170 |
-| **WL** | 28171 | 28172 | 28245 | 28173 |
+- scheduled runs (bi-monthly)
+- manual runs (with parameters)
 
 ---
 
-## Déclenchement
-
-### 1. Automatique (GitHub Actions)
-
-**Fréquence** : 1er et 15 de chaque mois à 03:00 UTC
-
-**Branche** : `main`
-
-Le workflow se déclenche automatiquement via le cron schedule. Il traite toutes les séries (F4, H5, H7, U5, WL).
-
-### 2. Manuel (GitHub Actions)
-
-1. Aller sur : `Actions` → `Auto Update KB` → `Run workflow`
-2. Paramètres disponibles :
-   - **series** : séries à traiter (ex: `h7` ou `f4,h5`)
-   - **skip_ingestion** : réutiliser les données brutes existantes
-   - **skip_upload** : mode dry-run (pas d'upload)
-
-### 3. Local (PowerShell)
-
-```powershell
-# Toutes les séries
-.\pipeline_Automation\workflow\Run_Full_Auto_Update_KB.ps1 -RemoteUser "abir.gharbi@st.com"
-
-# Une seule série, sans ingestion
-.\pipeline_Automation\workflow\Run_Full_Auto_Update_KB.ps1 -Series h7 -SkipIngestion
-
-# Dry-run (pas d'upload)
-.\pipeline_Automation\workflow\Run_Full_Auto_Update_KB.ps1 -Series f4,h5 -SkipUpload
-```
-
----
-
-## Secrets GitHub requis
-
-| Secret | Valeur | Usage |
-|--------|--------|-------|
-| `ST_CHATGPT_API_KEY` | Clé API ST AI Bridge | Signe les requêtes d'upload |
-| `ST_REMOTE_USER` | Email (ex: `abir.gharbi@st.com`) | Identifie l'utilisateur |
-| `GITHUB_TOKEN` | Automatique (fourni par GitHub) | Accès aux repos STM32 |
-
-**Configuration** : Repository Settings → Secrets and variables → Actions → New repository secret
-
----
-
-## Mécanisme d'authentification API
-
-L'API ST AI Bridge utilise un token HMAC :
-
-```
-token = SHA1( clientAppName + serviceName + apiKey + timestamp + nonce )
-```
-
-- `clientAppName` = `mdrf_st_github_analyzer`
-- `serviceName` = `kb`
-- `apiKey` = valeur du secret `ST_CHATGPT_API_KEY`
-- `timestamp` = epoch en secondes
-- `nonce` = valeur aléatoire
-
-Ce token est envoyé dans chaque requête POST vers l'API.
-
----
-
-## Format d'upload
-
-Chaque requête POST envoie un JSON avec :
-
-```json
-{
-  "type": "kb-datasource-add",
-  "clientAppName": "mdrf_st_github_analyzer",
-  "datasourceId": 19896,
-  "rootTagPath": "issues",
-  "remoteUser": "abir.gharbi@st.com",
-  "token": "<HMAC_SHA1>",
-  "timestamp": 1717560000,
-  "nonce": "abc123",
-  "data": [ ... ]  // max 1000 items par requête
-}
-```
-
-Les fichiers volumineux sont découpés en batches de 1000 éléments (`--json-split-size 1000`).
-
----
-
-## Outputs générés
-
-Après exécution, les artefacts sont stockés sous :
-
-```
-datasets/07_delivery/st_ready/by_series/
-├── stm32cubef4/
-│   ├── issues_json/st_ready_issues_stm32cubef4.json
-│   ├── files_json/st_ready_files_stm32cubef4.json
-│   ├── resolver_cases_json/st_ready_resolver_cases_stm32cubef4.json
-│   └── diagnostic_cards_json/st_ready_diagnostic_cards_stm32cubef4.json
-├── stm32cubeh5/
-├── stm32cubeh7/
-├── stm32cubeu5/
-└── stm32cubewl/
-```
-
-En CI, ces artefacts sont archivés pendant 30 jours via `actions/upload-artifact@v4`.
-
----
-
-## Gestion des erreurs
-
-| Situation | Comportement |
-|-----------|-------------|
-| Ingestion échoue pour une série | Continue les autres (`--continue-on-error`) |
-| Validation schéma échoue | Upload **bloqué** (gate) |
-| Upload HTTP 429/500/503 | Retry automatique (3 tentatives) |
-| Fichier delivery absent | Série skippée avec warning |
-
----
-
-## Logs
-
-- **Cloud** : Visibles dans l'onglet Actions de GitHub
-- **Local** : Écrits dans `logs/auto_update_kb_<timestamp>.log`
-
----
-
-## Diagramme de séquence
+## 2) High-Level Execution Flow
 
 ```mermaid
-sequenceDiagram
-    participant Cron as Cron / Manual Trigger
-    participant GHA as GitHub Actions Runner
-    participant Pipeline as run_all_series.py
-    participant Validate as validate_schemas.py
-    participant Upload as Add_Data_Source_Files.py
-    participant API as ST AI Bridge API
-
-    Cron->>GHA: Trigger workflow
-    GHA->>GHA: Checkout + Install deps
-    GHA->>Pipeline: Run pipeline (F4, H5, H7, U5, WL)
-    Pipeline->>Pipeline: Per series: swap config, ingest, clean, enrich, export
-    Pipeline-->>GHA: ST-ready JSON generated
-    GHA->>Validate: Validate schemas
-    alt Validation OK
-        GHA->>Upload: Upload per series/artifact
-        Upload->>API: POST /client-apps (batch 1000)
-        API-->>Upload: 200 OK
-    else Validation FAILED
-        GHA-->>GHA: Upload blocked, exit 1
-    end
-    GHA->>GHA: Archive artifacts + Summary
+flowchart TD
+        A[Trigger: schedule or manual] --> B[Job: prepare on ubuntu-latest]
+        B --> C[Normalize inputs]
+        C --> D[Build series matrix JSON]
+        D --> E[Job: run-series on self-hosted]
+        E --> F[Checkout + Python setup]
+        F --> G[Run PowerShell per series]
+        G --> H[Upload artifacts]
+        H --> I[Step summary]
 ```
 
 ---
 
-## Maintenance
+## 3) File Structure Explained (Section by Section)
 
-### Ajouter une nouvelle série MCU
+### A. Workflow metadata
 
-1. Créer `shared/config/config_<series>.json` avec la liste des repos
-2. Ajouter l'entrée dans `SERIES_CONFIGS` de `run_all_series.py`
-3. Créer les datasources via ST AI Bridge (ou `create_missing_resolver_datasources.py`)
-4. Ajouter les IDs dans le registre (workflow YML + PowerShell)
-5. Ajouter la série dans le paramètre `default` du workflow
+```yaml
+name: Auto Update KB
+```
 
-### Ajouter un nouveau type d'artefact
+Display name shown in GitHub Actions UI.
 
-1. Créer le script d'export dans `pipeline/delivery/`
-2. Ajouter le datasource ID dans le registre
-3. Ajouter la section d'upload dans le workflow et le script PowerShell
+### B. Triggers (`on`)
+
+```yaml
+on:
+    schedule:
+        - cron: '0 3 1,15 * *'
+    workflow_dispatch:
+        inputs: ...
+```
+
+- `schedule`: automatic run at 03:00 UTC, on day 1 and 15 of each month.
+- `workflow_dispatch`: manual run button with custom inputs.
+
+#### Manual inputs
+
+| Input | Type | Default | Meaning |
+|---|---|---|---|
+| `series` | string (CSV) | `G4,L0,L1,L4,L5,N6,U0,U3,WB,WB0,WBA,WL3` | Which series to process |
+| `mode` | choice | `Full` | `Full`, `Prepare`, or `Upload` |
+| `skip_drivers` | boolean | `false` | Skip drivers/subrepo uploads |
+| `skip_schema_validation` | boolean | `false` | Disable schema gate |
+| `continue_on_workflow_error` | boolean | `false` | Continue when one repo fails inside workflow |
+| `placeholder_policy` | choice | `Fail` | Policy for unresolved Alfred placeholders (`Fail`, `Warn`, `Off`) |
+| `max_parallel` | string | `1` | Maximum parallel series jobs |
+
+### C. Permissions
+
+```yaml
+permissions:
+    contents: read
+```
+
+Minimal repository read permission for checkout.
+
+### D. Concurrency control
+
+```yaml
+concurrency:
+    group: auto-update-kb-${{ github.ref }}
+    cancel-in-progress: false
+```
+
+Prevents overlapping runs on same branch/reference.
+
+### E. Global env defaults
+
+```yaml
+env:
+    PYTHON_VERSION: '3.12'
+    DEFAULT_SERIES: '...'
+    DEFAULT_MODE: 'Full'
+    DEFAULT_PLACEHOLDER_POLICY: 'Fail'
+    DEFAULT_MAX_PARALLEL: '1'
+```
+
+Used when trigger is `schedule` (no manual inputs provided).
+
+---
+
+## 4) Job 1 — `prepare`
+
+### Why it exists
+
+This job transforms raw workflow inputs into clean outputs consumed by the matrix job.
+
+### Runtime
+
+- Runner: `ubuntu-latest`
+- Output variables exported through `GITHUB_OUTPUT`
+
+### Key logic in `Normalize workflow inputs`
+
+1. If manual run (`workflow_dispatch`): read provided inputs.
+2. If scheduled run: use env defaults.
+3. Execute inline Python to normalize `series`:
+     - uppercase all entries
+     - trim whitespace
+     - remove duplicates
+     - validate against allowed set:
+         - `G4, L0, L1, L4, L5, N6, U0, U3, WB, WB0, WBA, WL3`
+4. Emit JSON array for matrix strategy (example: `['G4','L4','U0']`).
+5. Emit all normalized flags/mode/policy as job outputs.
+
+### Outputs produced
+
+| Output | Used by |
+|---|---|
+| `series_json` | matrix series list |
+| `mode` | script argument |
+| `skip_drivers` | script switch |
+| `skip_schema_validation` | script switch |
+| `continue_on_workflow_error` | script switch |
+| `placeholder_policy` | script argument |
+| `max_parallel` | matrix parallelism |
+
+---
+
+## 5) Job 2 — `run-series`
+
+### Runtime characteristics
+
+- Runner: `self-hosted` (Windows runner expected)
+- Timeout: 360 minutes per series job
+- Strategy:
+    - `fail-fast: false` (one series failure does not cancel others)
+    - `max-parallel` controlled by input/output
+    - matrix over normalized series list
+
+### Secrets used
+
+| Secret | Purpose |
+|---|---|
+| `ST_CHATGPT_API_KEY` | ST AI Bridge authentication |
+| `ST_REMOTE_USER` | uploader identity (passed to script) |
+| `GITHUB_TOKEN` | Git operations/API access |
+
+### Steps breakdown
+
+1. `actions/checkout@v4`
+     - gets repository code on runner.
+
+2. Enable long paths
+     - runs: `git config --system core.longpaths true`
+     - avoids Windows path-length failures.
+
+3. `actions/setup-python@v5`
+     - uses Python `3.12`
+     - enables pip cache.
+
+4. Install dependencies
+     - `python -m pip install --upgrade pip`
+     - `pip install -r requirements.txt`
+
+5. Run per-series script
+     - script path:
+         - `pipeline_Automation/workflow/Run_Single_Series_Full_Pipeline_And_Upload.ps1`
+     - arguments wired from matrix + prepare outputs:
+         - `-Series`
+         - `-Mode`
+         - `-RemoteUser`
+         - `-KbId 793`
+         - `-JsonSplitSize 1000`
+         - `-PlaceholderPolicy`
+     - optional switches added conditionally:
+         - `-SkipDrivers`
+         - `-SkipSchemaValidation`
+         - `-ContinueOnWorkflowError`
+
+6. Upload artifacts (`if: always()`)
+     - artifact name: `st-ready-<SERIES>-<RUN_NUMBER>`
+     - path: `datasets/07_delivery/st_ready/by_series/`
+     - retention: 30 days
+     - still runs even if script step fails.
+
+7. Write GitHub step summary (`if: always()`)
+     - records mode and flags used for traceability.
+
+---
+
+## 6) How Inputs Map to Script Behavior
+
+| Workflow input | Script parameter | Practical effect |
+|---|---|---|
+| `series` | `-Series` (matrix item) | selects target series |
+| `mode` | `-Mode` | `Prepare` only prep, `Upload` only upload, `Full` both |
+| `skip_drivers` | `-SkipDrivers` | no driver/subrepo uploads |
+| `skip_schema_validation` | `-SkipSchemaValidation` | bypass schema gate |
+| `continue_on_workflow_error` | `-ContinueOnWorkflowError` | continue inside workflow when repo fails |
+| `placeholder_policy` | `-PlaceholderPolicy` | `Fail/Warn/Off` for unresolved Alfred placeholders |
+| `max_parallel` | matrix strategy | controls concurrent series jobs |
+
+---
+
+## 7) What Is Generated During a Run
+
+Main outputs are under:
+
+- `datasets/07_delivery/st_ready/by_series/stm32cube<series>/...`
+
+Typical folders per series:
+
+- `issues_json`
+- `files_json`
+- `resolver_cases_json`
+- `diagnostic_cards_json`
+- `drivers/...` for subrepo outputs
+
+Datasource IDs are persisted by the script in:
+
+- `upload_datasource_ids_<slug>.json`
+
+---
+
+## 8) Failure and Recovery Model
+
+### Validation failures
+
+- If schema or placeholder gates fail (depending on policy), the script exits with error.
+- Series job is marked failed; other series can continue because `fail-fast: false`.
+
+### Partial uploads
+
+- Script is idempotent-friendly by reusing saved datasource IDs when present.
+- `mode=Upload` can be used to retry upload only.
+
+### Runner issues
+
+- If self-hosted runner is offline, matrix jobs stay queued.
+
+---
+
+## 9) Operational Runbook
+
+### Preconditions
+
+1. self-hosted runner online
+2. repository secrets configured:
+     - `ST_CHATGPT_API_KEY`
+     - `ST_REMOTE_USER`
+3. access to ST AI Bridge from runner network
+
+### Safe manual smoke test
+
+- `series`: `G4`
+- `mode`: `Prepare`
+- `skip_drivers`: `true`
+- `skip_schema_validation`: `false`
+- `continue_on_workflow_error`: `false`
+- `placeholder_policy`: `Warn`
+- `max_parallel`: `1`
+
+Then promote to:
+
+- `mode`: `Full`
+- desired full series list
+
+---
+
+## 10) Quick FAQ
+
+### Why two jobs instead of one?
+
+`prepare` sanitizes/validates inputs and builds matrix cleanly. `run-series` focuses only on execution.
+
+### Why self-hosted for execution?
+
+Upload and environment constraints are tied to ST network/runtime dependencies.
+
+### Why `max_parallel` default is 1?
+
+Safer on a single Windows runner. Increase only if multiple runners/resources are available.
+
+---
+
+## 11) File References
+
+- Workflow: `.github/workflows/auto_update_kb.yml`
+- Main script: `pipeline_Automation/workflow/Run_Single_Series_Full_Pipeline_And_Upload.ps1`
+- Commands reference: `docs/pipeline_commands_reference.md`

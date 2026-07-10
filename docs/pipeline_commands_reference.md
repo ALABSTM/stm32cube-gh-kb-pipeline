@@ -329,3 +329,47 @@ Si le datasource reste bloque apres plusieurs rollbacks, creer un nouveau dataso
 | WB, WB0, WBA, WL3 | `shared/config/config_<série>.json` (nouvelles) |
 
 **25 séries au total** — 13 en production, 12 configurées.
+
+---
+
+## 14. GitHub Actions Automation (Self-Hosted Runner)
+
+Workflow principal : `.github/workflows/auto_update_kb.yml`
+
+Le workflow exécute, pour chaque série, le script :
+
+```powershell
+.\pipeline_Automation\workflow\Run_Single_Series_Full_Pipeline_And_Upload.ps1
+```
+
+### Prérequis
+
+- Runner self-hosted Windows `online` dans le repo GitHub
+- Secrets GitHub Actions configurés :
+    - `ST_CHATGPT_API_KEY`
+    - `ST_REMOTE_USER`
+
+### Trigger automatique
+
+- Cron bi-mensuel : 1er et 15 du mois à 03:00 UTC
+
+### Trigger manuel (GitHub UI)
+
+Dans **Actions > Auto Update KB > Run workflow** :
+
+- `series`: `G4,L0,L1,L4,L5,N6,U0,U3,WB,WB0,WBA,WL3` (ou sous-ensemble)
+- `mode`: `Full` | `Prepare` | `Upload`
+- `skip_drivers`: `true/false`
+- `skip_schema_validation`: `true/false`
+- `continue_on_workflow_error`: `true/false`
+- `placeholder_policy`: `Fail` | `Warn` | `Off`
+- `max_parallel`: `1` (recommandé avec un seul runner)
+
+### Vérification rapide runner local
+
+```powershell
+cd .\actions-runner
+.\run.cmd
+```
+
+Le runner doit afficher `Listening for Jobs`.
