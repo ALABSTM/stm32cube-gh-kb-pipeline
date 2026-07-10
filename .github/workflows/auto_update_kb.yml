@@ -46,6 +46,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: auto-update-kb-${{ github.ref }}
@@ -132,9 +133,63 @@ PY
           echo "placeholder_policy=$placeholder" >> "$GITHUB_OUTPUT"
           echo "max_parallel=$max_parallel" >> "$GITHUB_OUTPUT"
 
+  runner-check:
+    name: Check self-hosted runner availability
+    runs-on: ubuntu-latest
+    outputs:
+      runner_online: ${{ steps.check.outputs.runner_online }}
+      online_count: ${{ steps.check.outputs.online_count }}
+    steps:
+      - name: Detect online self-hosted runners
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          response=$(curl -sS \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$REPO/actions/runners")
+
+          parsed=$(RUNNERS_JSON="$response" python - <<'PY'
+import json
+import os
+
+payload = json.loads(os.environ["RUNNERS_JSON"])
+runners = payload.get("runners", [])
+online = []
+for r in runners:
+    if r.get("status") != "online":
+        continue
+    labels = {str(lbl.get("name", "")).lower() for lbl in r.get("labels", [])}
+    if "self-hosted" in labels:
+        online.append(r)
+
+print(f"{str(bool(online)).lower()}|{len(online)}")
+PY
+)
+
+          runner_online="${parsed%%|*}"
+          online_count="${parsed##*|}"
+
+          echo "runner_online=$runner_online" >> "$GITHUB_OUTPUT"
+          echo "online_count=$online_count" >> "$GITHUB_OUTPUT"
+
+      - name: Runner check summary
+        shell: bash
+        run: |
+          echo "## Runner Availability" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Metric | Value |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|---|---|" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Self-hosted runner online | ${{ steps.check.outputs.runner_online }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Online self-hosted count | ${{ steps.check.outputs.online_count }} |" >> "$GITHUB_STEP_SUMMARY"
+
   run-series:
     name: ${{ format('Series {0} ({1})', matrix.series, needs.prepare.outputs.mode) }}
-    needs: prepare
+    needs: [prepare, runner-check]
+    if: needs.runner-check.outputs.runner_online == 'true'
     runs-on: self-hosted
     timeout-minutes: 360
     strategy:
@@ -213,3 +268,25 @@ PY
           "| Continue On Workflow Error | ${{ needs.prepare.outputs.continue_on_workflow_error }} |" >> $env:GITHUB_STEP_SUMMARY
           "| Placeholder Policy | ${{ needs.prepare.outputs.placeholder_policy }} |" >> $env:GITHUB_STEP_SUMMARY
           "| Date | $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss K') |" >> $env:GITHUB_STEP_SUMMARY
+
+  runner-offline-notice:
+    name: Runner offline notice
+    needs: [prepare, runner-check]
+    if: needs.runner-check.outputs.runner_online != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish deferred upload notice
+        shell: bash
+        run: |
+          echo "## Upload Deferred" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "No online self-hosted runner was detected." >> "$GITHUB_STEP_SUMMARY"
+          echo "Run is deferred and no series job was executed." >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Parameter | Value |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|---|---|" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Mode | ${{ needs.prepare.outputs.mode }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Series | ${{ needs.prepare.outputs.series_json }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Online self-hosted count | ${{ needs.runner-check.outputs.online_count }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Action: bring runner online and re-run this workflow." >> "$GITHUB_STEP_SUMMARY"

@@ -256,6 +256,30 @@ Datasource IDs are persisted by the script in:
 - If schema or placeholder gates fail (depending on policy), the script exits with error.
 - Series job is marked failed; other series can continue because `fail-fast: false`.
 
+### Existing datasource name conflicts
+
+- Datasource conflict is handled by uploader logic.
+- In `operation=new`, if datasource name already exists, uploader tries to resolve existing datasource ID and switches to add mode.
+- If ID cannot be resolved, uploader retries creation with an auto-suffixed datasource name.
+
+Relevant implementation:
+
+- [pipeline_Automation/upload/Add_Data_Source_Files.py](pipeline_Automation/upload/Add_Data_Source_Files.py#L449)
+- [pipeline_Automation/upload/Add_Data_Source_Files.py](pipeline_Automation/upload/Add_Data_Source_Files.py#L1567)
+- [pipeline_Automation/upload/Add_Data_Source_Files.py](pipeline_Automation/upload/Add_Data_Source_Files.py#L1675)
+
+### Self-hosted runner offline handling
+
+- Workflow now checks runner availability before execution.
+- If no online self-hosted runner is detected, series jobs are skipped and a clear "Upload Deferred" summary is published instead of hanging in queue.
+- Re-run is required when runner is back online.
+
+Relevant implementation:
+
+- [.github/workflows/auto_update_kb.yml](.github/workflows/auto_update_kb.yml#L131)
+- [.github/workflows/auto_update_kb.yml](.github/workflows/auto_update_kb.yml#L167)
+- [.github/workflows/auto_update_kb.yml](.github/workflows/auto_update_kb.yml#L247)
+
 ### Partial uploads
 
 - Script is idempotent-friendly by reusing saved datasource IDs when present.
