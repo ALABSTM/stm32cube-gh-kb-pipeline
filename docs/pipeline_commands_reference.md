@@ -359,6 +359,7 @@ Dans **Actions > Auto Update KB > Run workflow** :
 
 - `series`: `G4,L0,L1,L4,L5,N6,U0,U3,WB,WB0,WBA,WL3` (ou sous-ensemble)
 - `mode`: `Full` | `Prepare` | `Upload`
+- `existing_datasource_mode`: `Replace` | `Add`
 - `skip_drivers`: `true/false`
 - `skip_schema_validation`: `true/false`
 - `continue_on_workflow_error`: `true/false`

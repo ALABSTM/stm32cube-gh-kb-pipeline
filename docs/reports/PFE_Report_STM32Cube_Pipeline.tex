@@ -2765,50 +2765,121 @@ PDF descriptions & +1 pt estimé & Élevé (CV + Alfred) & Acceptable \\
 
 \section{GitHub Actions --- Mise à Jour Automatique}
 
-Le pipeline est automatisé via GitHub Actions avec un workflow bi-mensuel :
+La mise à jour de la KB est orchestrée par le workflow \texttt{.github/workflows/auto\_update\_kb.yml}. L'objectif n'est pas seulement d'exécuter le pipeline, mais de garantir une mise à jour \textbf{fiable, traçable et idempotente} sur des séries multiples.
+
+\subsection{Architecture Opérationnelle Actuelle}
 
 \begin{figure}[H]
 \centering
-\begin{tikzpicture}[node distance=1cm,
-  job/.style={rectangle, draw=stblue, fill=stlightblue!40, text width=3.5cm, minimum height=1cm, align=center, font=\scriptsize\bfseries, rounded corners=3pt},
-  trigger/.style={rectangle, draw=storange, fill=storange!20, text width=3cm, minimum height=0.7cm, align=center, font=\scriptsize},
-  arr/.style={-{Stealth[length=2.5mm]}, thick}
+\begin{tikzpicture}[node distance=0.9cm,
+  trig/.style={rectangle, draw=storange, fill=storange!20, text width=2.9cm, minimum height=0.7cm, align=center, font=\scriptsize},
+  job/.style={rectangle, draw=stblue, fill=stlightblue!40, text width=3.8cm, minimum height=1cm, align=center, font=\scriptsize\bfseries, rounded corners=3pt},
+  gate/.style={rectangle, draw=stgreen!60!black, fill=stgreen!15, text width=3.4cm, minimum height=0.8cm, align=center, font=\scriptsize},
+  warn/.style={rectangle, draw=red!70!black, fill=red!8, text width=3.2cm, minimum height=0.8cm, align=center, font=\scriptsize},
+  arr/.style={-{Stealth[length=2.2mm]}, thick}
 ]
-\node[trigger] (cron) {Cron bi-mensuel\\\scriptsize 1er et 15 du mois};
-\node[trigger, below=0.4cm of cron] (manual) {workflow\_dispatch\\\scriptsize manuel};
-\node[job, right=2.5cm of cron, yshift=-0.4cm] (job1) {Job 1 --- Pipeline\\\scriptsize ubuntu-latest (cloud)\\\scriptsize Ingestion + Export};
-\node[job, right=2.5cm of job1] (job2) {Job 2 --- Upload\\\scriptsize self-hosted (PC local)\\\scriptsize Delete + Add KB};
-\node[rectangle, draw=stgreen, fill=stgreen!15, text width=2.5cm, align=center, font=\scriptsize, below=0.8cm of job1] (gate) {Gate Validation\\\scriptsize JSON Schema};
-\draw[arr] (cron) -- (job1);
-\draw[arr] (manual) -| (job1);
-\draw[arr] (job1) -- (job2);
-\draw[arr] (job1) -- (gate);
-\draw[arr, dashed, red] (gate) -- node[right, font=\tiny]{FAIL $\to$ bloque} ++(0,-0.8);
+\node[trig] (cron) {Cron bi-mensuel\\\scriptsize 1er et 15 à 03:00 UTC};
+\node[trig, below=0.35cm of cron] (manual) {workflow\_dispatch\\\scriptsize paramètres runtime};
+
+\node[job, right=2.6cm of cron, yshift=-0.2cm] (prepare) {Job prepare\\\scriptsize normalisation des inputs\\\scriptsize et matrice séries};
+\node[job, right=2.8cm of prepare] (runnercheck) {Job runner-check\\\scriptsize vérifie self-hosted\\\scriptsize online/offline};
+\node[job, below=1.2cm of runnercheck] (runseries) {Job run-series (matrix)\\\scriptsize exécution série par série\\\scriptsize script PowerShell unique};
+\node[warn, below=1.0cm of prepare, xshift=0.4cm] (deferred) {Runner offline\\\scriptsize upload différé + résumé\\\scriptsize pas de blocage en queue};
+\node[gate, below=1.0cm of runseries] (kb) {KB \#793\\\scriptsize upload Add/Replace\\\scriptsize + snapshot IDs};
+
+\draw[arr] (cron) -- (prepare);
+\draw[arr] (manual) -| (prepare);
+\draw[arr] (prepare) -- (runnercheck);
+\draw[arr] (runnercheck) -- node[right, font=\tiny]{online} (runseries);
+\draw[arr, dashed, red!70!black] (runnercheck) -- node[above, font=\tiny]{offline} (deferred);
+\draw[arr] (runseries) -- (kb);
 \end{tikzpicture}
-\caption{Architecture CI/CD : GitHub Actions + self-hosted runner}
+\caption{Architecture CI/CD actuelle : normalisation, contrôle runner, exécution matricielle et politique de mise à jour KB}
 \label{fig:cicd}
 \end{figure}
 
-\subsection{Architecture 2 Jobs}
+\subsection{Déclenchement et Paramètres}
+
+Le workflow est déclenché de deux manières :
+\begin{itemize}
+  \item \textbf{Planifié} : 1\textsuperscript{er} et 15 de chaque mois à 03:00 UTC
+  \item \textbf{Manuel} : \texttt{workflow\_dispatch} avec paramètres
+\end{itemize}
+
+\begin{longtable}{p{4.2cm}p{2.2cm}p{2.5cm}p{4.1cm}}
+\toprule
+\textbf{Paramètre} & \textbf{Type} & \textbf{Valeur par défaut} & \textbf{Rôle} \\
+\midrule
+\texttt{series} & CSV & G4,L0,L1,L4,L5,N6,U0,U3,WB,WB0,WBA,WL3 & Sous-ensemble de séries à traiter \\
+\texttt{mode} & Choice & Full & Full / Prepare / Upload \\
+\texttt{existing\_datasource\_mode} & Choice & Replace & Politique si la datasource existe (Replace ou Add) \\
+\texttt{skip\_drivers} & Bool & false & Ignore les uploads drivers/sous-repos \\
+\texttt{skip\_schema\_validation} & Bool & false & Désactive la gate de schéma \\
+\texttt{continue\_on\_workflow\_error} & Bool & false & Continue malgré un repo en échec \\
+\texttt{placeholder\_policy} & Choice & Fail & Politique sur placeholders Alfred \\
+\texttt{max\_parallel} & Entier & 1 & Concurrence de la matrice séries \\
+\bottomrule
+\end{longtable}
+
+\subsection{Politique Add vs Replace}
+
+Le workflow supporte explicitement deux stratégies lors de l'upload sur une datasource existante :
+
+\begin{itemize}
+  \item \textbf{Mode Add} : append des nouveaux fichiers sans suppression du contenu existant
+  \item \textbf{Mode Replace} : suppression du contenu existant puis upload des nouveaux fichiers
+\end{itemize}
+
+\textbf{Choix recommandé pour la production} : \texttt{Replace}, afin d'éviter les doublons et garantir que la KB reflète exactement l'état courant des JSON exportés.
+
+En \texttt{Replace}, la logique est stricte : si un conflit \texttt{file already exists} apparaît malgré la phase de suppression, le run est bloqué (pas de \textit{pass} silencieux).
+
+\subsection{Gestion des Datasource IDs et Reprise après Incident}
+
+Chaque série maintient un registre local :
+\begin{center}
+\texttt{datasets/07\_delivery/st\_ready/by\_series/stm32cube<serie>/upload\_datasource\_ids\_<slug>.json}
+\end{center}
+
+Ce registre est mis à jour \textbf{incrémentalement} après chaque étape d'upload (issues, files, diagnostic, resolver), et contient notamment :
+\begin{itemize}
+  \item les IDs courants de datasource par type d'artefact
+  \item \texttt{uploaded\_at}
+  \item \texttt{last\_successful\_stage}
+\end{itemize}
+
+Cette stratégie permet de reprendre proprement un run interrompu, sans perdre les IDs déjà créés pour une nouvelle série.
+
+\subsection{Disponibilité Runner et Déploiement Industriel}
+
+L'upload vers la KB nécessite un runner \texttt{self-hosted} (contraintes réseau/outillage interne ST). Pour éviter les workflows bloqués :
+\begin{itemize}
+  \item un job \texttt{runner-check} vérifie la disponibilité avant exécution
+  \item si offline, le workflow publie un statut \textit{Upload Deferred} et s'arrête proprement
+\end{itemize}
+
+\textbf{Recommandation d'exploitation} : héberger le runner sur une machine dédiée (VM/serveur) always-on plutôt qu'un poste utilisateur.
+
+\subsection{Garanties de Robustesse}
+
+\begin{itemize}
+  \item Validation de schéma et politique placeholders avant upload
+  \item Contrôle explicite Add/Replace selon le contexte de série
+  \item Détection proactive runner offline (pas de queue indéfinie)
+  \item Exécution matricielle avec \texttt{fail-fast=false} pour isoler les échecs par série
+  \item Artefacts et résumés GitHub conservés 30 jours pour audit
+\end{itemize}
+
+\subsection{Procédure Opérationnelle Recommandée}
 
 \begin{enumerate}
-  \item \textbf{Job 1 --- Pipeline} (cloud, ubuntu-latest) : Ingestion + Preprocessing + Export ST-ready
-  \item \textbf{Job 2 --- Upload} (self-hosted, PC local) : Delete ancien contenu + Upload nouveau vers KB \#793
+  \item Lancer d'abord une série pilote en \texttt{mode=Prepare}
+  \item Vérifier la qualité des outputs et les gates
+  \item Exécuter \texttt{mode=Full} avec \texttt{existing\_datasource\_mode=Replace}
+  \item En cas d'extension incrémentale ciblée, utiliser \texttt{existing\_datasource\_mode=Add}
 \end{enumerate}
 
-\subsection{Déclenchement}
-\begin{itemize}
-  \item Automatique : 1\textsuperscript{er} et 15 de chaque mois à 03h UTC
-  \item Manuel : via l'interface GitHub (workflow\_dispatch) avec sélection de séries
-\end{itemize}
-
-\subsection{Sécurité et Robustesse}
-\begin{itemize}
-  \item Gate de validation schéma (bloque l'upload si les JSON sont malformés)
-  \item Delete + Re-add pour éviter les conflits de noms de fichiers
-  \item Logs horodatés et artefacts archivés 30 jours
-  \item \texttt{--continue-on-error} permet de compléter les séries restantes même si une échoue
-\end{itemize}
+Ainsi, la CI/CD n'est pas seulement un déclencheur automatique ; elle devient un mécanisme de \textbf{gouvernance de la qualité des données} de la KB, avec contrôle explicite de la fraîcheur (Replace) et de l'incrémentalité (Add).
 
 %% ============================================================
 %% ANCIEN EMPLACEMENT du chapitre Configuration (déplacé via \input{chapter_configuration} avant Résultats)

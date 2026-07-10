@@ -117,6 +117,7 @@ def build_presentation(output_path: Path) -> None:
         bullets=[
             "series: CSV list of target series",
             "mode: Full, Prepare, Upload",
+            "existing_datasource_mode: Replace or Add",
             "skip_drivers: skip subrepo uploads",
             "skip_schema_validation: bypass schema gate",
             "continue_on_workflow_error: continue inside workflow",

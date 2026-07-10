@@ -49,6 +49,7 @@ flowchart LR
 |---|---|---|
 | `series` | choose series list | `G4,L4,U0` |
 | `mode` | execution mode | `Full` |
+| `existing_datasource_mode` | existing datasource behavior | `Replace` |
 | `skip_drivers` | skip subrepo uploads | `false` |
 | `skip_schema_validation` | bypass schema gate | `false` |
 | `continue_on_workflow_error` | continue if one repo fails | `false` |

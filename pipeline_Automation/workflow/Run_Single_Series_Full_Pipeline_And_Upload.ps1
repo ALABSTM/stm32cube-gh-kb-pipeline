@@ -38,6 +38,8 @@ param(
     [switch]$SkipDrivers,
     [switch]$SkipSchemaValidation,
     [switch]$ContinueOnWorkflowError,
+    [ValidateSet("Replace", "Add")]
+    [string]$ExistingDatasourceMode = "Replace",
     [ValidateSet("Fail", "Warn", "Off")]
     [string]$PlaceholderPolicy = "Fail"
 )
@@ -441,11 +443,16 @@ function Invoke-UploadJsonNew {
         "--json-root-mode", "auto",
         "--empty-json-policy", "skip",
         "--json-split-size", "$JsonSplitSize",
+        "--existing-datasource-policy", $ExistingDatasourceMode.ToLowerInvariant(),
         "--skip-auth-precheck",
         "--max-retries", "3",
         "--timeout", "120",
         "--files", (Resolve-Path $FilePath).Path
     )
+
+    if ($ExistingDatasourceMode -eq "Replace") {
+        $args += "--fail-on-existing-files"
+    }
 
     $output = Invoke-CapturedPython "Create datasource and upload $Label" $args
     $id = Get-DatasourceIdFromOutput $output
@@ -481,6 +488,24 @@ function Invoke-UploadJsonAdd {
         return $DatasourceId
     }
 
+    if ($ExistingDatasourceMode -eq "Replace") {
+        $deleteArgs = @(
+            $uploader,
+            "--kb", "$KbId",
+            "--operation", "delete",
+            "--datasource-id", "$DatasourceId",
+            "--remote-user", $RemoteUser,
+            "--delete-not-found-policy", "ignore",
+            "--skip-auth-precheck",
+            "--max-retries", "3",
+            "--timeout", "120"
+        )
+
+        Invoke-CapturedPython "Clear existing content for $Label in DS#$DatasourceId" $deleteArgs | Out-Null
+    } else {
+        Write-Host "[ADD] Existing datasource mode is Add for $Label (DS#$DatasourceId): appending files." -ForegroundColor DarkCyan
+    }
+
     $args = @(
         $uploader,
         "--kb", "$KbId",
@@ -497,6 +522,10 @@ function Invoke-UploadJsonAdd {
         "--timeout", "120",
         "--files", (Resolve-Path $FilePath).Path
     )
+
+    if ($ExistingDatasourceMode -eq "Replace") {
+        $args += "--fail-on-existing-files"
+    }
 
     Invoke-CapturedPython "Upload $Label into existing DS#$DatasourceId" $args | Out-Null
     return $DatasourceId
@@ -616,7 +645,33 @@ function Invoke-UploadSubrepoDeliveryAdd {
             "--timeout", "120",
             "--files", $file.FullName
         )
+        if ($ExistingDatasourceMode -eq "Replace") {
+            $args += "--fail-on-existing-files"
+        }
         Invoke-CapturedPython "Upload driver/subrepo $($file.Directory.Parent.Name) $Label into ${Series} DS#$effectiveDatasourceId" $args | Out-Null
+    }
+}
+
+function Save-DatasourceIdsSnapshot {
+    param(
+        [Parameter(Mandatory = $true)]
+        [object]$Ids,
+        [string]$Reason = ""
+    )
+
+    New-Item -ItemType Directory -Force -Path $deliveryRoot | Out-Null
+    $Ids["uploaded_at"] = (Get-Date).ToString("s")
+    if ($Reason) {
+        $Ids["last_update_reason"] = $Reason
+        $Ids["last_successful_stage"] = $Reason
+    }
+
+    $Ids | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $idsOutput -Encoding UTF8
+
+    if ($Reason) {
+        Write-Host "[UPLOAD] Datasource ID registry updated ($Reason): $idsOutput" -ForegroundColor DarkCyan
+    } else {
+        Write-Host "[UPLOAD] Datasource ID registry updated: $idsOutput" -ForegroundColor DarkCyan
     }
 }
 
@@ -626,7 +681,7 @@ function Invoke-UploadSeries {
     }
 
     # Reuse datasource IDs from the previous run when available.
-    # This makes reruns idempotent and avoids "datasource already exists" errors.
+    # Existing datasources are reused. Refresh policy is controlled by -ExistingDatasourceMode.
     if (Test-Path -LiteralPath $idsOutput) {
         try {
             $saved = Get-Content -LiteralPath $idsOutput -Raw | ConvertFrom-Json
@@ -689,6 +744,7 @@ function Invoke-UploadSeries {
         files = $null
         diagnostic = $null
         resolver = $null
+        last_successful_stage = $null
         uploaded_at = (Get-Date).ToString("s")
     }
 
@@ -717,6 +773,7 @@ function Invoke-UploadSeries {
             -ProcessorParams $issuesParams `
             -AllowEmpty
     }
+    Save-DatasourceIdsSnapshot -Ids $ids -Reason "issues"
 
     if ($FilesDatasourceId -gt 0) {
         $ids.files = Invoke-UploadJsonAdd `
@@ -733,6 +790,7 @@ function Invoke-UploadSeries {
             -DatasourceName "DB_STready_${Series}_Files" `
             -ProcessorParams $filesParams
     }
+    Save-DatasourceIdsSnapshot -Ids $ids -Reason "files"
 
     if ($DiagnosticDatasourceId -gt 0) {
         $ids.diagnostic = Invoke-UploadJsonAdd `
@@ -760,6 +818,7 @@ function Invoke-UploadSeries {
             -ProcessorParams $diagnosticParams `
             -AllowEmpty
     }
+    Save-DatasourceIdsSnapshot -Ids $ids -Reason "diagnostic"
 
     $resolverAllowEmpty = ($driverResolverNonEmptyFiles.Count -eq 0)
     if ($ResolverDatasourceId -gt 0) {
@@ -788,10 +847,9 @@ function Invoke-UploadSeries {
             -ProcessorParams $resolverParams `
             -AllowEmpty:$resolverAllowEmpty
     }
+            Save-DatasourceIdsSnapshot -Ids $ids -Reason "resolver"
 
-    New-Item -ItemType Directory -Force -Path $deliveryRoot | Out-Null
-    $ids | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $idsOutput -Encoding UTF8
-    Write-Host "`nSaved datasource IDs: $idsOutput" -ForegroundColor Green
+            Write-Host "`nSaved datasource IDs: $idsOutput" -ForegroundColor Green
 
     Invoke-UploadSubrepoDeliveryAdd -Label "issues" -Files $driverIssueFiles -RootKey "issues" -DatasourceId $ids.issues -ProcessorParams $issuesParams
     Invoke-UploadSubrepoDeliveryAdd -Label "files" -Files $driverFiles -RootKey "files" -DatasourceId $ids.files -ProcessorParams $filesParams

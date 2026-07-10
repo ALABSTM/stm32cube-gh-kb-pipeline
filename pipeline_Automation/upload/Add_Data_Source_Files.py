@@ -1504,6 +1504,7 @@ def run_add_request_skip_existing_files(
     timeout_seconds: int,
     verify_ssl: bool,
     proxies: dict[str, str] | None,
+    fail_on_existing_files: bool,
     verbose: bool,
 ) -> dict[str, Any]:
     uploaded_files: list[str] = []
@@ -1537,6 +1538,12 @@ def run_add_request_skip_existing_files(
         except ApiRejectedError as exc:
             if is_existing_file_conflict(exc.error_code, exc.api_message):
                 existing_name = extract_existing_filename(exc.api_message) or path.name
+                if fail_on_existing_files:
+                    raise RuntimeError(
+                        "Upload blocked: existing file conflict detected for "
+                        f"'{existing_name}' while strict mode is enabled. "
+                        "In replace mode this usually means datasource clear did not complete as expected."
+                    )
                 skipped_existing_files.append(existing_name)
                 if verbose:
                     print(f"Skipping existing file already in datasource: {existing_name}")
@@ -1581,6 +1588,8 @@ def run_new_request_with_followup_add(
     timeout_seconds: int,
     verify_ssl: bool,
     proxies: dict[str, str] | None,
+    existing_datasource_policy: str,
+    fail_on_existing_files: bool,
     verbose: bool,
 ) -> dict[str, Any]:
     if not file_paths:
@@ -1676,6 +1685,38 @@ def run_new_request_with_followup_add(
                     f"{existing_datasource_id}."
                 )
 
+            if existing_datasource_policy == "replace":
+                if verbose:
+                    print(
+                        "Existing datasource policy=replace: clearing datasource content before add upload "
+                        f"(datasource id {existing_datasource_id})."
+                    )
+
+                run_datasource_request(
+                    endpoint=endpoint,
+                    api_key=api_key,
+                    client_app_name=client_app_name,
+                    service_name=service_name,
+                    remote_user=remote_user,
+                    kb_id=kb_id,
+                    datasource_payload=existing_datasource_id,
+                    file_paths=[],
+                    request_types=[DEFAULT_TYPE_DELETE],
+                    request_part_names=request_part_names,
+                    payload_modes=payload_modes,
+                    timestamp_modes=timestamp_modes,
+                    max_retries=max_retries,
+                    timeout_seconds=timeout_seconds,
+                    verify_ssl=verify_ssl,
+                    proxies=proxies,
+                    verbose=verbose,
+                )
+            elif verbose:
+                print(
+                    "Existing datasource policy=add: appending files to existing datasource content "
+                    f"(datasource id {existing_datasource_id})."
+                )
+
             add_datasource_payload: dict[str, Any] = {"id": existing_datasource_id}
             if requested_processor:
                 add_datasource_payload["processor"] = requested_processor
@@ -1699,18 +1740,28 @@ def run_new_request_with_followup_add(
                 timeout_seconds=timeout_seconds,
                 verify_ssl=verify_ssl,
                 proxies=proxies,
+                fail_on_existing_files=fail_on_existing_files,
                 verbose=verbose,
             )
 
             final_existing = dict(add_response)
             final_existing["datasource"] = existing_datasource_id
-            final_existing.setdefault(
-                "message",
-                (
-                    f'Datasource "{conflict_name}" already existed; files were uploaded '
-                    "with add mode to the existing datasource."
-                ),
-            )
+            if existing_datasource_policy == "replace":
+                final_existing.setdefault(
+                    "message",
+                    (
+                        f'Datasource "{conflict_name}" already existed; existing content was deleted '
+                        "and fresh files were uploaded (replace mode)."
+                    ),
+                )
+            else:
+                final_existing.setdefault(
+                    "message",
+                    (
+                        f'Datasource "{conflict_name}" already existed; files were appended '
+                        "to the existing datasource (add mode)."
+                    ),
+                )
             return final_existing
 
     datasource_id_raw = create_response.get("datasource") if isinstance(create_response, dict) else None
@@ -1751,6 +1802,7 @@ def run_new_request_with_followup_add(
             timeout_seconds=timeout_seconds,
             verify_ssl=verify_ssl,
             proxies=proxies,
+            fail_on_existing_files=fail_on_existing_files,
             verbose=verbose,
         )
 
@@ -1894,6 +1946,15 @@ def parse_args() -> argparse.Namespace:
         "--fail-on-existing-files",
         action="store_true",
         help="In add mode, fail if files already exist in datasource (default: skip existing files)",
+    )
+    parser.add_argument(
+        "--existing-datasource-policy",
+        choices=["replace", "add"],
+        default="replace",
+        help=(
+            "When --operation new and datasource name already exists: "
+            "replace (delete then add, default) or add (append)."
+        ),
     )
     parser.add_argument(
         "--delete-not-found-policy",
@@ -2159,9 +2220,10 @@ def main() -> None:
                 timeout_seconds=max(5, args.timeout),
                 verify_ssl=args.verify_ssl,
                 proxies=proxies,
+                fail_on_existing_files=args.fail_on_existing_files,
                 verbose=args.verbose,
             )
-        elif args.operation == "new" and len(prepared_file_paths) > 1:
+        elif args.operation == "new":
             response_json = run_new_request_with_followup_add(
                 endpoint=args.endpoint,
                 api_key=api_key,
@@ -2179,6 +2241,11 @@ def main() -> None:
                 timeout_seconds=max(5, args.timeout),
                 verify_ssl=args.verify_ssl,
                 proxies=proxies,
+                existing_datasource_policy=args.existing_datasource_policy,
+                fail_on_existing_files=(
+                    args.fail_on_existing_files
+                    or args.existing_datasource_policy == "replace"
+                ),
                 verbose=args.verbose,
             )
         else:

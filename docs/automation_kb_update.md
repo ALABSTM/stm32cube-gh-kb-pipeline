@@ -75,6 +75,7 @@ on:
 |---|---|---|---|
 | `series` | string (CSV) | `G4,L0,L1,L4,L5,N6,U0,U3,WB,WB0,WBA,WL3` | Which series to process |
 | `mode` | choice | `Full` | `Full`, `Prepare`, or `Upload` |
+| `existing_datasource_mode` | choice | `Replace` | Existing datasource policy (`Replace`, `Add`) |
 | `skip_drivers` | boolean | `false` | Skip drivers/subrepo uploads |
 | `skip_schema_validation` | boolean | `false` | Disable schema gate |
 | `continue_on_workflow_error` | boolean | `false` | Continue when one repo fails inside workflow |
@@ -107,6 +108,7 @@ env:
     PYTHON_VERSION: '3.12'
     DEFAULT_SERIES: '...'
     DEFAULT_MODE: 'Full'
+    DEFAULT_EXISTING_DATASOURCE_MODE: 'Replace'
     DEFAULT_PLACEHOLDER_POLICY: 'Fail'
     DEFAULT_MAX_PARALLEL: '1'
 ```
@@ -145,6 +147,7 @@ This job transforms raw workflow inputs into clean outputs consumed by the matri
 |---|---|
 | `series_json` | matrix series list |
 | `mode` | script argument |
+| `existing_datasource_mode` | script argument |
 | `skip_drivers` | script switch |
 | `skip_schema_validation` | script switch |
 | `continue_on_workflow_error` | script switch |
@@ -195,6 +198,7 @@ This job transforms raw workflow inputs into clean outputs consumed by the matri
      - arguments wired from matrix + prepare outputs:
          - `-Series`
          - `-Mode`
+         - `-ExistingDatasourceMode`
          - `-RemoteUser`
          - `-KbId 793`
          - `-JsonSplitSize 1000`
@@ -221,6 +225,7 @@ This job transforms raw workflow inputs into clean outputs consumed by the matri
 |---|---|---|
 | `series` | `-Series` (matrix item) | selects target series |
 | `mode` | `-Mode` | `Prepare` only prep, `Upload` only upload, `Full` both |
+| `existing_datasource_mode` | `-ExistingDatasourceMode` | `Replace` refreshes existing datasource, `Add` appends |
 | `skip_drivers` | `-SkipDrivers` | no driver/subrepo uploads |
 | `skip_schema_validation` | `-SkipSchemaValidation` | bypass schema gate |
 | `continue_on_workflow_error` | `-ContinueOnWorkflowError` | continue inside workflow when repo fails |
@@ -247,6 +252,10 @@ Datasource IDs are persisted by the script in:
 
 - `upload_datasource_ids_<slug>.json`
 
+The file is updated incrementally during upload (issues, files, diagnostic, resolver),
+so newly created datasource IDs are persisted immediately even if a later step fails.
+It now includes `last_successful_stage` to indicate the latest completed checkpoint.
+
 ---
 
 ## 8) Failure and Recovery Model
@@ -259,8 +268,11 @@ Datasource IDs are persisted by the script in:
 ### Existing datasource name conflicts
 
 - Datasource conflict is handled by uploader logic.
-- In `operation=new`, if datasource name already exists, uploader tries to resolve existing datasource ID and switches to add mode.
+- In `operation=new`, if datasource name already exists, uploader resolves existing datasource ID and applies `existing_datasource_mode` policy:
+    - `Replace`: clear datasource content, then upload fresh files.
+    - `Add`: append uploaded files to existing datasource content.
 - If ID cannot be resolved, uploader retries creation with an auto-suffixed datasource name.
+- In `Replace`, existing-file conflicts are treated as blocking errors (strict mode), not skipped.
 
 Relevant implementation:
 

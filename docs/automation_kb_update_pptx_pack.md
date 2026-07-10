@@ -75,6 +75,7 @@ Manual Inputs - Runtime Controls
 |---|---|---|
 | `series` | CSV list | Select target MCU series |
 | `mode` | `Full` / `Prepare` / `Upload` | Choose full run or partial stage |
+| `existing_datasource_mode` | `Replace` / `Add` | Existing datasource behavior on conflict |
 | `skip_drivers` | true/false | Disable subrepo driver uploads |
 | `skip_schema_validation` | true/false | Bypass schema gate |
 | `continue_on_workflow_error` | true/false | Continue internal workflow on one-repo failure |
