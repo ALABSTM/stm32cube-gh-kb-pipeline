@@ -45,20 +45,37 @@ jobs:
       - name: DNS + TLS reachability
         shell: bash
         run: |
-          set -euo pipefail
+          set -uo pipefail
           host=$(python -c "from urllib.parse import urlparse; import os; print(urlparse(os.environ['ENDPOINT']).netloc)")
 
           echo "Probing host: $host"
-          nslookup "$host" >/dev/null
+
+          if ! getent ahosts "$host" > /tmp/st_dns_probe.txt 2>/tmp/st_dns_probe.err; then
+            echo "::error::DNS resolution failed for $host from GitHub-hosted runner."
+            if command -v nslookup >/dev/null 2>&1; then
+              echo "---- nslookup debug ----"
+              nslookup "$host" || true
+            fi
+            echo "---- getent stderr ----"
+            cat /tmp/st_dns_probe.err || true
+            exit 2
+          fi
+
+          echo "DNS resolution OK (first line):"
+          head -n 1 /tmp/st_dns_probe.txt || true
 
           http_code=$(curl -k -sS -o /tmp/st_probe_headers.txt -w "%{http_code}" \
             --connect-timeout 20 \
             --max-time 40 \
             -I "$ENDPOINT")
+          curl_exit=$?
 
+          echo "curl exit code: $curl_exit"
           echo "HTTP code from HEAD probe: $http_code"
-          if [ "$http_code" = "000" ]; then
-            echo "Network reachability failed from GitHub-hosted runner." >&2
+          if [ "$curl_exit" -ne 0 ] || [ "$http_code" = "000" ]; then
+            echo "::error::Network/TLS reachability failed from GitHub-hosted runner."
+            echo "---- curl headers/output ----"
+            cat /tmp/st_probe_headers.txt || true
             exit 2
           fi
 
