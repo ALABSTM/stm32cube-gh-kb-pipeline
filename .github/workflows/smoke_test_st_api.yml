@@ -11,6 +11,9 @@ on:
         description: ST client app name
         required: false
         default: mdrf_stgithub_analyzer_client
+  push:
+    branches:
+      - PFE_Chatbot_STM32Cube_V2
 
 permissions:
   contents: read
@@ -21,8 +24,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
-      ENDPOINT: ${{ inputs.endpoint }}
-      CLIENT_APP_NAME: ${{ inputs.client_app_name }}
+      ENDPOINT: ${{ inputs.endpoint || 'https://api-ai-bridge.st.com/chatgpt/api/client-apps' }}
+      CLIENT_APP_NAME: ${{ inputs.client_app_name || 'mdrf_stgithub_analyzer_client' }}
       API_KEY: ${{ secrets.ST_CHATGPT_API_KEY }}
     steps:
       - name: Preconditions
