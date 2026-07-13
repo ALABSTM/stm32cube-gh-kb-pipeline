@@ -124,6 +124,32 @@ Le \textbf{Search Type} détermine l'algorithme de recherche utilisé pour inter
 
 Le mode \textbf{Hybrid} a été retenu car les questions des ingénieurs STM32 mélangent systématiquement du langage naturel (``mon SPI crash au deuxième transfert'') et des identifiants techniques exacts (\texttt{HAL\_SPI\_Transmit\_DMA}, \texttt{NUCLEO-H743ZI}).
 
+La Figure~\ref{fig:hybrid_search} schématise la fusion~: la requête est traitée en parallèle par la branche sémantique (embedding AdaV2, seuil 0.55) et la branche full-text (correspondance exacte), puis les deux ensembles de documents sont fusionnés et dédupliqués avant d'être injectés dans le contexte de GPT-5.1.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=0.8cm,
+  q/.style={rectangle, draw=gray, fill=codebg, text width=2.6cm, minimum height=0.8cm, align=center, font=\scriptsize\bfseries},
+  sem/.style={rectangle, draw=stblue, fill=stlightblue!45, text width=3.2cm, minimum height=0.8cm, align=center, font=\scriptsize},
+  ft/.style={rectangle, draw=storange, fill=storange!20, text width=3.2cm, minimum height=0.8cm, align=center, font=\scriptsize},
+  fus/.style={rectangle, draw=stgreen, fill=stgreen!15, text width=2.8cm, minimum height=0.8cm, align=center, font=\scriptsize\bfseries},
+  arr/.style={-{Stealth[length=2.5mm]}, thick}
+]
+\node[q] (query) {Requête\\ingénieur};
+\node[sem, above right=0.5cm and 1.6cm of query] (sem) {Branche sémantique\\\scriptsize embedding, seuil 0.55, 25 docs};
+\node[ft, below right=0.5cm and 1.6cm of query] (ft) {Branche full-text\\\scriptsize match exact API, 12 docs};
+\node[fus, right=1.6cm of query, xshift=5.2cm] (fus) {Fusion + déduplication};
+\node[q, right=1.4cm of fus, draw=stgreen, fill=stgreen!10] (ctx) {Contexte\\GPT-5.1};
+\draw[arr] (query) -- (sem);
+\draw[arr] (query) -- (ft);
+\draw[arr] (sem) -- (fus);
+\draw[arr] (ft) -- (fus);
+\draw[arr] (fus) -- (ctx);
+\end{tikzpicture}
+\caption{Recherche hybride : fusion des branches sémantique et full-text avant génération}
+\label{fig:hybrid_search}
+\end{figure}
+
 \subsection{Tool Description}
 
 La description du tool KB est critique car elle guide le LLM dans sa décision d'appeler ou non le tool :

@@ -164,9 +164,10 @@
                                                   "resolver":  28244
                                               },
                               "STM32CubeWB":  {
-                                                  "issues":  null,
-                                                  "files":  null,
-                                                  "diagnostic":  null
+                                                  "issues":  30524,
+                                                  "files":  30525,
+                                                  "diagnostic":  30526,
+                                                  "resolver":  30527
                                               },
                               "STM32CubeWB0":  {
                                                    "issues":  29932,

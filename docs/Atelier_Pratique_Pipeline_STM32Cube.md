@@ -1,5 +1,16 @@
 # Atelier Pratique — Pipeline de Prétraitement STM32Cube
 
+## Génération de la présentation PPTX (après modifications)
+
+Pour régénérer la version PowerPoint à jour :
+
+```powershell
+python docs/scripts/generate_atelier_pratique_pptx.py --output docs/Atelier_Pratique_Pipeline_STM32Cube.pptx
+```
+
+Sortie attendue :
+`docs/Atelier_Pratique_Pipeline_STM32Cube.pptx`
+
 ## Objectif
 
 Ce guide permet à l'équipe de **lancer, comprendre et maintenir** le pipeline de prétraitement de bout en bout :  

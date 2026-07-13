@@ -84,6 +84,7 @@ $configPath = $seriesInfo.Config
 $deliveryRoot = "datasets/07_delivery/st_ready/by_series/$slug"
 $uploader = "pipeline_Automation/upload/Add_Data_Source_Files.py"
 $idsOutput = Join-Path $deliveryRoot "upload_datasource_ids_$slug.json"
+$globalConfigPath = "shared/config/config_all_series.json"
 
 function Invoke-Step {
     param(
@@ -153,7 +154,9 @@ function Invoke-CapturedPython {
     }
 
     if ($exitCode -ne 0) {
-        throw "$Label failed with exit code $exitCode"
+        $tail = @($output | Select-Object -Last 25)
+        $tailText = if ($tail.Count -gt 0) { "`n" + ($tail -join "`n") } else { "" }
+        throw "$Label failed with exit code $exitCode$tailText"
     }
     return @($output | ForEach-Object { [string]$_ })
 }
@@ -469,6 +472,7 @@ function Invoke-UploadJsonAdd {
         [string]$RootKey,
         [int]$DatasourceId,
         [string]$ProcessorParams,
+        [string]$DatasourceNameForFallback = "",
         [switch]$AllowEmpty
     )
 
@@ -489,6 +493,10 @@ function Invoke-UploadJsonAdd {
     }
 
     if ($ExistingDatasourceMode -eq "Replace") {
+        if (-not $DatasourceNameForFallback) {
+            throw "Replace mode for $Label requires -DatasourceNameForFallback to recreate datasource after delete."
+        }
+
         $deleteArgs = @(
             $uploader,
             "--kb", "$KbId",
@@ -501,7 +509,22 @@ function Invoke-UploadJsonAdd {
             "--timeout", "120"
         )
 
-        Invoke-CapturedPython "Clear existing content for $Label in DS#$DatasourceId" $deleteArgs | Out-Null
+        $deleteOutput = Invoke-CapturedPython "Clear existing content for $Label in DS#$DatasourceId" $deleteArgs
+        $deleteText = ($deleteOutput -join "`n")
+
+        if ($deleteText -match "Datasource not found") {
+            Write-Host "[WARN] DS#$DatasourceId for $Label no longer exists. Recreating datasource '$DatasourceNameForFallback'." -ForegroundColor Yellow
+        } else {
+            Write-Host "[REPLACE] DS#$DatasourceId deleted for $Label. Creating fresh datasource '$DatasourceNameForFallback'." -ForegroundColor DarkCyan
+        }
+
+        return Invoke-UploadJsonNew `
+            -Label $Label `
+            -FilePath $FilePath `
+            -RootKey $RootKey `
+            -DatasourceName $DatasourceNameForFallback `
+            -ProcessorParams $ProcessorParams `
+            -AllowEmpty:$AllowEmpty
     } else {
         Write-Host "[ADD] Existing datasource mode is Add for $Label (DS#$DatasourceId): appending files." -ForegroundColor DarkCyan
     }
@@ -527,8 +550,34 @@ function Invoke-UploadJsonAdd {
         $args += "--fail-on-existing-files"
     }
 
-    Invoke-CapturedPython "Upload $Label into existing DS#$DatasourceId" $args | Out-Null
-    return $DatasourceId
+    try {
+        Invoke-CapturedPython "Upload $Label into existing DS#$DatasourceId" $args | Out-Null
+        return $DatasourceId
+    }
+    catch {
+        $errorText = $_.Exception.Message
+        $normalized = $errorText.ToLowerInvariant()
+
+        $isDatasourceMissing = (
+            $normalized -match "could not find any entity of type .*kbdatasourceentity" -or
+            $normalized -match "datasource not found" -or
+            $normalized -match "cannot upload files to deleted datasource" -or
+            $normalized -match "errorcode=3000"
+        )
+
+        if ($isDatasourceMissing -and $DatasourceNameForFallback) {
+            Write-Host "[WARN] Upload failed because DS#$DatasourceId for $Label does not exist. Recreating datasource '$DatasourceNameForFallback'." -ForegroundColor Yellow
+            return Invoke-UploadJsonNew `
+                -Label $Label `
+                -FilePath $FilePath `
+                -RootKey $RootKey `
+                -DatasourceName $DatasourceNameForFallback `
+                -ProcessorParams $ProcessorParams `
+                -AllowEmpty:$AllowEmpty
+        }
+
+        throw
+    }
 }
 
 function Get-SubrepoDeliveryFiles {
@@ -652,6 +701,65 @@ function Invoke-UploadSubrepoDeliveryAdd {
     }
 }
 
+function Set-OrAddProperty {
+    param(
+        [Parameter(Mandatory = $true)]
+        [object]$Target,
+        [Parameter(Mandatory = $true)]
+        [string]$Name,
+        [AllowNull()][object]$Value
+    )
+
+    $prop = $Target.PSObject.Properties[$Name]
+    if ($null -eq $prop) {
+        $Target | Add-Member -NotePropertyName $Name -NotePropertyValue $Value
+    } else {
+        $prop.Value = $Value
+    }
+}
+
+function Sync-GlobalConfigDatasourceIds {
+    param(
+        [Parameter(Mandatory = $true)]
+        [object]$Ids
+    )
+
+    if (-not (Test-Path -LiteralPath $globalConfigPath)) {
+        Write-Host "[WARN] Global config not found, skip datasource sync: $globalConfigPath" -ForegroundColor Yellow
+        return
+    }
+
+    try {
+        $cfg = Get-Content -LiteralPath $globalConfigPath -Raw | ConvertFrom-Json
+        if ($null -eq $cfg -or $null -eq $cfg.kb_datasource_ids) {
+            Write-Host "[WARN] Invalid global config structure, skip datasource sync: $globalConfigPath" -ForegroundColor Yellow
+            return
+        }
+
+        $seriesKey = $seriesRepo
+        $seriesProp = $cfg.kb_datasource_ids.PSObject.Properties[$seriesKey]
+        if ($null -eq $seriesProp) {
+            $entry = [pscustomobject]@{}
+            $cfg.kb_datasource_ids | Add-Member -NotePropertyName $seriesKey -NotePropertyValue $entry
+        } else {
+            $entry = $seriesProp.Value
+        }
+
+        foreach ($name in @("issues", "files", "diagnostic", "resolver")) {
+            $value = $Ids.$name
+            if (($value -as [int]) -gt 0) {
+                Set-OrAddProperty -Target $entry -Name $name -Value ([int]$value)
+            }
+        }
+
+        $cfg | ConvertTo-Json -Depth 12 | Set-Content -LiteralPath $globalConfigPath -Encoding UTF8
+        Write-Host "[UPLOAD] Global datasource IDs synced for ${seriesKey}: $globalConfigPath" -ForegroundColor DarkCyan
+    }
+    catch {
+        Write-Host "[WARN] Failed to sync global datasource IDs: $($_.Exception.Message)" -ForegroundColor Yellow
+    }
+}
+
 function Save-DatasourceIdsSnapshot {
     param(
         [Parameter(Mandatory = $true)]
@@ -667,6 +775,7 @@ function Save-DatasourceIdsSnapshot {
     }
 
     $Ids | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $idsOutput -Encoding UTF8
+    Sync-GlobalConfigDatasourceIds -Ids $Ids
 
     if ($Reason) {
         Write-Host "[UPLOAD] Datasource ID registry updated ($Reason): $idsOutput" -ForegroundColor DarkCyan
@@ -754,7 +863,8 @@ function Invoke-UploadSeries {
             -FilePath $issuesFile `
             -RootKey "issues" `
             -DatasourceId $IssuesDatasourceId `
-            -ProcessorParams $issuesParams
+            -ProcessorParams $issuesParams `
+            -DatasourceNameForFallback "DB_STready_${Series}_Issues"
     } elseif ((Test-JsonRootIsEmpty -Path $issuesFile -RootKey "issues") -and ($driverIssueNonEmptyFiles.Count -gt 0)) {
         $firstIssueFile = $driverIssueNonEmptyFiles[0]
         $ids.issues = Invoke-UploadJsonNew `
@@ -781,7 +891,8 @@ function Invoke-UploadSeries {
             -FilePath $filesFile `
             -RootKey "files" `
             -DatasourceId $FilesDatasourceId `
-            -ProcessorParams $filesParams
+            -ProcessorParams $filesParams `
+            -DatasourceNameForFallback "DB_STready_${Series}_Files"
     } else {
         $ids.files = Invoke-UploadJsonNew `
             -Label "${Series} files" `
@@ -799,6 +910,7 @@ function Invoke-UploadSeries {
             -RootKey "diagnostic_cards" `
             -DatasourceId $DiagnosticDatasourceId `
             -ProcessorParams $diagnosticParams `
+            -DatasourceNameForFallback "DB_STready_${Series}_Diagnostic" `
             -AllowEmpty
     } elseif ((Test-JsonRootIsEmpty -Path $diagnosticFile -RootKey "diagnostic_cards") -and ($driverDiagnosticNonEmptyFiles.Count -gt 0)) {
         $firstDiagnosticFile = $driverDiagnosticNonEmptyFiles[0]
@@ -828,6 +940,7 @@ function Invoke-UploadSeries {
             -RootKey "resolver_cases" `
             -DatasourceId $ResolverDatasourceId `
             -ProcessorParams $resolverParams `
+            -DatasourceNameForFallback "DB_STready_${Series}_Resolver" `
             -AllowEmpty
     } elseif ((Test-JsonRootIsEmpty -Path $resolverFile -RootKey "resolver_cases") -and ($driverResolverNonEmptyFiles.Count -gt 0)) {
         $firstResolverFile = $driverResolverNonEmptyFiles[0]

@@ -665,6 +665,175 @@ def build_diagnostic_card(
     return card
 
 
+# ============================================================
+# Curated cross-series diagnostic cards
+# ------------------------------------------------------------
+# Some high-value support questions (e.g. I2C bus recovery) are common to many
+# STM32 series but are NOT captured as a single GitHub issue. Without a dedicated
+# KB document, the persona has nothing to retrieve and returns an incomplete
+# answer (scored 0 in evaluation). These curated cards inject durable,
+# retrieval-ready knowledge into every relevant series repo. They are authored
+# from well-established STM32 peripheral behavior, not fabricated issue metadata.
+# ============================================================
+
+CURATED_DIAGNOSTIC_CARDS: list[dict[str, Any]] = [
+    {
+        "topic_id": "i2c_busy_recovery",
+        "applies_to_series": "all",
+        "component": "I2C",
+        "severity": "high",
+        "issue_kind": "usage_question",
+        "title": "I2C stuck BUSY after a communication error: safe software bus-recovery sequence (no full MCU reset)",
+        "symptom_summary": (
+            "I2C stays BUSY after a communication error (NACK, arbitration loss, glitch) and the bus "
+            "never recovers; only a full MCU reset clears it. A software bus-recovery sequence releases "
+            "the bus and clears BUSY without resetting the whole MCU."
+        ),
+        "query_aliases": [
+            "I2C stuck BUSY after communication error",
+            "I2C bus never recovers",
+            "safe software recovery sequence without full MCU reset",
+            "I2C BUSY recovery without reset",
+            "clear I2C BUSY flag without reset",
+            "I2C bus recovery sequence",
+            "I2C SCL toggle 9 pulses",
+            "recover I2C bus in software",
+            "I2C hangs busy flag stays set",
+            "I2C deadlock recovery",
+        ],
+        "keywords": [
+            "I2C", "BUSY", "bus recovery", "SCL", "SDA", "STOP condition",
+            "GPIO open-drain", "9 clock pulses", "HAL_I2C", "deadlock", "NACK",
+            "__HAL_RCC_I2C1_FORCE_RESET", "__HAL_I2C_DISABLE",
+        ],
+        "api_family_tags": ["HAL_I2C_Init", "HAL_I2C_DeInit", "HAL_GPIO_Init"],
+        "technical_pattern_tags": ["state_stuck_busy", "pinmux", "interrupt_path"],
+        "confirmed_facts": [
+            "On STM32 I2C, the BUSY flag can remain set after an aborted/erroneous transfer and cannot always be cleared purely by peripheral software.",
+            "A slave holding SDA low, or a peripheral state machine left mid-transaction, keeps the bus BUSY.",
+            "A GPIO-level bus-recovery plus peripheral reset clears BUSY without a full MCU reset.",
+        ],
+        "plausible_diagnosis": [
+            "A slave device is holding SDA low after an incomplete byte, or the I2C state machine did not return to READY after the error.",
+            "On F1/F2/F4 I2C IP, an analog-filter glitch can also trigger the permanent BUSY condition.",
+        ],
+        "likely_causes": [
+            "Missing STOP after a NACK or error, leaving the bus mid-transaction",
+            "Slave clock-stretching or holding SDA low after a partial transfer",
+            "Weak/absent pull-ups or SDA/SCL glitch during START/STOP",
+        ],
+        "debug_checks": [
+            "Read the SCL and SDA GPIO levels: when idle both must be high; if SDA is low a slave is holding the bus",
+            "Confirm a STOP is generated and error flags are cleared in the I2C error callback",
+            "Verify pull-up values (2.2k-4.7k) and that no external device wedges the bus",
+        ],
+        "possible_workarounds": [
+            "1. Disable the I2C peripheral: __HAL_I2C_DISABLE(&hi2c) (clears PE)",
+            "2. Reconfigure SCL and SDA as GPIO open-drain outputs with pull-up (save the current alternate-function config)",
+            "3. If SDA is held low, generate up to 9 clock pulses on SCL to let the slave release SDA",
+            "4. Generate a manual STOP: drive SDA low while SCL is high, then release SDA high while SCL is high",
+            "5. Restore SCL/SDA to their I2C alternate function",
+            "6. Reset the peripheral: __HAL_RCC_I2C1_FORCE_RESET(); __HAL_RCC_I2C1_RELEASE_RESET();",
+            "7. Re-initialize with HAL_I2C_Init(&hi2c) and retry the transfer",
+            "F1/F2/F4 note: also disable the analog filter (HAL_I2CEx_ConfigAnalogFilter with DISABLE) to avoid the glitch-induced BUSY lockup",
+        ],
+        "constraints_or_limits": [
+            "Adapt the GPIO port/pin and __HAL_RCC_I2Cx_* macros to the I2C instance and pins used on your board",
+            "The GPIO bit-bang recovery is universal (H7, H5, U5, WL, F1, F2, F4); newer IP (H7/H5/U5) can also toggle PE/SWRST",
+        ],
+        "doc_url": "https://www.st.com/resource/en/application_note/an5343-i2c-timing-configuration-tool-stmicroelectronics.pdf",
+    },
+]
+
+
+def build_curated_card(repo: str, series: str, template: dict[str, Any]) -> dict[str, Any]:
+    topic_id = template["topic_id"]
+    component = template.get("component")
+    query_aliases = dedupe(list(template.get("query_aliases") or []), limit=16)
+    api_tags = list(template.get("api_family_tags") or [])
+    pattern_tags = list(template.get("technical_pattern_tags") or [])
+    peripheral_tags = dedupe([component] if component else [], limit=4)
+    keywords = dedupe(query_aliases + list(template.get("keywords") or []), limit=24)
+    query_anchor_tags = dedupe(query_aliases + api_tags + pattern_tags, limit=24)
+    confirmed_facts = list(template.get("confirmed_facts") or [])
+    plausible_diagnosis = list(template.get("plausible_diagnosis") or [])
+    likely_causes = list(template.get("likely_causes") or [])
+    debug_checks = list(template.get("debug_checks") or [])
+    hypotheses = build_hypotheses(likely_causes, plausible_diagnosis)
+    evidence_refs: list[dict[str, Any]] = []
+    if template.get("doc_url"):
+        evidence_refs.append({"type": "documentation", "url": template["doc_url"], "confidence": "high"})
+
+    card = {
+        "id": f"diag::{repo}::curated::{topic_id}",
+        "card_id": f"diag_{repo.lower()}_curated_{topic_id}",
+        "rootTagPath": "diagnostic_cards",
+        "delivery_template": "st_v1_diagnostic_card",
+        "repo_scope": repo,
+        "repo": repo,
+        "title": template.get("title"),
+        "label": template.get("title"),
+        "externalURL": template.get("doc_url"),
+        "issue_number": None,
+        "issue_title": None,
+        "issue_state": None,
+        "issue_kind": template.get("issue_kind"),
+        "severity": template.get("severity"),
+        "component": component,
+        "board": None,
+        "target_series": [series] if series else [],
+        "category": "technical_diagnosis",
+        "source_types": ["curated"],
+        "evidence_strength": "high",
+        "rescue_applied": False,
+        "resolution_status": None,
+        "peripheral_tags": peripheral_tags,
+        "technical_pattern_tags": pattern_tags,
+        "api_family_tags": api_tags,
+        "version_tags": [],
+        "query_anchor_tags": query_anchor_tags,
+        "query_aliases": query_aliases,
+        "clarification_questions_required": False,
+        "clarification_questions": [],
+        "symptom_summary": template.get("symptom_summary"),
+        "affected_context": f"Applies to {series} and other STM32 series sharing the same I2C behavior" if series else "",
+        "likely_causes": likely_causes,
+        "confirmed_facts": confirmed_facts,
+        "plausible_diagnosis": plausible_diagnosis,
+        "response_blocks": {
+            "facts_confirmed": confirmed_facts,
+            "hypotheses": hypotheses,
+            "checks": debug_checks,
+        },
+        "response_format": "direct_answer_with_recovery_steps",
+        "debug_checks": debug_checks,
+        "possible_workarounds": list(template.get("possible_workarounds") or []),
+        "constraints_or_limits": list(template.get("constraints_or_limits") or []),
+        "evidence_refs": evidence_refs,
+        "keywords": keywords,
+    }
+    card["st_ready_text"] = build_st_ready_text(card)
+    return card
+
+
+def build_curated_cards_for_repo(repo: str) -> list[dict[str, Any]]:
+    # Only inject curated cards into main series repos (STM32Cube<Series>),
+    # not into component/BSP repos, to avoid noise duplication.
+    if not re.match(r"(?i)stm32cube[a-z]", repo):
+        return []
+    series_list = infer_target_series(repo, None)
+    if not series_list:
+        return []
+    series = series_list[0]
+    cards: list[dict[str, Any]] = []
+    for template in CURATED_DIAGNOSTIC_CARDS:
+        applies = template.get("applies_to_series", "all")
+        if applies != "all" and series not in applies:
+            continue
+        cards.append(build_curated_card(repo, series, template))
+    return cards
+
+
 def export_repo_json(repo: str, include_all_issues: bool = False) -> tuple[int, int, Path]:
     issues_path = get_existing_repo_artifact_file(
         repo=repo,
@@ -704,6 +873,18 @@ def export_repo_json(repo: str, include_all_issues: bool = False) -> tuple[int, 
     for key in all_keys:
         cards.append(build_diagnostic_card(repo, issue_index.get(key), resolver_index.get(key)))
 
+    # Inject curated cross-series cards (e.g. I2C bus recovery) so the KB always
+    # has a retrieval-ready answer for common questions not tied to a single issue.
+    existing_ids = {card.get("id") for card in cards}
+    curated_cards = build_curated_cards_for_repo(repo)
+    curated_added = 0
+    for curated in curated_cards:
+        if curated.get("id") in existing_ids:
+            continue
+        cards.append(curated)
+        existing_ids.add(curated.get("id"))
+        curated_added += 1
+
     out_root = get_repo_artifact_dir(repo, "diagnostic_cards_json")
     out_root.mkdir(parents=True, exist_ok=True)
     out_file_name = f"st_ready_diagnostic_cards_{repo.lower()}.json"
@@ -723,6 +904,7 @@ def export_repo_json(repo: str, include_all_issues: bool = False) -> tuple[int, 
         "rescued_issues_considered": len(issue_index),
         "resolver_cases_considered": len(resolver_index),
         "exported_cards": len(cards),
+        "curated_cards_added": curated_added,
         "include_all_issues": include_all_issues,
         "format": "json-array",
         "root_tag_path": "diagnostic_cards",

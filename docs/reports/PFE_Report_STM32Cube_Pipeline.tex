@@ -33,6 +33,7 @@
 \definecolor{storange}{RGB}{255,152,0}
 \definecolor{stgreen}{RGB}{76,175,80}
 \definecolor{stgray}{RGB}{200,200,200}
+\definecolor{stred}{RGB}{210,60,60}
 \definecolor{codebg}{RGB}{245,245,245}
 \definecolor{codeframe}{RGB}{200,200,200}
 
@@ -329,6 +330,33 @@ Ce paradigme nous apporte trois avantages concrets :
   \item \textbf{Traçabilité} : chaque réponse cite un numéro d'issue, une URL GitHub, une version firmware
 \end{itemize}
 
+La Figure~\ref{fig:rag_paradigm} illustre le flux RAG appliqué à notre système~: la question de l'ingénieur déclenche une recherche dans la KB \#793, les documents pertinents sont récupérés, puis le LLM génère une réponse sourcée. Le pipeline de prétraitement (partie gauche) est ce qui \textbf{alimente et conditionne} la qualité de la KB indexable.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=1cm,
+  src/.style={rectangle, draw=stred, fill=red!8, text width=2.3cm, minimum height=0.8cm, align=center, font=\scriptsize},
+  proc/.style={rectangle, draw=stblue, fill=stlightblue!45, text width=2.3cm, minimum height=0.8cm, align=center, font=\scriptsize\bfseries},
+  kb/.style={rectangle, draw=storange, fill=storange!20, text width=2.1cm, minimum height=0.8cm, align=center, font=\scriptsize\bfseries},
+  llm/.style={rectangle, draw=stgreen, fill=stgreen!15, text width=2.1cm, minimum height=0.8cm, align=center, font=\scriptsize\bfseries},
+  arr/.style={-{Stealth[length=2.5mm]}, thick}
+]
+\node[src] (gh) {GitHub\\\scriptsize issues, fichiers, PDF};
+\node[proc, right=1.1cm of gh] (pipe) {Pipeline\\\scriptsize 7 stages};
+\node[kb, right=1.1cm of pipe] (kb) {KB \#793\\\scriptsize index hybride};
+\node[llm, right=1.1cm of kb] (llm) {GPT-5.1\\\scriptsize génération};
+\node[src, right=1.1cm of llm, draw=stblue, fill=stlightblue!30] (ans) {Réponse sourcée\\\scriptsize + citations};
+\node[below=1.1cm of kb, font=\scriptsize\bfseries, draw=gray, fill=codebg, text width=2.3cm, align=center, minimum height=0.7cm] (q) {Question\\ingénieur};
+\draw[arr] (gh) -- node[above, font=\tiny]{ingestion} (pipe);
+\draw[arr] (pipe) -- node[above, font=\tiny]{upload} (kb);
+\draw[arr] (q) -- node[right, font=\tiny]{retrieval} (kb);
+\draw[arr] (kb) -- node[above, font=\tiny]{docs} (llm);
+\draw[arr] (llm) -- (ans);
+\end{tikzpicture}
+\caption{Le paradigme RAG appliqué au projet : le pipeline conditionne la qualité de la KB interrogée à chaque question}
+\label{fig:rag_paradigm}
+\end{figure}
+
 \subsection{Preprocessing et Qualité de la KB}
 
 La qualité des réponses RAG dépend directement de la qualité des documents indexés --- c'est le principe ``\textbf{Garbage In, Garbage Out}''. Dans notre projet, nous avons constaté expérimentalement que :
@@ -514,6 +542,36 @@ Le système implique plusieurs catégories d'acteurs aux rôles et attentes dist
 \bottomrule
 \end{longtable}
 
+La Figure~\ref{fig:actors} positionne ces acteurs autour du système~: les acteurs \textbf{humains} (ingénieur, support, administrateur) à gauche, le \textbf{cœur logiciel} (pipeline + KB + persona) au centre, et les \textbf{services externes} (GitHub API, Alfred Vision) à droite.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=0.7cm,
+  human/.style={rectangle, draw=stblue, fill=stlightblue!45, text width=2.6cm, minimum height=0.75cm, align=center, font=\scriptsize\bfseries, rounded corners=3pt},
+  core/.style={rectangle, draw=storange, fill=storange!20, text width=2.7cm, minimum height=0.8cm, align=center, font=\scriptsize\bfseries},
+  ext/.style={rectangle, draw=stgreen, fill=stgreen!15, text width=2.6cm, minimum height=0.75cm, align=center, font=\scriptsize},
+  arr/.style={-{Stealth[length=2mm]}, thick}
+]
+\node[human] (eng) {Ingénieur STM32};
+\node[human, below=0.5cm of eng] (sup) {Équipe Support ST};
+\node[human, below=0.5cm of sup] (adm) {Administrateur KB};
+\node[core, right=2cm of sup, yshift=0.9cm] (persona) {Persona\\ST GitHub Analyzer};
+\node[core, below=0.5cm of persona] (kb) {KB \#793};
+\node[core, below=0.5cm of kb] (pipe) {Pipeline automatisé};
+\node[ext, right=2cm of persona, yshift=-0.5cm] (gh) {GitHub API};
+\node[ext, below=0.5cm of gh] (alf) {Alfred Vision AI};
+\draw[arr] (eng) -- (persona);
+\draw[arr] (sup) -- (kb);
+\draw[arr] (adm) -- (persona);
+\draw[arr] (persona) -- (kb);
+\draw[arr] (pipe) -- (kb);
+\draw[arr] (gh) -- (pipe);
+\draw[arr] (alf) -- (pipe);
+\end{tikzpicture}
+\caption{Positionnement des acteurs autour du système : humains (gauche), cœur logiciel (centre), services externes (droite)}
+\label{fig:actors}
+\end{figure}
+
 \section{Besoins Fonctionnels}
 \label{sec:besoins_fonctionnels}
 
@@ -590,6 +648,37 @@ Sprint 6 & Mai -- Juin 2026 & Alfred Vision (images issues + PDF), enrichissemen
 Sprint 7 & Juin 2026 & Nouvelles séries (G4, L0, L1, L4), automatisation CI/CD, évaluation finale \\
 \bottomrule
 \end{longtable}
+
+La Figure~\ref{fig:sprint_timeline} présente la frise des 7 sprints et met en évidence les jalons majeurs~: pipeline H7 complet (S2), première persona (S3), saut de Quality Index à 94 grâce aux Diagnostic Cards (S4), et extension multi-séries (S5--S7).
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=0cm,
+  sp/.style={rectangle, draw=stblue, fill=stlightblue!45, text width=1.5cm, minimum height=0.9cm, align=center, font=\tiny\bfseries},
+  milestone/.style={font=\tiny, align=center, text width=1.7cm, stgreen},
+  arr/.style={-{Stealth[length=2mm]}, thick, draw=stblue}
+]
+\node[sp] (s1) {S1\\\scriptsize état de l'art};
+\node[sp, right=0.35cm of s1] (s2) {S2\\\scriptsize pipeline H7};
+\node[sp, right=0.35cm of s2] (s3) {S3\\\scriptsize persona};
+\node[sp, right=0.35cm of s3] (s4) {S4\\\scriptsize QI=94};
+\node[sp, right=0.35cm of s4] (s5) {S5\\\scriptsize multi-séries};
+\node[sp, right=0.35cm of s5] (s6) {S6\\\scriptsize Alfred Vision};
+\node[sp, right=0.35cm of s6] (s7) {S7\\\scriptsize CI/CD};
+\draw[arr] (s1) -- (s2);
+\draw[arr] (s2) -- (s3);
+\draw[arr] (s3) -- (s4);
+\draw[arr] (s4) -- (s5);
+\draw[arr] (s5) -- (s6);
+\draw[arr] (s6) -- (s7);
+\node[milestone, above=0.35cm of s4] {jalon majeur\\Diagnostic Cards};
+\draw[-{Stealth[length=1.5mm]}, stgreen] ($(s4.north)+(0,0.05)$) -- ++(0,0.25);
+\node[below=0.2cm of s1, font=\tiny, stgray] {Fév 2026};
+\node[below=0.2cm of s7, font=\tiny, stgray] {Juin 2026};
+\end{tikzpicture}
+\caption{Frise des 7 sprints Scrum et jalons majeurs du projet}
+\label{fig:sprint_timeline}
+\end{figure}
 
 \subsection{Artefacts Scrum Utilisés}
 
@@ -1209,6 +1298,73 @@ La Figure~\ref{fig:data_flow} montre le parcours complet d'une donnée depuis Gi
 \chapter{Implémentation}
 %% ============================================================
 
+\textit{\small\textbf{\textcolor{stblue}{Phase CRISP-DM :}} ce chapitre couvre principalement la phase \textit{Data Preparation}, avec les décisions de \textit{Modeling} (similarité, heuristiques, formats d'artefacts) et la charnière vers le \textit{Deployment} (delivery et upload KB).}\par\smallskip
+
+Ce chapitre décrit la \textbf{réalisation concrète} du pipeline de prétraitement, c'est-à-dire le passage des concepts (Chapitre~\ref{chap:methodologie}) à un système Python exécutable, rejouable et automatisé. Chaque stage y est présenté selon un même schéma : objectif, mécanisme et scripts, exemple de sortie JSON réel, et résultats quantifiés.
+
+\section{Vue d'Orchestration du Pipeline}
+\label{sec:orchestration_pipeline}
+
+Avant de détailler chaque stage, la Figure~\ref{fig:orchestration} présente la \textbf{vue d'orchestration}~: l'orchestrateur \texttt{run\_full\_workflow.py} enchaîne les 7 stages pour une série donnée, applique les \textit{flags} d'exécution (\texttt{--skip-ingestion}, \texttt{--skip-chunking}, \texttt{--continue-on-error}, \texttt{--v3}), et boucle sur les 25 séries STM32. Cette vue complète le diagramme de flux de données (Figure~\ref{fig:pipeline_overview}) en montrant le \textbf{contrôle d'exécution} plutôt que le flux de données.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=0.7cm,
+  orch/.style={rectangle, draw=storange, fill=storange!20, text width=3.4cm, minimum height=0.9cm, align=center, font=\scriptsize\bfseries, rounded corners=3pt},
+  stg/.style={rectangle, draw=stblue, fill=stlightblue!45, text width=2.5cm, minimum height=0.7cm, align=center, font=\scriptsize},
+  gate/.style={diamond, draw=stgreen, fill=stgreen!15, text width=1.5cm, align=center, font=\tiny, inner sep=1pt},
+  arr/.style={-{Stealth[length=2mm]}, thick}
+]
+\node[orch] (orch) {run\_full\_workflow.py\\\scriptsize boucle sur 25 séries};
+\node[stg, below left=1cm and 2.4cm of orch] (s1) {1. Ingestion};
+\node[stg, below=0.45cm of s1] (s2) {2. Cleaning V1/V3};
+\node[stg, below=0.45cm of s2] (s3) {3. Enrichissement};
+\node[stg, below=0.45cm of s3] (s4) {4. Similarité};
+\node[stg, right=2.4cm of s1] (s5) {5. Chunking (test)};
+\node[stg, below=0.45cm of s5] (s6) {6. Validation};
+\node[gate, below=0.45cm of s6] (g) {Gate\\schéma};
+\node[stg, below=0.45cm of g] (s7) {7. Delivery};
+\node[orch, below=1cm of s7, fill=stgreen!20, draw=stgreen] (up) {Upload KB \#793};
+\draw[arr] (orch) -| (s1);
+\draw[arr] (s1) -- (s2);
+\draw[arr] (s2) -- (s3);
+\draw[arr] (s3) -- (s4);
+\draw[arr] (s4) -| (s5);
+\draw[arr] (s5) -- (s6);
+\draw[arr] (s6) -- (g);
+\draw[arr] (g) -- node[right, font=\tiny]{PASS} (s7);
+\draw[arr] (s7) -- (up);
+% Flags
+\node[right=0.3cm of orch, font=\tiny, align=left, text width=3.2cm] {\texttt{--skip-ingestion}\\\texttt{--skip-chunking}\\\texttt{--continue-on-error}\\\texttt{--v3}};
+\node[left=0.3cm of g, font=\tiny, stred] {FAIL $\to$ upload bloqué};
+\end{tikzpicture}
+\caption{Vue d'orchestration : \texttt{run\_full\_workflow.py} enchaîne les 7 stages avec gate de validation et flags d'exécution, en bouclant sur les 25 séries}
+\label{fig:orchestration}
+\end{figure}
+
+Le Tableau~\ref{tab:master_stages} résume, pour chaque stage, le script principal, le fichier d'entrée, le fichier de sortie et la métrique de qualité associée. Il sert de fil conducteur au reste du chapitre.
+
+\begin{longtable}{p{2.3cm}p{3.6cm}p{2.7cm}p{2.7cm}p{2.6cm}}
+\caption{Tableau de synthèse des 7 stages du pipeline}
+\label{tab:master_stages}\\
+\toprule
+\textbf{Stage} & \textbf{Script principal} & \textbf{Entrée} & \textbf{Sortie} & \textbf{Métrique clé} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Stage} & \textbf{Script principal} & \textbf{Entrée} & \textbf{Sortie} & \textbf{Métrique clé} \\
+\midrule
+\endhead
+1. Ingestion & \texttt{fetch\_issues.py}, \texttt{fetch\_files.py} & GitHub API & \texttt{raw\_*.json} & Complétude 99,7\% \\
+2. Cleaning V1/V3 & \texttt{clean\_files\_v3.py} & \texttt{raw\_*.json} & \texttt{clean\_*\_v3.json} & CMSIS $-96,4\%$, corpus $-38\%$ \\
+3. Enrichissement & \texttt{issues\_to\_docs\_v2.py} & \texttt{clean\_*.json} & \texttt{docs\_*\_v2.json} & Layer 88,2\%, comp. 72,6\% \\
+4. Similarité & \texttt{compute\_issue\_similarity\_v2.py} & \texttt{docs\_*\_v2.json} & \texttt{docs\_*\_sim.json} & Couverture voisins 22\% (H7) \\
+5. Chunking (test) & \texttt{docs\_to\_chunks\_*\_v2.py} & \texttt{docs\_*\_sim.json} & \texttt{chunks\_*.json} & Cohérence \texttt{PARENT\_CHILD} \\
+6. Validation & \texttt{validate\_schemas.py} & \texttt{st\_ready\_*.json} & Rapport gate & Conformité 100\% \\
+7. Delivery & \texttt{export\_st\_ready\_*.py} & \texttt{docs\_*\_sim.json} & \texttt{st\_ready\_*.json} & 4 artefacts / série \\
+\bottomrule
+\end{longtable}
+
 \section{Ingestion (Stage 1)}
 
 \textit{\small\textbf{\textcolor{stblue}{Phase CRISP-DM :}} Data Preparation (collecte exhaustive des données brutes, préalable à toute transformation).}\par\smallskip
@@ -1483,6 +1639,35 @@ Le module \texttt{stm32cube\_preprocessing\_heuristics.py} applique des règles 
 }
 \end{lstlisting}
 
+\subsection{Résultats de Couverture des Métadonnées}
+\label{sec:enrichment_coverage}
+
+La qualité de l'enrichissement se mesure par le \textbf{taux de couverture} de chaque champ, c'est-à-dire le pourcentage de documents pour lesquels l'heuristique a pu affecter une valeur non nulle. La Figure~\ref{fig:enrichment_coverage} présente ces taux mesurés sur la série H7.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    xbar,
+    width=11cm, height=5cm,
+    bar width=0.45cm,
+    xlabel={Taux de couverture (\%)},
+    xmin=0, xmax=100,
+    symbolic y coords={Board, Component, Layer},
+    ytick=data,
+    nodes near coords,
+    every node near coord/.append style={font=\small},
+    enlarge y limits=0.35,
+]
+\addplot[fill=stgreen!70] coordinates {(88.2,Layer) (72.6,Component) (45.3,Board)};
+\end{axis}
+\end{tikzpicture}
+\caption{Taux de couverture des métadonnées par heuristique NLP (série H7)}
+\label{fig:enrichment_coverage}
+\end{figure}
+
+\textbf{Lecture} : la couche architecturale (\texttt{layer}) est identifiée dans 88,2\% des cas et le composant dans 72,6\%, ce qui suffit au filtrage facetté du retrieval. En revanche, la couverture \texttt{board} plafonne à 45,3\%~: il ne s'agit pas d'un défaut de l'heuristique, mais d'une \textbf{limite de la donnée source} --- de nombreuses issues ne mentionnent aucun board explicite. Cette distinction entre défaut de pipeline et limite de source est reprise dans l'évaluation par stage (Chapitre~\ref{chap:resultats_evaluation}).
+
 \section{Similarité (Stage 4)}
 
 \textit{\small\textbf{\textcolor{stblue}{Phase CRISP-DM :}} Modeling (conception de la mesure de similarité TF-IDF et du seuil décisionnel).}\par\smallskip
@@ -1728,6 +1913,35 @@ Le pipeline intègre \textbf{Alfred Vision AI}, un service LLM interne ST, pour 
 \label{fig:alfred}
 \end{figure}
 
+\subsection{Fiabilité Mesurée de l'Enrichissement Visuel}
+\label{sec:alfred_contextual_trust}
+
+Produire une description n'est pas suffisant~: encore faut-il qu'elle soit \textbf{cohérente avec le contexte} de l'image. Le script \texttt{validate\_alfred\_coherence.py} compare chaque description au texte source (\texttt{st\_ready\_text} pour les issues, \texttt{page\_context\_text} pour les PDF) et calcule un score de cohérence combinant recouvrement lexical, similarité sémantique et probabilité de contradiction. La Figure~\ref{fig:alfred_trust} compare la \textbf{confiance contextuelle} des deux sources visuelles.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    width=10cm, height=5cm,
+    bar width=1.1cm,
+    ylabel={Confiance contextuelle (\%)},
+    ymin=0, ymax=100,
+    symbolic x coords={Images d'issues, Figures PDF, Global},
+    xtick=data,
+    nodes near coords,
+    every node near coord/.append style={font=\small},
+    enlarge x limits=0.3,
+]
+\addplot[fill=stgreen!70] coordinates {(Images d'issues,98.5) (Figures PDF,41.7) (Global,67.4)};
+\end{axis}
+\end{tikzpicture}
+\caption{Confiance contextuelle des descriptions Alfred : images d'issues (200 évaluées) vs figures PDF (242 évaluées)}
+\label{fig:alfred_trust}
+\end{figure}
+
+\textbf{Interprétation} : sur 200 images d'issues évaluées, seules 3 sont signalées à faible cohérence, soit une confiance contextuelle de \textbf{98,5\%}~; ces captures (logs IDE, écrans CubeMX, oscillogrammes) sont fortement ancrées dans le texte de l'issue. À l'inverse, sur 242 figures PDF, 141 sont à faible cohérence (confiance \textbf{41,7\%})~: beaucoup de \textit{crops} correspondent à des tableaux, historiques de révision ou fragments de page plutôt qu'à de vrais schémas. Conclusion opérationnelle~: l'enrichissement des images d'issues est \textbf{mature}, tandis que celui des figures PDF est conservé comme \textbf{rappel multimodal à confiance limitée}.
+
 \section{Architecture Agents --- Persona ST ChatGPT}
 
 Le système final s'articule autour d'une architecture \textbf{multi-agents} où chaque composant a un rôle bien défini.
@@ -1768,7 +1982,7 @@ La persona est un agent conversationnel déployé sur la plateforme \textbf{ST C
 \textbf{Paramètre} & \textbf{Valeur / Description} \\
 \midrule
 Nom & ST GitHub Analyzer \\
-Modèle & GPT-4o (Azure OpenAI) \\
+Modèle & GPT-5.1 (Azure OpenAI) \\
 Température & 0.2--0.3 (réponses factuelles) \\
 KB associée & KB \#793 (ST GitHub Analyzer) \\
 Tool principal & ST-GitHub-Analyzer-Unstructured (Hybrid Search) \\
@@ -1834,6 +2048,46 @@ Mise à jour KB & Delete + Re-add automatique via GitHub Actions \\
 Évaluation continue & Quality Index 52 questions pour détecter les régressions \\
 \bottomrule
 \end{longtable}
+
+%% ============================================================
+\section{Synthèse de l'Implémentation}
+\label{sec:synthese_implementation}
+%% ============================================================
+
+Le pipeline réalisé transforme la donnée brute GitHub en connaissance structurée exploitable par la plateforme, en enchaînant sept stages rejouables et un enrichissement visuel. La Figure~\ref{fig:synthese_impl} résume la chaîne de transformation, du volume brut aux 4 types d'artefacts KB-ready.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=0.6cm,
+  raw/.style={rectangle, draw=stred, fill=red!8, text width=3.2cm, minimum height=0.8cm, align=center, font=\scriptsize},
+  proc/.style={rectangle, draw=stblue, fill=stlightblue!45, text width=3.2cm, minimum height=0.8cm, align=center, font=\scriptsize\bfseries},
+  out/.style={rectangle, draw=stgreen, fill=stgreen!15, text width=3.2cm, minimum height=0.8cm, align=center, font=\scriptsize},
+  arr/.style={-{Stealth[length=2.5mm]}, thick}
+]
+\node[raw] (raw) {Données brutes\\\scriptsize issues, PRs, commits,\\\scriptsize fichiers, PDF, images};
+\node[proc, right=1.4cm of raw] (proc) {Pipeline 7 stages\\\scriptsize nettoyage, enrichissement,\\\scriptsize similarité, validation};
+\node[out, right=1.4cm of proc] (out) {4 artefacts KB-ready\\\scriptsize issues, files,\\\scriptsize resolver, diagnostic};
+\draw[arr] (raw) -- node[above, font=\tiny]{ingestion} (proc);
+\draw[arr] (proc) -- node[above, font=\tiny]{delivery} (out);
+\node[below=0.4cm of raw, font=\tiny, stred] {bruit élevé, non structuré};
+\node[below=0.4cm of proc, font=\tiny, stblue] {$-38\%$ corpus, +densité};
+\node[below=0.4cm of out, font=\tiny, stgreen] {traçable, sourcé, indexable};
+\end{tikzpicture}
+\caption{Synthèse de la chaîne de transformation : de la donnée brute aux artefacts KB-ready}
+\label{fig:synthese_impl}
+\end{figure}
+
+Les acquis principaux de l'implémentation sont~:
+
+\begin{itemize}
+  \item un \textbf{nettoyage par type} (V3) qui réduit le corpus de 38\% en moyenne et un header CMSIS de 96,4\%, améliorant directement la densité sémantique des embeddings AdaV2~;
+  \item un \textbf{enrichissement heuristique} couvrant 88,2\% des \texttt{layer} et 72,6\% des \texttt{component}, sans aucune donnée d'entraînement~;
+  \item deux \textbf{artefacts originaux} --- resolver cases (traçabilité Issue$\to$PR$\to$Commit) et diagnostic cards (raisonnement Symptôme$\to$Root Cause$\to$Fix) --- responsables du gain majeur de Quality Index~;
+  \item un \textbf{enrichissement visuel} fiable à 98,5\% sur les images d'issues~;
+  \item une \textbf{gate de validation} garantissant 100\% de conformité schéma avant upload.
+\end{itemize}
+
+Ces résultats sont mesurés et analysés en détail au Chapitre~\ref{chap:resultats_evaluation}.
 
 %% ============================================================
 %% Chapitre Configuration (fichier séparé pour repositionnement)
