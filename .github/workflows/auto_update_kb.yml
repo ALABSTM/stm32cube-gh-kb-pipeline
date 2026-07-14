@@ -3,6 +3,9 @@ name: Auto Update KB
 on:
   schedule:
     - cron: '0 3 1,15 * *'
+  push:
+    branches:
+      - PFE_Chatbot_STM32Cube_V2
   workflow_dispatch:
     inputs:
       series:
