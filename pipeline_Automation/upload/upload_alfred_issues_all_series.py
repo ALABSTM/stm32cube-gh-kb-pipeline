@@ -13,9 +13,9 @@ import subprocess
 import sys
 from pathlib import Path
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 BY_SERIES = PROJECT_ROOT / "datasets" / "07_delivery" / "st_ready" / "by_series"
-ADD_SCRIPT = PROJECT_ROOT / "pipeline_Automation" / "Add_Data_Source_Files.py"
+ADD_SCRIPT = PROJECT_ROOT / "pipeline_Automation" / "upload" / "Add_Data_Source_Files.py"
 
 KB_ID = 793
 
@@ -23,8 +23,17 @@ PROCESSOR_PARAMS = '{"label": "{{repo}} issue #{{issue_number}} - {{issue_title}
 
 # Datasource IDs for issues per series
 SERIES_DATASOURCES = {
+    "stm32cubec0": 29193,
+    "stm32cubef0": 29195,
+    "stm32cubef1": 29197,
+    "stm32cubef2": 29199,
+    "stm32cubef3": 29282,
     "stm32cubef4": 28099,
+    "stm32cubef7": 29276,
+    "stm32cubeg0": 29273,
     "stm32cubeh5": 28158,
+    "stm32cubeh7": 24406,
+    "stm32cubeh7rs": 29270,
     "stm32cubeu5": 28167,
     "stm32cubewl": 28171,
 }
@@ -45,7 +54,12 @@ def main():
     print()
 
     for series, ds_id in SERIES_DATASOURCES.items():
-        alfred_file = BY_SERIES / series / "issues_json" / f"st_ready_issues_{series}_with_alfred_image_text.json"
+        # Try both naming conventions
+        alfred_file = BY_SERIES / series / "issues_json" / f"st_ready_issues_with_images_{series}_with_alfred_image_text.json"
+        if not alfred_file.exists():
+            alfred_file = BY_SERIES / series / "issues_json" / f"st_ready_issues_{series}_with_alfred_image_text.json"
+        if not alfred_file.exists():
+            alfred_file = BY_SERIES / series / "issues_json" / f"st_ready_issues_with_images_{series}.json"
 
         if not alfred_file.exists():
             print(f"[SKIP] {series}: Alfred file not found")

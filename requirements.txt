@@ -4,3 +4,4 @@ jsonschema
 openpyxl
 opencv-python-headless
 PyMuPDF
+python-pptx

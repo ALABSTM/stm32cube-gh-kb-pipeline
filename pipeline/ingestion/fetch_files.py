@@ -1,3 +1,4 @@
+import argparse
 import json
 
 from pipeline.ingestion.file_collect_service import collect_repo_docs, write_raw_files_json
@@ -10,15 +11,20 @@ def load_config() -> dict:
     return json.loads(cfg_path.read_text(encoding="utf-8"))
 
 
-def main() -> None:
+def main(skip_repo_sync: bool = False, only_repos: list[str] | None = None) -> None:
     cfg = load_config()
     owner = cfg.get("owner", "STMicroelectronics")
     repos = cfg["repos"]
+    if only_repos:
+        wanted = {repo.lower() for repo in only_repos}
+        repos = [repo for repo in repos if repo.lower() in wanted]
     data_dir = DATA_DIR
     data_dir.mkdir(parents=True, exist_ok=True)
 
-    if cfg.get("auto_clone_missing_repos", True):
+    if cfg.get("auto_clone_missing_repos", True) and not skip_repo_sync:
         ensure_local_repos(cfg)
+    elif skip_repo_sync:
+        print("[SYNC] Skipped repo sync; scanning existing local clones only.")
 
     repos_root = get_repos_root(cfg.get("repos_dir", "GitHub_repos"))
 
@@ -43,4 +49,16 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Collect raw file artifacts from local STM32Cube repos.")
+    parser.add_argument(
+        "--skip-repo-sync",
+        action="store_true",
+        help="Do not clone/fetch/pin repos before scanning; use existing local clones only.",
+    )
+    parser.add_argument(
+        "--repo",
+        action="append",
+        help="Limit scanning to one repo from the active config. Can be repeated.",
+    )
+    args = parser.parse_args()
+    main(skip_repo_sync=args.skip_repo_sync, only_repos=args.repo)

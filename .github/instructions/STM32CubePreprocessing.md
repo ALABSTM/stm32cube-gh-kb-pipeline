@@ -42,10 +42,21 @@ The main steps are:
 
 5. **Delivery (ST-ready)**
   - `pipeline/delivery/export_st_ready_issues.py` → `datasets/07_delivery/st_ready/issues_json/st_ready_issues_<repo>.json`
+  - `pipeline/delivery/export_st_ready_issues_with_images.py` → `st_ready_issues_with_images_<repo>.json` (includes `image_urls` for Alfred)
   - `pipeline/delivery/export_st_ready_files.py` → `datasets/07_delivery/st_ready/files_json/st_ready_files_<repo>.json`
   - `pipeline/delivery/export_st_ready_resolver_cases.py` → `datasets/07_delivery/st_ready/resolver_cases_json/st_ready_resolver_cases_<repo>.json`
   - `pipeline/delivery/export_st_ready_diagnostic_cards.py` → `datasets/07_delivery/st_ready/diagnostic_cards_json/st_ready_diagnostic_cards_<repo>.json`
   - Each export also writes summary files (`summary_*.json`) for traceability.
+
+6. **Alfred Image Enrichment**
+  - `pipeline_Automation/alfred/enrich_json_images_with_alfred.py` → replaces `[IMAGE ATTACHED]` with `[IMAGE DESCRIPTION] ...` via Vision API.
+  - Output: `*_with_alfred_image_text.json`
+  - Known fix: `first_sentence()` strips image markers from `root_cause_hint` to prevent duplication.
+
+7. **Upload to KB**
+  - `pipeline_Automation/upload/Add_Data_Source_Files.py` → uploads JSON to ST ChatGPT KB datasource.
+  - Requires base64-encoded `--processor-params` in PowerShell.
+  - KB #793, H7 Issues datasource #24406.
 
 ## Active Repository Layout
 
@@ -97,6 +108,11 @@ Execution entry points:
 - `python -m pipeline.run_full_workflow --export-st-ready`
 - `python -m pipeline.run_full_workflow --skip-ingestion`
 - `python -m pipeline.run_full_workflow --continue-on-error`
+- `python -m pipeline.delivery.export_st_ready_issues_with_images --repo STM32CubeH7`
+- `python pipeline_Automation/alfred/enrich_json_images_with_alfred.py --input <file> --inplace`
+- `python pipeline_Automation/upload/Add_Data_Source_Files.py --kb 793 --operation add --datasource-id <ID> ...`
+
+Full command reference: `docs/pipeline_commands_reference.md`
 
 Targeted delivery exports:
 

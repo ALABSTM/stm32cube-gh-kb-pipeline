@@ -138,10 +138,10 @@ function Resolve-JsonFiles {
     return $resolved
 }
 
-$repoRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
+$repoRoot = Resolve-Path (Join-Path $PSScriptRoot "..\..")
 Set-Location $repoRoot
 
-$uploader = Join-Path $repoRoot "pipeline_Automation/Add_Data_Source_Files.py"
+$uploader = Join-Path $repoRoot "pipeline_Automation/upload/Add_Data_Source_Files.py"
 if (-not (Test-Path -LiteralPath $uploader)) {
     throw "Uploader script not found: $uploader"
 }

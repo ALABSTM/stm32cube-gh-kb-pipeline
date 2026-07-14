@@ -73,11 +73,39 @@ There are also **test scripts**:
 Delivery is part of the active workflow and exports KB-ready JSON under `datasets/07_delivery/st_ready/`:
 
 - `issues_json/st_ready_issues_<repo>.json`
+- `issues_json/st_ready_issues_with_images_<repo>.json` (variant with `image_urls` field for Alfred)
 - `files_json/st_ready_files_<repo>.json`
 - `resolver_cases_json/st_ready_resolver_cases_<repo>.json`
 - `diagnostic_cards_json/st_ready_diagnostic_cards_<repo>.json`
 
+After Alfred enrichment, the file becomes:
+- `issues_json/st_ready_issues_with_images_<repo>_with_alfred_image_text.json`
+
 Each export also writes `summary_*.json` for counts and traceability.
+
+## Alfred Image Enrichment
+
+Alfred Vision API converts `[IMAGE ATTACHED]` markers into `[IMAGE DESCRIPTION] ...` using image analysis.
+
+- Script: `pipeline_Automation/alfred/enrich_json_images_with_alfred.py`
+- Usage: `python pipeline_Automation/alfred/enrich_json_images_with_alfred.py --input <file> --inplace`
+- Options: `--use-proxy`, `--no-replace-text`, `--max-records N`, `--strip-analyses`
+- API: Alfred Vision via `api-ai-bridge.st.com`, client `mdrf_stgithub_analyzer_client`
+
+**Known fix**: `first_sentence()` strips `[IMAGE ATTACHED]` from `root_cause_hint` to prevent duplication. Without this, when comment images are quoted in both "Root cause:" and "Key comments:", Alfred exhausts URLs on the copy and produces UNAVAILABLE on the originals.
+
+## Upload to KB
+
+- Script: `pipeline_Automation/upload/Add_Data_Source_Files.py`
+- KB: #793 (ST GitHub Analyzer)
+- Datasource IDs: H7 Issues = #24406
+- PowerShell requires base64 encoding for `--processor-params` containing `{{}}`
+- Operation: `--operation add` to append, file is split with `--json-split-size 1000`
+
+## ST ChatGPT Tool Fallback
+
+The persona "ST GitHub Analyzer" can use Alfred as a fallback tool when the KB has no relevant answer. Tool description should enforce KB-first priority:
+> "Use this tool ONLY when the Knowledge Base does not contain a relevant answer. Forward the user's exact question to Alfred."
 
 ## Behavior
 
@@ -111,16 +139,26 @@ When the user interacts with you:
 Targeted delivery exports:
 
 - `python -m pipeline.delivery.export_st_ready_issues --repo STM32CubeH7`
+- `python -m pipeline.delivery.export_st_ready_issues_with_images --repo STM32CubeH7`
 - `python -m pipeline.delivery.export_st_ready_files --repo STM32CubeH7`
 - `python -m pipeline.delivery.export_st_ready_resolver_cases --repo STM32CubeH7`
 - `python -m pipeline.delivery.export_st_ready_diagnostic_cards --repo STM32CubeH7`
 
+Alfred enrichment:
+
+- `python pipeline_Automation/alfred/enrich_json_images_with_alfred.py --input <file> --inplace`
+
+Upload to KB:
+
+- `python pipeline_Automation/upload/Add_Data_Source_Files.py --kb 793 --operation add --datasource-id <ID> --remote-user "abir.gharbi@st.com" --processor JSON --processor-params "base64:<b64>" --json-split-size 1000 --files <file>`
+
 Automation scripts to know:
 
-- `pipeline_Automation/Run_Issues_Pipeline_For_All_Repos.ps1`
-- `pipeline_Automation/Generate_Diagnostic_Cards_For_All_Repos.ps1`
-- `pipeline_Automation/Upload_STReady_New_Batch.ps1`
-- `pipeline_Automation/Add_Data_Source_Files.py`
+- `pipeline_Automation/workflow/Run_Issues_Pipeline_For_All_Repos.ps1`
+- `pipeline_Automation/workflow/Generate_Diagnostic_Cards_For_All_Repos.ps1`
+- `pipeline_Automation/upload/Upload_STReady_New_Batch.ps1`
+- `pipeline_Automation/upload/Add_Data_Source_Files.py`
+- `pipeline_Automation/workflow/Run_Full_Auto_Update_KB.ps1`
 
 ## Quality and Validation Checklist
 
@@ -131,6 +169,8 @@ When reviewing generated outputs, verify:
 - `diagnostic_cards` include useful `query_aliases`, `keywords`, and `evidence_refs`.
 - High-value troubleshooting cases contain technical anchors used by user queries (for example: API names, error states, transfer sizes).
 - Delivery outputs remain aligned with `shared/schemas` and `validate_schemas.py`.
+- After Alfred enrichment: 0 `[IMAGE DESCRIPTION UNAVAILABLE]` expected for issues where all image URLs were captured.
+- Invalid issues (short text, duplicate/wontfix labels) are excluded by default; `rescue` mechanism recovers technical false negatives.
 
 Prefer **clear, structured answers** (sections, bullet points) that the user can copy into a report or documentation.
 

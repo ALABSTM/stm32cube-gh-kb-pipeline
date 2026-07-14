@@ -29,11 +29,11 @@
         <mxCell id="ps_detail" value="pipeline_Automation/&#xa;├── Run_Issues_Pipeline_For_All_Repos.ps1&#xa;│   → Loops over all configured repos&#xa;│   → Runs full pipeline per repo&#xa;│&#xa;├── Generate_Diagnostic_Cards_For_All_Repos.ps1&#xa;│   → Re-exports diagnostic cards only&#xa;│&#xa;└── Upload_STReady_New_Batch.ps1&#xa;    → Batch upload all st_ready outputs&#xa;    → Handles split + retry logic" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#2e7d32;fontSize=9;fontFamily=Courier New;align=left;spacingLeft=8;verticalAlign=top;spacingTop=5;" vertex="1" parent="ps_scripts">
           <mxGeometry x="10" y="35" width="430" height="135" as="geometry" />
         </mxCell>
-        <!-- Jenkins -->
-        <mxCell id="jenkins" value="Jenkinsfile (CI/CD)" style="swimlane;startSize=25;fillColor=#f3e5f5;strokeColor=#7b1fa2;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+        <!-- GitHub Actions CI/CD -->
+        <mxCell id="gh_actions" value="GitHub Actions (.github/workflows/auto_update_kb.yml)" style="swimlane;startSize=25;fillColor=#f3e5f5;strokeColor=#7b1fa2;fontSize=11;fontStyle=1;" vertex="1" parent="1">
           <mxGeometry x="40" y="400" width="500" height="220" as="geometry" />
         </mxCell>
-        <mxCell id="jk_detail" value="Pipeline Stages:&#xa;&#xa;1. Checkout → git pull&#xa;2. Setup → pip install -r requirements.txt&#xa;3. Ingest → python -m pipeline.ingestion (per repo)&#xa;4. Process → clean + enrich + similarity + chunk&#xa;5. Validate → python -m pipeline.evaluation.validate_schemas&#xa;6. Deliver → --export-st-ready&#xa;7. Upload → Add_Data_Source_Files.py (per datasource)&#xa;&#xa;Triggers:&#xa;• Scheduled: weekly (Monday 6:00 AM)&#xa;• Manual: parameterized (series selection)&#xa;&#xa;Notifications: Teams webhook on failure" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#7b1fa2;fontSize=9;fontFamily=Courier New;align=left;spacingLeft=8;verticalAlign=top;spacingTop=5;" vertex="1" parent="jenkins">
+        <mxCell id="gha_detail" value="Workflow Stages:&#xa;&#xa;Job 1 (ubuntu-latest):&#xa;1. Checkout → git pull&#xa;2. Setup → pip install -r requirements.txt&#xa;3. Pipeline → run_all_series.py (per series)&#xa;4. Upload artifact → st-ready-delivery&#xa;&#xa;Job 2 (self-hosted):&#xa;5. Download artifact&#xa;6. Delete old datasources&#xa;7. Upload → Add_Data_Source_Files.py (per datasource)&#xa;&#xa;Triggers:&#xa;• Scheduled: bi-weekly (1st &amp; 15th, 03:00 UTC)&#xa;• Manual: workflow_dispatch with series selection" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff;strokeColor=#7b1fa2;fontSize=9;fontFamily=Courier New;align=left;spacingLeft=8;verticalAlign=top;spacingTop=5;" vertex="1" parent="gh_actions">
           <mxGeometry x="10" y="35" width="480" height="175" as="geometry" />
         </mxCell>
         <!-- API connection -->
