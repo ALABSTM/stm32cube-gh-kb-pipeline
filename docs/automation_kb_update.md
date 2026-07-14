@@ -351,3 +351,5 @@ Safer on a single Windows runner. Increase only if multiple runners/resources ar
 - Workflow: `.github/workflows/auto_update_kb.yml`
 - Main script: `pipeline_Automation/workflow/Run_Single_Series_Full_Pipeline_And_Upload.ps1`
 - Commands reference: `docs/pipeline_commands_reference.md`
+- Jenkins-only architecture: `docs/jenkins_only_kb_automation.md`
+- Jenkins full pipeline file: `pipeline_Automation/jenkins/Jenkinsfile_GitHubArtifactsToKB.groovy`
