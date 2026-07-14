@@ -150,10 +150,12 @@ PY
     name: Check self-hosted runner availability
     runs-on: ubuntu-latest
     outputs:
-      runner_online: ${{ steps.check.outputs.runner_online }}
+      runner_ready: ${{ steps.check.outputs.runner_ready }}
       online_count: ${{ steps.check.outputs.online_count }}
+      idle_count: ${{ steps.check.outputs.idle_count }}
+      busy_count: ${{ steps.check.outputs.busy_count }}
     steps:
-      - name: Detect online self-hosted runners
+      - name: Detect online and idle self-hosted runners
         id: check
         env:
           GH_TOKEN: ${{ github.token }}
@@ -172,22 +174,34 @@ import os
 payload = json.loads(os.environ["RUNNERS_JSON"])
 runners = payload.get("runners", [])
 online = []
+idle = []
+busy = []
 for r in runners:
     if r.get("status") != "online":
         continue
     labels = {str(lbl.get("name", "")).lower() for lbl in r.get("labels", [])}
     if "self-hosted" in labels:
         online.append(r)
+        if bool(r.get("busy", False)):
+            busy.append(r)
+        else:
+            idle.append(r)
 
-print(f"{str(bool(online)).lower()}|{len(online)}")
+print(f"{str(bool(idle)).lower()}|{len(online)}|{len(idle)}|{len(busy)}")
 PY
 )
 
-          runner_online="${parsed%%|*}"
-          online_count="${parsed##*|}"
+          runner_ready="${parsed%%|*}"
+          rest="${parsed#*|}"
+          online_count="${rest%%|*}"
+          rest="${rest#*|}"
+          idle_count="${rest%%|*}"
+          busy_count="${rest##*|}"
 
-          echo "runner_online=$runner_online" >> "$GITHUB_OUTPUT"
+          echo "runner_ready=$runner_ready" >> "$GITHUB_OUTPUT"
           echo "online_count=$online_count" >> "$GITHUB_OUTPUT"
+          echo "idle_count=$idle_count" >> "$GITHUB_OUTPUT"
+          echo "busy_count=$busy_count" >> "$GITHUB_OUTPUT"
 
       - name: Runner check summary
         shell: bash
@@ -196,13 +210,15 @@ PY
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "| Metric | Value |" >> "$GITHUB_STEP_SUMMARY"
           echo "|---|---|" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Self-hosted runner online | ${{ steps.check.outputs.runner_online }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Self-hosted runner ready (online + idle) | ${{ steps.check.outputs.runner_ready }} |" >> "$GITHUB_STEP_SUMMARY"
           echo "| Online self-hosted count | ${{ steps.check.outputs.online_count }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Idle self-hosted count | ${{ steps.check.outputs.idle_count }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Busy self-hosted count | ${{ steps.check.outputs.busy_count }} |" >> "$GITHUB_STEP_SUMMARY"
 
   run-series:
     name: ${{ format('Series {0} ({1})', matrix.series, needs.prepare.outputs.mode) }}
     needs: [prepare, runner-check]
-    if: needs.runner-check.outputs.runner_online == 'true'
+    if: needs.runner-check.outputs.runner_ready == 'true'
     runs-on: self-hosted
     timeout-minutes: 360
     strategy:
@@ -284,10 +300,10 @@ PY
           "| Placeholder Policy | ${{ needs.prepare.outputs.placeholder_policy }} |" >> $env:GITHUB_STEP_SUMMARY
           "| Date | $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss K') |" >> $env:GITHUB_STEP_SUMMARY
 
-  runner-offline-notice:
-    name: Runner offline notice
+  runner-unavailable-notice:
+    name: Runner unavailable notice
     needs: [prepare, runner-check]
-    if: needs.runner-check.outputs.runner_online != 'true'
+    if: needs.runner-check.outputs.runner_ready != 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Publish deferred upload notice
@@ -295,7 +311,7 @@ PY
         run: |
           echo "## Upload Deferred" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "No online self-hosted runner was detected." >> "$GITHUB_STEP_SUMMARY"
+          echo "No ready self-hosted runner (online + idle) was detected." >> "$GITHUB_STEP_SUMMARY"
           echo "Run is deferred and no series job was executed." >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "| Parameter | Value |" >> "$GITHUB_STEP_SUMMARY"
@@ -304,5 +320,7 @@ PY
           echo "| Existing Datasource Mode | ${{ needs.prepare.outputs.existing_datasource_mode }} |" >> "$GITHUB_STEP_SUMMARY"
           echo "| Series | ${{ needs.prepare.outputs.series_json }} |" >> "$GITHUB_STEP_SUMMARY"
           echo "| Online self-hosted count | ${{ needs.runner-check.outputs.online_count }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Idle self-hosted count | ${{ needs.runner-check.outputs.idle_count }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Busy self-hosted count | ${{ needs.runner-check.outputs.busy_count }} |" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "Action: bring runner online and re-run this workflow." >> "$GITHUB_STEP_SUMMARY"
