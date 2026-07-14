@@ -1,0 +1,274 @@
+name: Manual Auto Update KB
+
+on:
+  workflow_dispatch:
+    inputs:
+      series:
+        description: 'Comma-separated series (G4,L0,L1,L4,L5,N6,U0,U3,WB,WB0,WBA,WL3)'
+        required: false
+        default: 'G4,L0,L1,L4,L5,N6,U0,U3,WB,WB0,WBA,WL3'
+      mode:
+        description: 'Execution mode for per-series script'
+        type: choice
+        required: false
+        options:
+          - Full
+          - Prepare
+          - Upload
+        default: Full
+      existing_datasource_mode:
+        description: 'Behavior when datasource already exists (Replace=refresh, Add=append)'
+        type: choice
+        required: false
+        options:
+          - Replace
+          - Add
+        default: Replace
+      skip_drivers:
+        description: 'Skip driver/subrepo uploads'
+        type: boolean
+        default: false
+      skip_schema_validation:
+        description: 'Skip schema validation gate'
+        type: boolean
+        default: false
+      continue_on_workflow_error:
+        description: 'Continue inside run_full_workflow when one repo fails'
+        type: boolean
+        default: false
+      placeholder_policy:
+        description: 'Policy for unresolved Alfred placeholders'
+        type: choice
+        required: false
+        options:
+          - Fail
+          - Warn
+          - Off
+        default: Fail
+      max_parallel:
+        description: 'Maximum series jobs in parallel'
+        required: false
+        default: '1'
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  PYTHON_VERSION: '3.12'
+
+jobs:
+  prepare:
+    name: Prepare matrix inputs
+    runs-on: ubuntu-latest
+    outputs:
+      series_json: ${{ steps.normalize.outputs.series_json }}
+      mode: ${{ steps.normalize.outputs.mode }}
+      existing_datasource_mode: ${{ steps.normalize.outputs.existing_datasource_mode }}
+      skip_drivers: ${{ steps.normalize.outputs.skip_drivers }}
+      skip_schema_validation: ${{ steps.normalize.outputs.skip_schema_validation }}
+      continue_on_workflow_error: ${{ steps.normalize.outputs.continue_on_workflow_error }}
+      placeholder_policy: ${{ steps.normalize.outputs.placeholder_policy }}
+      max_parallel: ${{ steps.normalize.outputs.max_parallel }}
+    steps:
+      - name: Normalize workflow inputs
+        id: normalize
+        shell: bash
+        run: |
+          raw_series='${{ inputs.series }}'
+          mode='${{ inputs.mode }}'
+          existing_ds_mode='${{ inputs.existing_datasource_mode }}'
+          skip_drivers='${{ inputs.skip_drivers }}'
+          skip_schema='${{ inputs.skip_schema_validation }}'
+          continue_err='${{ inputs.continue_on_workflow_error }}'
+          placeholder='${{ inputs.placeholder_policy }}'
+          max_parallel='${{ inputs.max_parallel }}'
+
+          series_json=$(RAW_SERIES="$raw_series" python - <<'PY'
+import json
+import os
+
+allowed = {
+    "G4", "L0", "L1", "L4", "L5", "N6", "U0", "U3", "WB", "WB0", "WBA", "WL3"
+}
+raw = os.environ.get("RAW_SERIES", "")
+items = [s.strip().upper() for s in raw.split(",") if s.strip()]
+
+if not items:
+    items = sorted(allowed)
+
+seen = set()
+normalized = []
+for s in items:
+    if s not in allowed:
+        raise SystemExit(f"Unsupported series '{s}'. Allowed: {', '.join(sorted(allowed))}")
+    if s in seen:
+        continue
+    seen.add(s)
+    normalized.append(s)
+
+print(json.dumps(normalized))
+PY
+)
+
+          if [ -z "$max_parallel" ]; then
+            max_parallel='1'
+          fi
+
+          echo "series_json=$series_json" >> "$GITHUB_OUTPUT"
+          echo "mode=$mode" >> "$GITHUB_OUTPUT"
+          echo "existing_datasource_mode=$existing_ds_mode" >> "$GITHUB_OUTPUT"
+          echo "skip_drivers=$skip_drivers" >> "$GITHUB_OUTPUT"
+          echo "skip_schema_validation=$skip_schema" >> "$GITHUB_OUTPUT"
+          echo "continue_on_workflow_error=$continue_err" >> "$GITHUB_OUTPUT"
+          echo "placeholder_policy=$placeholder" >> "$GITHUB_OUTPUT"
+          echo "max_parallel=$max_parallel" >> "$GITHUB_OUTPUT"
+
+  runner-check:
+    name: Check self-hosted runner availability
+    runs-on: ubuntu-latest
+    outputs:
+      runner_ready: ${{ steps.check.outputs.runner_ready }}
+      online_count: ${{ steps.check.outputs.online_count }}
+      idle_count: ${{ steps.check.outputs.idle_count }}
+      busy_count: ${{ steps.check.outputs.busy_count }}
+    steps:
+      - name: Detect online and idle self-hosted runners
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          response=$(curl -sS \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$REPO/actions/runners")
+
+          parsed=$(RUNNERS_JSON="$response" python - <<'PY'
+import json
+import os
+
+payload = json.loads(os.environ["RUNNERS_JSON"])
+runners = payload.get("runners", [])
+online = []
+idle = []
+busy = []
+for r in runners:
+    if r.get("status") != "online":
+        continue
+    labels = {str(lbl.get("name", "")).lower() for lbl in r.get("labels", [])}
+    if "self-hosted" in labels:
+        online.append(r)
+        if bool(r.get("busy", False)):
+            busy.append(r)
+        else:
+            idle.append(r)
+
+print(f"{str(bool(idle)).lower()}|{len(online)}|{len(idle)}|{len(busy)}")
+PY
+)
+
+          runner_ready="${parsed%%|*}"
+          rest="${parsed#*|}"
+          online_count="${rest%%|*}"
+          rest="${rest#*|}"
+          idle_count="${rest%%|*}"
+          busy_count="${rest##*|}"
+
+          echo "runner_ready=$runner_ready" >> "$GITHUB_OUTPUT"
+          echo "online_count=$online_count" >> "$GITHUB_OUTPUT"
+          echo "idle_count=$idle_count" >> "$GITHUB_OUTPUT"
+          echo "busy_count=$busy_count" >> "$GITHUB_OUTPUT"
+
+  run-series:
+    name: ${{ format('Series {0} ({1})', matrix.series, needs.prepare.outputs.mode) }}
+    needs: [prepare, runner-check]
+    if: needs.runner-check.outputs.runner_ready == 'true'
+    runs-on: self-hosted
+    timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      max-parallel: ${{ fromJSON(needs.prepare.outputs.max_parallel) }}
+      matrix:
+        series: ${{ fromJSON(needs.prepare.outputs.series_json) }}
+    env:
+      ST_CHATGPT_API_KEY: ${{ secrets.ST_CHATGPT_API_KEY }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Enable long paths (Windows)
+        shell: pwsh
+        run: git config --system core.longpaths true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run single-series full pipeline + upload
+        shell: pwsh
+        run: |
+          $script = "pipeline_Automation/workflow/Run_Single_Series_Full_Pipeline_And_Upload.ps1"
+          $args = @(
+            "-Series", "${{ matrix.series }}",
+            "-Mode", "${{ needs.prepare.outputs.mode }}",
+            "-ExistingDatasourceMode", "${{ needs.prepare.outputs.existing_datasource_mode }}",
+            "-RemoteUser", "${{ secrets.ST_REMOTE_USER }}",
+            "-KbId", "793",
+            "-JsonSplitSize", "1000",
+            "-PlaceholderPolicy", "${{ needs.prepare.outputs.placeholder_policy }}"
+          )
+
+          if ("${{ needs.prepare.outputs.skip_drivers }}" -eq "true") {
+            $args += "-SkipDrivers"
+          }
+          if ("${{ needs.prepare.outputs.skip_schema_validation }}" -eq "true") {
+            $args += "-SkipSchemaValidation"
+          }
+          if ("${{ needs.prepare.outputs.continue_on_workflow_error }}" -eq "true") {
+            $args += "-ContinueOnWorkflowError"
+          }
+
+          & $script @args
+
+      - name: Upload series artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: st-ready-${{ matrix.series }}-${{ github.run_number }}
+          path: datasets/07_delivery/st_ready/by_series/
+          if-no-files-found: warn
+          retention-days: 30
+
+  runner-unavailable-notice:
+    name: Runner unavailable notice
+    needs: [prepare, runner-check]
+    if: needs.runner-check.outputs.runner_ready != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish deferred upload notice
+        shell: bash
+        run: |
+          echo "## Upload Deferred" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "No ready self-hosted runner (online + idle) was detected." >> "$GITHUB_STEP_SUMMARY"
+          echo "Run is deferred and no series job was executed." >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Parameter | Value |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|---|---|" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Mode | ${{ needs.prepare.outputs.mode }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Existing Datasource Mode | ${{ needs.prepare.outputs.existing_datasource_mode }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Series | ${{ needs.prepare.outputs.series_json }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Online self-hosted count | ${{ needs.runner-check.outputs.online_count }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Idle self-hosted count | ${{ needs.runner-check.outputs.idle_count }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Busy self-hosted count | ${{ needs.runner-check.outputs.busy_count }} |" >> "$GITHUB_STEP_SUMMARY"
