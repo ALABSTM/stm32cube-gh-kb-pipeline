@@ -234,20 +234,21 @@ jobs:
         shell: powershell
         run: |
           $script = "pipeline_Automation/workflow/Run_Single_Series_Full_Pipeline_And_Upload.ps1"
-          $args = @(
-            "-Series", "${{ matrix.series }}",
-            "-Mode", "Prepare",
-            "-PlaceholderPolicy", "${{ needs.prepare.outputs.placeholder_policy }}"
-          )
+          $scriptArgs = @{
+            Series = "${{ matrix.series }}"
+            Mode = "Prepare"
+            PlaceholderPolicy = "${{ needs.prepare.outputs.placeholder_policy }}"
+          }
 
           if ("${{ needs.prepare.outputs.skip_schema_validation }}" -eq "true") {
-            $args += "-SkipSchemaValidation"
+            $scriptArgs.SkipSchemaValidation = $true
           }
           if ("${{ needs.prepare.outputs.continue_on_workflow_error }}" -eq "true") {
-            $args += "-ContinueOnWorkflowError"
+            $scriptArgs.ContinueOnWorkflowError = $true
           }
 
-          & $script @args
+          Write-Host "Running preprocess for series $($scriptArgs.Series)" -ForegroundColor Cyan
+          & $script @scriptArgs
 
       - name: Upload series artifacts
         if: needs.prepare.outputs.mode != 'Upload'
@@ -303,25 +304,26 @@ jobs:
         shell: powershell
         run: |
           $script = "pipeline_Automation/workflow/Run_Single_Series_Full_Pipeline_And_Upload.ps1"
-          $args = @(
-            "-Series", "${{ matrix.series }}",
-            "-Mode", "Upload",
-            "-ExistingDatasourceMode", "${{ needs.prepare.outputs.existing_datasource_mode }}",
-            "-RemoteUser", "${{ secrets.ST_REMOTE_USER }}",
-            "-KbId", "793",
-            "-JsonSplitSize", "1000",
-            "-PlaceholderPolicy", "${{ needs.prepare.outputs.placeholder_policy }}"
-          )
+          $scriptArgs = @{
+            Series = "${{ matrix.series }}"
+            Mode = "Upload"
+            ExistingDatasourceMode = "${{ needs.prepare.outputs.existing_datasource_mode }}"
+            RemoteUser = "${{ secrets.ST_REMOTE_USER }}"
+            KbId = 793
+            JsonSplitSize = 1000
+            PlaceholderPolicy = "${{ needs.prepare.outputs.placeholder_policy }}"
+          }
 
           if ("${{ needs.prepare.outputs.skip_drivers }}" -eq "true") {
-            $args += "-SkipDrivers"
+            $scriptArgs.SkipDrivers = $true
           }
           if ("${{ needs.prepare.outputs.skip_schema_validation }}" -eq "true") {
-            $args += "-SkipSchemaValidation"
+            $scriptArgs.SkipSchemaValidation = $true
           }
           if ("${{ needs.prepare.outputs.continue_on_workflow_error }}" -eq "true") {
-            $args += "-ContinueOnWorkflowError"
+            $scriptArgs.ContinueOnWorkflowError = $true
           }
 
-          & $script @args
+          Write-Host "Running upload for series $($scriptArgs.Series)" -ForegroundColor Cyan
+          & $script @scriptArgs
 
