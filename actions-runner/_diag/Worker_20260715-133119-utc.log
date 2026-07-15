@@ -1,0 +1,4 @@
+[2026-07-15 13:31:20Z INFO HostContext] No proxy settings were found based on environmental variables (http_proxy/https_proxy/HTTP_PROXY/HTTPS_PROXY)
+[2026-07-15 13:31:21Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 13:31:21Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 13:31:21Z INFO HostContext] Well known config file 'Credentials': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\.credentials'

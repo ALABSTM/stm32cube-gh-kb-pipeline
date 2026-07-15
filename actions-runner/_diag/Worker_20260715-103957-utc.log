@@ -1,0 +1,1974 @@
+[2026-07-15 10:39:57Z INFO HostContext] No proxy settings were found based on environmental variables (http_proxy/https_proxy/HTTP_PROXY/HTTPS_PROXY)
+[2026-07-15 10:39:57Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:39:57Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:39:57Z INFO HostContext] Well known config file 'Credentials': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\.credentials'
+[2026-07-15 10:39:58Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:39:58Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:39:58Z INFO HostContext] Well known config file 'Runner': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\.runner'
+[2026-07-15 10:39:58Z INFO Worker] Version: 2.334.0
+[2026-07-15 10:39:58Z INFO Worker] Commit: f1995ede5d885c997d13d8eca5467c4ce97fe69c
+[2026-07-15 10:39:58Z INFO Worker] Culture: en-US
+[2026-07-15 10:39:58Z INFO Worker] UI Culture: en-US
+[2026-07-15 10:39:58Z INFO Worker] Waiting to receive the job message from the channel.
+[2026-07-15 10:39:58Z INFO ProcessChannel] Receiving message of length 29369, with hash '2168efcba259f3ce503c4a352908d0531db5a35995559fc21adc2a102d3d3495'
+[2026-07-15 10:39:58Z INFO Worker] Message received.
+[2026-07-15 10:39:59Z INFO Worker] Job message:
+ {
+  "environmentVariables": [
+    {
+      "type": 2,
+      "file": 1,
+      "line": 67,
+      "col": 3,
+      "map": [
+        {
+          "key": {
+            "type": 0,
+            "file": 1,
+            "line": 67,
+            "col": 3,
+            "lit": "PYTHON_VERSION"
+          },
+          "value": {
+            "type": 0,
+            "file": 1,
+            "line": 67,
+            "col": 19,
+            "lit": "3.12"
+          }
+        },
+        {
+          "key": {
+            "type": 0,
+            "file": 1,
+            "line": 68,
+            "col": 3,
+            "lit": "DEFAULT_SERIES"
+          },
+          "value": {
+            "type": 0,
+            "file": 1,
+            "line": 68,
+            "col": 19,
+            "lit": "G4,L0,L1,L4,L5,N6,U0,U3,WB,WB0,WBA,WL3"
+          }
+        },
+        {
+          "key": {
+            "type": 0,
+            "file": 1,
+            "line": 69,
+            "col": 3,
+            "lit": "DEFAULT_MODE"
+          },
+          "value": {
+            "type": 0,
+            "file": 1,
+            "line": 69,
+            "col": 17,
+            "lit": "Full"
+          }
+        },
+        {
+          "key": {
+            "type": 0,
+            "file": 1,
+            "line": 70,
+            "col": 3,
+            "lit": "DEFAULT_EXISTING_DATASOURCE_MODE"
+          },
+          "value": {
+            "type": 0,
+            "file": 1,
+            "line": 70,
+            "col": 37,
+            "lit": "Replace"
+          }
+        },
+        {
+          "key": {
+            "type": 0,
+            "file": 1,
+            "line": 71,
+            "col": 3,
+            "lit": "DEFAULT_PLACEHOLDER_POLICY"
+          },
+          "value": {
+            "type": 0,
+            "file": 1,
+            "line": 71,
+            "col": 31,
+            "lit": "Fail"
+          }
+        },
+        {
+          "key": {
+            "type": 0,
+            "file": 1,
+            "line": 72,
+            "col": 3,
+            "lit": "DEFAULT_MAX_PARALLEL"
+          },
+          "value": {
+            "type": 0,
+            "file": 1,
+            "line": 72,
+            "col": 25,
+            "lit": "1"
+          }
+        }
+      ]
+    },
+    {
+      "type": 2,
+      "file": 1,
+      "line": 250,
+      "col": 7,
+      "map": [
+        {
+          "key": {
+            "type": 0,
+            "file": 1,
+            "line": 250,
+            "col": 7,
+            "lit": "ST_CHATGPT_API_KEY"
+          },
+          "value": {
+            "type": 3,
+            "file": 1,
+            "line": 250,
+            "col": 27,
+            "expr": "secrets.ST_CHATGPT_API_KEY"
+          }
+        },
+        {
+          "key": {
+            "type": 0,
+            "file": 1,
+            "line": 251,
+            "col": 7,
+            "lit": "GITHUB_TOKEN"
+          },
+          "value": {
+            "type": 3,
+            "file": 1,
+            "line": 251,
+            "col": 21,
+            "expr": "secrets.GITHUB_TOKEN"
+          }
+        }
+      ]
+    }
+  ],
+  "fileTable": [
+    ".github/workflows/auto_update_kb.yml"
+  ],
+  "mask": [
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    },
+    {
+      "type": "regex",
+      "value": "***"
+    }
+  ],
+  "steps": [
+    {
+      "type": "action",
+      "reference": {
+        "type": "repository",
+        "name": "actions/checkout",
+        "ref": "v4",
+        "repositoryType": "GitHub"
+      },
+      "displayNameToken": {
+        "type": 0,
+        "file": 1,
+        "line": 253,
+        "col": 15,
+        "lit": "Checkout repository"
+      },
+      "contextName": "__actions_checkout",
+      "condition": "success()",
+      "id": "bcd96823-fa79-4583-b6a3-807bfb1f1771",
+      "name": "__actions_checkout"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "type": "script"
+      },
+      "displayNameToken": {
+        "type": 0,
+        "file": 1,
+        "line": 256,
+        "col": 15,
+        "lit": "Enable long paths (Windows)"
+      },
+      "contextName": "__run",
+      "inputs": {
+        "type": 2,
+        "map": [
+          {
+            "key": "script",
+            "value": {
+              "type": 0,
+              "file": 1,
+              "line": 258,
+              "col": 14,
+              "lit": "git config --system core.longpaths true"
+            }
+          },
+          {
+            "key": "shell",
+            "value": {
+              "type": 0,
+              "file": 1,
+              "line": 257,
+              "col": 16,
+              "lit": "pwsh"
+            }
+          }
+        ]
+      },
+      "condition": "success()",
+      "id": "74c5eeb6-3334-47a3-b07a-b8d8c655ad7a",
+      "name": "__run"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "type": "repository",
+        "name": "actions/setup-python",
+        "ref": "v5",
+        "repositoryType": "GitHub"
+      },
+      "displayNameToken": {
+        "type": 0,
+        "file": 1,
+        "line": 260,
+        "col": 15,
+        "lit": "Set up Python"
+      },
+      "contextName": "__actions_setup-python",
+      "inputs": {
+        "type": 2,
+        "file": 1,
+        "line": 263,
+        "col": 11,
+        "map": [
+          {
+            "key": {
+              "type": 0,
+              "file": 1,
+              "line": 263,
+              "col": 11,
+              "lit": "python-version"
+            },
+            "value": {
+              "type": 3,
+              "file": 1,
+              "line": 263,
+              "col": 27,
+              "expr": "env.PYTHON_VERSION"
+            }
+          },
+          {
+            "key": {
+              "type": 0,
+              "file": 1,
+              "line": 264,
+              "col": 11,
+              "lit": "cache"
+            },
+            "value": {
+              "type": 0,
+              "file": 1,
+              "line": 264,
+              "col": 18,
+              "lit": "pip"
+            }
+          }
+        ]
+      },
+      "condition": "success()",
+      "id": "f589f8c9-96a0-4ea1-a17f-9db6ae3b9761",
+      "name": "__actions_setup-python"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "type": "script"
+      },
+      "displayNameToken": {
+        "type": 0,
+        "file": 1,
+        "line": 266,
+        "col": 15,
+        "lit": "Install dependencies"
+      },
+      "contextName": "__run_2",
+      "inputs": {
+        "type": 2,
+        "map": [
+          {
+            "key": "script",
+            "value": {
+              "type": 0,
+              "file": 1,
+              "line": 268,
+              "col": 14,
+              "lit": "python -m pip install --upgrade pip\npip install -r requirements.txt\n"
+            }
+          },
+          {
+            "key": "shell",
+            "value": {
+              "type": 0,
+              "file": 1,
+              "line": 267,
+              "col": 16,
+              "lit": "pwsh"
+            }
+          }
+        ]
+      },
+      "condition": "success()",
+      "id": "1b5de154-4008-4d89-ac94-abe12e284b7c",
+      "name": "__run_2"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "type": "script"
+      },
+      "displayNameToken": {
+        "type": 0,
+        "file": 1,
+        "line": 272,
+        "col": 15,
+        "lit": "Run single-series full pipeline + upload"
+      },
+      "contextName": "__run_3",
+      "inputs": {
+        "type": 2,
+        "map": [
+          {
+            "key": "script",
+            "value": {
+              "type": 3,
+              "file": 1,
+              "line": 274,
+              "col": 14,
+              "expr": "format('$script = \"pipeline_Automation/workflow/Run_Single_Series_Full_Pipeline_And_Upload.ps1\"\n$args = @(\n  \"-Series\", \"{0}\",\n  \"-Mode\", \"{1}\",\n  \"-ExistingDatasourceMode\", \"{2}\",\n  \"-RemoteUser\", \"{3}\",\n  \"-KbId\", \"793\",\n  \"-JsonSplitSize\", \"1000\",\n  \"-PlaceholderPolicy\", \"{4}\"\n)\n\nif (\"{5}\" -eq \"true\") {{\n  $args += \"-SkipDrivers\"\n}}\nif (\"{6}\" -eq \"true\") {{\n  $args += \"-SkipSchemaValidation\"\n}}\nif (\"{7}\" -eq \"true\") {{\n  $args += \"-ContinueOnWorkflowError\"\n}}\n\n& $script @args\n', matrix.series, needs.prepare.outputs.mode, needs.prepare.outputs.existing_datasource_mode, secrets.ST_REMOTE_USER, needs.prepare.outputs.placeholder_policy, needs.prepare.outputs.skip_drivers, needs.prepare.outputs.skip_schema_validation, needs.prepare.outputs.continue_on_workflow_error)"
+            }
+          },
+          {
+            "key": "shell",
+            "value": {
+              "type": 0,
+              "file": 1,
+              "line": 273,
+              "col": 16,
+              "lit": "pwsh"
+            }
+          }
+        ]
+      },
+      "condition": "success()",
+      "id": "3f1827b2-18bf-4cca-a2af-5919a51c1466",
+      "name": "__run_3"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "type": "repository",
+        "name": "actions/upload-artifact",
+        "ref": "v4",
+        "repositoryType": "GitHub"
+      },
+      "displayNameToken": {
+        "type": 0,
+        "file": 1,
+        "line": 298,
+        "col": 15,
+        "lit": "Upload series artifacts"
+      },
+      "contextName": "__actions_upload-artifact",
+      "inputs": {
+        "type": 2,
+        "file": 1,
+        "line": 302,
+        "col": 11,
+        "map": [
+          {
+            "key": {
+              "type": 0,
+              "file": 1,
+              "line": 302,
+              "col": 11,
+              "lit": "name"
+            },
+            "value": {
+              "type": 3,
+              "file": 1,
+              "line": 302,
+              "col": 17,
+              "expr": "format('st-ready-{0}-{1}', matrix.series, github.run_number)"
+            }
+          },
+          {
+            "key": {
+              "type": 0,
+              "file": 1,
+              "line": 303,
+              "col": 11,
+              "lit": "path"
+            },
+            "value": {
+              "type": 0,
+              "file": 1,
+              "line": 303,
+              "col": 17,
+              "lit": "datasets/07_delivery/st_ready/by_series/"
+            }
+          },
+          {
+            "key": {
+              "type": 0,
+              "file": 1,
+              "line": 304,
+              "col": 11,
+              "lit": "if-no-files-found"
+            },
+            "value": {
+              "type": 0,
+              "file": 1,
+              "line": 304,
+              "col": 30,
+              "lit": "warn"
+            }
+          },
+          {
+            "key": {
+              "type": 0,
+              "file": 1,
+              "line": 305,
+              "col": 11,
+              "lit": "retention-days"
+            },
+            "value": {
+              "type": 0,
+              "file": 1,
+              "line": 305,
+              "col": 27,
+              "lit": "30"
+            }
+          }
+        ]
+      },
+      "condition": "always()",
+      "id": "c4a50fd6-d347-4564-a69c-d9a79e03092e",
+      "name": "__actions_upload-artifact"
+    },
+    {
+      "type": "action",
+      "reference": {
+        "type": "script"
+      },
+      "displayNameToken": {
+        "type": 0,
+        "file": 1,
+        "line": 307,
+        "col": 15,
+        "lit": "Series summary"
+      },
+      "contextName": "__run_4",
+      "inputs": {
+        "type": 2,
+        "map": [
+          {
+            "key": "script",
+            "value": {
+              "type": 3,
+              "file": 1,
+              "line": 310,
+              "col": 14,
+              "expr": "format('\"## Series {0}\" >> $env:GITHUB_STEP_SUMMARY\n\"\" >> $env:GITHUB_STEP_SUMMARY\n\"| Parameter | Value |\" >> $env:GITHUB_STEP_SUMMARY\n\"|---|---|\" >> $env:GITHUB_STEP_SUMMARY\n\"| Mode | {1} |\" >> $env:GITHUB_STEP_SUMMARY\n\"| Existing Datasource Mode | {2} |\" >> $env:GITHUB_STEP_SUMMARY\n\"| Skip Drivers | {3} |\" >> $env:GITHUB_STEP_SUMMARY\n\"| Skip Schema Validation | {4} |\" >> $env:GITHUB_STEP_SUMMARY\n\"| Continue On Workflow Error | {5} |\" >> $env:GITHUB_STEP_SUMMARY\n\"| Placeholder Policy | {6} |\" >> $env:GITHUB_STEP_SUMMARY\n\"| Date | $(Get-Date -Format ''yyyy-MM-dd HH:mm:ss K'') |\" >> $env:GITHUB_STEP_SUMMARY\n', matrix.series, needs.prepare.outputs.mode, needs.prepare.outputs.existing_datasource_mode, needs.prepare.outputs.skip_drivers, needs.prepare.outputs.skip_schema_validation, needs.prepare.outputs.continue_on_workflow_error, needs.prepare.outputs.placeholder_policy)"
+            }
+          },
+          {
+            "key": "shell",
+            "value": {
+              "type": 0,
+              "file": 1,
+              "line": 309,
+              "col": 16,
+              "lit": "pwsh"
+            }
+          }
+        ]
+      },
+      "condition": "always()",
+      "id": "c1b67bc9-ec60-4678-8436-0928a472b35a",
+      "name": "__run_4"
+    }
+  ],
+  "variables": {
+    "Actions.EnableHttpRedirects": {
+      "value": "true"
+    },
+    "DistributedTask.AddWarningToNode12Action": {
+      "value": "true"
+    },
+    "DistributedTask.AddWarningToNode16Action": {
+      "value": "true"
+    },
+    "DistributedTask.AllowRunnerContainerHooks": {
+      "value": "true"
+    },
+    "DistributedTask.DeprecateStepOutputCommands": {
+      "value": "true"
+    },
+    "DistributedTask.DetailUntarFailure": {
+      "value": "true"
+    },
+    "DistributedTask.EnableCompositeActions": {
+      "value": "true"
+    },
+    "DistributedTask.EnableJobServerQueueTelemetry": {
+      "value": "true"
+    },
+    "DistributedTask.EnhancedAnnotations": {
+      "value": "true"
+    },
+    "DistributedTask.ForceGithubJavascriptActionsToNode16": {
+      "value": "true"
+    },
+    "DistributedTask.ForceGithubJavascriptActionsToNode20": {
+      "value": "true"
+    },
+    "DistributedTask.LogTemplateErrorsAsDebugMessages": {
+      "value": "true"
+    },
+    "DistributedTask.MarkJobAsFailedOnWorkerCrash": {
+      "value": "true"
+    },
+    "DistributedTask.NewActionMetadata": {
+      "value": "true"
+    },
+    "DistributedTask.UploadStepSummary": {
+      "value": "true"
+    },
+    "DistributedTask.UseActionArchiveCache": {
+      "value": "true"
+    },
+    "DistributedTask.UseWhich2": {
+      "value": "true"
+    },
+    "RunService.FixEmbeddedIssues": {
+      "value": "true"
+    },
+    "ST_CHATGPT_API_KEY": {
+      "value": "***",
+      "isSecret": true
+    },
+    "ST_REMOTE_USER": {
+      "value": "***",
+      "isSecret": true
+    },
+    "actions.runner.requirenode24": {
+      "value": "false"
+    },
+    "actions.runner.usenode24bydefault": {
+      "value": "true"
+    },
+    "actions.runner.warnonnode20": {
+      "value": "true"
+    },
+    "actions_add_check_run_id_to_job_context": {
+      "value": "true"
+    },
+    "actions_batch_action_resolution": {
+      "value": "false"
+    },
+    "actions_container_action_runner_temp": {
+      "value": "true"
+    },
+    "actions_display_helpful_actions_download_errors": {
+      "value": "true"
+    },
+    "actions_runner_allow_artifacts_file": {
+      "value": "false"
+    },
+    "actions_runner_compare_workflow_parser": {
+      "value": "false"
+    },
+    "actions_runner_deprecate_linux_arm32": {
+      "value": "true"
+    },
+    "actions_runner_emit_composite_markers": {
+      "value": "false"
+    },
+    "actions_runner_kill_linux_arm32": {
+      "value": "false"
+    },
+    "actions_runner_node20_removal_date": {
+      "value": ""
+    },
+    "actions_runner_node24_default_date": {
+      "value": "June 16th, 2026"
+    },
+    "actions_self_repository": {
+      "value": "false"
+    },
+    "actions_service_container_command": {
+      "value": "true"
+    },
+    "actions_set_orchestration_id_env_for_actions": {
+      "value": "true"
+    },
+    "actions_skip_retry_complete_job_upon_known_errors": {
+      "value": "true"
+    },
+    "actions_snapshot_preflight_hosted_runner_check": {
+      "value": "false"
+    },
+    "actions_snapshot_preflight_image_gen_pool_check": {
+      "value": "false"
+    },
+    "actions_use_bearer_token_for_codeload": {
+      "value": "false"
+    },
+    "actions_uses_cache_service_v2": {
+      "value": "true"
+    },
+    "github_token": {
+      "value": "***",
+      "isSecret": true
+    },
+    "system.from_run_service": {
+      "value": "true"
+    },
+    "system.github.job": {
+      "value": "run-series"
+    },
+    "system.github.launch_endpoint": {
+      "value": "https://launch.actions.githubusercontent.com"
+    },
+    "system.github.results_endpoint": {
+      "value": "https://results-receiver.actions.githubusercontent.com/"
+    },
+    "system.github.results_upload_with_sdk": {
+      "value": "true"
+    },
+    "system.github.token": {
+      "value": "***",
+      "isSecret": true
+    },
+    "system.github.token.permissions": {
+      "value": "{\"Actions\":\"read\",\"Contents\":\"read\",\"Metadata\":\"read\"}"
+    },
+    "system.orchestrationId": {
+      "value": "2ebcc44a-6727-43e0-a291-805a818e64b0.run-series.G4"
+    },
+    "system.phaseDisplayName": {
+      "value": "Series G4 (Full)"
+    },
+    "system.runner.lowdiskspacethreshold": {
+      "value": "100"
+    },
+    "system.runnerEnvironment": {
+      "value": "self-hosted"
+    },
+    "system.runnerGroupName": {
+      "value": "Default"
+    }
+  },
+  "messageType": "RunnerJobRequest",
+  "plan": {
+    "scopeIdentifier": "00000000-0000-0000-0000-000000000000",
+    "planType": "actions",
+    "version": 0,
+    "planId": "2ebcc44a-6727-43e0-a291-805a818e64b0",
+    "planGroup": null,
+    "artifactUri": null,
+    "artifactLocation": null,
+    "definition": null,
+    "owner": null
+  },
+  "timeline": {
+    "id": "2ebcc44a-6727-43e0-a291-805a818e64b0",
+    "changeId": 0,
+    "location": null
+  },
+  "jobId": "aca9598f-5ed0-5b3d-ba4b-f07341ffe66d",
+  "jobDisplayName": "Series G4 (Full)",
+  "jobName": "G4",
+  "requestId": 0,
+  "lockedUntil": "0001-01-01T00:00:00",
+  "resources": {
+    "endpoints": [
+      {
+        "data": {
+          "ServerId": "",
+          "ServerName": "",
+          "CacheServerUrl": "https://artifactcache.actions.githubusercontent.com/l1KqmtEI4yxrti9odznUeJKpBWPvBbndYT28YrDBYmfKjsfsMo/",
+          "FeedStreamUrl": "wss://results-receiver.actions.githubusercontent.com/_ws/ingest.sock",
+          "ResultsServiceUrl": "https://results-receiver.actions.githubusercontent.com/",
+          "PipelinesServiceUrl": "https://pipelinesghubeus23.actions.githubusercontent.com/l1KqmtEI4yxrti9odznUeJKpBWPvBbndYT28YrDBYmfKjsfsMo/",
+          "GenerateIdTokenUrl": "",
+          "ConnectivityChecks": "[\"https://broker.actions.githubusercontent.com/health\",\"https://token.actions.githubusercontent.com/ready\",\"https://run.actions.githubusercontent.com/health\"]"
+        },
+        "name": "SystemVssConnection",
+        "url": "https://run-actions-1-azure-eastus.actions.githubusercontent.com/128/",
+        "authorization": {
+          "parameters": {
+            "AccessToken": "***"
+          },
+          "scheme": "OAuth"
+        },
+        "isShared": false,
+        "isReady": true
+      }
+    ]
+  },
+  "contextData": {
+    "github": {
+      "t": 2,
+      "d": [
+        {
+          "k": "ref",
+          "v": "refs/heads/PFE_Chatbot_STM32Cube_V2"
+        },
+        {
+          "k": "sha",
+          "v": "cc37fb1f1f8a738274804626a8786451a7f8211a"
+        },
+        {
+          "k": "repository",
+          "v": "abirGharbi-st/PFE_Chatbot_STM32Cube"
+        },
+        {
+          "k": "repository_owner",
+          "v": "abirGharbi-st"
+        },
+        {
+          "k": "repository_owner_id",
+          "v": "262163779"
+        },
+        {
+          "k": "repositoryUrl",
+          "v": "git://github.com/abirGharbi-st/PFE_Chatbot_STM32Cube.git"
+        },
+        {
+          "k": "run_id",
+          "v": "29408898247"
+        },
+        {
+          "k": "run_number",
+          "v": "48"
+        },
+        {
+          "k": "retention_days",
+          "v": "90"
+        },
+        {
+          "k": "run_attempt",
+          "v": "1"
+        },
+        {
+          "k": "artifact_cache_size_limit",
+          "v": "10"
+        },
+        {
+          "k": "repository_visibility",
+          "v": "private"
+        },
+        {
+          "k": "actor_id",
+          "v": "262163779"
+        },
+        {
+          "k": "actor",
+          "v": "abirGharbi-st"
+        },
+        {
+          "k": "workflow",
+          "v": "Auto Update KB"
+        },
+        {
+          "k": "head_ref",
+          "v": ""
+        },
+        {
+          "k": "base_ref",
+          "v": ""
+        },
+        {
+          "k": "event_name",
+          "v": "push"
+        },
+        {
+          "k": "server_url",
+          "v": "https://github.com"
+        },
+        {
+          "k": "api_url",
+          "v": "https://api.github.com"
+        },
+        {
+          "k": "graphql_url",
+          "v": "https://api.github.com/graphql"
+        },
+        {
+          "k": "ref_name",
+          "v": "PFE_Chatbot_STM32Cube_V2"
+        },
+        {
+          "k": "ref_protected",
+          "v": false
+        },
+        {
+          "k": "ref_type",
+          "v": "branch"
+        },
+        {
+          "k": "secret_source",
+          "v": "Actions"
+        },
+        {
+          "k": "event",
+          "v": {
+            "t": 2,
+            "d": [
+              {
+                "k": "after",
+                "v": "cc37fb1f1f8a738274804626a8786451a7f8211a"
+              },
+              {
+                "k": "base_ref",
+                "v": null
+              },
+              {
+                "k": "before",
+                "v": "748b8651ef2c3e684c6e5c12868e0128a39e4f6c"
+              },
+              {
+                "k": "commits",
+                "v": {
+                  "t": 1,
+                  "a": [
+                    {
+                      "t": 2,
+                      "d": [
+                        {
+                          "k": "author",
+                          "v": {
+                            "t": 2,
+                            "d": [
+                              {
+                                "k": "email",
+                                "v": "***"
+                              },
+                              {
+                                "k": "name",
+                                "v": "Abir GHARBI"
+                              },
+                              {
+                                "k": "username",
+                                "v": "abirGharbi-st"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "k": "committer",
+                          "v": {
+                            "t": 2,
+                            "d": [
+                              {
+                                "k": "email",
+                                "v": "***"
+                              },
+                              {
+                                "k": "name",
+                                "v": "Abir GHARBI"
+                              },
+                              {
+                                "k": "username",
+                                "v": "abirGharbi-st"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "k": "distinct",
+                          "v": true
+                        },
+                        {
+                          "k": "id",
+                          "v": "cc37fb1f1f8a738274804626a8786451a7f8211a"
+                        },
+                        {
+                          "k": "message",
+                          "v": "automation fix final 1"
+                        },
+                        {
+                          "k": "timestamp",
+                          "v": "2026-07-15T11:39:31+01:00"
+                        },
+                        {
+                          "k": "tree_id",
+                          "v": "f4019a2af768eb1b89dac4b46b0b8749c577e36a"
+                        },
+                        {
+                          "k": "url",
+                          "v": "https://github.com/abirGharbi-st/PFE_Chatbot_STM32Cube/commit/cc37fb1f1f8a738274804626a8786451a7f8211a"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "k": "compare",
+                "v": "https://github.com/abirGharbi-st/PFE_Chatbot_STM32Cube/compare/748b8651ef2c...cc37fb1f1f8a"
+              },
+              {
+                "k": "created",
+                "v": false
+              },
+              {
+                "k": "deleted",
+                "v": false
+              },
+              {
+                "k": "forced",
+                "v": false
+              },
+              {
+                "k": "head_commit",
+                "v": {
+                  "t": 2,
+                  "d": [
+                    {
+                      "k": "author",
+                      "v": {
+                        "t": 2,
+                        "d": [
+                          {
+                            "k": "email",
+                            "v": "***"
+                          },
+                          {
+                            "k": "name",
+                            "v": "Abir GHARBI"
+                          },
+                          {
+                            "k": "username",
+                            "v": "abirGharbi-st"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "k": "committer",
+                      "v": {
+                        "t": 2,
+                        "d": [
+                          {
+                            "k": "email",
+                            "v": "***"
+                          },
+                          {
+                            "k": "name",
+                            "v": "Abir GHARBI"
+                          },
+                          {
+                            "k": "username",
+                            "v": "abirGharbi-st"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "k": "distinct",
+                      "v": true
+                    },
+                    {
+                      "k": "id",
+                      "v": "cc37fb1f1f8a738274804626a8786451a7f8211a"
+                    },
+                    {
+                      "k": "message",
+                      "v": "automation fix final 1"
+                    },
+                    {
+                      "k": "timestamp",
+                      "v": "2026-07-15T11:39:31+01:00"
+                    },
+                    {
+                      "k": "tree_id",
+                      "v": "f4019a2af768eb1b89dac4b46b0b8749c577e36a"
+                    },
+                    {
+                      "k": "url",
+                      "v": "https://github.com/abirGharbi-st/PFE_Chatbot_STM32Cube/commit/cc37fb1f1f8a738274804626a8786451a7f8211a"
+                    }
+                  ]
+                }
+              },
+              {
+                "k": "pusher",
+                "v": {
+                  "t": 2,
+                  "d": [
+                    {
+                      "k": "email",
+                      "v": "***"
+                    },
+                    {
+                      "k": "name",
+                      "v": "abirGharbi-st"
+                    }
+                  ]
+                }
+              },
+              {
+                "k": "ref",
+                "v": "refs/heads/PFE_Chatbot_STM32Cube_V2"
+              },
+              {
+                "k": "repository",
+                "v": {
+                  "t": 2,
+                  "d": [
+                    {
+                      "k": "allow_forking",
+                      "v": true
+                    },
+                    {
+                      "k": "archive_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/{archive_format}{/ref}"
+                    },
+                    {
+                      "k": "archived",
+                      "v": false
+                    },
+                    {
+                      "k": "assignees_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/assignees{/user}"
+                    },
+                    {
+                      "k": "blobs_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/git/blobs{/sha}"
+                    },
+                    {
+                      "k": "branches_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/branches{/branch}"
+                    },
+                    {
+                      "k": "clone_url",
+                      "v": "https://github.com/abirGharbi-st/PFE_Chatbot_STM32Cube.git"
+                    },
+                    {
+                      "k": "collaborators_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/collaborators{/collaborator}"
+                    },
+                    {
+                      "k": "comments_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/comments{/number}"
+                    },
+                    {
+                      "k": "commits_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/commits{/sha}"
+                    },
+                    {
+                      "k": "compare_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/compare/{base}...{head}"
+                    },
+                    {
+                      "k": "contents_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/contents/{+path}"
+                    },
+                    {
+                      "k": "contributors_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/contributors"
+                    },
+                    {
+                      "k": "created_at",
+                      "v": 1771855986.0
+                    },
+                    {
+                      "k": "default_branch",
+                      "v": "main"
+                    },
+                    {
+                      "k": "deployments_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/deployments"
+                    },
+                    {
+                      "k": "description",
+                      "v": null
+                    },
+                    {
+                      "k": "disabled",
+                      "v": false
+                    },
+                    {
+                      "k": "downloads_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/downloads"
+                    },
+                    {
+                      "k": "events_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/events"
+                    },
+                    {
+                      "k": "fork",
+                      "v": false
+                    },
+                    {
+                      "k": "forks",
+                      "v": 0.0
+                    },
+                    {
+                      "k": "forks_count",
+                      "v": 0.0
+                    },
+                    {
+                      "k": "forks_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/forks"
+                    },
+                    {
+                      "k": "full_name",
+                      "v": "abirGharbi-st/PFE_Chatbot_STM32Cube"
+                    },
+                    {
+                      "k": "git_commits_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/git/commits{/sha}"
+                    },
+                    {
+                      "k": "git_refs_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/git/refs{/sha}"
+                    },
+                    {
+                      "k": "git_tags_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/git/tags{/sha}"
+                    },
+                    {
+                      "k": "git_url",
+                      "v": "git://github.com/abirGharbi-st/PFE_Chatbot_STM32Cube.git"
+                    },
+                    {
+                      "k": "has_discussions",
+                      "v": false
+                    },
+                    {
+                      "k": "has_downloads",
+                      "v": true
+                    },
+                    {
+                      "k": "has_issues",
+                      "v": true
+                    },
+                    {
+                      "k": "has_pages",
+                      "v": false
+                    },
+                    {
+                      "k": "has_projects",
+                      "v": true
+                    },
+                    {
+                      "k": "has_pull_requests",
+                      "v": true
+                    },
+                    {
+                      "k": "has_wiki",
+                      "v": true
+                    },
+                    {
+                      "k": "homepage",
+                      "v": null
+                    },
+                    {
+                      "k": "hooks_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/hooks"
+                    },
+                    {
+                      "k": "html_url",
+                      "v": "https://github.com/abirGharbi-st/PFE_Chatbot_STM32Cube"
+                    },
+                    {
+                      "k": "id",
+                      "v": 1164814493.0
+                    },
+                    {
+                      "k": "is_template",
+                      "v": false
+                    },
+                    {
+                      "k": "issue_comment_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/issues/comments{/number}"
+                    },
+                    {
+                      "k": "issue_events_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/issues/events{/number}"
+                    },
+                    {
+                      "k": "issues_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/issues{/number}"
+                    },
+                    {
+                      "k": "keys_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/keys{/key_id}"
+                    },
+                    {
+                      "k": "labels_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/labels{/name}"
+                    },
+                    {
+                      "k": "language",
+                      "v": "Python"
+                    },
+                    {
+                      "k": "languages_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/languages"
+                    },
+                    {
+                      "k": "license",
+                      "v": null
+                    },
+                    {
+                      "k": "master_branch",
+                      "v": "main"
+                    },
+                    {
+                      "k": "merges_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/merges"
+                    },
+                    {
+                      "k": "milestones_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/milestones{/number}"
+                    },
+                    {
+                      "k": "mirror_url",
+                      "v": null
+                    },
+                    {
+                      "k": "name",
+                      "v": "PFE_Chatbot_STM32Cube"
+                    },
+                    {
+                      "k": "node_id",
+                      "v": "R_kgDORW2onQ"
+                    },
+                    {
+                      "k": "notifications_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/notifications{?since,all,participating}"
+                    },
+                    {
+                      "k": "open_issues",
+                      "v": 1.0
+                    },
+                    {
+                      "k": "open_issues_count",
+                      "v": 1.0
+                    },
+                    {
+                      "k": "owner",
+                      "v": {
+                        "t": 2,
+                        "d": [
+                          {
+                            "k": "avatar_url",
+                            "v": "https://avatars.githubusercontent.com/u/262163779?v=4"
+                          },
+                          {
+                            "k": "email",
+                            "v": "***"
+                          },
+                          {
+                            "k": "events_url",
+                            "v": "https://api.github.com/users/abirGharbi-st/events{/privacy}"
+                          },
+                          {
+                            "k": "followers_url",
+                            "v": "https://api.github.com/users/abirGharbi-st/followers"
+                          },
+                          {
+                            "k": "following_url",
+                            "v": "https://api.github.com/users/abirGharbi-st/following{/other_user}"
+                          },
+                          {
+                            "k": "gists_url",
+                            "v": "https://api.github.com/users/abirGharbi-st/gists{/gist_id}"
+                          },
+                          {
+                            "k": "gravatar_id",
+                            "v": ""
+                          },
+                          {
+                            "k": "html_url",
+                            "v": "https://github.com/abirGharbi-st"
+                          },
+                          {
+                            "k": "id",
+                            "v": 262163779.0
+                          },
+                          {
+                            "k": "login",
+                            "v": "abirGharbi-st"
+                          },
+                          {
+                            "k": "name",
+                            "v": "abirGharbi-st"
+                          },
+                          {
+                            "k": "node_id",
+                            "v": "U_kgDOD6BNQw"
+                          },
+                          {
+                            "k": "organizations_url",
+                            "v": "https://api.github.com/users/abirGharbi-st/orgs"
+                          },
+                          {
+                            "k": "received_events_url",
+                            "v": "https://api.github.com/users/abirGharbi-st/received_events"
+                          },
+                          {
+                            "k": "repos_url",
+                            "v": "https://api.github.com/users/abirGharbi-st/repos"
+                          },
+                          {
+                            "k": "site_admin",
+                            "v": false
+                          },
+                          {
+                            "k": "starred_url",
+                            "v": "https://api.github.com/users/abirGharbi-st/starred{/owner}{/repo}"
+                          },
+                          {
+                            "k": "subscriptions_url",
+                            "v": "https://api.github.com/users/abirGharbi-st/subscriptions"
+                          },
+                          {
+                            "k": "type",
+                            "v": "User"
+                          },
+                          {
+                            "k": "url",
+                            "v": "https://api.github.com/users/abirGharbi-st"
+                          },
+                          {
+                            "k": "user_view_type",
+                            "v": "public"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "k": "private",
+                      "v": true
+                    },
+                    {
+                      "k": "pull_request_creation_policy",
+                      "v": "all"
+                    },
+                    {
+                      "k": "pulls_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/pulls{/number}"
+                    },
+                    {
+                      "k": "pushed_at",
+                      "v": 1784111980.0
+                    },
+                    {
+                      "k": "releases_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/releases{/id}"
+                    },
+                    {
+                      "k": "size",
+                      "v": 718012.0
+                    },
+                    {
+                      "k": "ssh_url",
+                      "v": "git@github.com:abirGharbi-st/PFE_Chatbot_STM32Cube.git"
+                    },
+                    {
+                      "k": "stargazers",
+                      "v": 0.0
+                    },
+                    {
+                      "k": "stargazers_count",
+                      "v": 0.0
+                    },
+                    {
+                      "k": "stargazers_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/stargazers"
+                    },
+                    {
+                      "k": "statuses_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/statuses/{sha}"
+                    },
+                    {
+                      "k": "subscribers_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/subscribers"
+                    },
+                    {
+                      "k": "subscription_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/subscription"
+                    },
+                    {
+                      "k": "svn_url",
+                      "v": "https://github.com/abirGharbi-st/PFE_Chatbot_STM32Cube"
+                    },
+                    {
+                      "k": "tags_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/tags"
+                    },
+                    {
+                      "k": "teams_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/teams"
+                    },
+                    {
+                      "k": "topics",
+                      "v": {
+                        "t": 1
+                      }
+                    },
+                    {
+                      "k": "trees_url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube/git/trees{/sha}"
+                    },
+                    {
+                      "k": "updated_at",
+                      "v": "2026-07-15T09:40:43Z"
+                    },
+                    {
+                      "k": "url",
+                      "v": "https://api.github.com/repos/abirGharbi-st/PFE_Chatbot_STM32Cube"
+                    },
+                    {
+                      "k": "visibility",
+                      "v": "private"
+                    },
+                    {
+                      "k": "watchers",
+                      "v": 0.0
+                    },
+                    {
+                      "k": "watchers_count",
+                      "v": 0.0
+                    },
+                    {
+                      "k": "web_commit_signoff_required",
+                      "v": false
+                    }
+                  ]
+                }
+              },
+              {
+                "k": "sender",
+                "v": {
+                  "t": 2,
+                  "d": [
+                    {
+                      "k": "avatar_url",
+                      "v": "https://avatars.githubusercontent.com/u/262163779?v=4"
+                    },
+                    {
+                      "k": "events_url",
+                      "v": "https://api.github.com/users/abirGharbi-st/events{/privacy}"
+                    },
+                    {
+                      "k": "followers_url",
+                      "v": "https://api.github.com/users/abirGharbi-st/followers"
+                    },
+                    {
+                      "k": "following_url",
+                      "v": "https://api.github.com/users/abirGharbi-st/following{/other_user}"
+                    },
+                    {
+                      "k": "gists_url",
+                      "v": "https://api.github.com/users/abirGharbi-st/gists{/gist_id}"
+                    },
+                    {
+                      "k": "gravatar_id",
+                      "v": ""
+                    },
+                    {
+                      "k": "html_url",
+                      "v": "https://github.com/abirGharbi-st"
+                    },
+                    {
+                      "k": "id",
+                      "v": 262163779.0
+                    },
+                    {
+                      "k": "login",
+                      "v": "abirGharbi-st"
+                    },
+                    {
+                      "k": "node_id",
+                      "v": "U_kgDOD6BNQw"
+                    },
+                    {
+                      "k": "organizations_url",
+                      "v": "https://api.github.com/users/abirGharbi-st/orgs"
+                    },
+                    {
+                      "k": "received_events_url",
+                      "v": "https://api.github.com/users/abirGharbi-st/received_events"
+                    },
+                    {
+                      "k": "repos_url",
+                      "v": "https://api.github.com/users/abirGharbi-st/repos"
+                    },
+                    {
+                      "k": "site_admin",
+                      "v": false
+                    },
+                    {
+                      "k": "starred_url",
+                      "v": "https://api.github.com/users/abirGharbi-st/starred{/owner}{/repo}"
+                    },
+                    {
+                      "k": "subscriptions_url",
+                      "v": "https://api.github.com/users/abirGharbi-st/subscriptions"
+                    },
+                    {
+                      "k": "type",
+                      "v": "User"
+                    },
+                    {
+                      "k": "url",
+                      "v": "https://api.github.com/users/abirGharbi-st"
+                    },
+                    {
+                      "k": "user_view_type",
+                      "v": "public"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "k": "workflow_ref",
+          "v": "abirGharbi-st/PFE_Chatbot_STM32Cube/.github/workflows/auto_update_kb.yml@refs/heads/PFE_Chatbot_STM32Cube_V2"
+        },
+        {
+          "k": "workflow_sha",
+          "v": "cc37fb1f1f8a738274804626a8786451a7f8211a"
+        },
+        {
+          "k": "repository_id",
+          "v": "1164814493"
+        },
+        {
+          "k": "triggering_actor",
+          "v": "abirGharbi-st"
+        }
+      ]
+    },
+    "inputs": {
+      "t": 2
+    },
+    "job": {
+      "t": 2,
+      "d": [
+        {
+          "k": "check_run_id",
+          "v": 87331006493.0
+        },
+        {
+          "k": "workflow_ref",
+          "v": "abirGharbi-st/PFE_Chatbot_STM32Cube/.github/workflows/auto_update_kb.yml@refs/heads/PFE_Chatbot_STM32Cube_V2"
+        },
+        {
+          "k": "workflow_sha",
+          "v": "cc37fb1f1f8a738274804626a8786451a7f8211a"
+        },
+        {
+          "k": "workflow_repository",
+          "v": "abirGharbi-st/PFE_Chatbot_STM32Cube"
+        },
+        {
+          "k": "workflow_file_path",
+          "v": ".github/workflows/auto_update_kb.yml"
+        }
+      ]
+    },
+    "matrix": {
+      "t": 2,
+      "d": [
+        {
+          "k": "series",
+          "v": "G4"
+        }
+      ]
+    },
+    "needs": {
+      "t": 2,
+      "d": [
+        {
+          "k": "prepare",
+          "v": {
+            "t": 2,
+            "d": [
+              {
+                "k": "result",
+                "v": "success"
+              },
+              {
+                "k": "outputs",
+                "v": {
+                  "t": 2,
+                  "d": [
+                    {
+                      "k": "skip_schema_validation",
+                      "v": "false"
+                    },
+                    {
+                      "k": "continue_on_workflow_error",
+                      "v": "false"
+                    },
+                    {
+                      "k": "placeholder_policy",
+                      "v": "Fail"
+                    },
+                    {
+                      "k": "max_parallel",
+                      "v": "1"
+                    },
+                    {
+                      "k": "series_json",
+                      "v": "[\"G4\", \"L0\", \"L1\", \"L4\", \"L5\", \"N6\", \"U0\", \"U3\", \"WB\", \"WB0\", \"WBA\", \"WL3\"]"
+                    },
+                    {
+                      "k": "mode",
+                      "v": "Full"
+                    },
+                    {
+                      "k": "existing_datasource_mode",
+                      "v": "Replace"
+                    },
+                    {
+                      "k": "skip_drivers",
+                      "v": "false"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "strategy": {
+      "t": 2,
+      "d": [
+        {
+          "k": "fail-fast",
+          "v": false
+        },
+        {
+          "k": "job-index",
+          "v": 0.0
+        },
+        {
+          "k": "job-total",
+          "v": 12.0
+        },
+        {
+          "k": "max-parallel",
+          "v": 1.0
+        }
+      ]
+    },
+    "vars": {
+      "t": 2
+    }
+  },
+  "billingOwnerId": "U_kgDOD6BNQw"
+}
+[2026-07-15 10:39:59Z INFO JobRunner] Job ID aca9598f-5ed0-5b3d-ba4b-f07341ffe66d
+[2026-07-15 10:39:59Z INFO ConfigurationStore] currentAssemblyLocation: C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin\Runner.Worker.dll
+[2026-07-15 10:39:59Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:39:59Z INFO ConfigurationStore] binPath: C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin
+[2026-07-15 10:39:59Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:39:59Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:39:59Z INFO ConfigurationStore] RootFolder: C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner
+[2026-07-15 10:39:59Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:39:59Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:39:59Z INFO HostContext] Well known config file 'Runner': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\.runner'
+[2026-07-15 10:39:59Z INFO ConfigurationStore] ConfigFilePath: C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\.runner
+[2026-07-15 10:39:59Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:39:59Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:39:59Z INFO HostContext] Well known config file 'MigratedRunner': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\.runner_migrated'
+[2026-07-15 10:39:59Z INFO ConfigurationStore] MigratedConfigFilePath: C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\.runner_migrated
+[2026-07-15 10:39:59Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:39:59Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:39:59Z INFO HostContext] Well known config file 'Credentials': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\.credentials'
+[2026-07-15 10:39:59Z INFO ConfigurationStore] CredFilePath: C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\.credentials
+[2026-07-15 10:39:59Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:39:59Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:39:59Z INFO HostContext] Well known config file 'MigratedCredentials': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\.credentials_migrated'
+[2026-07-15 10:39:59Z INFO ConfigurationStore] MigratedCredFilePath: C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\.credentials_migrated
+[2026-07-15 10:39:59Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:39:59Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:39:59Z INFO HostContext] Well known config file 'Service': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\.service'
+[2026-07-15 10:39:59Z INFO ConfigurationStore] ServiceConfigFilePath: C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\.service
+[2026-07-15 10:39:59Z INFO ConfigurationStore] Read setting file: 410 chars
+[2026-07-15 10:39:59Z INFO JobRunner] Initializing launch client
+[2026-07-15 10:39:59Z INFO JobServerQueue] Initializing results client
+[2026-07-15 10:40:00Z INFO ResultServer] Creating websocket client ...wss://results-receiver.actions.githubusercontent.com/_ws/ingest.sock
+[2026-07-15 10:40:00Z INFO ResultServer] Attempting to start websocket client with delay 00:00:00.
+[2026-07-15 10:40:00Z INFO JobServerQueue] Start process web console line queue.
+[2026-07-15 10:40:00Z INFO JobServerQueue] Start process file upload queue.
+[2026-07-15 10:40:00Z INFO JobServerQueue] Start results file upload queue.
+[2026-07-15 10:40:00Z INFO JobServerQueue] Starting results-based upload queue...
+[2026-07-15 10:40:00Z INFO JobServerQueue] Start process timeline update queue.
+[2026-07-15 10:40:00Z INFO ExecutionContext] Initializing Job context
+[2026-07-15 10:40:00Z INFO ExecutionContext] Initialize GitHub context
+[2026-07-15 10:40:00Z INFO ExecutionContext] Initialize Env context
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Diag': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_diag'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Diag': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_diag'
+[2026-07-15 10:40:00Z INFO JobRunner] Starting the job execution context.
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Work': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work'
+[2026-07-15 10:40:00Z INFO JobRunner] Validating directory permissions for: 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Work': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Tools': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work\_tool'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Work': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Temp': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work\_temp'
+[2026-07-15 10:40:00Z INFO JobRunner] Getting job extension.
+[2026-07-15 10:40:00Z INFO JobRunner] Initialize job. Getting all job steps.
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Diag': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_diag'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Diag': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_diag'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:40:00Z INFO HostContext] Well known config file 'Credentials': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\.credentials'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:40:00Z INFO HostContext] Well known config file 'SetupInfo': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\.setup_info'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Work': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work'
+[2026-07-15 10:40:00Z INFO PipelineDirectoryManager] Loading tracking config if exists: C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work\_PipelineMapping\abirGharbi-st/PFE_Chatbot_STM32Cube\PipelineFolder.json
+[2026-07-15 10:40:00Z INFO PipelineDirectoryManager] Updating job run properties.
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Work': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Work': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:40:00Z INFO HostContext] Well known directory 'Work': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work'
+[2026-07-15 10:40:01Z INFO JobExtension] Downloading actions
+[2026-07-15 10:40:01Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:40:01Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:40:01Z INFO HostContext] Well known directory 'Work': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work'
+[2026-07-15 10:40:01Z INFO HostContext] Well known directory 'Actions': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work\_actions'
+[2026-07-15 10:40:01Z INFO Worker] Listening for cancel message from the channel.
+[2026-07-15 10:40:01Z INFO Worker] Waiting for the job to complete or for a cancel message from the channel.
+[2026-07-15 10:40:01Z INFO ResultServer] Successfully started websocket client.
+[2026-07-15 10:40:01Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'e4665299-e9c1-4c08-b9f9-d72dcb9bb929', success rate: 1/1.
+[2026-07-15 10:40:01Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'e4665299-e9c1-4c08-b9f9-d72dcb9bb929', success rate: 1/1.
+[2026-07-15 10:40:02Z INFO JobServerQueue] Job timeline record has been updated for the first time.
+[2026-07-15 10:40:02Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:40:02Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:40:02Z INFO HostContext] Well known directory 'Work': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work'
+[2026-07-15 10:40:02Z INFO HostContext] Well known directory 'Actions': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work\_actions'
+[2026-07-15 10:40:02Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:40:02Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:40:02Z INFO HostContext] Well known directory 'Work': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work'
+[2026-07-15 10:40:02Z INFO HostContext] Well known directory 'Actions': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work\_actions'
+[2026-07-15 10:40:02Z INFO ActionManager] Save archive 'https://codeload.github.com/actions/checkout/zip/34e114876b0b11c390a56381ad16ebd13914f8d5' into C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work\_actions\_temp_5ea976ad-6f1b-4292-9b4e-da9506eac29d\b710e3ee-919d-4353-8b4d-6c44662aba72.zip.
+[2026-07-15 10:40:02Z INFO ActionManager] Using Basic token for action archive download.
+[2026-07-15 10:40:02Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'e4665299-e9c1-4c08-b9f9-d72dcb9bb929', success rate: 1/1.
+[2026-07-15 10:40:02Z INFO ActionManager] Request URL: https://codeload.github.com/actions/checkout/zip/34e114876b0b11c390a56381ad16ebd13914f8d5 X-GitHub-Request-Id: 6C74:1BD0FB:78AA20:A9EB5B:6A576382 Http Status: OK
+[2026-07-15 10:40:05Z INFO ActionManager] Finished getting action repository.
+[2026-07-15 10:40:05Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:40:05Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:40:05Z INFO HostContext] Well known directory 'Work': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work'
+[2026-07-15 10:40:05Z INFO HostContext] Well known directory 'Actions': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work\_actions'
+[2026-07-15 10:40:05Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:40:05Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:40:05Z INFO HostContext] Well known directory 'Work': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work'
+[2026-07-15 10:40:05Z INFO HostContext] Well known directory 'Actions': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work\_actions'
+[2026-07-15 10:40:05Z INFO ActionManager] Save archive 'https://codeload.github.com/actions/setup-python/zip/a26af69be951a213d495a4c3e4e4022e16d87065' into C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work\_actions\_temp_79fdcedb-da77-488f-b439-a8d75f114749\1f768d24-4d4a-437c-bd87-45e3cd0ea9c0.zip.
+[2026-07-15 10:40:05Z INFO ActionManager] Using Basic token for action archive download.
+[2026-07-15 10:40:06Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'e4665299-e9c1-4c08-b9f9-d72dcb9bb929', success rate: 1/1.
+[2026-07-15 10:40:06Z INFO ActionManager] Request URL: https://codeload.github.com/actions/setup-python/zip/a26af69be951a213d495a4c3e4e4022e16d87065 X-GitHub-Request-Id: D2FE:CBE7D:724FAF:A39566:6A576385 Http Status: OK
+[2026-07-15 10:40:10Z INFO ActionManager] Finished getting action repository.
+[2026-07-15 10:40:10Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:40:10Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:40:10Z INFO HostContext] Well known directory 'Work': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work'
+[2026-07-15 10:40:10Z INFO HostContext] Well known directory 'Actions': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work\_actions'
+[2026-07-15 10:40:10Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:40:10Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:40:10Z INFO HostContext] Well known directory 'Work': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work'
+[2026-07-15 10:40:10Z INFO HostContext] Well known directory 'Actions': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work\_actions'
+[2026-07-15 10:40:10Z INFO ActionManager] Save archive 'https://codeload.github.com/actions/upload-artifact/zip/ea165f8d65b6e75b540449e92b4886f43607fa02' into C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work\_actions\_temp_b3214c6d-aa44-4ec9-9340-6d0818aae6a9\384f34e1-cfa8-4699-8491-06092f954fd5.zip.
+[2026-07-15 10:40:10Z INFO ActionManager] Using Basic token for action archive download.
+[2026-07-15 10:40:10Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'e4665299-e9c1-4c08-b9f9-d72dcb9bb929', success rate: 1/1.
+[2026-07-15 10:40:11Z INFO ProcessChannel] Receiving message of length 0, with hash 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
+[2026-07-15 10:40:11Z INFO Worker] Cancellation/Shutdown message received.
+[2026-07-15 10:40:11Z INFO ActionManager] Request URL: https://codeload.github.com/actions/upload-artifact/zip/ea165f8d65b6e75b540449e92b4886f43607fa02 X-GitHub-Request-Id: D2FD:165C2F:740DE3:A56217:6A57638A Http Status: OK
+[2026-07-15 10:40:11Z INFO ActionManager] Action download has been cancelled.
+[2026-07-15 10:40:11Z ERR  JobExtension] Caught cancellation exception from JobExtension Initialization: System.Threading.Tasks.TaskCanceledException: A task was canceled.
+   at GitHub.Runner.Worker.ActionManager.DownloadRepositoryArchive(IExecutionContext executionContext, String downloadUrl, String downloadAuthToken, String archiveFile)
+   at GitHub.Runner.Worker.ActionManager.DownloadRepositoryActionAsync(IExecutionContext executionContext, ActionDownloadInfo downloadInfo)
+   at GitHub.Runner.Worker.ActionManager.PrepareActionsRecursiveLegacyAsync(IExecutionContext executionContext, PrepareActionsState state, IEnumerable`1 actions, Int32 depth, Guid parentStepId)
+   at GitHub.Runner.Worker.ActionManager.PrepareActionsAsync(IExecutionContext executionContext, IEnumerable`1 steps, Guid rootStepId)
+   at GitHub.Runner.Worker.JobExtension.InitializeJob(IExecutionContext jobContext, AgentJobRequestMessage message)
+[2026-07-15 10:40:11Z INFO ExecutionContext] Publish step telemetry for current step {
+  "action": "setup_job",
+  "type": "runner",
+  "stage": "Pre",
+  "stepId": "e4665299-e9c1-4c08-b9f9-d72dcb9bb929",
+  "result": "canceled",
+  "errorMessages": [
+    "A task was canceled."
+  ],
+  "executionTimeInSeconds": 12,
+  "startTime": "2026-07-15T10:40:00.7973189Z",
+  "finishTime": "2026-07-15T10:40:11.9163729Z"
+}.
+[2026-07-15 10:40:11Z ERR  JobRunner] Job is cancelled during initialize.
+[2026-07-15 10:40:11Z ERR  JobRunner] Caught exception: System.Threading.Tasks.TaskCanceledException: A task was canceled.
+   at GitHub.Runner.Worker.ActionManager.DownloadRepositoryArchive(IExecutionContext executionContext, String downloadUrl, String downloadAuthToken, String archiveFile)
+   at GitHub.Runner.Worker.ActionManager.DownloadRepositoryActionAsync(IExecutionContext executionContext, ActionDownloadInfo downloadInfo)
+   at GitHub.Runner.Worker.ActionManager.PrepareActionsRecursiveLegacyAsync(IExecutionContext executionContext, PrepareActionsState state, IEnumerable`1 actions, Int32 depth, Guid parentStepId)
+   at GitHub.Runner.Worker.ActionManager.PrepareActionsAsync(IExecutionContext executionContext, IEnumerable`1 steps, Guid rootStepId)
+   at GitHub.Runner.Worker.JobExtension.InitializeJob(IExecutionContext jobContext, AgentJobRequestMessage message)
+   at GitHub.Runner.Worker.JobRunner.RunAsync(AgentJobRequestMessage message, CancellationToken jobRequestCancellationToken)
+[2026-07-15 10:40:11Z INFO JobRunner] Shutting down the job server queue.
+[2026-07-15 10:40:11Z INFO JobServerQueue] Fire signal to shutdown all queues.
+[2026-07-15 10:40:12Z INFO JobServerQueue] All queue process task stopped.
+[2026-07-15 10:40:12Z INFO JobServerQueue] Try to append 1 batches web console lines for record 'e4665299-e9c1-4c08-b9f9-d72dcb9bb929', success rate: 1/1.
+[2026-07-15 10:40:12Z INFO JobServerQueue] Web console line queue drained.
+[2026-07-15 10:40:12Z INFO JobServerQueue] Uploading 2 files in one shot.
+[2026-07-15 10:40:12Z INFO JobServerQueue] Try to upload 2 log files or attachments, success rate: 2/2.
+[2026-07-15 10:40:12Z INFO JobServerQueue] File upload queue drained.
+[2026-07-15 10:40:12Z INFO JobServerQueue] Starting results-based upload queue...
+[2026-07-15 10:40:12Z INFO JobServerQueue] Uploading 2 file(s) in one shot through results service.
+[2026-07-15 10:40:12Z INFO JobServerQueue] Got a step log file to send to results service.
+[2026-07-15 10:40:12Z INFO JobServerQueue] Starting upload of step log file to results service ResultsLog, C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_diag\blocks\2ebcc44a-6727-43e0-a291-805a818e64b0_e4665299-e9c1-4c08-b9f9-d72dcb9bb929.1
+[2026-07-15 10:40:14Z INFO JobServerQueue] Got a job log file to send to results service.
+[2026-07-15 10:40:14Z INFO JobServerQueue] Starting upload of job log file to results service ResultsLog, C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_diag\blocks\2ebcc44a-6727-43e0-a291-805a818e64b0_aca9598f-5ed0-5b3d-ba4b-f07341ffe66d.1
+[2026-07-15 10:40:15Z INFO JobServerQueue] Tried to upload 2 file(s) to results, success rate: 2/2.
+[2026-07-15 10:40:15Z INFO JobServerQueue] Results upload queue drained.
+[2026-07-15 10:40:15Z INFO JobServerQueue] Timeline update queue drained.
+[2026-07-15 10:40:15Z INFO JobServerQueue] Disposing job server ...
+[2026-07-15 10:40:15Z INFO JobServerQueue] Disposing results server ...
+[2026-07-15 10:40:15Z INFO JobServerQueue] All queue process tasks have been stopped, and all queues are drained.
+[2026-07-15 10:40:15Z INFO TempDirectoryManager] Cleaning runner temp folder: C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_work\_temp
+[2026-07-15 10:40:15Z INFO HostContext] Well known directory 'Bin': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\bin'
+[2026-07-15 10:40:15Z INFO HostContext] Well known directory 'Root': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner'
+[2026-07-15 10:40:15Z INFO HostContext] Well known directory 'Diag': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_diag'
+[2026-07-15 10:40:15Z INFO HostContext] Well known config file 'Telemetry': 'C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_diag\.telemetry'
+[2026-07-15 10:40:15Z INFO JobRunner] Raising job completed against run service
