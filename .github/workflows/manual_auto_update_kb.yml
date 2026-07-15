@@ -140,12 +140,21 @@ jobs:
           REPO: ${{ github.repository }}
         shell: bash
         run: |
-          response=$(curl -sS \
-            -H "Authorization: Bearer $GH_TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/$REPO/actions/runners")
+          attempts=20
+          sleep_seconds=15
 
-          parsed=$(RUNNERS_JSON="$response" python - <<'PY'
+          runner_ready="false"
+          online_count="0"
+          idle_count="0"
+          busy_count="0"
+
+          for attempt in $(seq 1 "$attempts"); do
+            response=$(curl -sS \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/$REPO/actions/runners")
+
+            parsed=$(RUNNERS_JSON="$response" python - <<'PY'
           import json
           import os
 
@@ -167,26 +176,100 @@ jobs:
 
           print(f"{str(bool(idle)).lower()}|{len(online)}|{len(idle)}|{len(busy)}")
           PY
-          )
+            )
 
-          runner_ready="${parsed%%|*}"
-          rest="${parsed#*|}"
-          online_count="${rest%%|*}"
-          rest="${rest#*|}"
-          idle_count="${rest%%|*}"
-          busy_count="${rest##*|}"
+            runner_ready="${parsed%%|*}"
+            rest="${parsed#*|}"
+            online_count="${rest%%|*}"
+            rest="${rest#*|}"
+            idle_count="${rest%%|*}"
+            busy_count="${rest##*|}"
+
+            if [ "$runner_ready" = "true" ]; then
+              break
+            fi
+
+            if [ "$attempt" -lt "$attempts" ]; then
+              sleep "$sleep_seconds"
+            fi
+          done
 
           echo "runner_ready=$runner_ready" >> "$GITHUB_OUTPUT"
           echo "online_count=$online_count" >> "$GITHUB_OUTPUT"
           echo "idle_count=$idle_count" >> "$GITHUB_OUTPUT"
           echo "busy_count=$busy_count" >> "$GITHUB_OUTPUT"
 
-  run-series:
-    name: ${{ format('Series {0} ({1})', matrix.series, needs.prepare.outputs.mode) }}
-    needs: [prepare, runner-check]
-    if: needs.runner-check.outputs.runner_ready == 'true'
-    runs-on: self-hosted
+  preprocess-series:
+    name: ${{ format('Preprocess {0}', matrix.series) }}
+    needs: [prepare]
+    runs-on: windows-latest
     timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      max-parallel: ${{ fromJSON(needs.prepare.outputs.max_parallel) }}
+      matrix:
+        series: ${{ fromJSON(needs.prepare.outputs.series_json) }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Enable long paths (Windows)
+        shell: powershell
+        run: git config --system core.longpaths true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        shell: powershell
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run preprocessing only
+        if: needs.prepare.outputs.mode != 'Upload'
+        shell: powershell
+        run: |
+          $script = "pipeline_Automation/workflow/Run_Single_Series_Full_Pipeline_And_Upload.ps1"
+          $effectivePlaceholderPolicy = "${{ needs.prepare.outputs.placeholder_policy }}"
+          if ($effectivePlaceholderPolicy -eq "Fail") {
+            Write-Host "Hosted preprocess: PlaceholderPolicy Fail downgraded to Warn to avoid Alfred placeholder hard-stop." -ForegroundColor Yellow
+            $effectivePlaceholderPolicy = "Warn"
+          }
+          $scriptArgs = @{
+            Series = "${{ matrix.series }}"
+            Mode = "Prepare"
+            PlaceholderPolicy = $effectivePlaceholderPolicy
+          }
+
+          if ("${{ needs.prepare.outputs.skip_schema_validation }}" -eq "true") {
+            $scriptArgs.SkipSchemaValidation = $true
+          }
+          if ("${{ needs.prepare.outputs.continue_on_workflow_error }}" -eq "true") {
+            $scriptArgs.ContinueOnWorkflowError = $true
+          }
+
+          Write-Host "Running preprocess for series $($scriptArgs.Series)" -ForegroundColor Cyan
+          & $script @scriptArgs
+
+      - name: Upload series artifacts
+        if: needs.prepare.outputs.mode != 'Upload'
+        uses: actions/upload-artifact@v4
+        with:
+          name: st-ready-${{ matrix.series }}-${{ github.run_number }}
+          path: datasets/07_delivery/st_ready/by_series/
+          if-no-files-found: warn
+          retention-days: 30
+
+  upload-series:
+    name: ${{ format('Upload {0}', matrix.series) }}
+    needs: [prepare, preprocess-series]
+    if: needs.prepare.outputs.mode != 'Prepare'
+    runs-on: self-hosted
+    timeout-minutes: 240
     strategy:
       fail-fast: false
       max-parallel: ${{ fromJSON(needs.prepare.outputs.max_parallel) }}
@@ -200,7 +283,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Enable long paths (Windows)
-        shell: pwsh
+        shell: powershell
         run: git config --system core.longpaths true
 
       - name: Set up Python
@@ -210,65 +293,42 @@ jobs:
           cache: 'pip'
 
       - name: Install dependencies
-        shell: pwsh
+        shell: powershell
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run single-series full pipeline + upload
-        shell: pwsh
-        run: |
-          $script = "pipeline_Automation/workflow/Run_Single_Series_Full_Pipeline_And_Upload.ps1"
-          $args = @(
-            "-Series", "${{ matrix.series }}",
-            "-Mode", "${{ needs.prepare.outputs.mode }}",
-            "-ExistingDatasourceMode", "${{ needs.prepare.outputs.existing_datasource_mode }}",
-            "-RemoteUser", "${{ secrets.ST_REMOTE_USER }}",
-            "-KbId", "793",
-            "-JsonSplitSize", "1000",
-            "-PlaceholderPolicy", "${{ needs.prepare.outputs.placeholder_policy }}"
-          )
-
-          if ("${{ needs.prepare.outputs.skip_drivers }}" -eq "true") {
-            $args += "-SkipDrivers"
-          }
-          if ("${{ needs.prepare.outputs.skip_schema_validation }}" -eq "true") {
-            $args += "-SkipSchemaValidation"
-          }
-          if ("${{ needs.prepare.outputs.continue_on_workflow_error }}" -eq "true") {
-            $args += "-ContinueOnWorkflowError"
-          }
-
-          & $script @args
-
-      - name: Upload series artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
+      - name: Download preprocessed artifacts
+        if: needs.prepare.outputs.mode == 'Full'
+        uses: actions/download-artifact@v4
         with:
           name: st-ready-${{ matrix.series }}-${{ github.run_number }}
-          path: datasets/07_delivery/st_ready/by_series/
-          if-no-files-found: warn
-          retention-days: 30
+          path: .
 
-  runner-unavailable-notice:
-    name: Runner unavailable notice
-    needs: [prepare, runner-check]
-    if: needs.runner-check.outputs.runner_ready != 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Publish deferred upload notice
-        shell: bash
+      - name: Run upload only
+        shell: powershell
         run: |
-          echo "## Upload Deferred" >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "No ready self-hosted runner (online + idle) was detected." >> "$GITHUB_STEP_SUMMARY"
-          echo "Run is deferred and no series job was executed." >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Parameter | Value |" >> "$GITHUB_STEP_SUMMARY"
-          echo "|---|---|" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Mode | ${{ needs.prepare.outputs.mode }} |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Existing Datasource Mode | ${{ needs.prepare.outputs.existing_datasource_mode }} |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Series | ${{ needs.prepare.outputs.series_json }} |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Online self-hosted count | ${{ needs.runner-check.outputs.online_count }} |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Idle self-hosted count | ${{ needs.runner-check.outputs.idle_count }} |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Busy self-hosted count | ${{ needs.runner-check.outputs.busy_count }} |" >> "$GITHUB_STEP_SUMMARY"
+          $script = "pipeline_Automation/workflow/Run_Single_Series_Full_Pipeline_And_Upload.ps1"
+          $scriptArgs = @{
+            Series = "${{ matrix.series }}"
+            Mode = "Upload"
+            ExistingDatasourceMode = "${{ needs.prepare.outputs.existing_datasource_mode }}"
+            RemoteUser = "${{ secrets.ST_REMOTE_USER }}"
+            KbId = 793
+            JsonSplitSize = 1000
+            PlaceholderPolicy = "${{ needs.prepare.outputs.placeholder_policy }}"
+          }
+
+          if ("${{ needs.prepare.outputs.skip_drivers }}" -eq "true") {
+            $scriptArgs.SkipDrivers = $true
+          }
+          if ("${{ needs.prepare.outputs.skip_schema_validation }}" -eq "true") {
+            $scriptArgs.SkipSchemaValidation = $true
+          }
+          if ("${{ needs.prepare.outputs.continue_on_workflow_error }}" -eq "true") {
+            $scriptArgs.ContinueOnWorkflowError = $true
+          }
+
+          Write-Host "Running upload for series $($scriptArgs.Series)" -ForegroundColor Cyan
+          & $script @scriptArgs
+

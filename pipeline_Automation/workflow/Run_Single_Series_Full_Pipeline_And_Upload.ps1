@@ -345,6 +345,7 @@ function Invoke-AlfredIssueImageDescriptionsForSeries {
         Invoke-Step "Alfred issue image descriptions for $($file.Directory.Parent.Name)" @(
             "pipeline_Automation/alfred/enrich_json_images_with_alfred.py",
             "--input", $file.FullName,
+            "--remote-user", $RemoteUser,
             "--inplace"
         )
     }
