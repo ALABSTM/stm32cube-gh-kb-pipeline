@@ -272,3 +272,9 @@ jobs:
           echo "| Online self-hosted count | ${{ needs.runner-check.outputs.online_count }} |" >> "$GITHUB_STEP_SUMMARY"
           echo "| Idle self-hosted count | ${{ needs.runner-check.outputs.idle_count }} |" >> "$GITHUB_STEP_SUMMARY"
           echo "| Busy self-hosted count | ${{ needs.runner-check.outputs.busy_count }} |" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Fail when no self-hosted runner is ready
+        shell: bash
+        run: |
+          echo "::error::No online + idle self-hosted runner found. Pipeline and upload were not executed."
+          exit 1

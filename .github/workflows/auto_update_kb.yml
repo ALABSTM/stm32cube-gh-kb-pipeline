@@ -327,3 +327,9 @@ jobs:
           echo "| Busy self-hosted count | ${{ needs.runner-check.outputs.busy_count }} |" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "Action: bring runner online and re-run this workflow." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Fail when no self-hosted runner is ready
+        shell: bash
+        run: |
+          echo "::error::No online + idle self-hosted runner found. Pipeline and upload were not executed."
+          exit 1
