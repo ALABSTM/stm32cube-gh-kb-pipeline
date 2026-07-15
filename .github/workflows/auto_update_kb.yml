@@ -236,11 +236,71 @@ jobs:
           echo "| Idle self-hosted count | ${{ steps.check.outputs.idle_count }} |" >> "$GITHUB_STEP_SUMMARY"
           echo "| Busy self-hosted count | ${{ steps.check.outputs.busy_count }} |" >> "$GITHUB_STEP_SUMMARY"
 
-  run-series:
-    name: ${{ format('Series {0} ({1})', matrix.series, needs.prepare.outputs.mode) }}
+  preprocess-series:
+    name: ${{ format('Preprocess {0}', matrix.series) }}
     needs: [prepare]
-    runs-on: self-hosted
+    runs-on: windows-latest
     timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      max-parallel: ${{ fromJSON(needs.prepare.outputs.max_parallel) }}
+      matrix:
+        series: ${{ fromJSON(needs.prepare.outputs.series_json) }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Enable long paths (Windows)
+        shell: powershell
+        run: git config --system core.longpaths true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        shell: powershell
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run preprocessing only
+        if: needs.prepare.outputs.mode != 'Upload'
+        shell: powershell
+        run: |
+          $script = "pipeline_Automation/workflow/Run_Single_Series_Full_Pipeline_And_Upload.ps1"
+          $args = @(
+            "-Series", "${{ matrix.series }}",
+            "-Mode", "Prepare",
+            "-PlaceholderPolicy", "${{ needs.prepare.outputs.placeholder_policy }}"
+          )
+
+          if ("${{ needs.prepare.outputs.skip_schema_validation }}" -eq "true") {
+            $args += "-SkipSchemaValidation"
+          }
+          if ("${{ needs.prepare.outputs.continue_on_workflow_error }}" -eq "true") {
+            $args += "-ContinueOnWorkflowError"
+          }
+
+          & $script @args
+
+      - name: Upload series artifacts
+        if: needs.prepare.outputs.mode != 'Upload'
+        uses: actions/upload-artifact@v4
+        with:
+          name: st-ready-${{ matrix.series }}-${{ github.run_number }}
+          path: datasets/07_delivery/st_ready/by_series/
+          if-no-files-found: warn
+          retention-days: 30
+
+  upload-series:
+    name: ${{ format('Upload {0}', matrix.series) }}
+    needs: [prepare, preprocess-series]
+    if: needs.prepare.outputs.mode != 'Prepare'
+    runs-on: self-hosted
+    timeout-minutes: 240
     strategy:
       fail-fast: false
       max-parallel: ${{ fromJSON(needs.prepare.outputs.max_parallel) }}
@@ -254,7 +314,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Enable long paths (Windows)
-        shell: pwsh
+        shell: powershell
         run: git config --system core.longpaths true
 
       - name: Set up Python
@@ -264,18 +324,25 @@ jobs:
           cache: 'pip'
 
       - name: Install dependencies
-        shell: pwsh
+        shell: powershell
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run single-series full pipeline + upload
-        shell: pwsh
+      - name: Download preprocessed artifacts
+        if: needs.prepare.outputs.mode == 'Full'
+        uses: actions/download-artifact@v4
+        with:
+          name: st-ready-${{ matrix.series }}-${{ github.run_number }}
+          path: .
+
+      - name: Run upload only
+        shell: powershell
         run: |
           $script = "pipeline_Automation/workflow/Run_Single_Series_Full_Pipeline_And_Upload.ps1"
           $args = @(
             "-Series", "${{ matrix.series }}",
-            "-Mode", "${{ needs.prepare.outputs.mode }}",
+            "-Mode", "Upload",
             "-ExistingDatasourceMode", "${{ needs.prepare.outputs.existing_datasource_mode }}",
             "-RemoteUser", "${{ secrets.ST_REMOTE_USER }}",
             "-KbId", "793",
@@ -295,18 +362,9 @@ jobs:
 
           & $script @args
 
-      - name: Upload series artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: st-ready-${{ matrix.series }}-${{ github.run_number }}
-          path: datasets/07_delivery/st_ready/by_series/
-          if-no-files-found: warn
-          retention-days: 30
-
       - name: Series summary
         if: always()
-        shell: pwsh
+        shell: powershell
         run: |
           "## Series ${{ matrix.series }}" >> $env:GITHUB_STEP_SUMMARY
           "" >> $env:GITHUB_STEP_SUMMARY
