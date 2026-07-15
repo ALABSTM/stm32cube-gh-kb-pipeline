@@ -234,15 +234,12 @@ jobs:
         shell: powershell
         run: |
           $script = "pipeline_Automation/workflow/Run_Single_Series_Full_Pipeline_And_Upload.ps1"
-          $effectivePlaceholderPolicy = "${{ needs.prepare.outputs.placeholder_policy }}"
-          if ($effectivePlaceholderPolicy -eq "Fail") {
-            Write-Host "Hosted preprocess: PlaceholderPolicy Fail downgraded to Warn to avoid Alfred placeholder hard-stop." -ForegroundColor Yellow
-            $effectivePlaceholderPolicy = "Warn"
-          }
           $scriptArgs = @{
             Series = "${{ matrix.series }}"
             Mode = "Prepare"
-            PlaceholderPolicy = $effectivePlaceholderPolicy
+            PlaceholderPolicy = "Off"
+            SkipAlfredEnrichment = $true
+            SkipPlaceholderGate = $true
           }
 
           if ("${{ needs.prepare.outputs.skip_schema_validation }}" -eq "true") {
@@ -317,6 +314,7 @@ jobs:
             KbId = 793
             JsonSplitSize = 1000
             PlaceholderPolicy = "${{ needs.prepare.outputs.placeholder_policy }}"
+            RunAlfredBeforeUpload = $true
           }
 
           if ("${{ needs.prepare.outputs.skip_drivers }}" -eq "true") {

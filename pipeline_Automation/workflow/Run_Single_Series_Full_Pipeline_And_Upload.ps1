@@ -41,7 +41,10 @@ param(
     [ValidateSet("Replace", "Add")]
     [string]$ExistingDatasourceMode = "Replace",
     [ValidateSet("Fail", "Warn", "Off")]
-    [string]$PlaceholderPolicy = "Fail"
+    [string]$PlaceholderPolicy = "Fail",
+    [switch]$SkipAlfredEnrichment,
+    [switch]$SkipPlaceholderGate,
+    [switch]$RunAlfredBeforeUpload
 )
 
 Set-StrictMode -Version Latest
@@ -351,42 +354,11 @@ function Invoke-AlfredIssueImageDescriptionsForSeries {
     }
 }
 
-function Invoke-PrepareSeries {
-    if (-not (Test-Path -LiteralPath $configPath)) {
-        throw "Config not found: $configPath"
-    }
+function Invoke-AlfredPdfFigureDescriptions {
+    Invoke-Step "Alfred PDF figure descriptions" @("pipeline_Automation/alfred/enrich_pdf_figures_with_alfred.py")
+}
 
-    $env:STM32CUBE_CONFIG = $configPath
-    Write-Host "`nPreparing $Series using $configPath" -ForegroundColor Green
-
-    Invoke-Step "Sync configured repos" @("-m", "pipeline.ingestion.repo_sync_service")
-    Invoke-Step "Audit/fix submodule repos" @("-m", "pipeline.evaluation.audit_config_submodules", "--fix")
-    Invoke-Step "Audit submodule repos gate" @("-m", "pipeline.evaluation.audit_config_submodules")
-
-    $workflowArgs = @("-m", "pipeline.run_full_workflow", "--skip-chunking")
-    if ($ContinueOnWorkflowError) {
-        $workflowArgs += "--continue-on-error"
-    }
-    Invoke-Step "Full preprocessing workflow with Alfred PDF" $workflowArgs
-
-    $repos = Get-ConfigRepos $configPath
-    Invoke-ParentRepoDeliveryExports
-    Invoke-SubrepoIssueDeliveryExports -Repos $repos
-    Invoke-AlfredIssueImageDescriptionsForSeries
-
-    $exportArgs = @("-m", "pipeline.delivery.export_st_ready_files", "--v3")
-    foreach ($repo in $repos) {
-        $exportArgs += @("--repo", $repo)
-    }
-    Invoke-Step "Export V3 ST-ready files for configured repos" $exportArgs
-    Assert-SeriesFilesCoverage -Repos $repos
-
-    Invoke-Step "Patch Alfred PDF descriptions into root and driver delivery files" @("pipeline_Automation/patch_pdf_descriptions_in_delivery.py")
-
-    if (-not $SkipSchemaValidation) {
-        Invoke-Step "Schema validation" @("-m", "pipeline.evaluation.validate_schemas")
-    }
-
+function Invoke-PlaceholderGate {
     Write-Host "`n===== Placeholder gate for $Series (policy=$PlaceholderPolicy) =====" -ForegroundColor Cyan
     if ($PlaceholderPolicy -ne "Off") {
         $placeholderMatches = Select-String -Path "$deliveryRoot/**/*.json" `
@@ -416,6 +388,89 @@ function Invoke-PrepareSeries {
         }
     } else {
         Write-Host "[SKIP] Placeholder gate disabled (PlaceholderPolicy=Off)" -ForegroundColor Yellow
+    }
+}
+
+function Invoke-PrepareSeries {
+    if (-not (Test-Path -LiteralPath $configPath)) {
+        throw "Config not found: $configPath"
+    }
+
+    $env:STM32CUBE_CONFIG = $configPath
+    Write-Host "`nPreparing $Series using $configPath" -ForegroundColor Green
+
+    Invoke-Step "Sync configured repos" @("-m", "pipeline.ingestion.repo_sync_service")
+    Invoke-Step "Audit/fix submodule repos" @("-m", "pipeline.evaluation.audit_config_submodules", "--fix")
+    Invoke-Step "Audit submodule repos gate" @("-m", "pipeline.evaluation.audit_config_submodules")
+
+    $workflowArgs = @("-m", "pipeline.run_full_workflow", "--skip-chunking")
+    if ($SkipAlfredEnrichment) {
+        $workflowArgs += "--no-enrich-pdf"
+    }
+    if ($ContinueOnWorkflowError) {
+        $workflowArgs += "--continue-on-error"
+    }
+    Invoke-Step "Full preprocessing workflow with Alfred PDF" $workflowArgs
+
+    $repos = Get-ConfigRepos $configPath
+    Invoke-ParentRepoDeliveryExports
+    Invoke-SubrepoIssueDeliveryExports -Repos $repos
+    if ($SkipAlfredEnrichment) {
+        Write-Host "[SKIP] Alfred issue image enrichment disabled by -SkipAlfredEnrichment" -ForegroundColor Yellow
+    } else {
+        Invoke-AlfredIssueImageDescriptionsForSeries
+    }
+
+    $exportArgs = @("-m", "pipeline.delivery.export_st_ready_files", "--v3")
+    foreach ($repo in $repos) {
+        $exportArgs += @("--repo", $repo)
+    }
+    Invoke-Step "Export V3 ST-ready files for configured repos" $exportArgs
+    Assert-SeriesFilesCoverage -Repos $repos
+
+    if ($SkipAlfredEnrichment) {
+        Write-Host "[SKIP] Patch Alfred PDF descriptions disabled by -SkipAlfredEnrichment" -ForegroundColor Yellow
+    } else {
+        Invoke-Step "Patch Alfred PDF descriptions into root and driver delivery files" @("pipeline_Automation/patch_pdf_descriptions_in_delivery.py")
+    }
+
+    if (-not $SkipSchemaValidation) {
+        Invoke-Step "Schema validation" @("-m", "pipeline.evaluation.validate_schemas")
+    }
+
+    if ($SkipPlaceholderGate) {
+        Write-Host "[SKIP] Placeholder gate disabled by -SkipPlaceholderGate" -ForegroundColor Yellow
+    } else {
+        Invoke-PlaceholderGate
+    }
+}
+
+function Invoke-PreUploadAlfredFinalize {
+    if (-not (Test-Path -LiteralPath $configPath)) {
+        throw "Config not found: $configPath"
+    }
+    if (-not (Test-Path -LiteralPath $deliveryRoot)) {
+        throw "Delivery root not found for ${Series}: $deliveryRoot"
+    }
+
+    $env:STM32CUBE_CONFIG = $configPath
+
+    if ($SkipAlfredEnrichment) {
+        Write-Host "[SKIP] Pre-upload Alfred finalize disabled by -SkipAlfredEnrichment" -ForegroundColor Yellow
+    } else {
+        Invoke-AlfredPdfFigureDescriptions
+        Invoke-AlfredIssueImageDescriptionsForSeries
+        Invoke-Step "Patch Alfred PDF descriptions into root and driver delivery files" @("pipeline_Automation/patch_pdf_descriptions_in_delivery.py")
+    }
+
+    if (-not $SkipSchemaValidation) {
+        Invoke-Step "Schema validation" @("-m", "pipeline.evaluation.validate_schemas")
+    }
+
+    if ($SkipPlaceholderGate) {
+        Write-Host "[SKIP] Placeholder gate disabled by -SkipPlaceholderGate" -ForegroundColor Yellow
+    } else {
+        Invoke-PlaceholderGate
     }
 }
 
@@ -979,6 +1034,9 @@ if ($Mode -in @("Full", "Prepare")) {
 }
 
 if ($Mode -in @("Full", "Upload")) {
+    if ($RunAlfredBeforeUpload) {
+        Invoke-PreUploadAlfredFinalize
+    }
     Invoke-UploadSeries
 }
 
