@@ -109,32 +109,32 @@ jobs:
             max_parallel='${{ env.DEFAULT_MAX_PARALLEL }}'
           fi
 
-          series_json=$(RAW_SERIES="$raw_series" python - <<'PY'
-import json
-import os
+            series_json=$(RAW_SERIES="$raw_series" python - <<'PY'
+            import json
+            import os
 
-allowed = {
-    "G4", "L0", "L1", "L4", "L5", "N6", "U0", "U3", "WB", "WB0", "WBA", "WL3"
-}
-raw = os.environ.get("RAW_SERIES", "")
-items = [s.strip().upper() for s in raw.split(",") if s.strip()]
+            allowed = {
+              "G4", "L0", "L1", "L4", "L5", "N6", "U0", "U3", "WB", "WB0", "WBA", "WL3"
+            }
+            raw = os.environ.get("RAW_SERIES", "")
+            items = [s.strip().upper() for s in raw.split(",") if s.strip()]
 
-if not items:
-    items = sorted(allowed)
+            if not items:
+              items = sorted(allowed)
 
-seen = set()
-normalized = []
-for s in items:
-    if s not in allowed:
-        raise SystemExit(f"Unsupported series '{s}'. Allowed: {', '.join(sorted(allowed))}")
-    if s in seen:
-        continue
-    seen.add(s)
-    normalized.append(s)
+            seen = set()
+            normalized = []
+            for s in items:
+              if s not in allowed:
+                raise SystemExit(f"Unsupported series '{s}'. Allowed: {', '.join(sorted(allowed))}")
+              if s in seen:
+                continue
+              seen.add(s)
+              normalized.append(s)
 
-print(json.dumps(normalized))
-PY
-)
+            print(json.dumps(normalized))
+            PY
+            )
 
           if [ -z "$max_parallel" ]; then
             max_parallel='1'
@@ -170,29 +170,29 @@ PY
             -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/$REPO/actions/runners")
 
-          parsed=$(RUNNERS_JSON="$response" python - <<'PY'
-import json
-import os
+            parsed=$(RUNNERS_JSON="$response" python - <<'PY'
+            import json
+            import os
 
-payload = json.loads(os.environ["RUNNERS_JSON"])
-runners = payload.get("runners", [])
-online = []
-idle = []
-busy = []
-for r in runners:
-    if r.get("status") != "online":
-        continue
-    labels = {str(lbl.get("name", "")).lower() for lbl in r.get("labels", [])}
-    if "self-hosted" in labels:
-        online.append(r)
-        if bool(r.get("busy", False)):
-            busy.append(r)
-        else:
-            idle.append(r)
+            payload = json.loads(os.environ["RUNNERS_JSON"])
+            runners = payload.get("runners", [])
+            online = []
+            idle = []
+            busy = []
+            for r in runners:
+              if r.get("status") != "online":
+                continue
+              labels = {str(lbl.get("name", "")).lower() for lbl in r.get("labels", [])}
+              if "self-hosted" in labels:
+                online.append(r)
+                if bool(r.get("busy", False)):
+                  busy.append(r)
+                else:
+                  idle.append(r)
 
-print(f"{str(bool(idle)).lower()}|{len(online)}|{len(idle)}|{len(busy)}")
-PY
-)
+            print(f"{str(bool(idle)).lower()}|{len(online)}|{len(idle)}|{len(busy)}")
+            PY
+            )
 
           runner_ready="${parsed%%|*}"
           rest="${parsed#*|}"
