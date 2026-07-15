@@ -140,12 +140,21 @@ jobs:
           REPO: ${{ github.repository }}
         shell: bash
         run: |
-          response=$(curl -sS \
-            -H "Authorization: Bearer $GH_TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/$REPO/actions/runners")
+          attempts=20
+          sleep_seconds=15
 
-          parsed=$(RUNNERS_JSON="$response" python - <<'PY'
+          runner_ready="false"
+          online_count="0"
+          idle_count="0"
+          busy_count="0"
+
+          for attempt in $(seq 1 "$attempts"); do
+            response=$(curl -sS \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/$REPO/actions/runners")
+
+            parsed=$(RUNNERS_JSON="$response" python - <<'PY'
           import json
           import os
 
@@ -167,14 +176,23 @@ jobs:
 
           print(f"{str(bool(idle)).lower()}|{len(online)}|{len(idle)}|{len(busy)}")
           PY
-          )
+            )
 
-          runner_ready="${parsed%%|*}"
-          rest="${parsed#*|}"
-          online_count="${rest%%|*}"
-          rest="${rest#*|}"
-          idle_count="${rest%%|*}"
-          busy_count="${rest##*|}"
+            runner_ready="${parsed%%|*}"
+            rest="${parsed#*|}"
+            online_count="${rest%%|*}"
+            rest="${rest#*|}"
+            idle_count="${rest%%|*}"
+            busy_count="${rest##*|}"
+
+            if [ "$runner_ready" = "true" ]; then
+              break
+            fi
+
+            if [ "$attempt" -lt "$attempts" ]; then
+              sleep "$sleep_seconds"
+            fi
+          done
 
           echo "runner_ready=$runner_ready" >> "$GITHUB_OUTPUT"
           echo "online_count=$online_count" >> "$GITHUB_OUTPUT"
