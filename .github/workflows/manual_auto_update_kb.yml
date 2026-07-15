@@ -201,8 +201,7 @@ jobs:
 
   run-series:
     name: ${{ format('Series {0} ({1})', matrix.series, needs.prepare.outputs.mode) }}
-    needs: [prepare, runner-check]
-    if: needs.runner-check.outputs.runner_ready == 'true'
+    needs: [prepare]
     runs-on: self-hosted
     timeout-minutes: 360
     strategy:
@@ -268,31 +267,3 @@ jobs:
           if-no-files-found: warn
           retention-days: 30
 
-  runner-unavailable-notice:
-    name: Runner unavailable notice
-    needs: [prepare, runner-check]
-    if: needs.runner-check.outputs.runner_ready != 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Publish deferred upload notice
-        shell: bash
-        run: |
-          echo "## Upload Deferred" >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "No ready self-hosted runner (online + idle) was detected." >> "$GITHUB_STEP_SUMMARY"
-          echo "Run is deferred and no series job was executed." >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Parameter | Value |" >> "$GITHUB_STEP_SUMMARY"
-          echo "|---|---|" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Mode | ${{ needs.prepare.outputs.mode }} |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Existing Datasource Mode | ${{ needs.prepare.outputs.existing_datasource_mode }} |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Series | ${{ needs.prepare.outputs.series_json }} |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Online self-hosted count | ${{ needs.runner-check.outputs.online_count }} |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Idle self-hosted count | ${{ needs.runner-check.outputs.idle_count }} |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| Busy self-hosted count | ${{ needs.runner-check.outputs.busy_count }} |" >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Fail when no self-hosted runner is ready
-        shell: bash
-        run: |
-          echo "::error::No online + idle self-hosted runner found. Pipeline and upload were not executed."
-          exit 1
