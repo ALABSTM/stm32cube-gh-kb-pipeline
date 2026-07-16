@@ -1,0 +1,21 @@
+[Tue 07/14/2026 14:43:55.12] --------whoami-------- 
+st\gharbia1
+[Tue 07/14/2026 14:43:55.36] --------whoami-------- 
+[Tue 07/14/2026 14:43:55.40] Waiting for Runner.Listener.exe (2576) to complete 
+Runner.Listener.exe           2576 Console                    1     52,468 K
+[Tue 07/14/2026 14:43:56.10] Process 2576 still running, check again after 1 second. 
+[Tue 07/14/2026 14:43:57.75] Process 2576 finished running 
+[Tue 07/14/2026 14:43:57.75] Sleep 1 more second to make sure process exited 
+[Tue 07/14/2026 14:43:58.89] Re-organize folders 
+06/05/2026  05:08 PM    <DIR>          bin
+07/10/2026  02:29 PM    <DIR>          bin.2.335.1
+[Tue 07/14/2026 14:43:59.02] Delete existing junction bin folder 
+Access is denied.
+06/05/2026  05:08 PM    <DIR>          externals
+07/10/2026  02:29 PM    <DIR>          externals.2.335.1
+[Tue 07/14/2026 14:43:59.16] Delete existing junction externals folder 
+Access is denied.
+[Tue 07/14/2026 14:43:59.21] Create junction bin folder 
+Cannot create a file when that file already exists.
+[Tue 07/14/2026 14:43:59.27] Can't create junction bin folder 
+[Tue 07/14/2026 14:43:59.29] Rename "C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_diag\SelfUpdate-20260714-134354.log" to be "C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_diag\SelfUpdate-20260714-134354.log.failed" 

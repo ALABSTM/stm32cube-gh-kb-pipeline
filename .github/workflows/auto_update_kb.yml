@@ -243,9 +243,29 @@ jobs:
       max-parallel: ${{ fromJSON(needs.prepare.outputs.max_parallel) }}
       matrix:
         series: ${{ fromJSON(needs.prepare.outputs.series_json) }}
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+      GH_TOKEN: ${{ github.token }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: GitHub API rate-limit preflight
+        shell: powershell
+        run: |
+          if (-not $env:GITHUB_TOKEN) {
+            throw "GITHUB_TOKEN is not available in preprocess job."
+          }
+          $headers = @{ Authorization = "Bearer $env:GITHUB_TOKEN"; Accept = "application/vnd.github+json" }
+          $resp = Invoke-RestMethod -Uri "https://api.github.com/rate_limit" -Headers $headers -Method Get
+          $remaining = [int]$resp.resources.core.remaining
+          $limit = [int]$resp.resources.core.limit
+          $reset = [int64]$resp.resources.core.reset
+          $resetUtc = [DateTimeOffset]::FromUnixTimeSeconds($reset).UtcDateTime
+          Write-Host "GitHub core rate-limit: $remaining/$limit, reset at $resetUtc"
+          if ($remaining -lt 100) {
+            throw "Insufficient GitHub API quota for ingestion ($remaining/$limit). Re-run later."
+          }
 
       - name: Enable long paths (Windows)
         shell: powershell
@@ -268,15 +288,12 @@ jobs:
         shell: powershell
         run: |
           $script = "pipeline_Automation/workflow/Run_Single_Series_Full_Pipeline_And_Upload.ps1"
-          $effectivePlaceholderPolicy = "${{ needs.prepare.outputs.placeholder_policy }}"
-          if ($effectivePlaceholderPolicy -eq "Fail") {
-            Write-Host "Hosted preprocess: PlaceholderPolicy Fail downgraded to Warn to avoid Alfred placeholder hard-stop." -ForegroundColor Yellow
-            $effectivePlaceholderPolicy = "Warn"
-          }
           $scriptArgs = @{
             Series = "${{ matrix.series }}"
             Mode = "Prepare"
-            PlaceholderPolicy = $effectivePlaceholderPolicy
+            PlaceholderPolicy = "Off"
+            SkipAlfredEnrichment = $true
+            SkipPlaceholderGate = $true
           }
 
           if ("${{ needs.prepare.outputs.skip_schema_validation }}" -eq "true") {
@@ -339,10 +356,67 @@ jobs:
           name: st-ready-${{ matrix.series }}-${{ github.run_number }}
           path: .
 
+      - name: Alfred connectivity preflight
+        id: alfred_net_check
+        shell: powershell
+        run: |
+          $targetUrl = "https://api-ai-bridge.st.com/chatgpt/api/client-apps"
+          $proxyUrl = "http://185.46.212.88:80"
+
+          function Test-Endpoint {
+            param(
+              [string]$Url,
+              [string]$Proxy = ""
+            )
+
+            try {
+              $request = @{
+                Uri = $Url
+                Method = "Get"
+                UseBasicParsing = $true
+                TimeoutSec = 20
+              }
+              if ($Proxy) {
+                $request.Proxy = $Proxy
+              }
+
+              $response = Invoke-WebRequest @request
+              Write-Host "Reachable: $Url (status $($response.StatusCode))"
+              return $true
+            }
+            catch {
+              $msg = $_.Exception.Message
+              if ($msg -match "401|403|404|405") {
+                Write-Host "Reachable (HTTP auth/method response): $Url ($msg)"
+                return $true
+              }
+              Write-Host "Unreachable: $Url ($msg)"
+              return $false
+            }
+          }
+
+          $proxyOk = Test-Endpoint -Url $targetUrl -Proxy $proxyUrl
+          $directOk = Test-Endpoint -Url $targetUrl
+
+          if ($proxyOk) {
+            "use_proxy=true" >> $env:GITHUB_OUTPUT
+            Write-Host "Selected Alfred network mode: proxy" -ForegroundColor Green
+            exit 0
+          }
+
+          if ($directOk) {
+            "use_proxy=false" >> $env:GITHUB_OUTPUT
+            Write-Host "Selected Alfred network mode: direct" -ForegroundColor Yellow
+            exit 0
+          }
+
+          throw "Alfred endpoint unreachable (direct and proxy)."
+
       - name: Run upload only
         shell: powershell
         run: |
           $script = "pipeline_Automation/workflow/Run_Single_Series_Full_Pipeline_And_Upload.ps1"
+          $useProxy = "${{ steps.alfred_net_check.outputs.use_proxy }}" -eq "true"
           $scriptArgs = @{
             Series = "${{ matrix.series }}"
             Mode = "Upload"
@@ -351,6 +425,8 @@ jobs:
             KbId = 793
             JsonSplitSize = 1000
             PlaceholderPolicy = "${{ needs.prepare.outputs.placeholder_policy }}"
+            RunAlfredBeforeUpload = $true
+            UseAlfredProxy = $useProxy
           }
 
           if ("${{ needs.prepare.outputs.skip_drivers }}" -eq "true") {
