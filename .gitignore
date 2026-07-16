@@ -17,8 +17,6 @@ Thumbs.db
 GitHub_repos/
 actions-runner/
 actions-runner.zip
-actions-runner/
-actions-runner.zip
 
 # Generated pipeline artifacts (can exceed GitHub limits)
 data/raw_*.json
