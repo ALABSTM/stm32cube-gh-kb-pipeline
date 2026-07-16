@@ -315,6 +315,7 @@ jobs:
             JsonSplitSize = 1000
             PlaceholderPolicy = "${{ needs.prepare.outputs.placeholder_policy }}"
             RunAlfredBeforeUpload = $true
+            UseAlfredProxy = $true
           }
 
           if ("${{ needs.prepare.outputs.skip_drivers }}" -eq "true") {

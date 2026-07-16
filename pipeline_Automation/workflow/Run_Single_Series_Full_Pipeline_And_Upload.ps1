@@ -44,7 +44,8 @@ param(
     [string]$PlaceholderPolicy = "Fail",
     [switch]$SkipAlfredEnrichment,
     [switch]$SkipPlaceholderGate,
-    [switch]$RunAlfredBeforeUpload
+    [switch]$RunAlfredBeforeUpload,
+    [switch]$UseAlfredProxy
 )
 
 Set-StrictMode -Version Latest
@@ -345,17 +346,25 @@ function Invoke-AlfredIssueImageDescriptionsForSeries {
     }
 
     foreach ($file in $issueImageFiles) {
-        Invoke-Step "Alfred issue image descriptions for $($file.Directory.Parent.Name)" @(
+        $alfredArgs = @(
             "pipeline_Automation/alfred/enrich_json_images_with_alfred.py",
             "--input", $file.FullName,
             "--remote-user", $RemoteUser,
             "--inplace"
         )
+        if ($UseAlfredProxy) {
+            $alfredArgs += "--use-proxy"
+        }
+        Invoke-Step "Alfred issue image descriptions for $($file.Directory.Parent.Name)" $alfredArgs
     }
 }
 
 function Invoke-AlfredPdfFigureDescriptions {
-    Invoke-Step "Alfred PDF figure descriptions" @("pipeline_Automation/alfred/enrich_pdf_figures_with_alfred.py")
+    $args = @("pipeline_Automation/alfred/enrich_pdf_figures_with_alfred.py")
+    if ($UseAlfredProxy) {
+        $args += "--use-proxy"
+    }
+    Invoke-Step "Alfred PDF figure descriptions" $args
 }
 
 function Invoke-PlaceholderGate {
