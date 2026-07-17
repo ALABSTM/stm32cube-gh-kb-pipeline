@@ -376,7 +376,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: st-ready-${{ matrix.series }}-${{ github.run_number }}
-          path: .
+          path: datasets/07_delivery/st_ready/by_series/
 
       - name: Alfred connectivity preflight
         id: alfred_net_check
