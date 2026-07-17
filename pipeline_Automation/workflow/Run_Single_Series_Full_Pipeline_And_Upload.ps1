@@ -459,7 +459,7 @@ function Invoke-PreUploadAlfredFinalize {
         throw "Config not found: $configPath"
     }
     if (-not (Test-Path -LiteralPath $deliveryRoot)) {
-        throw "Delivery root not found for ${Series}: $deliveryRoot"
+        throw "Delivery root not found for ${Series}: $deliveryRoot. Upload mode requires pre-generated delivery artifacts. Run -Mode Full, or run -Mode Prepare then upload from the same workflow run/artifacts."
     }
 
     $env:STM32CUBE_CONFIG = $configPath
@@ -851,7 +851,7 @@ function Save-DatasourceIdsSnapshot {
 
 function Invoke-UploadSeries {
     if (-not (Test-Path -LiteralPath $deliveryRoot)) {
-        throw "Delivery root not found for ${Series}: $deliveryRoot. Run with -Mode Prepare first."
+        throw "Delivery root not found for ${Series}: $deliveryRoot. Upload mode requires pre-generated delivery artifacts. Run with -Mode Full, or run with -Mode Prepare then upload from the same workflow run/artifacts."
     }
 
     # Reuse datasource IDs from the previous run when available.
@@ -899,7 +899,7 @@ function Invoke-UploadSeries {
         -LinkLabelTemplate "{{repo}} issue #{{issue_number}} - {{issue_title}}"
     $filesParams = New-ProcessorParamsArg `
         -RootTagPath "files" `
-        -LinkUrlTemplate "{{github_url}}" `
+        -LinkUrlTemplate "https://github.com/STMicroelectronics/{{repo}}/search?q={{path}}&type=code" `
         -LinkLabelTemplate "{{repo}} {{file_type}} - {{path}}"
     $diagnosticParams = New-ProcessorParamsArg `
         -RootTagPath "diagnostic_cards" `
