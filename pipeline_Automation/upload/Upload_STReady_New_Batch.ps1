@@ -30,7 +30,7 @@ param(
     [string]$DiagnosticRootTagPath = "diagnostic_cards",
     [string]$ResolverRootTagPath = "resolver_cases",
     [string]$IssuesLinkUrlTemplate = "{{github_url}}",
-    [string]$FilesLinkUrlTemplate = "{{github_url}}",
+    [string]$FilesLinkUrlTemplate = "https://github.com/STMicroelectronics/{{repo}}/search?q={{path}}&type=code",
     [string]$DiagnosticLinkUrlTemplate = "{{externalURL}}",
     [string]$ResolverLinkUrlTemplate = "{{externalURL}}",
     [string]$IssuesLinkLabelTemplate = "{{repo}} issue #{{issue_number}} - {{issue_title}}",
