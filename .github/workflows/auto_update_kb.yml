@@ -249,6 +249,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          clean: false
 
       - name: GitHub API rate-limit preflight
         shell: powershell
@@ -343,6 +345,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          clean: false
 
       - name: Enable long paths (Windows)
         shell: powershell
