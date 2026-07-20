@@ -411,6 +411,7 @@ jobs:
             ExistingDatasourceMode = "${{ needs.prepare.outputs.existing_datasource_mode }}"
             RemoteUser = "${{ secrets.ST_REMOTE_USER }}"
             KbId = 793
+            PythonExe = $env:RUNNER_PYTHON_EXE
             JsonSplitSize = 1000
             PlaceholderPolicy = "${{ needs.prepare.outputs.placeholder_policy }}"
             RunAlfredBeforeUpload = $true

@@ -102,7 +102,8 @@ function Invoke-Step {
 
     Write-Host "`n===== $Label =====" -ForegroundColor Cyan
     Write-Host ($Args -join " ") -ForegroundColor DarkGray
-    & $PythonExe @Args
+    $pythonArgs = @("-u") + $Args
+    & $PythonExe @pythonArgs
     if ($LASTEXITCODE -ne 0) {
         throw "$Label failed with exit code $LASTEXITCODE"
     }
@@ -123,7 +124,8 @@ function Invoke-CapturedPython {
     $tmpErr = [System.IO.Path]::GetTempFileName()
 
     try {
-        $argLine = ($Args | ForEach-Object {
+        $pythonArgs = @("-u") + $Args
+        $argLine = ($pythonArgs | ForEach-Object {
             if ($_ -match '[\s"]') {
                 '"' + ($_ -replace '"', '\\"') + '"'
             } else {
