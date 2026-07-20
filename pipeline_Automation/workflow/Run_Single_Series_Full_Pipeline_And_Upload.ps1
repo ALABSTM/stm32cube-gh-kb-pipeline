@@ -520,10 +520,6 @@ function Invoke-UploadJsonNew {
         "--files", (Resolve-Path $FilePath).Path
     )
 
-    if ($ExistingDatasourceMode -eq "Replace") {
-        $args += "--fail-on-existing-files"
-    }
-
     $output = Invoke-CapturedPython "Create datasource and upload $Label" $args
     $id = Get-DatasourceIdFromOutput $output
     if ($null -eq $id) {
@@ -612,10 +608,6 @@ function Invoke-UploadJsonAdd {
         "--timeout", "$uploadTimeoutSeconds",
         "--files", (Resolve-Path $FilePath).Path
     )
-
-    if ($ExistingDatasourceMode -eq "Replace") {
-        $args += "--fail-on-existing-files"
-    }
 
     try {
         Invoke-CapturedPython "Upload $Label into existing DS#$DatasourceId" $args | Out-Null
@@ -761,9 +753,6 @@ function Invoke-UploadSubrepoDeliveryAdd {
             "--timeout", "$uploadTimeoutSeconds",
             "--files", $file.FullName
         )
-        if ($ExistingDatasourceMode -eq "Replace") {
-            $args += "--fail-on-existing-files"
-        }
         Invoke-CapturedPython "Upload driver/subrepo $($file.Directory.Parent.Name) $Label into ${Series} DS#$effectiveDatasourceId" $args | Out-Null
     }
 }
