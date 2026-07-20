@@ -296,17 +296,61 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def resolve_existing_input(path_arg: Path) -> Path:
+    if path_arg.is_absolute() and path_arg.exists():
+        return path_arg
+
+    script_dir = Path(__file__).resolve().parent
+    repo_root = script_dir.parents[1]
+    docs_dir = repo_root / "docs"
+
+    candidates = [
+        Path.cwd() / path_arg,
+        script_dir / path_arg,
+        docs_dir / path_arg,
+        repo_root / path_arg,
+    ]
+
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+
+    return path_arg
+
+
+def resolve_output_path(path_arg: Path) -> Path:
+    if path_arg.is_absolute():
+        return path_arg
+
+    script_dir = Path(__file__).resolve().parent
+    repo_root = script_dir.parents[1]
+    docs_dir = repo_root / "docs"
+
+    # If user provides only filename, default output under docs/.
+    if len(path_arg.parts) == 1:
+        return docs_dir / path_arg
+
+    # Otherwise keep relative to current working directory.
+    return (Path.cwd() / path_arg).resolve()
+
+
 def main() -> None:
     args = parse_args()
-    if not args.input.exists():
-        raise FileNotFoundError(f"Input PPTX not found: {args.input}")
+    resolved_input = resolve_existing_input(args.input)
+    resolved_output = resolve_output_path(args.output)
+
+    if not resolved_input.exists():
+        raise FileNotFoundError(
+            "Input PPTX not found. Tried path: "
+            f"{args.input}. You can pass an absolute path or one under docs/."
+        )
 
     build_updated_presentation(
-        input_pptx=args.input,
-        output_pptx=args.output,
+        input_pptx=resolved_input,
+        output_pptx=resolved_output,
         diagrams_root=args.diagrams_root,
     )
-    print(f"Updated PPTX written to: {args.output}")
+    print(f"Updated PPTX written to: {resolved_output}")
 
 
 if __name__ == "__main__":
