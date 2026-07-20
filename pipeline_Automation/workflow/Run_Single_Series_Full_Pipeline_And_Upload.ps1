@@ -833,7 +833,11 @@ function Save-DatasourceIdsSnapshot {
     }
 
     $Ids | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $idsOutput -Encoding UTF8
-    Sync-GlobalConfigDatasourceIds -Ids $Ids
+    if ($env:GITHUB_ACTIONS -eq "true") {
+        Write-Host "[UPLOAD] Skipping shared/config/config_all_series.json update in GitHub Actions (runner-local state must stay immutable)." -ForegroundColor DarkYellow
+    } else {
+        Sync-GlobalConfigDatasourceIds -Ids $Ids
+    }
 
     if ($Reason) {
         Write-Host "[UPLOAD] Datasource ID registry updated ($Reason): $idsOutput" -ForegroundColor DarkCyan
@@ -849,7 +853,13 @@ function Invoke-UploadSeries {
 
     # Reuse datasource IDs from the previous run when available.
     # Existing datasources are reused. Refresh policy is controlled by -ExistingDatasourceMode.
-    if (Test-Path -LiteralPath $idsOutput) {
+    $reuseLocalSnapshot = $true
+    if ($env:GITHUB_ACTIONS -eq "true") {
+        $reuseLocalSnapshot = $false
+        Write-Host "[UPLOAD] Ignoring runner-local datasource snapshot in GitHub Actions: $idsOutput" -ForegroundColor DarkYellow
+    }
+
+    if ($reuseLocalSnapshot -and (Test-Path -LiteralPath $idsOutput)) {
         try {
             $saved = Get-Content -LiteralPath $idsOutput -Raw | ConvertFrom-Json
             if ($null -ne $saved) {
