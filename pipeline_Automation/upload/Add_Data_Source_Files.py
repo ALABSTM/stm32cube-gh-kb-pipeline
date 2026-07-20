@@ -415,6 +415,21 @@ def api_error_info(response_json: Any) -> tuple[int | None, str]:
     return numeric_code, message
 
 
+def is_timeout_like_success_payload(response_json: Any) -> bool:
+    if not isinstance(response_json, dict):
+        return False
+
+    error_code = response_json.get("errorCode")
+    if error_code not in (None, 0, "0"):
+        return False
+
+    message = str(response_json.get("message") or "").strip().lower()
+    if not message:
+        return False
+
+    return message in {"request timeout", "timeout"} or "request timeout" in message
+
+
 def is_non_retryable_api_rejection(error_code: int | None, message: str) -> bool:
     if error_code is None:
         return False
@@ -1404,6 +1419,14 @@ def run_datasource_request(
 
                             api_error_code, api_error_message = api_error_info(data)
                             if api_error_code is None:
+                                if is_timeout_like_success_payload(data):
+                                    if verbose:
+                                        print(
+                                            "API timeout-like response despite HTTP 200; "
+                                            "retrying with alternate payload/retry loop. "
+                                            f"message={str(data.get('message') or '')}"
+                                        )
+                                    continue
                                 return data
 
                             last_api_error_code = api_error_code

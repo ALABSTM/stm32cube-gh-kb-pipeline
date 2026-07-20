@@ -89,6 +89,8 @@ $deliveryRoot = "datasets/07_delivery/st_ready/by_series/$slug"
 $uploader = "pipeline_Automation/upload/Add_Data_Source_Files.py"
 $idsOutput = Join-Path $deliveryRoot "upload_datasource_ids_$slug.json"
 $globalConfigPath = "shared/config/config_all_series.json"
+$uploadMaxRetries = 5
+$uploadTimeoutSeconds = 300
 
 function Invoke-Step {
     param(
@@ -513,8 +515,8 @@ function Invoke-UploadJsonNew {
         "--json-split-size", "$JsonSplitSize",
         "--existing-datasource-policy", $ExistingDatasourceMode.ToLowerInvariant(),
         "--skip-auth-precheck",
-        "--max-retries", "3",
-        "--timeout", "120",
+        "--max-retries", "$uploadMaxRetries",
+        "--timeout", "$uploadTimeoutSeconds",
         "--files", (Resolve-Path $FilePath).Path
     )
 
@@ -570,8 +572,8 @@ function Invoke-UploadJsonAdd {
             "--remote-user", $RemoteUser,
             "--delete-not-found-policy", "ignore",
             "--skip-auth-precheck",
-            "--max-retries", "3",
-            "--timeout", "120"
+            "--max-retries", "$uploadMaxRetries",
+            "--timeout", "$uploadTimeoutSeconds"
         )
 
         $deleteOutput = Invoke-CapturedPython "Clear existing content for $Label in DS#$DatasourceId" $deleteArgs
@@ -606,8 +608,8 @@ function Invoke-UploadJsonAdd {
         "--empty-json-policy", "skip",
         "--json-split-size", "$JsonSplitSize",
         "--skip-auth-precheck",
-        "--max-retries", "3",
-        "--timeout", "120",
+        "--max-retries", "$uploadMaxRetries",
+        "--timeout", "$uploadTimeoutSeconds",
         "--files", (Resolve-Path $FilePath).Path
     )
 
@@ -755,8 +757,8 @@ function Invoke-UploadSubrepoDeliveryAdd {
             "--empty-json-policy", "skip",
             "--json-split-size", "$JsonSplitSize",
             "--skip-auth-precheck",
-            "--max-retries", "3",
-            "--timeout", "120",
+            "--max-retries", "$uploadMaxRetries",
+            "--timeout", "$uploadTimeoutSeconds",
             "--files", $file.FullName
         )
         if ($ExistingDatasourceMode -eq "Replace") {
@@ -877,6 +879,39 @@ function Invoke-UploadSeries {
             }
         } catch {
             Write-Host "[WARN] Could not parse saved datasource IDs from $idsOutput. Proceeding without reuse." -ForegroundColor Yellow
+        }
+    }
+
+    # Fallback to shared/config/config_all_series.json when no local snapshot IDs are available.
+    if ((($IssuesDatasourceId -le 0) -or ($FilesDatasourceId -le 0) -or ($DiagnosticDatasourceId -le 0) -or ($ResolverDatasourceId -le 0)) -and (Test-Path -LiteralPath $globalConfigPath)) {
+        try {
+            $cfg = Get-Content -LiteralPath $globalConfigPath -Raw | ConvertFrom-Json
+            $seriesEntry = $null
+            if ($null -ne $cfg -and $null -ne $cfg.kb_datasource_ids) {
+                $prop = $cfg.kb_datasource_ids.PSObject.Properties[$seriesRepo]
+                if ($null -ne $prop) {
+                    $seriesEntry = $prop.Value
+                }
+            }
+
+            if ($null -ne $seriesEntry) {
+                if (($IssuesDatasourceId -le 0) -and ($seriesEntry.issues -as [int]) -gt 0) {
+                    $IssuesDatasourceId = [int]$seriesEntry.issues
+                }
+                if (($FilesDatasourceId -le 0) -and ($seriesEntry.files -as [int]) -gt 0) {
+                    $FilesDatasourceId = [int]$seriesEntry.files
+                }
+                if (($DiagnosticDatasourceId -le 0) -and ($seriesEntry.diagnostic -as [int]) -gt 0) {
+                    $DiagnosticDatasourceId = [int]$seriesEntry.diagnostic
+                }
+                if (($ResolverDatasourceId -le 0) -and ($seriesEntry.resolver -as [int]) -gt 0) {
+                    $ResolverDatasourceId = [int]$seriesEntry.resolver
+                }
+
+                Write-Host "[UPLOAD] Reusing datasource IDs from $globalConfigPath for ${seriesRepo} when available." -ForegroundColor DarkCyan
+            }
+        } catch {
+            Write-Host "[WARN] Could not parse datasource IDs from $globalConfigPath. Proceeding without global fallback." -ForegroundColor Yellow
         }
     }
 
