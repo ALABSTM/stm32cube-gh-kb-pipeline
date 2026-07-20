@@ -6,7 +6,7 @@
 \chapter{Configuration de la Plateforme ST ChatGPT}
 \label{chap:configuration}
 
-Ce chapitre détaille la configuration de la persona \textbf{ST GitHub Analyzer} sur la plateforme ST ChatGPT, les justifications de chaque paramètre, et l'évolution incrémentale du Quality Index qui a guidé nos choix.
+Ce chapitre détaille la configuration de la persona \textbf{ST GitHub Analyzer} sur la plateforme ST ChatGPT, les justifications de chaque paramètre, l'automatisation CI/CD de la mise à jour KB, et l'évolution incrémentale du Quality Index qui a guidé nos choix.
 
 \section{Architecture de la Plateforme}
 
@@ -327,6 +327,101 @@ Files V3 (nettoyage) & Réduire le bruit des CMSIS headers & +3 estimé \\
 PDF descriptions & Rendre les figures PDF cherchables & +1 estimé \\
 \bottomrule
 \end{longtable}
+
+\section{Automatisation CI/CD et Opérations}
+\label{sec:automation_cicd}
+
+L'objectif de l'automatisation est de garantir une mise à jour \textbf{reproductible}, \textbf{traçable} et \textbf{sûre} de la KB \#793, sans dépendre d'interventions manuelles ad hoc. L'architecture retenue sépare l'orchestration cloud (GitHub Actions) et l'exécution réseau ST (runner self-hosted), indispensable pour atteindre l'API interne ST AI Bridge.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{06_cicd_automation.png}
+\caption{Automatisation CI/CD : orchestration GitHub Actions et upload KB via runner self-hosted}
+\label{fig:cicd_automation}
+\end{figure}
+
+\subsection{Principe d'Architecture}
+
+Le flux d'exécution suit trois phases :
+\begin{enumerate}
+  \item \textbf{Prepare} : synchronisation des repos, exécution du pipeline, enrichissements Alfred, génération des exports ST-ready.
+  \item \textbf{Validate} : validation des schémas et contrôle des placeholders pour bloquer les livrables incomplets.
+  \item \textbf{Upload} : création/alimentation des datasources et publication des artefacts parent + drivers dans la KB.
+\end{enumerate}
+
+Cette structuration explicite réduit le risque opérationnel : une erreur de qualité en phase \textit{Validate} arrête la publication avant impact utilisateur.
+
+\subsection{Workflow GitHub Actions}
+
+Le workflow principal \texttt{.github/workflows/auto\_update\_kb.yml} implémente :
+\begin{itemize}
+  \item des déclencheurs \textbf{planifiés} et \textbf{manuels} ;
+  \item une préparation des entrées (liste des séries, mode, politiques d'exécution) ;
+  \item un \textbf{runner-check} bloquant qui vérifie la disponibilité d'un runner \texttt{self-hosted} ;
+  \item une exécution par série avec traçabilité des artefacts ;
+  \item un résumé d'exécution en cas de succès ou d'échec.
+\end{itemize}
+
+Le contrôle de disponibilité du runner évite les faux positifs : si aucun runner ST n'est disponible, le workflow échoue explicitement avec un message d'exploitation, plutôt que de terminer en vert sans traitement.
+
+\subsection{Script Orchestrateur Unifié}
+
+La brique centrale est \texttt{pipeline\_Automation/workflow/Run\_Single\_Series\_Full\_Pipeline\_And\_Upload.ps1}. Elle unifie la chaîne complète pour une série et fournit trois modes d'exploitation :
+
+\begin{longtable}{p{2.8cm}p{9.4cm}}
+\toprule
+\textbf{Mode} & \textbf{Comportement} \\
+\midrule
+\texttt{Full} & Exécute \textit{Prepare + Upload} en one-shot (mode standard production). \\
+\texttt{Prepare} & Génère et valide les artefacts localement sans publication KB (mode debug et pré-validation). \\
+\texttt{Upload} & Publie uniquement des artefacts déjà préparés (mode reprise après incident réseau/API). \\
+\bottomrule
+\end{longtable}
+
+Commande opérationnelle de référence :
+\begin{lstlisting}[language=bash]
+.\pipeline_Automation\workflow\Run_Single_Series_Full_Pipeline_And_Upload.ps1 \
+  -Series H7 -Mode Full
+\end{lstlisting}
+
+\subsection{Garde-fous Qualité Avant Publication}
+
+L'automatisation intègre deux verrous critiques :
+\begin{enumerate}
+  \item \textbf{Validation schéma} : exécution de \texttt{validate\_schemas.py} pour garantir la conformité structurelle des JSON.
+  \item \textbf{Placeholder gate} : rejet des livrables contenant encore \texttt{[IMAGE DESCRIPTION UNAVAILABLE]} ou des marqueurs PDF non résolus.
+\end{enumerate}
+
+La politique \texttt{PlaceholderPolicy} est paramétrable (\texttt{Fail}, \texttt{Warn}, \texttt{Off}), mais \texttt{Fail} est la valeur recommandée en production pour préserver la qualité perçue des réponses.
+
+\subsection{Stratégie d'Upload et Traçabilité}
+
+L'upload vers KB \#793 est réalisé via \texttt{Add\_Data\_Source\_Files.py} selon deux cas :
+\begin{itemize}
+  \item \textbf{operation new} : création d'une datasource si aucun ID n'est fourni ;
+  \item \textbf{operation add} : ajout dans une datasource existante quand l'ID est connu.
+\end{itemize}
+
+Le script publie les artefacts du repo parent puis ajoute les sorties \texttt{drivers/*} dans les datasources parentes correspondantes (issues, files, resolver, diagnostic). Cette approche maintient une séparation logique par série tout en conservant une base unifiée côté exploitation.
+
+Les IDs effectifs sont sauvegardés dans :
+\begin{lstlisting}[language=bash]
+datasets/07_delivery/st_ready/by_series/<serie>/upload_datasource_ids_<serie>.json
+\end{lstlisting}
+
+et synchronisés dans \texttt{shared/config/config\_all\_series.json} pour assurer la continuité entre les exécutions.
+
+\subsection{Runbook Opérateur (Production)}
+
+Le runbook recommandé est :
+\begin{enumerate}
+  \item Lancer d'abord \texttt{Prepare} sur la série cible.
+  \item Vérifier les \texttt{summary\_*.json}, la validation schéma et l'absence de placeholders.
+  \item Lancer \texttt{Full} (ou \texttt{Upload} si les artefacts sont déjà prêts).
+  \item Contrôler les IDs sauvegardés et la cohérence des datasources créées/alimentées.
+\end{enumerate}
+
+Cette discipline d'exploitation est essentielle pour les soutenances internes : elle permet de démontrer à la fois la robustesse technique et la gouvernance de la chaîne de livraison.
 
 \section{Couverture Actuelle et Future}
 \label{sec:couverture}

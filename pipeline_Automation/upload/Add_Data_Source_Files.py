@@ -1679,42 +1679,10 @@ def run_new_request_with_followup_add(
         )
 
         if existing_datasource_id is None:
-            if existing_datasource_policy == "replace":
-                raise RuntimeError(
-                    "Datasource name conflict detected in replace mode, but existing datasource ID "
-                    f"could not be resolved for '{conflict_name}'. Aborting to avoid duplicate datasource creation. "
-                    "Retry after a short delay or resolve the duplicate manually in KB Management."
-                )
-
-            timestamp_suffix = int(time.time())
-            auto_name = f"{conflict_name}_{timestamp_suffix}"
-            retry_payload = dict(datasource_payload)
-            retry_payload["name"] = auto_name
-
-            if verbose:
-                print(
-                    "Datasource exists but ID could not be resolved from kb-list; "
-                    f"retrying creation with auto name '{auto_name}' (add policy)."
-                )
-
-            create_response = run_datasource_request(
-                endpoint=endpoint,
-                api_key=api_key,
-                client_app_name=client_app_name,
-                service_name=service_name,
-                remote_user=remote_user,
-                kb_id=kb_id,
-                datasource_payload=retry_payload,
-                file_paths=[first_path],
-                request_types=request_types,
-                request_part_names=request_part_names,
-                payload_modes=payload_modes,
-                timestamp_modes=timestamp_modes,
-                max_retries=max_retries,
-                timeout_seconds=timeout_seconds,
-                verify_ssl=verify_ssl,
-                proxies=proxies,
-                verbose=verbose,
+            raise RuntimeError(
+                "Datasource name conflict detected, but existing datasource ID "
+                f"could not be resolved for '{conflict_name}'. Aborting to avoid duplicate datasource creation. "
+                "Retry after a short delay or resolve the duplicate manually in KB Management."
             )
             created_datasource_name_used = auto_name
         else:
