@@ -704,6 +704,10 @@ def extract_existing_filename(message: str) -> str | None:
     return match.group(1)
 
 
+def is_split_part_filename(filename: str) -> bool:
+    return re.search(r"__part\d+\.json$", filename or "", flags=re.IGNORECASE) is not None
+
+
 def resolve_input_file_path(raw_item: str) -> Path:
     raw_path = Path(raw_item).expanduser()
 
@@ -1561,11 +1565,16 @@ def run_add_request_skip_existing_files(
         except ApiRejectedError as exc:
             if is_existing_file_conflict(exc.error_code, exc.api_message):
                 existing_name = extract_existing_filename(exc.api_message) or path.name
-                if fail_on_existing_files:
+                if fail_on_existing_files and not is_split_part_filename(existing_name):
                     raise RuntimeError(
                         "Upload blocked: existing file conflict detected for "
                         f"'{existing_name}' while strict mode is enabled. "
                         "In replace mode this usually means datasource clear did not complete as expected."
+                    )
+                if fail_on_existing_files and verbose and is_split_part_filename(existing_name):
+                    print(
+                        "Strict mode: tolerated existing conflict for split upload part "
+                        f"'{existing_name}' (idempotent retry scenario)."
                     )
                 skipped_existing_files.append(existing_name)
                 if verbose:
@@ -2265,10 +2274,7 @@ def main() -> None:
                 verify_ssl=args.verify_ssl,
                 proxies=proxies,
                 existing_datasource_policy=args.existing_datasource_policy,
-                fail_on_existing_files=(
-                    args.fail_on_existing_files
-                    or args.existing_datasource_policy == "replace"
-                ),
+                fail_on_existing_files=args.fail_on_existing_files,
                 verbose=args.verbose,
             )
         else:
