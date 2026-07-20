@@ -11,6 +11,21 @@ python docs/scripts/generate_atelier_pratique_pptx.py --output docs/Atelier_Prat
 Sortie attendue :
 `docs/Atelier_Pratique_Pipeline_STM32Cube.pptx`
 
+Pour mettre a jour directement la presentation atelier F1 avec les nouvelles slides
+automation + formules d'evaluation Alfred/persona :
+
+```powershell
+python docs/scripts/update_stm32cube_workshopf1_pptx.py --input docs/STM32Cube_worshopF1.pptx --output docs/STM32Cube_worshopF1.pptx
+```
+
+Ce script fait une finalisation "in-place" de la presentation existante :
+- remplit la diapo automation existante (au lieu d'ajouter une nouvelle diapo),
+- ajoute des encadres de reference formules en bas des diapos evaluation/persona,
+- supprime les anciennes diapos auto-ajoutees (Plan mise a jour / Formules globales) si presentes.
+
+Optionnel : si le schema automation a ete exporte en PNG, placez-le sous
+`docs/diagrams/presentation/exported/07_automation_series_pipeline.png`.
+
 ## Objectif
 
 Ce guide permet à l'équipe de **lancer, comprendre et maintenir** le pipeline de prétraitement de bout en bout :  

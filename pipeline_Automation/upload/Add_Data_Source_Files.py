@@ -1679,6 +1679,13 @@ def run_new_request_with_followup_add(
         )
 
         if existing_datasource_id is None:
+            if existing_datasource_policy == "replace":
+                raise RuntimeError(
+                    "Datasource name conflict detected in replace mode, but existing datasource ID "
+                    f"could not be resolved for '{conflict_name}'. Aborting to avoid duplicate datasource creation. "
+                    "Retry after a short delay or resolve the duplicate manually in KB Management."
+                )
+
             timestamp_suffix = int(time.time())
             auto_name = f"{conflict_name}_{timestamp_suffix}"
             retry_payload = dict(datasource_payload)
@@ -1687,7 +1694,7 @@ def run_new_request_with_followup_add(
             if verbose:
                 print(
                     "Datasource exists but ID could not be resolved from kb-list; "
-                    f"retrying creation with auto name '{auto_name}'."
+                    f"retrying creation with auto name '{auto_name}' (add policy)."
                 )
 
             create_response = run_datasource_request(
