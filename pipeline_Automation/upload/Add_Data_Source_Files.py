@@ -1900,6 +1900,89 @@ def run_new_request_with_followup_add(
                     proxies=proxies,
                     verbose=verbose,
                 )
+
+                # Delete removes the datasource entity; create it again with the first file,
+                # then append remaining files to the new datasource ID.
+                recreated_response = run_datasource_request(
+                    endpoint=endpoint,
+                    api_key=api_key,
+                    client_app_name=client_app_name,
+                    service_name=service_name,
+                    remote_user=remote_user,
+                    kb_id=kb_id,
+                    datasource_payload=datasource_payload,
+                    file_paths=[first_path],
+                    request_types=request_types,
+                    request_part_names=request_part_names,
+                    payload_modes=payload_modes,
+                    timestamp_modes=timestamp_modes,
+                    max_retries=max_retries,
+                    timeout_seconds=timeout_seconds,
+                    verify_ssl=verify_ssl,
+                    proxies=proxies,
+                    verbose=verbose,
+                )
+
+                recreated_id_raw = recreated_response.get("datasource") if isinstance(recreated_response, dict) else None
+                try:
+                    recreated_id = int(recreated_id_raw)
+                except Exception as exc:
+                    raise RuntimeError(
+                        "Datasource recreated after replace, but response does not include a numeric datasource ID: "
+                        f"{recreated_id_raw!r}"
+                    ) from exc
+
+                final_recreated = dict(recreated_response)
+                uploaded_files_recreated: list[str] = [first_path.name]
+                skipped_existing_recreated: list[str] = []
+
+                remaining_paths = file_paths[1:]
+                if remaining_paths:
+                    add_datasource_payload: dict[str, Any] = {"id": recreated_id}
+                    if requested_processor:
+                        add_datasource_payload["processor"] = requested_processor
+                    if requested_processor_params:
+                        add_datasource_payload["processorParams"] = requested_processor_params
+
+                    add_response = run_add_request_skip_existing_files(
+                        endpoint=endpoint,
+                        api_key=api_key,
+                        client_app_name=client_app_name,
+                        service_name=service_name,
+                        remote_user=remote_user,
+                        kb_id=kb_id,
+                        datasource_payload=add_datasource_payload,
+                        file_paths=remaining_paths,
+                        request_types=[DEFAULT_TYPE_ADD],
+                        request_part_names=request_part_names,
+                        payload_modes=payload_modes,
+                        timestamp_modes=timestamp_modes,
+                        max_retries=max_retries,
+                        timeout_seconds=timeout_seconds,
+                        verify_ssl=verify_ssl,
+                        proxies=proxies,
+                        fail_on_existing_files=fail_on_existing_files,
+                        verbose=verbose,
+                    )
+
+                    uploaded_files_recreated.extend(add_response.get("uploaded_files", []))
+                    skipped_existing_recreated.extend(add_response.get("skipped_existing_files", []))
+
+                final_recreated["datasource"] = recreated_id
+                final_recreated["uploaded_files"] = uploaded_files_recreated
+                if created_datasource_name_used:
+                    final_recreated["datasource_name_used"] = created_datasource_name_used
+                if skipped_existing_recreated:
+                    final_recreated["skipped_existing_files"] = skipped_existing_recreated
+                final_recreated.setdefault(
+                    "message",
+                    (
+                        f'Datasource "{conflict_name}" already existed; old datasource was deleted '
+                        "and replaced with a fresh datasource upload (replace mode)."
+                    ),
+                )
+                return final_recreated
+
             elif verbose:
                 print(
                     "Existing datasource policy=add: appending files to existing datasource content "
