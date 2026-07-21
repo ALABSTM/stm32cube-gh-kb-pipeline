@@ -495,6 +495,29 @@ def find_kb_entry_from_kb_list(kb_list_response: dict[str, Any], kb_id: int) -> 
     if len(kbs) == 1 and isinstance(kbs[0], dict):
         return kbs[0]
 
+    # Fallback: some API variants wrap payloads in nested objects.
+    stack: list[Any] = [kb_list_response]
+    while stack:
+        node = stack.pop()
+        if isinstance(node, dict):
+            nested_kbs = node.get("kbs")
+            if isinstance(nested_kbs, list):
+                for kb in nested_kbs:
+                    if not isinstance(kb, dict):
+                        continue
+                    try:
+                        if int(kb.get("id")) == int(kb_id):
+                            return kb
+                    except Exception:
+                        continue
+            for value in node.values():
+                if isinstance(value, (dict, list)):
+                    stack.append(value)
+        elif isinstance(node, list):
+            for item in node:
+                if isinstance(item, (dict, list)):
+                    stack.append(item)
+
     return None
 
 
@@ -546,6 +569,31 @@ def find_datasource_entry_from_kb_list(
             ds_name = str(ds.get("name") or "").strip()
             if ds_name.lower() == wanted_lower:
                 return ds
+
+    # Fallback: scan the full response in case dataSources are exposed in a different envelope.
+    if datasource_name and datasource_name.strip():
+        wanted_exact = datasource_name.strip()
+        wanted_lower = wanted_exact.lower()
+        stack: list[Any] = [kb_list_response]
+        while stack:
+            node = stack.pop()
+            if isinstance(node, dict):
+                ds_name = str(node.get("name") or "").strip()
+                ds_id = node.get("id")
+                if ds_name and ds_id is not None:
+                    try:
+                        int(ds_id)
+                        if ds_name == wanted_exact or ds_name.lower() == wanted_lower:
+                            return node
+                    except Exception:
+                        pass
+                for value in node.values():
+                    if isinstance(value, (dict, list)):
+                        stack.append(value)
+            elif isinstance(node, list):
+                for item in node:
+                    if isinstance(item, (dict, list)):
+                        stack.append(item)
 
     return None
 
