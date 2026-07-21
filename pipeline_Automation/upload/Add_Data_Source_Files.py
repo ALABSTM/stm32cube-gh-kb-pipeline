@@ -1751,14 +1751,66 @@ def run_new_request_with_followup_add(
                 if existing_datasource_id is not None:
                     break
 
+        fallback_created = False
         if existing_datasource_id is None:
+            if existing_datasource_policy == "replace":
+                if verbose:
+                    print(
+                        "Conflict persists with unresolved datasource ID; attempting replace fallback "
+                        f"by deleting datasource by name '{conflict_name}' and retrying creation."
+                    )
+                try:
+                    run_datasource_request(
+                        endpoint=endpoint,
+                        api_key=api_key,
+                        client_app_name=client_app_name,
+                        service_name=service_name,
+                        remote_user=remote_user,
+                        kb_id=kb_id,
+                        datasource_payload={"name": conflict_name},
+                        file_paths=[],
+                        request_types=[DEFAULT_TYPE_DELETE],
+                        request_part_names=request_part_names,
+                        payload_modes=payload_modes,
+                        timestamp_modes=timestamp_modes,
+                        max_retries=max_retries,
+                        timeout_seconds=timeout_seconds,
+                        verify_ssl=verify_ssl,
+                        proxies=proxies,
+                        verbose=verbose,
+                    )
+
+                    create_response = run_datasource_request(
+                        endpoint=endpoint,
+                        api_key=api_key,
+                        client_app_name=client_app_name,
+                        service_name=service_name,
+                        remote_user=remote_user,
+                        kb_id=kb_id,
+                        datasource_payload=datasource_payload,
+                        file_paths=[first_path],
+                        request_types=request_types,
+                        request_part_names=request_part_names,
+                        payload_modes=payload_modes,
+                        timestamp_modes=timestamp_modes,
+                        max_retries=max_retries,
+                        timeout_seconds=timeout_seconds,
+                        verify_ssl=verify_ssl,
+                        proxies=proxies,
+                        verbose=verbose,
+                    )
+                    fallback_created = True
+                except Exception:
+                    existing_datasource_id = None
+
+        if (existing_datasource_id is None) and (not fallback_created):
             raise RuntimeError(
                 "Datasource name conflict detected, but existing datasource ID "
                 f"could not be resolved for '{conflict_name}' after retries. "
                 "Aborting to avoid duplicate datasource creation. "
                 "Retry later or resolve the duplicate manually in KB Management."
             )
-        else:
+        if existing_datasource_id is not None:
             if verbose:
                 print(
                     "Datasource already exists by name; switching to add mode on existing ID "
