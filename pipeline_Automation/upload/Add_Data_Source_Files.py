@@ -1679,12 +1679,37 @@ def run_new_request_with_followup_add(
         )
 
         if existing_datasource_id is None:
+            resolve_attempts = 5
+            resolve_delay_seconds = 3
+            for attempt in range(2, resolve_attempts + 1):
+                if verbose:
+                    print(
+                        "Datasource name conflict detected but ID unresolved; retrying lookup "
+                        f"({attempt}/{resolve_attempts}) after {resolve_delay_seconds}s..."
+                    )
+                time.sleep(resolve_delay_seconds)
+                existing_datasource_id = resolve_existing_datasource_id_by_name(
+                    endpoint=endpoint,
+                    api_key=api_key,
+                    client_app_name=client_app_name,
+                    service_name=service_name,
+                    kb_id=kb_id,
+                    datasource_name=conflict_name,
+                    timeout_seconds=timeout_seconds,
+                    verify_ssl=verify_ssl,
+                    proxies=proxies,
+                    verbose=verbose,
+                )
+                if existing_datasource_id is not None:
+                    break
+
+        if existing_datasource_id is None:
             raise RuntimeError(
                 "Datasource name conflict detected, but existing datasource ID "
-                f"could not be resolved for '{conflict_name}'. Aborting to avoid duplicate datasource creation. "
-                "Retry after a short delay or resolve the duplicate manually in KB Management."
+                f"could not be resolved for '{conflict_name}' after retries. "
+                "Aborting to avoid duplicate datasource creation. "
+                "Retry later or resolve the duplicate manually in KB Management."
             )
-            created_datasource_name_used = auto_name
         else:
             if verbose:
                 print(
