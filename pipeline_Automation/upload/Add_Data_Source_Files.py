@@ -1877,8 +1877,8 @@ def run_new_request_with_followup_add(
             if existing_datasource_policy == "replace":
                 if verbose:
                     print(
-                        "Existing datasource policy=replace: clearing datasource content before add upload "
-                        f"(datasource id {existing_datasource_id})."
+                        "Existing datasource policy=replace: deleting datasource by name before recreate "
+                        f"(datasource name '{conflict_name}', resolved id {existing_datasource_id})."
                     )
 
                 run_datasource_request(
@@ -1888,7 +1888,7 @@ def run_new_request_with_followup_add(
                     service_name=service_name,
                     remote_user=remote_user,
                     kb_id=kb_id,
-                    datasource_payload=existing_datasource_id,
+                    datasource_payload={"name": conflict_name},
                     file_paths=[],
                     request_types=[DEFAULT_TYPE_DELETE],
                     request_part_names=request_part_names,
@@ -1903,25 +1903,33 @@ def run_new_request_with_followup_add(
 
                 # Delete removes the datasource entity; create it again with the first file,
                 # then append remaining files to the new datasource ID.
-                recreated_response = run_datasource_request(
-                    endpoint=endpoint,
-                    api_key=api_key,
-                    client_app_name=client_app_name,
-                    service_name=service_name,
-                    remote_user=remote_user,
-                    kb_id=kb_id,
-                    datasource_payload=datasource_payload,
-                    file_paths=[first_path],
-                    request_types=request_types,
-                    request_part_names=request_part_names,
-                    payload_modes=payload_modes,
-                    timestamp_modes=timestamp_modes,
-                    max_retries=max_retries,
-                    timeout_seconds=timeout_seconds,
-                    verify_ssl=verify_ssl,
-                    proxies=proxies,
-                    verbose=verbose,
-                )
+                try:
+                    recreated_response = run_datasource_request(
+                        endpoint=endpoint,
+                        api_key=api_key,
+                        client_app_name=client_app_name,
+                        service_name=service_name,
+                        remote_user=remote_user,
+                        kb_id=kb_id,
+                        datasource_payload=datasource_payload,
+                        file_paths=[first_path],
+                        request_types=request_types,
+                        request_part_names=request_part_names,
+                        payload_modes=payload_modes,
+                        timestamp_modes=timestamp_modes,
+                        max_retries=max_retries,
+                        timeout_seconds=timeout_seconds,
+                        verify_ssl=verify_ssl,
+                        proxies=proxies,
+                        verbose=verbose,
+                    )
+                except ApiRejectedError as recreate_exc:
+                    if not is_existing_datasource_name_conflict(recreate_exc.error_code, recreate_exc.api_message):
+                        raise
+                    raise RuntimeError(
+                        "Replace flow failed to recreate datasource by name after delete. "
+                        f"Conflict remains for '{conflict_name}'."
+                    ) from recreate_exc
 
                 recreated_id_raw = recreated_response.get("datasource") if isinstance(recreated_response, dict) else None
                 try:
