@@ -792,6 +792,78 @@ def resolve_datasource_id_from_local_config_by_name(datasource_name: str) -> int
         return None
 
 
+def resolve_datasource_id_from_delivery_snapshot_by_name(
+    datasource_name: str,
+    file_paths: list[Path],
+) -> int | None:
+    if not file_paths:
+        return None
+
+    match = re.match(
+        r"^DB_STready_([A-Za-z0-9]+)_(Issues|Files|Diagnostic|Resolver)$",
+        (datasource_name or "").strip(),
+        flags=re.IGNORECASE,
+    )
+    if not match:
+        return None
+
+    kind = match.group(2).lower()
+    kind_map = {
+        "issues": "issues",
+        "files": "files",
+        "diagnostic": "diagnostic",
+        "resolver": "resolver",
+    }
+    target_key = kind_map.get(kind)
+    if not target_key:
+        return None
+
+    first_path = file_paths[0].resolve()
+    for parent in [first_path.parent, *first_path.parents]:
+        if parent.name != "by_series":
+            continue
+        if len(first_path.parents) < 2:
+            break
+
+    # Walk up and locate by_series/<slug>/...
+    current = first_path.parent
+    by_series_dir: Path | None = None
+    slug_dir: Path | None = None
+    for _ in range(8):
+        if current.name == "by_series":
+            by_series_dir = current
+            break
+        if current.parent == current:
+            break
+        current = current.parent
+    if by_series_dir is None:
+        return None
+
+    # slug is the direct child in the original path under by_series
+    rel = first_path.relative_to(by_series_dir)
+    if len(rel.parts) < 2:
+        return None
+    slug_dir = by_series_dir / rel.parts[0]
+    snapshot_path = slug_dir / f"upload_datasource_ids_{rel.parts[0]}.json"
+    if not snapshot_path.exists():
+        return None
+
+    try:
+        payload = json.loads(snapshot_path.read_text(encoding="utf-8-sig"))
+    except Exception:
+        return None
+
+    if not isinstance(payload, dict):
+        return None
+
+    value = payload.get(target_key)
+    try:
+        parsed = int(value)
+        return parsed if parsed > 0 else None
+    except Exception:
+        return None
+
+
 def extract_existing_filename(message: str) -> str | None:
     match = re.search(r'cannot upload existing file "([^"]+)"', message or "", flags=re.IGNORECASE)
     if not match:
@@ -1808,59 +1880,20 @@ def run_new_request_with_followup_add(
                         f"for '{conflict_name}': {existing_datasource_id}"
                     )
 
-        fallback_created = False
         if existing_datasource_id is None:
-            if existing_datasource_policy == "replace":
+            snapshot_fallback_id = resolve_datasource_id_from_delivery_snapshot_by_name(
+                conflict_name,
+                file_paths,
+            )
+            if snapshot_fallback_id is not None:
+                existing_datasource_id = snapshot_fallback_id
                 if verbose:
                     print(
-                        "Conflict persists with unresolved datasource ID; attempting replace fallback "
-                        f"by deleting datasource by name '{conflict_name}' and retrying creation."
-                    )
-                try:
-                    run_datasource_request(
-                        endpoint=endpoint,
-                        api_key=api_key,
-                        client_app_name=client_app_name,
-                        service_name=service_name,
-                        remote_user=remote_user,
-                        kb_id=kb_id,
-                        datasource_payload={"name": conflict_name},
-                        file_paths=[],
-                        request_types=[DEFAULT_TYPE_DELETE],
-                        request_part_names=request_part_names,
-                        payload_modes=payload_modes,
-                        timestamp_modes=timestamp_modes,
-                        max_retries=max_retries,
-                        timeout_seconds=timeout_seconds,
-                        verify_ssl=verify_ssl,
-                        proxies=proxies,
-                        verbose=verbose,
+                        "Datasource ID resolved from upload_datasource_ids snapshot "
+                        f"for '{conflict_name}': {existing_datasource_id}"
                     )
 
-                    create_response = run_datasource_request(
-                        endpoint=endpoint,
-                        api_key=api_key,
-                        client_app_name=client_app_name,
-                        service_name=service_name,
-                        remote_user=remote_user,
-                        kb_id=kb_id,
-                        datasource_payload=datasource_payload,
-                        file_paths=[first_path],
-                        request_types=request_types,
-                        request_part_names=request_part_names,
-                        payload_modes=payload_modes,
-                        timestamp_modes=timestamp_modes,
-                        max_retries=max_retries,
-                        timeout_seconds=timeout_seconds,
-                        verify_ssl=verify_ssl,
-                        proxies=proxies,
-                        verbose=verbose,
-                    )
-                    fallback_created = True
-                except Exception:
-                    existing_datasource_id = None
-
-        if (existing_datasource_id is None) and (not fallback_created):
+        if existing_datasource_id is None:
             raise RuntimeError(
                 "Datasource name conflict detected, but existing datasource ID "
                 f"could not be resolved for '{conflict_name}' after retries. "
@@ -1888,7 +1921,7 @@ def run_new_request_with_followup_add(
                     service_name=service_name,
                     remote_user=remote_user,
                     kb_id=kb_id,
-                    datasource_payload={"name": conflict_name},
+                    datasource_payload=existing_datasource_id,
                     file_paths=[],
                     request_types=[DEFAULT_TYPE_DELETE],
                     request_part_names=request_part_names,
