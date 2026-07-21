@@ -1910,88 +1910,18 @@ def run_new_request_with_followup_add(
             if existing_datasource_policy == "replace":
                 if verbose:
                     print(
-                        "Existing datasource policy=replace: deleting datasource by name before recreate "
-                        f"(datasource name '{conflict_name}', resolved id {existing_datasource_id})."
+                        "Existing datasource policy=replace: using in-place upload on resolved datasource ID "
+                        f"{existing_datasource_id} to avoid delete/recreate conflicts."
                     )
 
-                run_datasource_request(
-                    endpoint=endpoint,
-                    api_key=api_key,
-                    client_app_name=client_app_name,
-                    service_name=service_name,
-                    remote_user=remote_user,
-                    kb_id=kb_id,
-                    datasource_payload=existing_datasource_id,
-                    file_paths=[],
-                    request_types=[DEFAULT_TYPE_DELETE],
-                    request_part_names=request_part_names,
-                    payload_modes=payload_modes,
-                    timestamp_modes=timestamp_modes,
-                    max_retries=max_retries,
-                    timeout_seconds=timeout_seconds,
-                    verify_ssl=verify_ssl,
-                    proxies=proxies,
-                    verbose=verbose,
-                )
+                add_payload: dict[str, Any] = {"id": existing_datasource_id}
+                if requested_processor:
+                    add_payload["processor"] = requested_processor
+                if requested_processor_params:
+                    add_payload["processorParams"] = requested_processor_params
 
-                # Delete removes the datasource entity; create it again with the first file,
-                # then append remaining files to the new datasource ID.
                 try:
-                    recreated_response = run_datasource_request(
-                        endpoint=endpoint,
-                        api_key=api_key,
-                        client_app_name=client_app_name,
-                        service_name=service_name,
-                        remote_user=remote_user,
-                        kb_id=kb_id,
-                        datasource_payload=datasource_payload,
-                        file_paths=[first_path],
-                        request_types=request_types,
-                        request_part_names=request_part_names,
-                        payload_modes=payload_modes,
-                        timestamp_modes=timestamp_modes,
-                        max_retries=max_retries,
-                        timeout_seconds=timeout_seconds,
-                        verify_ssl=verify_ssl,
-                        proxies=proxies,
-                        verbose=verbose,
-                    )
-                except ApiRejectedError as recreate_exc:
-                    if not is_existing_datasource_name_conflict(recreate_exc.error_code, recreate_exc.api_message):
-                        raise
-
-                    # Race-safe fallback: if the datasource still exists by name,
-                    # resolve its ID again and continue with add semantics.
-                    fallback_id = resolve_existing_datasource_id_by_name(
-                        endpoint=endpoint,
-                        api_key=api_key,
-                        client_app_name=client_app_name,
-                        service_name=service_name,
-                        kb_id=kb_id,
-                        datasource_name=conflict_name,
-                        timeout_seconds=timeout_seconds,
-                        verify_ssl=verify_ssl,
-                        proxies=proxies,
-                        verbose=verbose,
-                    )
-                    if fallback_id is None:
-                        fallback_id = resolve_datasource_id_from_local_config_by_name(conflict_name)
-                    if fallback_id is None:
-                        fallback_id = resolve_datasource_id_from_delivery_snapshot_by_name(conflict_name, file_paths)
-
-                    if fallback_id is None:
-                        raise RuntimeError(
-                            "Replace flow failed to recreate datasource by name after delete. "
-                            f"Conflict remains for '{conflict_name}', and fallback ID resolution failed."
-                        ) from recreate_exc
-
-                    add_payload: dict[str, Any] = {"id": fallback_id}
-                    if requested_processor:
-                        add_payload["processor"] = requested_processor
-                    if requested_processor_params:
-                        add_payload["processorParams"] = requested_processor_params
-
-                    add_after_conflict = run_add_request_skip_existing_files(
+                    add_replace_response = run_add_request_skip_existing_files(
                         endpoint=endpoint,
                         api_key=api_key,
                         client_app_name=client_app_name,
@@ -2011,48 +1941,49 @@ def run_new_request_with_followup_add(
                         fail_on_existing_files=fail_on_existing_files,
                         verbose=verbose,
                     )
+                except ApiRejectedError as add_exc:
+                    message_l = (add_exc.api_message or "").lower()
+                    if "deleted datasource" not in message_l and "errorcode=3000" not in message_l:
+                        raise
 
-                    fallback_response = dict(add_after_conflict)
-                    fallback_response["datasource"] = fallback_id
-                    fallback_response.setdefault(
-                        "message",
-                        (
-                            f'Replace recreate conflict for "{conflict_name}"; '
-                            f"continued with existing datasource ID {fallback_id}."
-                        ),
+                    # Re-resolve ID if the one we had is stale/deleted.
+                    fallback_id = resolve_existing_datasource_id_by_name(
+                        endpoint=endpoint,
+                        api_key=api_key,
+                        client_app_name=client_app_name,
+                        service_name=service_name,
+                        kb_id=kb_id,
+                        datasource_name=conflict_name,
+                        timeout_seconds=timeout_seconds,
+                        verify_ssl=verify_ssl,
+                        proxies=proxies,
+                        verbose=verbose,
                     )
-                    return fallback_response
+                    if fallback_id is None:
+                        fallback_id = resolve_datasource_id_from_delivery_snapshot_by_name(conflict_name, file_paths)
+                    if fallback_id is None:
+                        fallback_id = resolve_datasource_id_from_local_config_by_name(conflict_name)
+                    if fallback_id is None:
+                        raise RuntimeError(
+                            f"Conflict for '{conflict_name}' and stale datasource ID {existing_datasource_id}; "
+                            "could not resolve a live datasource ID for fallback add."
+                        ) from add_exc
 
-                recreated_id_raw = recreated_response.get("datasource") if isinstance(recreated_response, dict) else None
-                try:
-                    recreated_id = int(recreated_id_raw)
-                except Exception as exc:
-                    raise RuntimeError(
-                        "Datasource recreated after replace, but response does not include a numeric datasource ID: "
-                        f"{recreated_id_raw!r}"
-                    ) from exc
-
-                final_recreated = dict(recreated_response)
-                uploaded_files_recreated: list[str] = [first_path.name]
-                skipped_existing_recreated: list[str] = []
-
-                remaining_paths = file_paths[1:]
-                if remaining_paths:
-                    add_datasource_payload: dict[str, Any] = {"id": recreated_id}
+                    add_payload_retry: dict[str, Any] = {"id": fallback_id}
                     if requested_processor:
-                        add_datasource_payload["processor"] = requested_processor
+                        add_payload_retry["processor"] = requested_processor
                     if requested_processor_params:
-                        add_datasource_payload["processorParams"] = requested_processor_params
+                        add_payload_retry["processorParams"] = requested_processor_params
 
-                    add_response = run_add_request_skip_existing_files(
+                    add_replace_response = run_add_request_skip_existing_files(
                         endpoint=endpoint,
                         api_key=api_key,
                         client_app_name=client_app_name,
                         service_name=service_name,
                         remote_user=remote_user,
                         kb_id=kb_id,
-                        datasource_payload=add_datasource_payload,
-                        file_paths=remaining_paths,
+                        datasource_payload=add_payload_retry,
+                        file_paths=file_paths,
                         request_types=[DEFAULT_TYPE_ADD],
                         request_part_names=request_part_names,
                         payload_modes=payload_modes,
@@ -2064,24 +1995,18 @@ def run_new_request_with_followup_add(
                         fail_on_existing_files=fail_on_existing_files,
                         verbose=verbose,
                     )
+                    existing_datasource_id = fallback_id
 
-                    uploaded_files_recreated.extend(add_response.get("uploaded_files", []))
-                    skipped_existing_recreated.extend(add_response.get("skipped_existing_files", []))
-
-                final_recreated["datasource"] = recreated_id
-                final_recreated["uploaded_files"] = uploaded_files_recreated
-                if created_datasource_name_used:
-                    final_recreated["datasource_name_used"] = created_datasource_name_used
-                if skipped_existing_recreated:
-                    final_recreated["skipped_existing_files"] = skipped_existing_recreated
-                final_recreated.setdefault(
+                final_replace = dict(add_replace_response)
+                final_replace["datasource"] = existing_datasource_id
+                final_replace.setdefault(
                     "message",
                     (
-                        f'Datasource "{conflict_name}" already existed; old datasource was deleted '
-                        "and replaced with a fresh datasource upload (replace mode)."
+                        f'Datasource "{conflict_name}" already existed; '
+                        "replace policy executed with in-place upload on existing datasource."
                     ),
                 )
-                return final_recreated
+                return final_replace
 
             elif verbose:
                 print(
