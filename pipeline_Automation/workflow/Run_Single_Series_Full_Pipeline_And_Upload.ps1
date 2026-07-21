@@ -558,10 +558,6 @@ function Invoke-UploadJsonAdd {
     }
 
     if ($ExistingDatasourceMode -eq "Replace") {
-        if (-not $DatasourceNameForFallback) {
-            throw "Replace mode for $Label requires -DatasourceNameForFallback to recreate datasource after delete."
-        }
-
         $deleteArgs = @(
             $uploader,
             "--kb", "$KbId",
@@ -578,18 +574,20 @@ function Invoke-UploadJsonAdd {
         $deleteText = ($deleteOutput -join "`n")
 
         if ($deleteText -match "Datasource not found") {
+            if (-not $DatasourceNameForFallback) {
+                throw "DS#$DatasourceId for $Label is missing after delete step, and no fallback datasource name was provided."
+            }
             Write-Host "[WARN] DS#$DatasourceId for $Label no longer exists. Recreating datasource '$DatasourceNameForFallback'." -ForegroundColor Yellow
+            return Invoke-UploadJsonNew `
+                -Label $Label `
+                -FilePath $FilePath `
+                -RootKey $RootKey `
+                -DatasourceName $DatasourceNameForFallback `
+                -ProcessorParams $ProcessorParams `
+                -AllowEmpty:$AllowEmpty
         } else {
-            Write-Host "[REPLACE] DS#$DatasourceId deleted for $Label. Creating fresh datasource '$DatasourceNameForFallback'." -ForegroundColor DarkCyan
+            Write-Host "[REPLACE] DS#$DatasourceId content cleared for $Label. Re-uploading into same datasource." -ForegroundColor DarkCyan
         }
-
-        return Invoke-UploadJsonNew `
-            -Label $Label `
-            -FilePath $FilePath `
-            -RootKey $RootKey `
-            -DatasourceName $DatasourceNameForFallback `
-            -ProcessorParams $ProcessorParams `
-            -AllowEmpty:$AllowEmpty
     } else {
         Write-Host "[ADD] Existing datasource mode is Add for $Label (DS#$DatasourceId): appending files." -ForegroundColor DarkCyan
     }
@@ -636,6 +634,10 @@ function Invoke-UploadJsonAdd {
                 -ProcessorParams $ProcessorParams `
                 -AllowEmpty:$AllowEmpty
         }
+
+            if ($isDatasourceMissing -and (-not $DatasourceNameForFallback)) {
+                throw "Upload failed because DS#$DatasourceId for $Label does not exist, and no fallback datasource name was provided."
+            }
 
         throw
     }
