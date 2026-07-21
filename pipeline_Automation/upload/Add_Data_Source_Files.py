@@ -745,6 +745,53 @@ def resolve_existing_datasource_id_by_name(
     )
 
 
+def resolve_datasource_id_from_local_config_by_name(datasource_name: str) -> int | None:
+    match = re.match(
+        r"^DB_STready_([A-Za-z0-9]+)_(Issues|Files|Diagnostic|Resolver)$",
+        (datasource_name or "").strip(),
+        flags=re.IGNORECASE,
+    )
+    if not match:
+        return None
+
+    series = match.group(1).upper()
+    kind = match.group(2).lower()
+    kind_map = {
+        "issues": "issues",
+        "files": "files",
+        "diagnostic": "diagnostic",
+        "resolver": "resolver",
+    }
+    target_key = kind_map.get(kind)
+    if not target_key:
+        return None
+
+    config_path = Path(__file__).resolve().parents[2] / "shared" / "config" / "config_all_series.json"
+    if not config_path.exists():
+        return None
+
+    try:
+        cfg = json.loads(config_path.read_text(encoding="utf-8-sig"))
+    except Exception:
+        return None
+
+    ids_map = cfg.get("kb_datasource_ids") if isinstance(cfg, dict) else None
+    if not isinstance(ids_map, dict):
+        return None
+
+    series_repo = f"STM32Cube{series}"
+    entry = ids_map.get(series_repo)
+    if not isinstance(entry, dict):
+        return None
+
+    value = entry.get(target_key)
+    try:
+        parsed = int(value)
+        return parsed if parsed > 0 else None
+    except Exception:
+        return None
+
+
 def extract_existing_filename(message: str) -> str | None:
     match = re.search(r'cannot upload existing file "([^"]+)"', message or "", flags=re.IGNORECASE)
     if not match:
@@ -1750,6 +1797,16 @@ def run_new_request_with_followup_add(
                 )
                 if existing_datasource_id is not None:
                     break
+
+        if existing_datasource_id is None:
+            local_fallback_id = resolve_datasource_id_from_local_config_by_name(conflict_name)
+            if local_fallback_id is not None:
+                existing_datasource_id = local_fallback_id
+                if verbose:
+                    print(
+                        "Datasource ID resolved from shared/config/config_all_series.json "
+                        f"for '{conflict_name}': {existing_datasource_id}"
+                    )
 
         fallback_created = False
         if existing_datasource_id is None:
