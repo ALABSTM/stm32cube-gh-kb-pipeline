@@ -468,6 +468,20 @@ def is_existing_datasource_name_conflict(error_code: int | None, message: str) -
     return "datasource with name" in normalized and "already exists" in normalized
 
 
+def is_missing_datasource_entity_error(error_code: int | None, message: str) -> bool:
+    if error_code != 1000:
+        return False
+    normalized = (message or "").strip().lower()
+    return 'could not find any entity of type "kbdatasourceentity"' in normalized
+
+
+def is_deleted_or_missing_datasource_error(error_code: int | None, message: str) -> bool:
+    normalized = (message or "").strip().lower()
+    if error_code == 3000 and "cannot upload files to deleted datasource" in normalized:
+        return True
+    return is_missing_datasource_entity_error(error_code, message)
+
+
 def extract_existing_datasource_name(message: str) -> str | None:
     match = re.search(r'datasource with name\s+"([^"]+)"\s+already exists', message or "", flags=re.IGNORECASE)
     if not match:
@@ -1942,12 +1956,13 @@ def run_new_request_with_followup_add(
                         verbose=verbose,
                     )
                 except ApiRejectedError as add_exc:
-                    message_l = (add_exc.api_message or "").lower()
-                    if "deleted datasource" not in message_l and "errorcode=3000" not in message_l:
+                    if not is_deleted_or_missing_datasource_error(add_exc.error_code, add_exc.api_message):
                         raise
 
                     # Re-resolve ID if the one we had is stale/deleted.
-                    fallback_id = resolve_existing_datasource_id_by_name(
+                    fallback_candidates: list[int] = []
+
+                    resolved_from_api = resolve_existing_datasource_id_by_name(
                         endpoint=endpoint,
                         api_key=api_key,
                         client_app_name=client_app_name,
@@ -1959,43 +1974,79 @@ def run_new_request_with_followup_add(
                         proxies=proxies,
                         verbose=verbose,
                     )
-                    if fallback_id is None:
-                        fallback_id = resolve_datasource_id_from_delivery_snapshot_by_name(conflict_name, file_paths)
-                    if fallback_id is None:
-                        fallback_id = resolve_datasource_id_from_local_config_by_name(conflict_name)
-                    if fallback_id is None:
+                    if resolved_from_api is not None:
+                        fallback_candidates.append(resolved_from_api)
+
+                    resolved_from_snapshot = resolve_datasource_id_from_delivery_snapshot_by_name(conflict_name, file_paths)
+                    if resolved_from_snapshot is not None:
+                        fallback_candidates.append(resolved_from_snapshot)
+
+                    resolved_from_config = resolve_datasource_id_from_local_config_by_name(conflict_name)
+                    if resolved_from_config is not None:
+                        fallback_candidates.append(resolved_from_config)
+
+                    ordered_candidates: list[int] = []
+                    seen_ids: set[int] = set()
+                    for candidate in fallback_candidates:
+                        if candidate in seen_ids or candidate == existing_datasource_id:
+                            continue
+                        seen_ids.add(candidate)
+                        ordered_candidates.append(candidate)
+
+                    if existing_datasource_id not in seen_ids:
+                        ordered_candidates.append(existing_datasource_id)
+
+                    if not ordered_candidates:
                         raise RuntimeError(
                             f"Conflict for '{conflict_name}' and stale datasource ID {existing_datasource_id}; "
                             "could not resolve a live datasource ID for fallback add."
                         ) from add_exc
 
-                    add_payload_retry: dict[str, Any] = {"id": fallback_id}
-                    if requested_processor:
-                        add_payload_retry["processor"] = requested_processor
-                    if requested_processor_params:
-                        add_payload_retry["processorParams"] = requested_processor_params
+                    retry_success = False
+                    last_retry_exc: ApiRejectedError | None = None
+                    for candidate_id in ordered_candidates:
+                        add_payload_retry: dict[str, Any] = {"id": candidate_id}
+                        if requested_processor:
+                            add_payload_retry["processor"] = requested_processor
+                        if requested_processor_params:
+                            add_payload_retry["processorParams"] = requested_processor_params
 
-                    add_replace_response = run_add_request_skip_existing_files(
-                        endpoint=endpoint,
-                        api_key=api_key,
-                        client_app_name=client_app_name,
-                        service_name=service_name,
-                        remote_user=remote_user,
-                        kb_id=kb_id,
-                        datasource_payload=add_payload_retry,
-                        file_paths=file_paths,
-                        request_types=[DEFAULT_TYPE_ADD],
-                        request_part_names=request_part_names,
-                        payload_modes=payload_modes,
-                        timestamp_modes=timestamp_modes,
-                        max_retries=max_retries,
-                        timeout_seconds=timeout_seconds,
-                        verify_ssl=verify_ssl,
-                        proxies=proxies,
-                        fail_on_existing_files=fail_on_existing_files,
-                        verbose=verbose,
-                    )
-                    existing_datasource_id = fallback_id
+                        try:
+                            add_replace_response = run_add_request_skip_existing_files(
+                                endpoint=endpoint,
+                                api_key=api_key,
+                                client_app_name=client_app_name,
+                                service_name=service_name,
+                                remote_user=remote_user,
+                                kb_id=kb_id,
+                                datasource_payload=add_payload_retry,
+                                file_paths=file_paths,
+                                request_types=[DEFAULT_TYPE_ADD],
+                                request_part_names=request_part_names,
+                                payload_modes=payload_modes,
+                                timestamp_modes=timestamp_modes,
+                                max_retries=max_retries,
+                                timeout_seconds=timeout_seconds,
+                                verify_ssl=verify_ssl,
+                                proxies=proxies,
+                                fail_on_existing_files=fail_on_existing_files,
+                                verbose=verbose,
+                            )
+                            existing_datasource_id = candidate_id
+                            retry_success = True
+                            break
+                        except ApiRejectedError as retry_exc:
+                            if is_deleted_or_missing_datasource_error(retry_exc.error_code, retry_exc.api_message):
+                                last_retry_exc = retry_exc
+                                continue
+                            raise
+
+                    if not retry_success:
+                        tried = ", ".join(str(cid) for cid in ordered_candidates)
+                        raise RuntimeError(
+                            f"Conflict for '{conflict_name}' and stale datasource ID {existing_datasource_id}; "
+                            f"fallback add failed for candidate datasource IDs: [{tried}]"
+                        ) from last_retry_exc
 
                 final_replace = dict(add_replace_response)
                 final_replace["datasource"] = existing_datasource_id
