@@ -558,18 +558,26 @@ function Invoke-UploadJsonAdd {
     }
 
     if ($ExistingDatasourceMode -eq "Replace") {
-        if (-not $DatasourceNameForFallback) {
-            throw "Replace mode for $Label requires -DatasourceNameForFallback."
-        }
+        $deleteArgs = @(
+            $uploader,
+            "--kb", "$KbId",
+            "--operation", "delete",
+            "--datasource-id", "$DatasourceId",
+            "--remote-user", $RemoteUser,
+            "--delete-not-found-policy", "ignore",
+            "--skip-auth-precheck",
+            "--max-retries", "$uploadMaxRetries",
+            "--timeout", "$uploadTimeoutSeconds"
+        )
 
-        Write-Host "[REPLACE] Name-based replace for $Label using '$DatasourceNameForFallback' (avoids stale datasource ID races)." -ForegroundColor DarkCyan
-        return Invoke-UploadJsonNew `
-            -Label $Label `
-            -FilePath $FilePath `
-            -RootKey $RootKey `
-            -DatasourceName $DatasourceNameForFallback `
-            -ProcessorParams $ProcessorParams `
-            -AllowEmpty:$AllowEmpty
+        $deleteOutput = Invoke-CapturedPython "Clear existing content for $Label in DS#$DatasourceId" $deleteArgs
+        $deleteText = ($deleteOutput -join "`n")
+
+        if ($deleteText -match "Datasource not found") {
+            Write-Host "[WARN] DS#$DatasourceId for $Label not found during replace clear. Will attempt upload and fallback if needed." -ForegroundColor Yellow
+        } else {
+            Write-Host "[REPLACE] DS#$DatasourceId content cleared for $Label. Re-uploading into same datasource." -ForegroundColor DarkCyan
+        }
     } else {
         Write-Host "[ADD] Existing datasource mode is Add for $Label (DS#$DatasourceId): appending files." -ForegroundColor DarkCyan
     }
