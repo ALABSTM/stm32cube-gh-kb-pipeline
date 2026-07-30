@@ -25,10 +25,7 @@ Aller à Settings -> Secrets and variables -> Actions.
 Ajouter:
 1. RUNNER_CHECK_TOKEN
 2. ST_CHATGPT_API_KEY
-
-Alternative clé Alfred (si ST_CHATGPT_API_KEY indisponible):
-1. ST_AI_BRIDGE_API_KEY
-2. ST_API_KEY
+3. ST_CHATGPT_API_KEY 
 
 ## 4) Préparer Python dans le projet
 

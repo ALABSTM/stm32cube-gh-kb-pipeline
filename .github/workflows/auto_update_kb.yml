@@ -79,6 +79,9 @@ env:
   DEFAULT_MAX_PARALLEL: '1'
 
 jobs:
+  # Job 1: Build normalized inputs and matrix values.
+  # Runner location: GitHub-hosted Linux runner (ubuntu-latest).
+  # Self-hosted access: none. This job only prepares outputs used by later jobs.
   prepare:
     name: Prepare matrix inputs
     runs-on: ubuntu-latest
@@ -192,6 +195,12 @@ jobs:
           echo "component_issues_only=$component_issues_only" >> "$GITHUB_OUTPUT"
           echo "max_parallel=$max_parallel" >> "$GITHUB_OUTPUT"
 
+  # Job 2: Probe self-hosted runner availability before any job targets self-hosted.
+  # Runner location: GitHub-hosted Linux runner (ubuntu-latest).
+  # Self-hosted access method:
+  # - Calls GitHub REST API /actions/runners for this repo.
+  # - Counts online/idle runners with label self-hosted.
+  # - Exposes runner_ready output consumed as a gate by downstream jobs.
   runner-check:
     name: Check self-hosted runner availability
     runs-on: ubuntu-latest
@@ -337,9 +346,16 @@ jobs:
           echo "| Busy self-hosted count | ${{ steps.check.outputs.busy_count }} |" >> "$GITHUB_STEP_SUMMARY"
           echo "| Runner API note | ${{ steps.check.outputs.api_note }} |" >> "$GITHUB_STEP_SUMMARY"
 
+  # Job 3: Run preprocessing per series.
+  # Runner location: GitHub-hosted Windows runner (windows-latest).
+  # Self-hosted access:
+  # - Does NOT run on self-hosted.
+  # - Is gated by runner-check output so preprocess/upload orchestration stays aligned.
+  # - Produces artifacts for upload job when mode is Full.
   preprocess-series:
     name: ${{ format('Preprocess {0}', matrix.series) }}
     needs: [prepare, runner-check]
+    # Gate execution using runner-check: only continue when self-hosted is reported ready.
     if: needs.runner-check.outputs.runner_ready == 'true'
     runs-on: windows-latest
     timeout-minutes: 120
@@ -441,9 +457,16 @@ jobs:
           if-no-files-found: warn
           retention-days: 30
 
+  # Job 4: Upload per series to ST KB.
+  # Runner location: self-hosted.
+  # How this gets access to self-hosted:
+  # - runs-on: self-hosted sends job directly to a registered self-hosted runner.
+  # - needs: [runner-check] + if gate prevents queueing when not ready.
+  # - runner-check computes runner_ready from GitHub runner API before this job starts.
   upload-series:
     name: ${{ format('Upload {0}', matrix.series) }}
     needs: [prepare, preprocess-series, runner-check]
+    # Upload is skipped if mode is Prepare, or if self-hosted readiness gate is false.
     if: needs.prepare.outputs.mode != 'Prepare' && needs.runner-check.outputs.runner_ready == 'true'
     runs-on: self-hosted
     timeout-minutes: 90
@@ -457,6 +480,8 @@ jobs:
       ST_CHATGPT_API_KEY: ${{ secrets.ST_CHATGPT_API_KEY }}
       ST_AI_BRIDGE_API_KEY: ${{ secrets.ST_AI_BRIDGE_API_KEY }}
       ST_API_KEY: ${{ secrets.ST_API_KEY }}
+      ST_CHATGPT_CLIENT_APP: ${{ secrets.ST_CHATGPT_CLIENT_APP }}
+      ST_CLIENT_APP_NAME: ${{ secrets.ST_CLIENT_APP_NAME }}
       ST_REMOTE_USER: ${{ secrets.ST_REMOTE_USER }}
     steps:
       - name: Reset self-hosted workspace before checkout
@@ -575,6 +600,96 @@ jobs:
 
           throw "Alfred endpoint unreachable (direct and proxy)."
 
+      - name: Select deterministic upload auth key/app
+        shell: powershell
+        run: |
+          $selectedClientApp = ""
+          if ($env:ST_CHATGPT_CLIENT_APP) {
+            $selectedClientApp = $env:ST_CHATGPT_CLIENT_APP
+          } elseif ($env:ST_CLIENT_APP_NAME) {
+            $selectedClientApp = $env:ST_CLIENT_APP_NAME
+          }
+
+          $selectedApiKey = ""
+          $selectedApiSource = ""
+
+          # If no explicit client app is configured, uploader falls back to
+          # mdrf_st_github_analyzer. Prefer analyzer key to avoid app/key mismatch.
+          if (-not $selectedClientApp) {
+            if ($env:ST_GITHUB_ANALYZER_API_KEY) {
+              $selectedApiKey = $env:ST_GITHUB_ANALYZER_API_KEY
+              $selectedApiSource = "ST_GITHUB_ANALYZER_API_KEY"
+            } elseif ($env:ST_CHATGPT_API_KEY) {
+              $selectedApiKey = $env:ST_CHATGPT_API_KEY
+              $selectedApiSource = "ST_CHATGPT_API_KEY"
+            } elseif ($env:ST_AI_BRIDGE_API_KEY) {
+              $selectedApiKey = $env:ST_AI_BRIDGE_API_KEY
+              $selectedApiSource = "ST_AI_BRIDGE_API_KEY"
+            } elseif ($env:ST_API_KEY) {
+              $selectedApiKey = $env:ST_API_KEY
+              $selectedApiSource = "ST_API_KEY"
+            }
+          } else {
+            # With explicit client app, keep priority on chatgpt/bridge keys.
+            if ($env:ST_CHATGPT_API_KEY) {
+              $selectedApiKey = $env:ST_CHATGPT_API_KEY
+              $selectedApiSource = "ST_CHATGPT_API_KEY"
+            } elseif ($env:ST_AI_BRIDGE_API_KEY) {
+              $selectedApiKey = $env:ST_AI_BRIDGE_API_KEY
+              $selectedApiSource = "ST_AI_BRIDGE_API_KEY"
+            } elseif ($env:ST_API_KEY) {
+              $selectedApiKey = $env:ST_API_KEY
+              $selectedApiSource = "ST_API_KEY"
+            } elseif ($env:ST_GITHUB_ANALYZER_API_KEY) {
+              $selectedApiKey = $env:ST_GITHUB_ANALYZER_API_KEY
+              $selectedApiSource = "ST_GITHUB_ANALYZER_API_KEY"
+            }
+          }
+
+          if (-not $selectedApiKey) {
+            throw "No API key available for upload auth. Define one of: ST_CHATGPT_API_KEY, ST_AI_BRIDGE_API_KEY, ST_API_KEY, ST_GITHUB_ANALYZER_API_KEY."
+          }
+
+          # Force deterministic key resolution in Add_Data_Source_Files.py.
+          "ST_CHATGPT_API_KEY=$selectedApiKey" >> $env:GITHUB_ENV
+          "ST_AI_BRIDGE_API_KEY=" >> $env:GITHUB_ENV
+          "ST_API_KEY=" >> $env:GITHUB_ENV
+          "ST_GITHUB_ANALYZER_API_KEY=" >> $env:GITHUB_ENV
+
+          if ($selectedClientApp) {
+            "ST_CHATGPT_CLIENT_APP=$selectedClientApp" >> $env:GITHUB_ENV
+            "ST_CLIENT_APP_NAME=$selectedClientApp" >> $env:GITHUB_ENV
+            Write-Host "Selected upload client app from workflow secrets." -ForegroundColor Green
+          } else {
+            Write-Host "No explicit client app secret found; uploader will use auto-resolution/default." -ForegroundColor Yellow
+          }
+
+          Write-Host "Selected upload API key source: $selectedApiSource" -ForegroundColor Green
+
+      - name: Upload auth precheck (kb-list)
+        shell: powershell
+        run: |
+          $remoteUser = $env:ST_REMOTE_USER
+          if (-not $remoteUser) {
+            $remoteUser = "abir.gharbi@st.com"
+            Write-Host "[WARN] ST_REMOTE_USER is empty; using fallback remote user for auth precheck." -ForegroundColor Yellow
+          }
+
+          $args = @(
+            "pipeline_Automation/upload/Add_Data_Source_Files.py",
+            "--kb", "793",
+            "--operation", "add",
+            "--remote-user", $remoteUser,
+            "--service", "kb",
+            "--auth-check-only",
+            "--timeout", "120"
+          )
+
+          & $env:RUNNER_PYTHON_EXE @args
+          if ($LASTEXITCODE -ne 0) {
+            throw "Upload auth precheck failed with exit code $LASTEXITCODE"
+          }
+
       - name: Run upload only
         shell: powershell
         run: |
@@ -619,6 +734,11 @@ jobs:
           Write-Host "Running upload for series $($scriptArgs.Series)" -ForegroundColor Cyan
           & $script @scriptArgs
 
+  # Job 5: Explicit failure notice when upload should run but self-hosted is unavailable.
+  # Runner location: GitHub-hosted Linux runner (ubuntu-latest).
+  # Self-hosted access:
+  # - No direct self-hosted execution.
+  # - Uses runner-check outputs to explain why self-hosted upload was skipped.
   runner-unavailable-notice:
     name: Runner unavailable (upload skipped)
     needs: [prepare, runner-check]
