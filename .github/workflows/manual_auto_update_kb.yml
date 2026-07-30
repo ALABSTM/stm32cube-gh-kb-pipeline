@@ -174,6 +174,7 @@ jobs:
       online_count: ${{ steps.check.outputs.online_count }}
       idle_count: ${{ steps.check.outputs.idle_count }}
       busy_count: ${{ steps.check.outputs.busy_count }}
+      api_note: ${{ steps.check.outputs.api_note }}
     steps:
       - name: Detect online and idle self-hosted runners
         id: check
@@ -182,25 +183,49 @@ jobs:
           REPO: ${{ github.repository }}
         shell: bash
         run: |
-          attempts=20
-          sleep_seconds=15
+          attempts=30
+          sleep_seconds=10
 
           runner_ready="false"
           online_count="0"
           idle_count="0"
           busy_count="0"
+          api_note=""
 
           for attempt in $(seq 1 "$attempts"); do
-            response=$(curl -sS \
+            http_code=$(curl -sS -o /tmp/runners_response.json -w "%{http_code}" \
               -H "Authorization: Bearer $GH_TOKEN" \
               -H "Accept: application/vnd.github+json" \
-              "https://api.github.com/repos/$REPO/actions/runners")
+              "https://api.github.com/repos/$REPO/actions/runners" || true)
+
+            if [ "$http_code" != "200" ]; then
+              api_note="http_status_$http_code"
+              if [ "$attempt" -lt "$attempts" ]; then
+                sleep "$sleep_seconds"
+                continue
+              fi
+              break
+            fi
+
+            response=$(cat /tmp/runners_response.json)
 
             parsed=$(RUNNERS_JSON="$response" python - <<'PY'
           import json
           import os
+          import sys
 
-          payload = json.loads(os.environ["RUNNERS_JSON"])
+          try:
+            payload = json.loads(os.environ.get("RUNNERS_JSON", ""))
+          except Exception as exc:
+            print(f"error|invalid-json:{exc}|0|0|0")
+            sys.exit(0)
+
+          runners = payload.get("runners")
+          if not isinstance(runners, list):
+            msg = str(payload.get("message") or "missing runners array")
+            print(f"error|{msg}|0|0|0")
+            sys.exit(0)
+
           runners = payload.get("runners", [])
           online = []
           idle = []
@@ -216,19 +241,27 @@ jobs:
               else:
                 idle.append(r)
 
-          print(f"{str(bool(idle)).lower()}|{len(online)}|{len(idle)}|{len(busy)}")
+          print(f"ok|{str(bool(idle)).lower()}|{len(online)}|{len(idle)}|{len(busy)}")
           PY
             )
 
-            runner_ready="${parsed%%|*}"
+            status="${parsed%%|*}"
             rest="${parsed#*|}"
-            online_count="${rest%%|*}"
-            rest="${rest#*|}"
-            idle_count="${rest%%|*}"
-            busy_count="${rest##*|}"
 
-            if [ "$runner_ready" = "true" ]; then
-              break
+            if [ "$status" = "ok" ]; then
+              runner_ready="${rest%%|*}"
+              rest="${rest#*|}"
+              online_count="${rest%%|*}"
+              rest="${rest#*|}"
+              idle_count="${rest%%|*}"
+              busy_count="${rest##*|}"
+              api_note="ok"
+
+              if [ "$runner_ready" = "true" ]; then
+                break
+              fi
+            else
+              api_note="$rest"
             fi
 
             if [ "$attempt" -lt "$attempts" ]; then
@@ -240,6 +273,7 @@ jobs:
           echo "online_count=$online_count" >> "$GITHUB_OUTPUT"
           echo "idle_count=$idle_count" >> "$GITHUB_OUTPUT"
           echo "busy_count=$busy_count" >> "$GITHUB_OUTPUT"
+          echo "api_note=$api_note" >> "$GITHUB_OUTPUT"
 
   preprocess-series:
     name: ${{ format('Preprocess {0}', matrix.series) }}
@@ -507,6 +541,7 @@ jobs:
           echo "| Online self-hosted count | ${{ needs.runner-check.outputs.online_count }} |" >> "$GITHUB_STEP_SUMMARY"
           echo "| Idle self-hosted count | ${{ needs.runner-check.outputs.idle_count }} |" >> "$GITHUB_STEP_SUMMARY"
           echo "| Busy self-hosted count | ${{ needs.runner-check.outputs.busy_count }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Runner API note | ${{ needs.runner-check.outputs.api_note }} |" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "Upload was intentionally skipped to avoid indefinite queue waiting." >> "$GITHUB_STEP_SUMMARY"
           exit 1
