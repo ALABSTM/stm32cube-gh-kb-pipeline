@@ -3,6 +3,7 @@ import base64
 import io
 import json
 import mimetypes
+import os
 import random
 import re
 import time
@@ -19,9 +20,14 @@ import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # --- Alfred Vision API credentials (persona: mdrf_stgithub_analyzer_client) ---
-VISION_CLIENT_APP_NAME = "mdrf_stgithub_analyzer_client"
-VISION_API_KEY = "46f2335f-873f-4704-afea-634ed6c92620"
-VISION_URL = "https://api-ai-bridge.st.com/chatgpt/api/client-apps"
+VISION_CLIENT_APP_NAME = os.getenv("ALFRED_CLIENT_APP_NAME", "mdrf_stgithub_analyzer_client").strip()
+VISION_API_KEY = (
+    os.getenv("ST_CHATGPT_API_KEY")
+    or os.getenv("ST_AI_BRIDGE_API_KEY")
+    or os.getenv("ST_API_KEY")
+    or ""
+).strip()
+VISION_URL = os.getenv("ALFRED_API_URL", "https://api-ai-bridge.st.com/chatgpt/api/client-apps").strip()
 CHAT_SERVICE_NAME = "chat"
 
 VISION_PROXIES = {
@@ -290,9 +296,9 @@ def call_alfred_for_image(
     use_proxy: bool,
 ) -> dict[str, Any]:
     if not VISION_CLIENT_APP_NAME:
-        raise ValueError("Missing VISION_CLIENT_APP_NAME")
+        raise ValueError("Missing Alfred client app name. Set ALFRED_CLIENT_APP_NAME.")
     if not VISION_API_KEY:
-        raise ValueError("Missing VISION_API_KEY")
+        raise ValueError("Missing Alfred API key. Set ST_CHATGPT_API_KEY (or ST_AI_BRIDGE_API_KEY/ST_API_KEY).")
 
     timestamp_modes = ["seconds", "milliseconds"]
     user_prompt = USER_PROMPT_TEMPLATE.format(context=context)
@@ -708,7 +714,8 @@ def process_file(
     if not input_path.exists():
         raise FileNotFoundError(f"Input JSON file not found: {input_path}")
 
-    data = json.loads(input_path.read_text(encoding="utf-8"))
+    # Be tolerant to UTF-8 BOM (common with some PowerShell writes).
+    data = json.loads(input_path.read_text(encoding="utf-8-sig"))
     container, records, root_key = find_records_container(data)
 
     stats = transform_records(

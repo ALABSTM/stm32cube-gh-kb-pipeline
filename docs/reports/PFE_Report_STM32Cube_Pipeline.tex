@@ -3064,7 +3064,7 @@ Le workflow est déclenché de deux manières :
 \toprule
 \textbf{Paramètre} & \textbf{Type} & \textbf{Valeur par défaut} & \textbf{Rôle} \\
 \midrule
-\texttt{series} & CSV & G4,L0,L1,L4,L5,N6,U0,U3,WB,WB0,WBA,WL3 & Sous-ensemble de séries à traiter \\
+\texttt{series} & CSV & Vide (\textit{all configured}) & Liste de codes séries; vide = toutes les séries définies dans \texttt{config\_all\_series.json} \\
 \texttt{mode} & Choice & Full & Full / Prepare / Upload \\
 \texttt{existing\_datasource\_mode} & Choice & Replace & Politique si la datasource existe (Replace ou Add) \\
 \texttt{skip\_drivers} & Bool & false & Ignore les uploads drivers/sous-repos \\
@@ -3074,6 +3074,18 @@ Le workflow est déclenché de deux manières :
 \texttt{max\_parallel} & Entier & 1 & Concurrence de la matrice séries \\
 \bottomrule
 \end{longtable}
+
+\subsection{Gouvernance Dynamique des Séries (Source Unique)}
+
+Pour supprimer la dérive de maintenance entre CI et scripts, la validation des séries n'est plus codée en dur.
+
+\begin{itemize}
+  \item Les workflows \texttt{auto\_update\_kb.yml} et \texttt{manual\_auto\_update\_kb.yml} lisent \texttt{shared/config/config\_all\_series.json} (champ \texttt{all\_series})
+  \item Les noms longs sont normalisés en codes courts (ex.: \texttt{STM32CubeH7} $\rightarrow$ \texttt{H7}) avant validation
+  \item Le script \texttt{Run\_Single\_Series\_Full\_Pipeline\_And\_Upload.ps1} et les scripts \textit{issues-by-component} appliquent la même logique dynamique
+\end{itemize}
+
+Cette stratégie garantit qu'un ajout de série s'effectue à un seul endroit (config central + fichier série), sans patcher plusieurs listes \texttt{ValidateSet}.
 
 \subsection{Politique Add vs Replace}
 
@@ -3119,10 +3131,19 @@ L'upload vers la KB nécessite un runner \texttt{self-hosted} (contraintes rése
 \begin{itemize}
   \item Validation de schéma et politique placeholders avant upload
   \item Contrôle explicite Add/Replace selon le contexte de série
+  \item Timeout réseau borné à \textbf{60 s} par requête d'upload pour éviter les attentes bloquantes
   \item Détection proactive runner offline (pas de queue indéfinie)
   \item Exécution matricielle avec \texttt{fail-fast=false} pour isoler les échecs par série
   \item Artefacts et résumés GitHub conservés 30 jours pour audit
 \end{itemize}
+
+\subsection{Gestion des Credentials en CI}
+
+Les jobs d'upload n'injectent plus explicitement de secrets API dans les workflows.
+L'authentification est résolue côté runner self-hosted via variables d'environnement
+(par exemple \texttt{ST\_GITHUB\_ANALYZER\_API\_KEY} / \texttt{PERSONA\_API\_KEY}).
+
+Ce choix réduit l'exposition des secrets dans les définitions YAML et aligne le comportement CI avec l'exécution locale déjà validée.
 
 \subsection{Procédure Opérationnelle Recommandée}
 

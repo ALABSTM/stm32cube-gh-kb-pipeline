@@ -1,6 +1,7 @@
 import time
 import random
 import hashlib
+import os
 import requests
 import urllib3
  
@@ -18,7 +19,14 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
  
  
 clientAppName = "mdrf_st_github_analyzer"
-apiKey = "2d4fb50a-a6be-49fe-8054-2f12e880686c"
+apiKey = (
+    os.getenv("PERSONA_API_KEY")
+    or os.getenv("ST_GITHUB_ANALYZER_API_KEY")
+    or os.getenv("ST_CHATGPT_API_KEY")
+    or os.getenv("ST_AI_BRIDGE_API_KEY")
+    or os.getenv("ST_API_KEY")
+    or ""
+).strip()
 serviceName = "kb"
 url = "https://api-ai-bridge.st.com/chatgpt/api/client-apps"
  
@@ -38,6 +46,12 @@ def call_api(request_body, max_retries=3):
     """
     Envoie la requête POST à l'API avec gestion des retries.
     """
+    if not apiKey:
+        raise RuntimeError(
+            "Missing persona API key. Set PERSONA_API_KEY or ST_GITHUB_ANALYZER_API_KEY "
+            "(fallbacks: ST_CHATGPT_API_KEY, ST_AI_BRIDGE_API_KEY, ST_API_KEY)."
+        )
+
     for attempt in range(1, max_retries + 1):
         timestamp = request_body.get("timestamp", int(time.time()))
         nonce = random.randint(0, 999999)

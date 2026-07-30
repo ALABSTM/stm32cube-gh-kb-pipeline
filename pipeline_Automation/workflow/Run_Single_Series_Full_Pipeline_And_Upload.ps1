@@ -21,7 +21,6 @@
 
 param(
     [Parameter(Mandatory = $true)]
-    [ValidateSet("G4", "L0", "L1", "L4", "L5", "N6", "U0", "U3", "WB", "WB0", "WBA", "WL3")]
     [string]$Series,
 
     [ValidateSet("Full", "Prepare", "Upload")]
@@ -45,7 +44,9 @@ param(
     [switch]$SkipAlfredEnrichment,
     [switch]$SkipPlaceholderGate,
     [switch]$RunAlfredBeforeUpload,
-    [switch]$UseAlfredProxy
+    [switch]$UseAlfredProxy,
+    [switch]$EnableIssuesByComponentFlow,
+    [switch]$ComponentIssuesOnly
 )
 
 Set-StrictMode -Version Latest
@@ -53,6 +54,7 @@ $ErrorActionPreference = "Stop"
 
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot "..\..")
 Set-Location $repoRoot
+$globalConfigPath = "shared/config/config_all_series.json"
 
 # Auto-detect venv python if not specified.
 if (-not $PythonExe) {
@@ -66,19 +68,29 @@ if (-not $PythonExe) {
     }
 }
 
-$seriesMap = @{
-    "G4" = @{ Slug = "stm32cubeg4"; Repo = "STM32CubeG4"; Config = "shared/config/config_g4.json" }
-    "L0" = @{ Slug = "stm32cubel0"; Repo = "STM32CubeL0"; Config = "shared/config/config_l0.json" }
-    "L1" = @{ Slug = "stm32cubel1"; Repo = "STM32CubeL1"; Config = "shared/config/config_l1.json" }
-    "L4" = @{ Slug = "stm32cubel4"; Repo = "STM32CubeL4"; Config = "shared/config/config_l4.json" }
-    "L5" = @{ Slug = "stm32cubel5"; Repo = "STM32CubeL5"; Config = "shared/config/config_l5.json" }
-    "N6" = @{ Slug = "stm32cuben6"; Repo = "STM32CubeN6"; Config = "shared/config/config_n6.json" }
-    "U0" = @{ Slug = "stm32cubeu0"; Repo = "STM32CubeU0"; Config = "shared/config/config_u0.json" }
-    "U3" = @{ Slug = "stm32cubeu3"; Repo = "STM32CubeU3"; Config = "shared/config/config_u3.json" }
-    "WB" = @{ Slug = "stm32cubewb"; Repo = "STM32CubeWB"; Config = "shared/config/config_wb.json" }
-    "WB0" = @{ Slug = "stm32cubewb0"; Repo = "STM32CubeWB0"; Config = "shared/config/config_wb0.json" }
-    "WBA" = @{ Slug = "stm32cubewba"; Repo = "STM32CubeWBA"; Config = "shared/config/config_wba.json" }
-    "WL3" = @{ Slug = "stm32cubewl3"; Repo = "STM32CubeWL3"; Config = "shared/config/config_wl3.json" }
+$cfgAll = Get-Content -LiteralPath $globalConfigPath -Raw | ConvertFrom-Json
+$seriesMap = @{}
+foreach ($seriesFull in @($cfgAll.all_series)) {
+    $name = [string]$seriesFull
+    if (-not $name.StartsWith("STM32Cube")) {
+        continue
+    }
+    $seriesCode = $name.Substring(9).ToUpperInvariant()
+    $cfgFile = $cfgAll.series_config_files.$name
+    if (-not $cfgFile) {
+        continue
+    }
+    $seriesMap[$seriesCode] = @{
+        Slug = $name.ToLowerInvariant()
+        Repo = $name
+        Config = "shared/config/$cfgFile"
+    }
+}
+
+$Series = $Series.ToUpperInvariant()
+if (-not $seriesMap.ContainsKey($Series)) {
+    $allowed = ($seriesMap.Keys | Sort-Object) -join ", "
+    throw "Unsupported series '$Series'. Allowed (from $globalConfigPath): $allowed"
 }
 
 $seriesInfo = $seriesMap[$Series]
@@ -88,9 +100,8 @@ $configPath = $seriesInfo.Config
 $deliveryRoot = "datasets/07_delivery/st_ready/by_series/$slug"
 $uploader = "pipeline_Automation/upload/Add_Data_Source_Files.py"
 $idsOutput = Join-Path $deliveryRoot "upload_datasource_ids_$slug.json"
-$globalConfigPath = "shared/config/config_all_series.json"
 $uploadMaxRetries = 5
-$uploadTimeoutSeconds = 300
+$uploadTimeoutSeconds = 60
 
 function Invoke-Step {
     param(
@@ -455,6 +466,41 @@ function Invoke-PrepareSeries {
         Write-Host "[SKIP] Placeholder gate disabled by -SkipPlaceholderGate" -ForegroundColor Yellow
     } else {
         Invoke-PlaceholderGate
+    }
+
+    if ($EnableIssuesByComponentFlow) {
+        Invoke-IssuesByComponentSplit
+    }
+}
+
+function Invoke-IssuesByComponentSplit {
+    $splitScript = Join-Path $repoRoot "pipeline_Automation/workflow/Split_Issues_By_Component.ps1"
+    if (-not (Test-Path -LiteralPath $splitScript)) {
+        throw "Issues-by-component split script not found: $splitScript"
+    }
+
+    Write-Host "`n===== Split issues by component for $Series =====" -ForegroundColor Cyan
+    & powershell -ExecutionPolicy Bypass -File $splitScript -Series $Series -PythonExe $PythonExe
+    if ($LASTEXITCODE -ne 0) {
+        throw "Split issues by component failed for $Series"
+    }
+}
+
+function Invoke-IssuesByComponentUpload {
+    $uploadScript = Join-Path $repoRoot "pipeline_Automation/workflow/Upload_Issues_By_Component.ps1"
+    if (-not (Test-Path -LiteralPath $uploadScript)) {
+        throw "Issues-by-component upload script not found: $uploadScript"
+    }
+
+    Write-Host "`n===== Upload issues by component for $Series =====" -ForegroundColor Cyan
+    & powershell -ExecutionPolicy Bypass -File $uploadScript `
+        -Series $Series `
+        -PythonExe $PythonExe `
+        -RemoteUser $RemoteUser `
+        -KbId $KbId `
+        -JsonSplitSize $JsonSplitSize
+    if ($LASTEXITCODE -ne 0) {
+        throw "Upload issues by component failed for $Series"
     }
 }
 
@@ -950,33 +996,39 @@ function Invoke-UploadSeries {
         uploaded_at = (Get-Date).ToString("s")
     }
 
-    if ($IssuesDatasourceId -gt 0) {
-        $ids.issues = Invoke-UploadJsonAdd `
-            -Label "${Series} issues" `
-            -FilePath $issuesFile `
-            -RootKey "issues" `
-            -DatasourceId $IssuesDatasourceId `
-            -ProcessorParams $issuesParams `
-            -DatasourceNameForFallback "DB_STready_${Series}_Issues"
-    } elseif ((Test-JsonRootIsEmpty -Path $issuesFile -RootKey "issues") -and ($driverIssueNonEmptyFiles.Count -gt 0)) {
-        $firstIssueFile = $driverIssueNonEmptyFiles[0]
-        $ids.issues = Invoke-UploadJsonNew `
-            -Label "${Series} issues from driver/subrepo $($firstIssueFile.Directory.Parent.Name)" `
-            -FilePath $firstIssueFile.FullName `
-            -RootKey "issues" `
-            -DatasourceName "DB_STready_${Series}_Issues" `
-            -ProcessorParams $issuesParams
-        $driverIssueFiles = @($driverIssueFiles | Where-Object { $_.FullName -ne $firstIssueFile.FullName })
+    if ($ComponentIssuesOnly) {
+        Write-Host "[SKIP] Monolithic issues datasource upload disabled by -ComponentIssuesOnly" -ForegroundColor Yellow
+        $ids.issues = $null
+        Save-DatasourceIdsSnapshot -Ids $ids -Reason "issues_skipped_component_only"
     } else {
-        $ids.issues = Invoke-UploadJsonNew `
-            -Label "${Series} issues" `
-            -FilePath $issuesFile `
-            -RootKey "issues" `
-            -DatasourceName "DB_STready_${Series}_Issues" `
-            -ProcessorParams $issuesParams `
-            -AllowEmpty
+        if ($IssuesDatasourceId -gt 0) {
+            $ids.issues = Invoke-UploadJsonAdd `
+                -Label "${Series} issues" `
+                -FilePath $issuesFile `
+                -RootKey "issues" `
+                -DatasourceId $IssuesDatasourceId `
+                -ProcessorParams $issuesParams `
+                -DatasourceNameForFallback "DB_STready_${Series}_Issues"
+        } elseif ((Test-JsonRootIsEmpty -Path $issuesFile -RootKey "issues") -and ($driverIssueNonEmptyFiles.Count -gt 0)) {
+            $firstIssueFile = $driverIssueNonEmptyFiles[0]
+            $ids.issues = Invoke-UploadJsonNew `
+                -Label "${Series} issues from driver/subrepo $($firstIssueFile.Directory.Parent.Name)" `
+                -FilePath $firstIssueFile.FullName `
+                -RootKey "issues" `
+                -DatasourceName "DB_STready_${Series}_Issues" `
+                -ProcessorParams $issuesParams
+            $driverIssueFiles = @($driverIssueFiles | Where-Object { $_.FullName -ne $firstIssueFile.FullName })
+        } else {
+            $ids.issues = Invoke-UploadJsonNew `
+                -Label "${Series} issues" `
+                -FilePath $issuesFile `
+                -RootKey "issues" `
+                -DatasourceName "DB_STready_${Series}_Issues" `
+                -ProcessorParams $issuesParams `
+                -AllowEmpty
+        }
+        Save-DatasourceIdsSnapshot -Ids $ids -Reason "issues"
     }
-    Save-DatasourceIdsSnapshot -Ids $ids -Reason "issues"
 
     if ($FilesDatasourceId -gt 0) {
         $ids.files = Invoke-UploadJsonAdd `
@@ -1061,6 +1113,11 @@ function Invoke-UploadSeries {
     Invoke-UploadSubrepoDeliveryAdd -Label "files" -Files $driverFiles -RootKey "files" -DatasourceId $ids.files -ProcessorParams $filesParams
     Invoke-UploadSubrepoDeliveryAdd -Label "diagnostic cards" -Files $driverDiagnosticFiles -RootKey "diagnostic_cards" -DatasourceId $ids.diagnostic -ProcessorParams $diagnosticParams
     Invoke-UploadSubrepoDeliveryAdd -Label "resolver cases" -Files $driverResolverFiles -RootKey "resolver_cases" -DatasourceId $ids.resolver -ProcessorParams $resolverParams
+
+    if ($EnableIssuesByComponentFlow) {
+        Invoke-IssuesByComponentSplit
+        Invoke-IssuesByComponentUpload
+    }
 
     Write-Host "`n===== $Series upload summary =====" -ForegroundColor Cyan
     $ids | ConvertTo-Json -Depth 4 | Write-Host

@@ -1,5 +1,11 @@
 # Atelier Pratique — Pipeline de Prétraitement STM32Cube
 
+## Guide rapide commandes (copier-coller)
+
+Pour une version courte et accessible des commandes atelier, voir:
+
+- `docs/presentations/README_Atelier_Quick_Commands.md`
+
 ## Génération de la présentation PPTX (après modifications)
 
 Pour régénérer la version PowerPoint à jour :

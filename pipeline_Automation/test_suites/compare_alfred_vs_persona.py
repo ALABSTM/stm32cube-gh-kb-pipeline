@@ -19,6 +19,7 @@ Requires: openpyxl, requests
 """
 
 import hashlib
+import os
 import random
 import sys
 import time
@@ -50,13 +51,25 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 # ============================================================
 
 # --- Alfred (generic st_copilot) ---
-ALFRED_CLIENT_APP = "mdrf_stgithub_analyzer_client"
-ALFRED_API_KEY = "46f2335f-873f-4704-afea-634ed6c92620"
+ALFRED_CLIENT_APP = os.getenv("ALFRED_CLIENT_APP_NAME", "mdrf_stgithub_analyzer_client").strip()
+ALFRED_API_KEY = (
+    os.getenv("ST_CHATGPT_API_KEY")
+    or os.getenv("ST_AI_BRIDGE_API_KEY")
+    or os.getenv("ST_API_KEY")
+    or ""
+).strip()
 ALFRED_PERSONA = "st_copilot"
 
 # --- ST GitHub Analyzer (KB-powered persona) ---
-PERSONA_CLIENT_APP = "mdrf_st_github_analyzer"
-PERSONA_API_KEY = "2d4fb50a-a6be-49fe-8054-2f12e880686c"
+PERSONA_CLIENT_APP = os.getenv("PERSONA_CLIENT_APP_NAME", "mdrf_st_github_analyzer").strip()
+PERSONA_API_KEY = (
+    os.getenv("PERSONA_API_KEY")
+    or os.getenv("ST_GITHUB_ANALYZER_API_KEY")
+    or os.getenv("ST_CHATGPT_API_KEY")
+    or os.getenv("ST_AI_BRIDGE_API_KEY")
+    or os.getenv("ST_API_KEY")
+    or ""
+).strip()
 PERSONA_NAME = "ST GitHub Analyzer"
 
 # Shared
@@ -532,6 +545,15 @@ def main():
         help="Custom output path for Excel file",
     )
     args = parser.parse_args()
+
+    if not ALFRED_CLIENT_APP:
+        raise SystemExit("Missing Alfred client app name. Set ALFRED_CLIENT_APP_NAME.")
+    if not ALFRED_API_KEY:
+        raise SystemExit("Missing Alfred API key. Set ST_CHATGPT_API_KEY (or ST_AI_BRIDGE_API_KEY/ST_API_KEY).")
+    if not PERSONA_CLIENT_APP:
+        raise SystemExit("Missing persona client app name. Set PERSONA_CLIENT_APP_NAME.")
+    if not PERSONA_API_KEY:
+        raise SystemExit("Missing persona API key. Set PERSONA_API_KEY or ST_GITHUB_ANALYZER_API_KEY.")
 
     questions = COMPARISON_QUESTIONS
     if args.max_questions:

@@ -40,7 +40,9 @@ param(
     [switch]$SkipIssues,
     [switch]$SkipFiles,
     [switch]$SkipDiagnostic,
-    [switch]$SkipResolver
+    [switch]$SkipResolver,
+    [switch]$EnableIssuesByComponentFlow,
+    [switch]$ComponentIssuesOnly
 )
 
 Set-StrictMode -Version Latest
@@ -418,10 +420,38 @@ function Upload-Category {
 }
 
 # ---- Main --------------------------------------------------------
-if (-not $SkipIssues)    { Upload-Category "issues"          "issues"          "{{github_url}}" "{{repo}} issue #{{issue_number}} - {{issue_title}}" }
+if ($ComponentIssuesOnly) {
+    Write-Host "[SKIP] Monolithic issues upload disabled by -ComponentIssuesOnly" -ForegroundColor Yellow
+} elseif (-not $SkipIssues) {
+    Upload-Category "issues" "issues" "{{github_url}}" "{{repo}} issue #{{issue_number}} - {{issue_title}}"
+}
 if (-not $SkipFiles)     { Upload-Category "files"           "files"           "{{github_url}}" "{{repo}} {{file_type}} - {{path}}" }
 if (-not $SkipDiagnostic){ Upload-Category "diagnostic_cards" "diagnostic_cards" "{{externalURL}}" "{{repo}} diagnostic #{{issue_number}} - {{title}}" }
 if (-not $SkipResolver)  { Upload-Category "resolver_cases"  "resolver_cases"  "{{externalURL}}" "{{repo}} resolver #{{issue_number}} - {{issue_title}}" }
+
+if ($EnableIssuesByComponentFlow) {
+    $splitScript = Join-Path $repoRoot "pipeline_Automation/workflow/Split_Issues_By_Component.ps1"
+    $uploadScript = Join-Path $repoRoot "pipeline_Automation/workflow/Upload_Issues_By_Component.ps1"
+
+    if (-not (Test-Path -LiteralPath $splitScript)) {
+        throw "Issues-by-component split script not found: $splitScript"
+    }
+    if (-not (Test-Path -LiteralPath $uploadScript)) {
+        throw "Issues-by-component upload script not found: $uploadScript"
+    }
+
+    Write-Host "`n===== Issues by component: split ($Series) =====" -ForegroundColor Cyan
+    & powershell -ExecutionPolicy Bypass -File $splitScript -Series $Series -PythonExe $PythonExe
+    if ($LASTEXITCODE -ne 0) {
+        throw "Issues-by-component split failed for $Series"
+    }
+
+    Write-Host "`n===== Issues by component: upload ($Series) =====" -ForegroundColor Cyan
+    & powershell -ExecutionPolicy Bypass -File $uploadScript -Series $Series -PythonExe $PythonExe -RemoteUser $RemoteUser -KbId $KbId -JsonSplitSize $JsonSplitSize
+    if ($LASTEXITCODE -ne 0) {
+        throw "Issues-by-component upload failed for $Series"
+    }
+}
 
 Write-Host "`n===== $Series upload complete =====" -ForegroundColor Green
 Write-Host "Final IDs:" -ForegroundColor Gray

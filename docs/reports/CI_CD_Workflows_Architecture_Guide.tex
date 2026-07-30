@@ -45,10 +45,14 @@ Both workflows use the same four-job sequence:
 \subsection{1) Prepare Matrix Inputs}
 \begin{itemize}
   \item Reads input values (series, mode, datasource mode, policy flags, max parallel)
-  \item Normalizes and validates series list against allowed values:
-  \texttt{G4,L0,L1,L4,L5,N6,U0,U3,WB,WB0,WBA,WL3}
+  \item Normalizes and validates the series list dynamically from
+  \texttt{shared/config/config\_all\_series.json} (field \texttt{all\_series})
+  \item Converts long names to short codes during validation
+  (example: \texttt{STM32CubeH7} $\rightarrow$ \texttt{H7})
   \item Produces job outputs consumed by later jobs
 \end{itemize}
+
+This removes hardcoded allowlists in workflows and avoids drift when a new series is onboarded.
 
 \subsection{2) Check Self-Hosted Runner Availability}
 \begin{itemize}
@@ -89,6 +93,18 @@ This behavior avoids false-positive green runs and clearly indicates that prepro
   \item No schedule or push auto-execution
   \item Best for controlled on-demand execution by operator
 \end{itemize}
+
+\subsection{Single Source of Truth for Series Governance}
+The two workflows and the per-series orchestration script now share one source of truth:
+\texttt{shared/config/config\_all\_series.json}.
+
+\begin{itemize}
+  \item If \texttt{series} input is empty, workflows process all configured series from \texttt{all\_series}
+  \item If \texttt{series} is provided, each code is validated against this dynamic set
+  \item Component scripts also validate from the same config (no static \texttt{ValidateSet})
+\end{itemize}
+
+Operational consequence: adding a new series requires updating central config (and its per-series config file), not editing multiple workflow/script allowlists.
 
 \section{End-to-End Architecture}
 \subsection{Control Plane (GitHub Actions)}
@@ -137,10 +153,21 @@ Before running either workflow:
 \begin{enumerate}
   \item Confirm self-hosted runner is \texttt{Online} in repository settings
   \item Ensure runner is not busy
-  \item Verify required secrets:\\
-  \texttt{ST\_CHATGPT\_API\_KEY}, \texttt{ST\_REMOTE\_USER}
+  \item Verify runner environment variables are configured (not workflow secrets):\\
+  \texttt{ST\_GITHUB\_ANALYZER\_API\_KEY} (or \texttt{PERSONA\_API\_KEY} / \texttt{ST\_CHATGPT\_API\_KEY})
+  \item Optional: define \texttt{ST\_REMOTE\_USER}; otherwise the orchestration script default is used
   \item For manual runs, choose correct series and mode
 \end{enumerate}
+
+\section{Upload Timeout Policy}
+To avoid long blocking waits and unnecessary GitHub minutes consumption, each upload HTTP call is now bounded to\
+\textbf{60 seconds maximum}.
+
+\begin{itemize}
+  \item Implemented in uploader default: \texttt{Add\_Data\_Source\_Files.py} (\texttt{--timeout}=60 by default)
+  \item Enforced by orchestration override in full pipeline script (60s)
+  \item Applied in component upload flow as explicit \texttt{--timeout 60}
+\end{itemize}
 
 \section{Troubleshooting Guide}
 \subsection{Run shows only notice job}
@@ -150,6 +177,13 @@ Action: start runner process/service on the bound machine and rerun.
 \subsection{Run button not visible}
 Cause: workflow file missing or invalid on default branch.\\
 Action: ensure valid \texttt{workflow\_dispatch} YAML is present on default branch.
+
+\subsection{Unsupported series error (for example C5)}
+Cause: the series is not declared in \texttt{shared/config/config\_all\_series.json}
+or has no mapped per-series config file.\\
+Action: add \texttt{STM32Cube<Series>} to \texttt{all\_series}, map it in
+\texttt{series\_config\_files}, and create the corresponding
+\texttt{shared/config/config\_<series>.json}.
 
 \subsection{Upload did not happen}
 Cause: pipeline stage did not run (runner gate blocked) or upload stage failed.\\

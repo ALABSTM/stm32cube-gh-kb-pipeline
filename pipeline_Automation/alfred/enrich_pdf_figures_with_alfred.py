@@ -22,6 +22,7 @@ import hashlib
 import io
 import json
 import mimetypes
+import os
 import random
 import time
 from pathlib import Path
@@ -43,9 +44,14 @@ DATA_DIR = PROJECT_ROOT / "data"
 DESCRIPTIONS_FILE = DATA_DIR / "pdf_image_descriptions.json"
 
 # --- Alfred Vision API credentials ---
-CLIENT_APP_NAME = "mdrf_stgithub_analyzer_client"
-API_KEY = "46f2335f-873f-4704-afea-634ed6c92620"
-API_URL = "https://api-ai-bridge.st.com/chatgpt/api/client-apps"
+CLIENT_APP_NAME = os.getenv("ALFRED_CLIENT_APP_NAME", "mdrf_stgithub_analyzer_client").strip()
+API_KEY = (
+    os.getenv("ST_CHATGPT_API_KEY")
+    or os.getenv("ST_AI_BRIDGE_API_KEY")
+    or os.getenv("ST_API_KEY")
+    or ""
+).strip()
+API_URL = os.getenv("ALFRED_API_URL", "https://api-ai-bridge.st.com/chatgpt/api/client-apps").strip()
 CHAT_SERVICE = "chat"
 DEFAULT_PERSONA = "st_copilot"
 
@@ -129,6 +135,11 @@ def call_alfred_for_figure(
     timeout: int = 120,
 ) -> str:
     """Send a figure crop to Alfred Vision and return the description."""
+    if not CLIENT_APP_NAME:
+        raise ValueError("Missing Alfred client app name. Set ALFRED_CLIENT_APP_NAME.")
+    if not API_KEY:
+        raise ValueError("Missing Alfred API key. Set ST_CHATGPT_API_KEY (or ST_AI_BRIDGE_API_KEY/ST_API_KEY).")
+
     user_prompt = (
         f"{prompt}\n\n"
         f"Page context (surrounding text):\n{page_context[:2000]}"

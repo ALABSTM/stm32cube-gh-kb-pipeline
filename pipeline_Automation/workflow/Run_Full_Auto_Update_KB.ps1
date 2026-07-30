@@ -33,12 +33,15 @@
 param(
     [string[]]$Series = @("f4", "h5", "h7", "u5", "wl"),
     [string]$PythonExe = "python",
+    [int]$KbId = 793,
     [string]$RemoteUser = "",
     [string]$ApiKey = "",
     [switch]$SkipIngestion,
     [switch]$SkipUpload,
     [switch]$ContinueOnError,
-    [int]$JsonSplitSize = 1000
+    [int]$JsonSplitSize = 1000,
+    [switch]$EnableIssuesByComponentFlow,
+    [switch]$ComponentIssuesOnly
 )
 
 Set-StrictMode -Version Latest
@@ -63,6 +66,21 @@ function Run-Step {
     param([string]$Label, [string[]]$CmdArgs)
     Log "=== $Label ==="
     & $PythonExe @CmdArgs 2>&1 | Tee-Object -Append -FilePath $logFile
+    if ($LASTEXITCODE -ne 0) {
+        if ($ContinueOnError) {
+            Log "$Label FAILED (exit code $LASTEXITCODE) - continuing" "WARN"
+            return $false
+        }
+        throw "$Label failed with exit code $LASTEXITCODE"
+    }
+    Log "$Label completed successfully"
+    return $true
+}
+
+function Run-PowerShellStep {
+    param([string]$Label, [string[]]$CmdArgs)
+    Log "=== $Label ==="
+    & powershell @CmdArgs 2>&1 | Tee-Object -Append -FilePath $logFile
     if ($LASTEXITCODE -ne 0) {
         if ($ContinueOnError) {
             Log "$Label FAILED (exit code $LASTEXITCODE) - continuing" "WARN"
@@ -142,6 +160,11 @@ if ($SkipUpload) {
         }
 
         foreach ($artifact in $artifactTypes) {
+            if ($ComponentIssuesOnly -and $artifact.type -eq "issues") {
+                Log "Skipping monolithic issues upload for $($s.ToUpper()) due to -ComponentIssuesOnly"
+                continue
+            }
+
             $dsId = $datasourceIds[$s][$artifact.type]
             $artifactDir = Join-Path $seriesDir $artifact.dir
             $files = @(Get-ChildItem -Path $artifactDir -Filter $artifact.pattern -File -ErrorAction SilentlyContinue)
@@ -169,6 +192,32 @@ if ($SkipUpload) {
             }
 
             Run-Step -Label "Upload $($s.ToUpper()) $($artifact.type) (DS#$dsId)" -CmdArgs $uploadArgs
+        }
+
+        if ($EnableIssuesByComponentFlow) {
+            $seriesUpper = $s.ToUpperInvariant()
+            $splitScript = Join-Path $repoRoot "pipeline_Automation/workflow/Split_Issues_By_Component.ps1"
+            $uploadScript = Join-Path $repoRoot "pipeline_Automation/workflow/Upload_Issues_By_Component.ps1"
+
+            Run-PowerShellStep -Label "Split issues by component ($seriesUpper)" -CmdArgs @(
+                "-ExecutionPolicy", "Bypass",
+                "-File", $splitScript,
+                "-Series", $seriesUpper,
+                "-PythonExe", $PythonExe
+            ) | Out-Null
+
+            $uploadPsArgs = @(
+                "-ExecutionPolicy", "Bypass",
+                "-File", $uploadScript,
+                "-Series", $seriesUpper,
+                "-PythonExe", $PythonExe,
+                "-KbId", "$KbId",
+                "-JsonSplitSize", "$JsonSplitSize"
+            )
+            if ($RemoteUser) {
+                $uploadPsArgs += @("-RemoteUser", $RemoteUser)
+            }
+            Run-PowerShellStep -Label "Upload issues by component ($seriesUpper)" -CmdArgs $uploadPsArgs | Out-Null
         }
     }
 }

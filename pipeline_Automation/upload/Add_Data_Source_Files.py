@@ -32,7 +32,7 @@ LEGACY_TYPE_VARIANT_DELETE = "kb-datasouce-delete"
 # Repository default client app for ST GitHub Analyzer persona.
 DEFAULT_CLIENT_APP_NAME = "mdrf_st_github_analyzer"
 DEFAULT_MAX_RETRIES = 3
-DEFAULT_TIMEOUT_SECONDS = 120
+DEFAULT_TIMEOUT_SECONDS = 60
 RETRYABLE_HTTP_CODES = {408, 425, 429, 500, 502, 503, 504}
 DEFAULT_PAYLOAD_MODES = ["flat"]
 DEFAULT_TIMESTAMP_MODES = ["s"]
@@ -84,6 +84,7 @@ def _load_legacy_value(attr_name: str) -> Any:
             return legacy_vars.get(attr_name)
         except Exception:
             return None
+        
 
 
 def looks_like_placeholder_api_key(value: str) -> bool:
@@ -116,7 +117,13 @@ def resolve_api_key(cli_api_key: str | None) -> str:
             )
         return key
 
-    for env_name in ("ST_CHATGPT_API_KEY", "ST_AI_BRIDGE_API_KEY", "ST_API_KEY"):
+    for env_name in (
+        "ST_GITHUB_ANALYZER_API_KEY",
+        "PERSONA_API_KEY",
+        "ST_CHATGPT_API_KEY",
+        "ST_AI_BRIDGE_API_KEY",
+        "ST_API_KEY",
+    ):
         value = os.getenv(env_name)
         if value and value.strip():
             key = value.strip()
@@ -133,7 +140,7 @@ def resolve_api_key(cli_api_key: str | None) -> str:
 
     raise ValueError(
         "Missing API key. Provide --api-key or set one of: "
-        "ST_CHATGPT_API_KEY, ST_AI_BRIDGE_API_KEY, ST_API_KEY."
+        "ST_GITHUB_ANALYZER_API_KEY, PERSONA_API_KEY, ST_CHATGPT_API_KEY, ST_AI_BRIDGE_API_KEY, ST_API_KEY."
     )
 
 

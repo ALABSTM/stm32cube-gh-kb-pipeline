@@ -195,7 +195,8 @@
     "kb_id":  793,
     "alfred_api":  {
                        "client_app_name":  "mdrf_stgithub_analyzer_client",
-                       "api_key":  "46f2335f-873f-4704-afea-634ed6c92620",
+                       "api_key":  null,
+                       "api_key_env":  "ST_CHATGPT_API_KEY",
                        "api_url":  "https://api-ai-bridge.st.com/chatgpt/api/client-apps",
                        "use_proxy":  false
                    },

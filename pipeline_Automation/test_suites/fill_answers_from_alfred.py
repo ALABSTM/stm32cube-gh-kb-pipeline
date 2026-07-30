@@ -11,6 +11,7 @@ Requires: openpyxl, requests
 """
 
 import hashlib
+import os
 import random
 import sys
 import time
@@ -38,9 +39,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from generate_quality_test_suite import QUESTIONS
 
 # --- Alfred API credentials (same as enrich_json_images_with_alfred.py) ---
-CLIENT_APP_NAME = "mdrf_stgithub_analyzer_client"
-API_KEY = "46f2335f-873f-4704-afea-634ed6c92620"
-API_URL = "https://api-ai-bridge.st.com/chatgpt/api/client-apps"
+CLIENT_APP_NAME = os.getenv("ALFRED_CLIENT_APP_NAME", "mdrf_stgithub_analyzer_client").strip()
+API_KEY = (
+    os.getenv("ST_CHATGPT_API_KEY")
+    or os.getenv("ST_AI_BRIDGE_API_KEY")
+    or os.getenv("ST_API_KEY")
+    or ""
+).strip()
+API_URL = os.getenv("ALFRED_API_URL", "https://api-ai-bridge.st.com/chatgpt/api/client-apps").strip()
 CHAT_SERVICE = "chat"
 PERSONA = "st_copilot"
 
@@ -128,6 +134,11 @@ def ask_alfred(question: str, retries: int = 3) -> str:
 
 
 def main():
+    if not CLIENT_APP_NAME:
+        raise SystemExit("Missing Alfred client app name. Set ALFRED_CLIENT_APP_NAME.")
+    if not API_KEY:
+        raise SystemExit("Missing Alfred API key. Set ST_CHATGPT_API_KEY (or ST_AI_BRIDGE_API_KEY/ST_API_KEY).")
+
     print(f"Calling Alfred ({PERSONA}) for {len(QUESTIONS)} questions...")
     print(f"Output: {XLSX_PATH}")
     print("=" * 60)
