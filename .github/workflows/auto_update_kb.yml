@@ -6,9 +6,9 @@ on:
   workflow_dispatch:
     inputs:
       series:
-        description: 'Comma-separated series (G4,L0,L1,L4,L5,N6,U0,U3,WB,WB0,WBA,WL3)'
+        description: 'Comma-separated series codes (ex: H7,U5,WB). Allowed values are loaded from shared/config/config_all_series.json'
         required: false
-        default: 'G4,L0,L1,L4,L5,N6,U0,U3,WB,WB0,WBA,WL3'
+        default: ''
       mode:
         description: 'Execution mode for per-series script'
         type: choice
@@ -47,6 +47,14 @@ on:
           - Warn
           - Off
         default: Fail
+      enable_issues_by_component_flow:
+        description: 'Enable split+upload of issues datasources by component'
+        type: boolean
+        default: false
+      component_issues_only:
+        description: 'Skip monolithic issues datasource and keep only per-component issues datasources'
+        type: boolean
+        default: false
       max_parallel:
         description: 'Maximum series jobs in parallel'
         required: false
@@ -62,10 +70,12 @@ concurrency:
 
 env:
   PYTHON_VERSION: '3.12'
-  DEFAULT_SERIES: 'G4,L0,L1,L4,L5,N6,U0,U3,WB,WB0,WBA,WL3'
+  DEFAULT_SERIES: ''
   DEFAULT_MODE: 'Full'
   DEFAULT_EXISTING_DATASOURCE_MODE: 'Replace'
   DEFAULT_PLACEHOLDER_POLICY: 'Fail'
+  DEFAULT_ENABLE_ISSUES_BY_COMPONENT_FLOW: 'false'
+  DEFAULT_COMPONENT_ISSUES_ONLY: 'false'
   DEFAULT_MAX_PARALLEL: '1'
 
 jobs:
@@ -80,8 +90,15 @@ jobs:
       skip_schema_validation: ${{ steps.normalize.outputs.skip_schema_validation }}
       continue_on_workflow_error: ${{ steps.normalize.outputs.continue_on_workflow_error }}
       placeholder_policy: ${{ steps.normalize.outputs.placeholder_policy }}
+      enable_issues_by_component_flow: ${{ steps.normalize.outputs.enable_issues_by_component_flow }}
+      component_issues_only: ${{ steps.normalize.outputs.component_issues_only }}
       max_parallel: ${{ steps.normalize.outputs.max_parallel }}
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
       - name: Normalize workflow inputs
         id: normalize
         shell: bash
@@ -94,6 +111,8 @@ jobs:
             skip_schema='${{ inputs.skip_schema_validation }}'
             continue_err='${{ inputs.continue_on_workflow_error }}'
             placeholder='${{ inputs.placeholder_policy }}'
+            enable_component_flow='${{ inputs.enable_issues_by_component_flow }}'
+            component_issues_only='${{ inputs.component_issues_only }}'
             max_parallel='${{ inputs.max_parallel }}'
           else
             raw_series='${{ env.DEFAULT_SERIES }}'
@@ -103,27 +122,52 @@ jobs:
             skip_schema='false'
             continue_err='false'
             placeholder='${{ env.DEFAULT_PLACEHOLDER_POLICY }}'
+            enable_component_flow='${{ env.DEFAULT_ENABLE_ISSUES_BY_COMPONENT_FLOW }}'
+            component_issues_only='${{ env.DEFAULT_COMPONENT_ISSUES_ONLY }}'
             max_parallel='${{ env.DEFAULT_MAX_PARALLEL }}'
           fi
 
           series_json=$(RAW_SERIES="$raw_series" python - <<'PY'
           import json
           import os
+          from pathlib import Path
 
-          allowed = {
-            "G4", "L0", "L1", "L4", "L5", "N6", "U0", "U3", "WB", "WB0", "WBA", "WL3"
-          }
+          cfg_path = Path("shared/config/config_all_series.json")
+          if not cfg_path.exists():
+            raise SystemExit(f"Missing config file: {cfg_path}")
+
+          cfg = json.loads(cfg_path.read_text(encoding="utf-8-sig"))
+          all_series = cfg.get("all_series", [])
+          if not isinstance(all_series, list) or not all_series:
+            raise SystemExit("config_all_series.json: 'all_series' is missing or empty")
+
+          allowed = []
+          seen_allowed = set()
+          for name in all_series:
+            if not isinstance(name, str):
+              continue
+            if not name.startswith("STM32Cube"):
+              continue
+            code = name.replace("STM32Cube", "", 1).upper().strip()
+            if not code or code in seen_allowed:
+              continue
+            seen_allowed.add(code)
+            allowed.append(code)
+
+          if not allowed:
+            raise SystemExit("No valid STM32Cube series codes derived from config_all_series.json")
+
           raw = os.environ.get("RAW_SERIES", "")
           items = [s.strip().upper() for s in raw.split(",") if s.strip()]
 
           if not items:
-            items = sorted(allowed)
+            items = list(allowed)
 
           seen = set()
           normalized = []
           for s in items:
-            if s not in allowed:
-              raise SystemExit(f"Unsupported series '{s}'. Allowed: {', '.join(sorted(allowed))}")
+            if s not in seen_allowed:
+              raise SystemExit(f"Unsupported series '{s}'. Allowed: {', '.join(allowed)}")
             if s in seen:
               continue
             seen.add(s)
@@ -144,6 +188,8 @@ jobs:
           echo "skip_schema_validation=$skip_schema" >> "$GITHUB_OUTPUT"
           echo "continue_on_workflow_error=$continue_err" >> "$GITHUB_OUTPUT"
           echo "placeholder_policy=$placeholder" >> "$GITHUB_OUTPUT"
+          echo "enable_issues_by_component_flow=$enable_component_flow" >> "$GITHUB_OUTPUT"
+          echo "component_issues_only=$component_issues_only" >> "$GITHUB_OUTPUT"
           echo "max_parallel=$max_parallel" >> "$GITHUB_OUTPUT"
 
   runner-check:
@@ -235,9 +281,10 @@ jobs:
 
   preprocess-series:
     name: ${{ format('Preprocess {0}', matrix.series) }}
-    needs: [prepare]
+    needs: [prepare, runner-check]
+    if: needs.runner-check.outputs.runner_ready == 'true'
     runs-on: windows-latest
-    timeout-minutes: 360
+    timeout-minutes: 120
     strategy:
       fail-fast: false
       max-parallel: ${{ fromJSON(needs.prepare.outputs.max_parallel) }}
@@ -317,6 +364,12 @@ jobs:
           if ("${{ needs.prepare.outputs.continue_on_workflow_error }}" -eq "true") {
             $scriptArgs.ContinueOnWorkflowError = $true
           }
+          if ("${{ needs.prepare.outputs.enable_issues_by_component_flow }}" -eq "true") {
+            $scriptArgs.EnableIssuesByComponentFlow = $true
+          }
+          if ("${{ needs.prepare.outputs.component_issues_only }}" -eq "true") {
+            $scriptArgs.ComponentIssuesOnly = $true
+          }
 
           Write-Host "Running preprocess for series $($scriptArgs.Series)" -ForegroundColor Cyan
           & $script @scriptArgs
@@ -332,18 +385,15 @@ jobs:
 
   upload-series:
     name: ${{ format('Upload {0}', matrix.series) }}
-    needs: [prepare, preprocess-series]
-    if: needs.prepare.outputs.mode != 'Prepare'
+    needs: [prepare, preprocess-series, runner-check]
+    if: needs.prepare.outputs.mode != 'Prepare' && needs.runner-check.outputs.runner_ready == 'true'
     runs-on: self-hosted
-    timeout-minutes: 240
+    timeout-minutes: 90
     strategy:
       fail-fast: false
       max-parallel: ${{ fromJSON(needs.prepare.outputs.max_parallel) }}
       matrix:
         series: ${{ fromJSON(needs.prepare.outputs.series_json) }}
-    env:
-      ST_CHATGPT_API_KEY: ${{ secrets.ST_CHATGPT_API_KEY }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -451,7 +501,6 @@ jobs:
             Series = "${{ matrix.series }}"
             Mode = "Upload"
             ExistingDatasourceMode = "${{ needs.prepare.outputs.existing_datasource_mode }}"
-            RemoteUser = "${{ secrets.ST_REMOTE_USER }}"
             KbId = 793
             PythonExe = $env:RUNNER_PYTHON_EXE
             JsonSplitSize = 1000
@@ -469,9 +518,36 @@ jobs:
           if ("${{ needs.prepare.outputs.continue_on_workflow_error }}" -eq "true") {
             $scriptArgs.ContinueOnWorkflowError = $true
           }
+          if ("${{ needs.prepare.outputs.enable_issues_by_component_flow }}" -eq "true") {
+            $scriptArgs.EnableIssuesByComponentFlow = $true
+          }
+          if ("${{ needs.prepare.outputs.component_issues_only }}" -eq "true") {
+            $scriptArgs.ComponentIssuesOnly = $true
+          }
 
           Write-Host "Running upload for series $($scriptArgs.Series)" -ForegroundColor Cyan
           & $script @scriptArgs
+
+  runner-unavailable-notice:
+    name: Runner unavailable (upload skipped)
+    needs: [prepare, runner-check]
+    if: needs.prepare.outputs.mode != 'Prepare' && needs.runner-check.outputs.runner_ready != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Explain runner unavailability and fail fast
+        shell: bash
+        run: |
+          echo "## Upload Deferred: self-hosted runner unavailable" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Metric | Value |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|---|---|" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Runner ready (online + idle) | ${{ needs.runner-check.outputs.runner_ready }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Online self-hosted count | ${{ needs.runner-check.outputs.online_count }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Idle self-hosted count | ${{ needs.runner-check.outputs.idle_count }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Busy self-hosted count | ${{ needs.runner-check.outputs.busy_count }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Upload was intentionally skipped to avoid indefinite queue waiting." >> "$GITHUB_STEP_SUMMARY"
+          exit 1
 
       - name: Series summary
         if: always()
@@ -487,5 +563,7 @@ jobs:
           "| Skip Schema Validation | ${{ needs.prepare.outputs.skip_schema_validation }} |" >> $env:GITHUB_STEP_SUMMARY
           "| Continue On Workflow Error | ${{ needs.prepare.outputs.continue_on_workflow_error }} |" >> $env:GITHUB_STEP_SUMMARY
           "| Placeholder Policy | ${{ needs.prepare.outputs.placeholder_policy }} |" >> $env:GITHUB_STEP_SUMMARY
+          "| Enable Issues By Component Flow | ${{ needs.prepare.outputs.enable_issues_by_component_flow }} |" >> $env:GITHUB_STEP_SUMMARY
+          "| Component Issues Only | ${{ needs.prepare.outputs.component_issues_only }} |" >> $env:GITHUB_STEP_SUMMARY
           "| Date | $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss K') |" >> $env:GITHUB_STEP_SUMMARY
 
