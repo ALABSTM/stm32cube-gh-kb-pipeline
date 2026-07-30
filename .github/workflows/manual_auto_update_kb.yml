@@ -414,12 +414,22 @@ jobs:
       matrix:
         series: ${{ fromJSON(needs.prepare.outputs.series_json) }}
     steps:
+      - name: Reset self-hosted workspace before checkout
+        shell: powershell
+        run: |
+          if (Test-Path -LiteralPath $env:GITHUB_WORKSPACE) {
+            Write-Host "Cleaning workspace: $env:GITHUB_WORKSPACE" -ForegroundColor Yellow
+            Get-ChildItem -LiteralPath $env:GITHUB_WORKSPACE -Force -ErrorAction SilentlyContinue |
+              Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
+          }
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          clean: false
+          clean: true
           submodules: false
           persist-credentials: false
+          fetch-depth: 1
 
       - name: Enable long paths (Windows)
         shell: powershell
