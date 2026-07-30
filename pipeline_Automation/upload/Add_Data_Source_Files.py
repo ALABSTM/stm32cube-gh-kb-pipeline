@@ -117,12 +117,15 @@ def resolve_api_key(cli_api_key: str | None) -> str:
             )
         return key
 
+    # Prefer runtime workflow secrets used by upload/Alfred jobs first.
+    # This avoids stale analyzer-specific keys taking precedence when both
+    # are present in the environment.
     for env_name in (
-        "ST_GITHUB_ANALYZER_API_KEY",
-        "PERSONA_API_KEY",
         "ST_CHATGPT_API_KEY",
         "ST_AI_BRIDGE_API_KEY",
         "ST_API_KEY",
+        "ST_GITHUB_ANALYZER_API_KEY",
+        "PERSONA_API_KEY",
     ):
         value = os.getenv(env_name)
         if value and value.strip():
