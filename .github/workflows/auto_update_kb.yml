@@ -452,6 +452,10 @@ jobs:
       max-parallel: ${{ fromJSON(needs.prepare.outputs.max_parallel) }}
       matrix:
         series: ${{ fromJSON(needs.prepare.outputs.series_json) }}
+    env:
+      ST_CHATGPT_API_KEY: ${{ secrets.ST_CHATGPT_API_KEY }}
+      ST_AI_BRIDGE_API_KEY: ${{ secrets.ST_AI_BRIDGE_API_KEY }}
+      ST_API_KEY: ${{ secrets.ST_API_KEY }}
     steps:
       - name: Reset self-hosted workspace before checkout
         shell: powershell
@@ -503,6 +507,15 @@ jobs:
         with:
           name: st-ready-${{ matrix.series }}-${{ github.run_number }}
           path: datasets/07_delivery/st_ready/by_series/
+
+      - name: Alfred API key preflight
+        shell: powershell
+        run: |
+          if ($env:ST_CHATGPT_API_KEY -or $env:ST_AI_BRIDGE_API_KEY -or $env:ST_API_KEY) {
+            Write-Host "Alfred API key detected in workflow env." -ForegroundColor Green
+            exit 0
+          }
+          throw "Missing Alfred API key in workflow env. Define one of repo secrets: ST_CHATGPT_API_KEY, ST_AI_BRIDGE_API_KEY, ST_API_KEY."
 
       - name: Alfred connectivity preflight
         id: alfred_net_check
