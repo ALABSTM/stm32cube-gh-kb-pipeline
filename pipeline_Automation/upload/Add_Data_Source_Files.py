@@ -561,6 +561,50 @@ def list_datasource_entries_from_kb_entry(kb_entry: dict[str, Any] | None) -> li
     return [item for item in data_sources if isinstance(item, dict)]
 
 
+def datasource_entry_is_deleted(entry: dict[str, Any]) -> bool:
+    if not isinstance(entry, dict):
+        return False
+
+    for key in ("deleted", "isDeleted", "is_deleted"):
+        raw = entry.get(key)
+        if isinstance(raw, bool):
+            return raw
+        if isinstance(raw, (int, float)) and int(raw) != 0:
+            return True
+        if isinstance(raw, str) and raw.strip().lower() in {"1", "true", "yes", "y"}:
+            return True
+
+    deleted_at = entry.get("deletedAt") or entry.get("deleted_at")
+    if isinstance(deleted_at, str) and deleted_at.strip():
+        return True
+
+    status = str(entry.get("status") or entry.get("state") or "").strip().lower()
+    if status in {"deleted", "inactive", "archived", "removed"}:
+        return True
+
+    active = entry.get("active")
+    if isinstance(active, bool):
+        return not active
+
+    return False
+
+
+def datasource_entry_sort_id(entry: dict[str, Any]) -> int:
+    try:
+        return int(entry.get("id"))
+    except Exception:
+        return -1
+
+
+def pick_preferred_datasource_entry(candidates: list[dict[str, Any]]) -> dict[str, Any] | None:
+    if not candidates:
+        return None
+
+    active_candidates = [c for c in candidates if not datasource_entry_is_deleted(c)]
+    pool = active_candidates if active_candidates else candidates
+    return max(pool, key=datasource_entry_sort_id)
+
+
 def find_datasource_entry_from_kb_list(
     kb_list_response: dict[str, Any],
     kb_id: int,
@@ -584,20 +628,27 @@ def find_datasource_entry_from_kb_list(
         wanted_exact = datasource_name.strip()
         wanted_lower = wanted_exact.lower()
 
-        for ds in data_sources:
-            ds_name = str(ds.get("name") or "").strip()
-            if ds_name == wanted_exact:
-                return ds
+        exact_matches = [
+            ds for ds in data_sources
+            if str(ds.get("name") or "").strip() == wanted_exact
+        ]
+        preferred_exact = pick_preferred_datasource_entry(exact_matches)
+        if preferred_exact is not None:
+            return preferred_exact
 
-        for ds in data_sources:
-            ds_name = str(ds.get("name") or "").strip()
-            if ds_name.lower() == wanted_lower:
-                return ds
+        lower_matches = [
+            ds for ds in data_sources
+            if str(ds.get("name") or "").strip().lower() == wanted_lower
+        ]
+        preferred_lower = pick_preferred_datasource_entry(lower_matches)
+        if preferred_lower is not None:
+            return preferred_lower
 
     # Fallback: scan the full response in case dataSources are exposed in a different envelope.
     if datasource_name and datasource_name.strip():
         wanted_exact = datasource_name.strip()
         wanted_lower = wanted_exact.lower()
+        nested_matches: list[dict[str, Any]] = []
         stack: list[Any] = [kb_list_response]
         while stack:
             node = stack.pop()
@@ -608,7 +659,7 @@ def find_datasource_entry_from_kb_list(
                     try:
                         int(ds_id)
                         if ds_name == wanted_exact or ds_name.lower() == wanted_lower:
-                            return node
+                            nested_matches.append(node)
                     except Exception:
                         pass
                 for value in node.values():
@@ -618,6 +669,10 @@ def find_datasource_entry_from_kb_list(
                 for item in node:
                     if isinstance(item, (dict, list)):
                         stack.append(item)
+
+        preferred_nested = pick_preferred_datasource_entry(nested_matches)
+        if preferred_nested is not None:
+            return preferred_nested
 
     return None
 

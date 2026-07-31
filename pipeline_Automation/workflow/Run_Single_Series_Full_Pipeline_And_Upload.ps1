@@ -677,7 +677,7 @@ function Invoke-UploadJsonAdd {
         )
 
         if ($isDatasourceMissing -and $DatasourceNameForFallback) {
-            Write-Host "[WARN] Upload failed because DS#$DatasourceId for $Label does not exist. Recreating datasource '$DatasourceNameForFallback'." -ForegroundColor Yellow
+            Write-Host "[WARN] Upload failed because DS#$DatasourceId for $Label does not exist. Recreating datasource '$DatasourceNameForFallback' (canonical name, no duplication suffix)." -ForegroundColor Yellow
             return Invoke-UploadJsonNew `
                 -Label $Label `
                 -FilePath $FilePath `
