@@ -117,14 +117,14 @@ def resolve_api_key(cli_api_key: str | None) -> str:
             )
         return key
 
-    # Upload flows in this repository are bound to GitHub Analyzer identity.
-    # Prefer analyzer credential first to avoid key/app mismatch when multiple
-    # API key secrets are present in the environment.
+    # Prefer legacy upload keys first (chatgpt/bridge), then analyzer fallback.
+    # This keeps compatibility with existing stable CI runs and self-hosted
+    # environments that expose multiple credentials.
     for env_name in (
-        "ST_GITHUB_ANALYZER_API_KEY",
         "ST_CHATGPT_API_KEY",
         "ST_AI_BRIDGE_API_KEY",
         "ST_API_KEY",
+        "ST_GITHUB_ANALYZER_API_KEY",
         "PERSONA_API_KEY",
     ):
         value = os.getenv(env_name)

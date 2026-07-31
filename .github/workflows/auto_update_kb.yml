@@ -476,12 +476,9 @@ jobs:
       matrix:
         series: ${{ fromJSON(needs.prepare.outputs.series_json) }}
     env:
-      ST_GITHUB_ANALYZER_API_KEY: ${{ secrets.ST_GITHUB_ANALYZER_API_KEY }}
       ST_CHATGPT_API_KEY: ${{ secrets.ST_CHATGPT_API_KEY }}
       ST_AI_BRIDGE_API_KEY: ${{ secrets.ST_AI_BRIDGE_API_KEY }}
       ST_API_KEY: ${{ secrets.ST_API_KEY }}
-      ST_CHATGPT_CLIENT_APP: ${{ secrets.ST_CHATGPT_CLIENT_APP }}
-      ST_CLIENT_APP_NAME: ${{ secrets.ST_CLIENT_APP_NAME }}
       ST_REMOTE_USER: ${{ secrets.ST_REMOTE_USER }}
     steps:
       - name: Reset self-hosted workspace before checkout
@@ -600,69 +597,35 @@ jobs:
 
           throw "Alfred endpoint unreachable (direct and proxy)."
 
-      - name: Select deterministic upload auth key/app
+      - name: Select stable upload auth key
         shell: powershell
         run: |
-          $selectedClientApp = ""
-          if ($env:ST_CHATGPT_CLIENT_APP) {
-            $selectedClientApp = $env:ST_CHATGPT_CLIENT_APP
-          } elseif ($env:ST_CLIENT_APP_NAME) {
-            $selectedClientApp = $env:ST_CLIENT_APP_NAME
-          }
-
           $selectedApiKey = ""
           $selectedApiSource = ""
 
-          # If no explicit client app is configured, uploader falls back to
-          # mdrf_st_github_analyzer. Prefer analyzer key to avoid app/key mismatch.
-          if (-not $selectedClientApp) {
-            if ($env:ST_GITHUB_ANALYZER_API_KEY) {
-              $selectedApiKey = $env:ST_GITHUB_ANALYZER_API_KEY
-              $selectedApiSource = "ST_GITHUB_ANALYZER_API_KEY"
-            } elseif ($env:ST_CHATGPT_API_KEY) {
-              $selectedApiKey = $env:ST_CHATGPT_API_KEY
-              $selectedApiSource = "ST_CHATGPT_API_KEY"
-            } elseif ($env:ST_AI_BRIDGE_API_KEY) {
-              $selectedApiKey = $env:ST_AI_BRIDGE_API_KEY
-              $selectedApiSource = "ST_AI_BRIDGE_API_KEY"
-            } elseif ($env:ST_API_KEY) {
-              $selectedApiKey = $env:ST_API_KEY
-              $selectedApiSource = "ST_API_KEY"
-            }
-          } else {
-            # With explicit client app, keep priority on chatgpt/bridge keys.
-            if ($env:ST_CHATGPT_API_KEY) {
-              $selectedApiKey = $env:ST_CHATGPT_API_KEY
-              $selectedApiSource = "ST_CHATGPT_API_KEY"
-            } elseif ($env:ST_AI_BRIDGE_API_KEY) {
-              $selectedApiKey = $env:ST_AI_BRIDGE_API_KEY
-              $selectedApiSource = "ST_AI_BRIDGE_API_KEY"
-            } elseif ($env:ST_API_KEY) {
-              $selectedApiKey = $env:ST_API_KEY
-              $selectedApiSource = "ST_API_KEY"
-            } elseif ($env:ST_GITHUB_ANALYZER_API_KEY) {
-              $selectedApiKey = $env:ST_GITHUB_ANALYZER_API_KEY
-              $selectedApiSource = "ST_GITHUB_ANALYZER_API_KEY"
-            }
+          if ($env:ST_CHATGPT_API_KEY) {
+            $selectedApiKey = $env:ST_CHATGPT_API_KEY
+            $selectedApiSource = "ST_CHATGPT_API_KEY"
+          } elseif ($env:ST_AI_BRIDGE_API_KEY) {
+            $selectedApiKey = $env:ST_AI_BRIDGE_API_KEY
+            $selectedApiSource = "ST_AI_BRIDGE_API_KEY"
+          } elseif ($env:ST_API_KEY) {
+            $selectedApiKey = $env:ST_API_KEY
+            $selectedApiSource = "ST_API_KEY"
           }
 
           if (-not $selectedApiKey) {
-            throw "No API key available for upload auth. Define one of: ST_CHATGPT_API_KEY, ST_AI_BRIDGE_API_KEY, ST_API_KEY, ST_GITHUB_ANALYZER_API_KEY."
+            throw "Missing upload API key. Define one of: ST_CHATGPT_API_KEY, ST_AI_BRIDGE_API_KEY, ST_API_KEY."
           }
 
-          # Force deterministic key resolution in Add_Data_Source_Files.py.
+          # Keep one deterministic key for uploader resolution.
           "ST_CHATGPT_API_KEY=$selectedApiKey" >> $env:GITHUB_ENV
           "ST_AI_BRIDGE_API_KEY=" >> $env:GITHUB_ENV
           "ST_API_KEY=" >> $env:GITHUB_ENV
-          "ST_GITHUB_ANALYZER_API_KEY=" >> $env:GITHUB_ENV
 
-          if ($selectedClientApp) {
-            "ST_CHATGPT_CLIENT_APP=$selectedClientApp" >> $env:GITHUB_ENV
-            "ST_CLIENT_APP_NAME=$selectedClientApp" >> $env:GITHUB_ENV
-            Write-Host "Selected upload client app from workflow secrets." -ForegroundColor Green
-          } else {
-            Write-Host "No explicit client app secret found; uploader will use auto-resolution/default." -ForegroundColor Yellow
-          }
+          # Clear optional app overrides to preserve stable legacy behavior.
+          "ST_CHATGPT_CLIENT_APP=" >> $env:GITHUB_ENV
+          "ST_CLIENT_APP_NAME=" >> $env:GITHUB_ENV
 
           Write-Host "Selected upload API key source: $selectedApiSource" -ForegroundColor Green
 
