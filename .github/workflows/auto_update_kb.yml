@@ -605,13 +605,9 @@ jobs:
             throw "Missing ST_GITHUB_ANALYZER_API_KEY secret for upload phase."
           }
 
-          # Force uploader to use the known-working analyzer credential + app.
-          "ST_CHATGPT_API_KEY=$($env:ST_GITHUB_ANALYZER_API_KEY)" >> $env:GITHUB_ENV
-          "ST_AI_BRIDGE_API_KEY=" >> $env:GITHUB_ENV
-          "ST_API_KEY=" >> $env:GITHUB_ENV
-          "ST_GITHUB_ANALYZER_API_KEY=$($env:ST_GITHUB_ANALYZER_API_KEY)" >> $env:GITHUB_ENV
-          "ST_CHATGPT_CLIENT_APP=mdrf_st_github_analyzer" >> $env:GITHUB_ENV
-          "ST_CLIENT_APP_NAME=mdrf_st_github_analyzer" >> $env:GITHUB_ENV
+          # Keep Alfred credentials untouched. Use dedicated upload auth vars.
+          "UPLOAD_API_KEY=$($env:ST_GITHUB_ANALYZER_API_KEY)" >> $env:GITHUB_ENV
+          "UPLOAD_CLIENT_APP_NAME=mdrf_st_github_analyzer" >> $env:GITHUB_ENV
 
           Write-Host "Selected upload API key source: ST_GITHUB_ANALYZER_API_KEY" -ForegroundColor Green
           Write-Host "Selected upload client app: mdrf_st_github_analyzer" -ForegroundColor Green
@@ -631,8 +627,8 @@ jobs:
             "--operation", "add",
             "--remote-user", $remoteUser,
             "--service", "kb",
-            "--api-key", $env:ST_GITHUB_ANALYZER_API_KEY,
-            "--client-app-name", "mdrf_st_github_analyzer",
+            "--api-key", $env:UPLOAD_API_KEY,
+            "--client-app-name", $env:UPLOAD_CLIENT_APP_NAME,
             "--auth-check-only",
             "--timeout", "120"
           )
@@ -655,8 +651,8 @@ jobs:
             Series = "${{ matrix.series }}"
             Mode = "Upload"
             ExistingDatasourceMode = "${{ needs.prepare.outputs.existing_datasource_mode }}"
-            ApiKey = $env:ST_GITHUB_ANALYZER_API_KEY
-            ClientAppName = "mdrf_st_github_analyzer"
+            ApiKey = $env:UPLOAD_API_KEY
+            ClientAppName = $env:UPLOAD_CLIENT_APP_NAME
             KbId = 793
             PythonExe = $env:RUNNER_PYTHON_EXE
             JsonSplitSize = 1000
