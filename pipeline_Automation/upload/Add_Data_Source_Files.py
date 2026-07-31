@@ -1883,6 +1883,98 @@ def run_new_request_with_followup_add(
     # Create the datasource with the first file, then add remaining files one by one.
     # This avoids oversized multipart requests for large split sets.
     first_path = file_paths[0]
+
+    def create_with_unique_name_fallback(reason: str) -> dict[str, Any]:
+        nonlocal created_datasource_name_used
+
+        base_name = datasource_name or "DB_STready_Fallback"
+        unique_name = f"{base_name}_{time.strftime('%Y%m%d_%H%M%S')}_{random.randint(100, 999)}"
+
+        unique_payload = dict(datasource_payload)
+        unique_payload["name"] = unique_name
+
+        if verbose:
+            print(
+                "Name-conflict fallback: creating datasource with unique name "
+                f"'{unique_name}' ({reason})"
+            )
+
+        create_resp = run_datasource_request(
+            endpoint=endpoint,
+            api_key=api_key,
+            client_app_name=client_app_name,
+            service_name=service_name,
+            remote_user=remote_user,
+            kb_id=kb_id,
+            datasource_payload=unique_payload,
+            file_paths=[first_path],
+            request_types=request_types,
+            request_part_names=request_part_names,
+            payload_modes=payload_modes,
+            timestamp_modes=timestamp_modes,
+            max_retries=max_retries,
+            timeout_seconds=timeout_seconds,
+            verify_ssl=verify_ssl,
+            proxies=proxies,
+            verbose=verbose,
+        )
+
+        created_datasource_name_used = unique_name
+        return create_resp
+
+    def finalize_created_response(create_resp: dict[str, Any]) -> dict[str, Any]:
+        datasource_id_raw = create_resp.get("datasource") if isinstance(create_resp, dict) else None
+        try:
+            datasource_id = int(datasource_id_raw)
+        except Exception as exc:
+            raise RuntimeError(
+                "Datasource created but response does not include a numeric datasource ID: "
+                f"{datasource_id_raw!r}"
+            ) from exc
+
+        final_resp = dict(create_resp)
+        uploaded_files: list[str] = [first_path.name]
+        skipped_existing_files: list[str] = []
+
+        remaining_paths = file_paths[1:]
+        if remaining_paths:
+            add_datasource_payload: dict[str, Any] = {"id": datasource_id}
+            if requested_processor:
+                add_datasource_payload["processor"] = requested_processor
+            if requested_processor_params:
+                add_datasource_payload["processorParams"] = requested_processor_params
+
+            add_response = run_add_request_skip_existing_files(
+                endpoint=endpoint,
+                api_key=api_key,
+                client_app_name=client_app_name,
+                service_name=service_name,
+                remote_user=remote_user,
+                kb_id=kb_id,
+                datasource_payload=add_datasource_payload,
+                file_paths=remaining_paths,
+                request_types=[DEFAULT_TYPE_ADD],
+                request_part_names=request_part_names,
+                payload_modes=payload_modes,
+                timestamp_modes=timestamp_modes,
+                max_retries=max_retries,
+                timeout_seconds=timeout_seconds,
+                verify_ssl=verify_ssl,
+                proxies=proxies,
+                fail_on_existing_files=fail_on_existing_files,
+                verbose=verbose,
+            )
+
+            uploaded_files.extend(add_response.get("uploaded_files", []))
+            skipped_existing_files.extend(add_response.get("skipped_existing_files", []))
+
+        final_resp["datasource"] = datasource_id
+        final_resp["uploaded_files"] = uploaded_files
+        if created_datasource_name_used:
+            final_resp["datasource_name_used"] = created_datasource_name_used
+        if skipped_existing_files:
+            final_resp["skipped_existing_files"] = skipped_existing_files
+        return final_resp
     try:
         create_response = run_datasource_request(
             endpoint=endpoint,
@@ -1973,12 +2065,10 @@ def run_new_request_with_followup_add(
                     )
 
         if existing_datasource_id is None:
-            raise RuntimeError(
-                "Datasource name conflict detected, but existing datasource ID "
-                f"could not be resolved for '{conflict_name}' after retries. "
-                "Aborting to avoid duplicate datasource creation. "
-                "Retry later or resolve the duplicate manually in KB Management."
+            create_response = create_with_unique_name_fallback(
+                f"unresolved existing ID for conflict name '{conflict_name}'"
             )
+            return finalize_created_response(create_response)
         if existing_datasource_id is not None:
             if verbose:
                 print(
@@ -2108,21 +2198,22 @@ def run_new_request_with_followup_add(
 
                     if not retry_success:
                         tried = ", ".join(str(cid) for cid in ordered_candidates)
-                        raise RuntimeError(
-                            f"Conflict for '{conflict_name}' and stale datasource ID {existing_datasource_id}; "
-                            f"fallback add failed for candidate datasource IDs: [{tried}]"
-                        ) from last_retry_exc
+                        create_response = create_with_unique_name_fallback(
+                            f"stale IDs after retries [{tried}] for conflict name '{conflict_name}'"
+                        )
+                        return finalize_created_response(create_response)
 
-                final_replace = dict(add_replace_response)
-                final_replace["datasource"] = existing_datasource_id
-                final_replace.setdefault(
-                    "message",
-                    (
-                        f'Datasource "{conflict_name}" already existed; '
-                        "replace policy executed with in-place upload on existing datasource."
-                    ),
-                )
-                return final_replace
+                if existing_datasource_id is not None:
+                    final_replace = dict(add_replace_response)
+                    final_replace["datasource"] = existing_datasource_id
+                    final_replace.setdefault(
+                        "message",
+                        (
+                            f'Datasource "{conflict_name}" already existed; '
+                            "replace policy executed with in-place upload on existing datasource."
+                        ),
+                    )
+                    return final_replace
 
             elif verbose:
                 print(
