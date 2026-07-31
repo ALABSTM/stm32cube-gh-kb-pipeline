@@ -27,6 +27,8 @@ param(
     [string]$Mode = "Full",
 
     [string]$RemoteUser = "abir.gharbi@st.com",
+    [string]$ApiKey = "",
+    [string]$ClientAppName = "",
     [int]$KbId = 793,
     [string]$PythonExe = "",
     [int]$JsonSplitSize = 1000,
@@ -102,6 +104,17 @@ $uploader = "pipeline_Automation/upload/Add_Data_Source_Files.py"
 $idsOutput = Join-Path $deliveryRoot "upload_datasource_ids_$slug.json"
 $uploadMaxRetries = 5
 $uploadTimeoutSeconds = 60
+
+function Get-UploadAuthArgs {
+    $authArgs = @()
+    if ($ApiKey) {
+        $authArgs += @("--api-key", $ApiKey)
+    }
+    if ($ClientAppName) {
+        $authArgs += @("--client-app-name", $ClientAppName)
+    }
+    return $authArgs
+}
 
 function Invoke-Step {
     param(
@@ -567,6 +580,7 @@ function Invoke-UploadJsonNew {
         "--timeout", "$uploadTimeoutSeconds",
         "--files", (Resolve-Path $FilePath).Path
     )
+    $args += @(Get-UploadAuthArgs)
 
     $output = Invoke-CapturedPython "Create datasource and upload $Label" $args
     $id = Get-DatasourceIdFromOutput $output
@@ -615,6 +629,7 @@ function Invoke-UploadJsonAdd {
             "--max-retries", "$uploadMaxRetries",
             "--timeout", "$uploadTimeoutSeconds"
         )
+        $deleteArgs += @(Get-UploadAuthArgs)
 
         $deleteOutput = Invoke-CapturedPython "Clear existing content for $Label in DS#$DatasourceId" $deleteArgs
         $deleteText = ($deleteOutput -join "`n")
@@ -644,6 +659,7 @@ function Invoke-UploadJsonAdd {
         "--timeout", "$uploadTimeoutSeconds",
         "--files", (Resolve-Path $FilePath).Path
     )
+    $args += @(Get-UploadAuthArgs)
 
     try {
         Invoke-CapturedPython "Upload $Label into existing DS#$DatasourceId" $args | Out-Null
@@ -793,6 +809,7 @@ function Invoke-UploadSubrepoDeliveryAdd {
             "--timeout", "$uploadTimeoutSeconds",
             "--files", $file.FullName
         )
+        $args += @(Get-UploadAuthArgs)
         Invoke-CapturedPython "Upload driver/subrepo $($file.Directory.Parent.Name) $Label into ${Series} DS#$effectiveDatasourceId" $args | Out-Null
     }
 }

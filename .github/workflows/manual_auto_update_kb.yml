@@ -536,6 +536,50 @@ jobs:
 
           throw "Alfred endpoint unreachable (direct and proxy)."
 
+      - name: Select analyzer upload auth key
+        shell: powershell
+        run: |
+          if (-not $env:ST_GITHUB_ANALYZER_API_KEY) {
+            throw "Missing ST_GITHUB_ANALYZER_API_KEY secret for upload phase."
+          }
+
+          # Force uploader to use the known-working analyzer credential + app.
+          "ST_CHATGPT_API_KEY=$($env:ST_GITHUB_ANALYZER_API_KEY)" >> $env:GITHUB_ENV
+          "ST_AI_BRIDGE_API_KEY=" >> $env:GITHUB_ENV
+          "ST_API_KEY=" >> $env:GITHUB_ENV
+          "ST_GITHUB_ANALYZER_API_KEY=$($env:ST_GITHUB_ANALYZER_API_KEY)" >> $env:GITHUB_ENV
+          "ST_CHATGPT_CLIENT_APP=mdrf_st_github_analyzer" >> $env:GITHUB_ENV
+          "ST_CLIENT_APP_NAME=mdrf_st_github_analyzer" >> $env:GITHUB_ENV
+
+          Write-Host "Selected upload API key source: ST_GITHUB_ANALYZER_API_KEY" -ForegroundColor Green
+          Write-Host "Selected upload client app: mdrf_st_github_analyzer" -ForegroundColor Green
+
+      - name: Upload auth precheck (kb-list)
+        shell: powershell
+        run: |
+          $remoteUser = $env:ST_REMOTE_USER
+          if (-not $remoteUser) {
+            $remoteUser = "abir.gharbi@st.com"
+            Write-Host "[WARN] ST_REMOTE_USER is empty; using fallback remote user for auth precheck." -ForegroundColor Yellow
+          }
+
+          $args = @(
+            "pipeline_Automation/upload/Add_Data_Source_Files.py",
+            "--kb", "793",
+            "--operation", "add",
+            "--remote-user", $remoteUser,
+            "--service", "kb",
+            "--api-key", $env:ST_GITHUB_ANALYZER_API_KEY,
+            "--client-app-name", "mdrf_st_github_analyzer",
+            "--auth-check-only",
+            "--timeout", "120"
+          )
+
+          & $env:RUNNER_PYTHON_EXE @args
+          if ($LASTEXITCODE -ne 0) {
+            throw "Upload auth precheck failed with exit code $LASTEXITCODE"
+          }
+
       - name: Run upload only
         shell: powershell
         run: |
@@ -549,6 +593,8 @@ jobs:
             Series = "${{ matrix.series }}"
             Mode = "Upload"
             ExistingDatasourceMode = "${{ needs.prepare.outputs.existing_datasource_mode }}"
+            ApiKey = $env:ST_GITHUB_ANALYZER_API_KEY
+            ClientAppName = "mdrf_st_github_analyzer"
             KbId = 793
             PythonExe = $env:RUNNER_PYTHON_EXE
             JsonSplitSize = 1000

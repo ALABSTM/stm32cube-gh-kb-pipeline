@@ -476,6 +476,7 @@ jobs:
       matrix:
         series: ${{ fromJSON(needs.prepare.outputs.series_json) }}
     env:
+      ST_GITHUB_ANALYZER_API_KEY: ${{ secrets.ST_GITHUB_ANALYZER_API_KEY }}
       ST_CHATGPT_API_KEY: ${{ secrets.ST_CHATGPT_API_KEY }}
       ST_AI_BRIDGE_API_KEY: ${{ secrets.ST_AI_BRIDGE_API_KEY }}
       ST_API_KEY: ${{ secrets.ST_API_KEY }}
@@ -597,37 +598,23 @@ jobs:
 
           throw "Alfred endpoint unreachable (direct and proxy)."
 
-      - name: Select stable upload auth key
+      - name: Select analyzer upload auth key
         shell: powershell
         run: |
-          $selectedApiKey = ""
-          $selectedApiSource = ""
-
-          if ($env:ST_CHATGPT_API_KEY) {
-            $selectedApiKey = $env:ST_CHATGPT_API_KEY
-            $selectedApiSource = "ST_CHATGPT_API_KEY"
-          } elseif ($env:ST_AI_BRIDGE_API_KEY) {
-            $selectedApiKey = $env:ST_AI_BRIDGE_API_KEY
-            $selectedApiSource = "ST_AI_BRIDGE_API_KEY"
-          } elseif ($env:ST_API_KEY) {
-            $selectedApiKey = $env:ST_API_KEY
-            $selectedApiSource = "ST_API_KEY"
+          if (-not $env:ST_GITHUB_ANALYZER_API_KEY) {
+            throw "Missing ST_GITHUB_ANALYZER_API_KEY secret for upload phase."
           }
 
-          if (-not $selectedApiKey) {
-            throw "Missing upload API key. Define one of: ST_CHATGPT_API_KEY, ST_AI_BRIDGE_API_KEY, ST_API_KEY."
-          }
-
-          # Keep one deterministic key for uploader resolution.
-          "ST_CHATGPT_API_KEY=$selectedApiKey" >> $env:GITHUB_ENV
+          # Force uploader to use the known-working analyzer credential + app.
+          "ST_CHATGPT_API_KEY=$($env:ST_GITHUB_ANALYZER_API_KEY)" >> $env:GITHUB_ENV
           "ST_AI_BRIDGE_API_KEY=" >> $env:GITHUB_ENV
           "ST_API_KEY=" >> $env:GITHUB_ENV
+          "ST_GITHUB_ANALYZER_API_KEY=$($env:ST_GITHUB_ANALYZER_API_KEY)" >> $env:GITHUB_ENV
+          "ST_CHATGPT_CLIENT_APP=mdrf_st_github_analyzer" >> $env:GITHUB_ENV
+          "ST_CLIENT_APP_NAME=mdrf_st_github_analyzer" >> $env:GITHUB_ENV
 
-          # Clear optional app overrides to preserve stable legacy behavior.
-          "ST_CHATGPT_CLIENT_APP=" >> $env:GITHUB_ENV
-          "ST_CLIENT_APP_NAME=" >> $env:GITHUB_ENV
-
-          Write-Host "Selected upload API key source: $selectedApiSource" -ForegroundColor Green
+          Write-Host "Selected upload API key source: ST_GITHUB_ANALYZER_API_KEY" -ForegroundColor Green
+          Write-Host "Selected upload client app: mdrf_st_github_analyzer" -ForegroundColor Green
 
       - name: Upload auth precheck (kb-list)
         shell: powershell
@@ -644,6 +631,8 @@ jobs:
             "--operation", "add",
             "--remote-user", $remoteUser,
             "--service", "kb",
+            "--api-key", $env:ST_GITHUB_ANALYZER_API_KEY,
+            "--client-app-name", "mdrf_st_github_analyzer",
             "--auth-check-only",
             "--timeout", "120"
           )
@@ -666,6 +655,8 @@ jobs:
             Series = "${{ matrix.series }}"
             Mode = "Upload"
             ExistingDatasourceMode = "${{ needs.prepare.outputs.existing_datasource_mode }}"
+            ApiKey = $env:ST_GITHUB_ANALYZER_API_KEY
+            ClientAppName = "mdrf_st_github_analyzer"
             KbId = 793
             PythonExe = $env:RUNNER_PYTHON_EXE
             JsonSplitSize = 1000
