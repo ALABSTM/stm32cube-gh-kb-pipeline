@@ -510,6 +510,8 @@ function Invoke-IssuesByComponentUpload {
         -Series $Series `
         -PythonExe $PythonExe `
         -RemoteUser $RemoteUser `
+        -ApiKey $ApiKey `
+        -ClientAppName $ClientAppName `
         -KbId $KbId `
         -JsonSplitSize $JsonSplitSize
     if ($LASTEXITCODE -ne 0) {

@@ -19,6 +19,8 @@ param(
 
     [switch]$AllSeries,
     [string]$RemoteUser = "abir.gharbi@st.com",
+    [string]$ApiKey = "",
+    [string]$ClientAppName = "",
     [int]$KbId = 793,
     [int]$JsonSplitSize = 1000,
     [string]$PythonExe = "",
@@ -138,6 +140,17 @@ function Invoke-Uploader {
     }
 }
 
+function Get-UploadAuthArgs {
+    $authArgs = @()
+    if ($ApiKey) {
+        $authArgs += @("--api-key", $ApiKey)
+    }
+    if ($ClientAppName) {
+        $authArgs += @("--client-app-name", $ClientAppName)
+    }
+    return $authArgs
+}
+
 function Parse-DatasourceId {
     param([string[]]$Lines)
     foreach ($line in $Lines) {
@@ -240,6 +253,7 @@ function Upload-SeriesByComponent {
                 "--timeout", "60",
                 "--files", $filePath
             )
+            $args += @(Get-UploadAuthArgs)
 
             try {
                 Invoke-Uploader -Label "$datasourceName (add:$existingId)" -CommandArgs $args | Out-Null
@@ -273,6 +287,7 @@ function Upload-SeriesByComponent {
             "--timeout", "60",
             "--files", $filePath
         )
+        $args += @(Get-UploadAuthArgs)
 
         $outLines = Invoke-Uploader -Label "$datasourceName (new)" -CommandArgs $args
         if (-not $DryRun) {
