@@ -1,12 +1,35 @@
+"""Standalone STM32Cube-specific text heuristics for enrichment.
+
+Role in the pipeline: pure, dependency-free helper functions used by
+`preprocessing_model.PreprocessingModelIssuesV2` to derive the `layer` and
+`severity` fields from cleaned issue/file text. Contains no I/O; inputs are
+plain strings/label lists, outputs are classification labels.
+"""
+
 from typing import List
 
 
 def detect_layer(text: str) -> str:
+    """Guess which STM32Cube software layer the text is about.
+
+    Uses simple, ordered keyword/prefix matching on the uppercased text:
+    HAL API prefix/mentions take priority over LL, then middleware
+    (LwIP/FatFs/FreeRTOS/USB stacks/...), then CubeMX-generated code
+    markers. Defaults to "Other" when nothing matches or text is empty.
+
+    Args:
+        text: Cleaned issue or file text to classify.
+
+    Returns:
+        One of "HAL", "LL", "Middleware", "CubeMX", "Other".
+    """
     if not text:
         return "Other"
 
     txt = text.upper()
 
+    # HAL is checked first since HAL_* symbols are the most common and
+    # specific signal (many middleware/CubeMX texts also mention HAL_).
     if "HAL_" in txt or " HAL DRIVER" in txt or " HAL LIBRARY" in txt:
         return "HAL"
 
@@ -43,6 +66,21 @@ def detect_layer(text: str) -> str:
 
 
 def detect_severity(text: str, labels: List[str] | None = None) -> str:
+    """Guess the severity of an issue from its labels and text.
+
+    Order of precedence: documentation/typo-style signals (labels or
+    keywords) always classify as "low" first, since these are cosmetic
+    regardless of any high-severity wording elsewhere. Otherwise, keyword
+    hints for crashes/hangs/deadlocks/regressions classify as "high".
+    Everything else defaults to "medium".
+
+    Args:
+        text: Cleaned issue text.
+        labels: GitHub labels attached to the issue (optional).
+
+    Returns:
+        One of "low", "high", "medium".
+    """
     if labels is None:
         labels = []
 
@@ -65,6 +103,8 @@ def detect_severity(text: str, labels: List[str] | None = None) -> str:
     if any(lbl in labels_lower for lbl in low_labels) or any(kw in txt_lower for kw in low_keywords):
         return "low"
 
+    # Keywords indicating the software becomes unusable/unresponsive or
+    # regresses vs. a previous working state -- treated as high severity.
     high_keywords = [
         "hardfault",
         "hard fault",

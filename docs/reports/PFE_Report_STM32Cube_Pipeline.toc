@@ -4,10 +4,10 @@
 \contentsline {chapter}{\numberline {1}Présentation de l'Entreprise}{12}{chapter.1}%
 \contentsline {section}{\numberline {1.1}STMicroelectronics}{12}{section.1.1}%
 \contentsline {subsection}{\numberline {1.1.1}Présentation Générale}{12}{subsection.1.1.1}%
-\contentsline {subsection}{\numberline {1.1.2}Vision et Marchés}{12}{subsection.1.1.2}%
+\contentsline {subsection}{\numberline {1.1.2}Vision et Marchés}{13}{subsection.1.1.2}%
 \contentsline {subsection}{\numberline {1.1.3}STMicroelectronics Tunis}{13}{subsection.1.1.3}%
 \contentsline {section}{\numberline {1.2}Division Microcontrôleurs (MCD)}{13}{section.1.2}%
-\contentsline {section}{\numberline {1.3}Équipe d'Accueil : Technical Marketing and Application Support}{13}{section.1.3}%
+\contentsline {section}{\numberline {1.3}Équipe d'Accueil : Technical Marketing and Application Support}{14}{section.1.3}%
 \contentsline {chapter}{\numberline {2}Contexte du Projet}{15}{chapter.2}%
 \contentsline {section}{\numberline {2.1}L'Écosystème STM32 et les Dépôts GitHub}{15}{section.2.1}%
 \contentsline {subsection}{\numberline {2.1.1}Les Dépôts GitHub STMicroelectronics}{16}{subsection.2.1.1}%
@@ -133,85 +133,94 @@
 \contentsline {subsubsection}{Phase 2 : Ajout des Resolver Cases et Diagnostic Cards (QI = 94)}{78}{subsection.7.5.2}%
 \contentsline {subsubsection}{Phase 3 : Passage multi-séries (QI = 54)}{78}{subsection.7.5.2}%
 \contentsline {subsection}{\numberline {7.5.3}Raisonnement de Chaque Amélioration}{78}{subsection.7.5.3}%
-\contentsline {section}{\numberline {7.6}Couverture Actuelle et Future}{79}{section.7.6}%
-\contentsline {subsection}{\numberline {7.6.1}13 Séries en Production}{79}{subsection.7.6.1}%
-\contentsline {subsection}{\numberline {7.6.2}4 Nouvelles Séries Exportées (Pipeline Terminé)}{80}{subsection.7.6.2}%
-\contentsline {subsection}{\numberline {7.6.3}8 Séries Configurées (Prêtes à Lancer)}{80}{subsection.7.6.3}%
-\contentsline {chapter}{\numberline {8}Résultats et Évaluation}{81}{chapter.8}%
-\contentsline {section}{\numberline {8.1}Cadrage Théorique et Définitions Préalables}{81}{section.8.1}%
-\contentsline {subsection}{\numberline {8.1.1}Métriques Fondamentales d'Information Retrieval}{81}{subsection.8.1.1}%
-\contentsline {subsection}{\numberline {8.1.2}Similarité Textuelle}{82}{subsection.8.1.2}%
-\contentsline {subsubsection}{Similarité de Jaccard}{82}{subsection.8.1.2}%
-\contentsline {subsubsection}{Similarité Cosinus}{82}{equation.8.3}%
-\contentsline {subsubsection}{TF-IDF (Term Frequency -- Inverse Document Frequency)}{82}{equation.8.4}%
-\contentsline {subsection}{\numberline {8.1.3}Métriques de Qualité des Données}{83}{subsection.8.1.3}%
-\contentsline {subsection}{\numberline {8.1.4}Confiance Contextuelle}{83}{subsection.8.1.4}%
-\contentsline {subsection}{\numberline {8.1.5}Score Global Pondéré}{84}{subsection.8.1.5}%
-\contentsline {subsection}{\numberline {8.1.6}Quality Index (QI)}{84}{subsection.8.1.6}%
-\contentsline {subsection}{\numberline {8.1.7}Retrieval Hybride et Fallback}{84}{subsection.8.1.7}%
-\contentsline {subsection}{\numberline {8.1.8}Tableau Récapitulatif des Notions}{85}{subsection.8.1.8}%
-\contentsline {section}{\numberline {8.2}Justification des Seuils Décisionnels}{85}{section.8.2}%
-\contentsline {subsection}{\numberline {8.2.1}Cadre Normatif de Référence}{85}{subsection.8.2.1}%
-\contentsline {subsection}{\numberline {8.2.2}Échelle de Classification}{86}{subsection.8.2.2}%
-\contentsline {subsection}{\numberline {8.2.3}Logique de Calibration de Chaque Borne}{86}{subsection.8.2.3}%
-\contentsline {subsection}{\numberline {8.2.4}Seuils Différenciés par Champ}{87}{subsection.8.2.4}%
-\contentsline {subsection}{\numberline {8.2.5}Seuil de Cohérence Alfred ($\tau = 0.12$)}{87}{subsection.8.2.5}%
-\contentsline {section}{\numberline {8.3}Évaluation par Stage du Pipeline}{88}{section.8.3}%
-\contentsline {subsection}{\numberline {8.3.1}Stage 1~: Ingestion --- Complétude des Données Brutes}{88}{subsection.8.3.1}%
-\contentsline {subsection}{\numberline {8.3.2}Stage 2~: Cleaning --- Qualité de Préparation Textuelle}{89}{subsection.8.3.2}%
-\contentsline {subsection}{\numberline {8.3.3}Stage 3a~: Enrichissement --- Classification par Heuristiques NLP}{90}{subsection.8.3.3}%
-\contentsline {subsection}{\numberline {8.3.4}Stage 4~: Similarité TF-IDF}{91}{subsection.8.3.4}%
-\contentsline {subsection}{\numberline {8.3.5}Stage 5~: Delivery --- Complétude des Artefacts Exportés}{91}{subsection.8.3.5}%
-\contentsline {subsection}{\numberline {8.3.6}Synthèse des Scores par Stage}{92}{subsection.8.3.6}%
-\contentsline {subsection}{\numberline {8.3.7}Score Global~: Application Numérique}{92}{subsection.8.3.7}%
-\contentsline {section}{\numberline {8.4}Évaluation de la Confiance Alfred Vision}{93}{section.8.4}%
-\contentsline {subsection}{\numberline {8.4.1}Fiabilité Opérationnelle}{93}{subsection.8.4.1}%
-\contentsline {subsection}{\numberline {8.4.2}Méthode de Calcul de la Cohérence Contextuelle}{93}{subsection.8.4.2}%
-\contentsline {subsubsection}{Prétraitement}{94}{subsection.8.4.2}%
-\contentsline {subsubsection}{Score de Cohérence}{94}{subsection.8.4.2}%
-\contentsline {subsubsection}{Score Lexical $L$}{94}{equation.8.13}%
-\contentsline {subsubsection}{Similarité Sémantique Légère $S$}{94}{equation.8.15}%
-\contentsline {subsubsection}{Pénalité de Contradiction $P_{\text {contrad}}$}{94}{equation.8.16}%
-\contentsline {subsection}{\numberline {8.4.3}Résultats de Cohérence Contextuelle}{95}{subsection.8.4.3}%
-\contentsline {subsection}{\numberline {8.4.4}Analyse de l'Écart Issues vs PDF}{95}{subsection.8.4.4}%
-\contentsline {section}{\numberline {8.5}Évolution Incrémentale du Quality Index}{96}{section.8.5}%
-\contentsline {subsection}{\numberline {8.5.1}Chronologie et Logique de Progression}{96}{subsection.8.5.1}%
-\contentsline {subsection}{\numberline {8.5.2}Analyse des Points d'Inflexion}{97}{subsection.8.5.2}%
-\contentsline {subsubsection}{Le Saut Diagnostic Cards (+33 points)}{97}{subsection.8.5.2}%
-\contentsline {subsubsection}{La Régression Multi-séries ($-34$ points)}{98}{Item.88}%
-\contentsline {subsubsection}{La Stabilisation S0/S1 (65--66)}{98}{Item.91}%
-\contentsline {subsection}{\numberline {8.5.3}Matrice Valeur $\times $ Effort}{98}{subsection.8.5.3}%
-\contentsline {section}{\numberline {8.6}Architecture de Fallback~: d'Alfred Permissif à NovaX Restrictif}{99}{section.8.6}%
-\contentsline {subsection}{\numberline {8.6.1}Problème Initial~: Fallback Trop Permissif}{99}{subsection.8.6.1}%
-\contentsline {subsection}{\numberline {8.6.2}Solution~: Description Restrictive}{99}{subsection.8.6.2}%
-\contentsline {subsection}{\numberline {8.6.3}Évolution vers NovaX}{100}{subsection.8.6.3}%
-\contentsline {subsection}{\numberline {8.6.4}Synthèse de l'Évolution Fallback}{100}{subsection.8.6.4}%
-\contentsline {section}{\numberline {8.7}Étude Comparative~: Alfred Générique vs Persona KB}{100}{section.8.7}%
-\contentsline {subsection}{\numberline {8.7.1}Protocole Expérimental}{100}{subsection.8.7.1}%
-\contentsline {subsection}{\numberline {8.7.2}Grille de Scoring}{101}{subsection.8.7.2}%
-\contentsline {subsection}{\numberline {8.7.3}Résultats Synthétiques}{101}{subsection.8.7.3}%
-\contentsline {subsection}{\numberline {8.7.4}Analyse par Catégorie}{102}{subsection.8.7.4}%
-\contentsline {section}{\numberline {8.8}Comparaison des Stratégies de Retrieval}{102}{section.8.8}%
-\contentsline {section}{\numberline {8.9}Assurance Qualité du Chapitre d'Évaluation}{103}{section.8.9}%
-\contentsline {subsection}{\numberline {8.9.1}Protocole de Vérification}{103}{subsection.8.9.1}%
-\contentsline {subsection}{\numberline {8.9.2}Résultats du Contrôle}{104}{subsection.8.9.2}%
-\contentsline {subsection}{\numberline {8.9.3}Points d'Amélioration Identifiés}{105}{subsection.8.9.3}%
-\contentsline {subsection}{\numberline {8.9.4}Applicabilité au Reste du Rapport}{105}{subsection.8.9.4}%
-\contentsline {section}{\numberline {8.10}Correspondance Métriques $\leftrightarrow $ Normes $\leftrightarrow $ Références}{105}{section.8.10}%
-\contentsline {section}{\numberline {8.11}Synthèse et Bilan du Chapitre}{106}{section.8.11}%
-\contentsline {chapter}{\numberline {9}Automatisation et CI/CD}{108}{chapter.9}%
-\contentsline {section}{\numberline {9.1}GitHub Actions --- Mise à Jour Automatique}{108}{section.9.1}%
-\contentsline {subsection}{\numberline {9.1.1}Architecture Opérationnelle Actuelle}{108}{subsection.9.1.1}%
-\contentsline {subsection}{\numberline {9.1.2}Déclenchement et Paramètres}{108}{subsection.9.1.2}%
-\contentsline {subsection}{\numberline {9.1.3}Politique Add vs Replace}{109}{subsection.9.1.3}%
-\contentsline {subsection}{\numberline {9.1.4}Gestion des Datasource IDs et Reprise après Incident}{109}{subsection.9.1.4}%
-\contentsline {subsection}{\numberline {9.1.5}Disponibilité Runner et Déploiement Industriel}{110}{subsection.9.1.5}%
-\contentsline {subsection}{\numberline {9.1.6}Garanties de Robustesse}{110}{subsection.9.1.6}%
-\contentsline {subsection}{\numberline {9.1.7}Procédure Opérationnelle Recommandée}{110}{subsection.9.1.7}%
-\contentsline {chapter}{\numberline {10}Conclusion et Perspectives}{111}{chapter.10}%
-\contentsline {section}{\numberline {10.1}Bilan du Projet}{111}{section.10.1}%
-\contentsline {section}{\numberline {10.2}Valeur Industrielle}{112}{section.10.2}%
-\contentsline {section}{\numberline {10.3}Leçons Apprises}{112}{section.10.3}%
-\contentsline {section}{\numberline {10.4}Perspectives}{112}{section.10.4}%
-\contentsline {chapter}{Références}{114}{chapter*.3}%
-\contentsline {chapter}{Annexes}{118}{chapter*.5}%
+\contentsline {section}{\numberline {7.6}Automatisation CI/CD et Opérations}{79}{section.7.6}%
+\contentsline {subsection}{\numberline {7.6.1}Principe d'Architecture}{80}{subsection.7.6.1}%
+\contentsline {subsection}{\numberline {7.6.2}Workflow GitHub Actions}{80}{subsection.7.6.2}%
+\contentsline {subsection}{\numberline {7.6.3}Script Orchestrateur Unifié}{81}{subsection.7.6.3}%
+\contentsline {subsection}{\numberline {7.6.4}Garde-fous Qualité Avant Publication}{81}{subsection.7.6.4}%
+\contentsline {subsection}{\numberline {7.6.5}Stratégie d'Upload et Traçabilité}{82}{subsection.7.6.5}%
+\contentsline {subsection}{\numberline {7.6.6}Runbook Opérateur (Production)}{82}{subsection.7.6.6}%
+\contentsline {section}{\numberline {7.7}Couverture Actuelle et Future}{82}{section.7.7}%
+\contentsline {subsection}{\numberline {7.7.1}13 Séries en Production}{82}{subsection.7.7.1}%
+\contentsline {subsection}{\numberline {7.7.2}4 Nouvelles Séries Exportées (Pipeline Terminé)}{83}{subsection.7.7.2}%
+\contentsline {subsection}{\numberline {7.7.3}8 Séries Configurées (Prêtes à Lancer)}{83}{subsection.7.7.3}%
+\contentsline {chapter}{\numberline {8}Résultats et Évaluation}{85}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Cadrage Théorique et Définitions Préalables}{85}{section.8.1}%
+\contentsline {subsection}{\numberline {8.1.1}Métriques Fondamentales d'Information Retrieval}{85}{subsection.8.1.1}%
+\contentsline {subsection}{\numberline {8.1.2}Similarité Textuelle}{86}{subsection.8.1.2}%
+\contentsline {subsubsection}{Similarité de Jaccard}{86}{subsection.8.1.2}%
+\contentsline {subsubsection}{Similarité Cosinus}{86}{equation.8.3}%
+\contentsline {subsubsection}{TF-IDF (Term Frequency -- Inverse Document Frequency)}{86}{equation.8.4}%
+\contentsline {subsection}{\numberline {8.1.3}Métriques de Qualité des Données}{87}{subsection.8.1.3}%
+\contentsline {subsection}{\numberline {8.1.4}Confiance Contextuelle}{87}{subsection.8.1.4}%
+\contentsline {subsection}{\numberline {8.1.5}Score Global Pondéré}{88}{subsection.8.1.5}%
+\contentsline {subsection}{\numberline {8.1.6}Quality Index (QI)}{88}{subsection.8.1.6}%
+\contentsline {subsection}{\numberline {8.1.7}Retrieval Hybride et Fallback}{88}{subsection.8.1.7}%
+\contentsline {subsection}{\numberline {8.1.8}Tableau Récapitulatif des Notions}{89}{subsection.8.1.8}%
+\contentsline {section}{\numberline {8.2}Justification des Seuils Décisionnels}{89}{section.8.2}%
+\contentsline {subsection}{\numberline {8.2.1}Cadre Normatif de Référence}{89}{subsection.8.2.1}%
+\contentsline {subsection}{\numberline {8.2.2}Échelle de Classification}{90}{subsection.8.2.2}%
+\contentsline {subsection}{\numberline {8.2.3}Logique de Calibration de Chaque Borne}{90}{subsection.8.2.3}%
+\contentsline {subsection}{\numberline {8.2.4}Seuils Différenciés par Champ}{91}{subsection.8.2.4}%
+\contentsline {subsection}{\numberline {8.2.5}Seuil de Cohérence Alfred ($\tau = 0.12$)}{91}{subsection.8.2.5}%
+\contentsline {section}{\numberline {8.3}Évaluation par Stage du Pipeline}{92}{section.8.3}%
+\contentsline {subsection}{\numberline {8.3.1}Stage 1~: Ingestion --- Complétude des Données Brutes}{92}{subsection.8.3.1}%
+\contentsline {subsection}{\numberline {8.3.2}Stage 2~: Cleaning --- Qualité de Préparation Textuelle}{93}{subsection.8.3.2}%
+\contentsline {subsection}{\numberline {8.3.3}Stage 3a~: Enrichissement --- Classification par Heuristiques NLP}{94}{subsection.8.3.3}%
+\contentsline {subsection}{\numberline {8.3.4}Stage 4~: Similarité TF-IDF}{95}{subsection.8.3.4}%
+\contentsline {subsection}{\numberline {8.3.5}Stage 5~: Delivery --- Complétude des Artefacts Exportés}{95}{subsection.8.3.5}%
+\contentsline {subsection}{\numberline {8.3.6}Synthèse des Scores par Stage}{96}{subsection.8.3.6}%
+\contentsline {subsection}{\numberline {8.3.7}Score Global~: Application Numérique}{96}{subsection.8.3.7}%
+\contentsline {section}{\numberline {8.4}Évaluation de la Confiance Alfred Vision}{97}{section.8.4}%
+\contentsline {subsection}{\numberline {8.4.1}Fiabilité Opérationnelle}{97}{subsection.8.4.1}%
+\contentsline {subsection}{\numberline {8.4.2}Méthode de Calcul de la Cohérence Contextuelle}{97}{subsection.8.4.2}%
+\contentsline {subsubsection}{Prétraitement}{98}{subsection.8.4.2}%
+\contentsline {subsubsection}{Score de Cohérence}{98}{subsection.8.4.2}%
+\contentsline {subsubsection}{Score Lexical $L$}{98}{equation.8.13}%
+\contentsline {subsubsection}{Similarité Sémantique Légère $S$}{98}{equation.8.15}%
+\contentsline {subsubsection}{Pénalité de Contradiction $P_{\text {contrad}}$}{98}{equation.8.16}%
+\contentsline {subsection}{\numberline {8.4.3}Résultats de Cohérence Contextuelle}{99}{subsection.8.4.3}%
+\contentsline {subsection}{\numberline {8.4.4}Analyse de l'Écart Issues vs PDF}{99}{subsection.8.4.4}%
+\contentsline {section}{\numberline {8.5}Évolution Incrémentale du Quality Index}{100}{section.8.5}%
+\contentsline {subsection}{\numberline {8.5.1}Chronologie et Logique de Progression}{100}{subsection.8.5.1}%
+\contentsline {subsection}{\numberline {8.5.2}Analyse des Points d'Inflexion}{101}{subsection.8.5.2}%
+\contentsline {subsubsection}{Le Saut Diagnostic Cards (+33 points)}{101}{subsection.8.5.2}%
+\contentsline {subsubsection}{La Régression Multi-séries ($-34$ points)}{102}{Item.97}%
+\contentsline {subsubsection}{La Stabilisation S0/S1 (65--66)}{102}{Item.100}%
+\contentsline {subsection}{\numberline {8.5.3}Matrice Valeur $\times $ Effort}{102}{subsection.8.5.3}%
+\contentsline {section}{\numberline {8.6}Architecture de Fallback~: d'Alfred Permissif à NovaX Restrictif}{103}{section.8.6}%
+\contentsline {subsection}{\numberline {8.6.1}Problème Initial~: Fallback Trop Permissif}{103}{subsection.8.6.1}%
+\contentsline {subsection}{\numberline {8.6.2}Solution~: Description Restrictive}{103}{subsection.8.6.2}%
+\contentsline {subsection}{\numberline {8.6.3}Évolution vers NovaX}{104}{subsection.8.6.3}%
+\contentsline {subsection}{\numberline {8.6.4}Synthèse de l'Évolution Fallback}{104}{subsection.8.6.4}%
+\contentsline {section}{\numberline {8.7}Étude Comparative~: Alfred Générique vs Persona KB}{104}{section.8.7}%
+\contentsline {subsection}{\numberline {8.7.1}Protocole Expérimental}{104}{subsection.8.7.1}%
+\contentsline {subsection}{\numberline {8.7.2}Grille de Scoring}{105}{subsection.8.7.2}%
+\contentsline {subsection}{\numberline {8.7.3}Résultats Synthétiques}{105}{subsection.8.7.3}%
+\contentsline {subsection}{\numberline {8.7.4}Analyse par Catégorie}{106}{subsection.8.7.4}%
+\contentsline {section}{\numberline {8.8}Comparaison des Stratégies de Retrieval}{106}{section.8.8}%
+\contentsline {section}{\numberline {8.9}Assurance Qualité du Chapitre d'Évaluation}{107}{section.8.9}%
+\contentsline {subsection}{\numberline {8.9.1}Protocole de Vérification}{107}{subsection.8.9.1}%
+\contentsline {subsection}{\numberline {8.9.2}Résultats du Contrôle}{108}{subsection.8.9.2}%
+\contentsline {subsection}{\numberline {8.9.3}Points d'Amélioration Identifiés}{109}{subsection.8.9.3}%
+\contentsline {subsection}{\numberline {8.9.4}Applicabilité au Reste du Rapport}{109}{subsection.8.9.4}%
+\contentsline {section}{\numberline {8.10}Correspondance Métriques $\leftrightarrow $ Normes $\leftrightarrow $ Références}{109}{section.8.10}%
+\contentsline {section}{\numberline {8.11}Synthèse et Bilan du Chapitre}{110}{section.8.11}%
+\contentsline {chapter}{\numberline {9}Automatisation et CI/CD}{112}{chapter.9}%
+\contentsline {section}{\numberline {9.1}GitHub Actions --- Mise à Jour Automatique}{112}{section.9.1}%
+\contentsline {subsection}{\numberline {9.1.1}Architecture Opérationnelle Actuelle}{112}{subsection.9.1.1}%
+\contentsline {subsection}{\numberline {9.1.2}Déclenchement et Paramètres}{112}{subsection.9.1.2}%
+\contentsline {subsection}{\numberline {9.1.3}Gouvernance Dynamique des Séries (Source Unique)}{113}{subsection.9.1.3}%
+\contentsline {subsection}{\numberline {9.1.4}Politique Add vs Replace}{114}{subsection.9.1.4}%
+\contentsline {subsection}{\numberline {9.1.5}Gestion des Datasource IDs et Reprise après Incident}{114}{subsection.9.1.5}%
+\contentsline {subsection}{\numberline {9.1.6}Disponibilité Runner et Déploiement Industriel}{114}{subsection.9.1.6}%
+\contentsline {subsection}{\numberline {9.1.7}Garanties de Robustesse}{115}{subsection.9.1.7}%
+\contentsline {subsection}{\numberline {9.1.8}Gestion des Credentials en CI}{115}{subsection.9.1.8}%
+\contentsline {subsection}{\numberline {9.1.9}Procédure Opérationnelle Recommandée}{115}{subsection.9.1.9}%
+\contentsline {chapter}{\numberline {10}Conclusion et Perspectives}{116}{chapter.10}%
+\contentsline {section}{\numberline {10.1}Bilan du Projet}{116}{section.10.1}%
+\contentsline {section}{\numberline {10.2}Valeur Industrielle}{117}{section.10.2}%
+\contentsline {section}{\numberline {10.3}Leçons Apprises}{117}{section.10.3}%
+\contentsline {section}{\numberline {10.4}Perspectives}{117}{section.10.4}%
+\contentsline {chapter}{Références}{119}{chapter*.3}%
+\contentsline {chapter}{Annexes}{123}{chapter*.5}%

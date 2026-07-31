@@ -1,6 +1,7 @@
 \babel@toc {french}{}\relax 
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {1.1}{\ignorespaces Logo officiel de STMicroelectronics}}{12}{figure.1.1}%
+\contentsline {figure}{\numberline {1.2}{\ignorespaces Structure organisationnelle de la division Microcontrôleurs (MCD) au site ST Tunis. L'équipe Maintenance (mise en évidence) est l'équipe d'accueil de ce projet.}}{14}{figure.1.2}%
 \addvspace {10\p@ }
 \contentsline {figure}{\numberline {2.1}{\ignorespaces Le paradigme RAG appliqué au projet : le pipeline conditionne la qualité de la KB interrogée à chaque question}}{19}{figure.2.1}%
 \addvspace {10\p@ }
@@ -28,14 +29,15 @@
 \contentsline {figure}{\numberline {7.1}{\ignorespaces Quality Index des stratégies Unstructured KB sur 96 questions --- S1 maximise le rappel, S0 reste le point d'équilibre courant}}{72}{figure.7.1}%
 \contentsline {figure}{\numberline {7.2}{\ignorespaces Recherche hybride : fusion des branches sémantique et full-text avant génération}}{73}{figure.7.2}%
 \contentsline {figure}{\numberline {7.3}{\ignorespaces Évolution du Quality Index au fil des améliorations incrémentales}}{77}{figure.7.3}%
+\contentsline {figure}{\numberline {7.4}{\ignorespaces Automatisation CI/CD : orchestration GitHub Actions et upload KB via runner self-hosted}}{80}{figure.7.4}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {8.1}{\ignorespaces Complétude d'ingestion par série~: toutes métriques au-dessus du seuil EXCELLENT}}{89}{figure.8.1}%
-\contentsline {figure}{\numberline {8.2}{\ignorespaces Couverture d'enrichissement STM32CubeH7~: score vs seuil par champ}}{90}{figure.8.2}%
-\contentsline {figure}{\numberline {8.3}{\ignorespaces Décomposition du score global 87.1\%~: contribution pondérée de chaque stage}}{93}{figure.8.3}%
-\contentsline {figure}{\numberline {8.4}{\ignorespaces Confiance contextuelle Alfred --- seuil d'alerte $\tau = 0.12$}}{95}{figure.8.4}%
-\contentsline {figure}{\numberline {8.5}{\ignorespaces Évolution du Quality Index~: le saut majeur (+33) provient des Diagnostic Cards, la régression ($-34$) de la dilution multi-séries}}{99}{figure.8.5}%
-\contentsline {figure}{\numberline {8.6}{\ignorespaces Comparaison Alfred vs Persona KB par catégorie de question}}{102}{figure.8.6}%
-\contentsline {figure}{\numberline {8.7}{\ignorespaces Comparaison des stratégies de retrieval KB sur 96 questions}}{103}{figure.8.7}%
+\contentsline {figure}{\numberline {8.1}{\ignorespaces Complétude d'ingestion par série~: toutes métriques au-dessus du seuil EXCELLENT}}{93}{figure.8.1}%
+\contentsline {figure}{\numberline {8.2}{\ignorespaces Couverture d'enrichissement STM32CubeH7~: score vs seuil par champ}}{94}{figure.8.2}%
+\contentsline {figure}{\numberline {8.3}{\ignorespaces Décomposition du score global 87.1\%~: contribution pondérée de chaque stage}}{97}{figure.8.3}%
+\contentsline {figure}{\numberline {8.4}{\ignorespaces Confiance contextuelle Alfred --- seuil d'alerte $\tau = 0.12$}}{99}{figure.8.4}%
+\contentsline {figure}{\numberline {8.5}{\ignorespaces Évolution du Quality Index~: le saut majeur (+33) provient des Diagnostic Cards, la régression ($-34$) de la dilution multi-séries}}{103}{figure.8.5}%
+\contentsline {figure}{\numberline {8.6}{\ignorespaces Comparaison Alfred vs Persona KB par catégorie de question}}{106}{figure.8.6}%
+\contentsline {figure}{\numberline {8.7}{\ignorespaces Comparaison des stratégies de retrieval KB sur 96 questions}}{107}{figure.8.7}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {9.1}{\ignorespaces Architecture CI/CD actuelle : normalisation, contrôle runner, exécution matricielle et politique de mise à jour KB}}{108}{figure.9.1}%
+\contentsline {figure}{\numberline {9.1}{\ignorespaces Architecture CI/CD actuelle : normalisation, contrôle runner, exécution matricielle et politique de mise à jour KB}}{112}{figure.9.1}%
 \addvspace {10\p@ }

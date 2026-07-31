@@ -1,3 +1,36 @@
+"""CLI: validate a by-component issues split produced by
+`split_st_ready_issues_by_component.py`.
+
+After splitting a `st_ready_issues_with_images_<repo>.json` payload into
+per-component files (`by_component/st_ready_issues_<series>_<component>.json`),
+this script cross-checks the split output against the original source file to
+catch data-integrity regressions before those files are uploaded as separate
+KB datasources. It verifies:
+
+- No issue ID/`issue_number` appears in more than one component file
+  (duplicates would cause the same issue to be retrievable from two
+  datasources).
+- Every issue from the source file is present in exactly one split file
+  (no silently dropped issues).
+- No split file contains IDs that are not in the source file (no
+  fabricated/leftover records from a stale run).
+
+Input:
+- `--summary`: path to a `summary_by_component_<series>.json` file written by
+  `split_st_ready_issues_by_component.py`. It references the original
+  `source_file` and the list of per-component `output_file` paths
+  (`datasources`), which this script reads.
+
+Exit behavior:
+- Prints a report to stdout; exits with status 1 (`SystemExit(1)`) if any
+  duplicates, missing IDs, or extra IDs are found, so it can be used as a CI
+  gate in the delivery workflow.
+
+Run:
+    python -m pipeline.delivery.validate_issues_by_component_split \\
+        --summary <path/to/summary_by_component_<series>.json>
+"""
+
 import argparse
 import json
 from collections import defaultdict
@@ -6,6 +39,7 @@ from typing import Any
 
 
 def load_json(path: Path) -> dict[str, Any]:
+    """Load a JSON file and ensure its root is an object (not an array)."""
     payload = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(payload, dict):
         raise ValueError(f"Expected object at root: {path}")
@@ -13,6 +47,12 @@ def load_json(path: Path) -> dict[str, Any]:
 
 
 def extract_issue_id(issue: dict[str, Any]) -> str:
+    """Return a stable identity key for an issue record.
+
+    Prefers the delivery `id` field; falls back to `issue_number` (prefixed
+    to avoid collisions with the `id` namespace) so records missing `id` can
+    still be tracked for duplicate/coverage checks.
+    """
     issue_id = issue.get("id")
     if issue_id:
         return str(issue_id)
@@ -23,6 +63,9 @@ def extract_issue_id(issue: dict[str, Any]) -> str:
 
 
 def main() -> None:
+    """CLI entry point: load the split summary, compare split files against
+    the source file, print a report, and raise `SystemExit(1)` on failure.
+    """
     parser = argparse.ArgumentParser(
         description="Validate no duplicates across by_component issue files and check coverage against source."
     )

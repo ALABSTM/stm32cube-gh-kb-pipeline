@@ -1,3 +1,58 @@
+"""Evaluate KB retrieval strategies directly against the raw ``kb-query`` API.
+
+Role in the evaluation stage
+-----------------------------
+This script benchmarks *retrieval only* (no LLM generation): it calls the ST
+AI Bridge KB search endpoint (``service=kb``, ``type=kb-query``) with a given
+search strategy (semantic threshold, semantic/full-text max doc counts) for
+a set of benchmark questions, and records whether the expected repo/card
+appears in the top-1/top-3 results. This isolates whether retrieval-tuning
+changes (thresholds, doc counts, search type) actually surface the right
+documents, independent of persona/LLM answer quality (which
+run_persona_kb_eval.py covers instead).
+
+Inputs
+------
+- Question set: CSV or ``.xlsx`` file with columns ``query_id``/``query_text``
+  (default ``docs/evaluation/all_series_test_suite_10q_diversified_chatwithalfred.xlsx``).
+- Strategy matrix CSV (default ``docs/evaluation/kb_strategy_matrix.csv``)
+  defining named strategies (``strategy_id`` -> search_type/thresholds/doc counts).
+- ST AI Bridge KB query API (``service=kb``, ``type=kb-query``), reached via
+  credentials/helpers imported from
+  pipeline_Automation/upload/Get_Persona_KBs.py.
+
+Outputs
+------
+- Per-run artifacts directory under ``docs/evaluation/runs_kb_query/`` with
+  ``run_manifest.json``, ``responses_raw.jsonl`` (full API responses), and
+  ``responses_flat.csv`` (flattened top-1 result per question).
+- Upserted rows in the comparison CSV (default
+  ``docs/evaluation/kb_query_strategy_comparison.csv``), keyed by
+  (run_id, strategy_id, query_id), so repeated runs update rather than
+  duplicate prior results.
+
+Usage (CLI)
+-----------
+    python pipeline/evaluation/run_kb_query_strategy_eval.py \\
+        --run-id R1 --strategy-id S1_SEMANTIC_08
+
+Key arguments:
+    --questions          Path to the question set (CSV or .xlsx).
+    --xlsx-sheet         Optional sheet name when --questions is .xlsx.
+    --output-csv         Path to the comparison CSV to upsert into.
+    --run-id             Required run identifier (e.g. R1).
+    --strategy-id        Required strategy id, must exist in --strategy-matrix.
+    --strategy-matrix    Path to the strategy definitions CSV.
+    --kb-id              Optional explicit KB id (resolved automatically if omitted).
+    --remote-user        Remote user identity forwarded to the API.
+    --max-retries        Max retry attempts per question on transient errors.
+    --request-timeout    Per-request timeout in seconds.
+    --delay              Delay in seconds between requests (rate limiting).
+    --use-proxy          Route requests through the configured proxy.
+    --limit              Only evaluate the first N questions (smoke testing).
+    --default-tags       Fallback KB tags when a question row has none.
+"""
+
 import argparse
 import csv
 import json
@@ -26,6 +81,8 @@ from pipeline_Automation.upload.Get_Persona_KBs import (  # noqa: E402
     url,
 )
 
+# The internal ST AI Bridge endpoint uses a self-signed/internal certificate;
+# disable the resulting urllib3 warning noise for these evaluation runs.
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
@@ -34,6 +91,19 @@ DEFAULT_OUTPUT_CSV = PROJECT_ROOT / "docs" / "evaluation" / "kb_query_strategy_c
 
 
 def infer_query_type(question: str, tags: str = "") -> str:
+    """Heuristically classify a question as error_message/api_symbol/how_to.
+
+    Used to auto-tag questions loaded from .xlsx test suites that don't
+    already specify a ``query_type`` column, so downstream comparison
+    reports can be sliced by query intent.
+
+    Args:
+        question: The question text.
+        tags: Optional free-text tags/notes associated with the question.
+
+    Returns:
+        One of "error_message", "api_symbol", or "how_to" (default).
+    """
     text = (question or "").lower()
     tag_text = (tags or "").lower()
 
@@ -45,6 +115,17 @@ def infer_query_type(question: str, tags: str = "") -> str:
 
 
 def load_questions_csv(path: Path) -> list[dict[str, str]]:
+    """Load a benchmark question set from a CSV file.
+
+    Args:
+        path: CSV with at minimum ``query_id`` and ``query_text`` columns.
+            ``tags`` falls back to ``notes`` when absent, and ``query_type``
+            is auto-inferred via infer_query_type when missing.
+
+    Returns:
+        List of row dicts, one per valid question (rows missing id or text
+        are skipped).
+    """
     questions: list[dict[str, str]] = []
     with path.open("r", encoding="utf-8", newline="") as f:
         reader = csv.DictReader(f)
@@ -64,6 +145,22 @@ def load_questions_csv(path: Path) -> list[dict[str, str]]:
 
 
 def load_questions_xlsx(path: Path, sheet_name: str = "") -> list[dict[str, str]]:
+    """Load a benchmark question set from an Excel test-suite workbook.
+
+    Args:
+        path: ``.xlsx`` file with a header row containing a question column
+            (one of "question"/"query"/"prompt") and optionally a tags column
+            ("tags"/"tag"/"category").
+        sheet_name: Optional sheet to read; defaults to the workbook's active sheet.
+
+    Returns:
+        List of synthesized row dicts with generated ``query_id`` values
+        (``Q001``, ``Q002``, ...) and an auto-inferred ``query_type``.
+
+    Raises:
+        RuntimeError: If openpyxl is not installed.
+        ValueError: If no recognizable question column is found in the header.
+    """
     try:
         from openpyxl import load_workbook
     except Exception as exc:
@@ -128,12 +225,24 @@ def load_questions_xlsx(path: Path, sheet_name: str = "") -> list[dict[str, str]
 
 
 def load_questions(path: Path, sheet_name: str = "") -> list[dict[str, str]]:
+    """Dispatch to the CSV or Excel loader based on file extension."""
     if path.suffix.lower() == ".xlsx":
         return load_questions_xlsx(path, sheet_name=sheet_name)
     return load_questions_csv(path)
 
 
 def load_strategy_matrix(path: Path) -> dict[str, dict[str, str]]:
+    """Load named KB search strategies (thresholds/doc counts) from a CSV.
+
+    Args:
+        path: CSV with a ``strategy_id`` column plus strategy parameter columns.
+
+    Returns:
+        Mapping of strategy_id -> row dict.
+
+    Raises:
+        FileNotFoundError: If the strategy matrix file does not exist.
+    """
     if not path.exists():
         raise FileNotFoundError(f"Strategy matrix not found: {path}")
 
@@ -149,6 +258,12 @@ def load_strategy_matrix(path: Path) -> dict[str, dict[str, str]]:
 
 @dataclass
 class EvalRow:
+    """One flattened evaluation result row for a single (run, strategy, query).
+
+    Mirrors the output CSV schema used by upsert_evaluation_rows; kept as a
+    dataclass for type-checked construction before serialization.
+    """
+
     run_id: str
     run_date: str
     strategy_id: str
@@ -181,6 +296,30 @@ def call_kb_query(
     request_timeout: int,
     use_proxy: bool,
 ) -> tuple[list[dict[str, Any]], dict[str, Any], float]:
+    """Call the ST AI Bridge ``kb-query`` API for one question and one strategy.
+
+    Handles HMAC-style request signing (generate_token), retries with
+    exponential backoff on transient HTTP/network errors, and a fallback
+    between seconds/milliseconds timestamp formats (some API deployments
+    expect one or the other for the auth window check).
+
+    Args:
+        question: The natural-language query text to send.
+        kb_id: Target knowledge base id.
+        semantic_threshold: Minimum semantic similarity score to include a doc.
+        semantic_max_docs_count: Max docs returned by semantic search.
+        fulltext_max_docs_count: Max docs returned by full-text search.
+        tags: KB tag ids to filter/boost the search scope.
+        remote_user: Identity forwarded to the API for auditing/rate limiting.
+        max_retries: Maximum number of attempts before giving up.
+        request_timeout: Per-request timeout in seconds.
+        use_proxy: Whether to route the request through the configured proxy.
+
+    Returns:
+        Tuple of (results_list, raw_response_json, latency_seconds). On
+        failure after all retries, results is an empty list and the response
+        dict contains an "error" key.
+    """
     last_error = ""
 
     for attempt in range(1, max_retries + 1):
@@ -268,6 +407,21 @@ def call_kb_query(
 
 
 def repo_hit_flags(expected_repo: str, results: list[dict[str, Any]]) -> tuple[str, str]:
+    """Check whether the expected repo name appears in the top-1/top-3 KB results.
+
+    Uses a simple substring match against the JSON-serialized result payload
+    rather than a specific field, since result schemas can vary slightly
+    between search types (semantic vs full-text).
+
+    Args:
+        expected_repo: Expected repo/card identifier for this question (may
+            be empty if unknown/not applicable).
+        results: List of KB result dicts returned by call_kb_query.
+
+    Returns:
+        Tuple of ("1"/"0" for top1 hit, "1"/"0" for top3 hit). Both are ""
+        when expected_repo is empty (nothing to check against).
+    """
     repo = (expected_repo or "").strip().lower()
     if not repo:
         return "", ""
@@ -283,6 +437,18 @@ def repo_hit_flags(expected_repo: str, results: list[dict[str, Any]]) -> tuple[s
 
 
 def write_run_artifacts(run_dir: Path, rows: list[dict[str, Any]], manifest: dict[str, Any]) -> None:
+    """Persist raw per-question API responses and a flattened CSV for one run.
+
+    Args:
+        run_dir: Directory to create for this run's artifacts.
+        rows: Per-question result dicts (query id/text, results, latency, error).
+        manifest: Run configuration metadata (strategy params, CLI args) to
+            record alongside the raw responses for reproducibility.
+
+    Side effects:
+        Writes ``run_manifest.json``, ``responses_raw.jsonl``, and
+        ``responses_flat.csv`` under run_dir.
+    """
     run_dir.mkdir(parents=True, exist_ok=True)
     (run_dir / "run_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
 
@@ -328,6 +494,20 @@ def write_run_artifacts(run_dir: Path, rows: list[dict[str, Any]], manifest: dic
 
 
 def upsert_evaluation_rows(output_csv: Path, new_rows: list[EvalRow]) -> None:
+    """Merge new evaluation rows into the comparison CSV, replacing same-key rows.
+
+    Keyed by (run_id, strategy_id, query_id) so re-running the same
+    run_id/strategy_id combination overwrites its previous rows instead of
+    duplicating them, letting comparisons accumulate across many runs/
+    strategies over time in a single CSV.
+
+    Args:
+        output_csv: Path to the comparison CSV (created if it doesn't exist).
+        new_rows: EvalRow entries produced by the current run.
+
+    Side effects:
+        Overwrites output_csv with the merged, sorted row set.
+    """
     fieldnames = [
         "run_id",
         "run_date",
@@ -393,6 +573,7 @@ def upsert_evaluation_rows(output_csv: Path, new_rows: list[EvalRow]) -> None:
 
 
 def main() -> None:
+    """CLI entry point: run a KB query strategy against a question set and record results."""
     parser = argparse.ArgumentParser(description="Evaluate KB strategies directly via service=kb,type=kb-query.")
     parser.add_argument("--questions", default="docs/evaluation/all_series_test_suite_10q_diversified_chatwithalfred.xlsx")
     parser.add_argument("--xlsx-sheet", default="")
@@ -421,6 +602,8 @@ def main() -> None:
         return [t.strip() for t in raw.split(",") if t.strip()]
 
     def is_uuid(value: str) -> bool:
+        # KB tags are addressed by UUID in the API payload; the strategy/question
+        # CSVs may instead contain human-readable tag labels that need mapping.
         return bool(
             re.match(
                 r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
@@ -465,6 +648,8 @@ def main() -> None:
 
     tag_items: list[dict[str, Any]] = []
     kb_tags_def = kb_meta.get("kbTagsDef") if isinstance(kb_meta, dict) else None
+    # kbTagsDef shape varies across API versions (dict-with-items vs plain list);
+    # normalize both to a flat list of tag item dicts.
     if isinstance(kb_tags_def, dict):
         items = kb_tags_def.get("items")
         if isinstance(items, list):
@@ -509,6 +694,9 @@ def main() -> None:
             if is_uuid(t):
                 effective_tags.append(t)
                 continue
+            # Resolve a human-readable tag label to its KB tag UUID; unresolved
+            # labels are dropped (with a warning) rather than sent as-is, since
+            # the API expects tag ids, not labels.
             mapped = label_to_id.get(t.lower())
             if mapped:
                 effective_tags.append(mapped)

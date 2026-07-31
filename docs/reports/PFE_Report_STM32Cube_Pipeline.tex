@@ -173,6 +173,10 @@ Ce rapport s'organise comme suit :
 \label{chap:entreprise}
 %% ============================================================
 
+\section*{Introduction}
+
+Ce chapitre présente l'entreprise d'accueil et le cadre dans lequel ce projet de fin d'études a été mené. Nous décrivons successivement STMicroelectronics à l'échelle mondiale, le site de Tunis, la division Microcontrôleurs (MCD) et, plus précisément, l'équipe Technical Marketing and Application Support --- et en son sein l'équipe Maintenance et Validation --- qui a accueilli ce travail. Cette présentation constitue le socle sur lequel s'appuiera le chapitre suivant pour introduire la problématique, la critique de l'existant et les fondements théoriques du projet.
+
 \section{STMicroelectronics}
 \label{sec:st_presentation}
 
@@ -212,20 +216,29 @@ Le site \textbf{ST Tunis}, situé dans le \textbf{Technopark El Ghazela}, a déb
 \section{Division Microcontrôleurs (MCD)}
 \label{sec:mcd}
 
-La \textbf{Microcontroller Division (MCD)} est dédiée à la conception de microcontrôleurs, de plateformes de démonstration et de solutions pour les applications grand public. Elle est responsable du développement de drivers et de logiciels embarqués --- en particulier la validation et le développement des bibliothèques et firmware qui pilotent les microcontrôleurs ST.
+La \textbf{Microcontroller Division (MCD)} est dédiée à la conception de microcontrôleurs, de plateformes de démonstration et de solutions pour les applications grand public. Elle est responsable du développement de drivers et de logiciels embarqués --- en particulier la validation et le développement des bibliothèques et firmware qui pilotent les microcontrôleurs ST. La division couvre l'ensemble du cycle de vie du firmware : conception initiale, portage entre séries, validation fonctionnelle, maintenance corrective et support aux clients externes.
+
+La Figure~\ref{fig:st-site-org} présente l'organisation de la MCD sur le site de Tunis. L'équipe \textbf{Maintenance} (mise en évidence) est l'équipe d'accueil de ce projet de fin d'études.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox{0.7\textwidth}{\centering\vspace{2.2cm}\textit{[Organigramme MCD --- ST Tunis\\à exporter depuis draw.io : \texttt{Figures/chapter1/st-site-organization.pdf}]}\vspace{2.2cm}}}
+\caption{Structure organisationnelle de la division Microcontrôleurs (MCD) au site ST Tunis. L'équipe Maintenance (mise en évidence) est l'équipe d'accueil de ce projet.}
+\label{fig:st-site-org}
+\end{figure}
 
 \section{Équipe d'Accueil : Technical Marketing and Application Support}
 \label{sec:equipe_accueil}
 
-Ce projet a été réalisé au sein de l'équipe \textbf{Technical Marketing and Application Support} rattachée à la MCD sur le site de Tunis. Cette équipe comprend deux sous-équipes :
+Ce projet a été réalisé au sein de l'équipe \textbf{Technical Marketing and Application Support}, rattachée à la MCD sur le site de Tunis. Cette équipe assure la jonction entre les équipes de conception (design), les clients externes utilisant les microcontrôleurs STM32, et les processus internes de qualité et d'industrialisation. Elle comprend deux sous-équipes complémentaires :
 
 \begin{itemize}
   \item \textbf{L'équipe GitHub} : assure le support client via les dépôts GitHub publics de STMicroelectronics, publie les mises à jour des drivers HAL, et maintient les projets d'exemples pour faciliter le développement d'applications basées sur les microcontrôleurs STM32.
-  
-  \item \textbf{L'équipe Maintenance et Validation} : garantit la satisfaction client par la maintenance des bugs et la validation fonctionnelle des microcontrôleurs fabriqués et de leurs versions HAL associées. Cette équipe représente la jonction entre les processus de conception logicielle/matérielle et l'industrialisation.
+
+  \item \textbf{L'équipe Maintenance et Validation} : garantit la satisfaction client par la maintenance des bugs et la validation fonctionnelle des microcontrôleurs fabriqués et de leurs versions HAL associées. Cette équipe représente la jonction entre les processus de conception logicielle/matérielle et l'industrialisation. \textbf{C'est au sein de cette équipe que le présent projet de fin d'études a été réalisé.}
 \end{itemize}
 
-C'est dans ce contexte que le besoin d'un \textbf{chatbot IA spécialisé STM32} a émergé : face au volume croissant d'issues GitHub (plusieurs milliers par an, répartis sur 200+ dépôts) et à la richesse inexploitée de ces données, l'équipe a identifié l'opportunité d'automatiser le support de premier niveau par un pipeline intelligent de prétraitement alimentant une base de connaissances structurée.
+C'est dans ce contexte opérationnel que le besoin d'un \textbf{chatbot IA spécialisé STM32} a émergé : face au volume croissant d'issues GitHub (plusieurs milliers par an, répartis sur 200+ dépôts) et à la richesse inexploitée de ces données, l'équipe Maintenance et Validation a identifié l'opportunité d'automatiser le support de premier niveau par un pipeline intelligent de prétraitement alimentant une base de connaissances structurée. Le chapitre suivant détaille ce contexte, la problématique précise qui en découle, et l'état de l'art qui a guidé la solution retenue.
 
 %% ============================================================
 \chapter{Contexte du Projet}

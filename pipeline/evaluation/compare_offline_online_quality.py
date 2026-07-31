@@ -1,3 +1,43 @@
+"""Compare offline (manual) benchmark scores against online ST Quality Index scores.
+
+Role in the evaluation stage
+-----------------------------
+The project runs two parallel quality assessments for the same benchmark
+question set: an *offline* manual scoring pass (humans grading answers on a
+0-7 rubric, recorded in a CSV) and an *online* pass where the deployed ST
+ChatGPT persona is graded by the built-in "ST Quality Index" (0-100 score).
+This script merges both sources by ``(run_id, question_id)``, normalizes
+scales, and produces per-scope (global/issues/files/mixed) averages plus an
+A/B delta table, so regressions or improvements between two pipeline/config
+versions ("run A" vs "run B") are visible at a glance.
+
+Inputs
+------
+- Offline scored CSV (default
+  ``datasets/06_eval_outputs/h7_eval_30q_scoring_template_results_scored.csv``)
+  with columns ``run_id``, ``question_id``, ``question_group``,
+  ``total_0_to_7``.
+- Online scores CSV (default
+  ``datasets/06_eval_outputs/quality_index_30q_online_scores.csv``) with a
+  score column named ``quality_index_score_0_to_100``, ``score_0_to_100``, or
+  ``score``. This file is optional; if missing, only offline stats are
+  produced and a template is written to help fill it in.
+
+Outputs
+-------
+- Online scores template CSV (pre-filled with run_id/question_id rows,
+  empty score column) to guide manual/online score entry.
+- Summary CSV and Markdown with per-scope offline/online averages and the
+  online-minus-offline delta, plus an ``A->B`` comparison row per scope.
+
+Usage (CLI)
+-----------
+    python pipeline/evaluation/compare_offline_online_quality.py
+    python pipeline/evaluation/compare_offline_online_quality.py \\
+        --offline-scored-csv <path> --online-scores-csv <path> \\
+        --out-summary-csv <path> --out-summary-md <path>
+"""
+
 import argparse
 import csv
 import re
@@ -9,6 +49,12 @@ from shared.utils.paths import PROJECT_ROOT
 
 
 def normalize_qid(raw: str | None) -> str:
+    """Normalize a question id to the canonical ``Q<NN>`` form (e.g. ``Q07``).
+
+    Accepts already-prefixed ids, bare digits, or ids embedded in other text,
+    so offline/online CSVs authored with slightly different conventions can
+    still be joined on the same key.
+    """
     value = (raw or "").strip().upper()
     if not value:
         return ""
@@ -23,6 +69,7 @@ def normalize_qid(raw: str | None) -> str:
 
 
 def qid_sort_key(qid: str) -> tuple[int, str]:
+    """Sort key that orders question ids numerically (Q2 before Q10)."""
     match = re.search(r"(\d+)", qid or "")
     if match:
         return int(match.group(1)), qid
@@ -30,6 +77,7 @@ def qid_sort_key(qid: str) -> tuple[int, str]:
 
 
 def to_float(raw: str | None) -> float | None:
+    """Best-effort string-to-float conversion, returning None for blank/invalid values."""
     value = (raw or "").strip()
     if not value:
         return None
@@ -40,6 +88,20 @@ def to_float(raw: str | None) -> float | None:
 
 
 def load_offline_scored(path: Path) -> dict[tuple[str, str], dict[str, Any]]:
+    """Load the manually-scored offline benchmark CSV.
+
+    Args:
+        path: CSV with columns run_id/question_id/question_group/total_0_to_7.
+
+    Returns:
+        Mapping of (run_id, question_id) -> row dict, including the score
+        normalized to a 0-100 scale for direct comparison with the online
+        Quality Index.
+
+    Raises:
+        FileNotFoundError: If the offline CSV does not exist (this file is
+        the required baseline; there is no meaningful comparison without it).
+    """
     if not path.exists():
         raise FileNotFoundError(f"Offline scored file not found: {path}")
 
@@ -63,12 +125,22 @@ def load_offline_scored(path: Path) -> dict[tuple[str, str], dict[str, Any]]:
                 "question_id": qid,
                 "question_group": (row.get("question_group") or "").strip().lower() or "unknown",
                 "offline_total_0_to_7": offline_total,
+                # Normalize the 0-7 rubric score to a 0-100 scale so it can be
+                # directly compared/subtracted against the online Quality Index.
                 "offline_total_0_to_100": round((offline_total / 7.0) * 100.0, 2),
             }
     return out
 
 
 def detect_online_score_column(fieldnames: list[str]) -> str | None:
+    """Find which of the accepted score column names is present in a CSV header.
+
+    Different exports of the online Quality Index use slightly different
+    column names; this checks a priority list case-insensitively.
+
+    Returns:
+        The actual (original-case) column name found, or None if none match.
+    """
     candidates = [
         "quality_index_score_0_to_100",
         "score_0_to_100",
@@ -82,6 +154,21 @@ def detect_online_score_column(fieldnames: list[str]) -> str | None:
 
 
 def load_online_scores(path: Path) -> dict[tuple[str, str], dict[str, Any]]:
+    """Load the online ST Quality Index scores CSV, if present.
+
+    Args:
+        path: CSV with a score column (see detect_online_score_column) and
+            run_id/question_id columns.
+
+    Returns:
+        Mapping of (run_id, question_id) -> row dict. Returns an empty dict
+        (not an error) when the file does not exist yet, since online scores
+        are typically collected after the offline pass and may not be ready.
+
+    Raises:
+        ValueError: If the file exists but has none of the accepted score
+        column names.
+    """
     if not path.exists():
         return {}
 
@@ -116,6 +203,17 @@ def load_online_scores(path: Path) -> dict[tuple[str, str], dict[str, Any]]:
 
 
 def write_online_template(path: Path, offline_rows: dict[tuple[str, str], dict[str, Any]]) -> None:
+    """Write a blank online-scores CSV template pre-populated from offline rows.
+
+    This lets a reviewer fill in only the score/reason columns for each
+    (run_id, question_id) pair that already has an offline score, instead of
+    re-typing identifying columns by hand.
+
+    Args:
+        path: Output CSV path for the template.
+        offline_rows: Offline rows keyed by (run_id, question_id), used to
+            derive the rows to pre-fill.
+    """
     path.parent.mkdir(parents=True, exist_ok=True)
     rows = sorted(
         offline_rows.values(),
@@ -151,6 +249,18 @@ def merge_offline_online(
     offline_rows: dict[tuple[str, str], dict[str, Any]],
     online_rows: dict[tuple[str, str], dict[str, Any]],
 ) -> list[dict[str, Any]]:
+    """Join offline and online rows on (run_id, question_id) and compute deltas.
+
+    Args:
+        offline_rows: Offline scores keyed by (run_id, question_id).
+        online_rows: Online scores keyed by (run_id, question_id); may be
+            missing entries when online scoring is incomplete.
+
+    Returns:
+        List of merged row dicts, one per offline row, sorted by run_id then
+        question id. ``delta_online_minus_offline`` is None when the online
+        score for that key is not yet available.
+    """
     merged: list[dict[str, Any]] = []
     for key, offline in sorted(offline_rows.items(), key=lambda item: (item[0][0], qid_sort_key(item[0][1]))):
         online = online_rows.get(key, {})
@@ -177,6 +287,22 @@ def merge_offline_online(
 
 
 def aggregate_summary(merged_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Aggregate merged rows into per-scope averages plus an A/B delta table.
+
+    Each row is counted both under its own ``run_id`` and under a synthetic
+    "global" scope, and both under its ``question_group`` and the same
+    "global" scope, so the summary answers both "how did run X do overall"
+    and "how did run X do on issues-only questions" without a second pass.
+    When both run "A" and run "B" exist for a scope, an extra ``A->B`` row is
+    appended with the point-by-point difference, making regressions/gains
+    immediately visible.
+
+    Args:
+        merged_rows: Rows produced by merge_offline_online.
+
+    Returns:
+        List of summary rows (per-scope averages, followed by A->B deltas).
+    """
     by_scope: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
     for row in merged_rows:
         run_id = row.get("run_id") or ""
@@ -225,6 +351,8 @@ def aggregate_summary(merged_rows: list[dict[str, Any]]) -> list[dict[str, Any]]
             }
         )
 
+    # Build A/B comparison rows: for each scope where both runs "A" and "B"
+    # exist, compute the point-by-point delta (B - A) to highlight regressions/gains.
     by_scope_run = {(row["scope"], row["run_id"]): row for row in summary_rows}
     ab_rows: list[dict[str, Any]] = []
     for scope in sorted({row["scope"] for row in summary_rows}, key=lambda s: scope_order.get(s, 99)):
@@ -257,6 +385,7 @@ def aggregate_summary(merged_rows: list[dict[str, Any]]) -> list[dict[str, Any]]
 
 
 def write_summary_csv(path: Path, summary_rows: list[dict[str, Any]]) -> None:
+    """Write the per-scope summary (and A/B delta rows) to a CSV file."""
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(
@@ -277,6 +406,7 @@ def write_summary_csv(path: Path, summary_rows: list[dict[str, Any]]) -> None:
 
 
 def write_summary_markdown(path: Path, summary_rows: list[dict[str, Any]]) -> None:
+    """Write the same summary as a human-readable Markdown table with a legend."""
     path.parent.mkdir(parents=True, exist_ok=True)
     lines = [
         "# Offline vs Online Evaluation Summary",
@@ -307,6 +437,7 @@ def write_summary_markdown(path: Path, summary_rows: list[dict[str, Any]]) -> No
 
 
 def main() -> None:
+    """CLI entry point: load offline/online CSVs, merge, aggregate, and write reports."""
     parser = argparse.ArgumentParser(
         description=(
             "Compare offline manual benchmark scores with online ST Quality Index scores "

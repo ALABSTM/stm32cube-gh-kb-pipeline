@@ -1,3 +1,17 @@
+"""Core V2 enrichment models for issues and files.
+
+Role in the pipeline: this module implements the main enrichment logic used
+by `issues_to_docs_v2.py` and `files_to_docs_v2.py`. It classifies issues
+(bug/question/config-help), detects layer/severity/board/component signals,
+flags validity (with a "rescue" mechanism for technical false negatives),
+and builds the final "doc" dict schema (with `mcu_series`, `github_url`,
+etc.) shared by downstream similarity and chunking stages.
+
+No file I/O happens here; callers (the CLI scripts above) read
+`clean_issues_<repo>.json` / `clean_files_<repo>[_v3].json` and write
+`docs_issues_<repo>_v2.json` / `docs_files_<repo>_v2[_v3].json`.
+"""
+
 import re
 from typing import Any
 from urllib.parse import quote
@@ -7,6 +21,19 @@ from pipeline.enrichment.stm32cube_preprocessing_heuristics import detect_layer,
 
 
 def classify_issue_kind(text: str, labels: list[str]) -> str:
+    """Classify an issue into a coarse kind based on labels and text.
+
+    Priority: an explicit "bug"/"internal bug tracker" label always wins.
+    Otherwise falls back to simple keyword heuristics for usage questions and
+    configuration help, defaulting to "other" when nothing matches.
+
+    Args:
+        text: Cleaned issue text (title + body).
+        labels: GitHub labels attached to the issue.
+
+    Returns:
+        One of "bug_report", "usage_question", "configuration_help", "other".
+    """
     labels_lower = [lbl.lower() for lbl in labels]
 
     if "bug" in labels_lower or "internal bug tracker" in labels_lower:
@@ -23,10 +50,19 @@ def classify_issue_kind(text: str, labels: list[str]) -> str:
 
 
 def has_invalid_label(labels: list[str]) -> bool:
+    """Return True if any label marks the issue as invalid/duplicate/wontfix.
+
+    Used by the validity filter in `PreprocessingModelIssuesV2` to exclude
+    low-value issues from the knowledge base by default.
+    """
     labels_lower = [lbl.lower() for lbl in labels]
     return any(lbl in ("invalid", "duplicate", "wontfix") for lbl in labels_lower)
 
 
+# Regex signals suggesting the issue describes a concrete, reproducible
+# technical problem (HAL/LL API usage, DMA, blocking behavior, faults, etc.).
+# Used to "rescue" issues that would otherwise be filtered out as invalid
+# (e.g. mislabeled or short) but contain strong technical evidence.
 RESCUE_SIGNAL_PATTERNS = [
     r"\bHAL_[A-Za-z0-9_]+\b",
     r"\bLL_[A-Za-z0-9_]+\b",
@@ -42,6 +78,15 @@ RESCUE_SIGNAL_PATTERNS = [
 
 
 def detect_rescue_signals(text: str) -> list[str]:
+    """Find which rescue-signal regex patterns match in the given text.
+
+    Args:
+        text: Cleaned issue text to scan.
+
+    Returns:
+        The subset of `RESCUE_SIGNAL_PATTERNS` (as raw pattern strings) that
+        matched at least once, case-insensitively.
+    """
     txt = text or ""
     found: list[str] = []
     for pattern in RESCUE_SIGNAL_PATTERNS:
@@ -56,9 +101,28 @@ def compute_issue_evidence_strength(
     rescue_signal_count: int,
     is_valid: bool,
 ) -> str:
+    """Score how strong the technical evidence in an issue is.
+
+    Combines two proxies for technical specificity: the count of "anchor"
+    tokens (all-caps identifiers or SNAKE_CASE-style names, e.g. API/macro
+    names) and the count of matched rescue signals (see
+    `detect_rescue_signals`). An invalid issue is always scored "low"
+    regardless of other signals.
+
+    Args:
+        clean_text: Cleaned issue text.
+        is_confirmed_bug: Whether the issue carries a confirmed-bug label.
+        rescue_signal_count: Number of rescue signals detected in the text.
+        is_valid: Whether the issue passed the validity filter.
+
+    Returns:
+        "high", "medium", or "low".
+    """
     if not is_valid:
         return "low"
 
+    # Anchor tokens approximate technical specificity: ALL_CAPS identifiers
+    # (e.g. HAL macros) or snake_case-looking names (e.g. function/param names).
     anchor_matches = re.findall(r"\b([A-Z]{2,}[A-Z0-9_\-]{1,}|[A-Za-z]+_[A-Za-z0-9_]+)\b", clean_text or "")
     anchor_count = len(anchor_matches)
 
@@ -69,6 +133,8 @@ def compute_issue_evidence_strength(
     return "low"
 
 
+# Board name patterns recognized in issue/file text; ordered from most
+# specific (Nucleo board names) to generic MCU part-number prefixes.
 BOARD_REGEXES = [
     r"NUCLEO-[A-Z0-9]+",
     r"STM32H7[0-9A-Z]+",
@@ -78,6 +144,15 @@ BOARD_REGEXES = [
 
 
 def detect_board(text: str) -> str | None:
+    """Detect the first matching board/MCU part-number pattern in text.
+
+    Args:
+        text: Text to search (uppercased internally for matching).
+
+    Returns:
+        The matched board string (as found in the uppercased text), or None
+        if no `BOARD_REGEXES` pattern matches.
+    """
     txt_upper = text.upper()
     for pattern in BOARD_REGEXES:
         match = re.search(pattern, txt_upper)
@@ -86,6 +161,9 @@ def detect_board(text: str) -> str | None:
     return None
 
 
+# Keyword groups used to guess the STM32 peripheral/middleware component an
+# issue or file is about. Keys are the resulting `component` value; values
+# are lowercase substrings searched for in the (space-padded) lowered text.
 COMPONENT_KEYWORDS = {
     "ETH": ["ethernet", " lan ", " eth "],
     "USB": ["usb", "usb device", "usb_device"],
@@ -98,6 +176,18 @@ COMPONENT_KEYWORDS = {
 
 
 def detect_component(text: str) -> str | None:
+    """Detect the first matching STM32 component/peripheral keyword group.
+
+    Args:
+        text: Text to search (lowered and padded with spaces internally so
+            single-word keywords with leading/trailing spaces can match at
+            the text boundaries).
+
+    Returns:
+        The component key (e.g. "ETH", "USB", "DMA") from `COMPONENT_KEYWORDS`
+        whose first matching keyword is found earliest in dict order, or
+        None if nothing matches.
+    """
     txt_lower = f" {text.lower()} "
     for component, keywords in COMPONENT_KEYWORDS.items():
         for kw in keywords:
@@ -107,6 +197,18 @@ def detect_component(text: str) -> str | None:
 
 
 def build_file_github_url(repo: str | None, path: str | None, owner: str = "STMicroelectronics") -> str | None:
+    """Build a GitHub "blob" URL for a file path within a repo.
+
+    Args:
+        repo: Repository name (e.g. "STM32CubeH7").
+        path: File path within the repo (may use backslashes; normalized to
+            forward slashes and URL-escaped).
+        owner: GitHub organization/owner, defaults to "STMicroelectronics".
+
+    Returns:
+        A `https://github.com/<owner>/<repo>/blob/master/<path>` URL, or None
+        if `repo` or `path` is missing.
+    """
     if not repo or not path:
         return None
     path_norm = path.replace("\\", "/").lstrip("/")
@@ -115,7 +217,19 @@ def build_file_github_url(repo: str | None, path: str | None, owner: str = "STMi
 
 
 class PreprocessingConfig:
+    """Feature-flag configuration for the V2 preprocessing/enrichment models.
+
+    Attributes:
+        version: Ingest version tag stored on produced docs.
+        enable_filtering: Whether to apply the short-text/invalid-label
+            validity filter (with rescue) to issues.
+        enable_issue_kind: Whether to compute `issue_kind` for issues.
+        enable_board_detection: Whether to run `detect_board`.
+        enable_component_detection: Whether to run `detect_component`.
+    """
+
     def __init__(self, version: str = "v2.0") -> None:
+        """Initialize config with all detection features enabled by default."""
         self.version = version
         self.enable_filtering = True
         self.enable_issue_kind = True
@@ -124,10 +238,30 @@ class PreprocessingConfig:
 
 
 class PreprocessingModelIssuesV2:
+    """V2 enrichment model that turns a clean issue dict into a doc dict."""
+
     def __init__(self, config: PreprocessingConfig | None = None) -> None:
+        """Initialize with the given config, or a default `PreprocessingConfig`."""
         self.config = config or PreprocessingConfig()
 
     def process_clean_issue(self, issue: dict[str, Any]) -> dict[str, Any]:
+        """Enrich a single clean issue into the V2 doc schema.
+
+        Applies (depending on `self.config` flags): validity filtering with a
+        rescue mechanism for technical false negatives, evidence-strength
+        scoring, layer/severity detection, issue-kind classification, and
+        board/component detection.
+
+        Args:
+            issue: Clean issue dict (from `clean_issues_<repo>.json`).
+
+        Returns:
+            An enriched doc dict with the standard fields (id, mcu_series,
+            github_url, labels, ...) plus `is_valid`, `rescue_applied`,
+            `rescue_signal_count`, `evidence_strength`,
+            `filter_invalid_reasons`, `layer`, `severity`, and optionally
+            `issue_kind`, `board`, `component`.
+        """
         repo = issue.get("repo")
         issue_number = issue.get("issue_number")
         labels: list[str] = issue.get("labels") or []
@@ -212,10 +346,28 @@ class PreprocessingModelIssuesV2:
 
 
 class PreprocessingModelFilesV2:
+    """V2 enrichment model that turns a clean file dict into a doc dict."""
+
     def __init__(self, config: PreprocessingConfig | None = None) -> None:
+        """Initialize with the given config, or a default `PreprocessingConfig`."""
         self.config = config or PreprocessingConfig()
 
     def process_clean_file(self, file_obj: dict[str, Any]) -> dict[str, Any]:
+        """Enrich a single clean file record into the V2 doc schema.
+
+        Args:
+            file_obj: Clean file dict (from `clean_files_<repo>[_v3].json`),
+                expected to contain keys like `repo`, `path`, `clean_text`,
+                `file_type`, `media_urls`, `image_records`.
+
+        Returns:
+            An enriched doc dict with a stable `id`
+            (`<repo>-file-<hash(path)>`), derived `mcu_series`, `github_url`
+            (built from `repo`/`path` if not already present), `is_valid`
+            flag (based on cleaned text length), and detected `board`,
+            `component`, and `example_name` (extracted from an `Examples/`
+            path segment) when applicable.
+        """
         repo = file_obj.get("repo")
         path = file_obj.get("path") or ""
         clean_text: str = file_obj.get("clean_text") or ""
@@ -260,6 +412,8 @@ class PreprocessingModelFilesV2:
         if component:
             doc["component"] = component
 
+        # Example projects live under an "Examples/<ExampleName>/..." path
+        # segment; extract that name to use as a human-readable label.
         parts = path.replace("\\", "/").split("/")
         if "Examples" in parts:
             idx = parts.index("Examples")

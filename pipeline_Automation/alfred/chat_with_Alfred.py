@@ -1,3 +1,30 @@
+"""
+Send a one-off text (and optionally image) prompt to the Alfred chat API and print the reply.
+
+Role in the automation layer:
+    Alfred is ST's internal LLM service (accessed through the ST ChatGPT / AI-bridge
+    infrastructure). This script is a small CLI utility for ad hoc interactive use
+    (manual testing, debugging a persona, quick one-off questions) as opposed to the
+    batch enrichment scripts in this folder (``enrich_json_images_with_alfred.py``,
+    ``enrich_pdf_figures_with_alfred.py``) which call the same kind of API in bulk
+    over pipeline artifacts.
+
+Inputs:
+    - ``--prompt`` or ``--prompt-file``: the user prompt text.
+    - ``--image`` (optional): local image path sent alongside the prompt as a
+      base64 data URL.
+    - Credentials/config imported from ``Get_Persona_KBs`` (API key, client app
+      name, proxy settings, base URL).
+
+Outputs:
+    - Prints the extracted assistant text to stdout, or the full JSON response
+      if ``--print-json`` is passed or no text could be extracted.
+
+Usage:
+    python pipeline_Automation/alfred/chat_with_Alfred.py --prompt "Explain HAL_UART_Transmit"
+    python pipeline_Automation/alfred/chat_with_Alfred.py --prompt-file question.txt --image screenshot.png
+"""
+
 import argparse
 import base64
 import json
@@ -23,6 +50,7 @@ DEFAULT_TIMEOUT_SECONDS = 120
 
 
 def build_data_url(image_path: str) -> str:
+	"""Read a local image file and return it encoded as a base64 ``data:`` URL."""
 	path = Path(image_path)
 	if not path.exists() or not path.is_file():
 		raise FileNotFoundError(f"Image file not found: {image_path}")
@@ -36,6 +64,13 @@ def build_data_url(image_path: str) -> str:
 
 
 def extract_text_from_response(response_json: dict[str, Any]) -> str | None:
+	"""Best-effort extraction of the assistant's reply text from a chat API response.
+
+	The API response shape can vary by persona/backend, so this checks several
+	known keys/paths (``completion``, ``text``/``content``/``message``/``answer``,
+	``messages``, OpenAI-style ``choices``) in order of likelihood and returns the
+	first non-empty string found.
+	"""
 	if not isinstance(response_json, dict):
 		return None
 
@@ -87,6 +122,15 @@ def call_chat(
 	timeout_seconds: int = DEFAULT_TIMEOUT_SECONDS,
 	use_proxy: bool = False,
 ) -> dict[str, Any]:
+	"""Call the Alfred chat API with a text prompt and optional image, retrying on failure.
+
+	Generates a fresh HMAC-style auth token/nonce per attempt (required by the
+	backend), retries with exponential backoff on network errors or invalid JSON,
+	and returns the raw parsed response JSON.
+
+	Raises:
+		RuntimeError: if all retry attempts fail.
+	"""
 	data_url = build_data_url(image_path) if image_path else None
 
 	content: list[dict[str, str]] = [
@@ -164,6 +208,12 @@ def call_chat(
 
 
 def resolve_prompt(prompt: str | None, prompt_file: str | None) -> str:
+	"""Return the effective prompt text: prefer ``--prompt``, fall back to ``--prompt-file``.
+
+	Raises:
+		FileNotFoundError: if ``prompt_file`` is given but does not exist.
+		ValueError: if neither a usable prompt nor prompt file was provided.
+	"""
 	if prompt and prompt.strip():
 		return prompt.strip()
 
@@ -179,6 +229,7 @@ def resolve_prompt(prompt: str | None, prompt_file: str | None) -> str:
 
 
 def main() -> None:
+	"""CLI entry point: parse arguments, call Alfred chat, and print the result."""
 	parser = argparse.ArgumentParser(description="Send prompt/image to Alfred chat API using persona st_copilot by default.")
 	parser.add_argument("--prompt", help="User prompt text.")
 	parser.add_argument("--prompt-file", help="Path to UTF-8 text file containing the prompt.")

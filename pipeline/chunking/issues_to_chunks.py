@@ -1,3 +1,23 @@
+"""CLI script (legacy V1): chunk clean issues directly, skipping enrichment.
+
+Role in the pipeline: earliest/legacy shortcut that bypasses the enrichment
+stage entirely, converting `clean_issues_<repo>.json` straight into chunks
+via `chunk_service.clean_issue_to_chunk` (always exactly one chunk per
+issue, no `clean_text` splitting, no layer/severity/board/component
+heuristics). Superseded by the `docs_to_chunks_issues*.py` scripts.
+
+For each repo in the active config, reads `data/clean_issues_<repo>.json`
+and writes `data/chunks_issues_<repo>.json` (note: this overwrites the same
+output file produced by `docs_to_chunks_issues.py` if run for the same
+repo).
+
+Config: resolved via `shared.utils.paths.get_config_path()`. Uses the
+`repos` list and optional `ingest_version` key.
+
+Run with:
+    python -m pipeline.chunking.issues_to_chunks
+"""
+
 import json
 
 from pipeline.chunking.chunk_service import clean_issue_to_chunk
@@ -5,11 +25,18 @@ from shared.utils.paths import DATA_DIR, get_config_path
 
 
 def load_config() -> dict:
+    """Load and return the active pipeline config as a dict."""
     cfg_path = get_config_path()
     return json.loads(cfg_path.read_text(encoding="utf-8"))
 
 
 def main() -> None:
+    """Convert clean issues directly into chunks for every repo in the config.
+
+    Note: unlike other chunking scripts, this does not check whether the
+    input file exists before reading it, so a missing `clean_issues_<repo>.json`
+    will raise instead of being skipped with a warning.
+    """
     cfg = load_config()
     repos = cfg["repos"]
     ingest_version = cfg.get("ingest_version", "v1.0")

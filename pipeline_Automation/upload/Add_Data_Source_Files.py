@@ -1,3 +1,49 @@
+"""Generic reusable CLI tool to create/update/delete KB datasources on ST AI Bridge.
+
+This is the core, reusable upload tool used by the per-series batch scripts in this
+folder (upload_f4_*, upload_h5_*, upload_u5_all_datasources.py, upload_wl_all_datasources.py,
+upload_alfred_issues_all_series.py, upload_pdf_enriched_files_all_series.py) as well as
+helper scripts such as create_missing_resolver_datasources.py.
+
+What it does:
+    - Talks to the ST AI Bridge REST API (https://api-ai-bridge.st.com/chatgpt/api/client-apps)
+      to manage "datasources" attached to a persona Knowledge Base (KB), for example
+      KB #793 ("ST GitHub Analyzer"). Supported operations:
+        * new    -> create a new datasource and upload its first files.
+        * add    -> upload/append files to an existing datasource (by --datasource-id).
+        * delete -> delete all files/content of an existing datasource.
+    - Input files are typically the ST-ready JSON exports produced by
+      pipeline/delivery (datasets/07_delivery/st_ready/**), for example issues,
+      files, resolver_cases, or diagnostic_cards JSON payloads.
+    - Handles JSON payload normalization/splitting (large arrays split into parts of
+      at most --json-split-size documents), retries with exponential backoff, multiple
+      request/payload/timestamp format variants (to tolerate API quirks), and datasource
+      name-conflict resolution (reuse existing datasource instead of failing).
+
+Authentication (env vars, first non-empty wins unless --api-key is passed):
+    ST_CHATGPT_API_KEY, ST_AI_BRIDGE_API_KEY, ST_API_KEY,
+    ST_GITHUB_ANALYZER_API_KEY, PERSONA_API_KEY
+    Client app name: --client-app-name, or env ST_CHATGPT_CLIENT_APP / ST_CLIENT_APP_NAME,
+    or falls back to the legacy value defined in Get_Persona_KBs.py
+    (default: "mdrf_st_github_analyzer").
+    See README_upload_runtime_config.md for the config-file-based alternative to passing
+    API keys/proxy on the command line.
+
+Required input:
+    One or more existing JSON (or other) files to upload, passed via --files. Bare
+    filenames are also searched under datasets/07_delivery/st_ready/{issues,files,
+    diagnostic_cards,resolver_cases}_json and data/ (see default_search_dirs()).
+
+How to run (example: append files to an existing KB datasource):
+    python pipeline_Automation/upload/Add_Data_Source_Files.py \\
+        --kb 793 --operation add --datasource-id 24406 \\
+        --remote-user first.last@st.com --processor JSON \\
+        --processor-params "{\"rootTagPath\":\"issues\"}" \\
+        --json-split-size 1000 --files path/to/st_ready_issues_STM32CubeH7.json
+
+Security: never hardcode the API key; it must always come from --api-key (interactively
+provided) or from the environment variables listed above.
+"""
 import argparse
 import base64
 import hashlib
@@ -17,6 +63,8 @@ import requests
 import urllib3
 
 
+# Disable SSL certificate verification warnings; verify_ssl defaults to False (see
+# --verify-ssl) for compatibility with the internal ST proxy/TLS interception setup.
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
@@ -41,6 +89,13 @@ EMAIL_PATTERN = re.compile(r"^[A-Za-z0-9._%+\-']+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
 
 
 class ApiRejectedError(RuntimeError):
+    """Raised when the AI Bridge API responds HTTP 200 but with a non-zero errorCode.
+
+    Carries the API's numeric error_code, the raw api_message, and an optional
+    human-readable hint used to help diagnose common misconfigurations (bad API key,
+    invalid client app name, timestamp format, etc.).
+    """
+
     def __init__(self, error_code: int | None, api_message: str, hint: str = "") -> None:
         self.error_code = error_code
         self.api_message = api_message
@@ -52,10 +107,12 @@ class ApiRejectedError(RuntimeError):
 
 
 def repo_root_dir() -> Path:
+    """Return the repository root directory (parent of pipeline_Automation/)."""
     return Path(__file__).resolve().parents[1]
 
 
 def default_search_dirs() -> list[Path]:
+    """Return candidate directories used to resolve bare filenames passed via --files."""
     root = repo_root_dir()
     return [
         root / "datasets" / "07_delivery" / "st_ready" / "issues_json",
@@ -67,17 +124,30 @@ def default_search_dirs() -> list[Path]:
 
 
 def generate_token(client_app_name: str, service_name: str, api_key: str, timestamp: int, nonce: int) -> str:
+    """Generate the SHA1 HMAC-like auth token expected by the AI Bridge API.
+
+    The token is a SHA1 hash of "{client_app_name}_{service_name}_{api_key}_{timestamp}_{nonce}".
+    It is sent as the 'stchatgpt-auth-token' header alongside 'stchatgpt-auth-nonce'.
+    """
+    # NOTE: token scheme is fixed by the ST AI Bridge API contract; do not reorder fields.
     data_string = f"{client_app_name}_{service_name}_{api_key}_{timestamp}_{nonce}"
     return hashlib.sha1(data_string.encode("utf-8")).hexdigest()
 
 
 def _load_legacy_value(attr_name: str) -> Any:
+    """Best-effort read of a module-level variable from the legacy Get_Persona_KBs.py script.
+
+    Used as a fallback source for clientAppName/apiKey/proxies when neither CLI flags
+    nor environment variables provide a value, to stay compatible with older setups.
+    Returns None if the legacy script/attribute cannot be loaded.
+    """
     try:
         from Get_Persona_KBs import __dict__ as legacy_vars  # type: ignore
 
         return legacy_vars.get(attr_name)
     except Exception:
-        # Fallback when launched from repo root where direct module import may fail.
+        # Fallback when launched from repo root where direct module import may fail:
+        # execute the legacy script as a standalone file and read its globals.
         try:
             legacy_path = Path(__file__).resolve().parent / "Get_Persona_KBs.py"
             legacy_vars = runpy.run_path(str(legacy_path))
@@ -88,6 +158,11 @@ def _load_legacy_value(attr_name: str) -> Any:
 
 
 def looks_like_placeholder_api_key(value: str) -> bool:
+    """Return True if value looks like a leftover placeholder instead of a real API key.
+
+    Used to fail fast with a clear error instead of sending an obviously fake key
+    (e.g. copy-pasted example values such as "your_api_key") to the API.
+    """
     normalized = value.strip().lower()
     placeholders = {
         "ta_vraie_api_key",
@@ -108,6 +183,12 @@ def looks_like_placeholder_api_key(value: str) -> bool:
 
 
 def resolve_api_key(cli_api_key: str | None) -> str:
+    """Resolve the API key to use, in order of priority: --api-key, environment variables,
+    then the legacy Get_Persona_KBs.py value.
+
+    Raises ValueError if no key is found, or if a candidate key looks like a placeholder.
+    Never logs or prints the resolved key.
+    """
     if cli_api_key and cli_api_key.strip():
         key = cli_api_key.strip()
         if looks_like_placeholder_api_key(key):
@@ -148,6 +229,10 @@ def resolve_api_key(cli_api_key: str | None) -> str:
 
 
 def resolve_client_app_name(cli_name: str | None) -> str:
+    """Resolve the AI Bridge client app name from --client-app-name, environment
+    variables (ST_CHATGPT_CLIENT_APP / ST_CLIENT_APP_NAME), the legacy script value,
+    or DEFAULT_CLIENT_APP_NAME as final fallback.
+    """
     if cli_name and cli_name.strip():
         return cli_name.strip()
 
@@ -164,6 +249,10 @@ def resolve_client_app_name(cli_name: str | None) -> str:
 
 
 def resolve_proxies(use_legacy_proxy: bool) -> dict[str, str] | None:
+    """Return the legacy proxy dict from Get_Persona_KBs.py when --use-legacy-proxy is set,
+    otherwise return None (no proxy). NOTE: the legacy proxy value is an internal ST
+    network proxy; adjust or remove it in Get_Persona_KBs.py if not needed.
+    """
     if not use_legacy_proxy:
         return None
 
@@ -175,6 +264,13 @@ def resolve_proxies(use_legacy_proxy: bool) -> dict[str, str] | None:
 
 
 def parse_processor_params(raw: str | None) -> dict[str, Any] | None:
+    """Parse --processor-params into a dict.
+
+    Accepts a plain JSON object string, or a "base64:<...>" prefixed value (used to
+    safely pass JSON containing '{{' '}}' template placeholders through PowerShell).
+    Falls back to parse_processor_params_relaxed() for PowerShell-mangled JSON.
+    Raises ValueError on invalid input.
+    """
     if raw is None:
         return None
 
@@ -643,6 +739,27 @@ def find_datasource_entry_from_kb_list(
         preferred_lower = pick_preferred_datasource_entry(lower_matches)
         if preferred_lower is not None:
             return preferred_lower
+
+        # Fallback for canonical ST-ready datasource names.
+        # When canonical names are reserved/deleted, the upload flow may create
+        # unique suffixes (for example: DB_STready_WB0_Files_20260731_165249_933).
+        # Reuse the latest active prefixed datasource instead of creating a new one.
+        canonical_match = re.match(
+            r"^(DB_STready_[A-Za-z0-9]+_(Issues|Files|Diagnostic|Resolver))$",
+            wanted_exact,
+            flags=re.IGNORECASE,
+        )
+        if canonical_match:
+            canonical_prefix = canonical_match.group(1)
+            canonical_prefix_lower = canonical_prefix.lower() + "_"
+            prefixed_matches = [
+                ds
+                for ds in data_sources
+                if str(ds.get("name") or "").strip().lower().startswith(canonical_prefix_lower)
+            ]
+            preferred_prefixed = pick_preferred_datasource_entry(prefixed_matches)
+            if preferred_prefixed is not None:
+                return preferred_prefixed
 
     # Fallback: scan the full response in case dataSources are exposed in a different envelope.
     if datasource_name and datasource_name.strip():

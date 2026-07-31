@@ -69,6 +69,7 @@ SYSTEM_PROMPT = (
 
 
 def generate_token(timestamp: int, nonce: int) -> str:
+    """Compute the SHA1 auth token expected by the Alfred chat/vision API for one request."""
     data_string = f"{CLIENT_APP_NAME}_{CHAT_SERVICE}_{API_KEY}_{timestamp}_{nonce}"
     return hashlib.sha1(data_string.encode("utf-8")).hexdigest()
 
@@ -105,6 +106,12 @@ def load_image_as_data_url(image_path: Path, max_bytes: int = 6_000_000) -> str:
 
 
 def extract_text_from_response(response_json: dict) -> str | None:
+    """Best-effort extraction of the completion text from an Alfred API response.
+
+    Checks several known response shapes (``completion``, ``text``/``content``/
+    ``message``/``answer``, OpenAI-style ``choices``) since the exact shape can
+    vary by backend/persona.
+    """
     if not isinstance(response_json, dict):
         return None
 
@@ -261,6 +268,13 @@ def load_tasks_from_file(task_file: Path) -> list[dict[str, Any]]:
 
 
 def main():
+    """CLI entry point: load pending PDF figure tasks, describe them via Alfred, and save results.
+
+    Loads any existing descriptions so re-runs are incremental (skips figures
+    already described unless ``--force``), processes tasks from all matching
+    ``pdf_image_tasks_*.jsonl`` files, and periodically saves progress every 10
+    figures in case of interruption.
+    """
     parser = argparse.ArgumentParser(description="Enrich PDF figures with Alfred Vision descriptions")
     parser.add_argument("--repo", type=str, default=None, help="Filter by repo name (e.g. STM32CubeH7)")
     parser.add_argument("--max-figures", type=int, default=None, help="Max figures to process")

@@ -1,6 +1,21 @@
 """
-Re-export ST-ready delivery outputs only (no ingestion/cleaning/enrichment).
-Useful after changing delivery_paths grouping logic.
+Re-export ST-ready delivery outputs only, skipping ingestion/cleaning/enrichment.
+
+Role in the automation layer:
+    The full pipeline (ingestion -> ... -> delivery) can take a long time to run.
+    When only the delivery/export logic changes (for example the ST-ready grouping
+    or field mapping), re-running everything is wasteful. This script re-runs just
+    the four delivery exporters (issues, files, resolver cases, diagnostic cards)
+    for each repo of the requested series, reusing already-computed intermediate
+    JSON artifacts (chunks/docs) as input.
+
+Inputs:
+    - ``shared/config/config_<series>.json`` (list of repos) for each requested series.
+    - Existing intermediate pipeline artifacts consumed by the delivery exporters.
+
+Outputs:
+    - Refreshed ``datasets/07_delivery/st_ready/...`` JSON files (issues, files,
+      resolver cases, diagnostic cards) and their ``summary_*.json`` counterparts.
 
 Usage:
     python -m pipeline_Automation.reexport_delivery --series f4 h5 u5 wl
@@ -24,6 +39,13 @@ SERIES_CONFIGS = {
 
 
 def reexport_series(series: str, continue_on_error: bool = False):
+    """Re-run the four ST-ready delivery exporters for every repo of one series.
+
+    Args:
+        series: Series key (e.g. "f4", "h5") used to look up its config file.
+        continue_on_error: If True, log and skip exporter failures instead of
+            raising, so remaining repos/exporters still run.
+    """
     cfg_path = SERIES_CONFIGS.get(series)
     if not cfg_path or not cfg_path.exists():
         print(f"[ERROR] Config not found for '{series}'")
@@ -92,6 +114,7 @@ def reexport_series(series: str, continue_on_error: bool = False):
 
 
 def main():
+    """CLI entry point: parse arguments and re-export delivery outputs for each requested series."""
     parser = argparse.ArgumentParser(description="Re-export ST-ready delivery for series.")
     parser.add_argument(
         "--series",

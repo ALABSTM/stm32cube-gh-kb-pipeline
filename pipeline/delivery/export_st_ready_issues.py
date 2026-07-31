@@ -1,3 +1,34 @@
+"""Export enriched STM32Cube issue docs into ST-ready issue cards (delivery stage).
+
+This script is one of the final delivery exporters: it turns per-repo
+`docs_issues_<repo>_v2.json` enrichment output (issue text, labels, layer,
+severity, component, `is_valid`/`rescue_applied` flags, etc.) into KB-ready
+issue "knowledge cards" for the ST AI Bridge knowledge base.
+
+Inputs:
+- `data/docs_issues_<repo>_v2.json`, produced by
+  `pipeline/enrichment/issues_to_docs_v2.py`.
+- `shared/config/config_all_series.json` (or `STM32CUBE_CONFIG`-selected
+  config) for the list of repos and the `owner` used to build GitHub URLs.
+
+Outputs (per repo), depending on `--output-format`:
+- `json` (default), under `delivery_paths.get_repo_artifact_dir(repo, "issues_json")`:
+  - `st_ready_issues_<repo>.json`: `{"issues": [...]}` array of issue cards,
+    each with a composed `st_ready_text` retrieval document.
+  - `summary_<repo>.json`: counts and export parameters.
+  - A backward-compatible mirror under the legacy flat `st_ready/issues_json/`.
+- `md`, under `delivery_paths.get_repo_artifact_dir(repo, "issues")`:
+  - One Markdown knowledge card per issue (`issue_<number>_<slug>.md`).
+  - `manifest.csv` and `summary.json` describing the exported set.
+
+Note: this script does not include image URLs; use
+`export_st_ready_issues_with_images.py` for the Alfred-enrichable variant.
+
+Run:
+    python -m pipeline.delivery.export_st_ready_issues --repo STM32CubeH7
+    python -m pipeline.delivery.export_st_ready_issues --output-format md --comments-chars 800
+"""
+
 import argparse
 import csv
 import json
@@ -13,10 +44,12 @@ from shared.utils.paths import DATA_DIR, PROJECT_ROOT, get_config_path
 
 
 def load_config() -> dict[str, Any]:
+    """Load the active series config resolved via `get_config_path()`."""
     return json.loads(get_config_path().read_text(encoding="utf-8"))
 
 
 def slugify(value: str, max_len: int = 80) -> str:
+    """Convert `value` to a lowercase, hyphenated filename-safe slug."""
     text = (value or "").strip().lower()
     text = re.sub(r"[^a-z0-9]+", "-", text)
     text = text.strip("-")
@@ -26,12 +59,18 @@ def slugify(value: str, max_len: int = 80) -> str:
 
 
 def strip_title_and_body_prefix(clean_text: str) -> str:
+    """Remove the leading `"Title: ...\\n\\nBody:\\n"` header the enrichment
+    stage prepends to issue text, since the title is rendered separately.
+    """
     text = clean_text or ""
     text = re.sub(r"^Title:\s*.*?\n\nBody:\n", "", text, flags=re.DOTALL)
     return text.strip()
 
 
 def remove_noisy_comment_lines(text: str) -> str:
+    """Strip bot/quote-header lines and sign-offs ("Best regards,", ...) from
+    issue comment text so they don't dilute the retrieval-relevant content.
+    """
     cleaned: list[str] = []
     for line in text.splitlines():
         ln = line.strip()
@@ -49,6 +88,9 @@ def remove_noisy_comment_lines(text: str) -> str:
 
 
 def split_main_and_comments(clean_text: str) -> tuple[str, str]:
+    """Split cleaned issue text into (main_body, comments) using the
+    `"Comments:"` marker inserted by the enrichment stage.
+    """
     text = strip_title_and_body_prefix(clean_text)
     marker = "\n\nComments:\n"
     if marker in text:
@@ -58,6 +100,7 @@ def split_main_and_comments(clean_text: str) -> tuple[str, str]:
 
 
 def compact_comments(comments: str, max_chars: int) -> str:
+    """Clean noisy lines from `comments`, collapse blank-line runs, and cap length."""
     if not comments:
         return ""
     text = remove_noisy_comment_lines(comments)
@@ -66,11 +109,13 @@ def compact_comments(comments: str, max_chars: int) -> str:
 
 
 def normalize_whitespace(text: str) -> str:
+    """Collapse any run of whitespace into a single space and strip ends."""
     cleaned = re.sub(r"\s+", " ", (text or "").strip())
     return cleaned
 
 
 def first_sentence(text: str, max_chars: int = 280) -> str:
+    """Return the first sentence of `text` (up to `max_chars`), or a hard cut."""
     s = normalize_whitespace(text)
     if not s:
         return ""
@@ -87,6 +132,9 @@ def first_sentence(text: str, max_chars: int = 280) -> str:
 
 
 def build_keywords(doc: dict[str, Any], main_text: str) -> list[str]:
+    """Build a deduped keyword list from structured metadata, labels, and
+    technical anchor tokens (API-like identifiers) found in the issue text.
+    """
     words: list[str] = []
     for key in ["mcu_series", "board", "layer", "component", "issue_kind", "severity"]:
         val = (doc.get(key) or "").strip()
@@ -117,6 +165,12 @@ def build_keywords(doc: dict[str, Any], main_text: str) -> list[str]:
 
 
 def compose_st_ready_text(doc: dict[str, Any], comments_chars: int) -> str:
+    """Compose the retrieval-ready structured text body for one issue card.
+
+    Renders a `Problem/Context/Root cause/Fix/Constraints/Keywords` header
+    followed by the full technical body and (if present) compacted key
+    comments, matching the prompt-friendly layout expected by the KB.
+    """
     main, comments = split_main_and_comments(doc.get("clean_text") or "")
     compact = compact_comments(comments, max_chars=comments_chars)
 
@@ -163,6 +217,12 @@ def compose_st_ready_text(doc: dict[str, Any], comments_chars: int) -> str:
 
 
 def compose_st_ready_issue(doc: dict[str, Any], comments_chars: int) -> str:
+    """Render one issue as a standalone Markdown knowledge card (`md` format).
+
+    Reuses `compose_st_ready_text` for the content, then splits it into a
+    `## Metadata` bullet list (first 12 header lines) followed by the body,
+    for a human-friendly Markdown document.
+    """
     st_ready_text = compose_st_ready_text(doc, comments_chars=comments_chars)
     metadata_lines = st_ready_text.splitlines()[:12]
     body_text = "\n".join(st_ready_text.splitlines()[12:]).strip()
@@ -180,6 +240,12 @@ def compose_st_ready_issue(doc: dict[str, Any], comments_chars: int) -> str:
 
 
 def export_repo(repo: str, include_invalid: bool, comments_chars: int) -> tuple[int, int, Path]:
+    """Export one repo's issues as individual Markdown cards (`--output-format md`).
+
+    Writes one `.md` file per issue plus a `manifest.csv` (one row per issue,
+    for quick auditing) and a `summary.json`. Returns
+    (total_docs_in_input, exported_docs_count, output_directory).
+    """
     in_path = DATA_DIR / f"docs_issues_{repo.lower()}_v2.json"
     if not in_path.exists():
         raise FileNotFoundError(f"Input file not found: {in_path}")
@@ -260,6 +326,13 @@ def export_repo(repo: str, include_invalid: bool, comments_chars: int) -> tuple[
 
 
 def export_repo_json(repo: str, include_invalid: bool, comments_chars: int) -> tuple[int, int, Path]:
+    """Export one repo's issues into a single `st_ready_issues_<repo>.json`
+    array (`--output-format json`, the default and KB-upload-ready format).
+
+    Writes the per-series output plus a legacy-flat-folder mirror and a
+    `summary_<repo>.json`. Returns
+    (total_docs_in_input, exported_docs_count, output_directory).
+    """
     in_path = DATA_DIR / f"docs_issues_{repo.lower()}_v2.json"
     if not in_path.exists():
         raise FileNotFoundError(f"Input file not found: {in_path}")
@@ -339,6 +412,7 @@ def export_repo_json(repo: str, include_invalid: bool, comments_chars: int) -> t
 
 
 def main() -> None:
+    """CLI entry point: export ST-ready issue cards for each configured repo."""
     parser = argparse.ArgumentParser(description="Export docs_issues_v2 into ST-ready issue cards.")
     parser.add_argument("--repo", action="append", help="Repo name, e.g., STM32CubeH7. Can be repeated.")
     parser.add_argument("--include-invalid", action="store_true", help="Include is_valid=false issues.")

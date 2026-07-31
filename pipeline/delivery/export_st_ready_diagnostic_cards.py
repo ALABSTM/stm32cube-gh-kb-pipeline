@@ -1,3 +1,39 @@
+"""Export ST-ready "diagnostic cards" (structured troubleshooting knowledge).
+
+Diagnostic cards are the richest delivery artifact: for each rescued issue
+and/or linked resolver case, this script synthesizes a structured
+troubleshooting document (symptom summary, likely causes, confirmed facts,
+plausible diagnosis, debug checks, clarification questions, workarounds,
+constraints, evidence links, and retrieval aliases/keywords) intended to let
+the ST AI Bridge persona answer support questions in a
+facts -> hypotheses -> checks format. It also injects a small set of
+curated, hand-authored cross-series cards (e.g. I2C bus recovery) for
+high-value questions that are not tied to any single GitHub issue.
+
+Inputs, per repo (read via `delivery_paths.get_existing_repo_artifact_file`,
+so either the by-series or legacy flat layout works):
+- `issues_json/st_ready_issues_<repo>.json` (`export_st_ready_issues.py`
+  output). Only issues with `rescue_applied=true` are used by default
+  (`--include-all-issues` includes every issue instead).
+- `resolver_cases_json/st_ready_resolver_cases_<repo>.json`
+  (`export_st_ready_resolver_cases.py` output).
+- `shared/config/config_all_series.json` (or `STM32CUBE_CONFIG`-selected
+  config) for the list of repos to process.
+
+Outputs, under `delivery_paths.get_repo_artifact_dir(repo, "diagnostic_cards_json")`:
+- `st_ready_diagnostic_cards_<repo>.json`: `{"diagnostic_cards": [...]}` — one
+  card per rescued-issue/resolver-case pair (keyed by issue number) plus any
+  applicable curated cross-series cards.
+- `summary_diagnostic_cards_<repo>.json`: counts (rescued issues considered,
+  resolver cases considered, cards exported, curated cards added).
+- A backward-compatible mirror under the legacy flat
+  `st_ready/diagnostic_cards_json/`.
+
+Run:
+    python -m pipeline.delivery.export_st_ready_diagnostic_cards --repo STM32CubeH7
+    python -m pipeline.delivery.export_st_ready_diagnostic_cards --include-all-issues
+"""
+
 import argparse
 import json
 import re
@@ -15,14 +51,17 @@ from shared.utils.paths import PROJECT_ROOT, get_config_path
 
 
 def load_config() -> dict[str, Any]:
+    """Load the active series config resolved via `get_config_path()`."""
     return json.loads(get_config_path().read_text(encoding="utf-8"))
 
 
 def normalize_whitespace(text: str | None) -> str:
+    """Collapse any run of whitespace into a single space and strip ends."""
     return re.sub(r"\s+", " ", (text or "").strip())
 
 
 def first_sentence(text: str | None, max_chars: int = 260) -> str:
+    """Return the first sentence of `text` (up to `max_chars`), or a hard cut."""
     normalized = normalize_whitespace(text)
     if not normalized:
         return ""
@@ -33,6 +72,9 @@ def first_sentence(text: str | None, max_chars: int = 260) -> str:
 
 
 def looks_like_conversational_noise(text: str | None) -> bool:
+    """Detect greetings/sign-offs/boilerplate that should not be surfaced as
+    a card's symptom summary or root-cause hint (they carry no diagnostic signal).
+    """
     value = normalize_whitespace(text).lower()
     if not value:
         return True
@@ -49,6 +91,7 @@ def looks_like_conversational_noise(text: str | None) -> bool:
 
 
 def clean_signal_sentence(text: str | None, max_chars: int = 260) -> str:
+    """Return the first sentence of `text`, or "" if it is conversational noise."""
     sentence = first_sentence(text, max_chars=max_chars)
     if looks_like_conversational_noise(sentence):
         return ""
@@ -56,6 +99,9 @@ def clean_signal_sentence(text: str | None, max_chars: int = 260) -> str:
 
 
 def extract_issue_body(st_ready_text: str | None) -> str:
+    """Return the technical body of an issue card, stripping the structured
+    `Problem/Context/.../Technical details:` header written by the issues exporter.
+    """
     text = st_ready_text or ""
     marker = "\n\nTechnical details:\n"
     if marker in text:
@@ -67,6 +113,7 @@ def extract_issue_body(st_ready_text: str | None) -> str:
 
 
 def slugify(value: str, max_len: int = 80) -> str:
+    """Convert `value` to a lowercase, hyphenated identifier-safe slug."""
     text = (value or "").strip().lower()
     text = re.sub(r"[^a-z0-9]+", "-", text)
     text = text.strip("-")
@@ -76,6 +123,10 @@ def slugify(value: str, max_len: int = 80) -> str:
 
 
 def load_json_array(path: Path, preferred_key: str | None = None) -> list[dict[str, Any]]:
+    """Load a JSON array of objects from `path`, tolerating either a raw
+    array root or an object root wrapping the array under `preferred_key`
+    (or the first list-valued key found, as a fallback).
+    """
     payload = json.loads(path.read_text(encoding="utf-8"))
     if isinstance(payload, list):
         return [item for item in payload if isinstance(item, dict)]
@@ -89,6 +140,9 @@ def load_json_array(path: Path, preferred_key: str | None = None) -> list[dict[s
 
 
 def parse_prefixed_lines(text: str | None, prefixes: set[str]) -> dict[str, str]:
+    """Parse `"Key: value"` lines out of a structured card text, keeping only
+    keys present in `prefixes` (e.g. "Problem", "Root cause", "Fix", ...).
+    """
     out: dict[str, str] = {}
     for line in (text or "").splitlines():
         stripped = line.strip()
@@ -102,6 +156,7 @@ def parse_prefixed_lines(text: str | None, prefixes: set[str]) -> dict[str, str]
 
 
 def split_keywords(raw_keywords: str | None) -> list[str]:
+    """Split a comma-separated `Keywords:` string into a cleaned list."""
     if not raw_keywords:
         return []
     items = [normalize_whitespace(item) for item in str(raw_keywords).split(",")]
@@ -109,6 +164,9 @@ def split_keywords(raw_keywords: str | None) -> list[str]:
 
 
 def normalize_series(value: str | None) -> str | None:
+    """Normalize a raw MCU series string to the `STM32<SERIES>` form (e.g. `H7`
+    -> `STM32H7`), or return the uppercased value unchanged if it doesn't match.
+    """
     series = normalize_whitespace(value)
     if not series:
         return None
@@ -121,6 +179,12 @@ def normalize_series(value: str | None) -> str | None:
 
 
 def infer_target_series(repo: str, issue_doc: dict[str, Any] | None) -> list[str]:
+    """Infer which MCU series a card targets.
+
+    Prefers the issue's own `mcu_series` field; falls back to parsing the
+    series letter+number out of the repo name (e.g. `STM32CubeH7` -> `H7`)
+    when no issue metadata is available (used by curated cards).
+    """
     if issue_doc:
         normalized = normalize_series(str(issue_doc.get("mcu_series") or ""))
         if normalized:
@@ -133,6 +197,12 @@ def infer_target_series(repo: str, issue_doc: dict[str, Any] | None) -> list[str
 
 
 def extract_api_family_tags(*texts: str) -> list[str]:
+    """Extract HAL/LL/BSP/MX/CMSIS API function-name anchors (e.g.
+    `HAL_I2C_Init`) from `texts`, capped to 8, preserving first-seen order.
+
+    These anchors are strong retrieval signals since users often quote the
+    exact API name they are calling when reporting an issue.
+    """
     anchor_re = re.compile(r"\b(?:HAL|LL|BSP|MX|CMSIS)_[A-Za-z0-9_]+\b")
     tags: list[str] = []
     seen: set[str] = set()
@@ -148,6 +218,12 @@ def extract_api_family_tags(*texts: str) -> list[str]:
 
 
 def build_pattern_tags(*texts: str) -> list[str]:
+    """Match `texts` against a fixed set of recurring failure-pattern regexes
+    (timeout, blocking behavior, DMA, crash, ...) and return the matched tags.
+
+    These pattern tags drive downstream heuristics (which debug checks,
+    clarification questions, and query aliases to generate).
+    """
     joined = " ".join(texts).lower()
     patterns = [
         (r"callback", "callback_not_reached"),
@@ -171,6 +247,12 @@ def build_pattern_tags(*texts: str) -> list[str]:
 
 
 def extract_version_tags(*texts: str) -> list[str]:
+    """Extract `<repo/tool> v<version>` mentions (STM32Cube packages,
+    CubeMX/CubeIDE, HAL/LL/CMSIS) from `texts`, deduped and capped to 8.
+
+    Used to flag potential version-regression issues and to build
+    version-specific query aliases.
+    """
     joined = " ".join([text or "" for text in texts])
     tags: list[str] = []
 
@@ -191,6 +273,13 @@ def build_query_alias_fallbacks(
     version_tags: list[str],
     title: str,
 ) -> list[str]:
+    """Build generic, always-safe query aliases from component/board/API/
+    version metadata and the card title.
+
+    Used as a baseline layer under the more targeted aliases produced by
+    `build_query_aliases`, so every card has at least some retrieval anchors
+    even when no specific technical pattern was detected.
+    """
     aliases: list[str] = []
     component = normalize_whitespace((issue_doc or {}).get("component") or "")
     board = normalize_whitespace((issue_doc or {}).get("board") or "")
@@ -227,6 +316,14 @@ def build_query_aliases(
     version_tags: list[str],
     title: str,
 ) -> list[str]:
+    """Build the full list of natural-language query aliases for a card.
+
+    Beyond the generic fallbacks, this adds phrase-level anchors observed in
+    real user questions (e.g. "small transfer", "2 bytes", "blocking function")
+    for known symptom combinations (SPI+DMA+blocking-like patterns), since
+    exact-phrase overlap materially improves KB retrieval recall for these
+    recurring support questions.
+    """
     aliases: list[str] = []
     issue_text = (issue_doc or {}).get("st_ready_text") or ""
     body = extract_issue_body(issue_text)
@@ -280,6 +377,9 @@ def build_query_aliases(
 
 
 def dedupe(items: list[str], limit: int = 12) -> list[str]:
+    """Normalize whitespace, drop empties, deduplicate case-insensitively
+    (preserving first-seen casing/order), and cap to `limit` items.
+    """
     out: list[str] = []
     seen: set[str] = set()
     for item in items:
@@ -297,6 +397,11 @@ def dedupe(items: list[str], limit: int = 12) -> list[str]:
 
 
 def ensure_list(items: list[str], fallback: str) -> list[str]:
+    """Return the deduped `items`, or a single-item list with `fallback` if empty.
+
+    Guarantees list-valued card fields (likely_causes, plausible_diagnosis,
+    ...) are never empty, so the KB always has something to show the user.
+    """
     cleaned = dedupe(items)
     return cleaned if cleaned else [fallback]
 
@@ -306,6 +411,9 @@ def build_debug_checks(
     resolver_doc: dict[str, Any] | None,
     pattern_tags: list[str],
 ) -> list[str]:
+    """Build the ordered list of concrete debug/verification steps for a card,
+    derived from its detected technical pattern tags and available resolver evidence.
+    """
     checks: list[str] = []
     if "callback_not_reached" in pattern_tags or "state_stuck_busy" in pattern_tags:
         checks.extend(
@@ -334,6 +442,9 @@ def build_clarification_questions(
     api_tags: list[str],
     version_tags: list[str],
 ) -> list[str]:
+    """Build the follow-up questions the persona should ask the user before
+    giving a definitive answer, tailored to the card's detected metadata/tags.
+    """
     questions: list[str] = []
     component = normalize_whitespace((issue_doc or {}).get("component") or "")
     board = normalize_whitespace((issue_doc or {}).get("board") or "")
@@ -361,6 +472,9 @@ def build_workarounds(
     resolver_fields: dict[str, str],
     pattern_tags: list[str],
 ) -> list[str]:
+    """Build candidate workarounds, prioritizing the issue's own `Fix:` hint
+    and any resolver-linked candidate PR before generic pattern-based advice.
+    """
     workarounds: list[str] = []
     fix_hint = clean_signal_sentence(issue_fields.get("Fix"), max_chars=220)
     if fix_hint:
@@ -378,6 +492,9 @@ def build_confirmed_facts(
     resolver_doc: dict[str, Any] | None,
     issue_fields: dict[str, str],
 ) -> list[str]:
+    """Build the list of objectively verifiable facts about a card (issue
+    existence, rescue/evidence status, resolver linkage status, root cause hint).
+    """
     facts: list[str] = []
     if issue_doc and issue_doc.get("github_url"):
         facts.append(f"Issue evidence exists in {issue_doc.get('repo')} issue #{issue_doc.get('issue_number')}")
@@ -406,6 +523,10 @@ def build_constraints(
     issue_doc: dict[str, Any] | None,
     resolver_doc: dict[str, Any] | None,
 ) -> list[str]:
+    """Build the applicability constraints/caveats for a card (e.g. rescued
+    issue needs validation, weak resolver confidence, always validate against
+    the exact board/package).
+    """
     constraints: list[str] = []
     issue_constraint = first_sentence(issue_fields.get("Constraints"), max_chars=220)
     if issue_constraint:
@@ -423,6 +544,10 @@ def build_plausible_diagnosis(
     resolver_doc: dict[str, Any] | None,
     pattern_tags: list[str],
 ) -> list[str]:
+    """Build plausible diagnosis statements from the issue's layer/component/
+    issue_kind classification and the resolver's resolution status, always
+    returning at least a generic "needs reproduction" fallback.
+    """
     out: list[str] = []
     if issue_doc:
         layer = normalize_whitespace(issue_doc.get("layer") or "")
@@ -447,6 +572,9 @@ def build_plausible_diagnosis(
 
 
 def build_likely_causes(issue_fields: dict[str, str], resolver_fields: dict[str, str]) -> list[str]:
+    """Combine the issue's root-cause hint with the resolver's assessment/signal
+    text into a likely-causes list, with a generic fallback if both are empty.
+    """
     causes: list[str] = []
     root_cause = clean_signal_sentence(issue_fields.get("Root cause"), max_chars=220)
     if root_cause:
@@ -461,11 +589,17 @@ def build_likely_causes(issue_fields: dict[str, str], resolver_fields: dict[str,
 
 
 def build_hypotheses(likely_causes: list[str], plausible_diagnosis: list[str]) -> list[str]:
+    """Merge likely causes and plausible diagnosis into the card's
+    `response_blocks.hypotheses` list (deduped, capped, with a fallback).
+    """
     merged = dedupe(plausible_diagnosis + likely_causes, limit=8)
     return ensure_list(merged, "No strong hypothesis yet; prioritize targeted checks and reproduction")
 
 
 def build_evidence_refs(issue_doc: dict[str, Any] | None, resolver_doc: dict[str, Any] | None) -> list[dict[str, Any]]:
+    """Build the list of evidence link references (issue/PR/commit URLs with
+    confidence), capped to 6 entries.
+    """
     refs: list[dict[str, Any]] = []
     if issue_doc and issue_doc.get("github_url"):
         refs.append(
@@ -492,6 +626,10 @@ def build_keywords(
     pattern_tags: list[str],
     version_tags: list[str],
 ) -> list[str]:
+    """Aggregate every keyword-like signal available for a card (explicit
+    keywords, labels, structured metadata, resolver modules/status, and the
+    detected tag sets) into one deduped keyword list, capped to 14.
+    """
     keywords: list[str] = []
     if issue_doc:
         keywords.extend(split_keywords(issue_fields.get("Keywords")))
@@ -513,6 +651,13 @@ def build_keywords(
 
 
 def build_st_ready_text(card: dict[str, Any]) -> str:
+    """Render the full retrieval-ready `st_ready_text` document for a card.
+
+    Concatenates every structured section (problem, context, symptoms,
+    aliases, facts/hypotheses/checks, causes, workarounds, constraints,
+    evidence links, keywords) into the flat text body embedded/indexed by
+    the KB, in the fixed order the persona prompt expects.
+    """
     evidence_links = [ref.get("url") for ref in card.get("evidence_refs") or [] if ref.get("url")]
     response_blocks = card.get("response_blocks") or {}
     facts_block = response_blocks.get("facts_confirmed") or card.get("confirmed_facts") or []
@@ -546,6 +691,13 @@ def build_diagnostic_card(
     issue_doc: dict[str, Any] | None,
     resolver_doc: dict[str, Any] | None,
 ) -> dict[str, Any]:
+    """Build one full diagnostic card record from an issue and/or resolver case.
+
+    Either `issue_doc` or `resolver_doc` (or both) may be provided — a card
+    can exist from resolver evidence alone if the issue itself was filtered
+    out upstream. Runs all tag/alias/section builders above in sequence and
+    assembles the final card dict, including the rendered `st_ready_text`.
+    """
     issue_fields = parse_prefixed_lines(
         (issue_doc or {}).get("st_ready_text"),
         {"Problem", "Context", "Root cause", "Fix", "Constraints", "Keywords"},
@@ -747,6 +899,12 @@ CURATED_DIAGNOSTIC_CARDS: list[dict[str, Any]] = [
 
 
 def build_curated_card(repo: str, series: str, template: dict[str, Any]) -> dict[str, Any]:
+    """Build one diagnostic card from a `CURATED_DIAGNOSTIC_CARDS` template.
+
+    Mirrors the shape produced by `build_diagnostic_card` so curated and
+    issue-derived cards are indistinguishable to the KB/persona, but sources
+    every field from the hand-authored template instead of issue/resolver data.
+    """
     topic_id = template["topic_id"]
     component = template.get("component")
     query_aliases = dedupe(list(template.get("query_aliases") or []), limit=16)
@@ -817,6 +975,12 @@ def build_curated_card(repo: str, series: str, template: dict[str, Any]) -> dict
 
 
 def build_curated_cards_for_repo(repo: str) -> list[dict[str, Any]]:
+    """Return the curated cards applicable to `repo`'s MCU series.
+
+    Only injects into main series repos (`STM32Cube<Series>`), not into
+    HAL/CMSIS/BSP sub-repos, since sub-repos are nested under the series
+    folder and would otherwise duplicate the same curated content.
+    """
     # Only inject curated cards into main series repos (STM32Cube<Series>),
     # not into component/BSP repos, to avoid noise duplication.
     if not re.match(r"(?i)stm32cube[a-z]", repo):
@@ -835,6 +999,15 @@ def build_curated_cards_for_repo(repo: str) -> list[dict[str, Any]]:
 
 
 def export_repo_json(repo: str, include_all_issues: bool = False) -> tuple[int, int, Path]:
+    """Export one repo's diagnostic cards into `st_ready_diagnostic_cards_<repo>.json`.
+
+    Loads rescued issues (or all issues, if `include_all_issues`) and resolver
+    cases, indexes both by issue number, builds one card per key present in
+    either index, appends applicable curated cross-series cards, then writes
+    the per-series output plus a legacy mirror and a summary file.
+
+    Returns (total_source_entries_considered, exported_cards_count, output_directory).
+    """
     issues_path = get_existing_repo_artifact_file(
         repo=repo,
         artifact_dir="issues_json",
@@ -925,6 +1098,7 @@ def export_repo_json(repo: str, include_all_issues: bool = False) -> tuple[int, 
 
 
 def main() -> None:
+    """CLI entry point: export ST-ready diagnostic cards for each configured repo."""
     parser = argparse.ArgumentParser(
         description="Export generic ST-ready diagnostic cards from rescued issues and resolver cases."
     )

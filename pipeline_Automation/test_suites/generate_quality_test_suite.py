@@ -1,8 +1,26 @@
 """
-Generate a quality test suite (Question, Answer, Tags) for all configured STM32Cube series.
+Generate a per-series quality test suite (Question, Answer, Tags) covering every
+STM32Cube series configured for the pipeline, and export it as an Excel workbook
+with an empty Answer column ready to be filled (manually, or via
+``fill_answers_from_alfred.py``).
 
-The series list is inferred from shared/config/config.json + shared/config/config_*.json
-(excluding config_all_series.json).
+The list of series is NOT read from datasets/*.json. It is inferred from the
+pipeline configuration files:
+    shared/config/config.json          (default/main series, e.g. H7)
+    shared/config/config_<series>.json (one file per additional series, e.g. config_wl3.json)
+(``config_all_series.json`` is intentionally excluded — it aggregates all series
+and would otherwise duplicate every question set).
+
+For each series config, 4 generic troubleshooting questions are generated from
+fixed templates (DMA HardFault, package migration/breaking-change checklist,
+I2C BUSY recovery, low-power audit), parameterized with the series' main repo name.
+
+Output:
+    datasets/07_delivery/st_ready/quality_test_suite_all_series.xlsx
+    Sheet "Quality Test Suite" with columns:
+      A = Question (width 95), B = Answer (width 70, left empty), C = Tags (width 14)
+    Header row is bold/white-on-blue, data rows wrap text, all cells have thin
+    borders, header row is frozen and an AutoFilter is applied.
 
 Usage:
     python pipeline_Automation/test_suites/generate_quality_test_suite.py
@@ -29,10 +47,18 @@ XLSX_PATH = OUTPUT_DIR / "quality_test_suite_all_series.xlsx"
 
 
 def _load_json(path: Path) -> dict:
+    """Load a JSON config file, tolerating a UTF-8 byte-order mark (utf-8-sig)."""
     return json.loads(path.read_text(encoding="utf-8-sig"))
 
 
 def _iter_series_configs() -> list[Path]:
+    """Return the ordered list of per-series config files to process.
+
+    Includes shared/config/config.json (the default/main series) first, then
+    every shared/config/config_*.json file in sorted order, except
+    config_all_series.json which aggregates all series and is not a per-series
+    config on its own.
+    """
     paths: list[Path] = []
 
     default_cfg = CONFIG_DIR / "config.json"
@@ -48,6 +74,13 @@ def _iter_series_configs() -> list[Path]:
 
 
 def _find_main_repo(cfg: dict, fallback: str) -> str:
+    """Pick the representative repo name for a series config.
+
+    Prefers the first repo whose name starts with "stm32cube" (case-insensitive)
+    since a config can list multiple related repos (BSP, examples, etc.) and we
+    only need one canonical name to plug into the question templates. Falls
+    back to the first listed repo, or to ``fallback`` if the list is empty.
+    """
     repos = cfg.get("repos", [])
     if isinstance(repos, list):
         for repo in repos:
@@ -60,6 +93,13 @@ def _find_main_repo(cfg: dict, fallback: str) -> str:
 
 
 def _series_tag_from_cfg(cfg_path: Path, cfg: dict) -> str:
+    """Derive a short series tag (e.g. "H7", "WL3") used to label questions.
+
+    For the default config.json, the tag is derived from the main repo name
+    (e.g. "STM32CubeH7" -> "H7"), defaulting to "H7" if it can't be parsed.
+    For config_<series>.json files, the tag is the uppercased <series> part
+    of the filename.
+    """
     if cfg_path.name == "config.json":
         main = _find_main_repo(cfg, "STM32CubeH7")
         if main.lower().startswith("stm32cube"):
@@ -72,6 +112,11 @@ def _series_tag_from_cfg(cfg_path: Path, cfg: dict) -> str:
 
 
 def _build_questions_for_series(tag: str, main_repo: str) -> list[dict[str, str]]:
+    """Instantiate the fixed question templates for one series.
+
+    Returns a list of dicts with empty "answer" (to be filled later) and the
+    series "tags" so results can be grouped/filtered in the Excel sheet.
+    """
     # 4 robust questions per series keeps runtime reasonable while covering common failure modes.
     templates = [
         (
@@ -103,6 +148,12 @@ def _build_questions_for_series(tag: str, main_repo: str) -> list[dict[str, str]
 
 
 def build_questions() -> list[dict[str, str]]:
+    """Build the full question list by iterating over every series config.
+
+    For each discovered config file, resolves its series tag and main repo
+    name, then generates that series' 4 template questions and appends them
+    to a single flat list (used to populate the ``QUESTIONS`` module constant).
+    """
     all_questions: list[dict[str, str]] = []
 
     for cfg_path in _iter_series_configs():
@@ -114,10 +165,17 @@ def build_questions() -> list[dict[str, str]]:
     return all_questions
 
 
+# Built once at import time so other scripts (e.g. fill_answers_from_alfred.py)
+# can simply do `from generate_quality_test_suite import QUESTIONS`.
 QUESTIONS = build_questions()
 
 
 def main() -> None:
+    """Build the question list and write it to a styled .xlsx workbook.
+
+    The Answer column is left blank; it is meant to be filled in afterwards,
+    either manually or by ``fill_answers_from_alfred.py``.
+    """
     wb = Workbook()
     ws = wb.active
     ws.title = "Quality Test Suite"
@@ -151,6 +209,7 @@ def main() -> None:
             cell.border = thin_border
             cell.font = Font(size=10)
 
+    # Keep the header row visible and enable column filtering/sorting for graders.
     ws.freeze_panes = "A2"
     ws.auto_filter.ref = f"A1:C{len(QUESTIONS) + 1}"
 

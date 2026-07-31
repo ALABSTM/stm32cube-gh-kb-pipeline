@@ -1,3 +1,28 @@
+"""CLI: split a mixed resolver/diagnostic ST-ready JSON payload into two files.
+
+Some manually edited or merged ST-ready payloads end up containing both a
+`resolver_cases` array and a `diagnostic_cards` array in a single JSON file.
+The ST AI Bridge datasource upload expects one root array type per file
+(one datasource = one artifact type), so this script splits such a mixed
+payload back into two separate, upload-ready JSON files.
+
+Input:
+- Any local JSON file (`--input`) whose root object may contain a
+  `resolver_cases` list and/or a `diagnostic_cards` list.
+
+Outputs:
+- `--resolver-output`: `{"resolver_cases": [...]}` with each card's
+  `rootTagPath` normalized to `"resolver_cases"`.
+- `--diagnostic-output`: `{"diagnostic_cards": [...]}` (cards passed through
+  unchanged).
+
+Run:
+    python -m pipeline.delivery.split_mixed_resolver_payload \\
+        --input <mixed.json> \\
+        --resolver-output <resolver_cases.json> \\
+        --diagnostic-output <diagnostic_cards.json>
+"""
+
 import argparse
 import json
 from pathlib import Path
@@ -5,6 +30,7 @@ from typing import Any
 
 
 def load_json(path: Path) -> dict[str, Any]:
+    """Load a JSON file and ensure its root is an object (not an array)."""
     payload = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(payload, dict):
         raise ValueError("Expected a JSON object at root.")
@@ -12,11 +38,18 @@ def load_json(path: Path) -> dict[str, Any]:
 
 
 def save_json(path: Path, payload: dict[str, Any]) -> None:
+    """Write `payload` as pretty-printed UTF-8 JSON, creating parent dirs."""
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def sanitize_resolver_cards(cards: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Return a copy of `cards` with `rootTagPath` forced to `resolver_cases`.
+
+    Mixed payloads sometimes carry a stale/incorrect `rootTagPath` from when
+    the card was still part of a combined document; the resolver datasource
+    upload requires it to consistently read `resolver_cases`.
+    """
     out: list[dict[str, Any]] = []
     for card in cards:
         if not isinstance(card, dict):
@@ -28,6 +61,7 @@ def sanitize_resolver_cards(cards: list[dict[str, Any]]) -> list[dict[str, Any]]
 
 
 def main() -> None:
+    """CLI entry point: read `--input`, split it, and write the two outputs."""
     parser = argparse.ArgumentParser(
         description=(
             "Split a mixed ST-ready resolver JSON into separate resolver_cases and "

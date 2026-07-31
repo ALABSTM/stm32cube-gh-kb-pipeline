@@ -1,3 +1,50 @@
+"""Batch-audit issue<->PR/commit linkage and resolver/diagnostic delivery exports.
+
+Role in the evaluation stage
+-----------------------------
+This script closes the loop between the linkage stage (issue_pr_commit_links)
+and two delivery exports (resolver cases, diagnostic cards) that depend on
+it: it (optionally) re-runs those exports, validates the linkage JSON against
+its schema, checks that each export's ``summary_*.json`` counts match the
+actual exported file contents (catching silent export bugs), and produces a
+detailed breakdown of *why* issues ended up "unlinked" (no confirmed PR/commit
+evidence) for one target repo. This is the main gate before shipping
+resolver/diagnostic knowledge base content.
+
+Inputs
+------
+- ``data/issue_pr_commit_links_<repo>.json`` (linkage stage output) and its
+  ``_summary.json``/``_linked_only.json`` companions.
+- ``shared/schemas/issue_pr_commit_links.schema.json`` (JSON Schema for validation).
+- ``datasets/07_delivery/st_ready/resolver_cases_json/`` and
+  ``diagnostic_cards_json/`` exports and their ``summary_*.json`` files.
+- Calls into pipeline.delivery.export_st_ready_resolver_cases and
+  pipeline.delivery.export_st_ready_diagnostic_cards to (re)generate exports
+  unless ``--skip-export`` is passed.
+
+Outputs
+-------
+- ``datasets/06_eval_outputs/linkage_delivery_batch_report.json`` / ``.md``:
+  export execution status, schema validation results, and summary-coherence
+  findings for every repo processed.
+- ``datasets/06_eval_outputs/unlinked_audit_<repo>.json`` / ``.md``: reason
+  breakdown, label frequency, and issue-number samples for unlinked issues
+  in the ``--audit-repo`` target.
+
+Usage (CLI)
+-----------
+    python pipeline/evaluation/run_linkage_delivery_audit.py
+    python pipeline/evaluation/run_linkage_delivery_audit.py --repo STM32CubeH7 --skip-export
+    python pipeline/evaluation/run_linkage_delivery_audit.py --audit-repo STM32CubeF4
+
+Arguments:
+    --repo                     Repo name, repeatable; defaults to all repos in config.
+    --exclude-reference-only   Exclude reference_only resolver cases from export.
+    --include-all-issues       Include all issues (not just rescued ones) in diagnostic cards.
+    --audit-repo               Repo to run the unlinked-issue reason audit on (default STM32CubeH7).
+    --skip-export              Skip re-running exports; only validate/audit existing artifacts.
+"""
+
 import argparse
 import json
 from collections import Counter, defaultdict
@@ -13,10 +60,16 @@ from shared.utils.paths import DATA_DIR, PROJECT_ROOT, get_config_path
 
 
 def load_config() -> dict[str, Any]:
+    """Load the resolved pipeline config (config_all_series.json + overrides)."""
     return json.loads(get_config_path().read_text(encoding="utf-8"))
 
 
 def load_json(path: Path, fallback: Any) -> Any:
+    """Load a JSON file, returning fallback if it's missing or malformed.
+
+    Centralizes the "tolerate missing/corrupt evaluation input" behavior used
+    throughout this script, since a repo may not have run every stage yet.
+    """
     if not path.exists():
         return fallback
     try:
@@ -26,6 +79,22 @@ def load_json(path: Path, fallback: Any) -> Any:
 
 
 def reason_for_unlinked(record: dict[str, Any]) -> str:
+    """Classify why one issue ended up with resolution_status == 'unlinked'.
+
+    Applies a small decision tree over the evidence flags collected by the
+    linkage stage (explicit PR/commit references, message-inferred commits,
+    commits reached via linked PRs, merge-like commits) to produce an
+    actionable root-cause label rather than a generic "unlinked" bucket.
+
+    Args:
+        record: One row from ``issue_pr_commit_links_<repo>.json`` with an
+            ``evidence`` sub-dict.
+
+    Returns:
+        One of: "no_pr_no_commit_signal", "pr_reference_without_commit_trace",
+        "message_inferred_only_but_unconfirmed", "merge_only_history", or the
+        catch-all "other_mixed_gap".
+    """
     evidence = record.get("evidence") or {}
     explicit_pr = bool(evidence.get("explicit_pr_numbers"))
     explicit_commits = bool(evidence.get("explicit_commit_shas"))
@@ -45,6 +114,20 @@ def reason_for_unlinked(record: dict[str, Any]) -> str:
 
 
 def audit_unlinked(repo: str) -> dict[str, Any]:
+    """Compute and write a breakdown of unlinked issues for one repo.
+
+    Args:
+        repo: Repo name whose linkage file to audit.
+
+    Returns:
+        Dict with unlinked rate, reason breakdown, sample issue numbers per
+        reason (capped at 25), and top unlinked labels; also includes the
+        paths of the JSON/Markdown reports written as a side effect.
+
+    Side effects:
+        Writes ``unlinked_audit_<repo>.json`` and ``.md`` under
+        ``datasets/06_eval_outputs``.
+    """
     links_path = DATA_DIR / f"issue_pr_commit_links_{repo.lower()}.json"
     links = load_json(links_path, [])
     if not isinstance(links, list):
@@ -115,6 +198,15 @@ def audit_unlinked(repo: str) -> dict[str, Any]:
 
 
 def validate_issue_links_schema(repos: list[str]) -> list[dict[str, Any]]:
+    """Validate each repo's linkage JSON file against its JSON Schema.
+
+    Args:
+        repos: Repo names to validate.
+
+    Returns:
+        List of per-repo result dicts with status "ok"/"missing"/"invalid"
+        and an error message when applicable.
+    """
     schema_path = PROJECT_ROOT / "shared" / "schemas" / "issue_pr_commit_links.schema.json"
     schema = load_json(schema_path, {})
 
@@ -143,6 +235,20 @@ def validate_issue_links_schema(repos: list[str]) -> list[dict[str, Any]]:
 
 
 def check_summary_coherence(repo: str) -> dict[str, Any]:
+    """Cross-check each export's summary_*.json counts against its actual file contents.
+
+    A mismatch here typically indicates an export script bug (e.g. a summary
+    written before the last few records were filtered out) rather than a data
+    quality issue, so it is reported separately from schema/linkage problems.
+
+    Args:
+        repo: Repo name to check (linkage summary, resolver cases summary,
+            diagnostic cards summary).
+
+    Returns:
+        Dict with status "ok"/"warning" and a list of human-readable problem
+        descriptions (empty when status is "ok").
+    """
     problems: list[str] = []
 
     links_summary_path = DATA_DIR / f"issue_pr_commit_links_{repo.lower()}_summary.json"
@@ -220,6 +326,15 @@ def check_summary_coherence(repo: str) -> dict[str, Any]:
 
 
 def write_batch_report(report: dict[str, Any]) -> tuple[Path, Path]:
+    """Write the combined batch audit report (JSON + Markdown) to disk.
+
+    Args:
+        report: Aggregate dict with export_results/schema_validation/
+            summary_coherence/unlinked_audit sections.
+
+    Returns:
+        Tuple of (json_path, md_path) written.
+    """
     out_root = PROJECT_ROOT / "datasets" / "06_eval_outputs"
     out_root.mkdir(parents=True, exist_ok=True)
 
@@ -278,6 +393,7 @@ def write_batch_report(report: dict[str, Any]) -> tuple[Path, Path]:
 
 
 def main() -> None:
+    """CLI entry point: run exports, validate schema/coherence, and audit unlinked issues."""
     parser = argparse.ArgumentParser(
         description="Run resolver/diagnostic exports for repos, then validate schema/coherence and audit unlinked issues."
     )

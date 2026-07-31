@@ -1,3 +1,30 @@
+"""Export enriched STM32Cube file docs into ST-ready file cards (delivery stage).
+
+This script is one of the final delivery exporters: it turns per-repo
+`docs_files_<repo>_v2.json` (or `_v3` cleaned variant) enrichment output into
+KB-ready JSON "file cards" describing README/Release-Notes/example/BSP
+documents, ready for upload to the ST AI Bridge knowledge base.
+
+Inputs:
+- `data/docs_files_<repo>_v2.json` (default) or `data/docs_files_<repo>_v3.json`
+  (with `--v3`), produced by `pipeline/enrichment/files_to_docs_v2.py`.
+- `shared/config/config_all_series.json` (or `STM32CUBE_CONFIG`-selected
+  config) for the list of repos and the `owner` used to build GitHub URLs.
+
+Outputs (per repo), under `datasets/07_delivery/st_ready/by_series/...` via
+`delivery_paths.get_repo_artifact_dir(repo, "files_json")`:
+- `st_ready_files_<repo>.json` (or `_v3` suffix): `{"files": [...]}` array of
+  file cards, each with a composed `st_ready_text` retrieval document.
+- `summary_files_<repo>.json`: counts and export parameters for traceability.
+- A backward-compatible mirror is also written under the legacy flat
+  `st_ready/files_json/` folder (skipped for `--v3` to avoid overwriting the
+  v2 mirror).
+
+Run:
+    python -m pipeline.delivery.export_st_ready_files --repo STM32CubeH7
+    python -m pipeline.delivery.export_st_ready_files --v3 --include-invalid
+"""
+
 import argparse
 import json
 import re
@@ -18,6 +45,7 @@ DEFAULT_TECHNICAL_MAX_CHARS = 20000
 
 
 def load_config() -> dict[str, Any]:
+    """Load the active series config resolved via `get_config_path()`."""
     return json.loads(get_config_path().read_text(encoding="utf-8"))
 
 
@@ -35,10 +63,12 @@ def load_all_repos() -> list[str]:
 
 
 def normalize_whitespace(text: str) -> str:
+    """Collapse any run of whitespace into a single space and strip ends."""
     return re.sub(r"\s+", " ", (text or "").strip())
 
 
 def first_sentence(text: str, max_chars: int = 320) -> str:
+    """Return the first sentence of `text` (up to `max_chars`), or a hard cut."""
     s = normalize_whitespace(text)
     if not s:
         return ""
@@ -49,6 +79,12 @@ def first_sentence(text: str, max_chars: int = 320) -> str:
 
 
 def truncate_text(text: str, max_chars: int) -> tuple[str, bool]:
+    """Truncate `text` to `max_chars`, returning (text, was_truncated).
+
+    Used to cap technical document bodies so a single oversized file (e.g. a
+    large PDF-extracted reference manual) does not blow up the delivery
+    payload size; truncation is flagged so the KB can note incompleteness.
+    """
     if max_chars <= 0:
         return "", bool(text)
     if len(text) <= max_chars:
@@ -58,6 +94,7 @@ def truncate_text(text: str, max_chars: int) -> tuple[str, bool]:
 
 
 def build_github_url(doc: dict[str, Any], url_base: str, root_path: str) -> str | None:
+    """Return the doc's GitHub URL, reconstructing it from repo/path if absent."""
     github_url = doc.get("github_url")
     if github_url:
         return github_url
@@ -72,6 +109,7 @@ def build_github_url(doc: dict[str, Any], url_base: str, root_path: str) -> str 
 
 
 def build_path_url(path: str | None) -> str | None:
+    """URL-encode a repo-relative file path for safe embedding in a GitHub URL."""
     if not path:
         return None
     normalized_path = str(path).replace("\\", "/").lstrip("/")
@@ -79,6 +117,7 @@ def build_path_url(path: str | None) -> str | None:
 
 
 def split_root_path(root_path: str) -> tuple[str, str]:
+    """Split a GitHub `"blob/master"`-style root path into (root_dir, root_ref)."""
     normalized = (root_path or "").strip("/")
     if "/" not in normalized:
         return normalized or "blob", "master"
@@ -91,6 +130,12 @@ def compose_st_ready_text(
     summary_max_chars: int,
     technical_max_chars: int,
 ) -> str:
+    """Compose the retrieval-ready text body embedded in each file card.
+
+    Produces a short human-readable summary line plus a (possibly truncated)
+    "Technical details" section, so the KB can surface a quick summary while
+    still exposing the full document content for detailed answers.
+    """
     clean = normalize_whitespace(doc.get("clean_text") or "")
     snippet = first_sentence(clean, max_chars=summary_max_chars)
     technical_details, was_truncated = truncate_text(clean, technical_max_chars)
@@ -138,6 +183,18 @@ def export_repo_json(
     technical_max_chars: int,
     use_v3: bool = False,
 ) -> tuple[int, int, Path]:
+    """Export one repo's `docs_files_*.json` into a `st_ready_files_*.json` card set.
+
+    Reads the enrichment file for `repo` (v2 by default, v3 when `use_v3`),
+    filters out invalid docs unless `include_invalid`, builds one file card per
+    remaining doc, and writes the per-series output plus a legacy mirror and a
+    summary file.
+
+    Returns (total_docs_in_input, exported_docs_count, output_directory).
+    """
+    # v3 is an alternate cleaned dataset used for controlled A/B comparisons;
+    # it is written to separate `_v3`-suffixed files so it never overwrites
+    # the v2 delivery output that may already be uploaded to the KB.
     suffix = "_v3" if use_v3 else "_v2"
     in_path = DATA_DIR / f"docs_files_{repo.lower()}{suffix}.json"
     if not in_path.exists():
@@ -234,6 +291,7 @@ def export_repo_json(
 
 
 def main() -> None:
+    """CLI entry point: export ST-ready file cards for each configured repo."""
     parser = argparse.ArgumentParser(description="Export docs_files_v2 into ST-ready JSON file cards.")
     parser.add_argument("--repo", action="append", help="Repo name, e.g., STM32CubeH7. Can be repeated.")
     parser.add_argument("--v3", action="store_true", help="Use V3 cleaned inputs and write to _v3 output files (no overwrite).")

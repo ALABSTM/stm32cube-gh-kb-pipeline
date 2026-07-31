@@ -1,6 +1,15 @@
 """
 Full evaluation pipeline — runs quality checks on each stage output.
 
+Role in the evaluation stage
+-----------------------------
+This is the primary console-based, text-report evaluation script: for a
+given repo (or all configured repos) it re-derives quality metrics directly
+from each pipeline stage's output files, independent of any previously
+computed stats, so it can be run standalone right after any stage to spot
+check data health. It is the CLI counterpart to generate_evaluation_report.py
+(which renders the same kind of metrics as charts/Excel instead of text).
+
 Stages evaluated:
   1. Ingestion   — completeness of fetched data
   2. Cleaning    — validity rate, classification coverage
@@ -8,9 +17,28 @@ Stages evaluated:
   4. Similarity  — related_issue_ids coverage
   5. Delivery    — schema conformance, export counts
 
+Inputs
+------
+- ``data/raw_issues_<repo>.json``, ``data/raw_files_<repo>.json``
+- ``data/clean_issues_<repo>.json``, ``data/clean_files_<repo>.json``
+- ``data/docs_issues_<repo>_v2.json``, ``data/docs_files_<repo>_v2.json``
+- ``data/docs_issues_<repo>_v2_sim.json``
+- ``datasets/07_delivery/st_ready/by_series/<repo>/*_json/st_ready_*.json``
+  and matching ``summary_*.json`` files
+
+Outputs
+-------
+- Console-only: per-stage detailed report boxes plus a compact summary table
+  with a qualitative score (EXCELLENT/GOOD/ACCEPTABLE/POOR) per stage. No
+  files are written.
+
 Usage:
     python pipeline/evaluation/run_full_evaluation.py --repo STM32CubeH7
     python pipeline/evaluation/run_full_evaluation.py --all
+
+Arguments:
+    --repo   Repository name to evaluate (default: STM32CubeH7).
+    --all    Evaluate every repo listed in the resolved config instead of a single one.
 """
 
 import argparse
@@ -22,12 +50,14 @@ from shared.utils.paths import DATA_DIR, get_config_path
 
 
 def _pct(n: int, total: int) -> str:
+    """Format n/total as a percentage string; return 'N/A' when total is 0."""
     if total == 0:
         return "N/A"
     return f"{n/total*100:.1f}%"
 
 
 def _score_label(pct: float) -> str:
+    """Map a coverage/success percentage to a qualitative label for reporting."""
     if pct >= 95:
         return "EXCELLENT"
     if pct >= 85:
@@ -245,6 +275,12 @@ def eval_delivery(repo: str) -> dict:
 # REPORT
 # ============================================================
 def print_stage_report(result: dict) -> None:
+    """Print a boxed console report for a single stage's evaluation result.
+
+    Args:
+        result: A dict as returned by one of the eval_* functions, with keys
+            ``stage``, ``repo``, and ``metrics``.
+    """
     stage = result["stage"]
     repo = result["repo"]
     metrics = result["metrics"]
@@ -271,7 +307,16 @@ def print_stage_report(result: dict) -> None:
 
 
 def print_summary_table(all_results: list[dict]) -> None:
-    """Print a compact summary table."""
+    """Print a compact summary table.
+
+    For each stage, picks a single representative metric (defined by the
+    hardcoded mapping below) so the summary fits in one line per stage
+    instead of dumping every metric again.
+
+    Args:
+        all_results: List of per-stage result dicts (stage/repo/metrics),
+            one per eval_* call.
+    """
     print(f"\n{'='*70}")
     print(f"  EVALUATION SUMMARY")
     print(f"{'='*70}")
@@ -316,6 +361,7 @@ def print_summary_table(all_results: list[dict]) -> None:
 # MAIN
 # ============================================================
 def main():
+    """CLI entry point: run all five stage evaluations and print detailed + summary reports."""
     parser = argparse.ArgumentParser(description="Run full evaluation pipeline")
     parser.add_argument("--repo", default="STM32CubeH7", help="Repository name")
     parser.add_argument("--all", action="store_true", help="Run for all repos in config")

@@ -1,3 +1,45 @@
+"""CLI: split ST-ready issue payloads into per-STM32-component JSON files.
+
+Uploading one giant `st_ready_issues_with_images_<repo>.json` as a single KB
+datasource makes retrieval noisier (queries about I2C can match SPI issues,
+etc.). This script splits such a payload into one file per hardware
+component (e.g. I2C, SPI, UART), so each component can be uploaded as its own
+ST AI Bridge datasource (`issues_<SERIES>_<COMPONENT>`), improving retrieval
+precision.
+
+Inputs (first pattern that matches under `--input-root`, in priority order):
+1. `**/issues_json/st_ready_issues_with_images_*_with_alfred_image_text.json`
+   (Alfred-enriched, preferred).
+2. `**/issues_json/st_ready_issues_with_images_*.json` (pre-Alfred).
+3. `**/issues_json/st_ready_issues_*_with_alfred_image_text.json`.
+4. `**/issues_json/st_ready_issues_*.json` (no images).
+
+Component detection per issue (`get_component_detection`), highest priority first:
+1. The issue's own `component` field, if it is a known STM32 peripheral/driver
+   name (`GENERIC_DRIVER_COMPONENTS`).
+2. The `component=` value parsed from the `Context:` line in `st_ready_text`.
+3. A weighted vote combining `Keywords:`, GitHub `labels`, and uppercase
+   technical tokens found anywhere in the title/text, with stricter score
+   thresholds for ambiguous acronyms (`AMBIGUOUS_COMPONENTS`, e.g. CAN/COMP/TIM)
+   to avoid false positives on common English words.
+
+Issues where no component can be confidently detected are grouped under
+`UNCATEGORIZED` and written to a repo-level (no component suffix) file.
+
+Outputs, under `<source_dir>/<output_subdir>/` (default `by_component/`,
+sibling of the source `issues_json` folder):
+- `st_ready_issues_<series>_<component>.json`: `{"issues": [...]}` per component.
+- `st_ready_issues_<series>.json`: uncategorized issues (if any).
+- `summary_by_component_<series>.json`: per-component counts and detection
+  source stats, consumed by `validate_issues_by_component_split.py`.
+- `component_detection_trace_<series>.json`: per-issue detection trace for
+  debugging misclassifications.
+
+Run:
+    python -m pipeline.delivery.split_st_ready_issues_by_component
+    python -m pipeline.delivery.split_st_ready_issues_by_component --input-file <path> --dry-run
+"""
+
 import argparse
 import json
 import re
@@ -17,6 +59,9 @@ FALLBACK_INPUT_PATTERNS = [
 ]
 DEFAULT_OUTPUT_SUBDIR = "by_component"
 UNKNOWN_COMPONENT = "UNCATEGORIZED"
+# Known STM32 peripheral/driver acronyms used to validate a detected component
+# candidate. Restricting to this allowlist avoids splitting on arbitrary
+# uppercase words that are not real hardware components.
 GENERIC_DRIVER_COMPONENTS = {
     "ADC", "CAN", "CEC", "COMP", "CORDIC", "CORTEX", "CRC", "CRS", "CRYP", "DAC",
     "DCACHE", "DCMI", "DELAYBLOCK", "DFSDM", "DMA", "DMAMUX", "DMA2D", "DSI", "DTS",
@@ -27,6 +72,7 @@ GENERIC_DRIVER_COMPONENTS = {
     "RCC", "RNG", "RTC", "SAI", "SDMMC", "SMARTCARD", "SPDIFRX", "SPI", "SWPMI", "TIM",
     "TSC", "UART", "UCPD", "USART", "USB", "WWDG", "XSPI",
 }
+# Merge near-synonym raw values onto the canonical acronym used across the KB.
 COMPONENT_ALIASES = {
     "ETHERNET": "ETH",
     "USB_OTG": "USB",
@@ -36,6 +82,8 @@ COMPONENT_ALIASES = {
     "TIMERS": "TIM",
     "TIMER": "TIM",
 }
+# These acronyms collide with common English words/abbreviations ("can", "comp",
+# "tim"), so weak single-mention evidence is not enough to assign them.
 AMBIGUOUS_COMPONENTS = {"CAN", "COMP", "TIM"}
 COMPONENT_PATTERNS = {
     comp: re.compile(rf"(?<![A-Z0-9_]){re.escape(comp)}(?![A-Z0-9_])")
@@ -44,10 +92,12 @@ COMPONENT_PATTERNS = {
 
 
 def utc_now_iso() -> str:
+    """Return the current UTC time as a second-precision ISO 8601 string."""
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
 
 def load_json_object(path: Path) -> dict[str, Any]:
+    """Load a JSON file and ensure its root is an object (not an array)."""
     payload = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(payload, dict):
         raise ValueError(f"Expected JSON object at root for {path}")
@@ -55,11 +105,15 @@ def load_json_object(path: Path) -> dict[str, Any]:
 
 
 def save_json(path: Path, payload: dict[str, Any]) -> None:
+    """Write `payload` as pretty-printed UTF-8 JSON, creating parent dirs."""
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def normalize_component(raw: Any) -> str:
+    """Canonicalize a raw component value to an uppercase, underscore-joined
+    token (or `UNCATEGORIZED` if empty/placeholder), applying known aliases.
+    """
     value = "" if raw is None else str(raw).strip()
     if not value:
         return UNKNOWN_COMPONENT
@@ -74,16 +128,25 @@ def normalize_component(raw: Any) -> str:
 
 
 def is_generic_driver_component(component: str) -> bool:
+    """Return True if `component` is one of the known STM32 peripheral acronyms."""
     return component in GENERIC_DRIVER_COMPONENTS
 
 
 def _normalize_candidate_token(raw: str) -> str:
+    """Normalize a free-text token the same way as `normalize_component`,
+    without the empty/placeholder handling (used for token-scoring candidates).
+    """
     token = re.sub(r"[^A-Za-z0-9]+", "_", (raw or "").upper()).strip("_")
     token = COMPONENT_ALIASES.get(token, token)
     return token
 
 
 def _extract_context_component(st_ready_text: str) -> str:
+    """Extract the `component=` value from the structured `Context:` line.
+
+    This is the highest-confidence signal because it was written explicitly
+    by the upstream enrichment stage, not inferred from free text.
+    """
     if not st_ready_text:
         return UNKNOWN_COMPONENT
     match = re.search(r"\bcomponent=([^,\n]+)", st_ready_text, flags=re.IGNORECASE)
@@ -96,6 +159,7 @@ def _extract_context_component(st_ready_text: str) -> str:
 
 
 def _extract_keyword_components(st_ready_text: str) -> list[str]:
+    """Return known component acronyms found in the card's `Keywords:` line."""
     if not st_ready_text:
         return []
     match = re.search(r"^Keywords:\s*(.+)$", st_ready_text, flags=re.IGNORECASE | re.MULTILINE)
@@ -111,6 +175,7 @@ def _extract_keyword_components(st_ready_text: str) -> list[str]:
 
 
 def _extract_label_components(issue: dict[str, Any]) -> list[str]:
+    """Return known component acronyms found among the issue's GitHub labels."""
     labels = issue.get("labels")
     if not isinstance(labels, list):
         return []
@@ -126,6 +191,11 @@ def _extract_label_components(issue: dict[str, Any]) -> list[str]:
 
 
 def _score_components_from_upper_tokens(text: str) -> dict[str, int]:
+    """Score candidate components by counting UPPERCASE technical tokens in `text`.
+
+    Restricting to uppercase tokens (instead of any word match) avoids
+    accidentally matching common lowercase English words like "can" or "comp".
+    """
     scores: dict[str, int] = {}
     if not text:
         return scores
@@ -141,6 +211,13 @@ def _score_components_from_upper_tokens(text: str) -> dict[str, int]:
 
 
 def find_component_in_st_ready_text(issue: dict[str, Any]) -> str:
+    """Infer a component for `issue` from its title/`st_ready_text` when the
+    `component` field is missing or not a recognized peripheral name.
+
+    Combines several signals in a weighted vote (context line > keywords/
+    labels > raw uppercase tokens) and applies confidence guardrails so a
+    single weak/ambiguous mention (or a tie) does not force a wrong split.
+    """
     text_parts = [
         str(issue.get("issue_title") or ""),
         str(issue.get("st_ready_text") or ""),
@@ -185,6 +262,11 @@ def find_component_in_st_ready_text(issue: dict[str, Any]) -> str:
 
 
 def get_component_detection(issue: dict[str, Any]) -> tuple[str, str]:
+    """Return (component, detection_source) for one issue.
+
+    `detection_source` is one of `"component_field"`, `"st_ready_text"`, or
+    `"none"`, recorded in the summary/trace files for auditability.
+    """
     component_from_field = normalize_component(issue.get("component"))
     if component_from_field != UNKNOWN_COMPONENT and is_generic_driver_component(component_from_field):
         return component_from_field, "component_field"
@@ -197,6 +279,11 @@ def get_component_detection(issue: dict[str, Any]) -> tuple[str, str]:
 
 
 def get_series_tag(issues: list[dict[str, Any]], source_path: Path) -> str:
+    """Derive a short series tag (e.g. `H7`) used in output file names.
+
+    Tries the first issue's `mcu_series`/`repo` fields first, then falls back
+    to parsing the `stm32cube<series>` segment out of the source file path.
+    """
     if issues:
         first = issues[0]
         mcu_series = str(first.get("mcu_series") or "").strip().upper()
@@ -223,6 +310,13 @@ def split_payload_by_component(
     datasource_prefix: str,
     dry_run: bool,
 ) -> dict[str, Any]:
+    """Split one ST-ready issues payload into per-component files.
+
+    Detects each issue's component (`get_component_detection`), groups issues
+    accordingly, writes one JSON file per component plus an uncategorized
+    file for undetected ones, and always writes a summary describing the
+    split (even in `--dry-run`, only file writes are skipped).
+    """
     payload = load_json_object(source_path)
     issues = payload.get("issues")
     if not isinstance(issues, list):
@@ -340,6 +434,12 @@ def split_payload_by_component(
 
 
 def resolve_source_files(input_root: Path, pattern: str) -> list[Path]:
+    """Resolve source files using `pattern`, falling back through
+    `FALLBACK_INPUT_PATTERNS` in order if nothing matches.
+
+    This lets the script work whether or not Alfred image enrichment has run
+    yet, and whether or not the with-images export variant was used.
+    """
     files = sorted(input_root.glob(pattern))
     if files:
         return files
@@ -352,6 +452,9 @@ def resolve_source_files(input_root: Path, pattern: str) -> list[Path]:
 
 
 def main() -> None:
+    """CLI entry point: split one file (`--input-file`) or every matching
+    file under `--input-root` into per-component ST-ready issue payloads.
+    """
     parser = argparse.ArgumentParser(
         description=(
             "Split ST-ready issues-with-images payloads into per-component JSON files "

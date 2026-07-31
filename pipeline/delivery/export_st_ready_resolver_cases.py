@@ -1,3 +1,37 @@
+"""Export resolver cases (issue -> PR/commit fix linkage) as ST-ready JSON.
+
+Resolver cases connect a GitHub issue to the pull requests and commits that
+likely fixed it, plus the actual changed source files. This script turns the
+issue/PR/commit linkage produced by `pipeline/similarity`/link-resolution
+steps into KB-ready "resolver case" cards that tell the ST AI Bridge whether
+(and how confidently) a fix already exists for a given issue.
+
+Inputs:
+- `data/issue_pr_commit_links_<repo>_linked_only.json` (preferred) or the
+  fallback `data/issue_pr_commit_links_<repo>.json` (full set including
+  unlinked cases), both produced upstream by the issue/PR/commit linking step.
+- `data/raw_commits_<repo>.json` and `data/raw_prs_<repo>.json` for commit
+  file-diff stats and PR body text.
+- `st_ready_files_<repo>.json` (via `delivery_paths.get_existing_repo_artifact_file`)
+  to match changed file paths against known file cards and enrich them with
+  component/board/file_type metadata.
+
+Outputs, under `delivery_paths.get_repo_artifact_dir(repo, "resolver_cases_json")`:
+- `st_ready_resolver_cases_<repo>.json`: `{"resolver_cases": [...]}` array of
+  cases, each with a composed `resolver_card_text` retrieval document and a
+  `files_evidence` block describing changed files matched to known docs.
+- `summary_resolver_cases_<repo>.json`: counts, status breakdown, and
+  evidence-strength stats for traceability.
+- A backward-compatible mirror under the legacy flat `st_ready/resolver_cases_json/`.
+
+By default, cases with `resolution_status == "unlinked"` (no fix evidence at
+all) are dropped, and `"reference_only"` cases (weak evidence) are dropped
+unless `--include-reference-only` is passed.
+
+Run:
+    python -m pipeline.delivery.export_st_ready_resolver_cases --repo STM32CubeH7
+"""
+
 import argparse
 import json
 import re
@@ -13,14 +47,17 @@ from shared.utils.paths import DATA_DIR, PROJECT_ROOT, get_config_path
 
 
 def load_config() -> dict[str, Any]:
+    """Load the active series config resolved via `get_config_path()`."""
     return json.loads(get_config_path().read_text(encoding="utf-8"))
 
 
 def normalize_whitespace(text: str) -> str:
+    """Collapse any run of whitespace into a single space and strip ends."""
     return re.sub(r"\s+", " ", (text or "").strip())
 
 
 def first_sentence(text: str, max_chars: int = 260) -> str:
+    """Return the first sentence of `text` (up to `max_chars`), or a hard cut."""
     s = normalize_whitespace(text)
     if not s:
         return ""
@@ -31,17 +68,27 @@ def first_sentence(text: str, max_chars: int = 260) -> str:
 
 
 def compact_list(items: list[str], max_items: int = 6) -> list[str]:
+    """Normalize whitespace in `items`, drop empties, and cap to `max_items`."""
     cleaned = [normalize_whitespace(x) for x in items if normalize_whitespace(x)]
     return cleaned[:max_items]
 
 
 def normalize_path(path: str | None) -> str:
+    """Normalize a file path to a lowercase, forward-slash, no-leading-slash
+    form so paths from different sources (commits vs. file docs) compare equal.
+    """
     if not path:
         return ""
     return str(path).replace("\\", "/").strip().lstrip("/").lower()
 
 
 def infer_module_from_path(path: str | None) -> str:
+    """Classify a repo-relative path into a coarse module bucket
+    (`HAL_Driver`, `CMSIS`, `Drivers`, `Middlewares`, `Projects`, ...).
+
+    Used to summarize which parts of the codebase a resolver case's fix
+    touches, without needing a full file-type lookup for every changed file.
+    """
     norm = normalize_path(path)
     if not norm:
         return "unknown"
@@ -63,6 +110,11 @@ def infer_module_from_path(path: str | None) -> str:
 
 
 def load_raw_commits_index(repo: str) -> dict[str, dict[str, Any]]:
+    """Load `raw_commits_<repo>.json` and index commits by lowercase SHA.
+
+    Returns an empty dict if the raw commits file is not available (resolver
+    cases can still be built, just without changed-file details).
+    """
     path = DATA_DIR / f"raw_commits_{repo.lower()}.json"
     if not path.exists():
         return {}
@@ -109,6 +161,12 @@ def clean_pr_body_for_card(body: str | None, max_chars: int = 1500) -> str:
 
 
 def load_files_lookup(repo: str) -> dict[str, dict[str, Any]]:
+    """Load the repo's ST-ready file cards and index them by normalized path.
+
+    Used to enrich a resolver case's changed files with component/board/
+    file_type metadata when a matching file card exists. Falls back to an
+    empty dict if the file-cards export has not run yet for this repo.
+    """
     files_path = get_existing_repo_artifact_file(
         repo=repo,
         artifact_dir="files_json",
@@ -138,6 +196,12 @@ def aggregate_changed_files(
     case: dict[str, Any],
     raw_commits_index: dict[str, dict[str, Any]],
 ) -> list[dict[str, Any]]:
+    """Merge changed-file stats across all commits linked to one resolver case.
+
+    A single file can be touched by several linked commits; this aggregates
+    additions/deletions/changes and the touching commit SHAs per file path,
+    then sorts by total churn so the most impacted files surface first.
+    """
     merged: dict[str, dict[str, Any]] = {}
 
     for linked_commit in case.get("linked_commits") or []:
@@ -182,6 +246,9 @@ def aggregate_changed_files(
 
 
 def build_github_file_url(repo: str, path: str | None) -> str | None:
+    """Build a `blob/master` GitHub URL for a changed file that has no
+    matching file-card `github_url` (e.g. a file only seen via commit diff).
+    """
     if not path:
         return None
     normalized = str(path).replace("\\", "/").lstrip("/")
@@ -191,6 +258,12 @@ def build_github_file_url(repo: str, path: str | None) -> str | None:
 
 
 def build_resolver_card_text(case: dict[str, Any], raw_prs_index: dict[int, dict[str, Any]] | None = None) -> str:
+    """Compose the retrieval-ready `resolver_card_text` for one resolver case.
+
+    Summarizes the issue, the resolution status/confidence, candidate PR
+    titles and commit message leads, optional PR body excerpts, and a
+    standard validation-constraints line.
+    """
     issue_title = normalize_whitespace(case.get("issue_title") or "")
     issue_number = case.get("issue_number")
     labels = ", ".join(case.get("issue_labels") or [])
@@ -249,6 +322,14 @@ def to_st_ready_case(
     raw_commits_index: dict[str, dict[str, Any]],
     raw_prs_index: dict[int, dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
+    """Build the full ST-ready resolver-case record for one linked issue.
+
+    Aggregates changed files across linked commits, matches each changed file
+    against the repo's known file cards (to attach component/board/file_type
+    and a reliable `github_url`), and computes summary evidence fields
+    (`match_rate`, `impacted_modules/components/boards`, etc.) consumed by
+    the KB card and by `summary_resolver_cases_<repo>.json`.
+    """
     linked_prs = case.get("linked_prs") or []
     linked_commits = case.get("linked_commits") or []
     repo = case.get("repo")
@@ -366,6 +447,13 @@ def to_st_ready_case(
 
 
 def export_repo_json(repo: str, include_reference_only: bool) -> tuple[int, int, Path]:
+    """Export one repo's resolver cases into `st_ready_resolver_cases_<repo>.json`.
+
+    Prefers the `_linked_only` input (already filtered to cases with some fix
+    evidence) and falls back to the full links file. Drops `"unlinked"` cases
+    always, and `"reference_only"` cases unless `include_reference_only`.
+    Returns (total_cases_in_input, exported_cases_count, output_directory).
+    """
     linked_only_path = DATA_DIR / f"issue_pr_commit_links_{repo.lower()}_linked_only.json"
     full_links_path = DATA_DIR / f"issue_pr_commit_links_{repo.lower()}.json"
 
@@ -451,6 +539,7 @@ def export_repo_json(repo: str, include_reference_only: bool) -> tuple[int, int,
 
 
 def main() -> None:
+    """CLI entry point: export ST-ready resolver cases for each configured repo."""
     parser = argparse.ArgumentParser(description="Export issue-pr-commit links into ST-ready resolver cases JSON.")
     parser.add_argument("--repo", action="append", help="Repo name, e.g., STM32CubeH7. Can be repeated.")
     parser.add_argument(
