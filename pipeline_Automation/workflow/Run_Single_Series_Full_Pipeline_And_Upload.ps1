@@ -677,14 +677,38 @@ function Invoke-UploadJsonAdd {
         )
 
         if ($isDatasourceMissing -and $DatasourceNameForFallback) {
-            Write-Host "[WARN] Upload failed because DS#$DatasourceId for $Label does not exist. Recreating datasource '$DatasourceNameForFallback' (canonical name, no duplication suffix)." -ForegroundColor Yellow
-            return Invoke-UploadJsonNew `
-                -Label $Label `
-                -FilePath $FilePath `
-                -RootKey $RootKey `
-                -DatasourceName $DatasourceNameForFallback `
-                -ProcessorParams $ProcessorParams `
-                -AllowEmpty:$AllowEmpty
+            Write-Host "[WARN] Upload failed because DS#$DatasourceId for $Label does not exist. Recreating datasource '$DatasourceNameForFallback'." -ForegroundColor Yellow
+
+            try {
+                return Invoke-UploadJsonNew `
+                    -Label $Label `
+                    -FilePath $FilePath `
+                    -RootKey $RootKey `
+                    -DatasourceName $DatasourceNameForFallback `
+                    -ProcessorParams $ProcessorParams `
+                    -AllowEmpty:$AllowEmpty
+            }
+            catch {
+                $newErrorText = $_.Exception.Message
+                $newNormalized = $newErrorText.ToLowerInvariant()
+                $hasNameConflict = $newNormalized -match "datasource with name .* already exists"
+
+                if (-not $hasNameConflict) {
+                    throw
+                }
+
+                $stamp = Get-Date -Format "yyyyMMdd_HHmmss"
+                $uniqueDatasourceName = "${DatasourceNameForFallback}_$stamp"
+                Write-Host "[WARN] Canonical datasource name '$DatasourceNameForFallback' is already reserved. Retrying with unique name '$uniqueDatasourceName'." -ForegroundColor Yellow
+
+                return Invoke-UploadJsonNew `
+                    -Label $Label `
+                    -FilePath $FilePath `
+                    -RootKey $RootKey `
+                    -DatasourceName $uniqueDatasourceName `
+                    -ProcessorParams $ProcessorParams `
+                    -AllowEmpty:$AllowEmpty
+            }
         }
 
             if ($isDatasourceMissing -and (-not $DatasourceNameForFallback)) {
