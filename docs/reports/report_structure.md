@@ -279,7 +279,20 @@
 
 Une sous-section **« Pourquoi CRISP-DM ? Choix et Justification Méthodologique »** est insérée dans le Chapitre 3 (Section *Approche Méthodologique*), **avant** l'adaptation de CRISP-DM (ex-5.2). Elle compare CRISP-DM à KDD, SEMMA, TDSP (Microsoft) et à une approche Agile pure, et justifie pourquoi CRISP-DM est le cadre le plus pertinent pour un projet orienté données/retrieval comme celui-ci, malgré l'absence de modèle prédictif entraîné.
 
+**Statut : ✅ implémentée.** La sous-section `\subsection{Pourquoi CRISP-DM ? Choix et Justification Méthodologique}` (label `sec:pourquoi_crispdm`) est en place dans le Chapitre 3, entre `\subsection{Sélection de la Méthodologie : Scrum Adapté}` et `\subsection{Adaptation de CRISP-DM au Projet}`. Elle compare explicitement CRISP-DM à Agile/Scrum pur, KDD, SEMMA, TDSP et une approche ad hoc, avec une grille de comparaison synthétique et une conclusion argumentative.
+
 ## Statut de mise en œuvre
 
 - [x] Fichier de structure créé/à jour (ce document).
-- [ ] Fusion physique du rapport LaTeX en 5 chapitres (en cours — voir suivi dans le chat).
+- [x] Fusion physique du rapport LaTeX en 5 chapitres numérotés (Contexte, État de l'Art, Conception, Réalisation, Résultats), encadrés par une Introduction Générale et une Conclusion Générale non numérotées.
+- [x] Nouvelle sous-section « Pourquoi CRISP-DM ? » rédigée et intégrée au Chapitre 3.
+- [x] Démotions de niveaux de titres effectuées (Scrum, Adaptation CRISP-DM, `chapter_configuration.tex` en entier) pour respecter la hiérarchie à 5 chapitres.
+- [x] Déplacements effectués : Acteurs/Besoins/Contraintes (ex-Ch3) fusionnés avec Méthodologie/Architecture (ex-Ch5) ; « Notre Pipeline : Mapping » déplacé du Chapitre 2 vers le Chapitre 3 ; « Architecture Cible » repositionnée après les Contraintes de la Plateforme.
+- [x] `chapter_configuration.tex` démoté de `\chapter` à `\section` et intégré (via `\input`) dans le Chapitre 4, juste après la synthèse de l'implémentation — inclut l'Automatisation CI/CD (conservée ici plutôt que déplacée au Chapitre 5, car elle relève de la phase *Deployment* au même titre que la configuration de la persona).
+- [x] `chapter_evaluation.tex` conservé tel quel comme `\chapter{Résultats et Évaluation}` = Chapitre 5 (titre non modifié en « ...et Industrialisation » car l'industrialisation/CI-CD est physiquement au Chapitre 4).
+- [x] Introduction Générale : liste des chapitres mise à jour (5 chapitres au lieu de 8).
+- [x] Conclusion : passée en `\chapter*` non numéré (cohérent avec l'Introduction Générale non numérotée).
+- [x] Références croisées corrigées : `chap:conception`, `chap:realisation` définis ; renvoi `chap:methodologie` supprimé ; ligne *Deployment* du tableau CRISP-DM pointant vers `chap:realisation`.
+- [ ] Nettoyage optionnel des blocs `\iffalse ... \fi` de contenu obsolète (ancien chapitre évaluation/configuration dupliqué) — laissés en l'état (non rendus à la compilation, donc sans impact) faute de gain net vs risque de régression sur un fichier volumineux.
+- [ ] Compilation `pdflatex` complète non exécutée dans cet environnement (pas d'accès terminal) — à valider manuellement par l'utilisateur.
+

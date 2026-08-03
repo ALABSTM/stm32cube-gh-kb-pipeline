@@ -21,8 +21,8 @@ What it does:
       name-conflict resolution (reuse existing datasource instead of failing).
 
 Authentication (env vars, first non-empty wins unless --api-key is passed):
-    ST_CHATGPT_API_KEY, ST_AI_BRIDGE_API_KEY, ST_API_KEY,
-    ST_GITHUB_ANALYZER_API_KEY, PERSONA_API_KEY
+    ST_GITHUB_ANALYZER_API_KEY, PERSONA_API_KEY,
+    ST_CHATGPT_API_KEY, ST_AI_BRIDGE_API_KEY, ST_API_KEY
     Client app name: --client-app-name, or env ST_CHATGPT_CLIENT_APP / ST_CLIENT_APP_NAME,
     or falls back to the legacy value defined in Get_Persona_KBs.py
     (default: "mdrf_st_github_analyzer").
@@ -198,15 +198,14 @@ def resolve_api_key(cli_api_key: str | None) -> str:
             )
         return key
 
-    # Prefer legacy upload keys first (chatgpt/bridge), then analyzer fallback.
-    # This keeps compatibility with existing stable CI runs and self-hosted
-    # environments that expose multiple credentials.
+    # Prefer analyzer-specific keys first to avoid mixing Alfred/chat keys with
+    # KB uploader credentials when several keys are exported in the same shell.
     for env_name in (
+        "ST_GITHUB_ANALYZER_API_KEY",
+        "PERSONA_API_KEY",
         "ST_CHATGPT_API_KEY",
         "ST_AI_BRIDGE_API_KEY",
         "ST_API_KEY",
-        "ST_GITHUB_ANALYZER_API_KEY",
-        "PERSONA_API_KEY",
     ):
         value = os.getenv(env_name)
         if value and value.strip():
@@ -992,6 +991,7 @@ def resolve_existing_datasource_id_by_name(
     api_key: str,
     client_app_name: str,
     service_name: str,
+    remote_user: str | None,
     kb_id: int,
     datasource_name: str,
     timeout_seconds: int,
@@ -1011,6 +1011,7 @@ def resolve_existing_datasource_id_by_name(
             api_key=api_key,
             client_app_name=client_app_name,
             service_name=service_name,
+            remote_user=remote_user,
             timeout_seconds=timeout_seconds,
             verify_ssl=verify_ssl,
             proxies=proxies,
@@ -1807,6 +1808,7 @@ def run_auth_precheck(
     api_key: str,
     client_app_name: str,
     service_name: str,
+    remote_user: str | None,
     timeout_seconds: int,
     verify_ssl: bool,
     proxies: dict[str, str] | None,
@@ -1837,6 +1839,8 @@ def run_auth_precheck(
         "service": service_name,
         "type": "kb-list",
     }
+    if remote_user and str(remote_user).strip():
+        payload["remoteUser"] = str(remote_user).strip()
 
     if verbose:
         print(
@@ -2344,6 +2348,7 @@ def run_new_request_with_followup_add(
             api_key=api_key,
             client_app_name=client_app_name,
             service_name=service_name,
+            remote_user=remote_user,
             kb_id=kb_id,
             datasource_name=conflict_name,
             timeout_seconds=timeout_seconds,
@@ -2367,6 +2372,7 @@ def run_new_request_with_followup_add(
                     api_key=api_key,
                     client_app_name=client_app_name,
                     service_name=service_name,
+                    remote_user=remote_user,
                     kb_id=kb_id,
                     datasource_name=conflict_name,
                     timeout_seconds=timeout_seconds,
@@ -2498,6 +2504,7 @@ def run_new_request_with_followup_add(
                                 api_key=api_key,
                                 client_app_name=client_app_name,
                                 service_name=service_name,
+                                remote_user=remote_user,
                                 kb_id=kb_id,
                                 datasource_name=conflict_name,
                                 timeout_seconds=timeout_seconds,
@@ -2902,6 +2909,7 @@ def main() -> None:
             api_key=api_key,
             client_app_name=client_app_name,
             service_name=args.service,
+            remote_user=remote_user,
             timeout_seconds=max(5, args.timeout),
             verify_ssl=args.verify_ssl,
             proxies=proxies,

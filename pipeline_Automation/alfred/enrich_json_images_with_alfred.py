@@ -17,8 +17,9 @@ Inputs:
     - One or more ``--input`` JSON files: either a top-level list of records, or a
       dict with a list under a known key (``issues``, ``files``, ``resolver_cases``,
       ``diagnostic_cards``, etc.).
-    - Alfred Vision API credentials via env vars: ``ALFRED_CLIENT_APP_NAME``,
-      ``ST_CHATGPT_API_KEY`` (or ``ST_AI_BRIDGE_API_KEY``/``ST_API_KEY``),
+        - Alfred Vision API credentials via env vars: ``ALFRED_CLIENT_APP_NAME``,
+            ``ALFRED_API_KEY`` (preferred) or ``ST_CHATGPT_API_KEY``
+            (or ``ST_AI_BRIDGE_API_KEY``/``ST_API_KEY``),
       ``ALFRED_API_URL``.
 
 Outputs:
@@ -59,7 +60,8 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 # --- Alfred Vision API credentials (persona: mdrf_stgithub_analyzer_client) ---
 VISION_CLIENT_APP_NAME = os.getenv("ALFRED_CLIENT_APP_NAME", "mdrf_stgithub_analyzer_client").strip()
 VISION_API_KEY = (
-    os.getenv("ST_CHATGPT_API_KEY")
+    os.getenv("ALFRED_API_KEY")
+    or os.getenv("ST_CHATGPT_API_KEY")
     or os.getenv("ST_AI_BRIDGE_API_KEY")
     or os.getenv("ST_API_KEY")
     or ""
@@ -374,7 +376,10 @@ def call_alfred_for_image(
     if not VISION_CLIENT_APP_NAME:
         raise ValueError("Missing Alfred client app name. Set ALFRED_CLIENT_APP_NAME.")
     if not VISION_API_KEY:
-        raise ValueError("Missing Alfred API key. Set ST_CHATGPT_API_KEY (or ST_AI_BRIDGE_API_KEY/ST_API_KEY).")
+        raise ValueError(
+            "Missing Alfred API key. Set ALFRED_API_KEY "
+            "(or ST_CHATGPT_API_KEY/ST_AI_BRIDGE_API_KEY/ST_API_KEY)."
+        )
 
     timestamp_modes = ["seconds", "milliseconds"]
     user_prompt = USER_PROMPT_TEMPLATE.format(context=context)

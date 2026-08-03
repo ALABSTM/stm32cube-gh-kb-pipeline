@@ -154,16 +154,13 @@ Le pipeline couvre les \textbf{25 séries} de la famille STM32 (13 en production
 
 Les résultats démontrent une \textbf{amélioration nette de la pertinence} par rapport à un LLM générique sur les questions techniques STM32, avec un Quality Index atteignant 94/100 sur la série pilote H7 grâce aux Diagnostic Cards.
 
-Ce rapport s'organise comme suit :
+Ce rapport est organisé en \textbf{cinq chapitres}, encadrés par la présente introduction générale et une conclusion générale :
 \begin{itemize}
-  \item \textbf{Chapitre 1} --- Présentation de l'entreprise : ST, le site de Tunis, l'équipe d'accueil
-  \item \textbf{Chapitre 2} --- Contexte du projet : problématique, critique de l'existant, solution proposée
-  \item \textbf{Chapitre 3} --- Spécification des besoins : acteurs, besoins fonctionnels/non fonctionnels, méthodologie Scrum
-  \item \textbf{Chapitre 4} --- Architecture et conception : architecture cible, choix techniques, flux de données
-  \item \textbf{Chapitre 5} --- Implémentation : les 7 stages du pipeline, enrichissement Alfred, delivery
-  \item \textbf{Chapitre 6} --- Tests et évaluation : métriques par stage, Quality Index, étude comparative
-  \item \textbf{Chapitre 7} --- Configuration de la plateforme ST ChatGPT et automatisation CI/CD
-  \item \textbf{Chapitre 8} --- Conclusion et perspectives
+  \item \textbf{Chapitre 1 --- Contexte Général du Projet} : présentation de l'entreprise d'accueil, du site de Tunis, de la division Microcontrôleurs et de l'équipe d'accueil, de l'écosystème STM32/GitHub, de la problématique, des objectifs et des contributions
+  \item \textbf{Chapitre 2 --- État de l'Art et Fondements Théoriques} : le paradigme RAG, les enjeux du preprocessing pour une KB, la similarité TF-IDF, Alfred Vision, le positionnement par rapport aux solutions existantes, et la notion générale de pipeline de preprocessing (étapes canoniques, métriques, patterns)
+  \item \textbf{Chapitre 3 --- Analyse des Besoins et Conception} : identification des acteurs, besoins fonctionnels et non fonctionnels, contraintes de conception, choix méthodologique (Scrum adapté et CRISP-DM --- avec une justification comparative face aux méthodologies alternatives), contraintes de la plateforme de retrieval et architecture cible
+  \item \textbf{Chapitre 4 --- Réalisation et Implémentation} : les 7 stages du pipeline (ingestion à delivery), l'enrichissement Alfred Vision, puis la configuration de la persona sur la plateforme ST ChatGPT et l'automatisation CI/CD
+  \item \textbf{Chapitre 5 --- Résultats et Évaluation} : métriques par stage, confiance Alfred, évolution incrémentale du Quality Index, et étude comparative Alfred générique vs Persona KB
 \end{itemize}
 
 \newpage
@@ -980,7 +977,7 @@ Le tableau suivant établit la correspondance explicite entre les six phases de 
 \textbf{Data Preparation} & Prétraitement multi-stage & Stages 1--3, 5--7 : ingestion, nettoyage V1/V3, enrichissement, chunking, validation, delivery \\
 \textbf{Modeling} \textit{(réinterprété)} & Conception algorithmique et structuration orientée retrieval & Similarité TF-IDF + seuil, heuristiques métadonnées, stratégie de chunking \texttt{PARENT\_CHILD}, formats d'artefacts KB-ready, routage KB-first \\
 \textbf{Evaluation} & Mesure de qualité end-to-end & Ch.~\ref{chap:resultats_evaluation} : Quality Index, métriques par stage, confiance Alfred, étude comparative \\
-\textbf{Deployment} & Mise en production sur la plateforme & Ch.~\ref{chap:configuration} + CI/CD : upload KB \#793, persona ST ChatGPT, recherche hybride, workflow automatisé \\
+\textbf{Deployment} & Mise en production sur la plateforme & Ch.~\ref{chap:realisation} (Section~\ref{chap:configuration}) : upload KB \#793, persona ST ChatGPT, recherche hybride, workflow CI/CD automatisé \\
 \bottomrule
 \end{longtable}
 
