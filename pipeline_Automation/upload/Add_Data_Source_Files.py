@@ -2420,7 +2420,7 @@ def run_new_request_with_followup_add(
                         f"{existing_datasource_id} then recreating datasource '{conflict_name}'."
                     )
 
-                delete_payload: dict[str, Any] = {"id": existing_datasource_id}
+                delete_payload: int = int(existing_datasource_id)
                 try:
                     run_datasource_request(
                         endpoint=endpoint,

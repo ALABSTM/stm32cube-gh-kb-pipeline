@@ -169,15 +169,15 @@ Ce rapport s'organise comme suit :
 \newpage
 
 %% ============================================================
-\chapter{Présentation de l'Entreprise}
-\label{chap:entreprise}
+\chapter{Contexte Général du Projet}
+\label{chap:contexte}
 %% ============================================================
 
 \section*{Introduction}
 
-Ce chapitre présente l'entreprise d'accueil et le cadre dans lequel ce projet de fin d'études a été mené. Nous décrivons successivement STMicroelectronics à l'échelle mondiale, le site de Tunis, la division Microcontrôleurs (MCD) et, plus précisément, l'équipe Technical Marketing and Application Support --- et en son sein l'équipe Maintenance et Validation --- qui a accueilli ce travail. Cette présentation constitue le socle sur lequel s'appuiera le chapitre suivant pour introduire la problématique, la critique de l'existant et les fondements théoriques du projet.
+Ce chapitre présente l'entreprise d'accueil et le cadre dans lequel ce projet de fin d'études a été mené, avant d'exposer l'écosystème STM32/GitHub, la problématique précise à laquelle répond le projet, ses objectifs et ses contributions. Nous décrivons successivement STMicroelectronics à l'échelle mondiale, le site de Tunis, la division Microcontrôleurs (MCD) et l'équipe Technical Marketing and Application Support --- et en son sein l'équipe Maintenance et Validation --- qui a accueilli ce travail. Cette présentation constitue le socle sur lequel s'appuiera le chapitre suivant pour introduire les fondements théoriques du projet.
 
-\section{STMicroelectronics}
+\section{Présentation de l'Entreprise}
 \label{sec:st_presentation}
 
 \subsection{Présentation Générale}
@@ -238,12 +238,7 @@ Ce projet a été réalisé au sein de l'équipe \textbf{Technical Marketing and
   \item \textbf{L'équipe Maintenance et Validation} : garantit la satisfaction client par la maintenance des bugs et la validation fonctionnelle des microcontrôleurs fabriqués et de leurs versions HAL associées. Cette équipe représente la jonction entre les processus de conception logicielle/matérielle et l'industrialisation. \textbf{C'est au sein de cette équipe que le présent projet de fin d'études a été réalisé.}
 \end{itemize}
 
-C'est dans ce contexte opérationnel que le besoin d'un \textbf{chatbot IA spécialisé STM32} a émergé : face au volume croissant d'issues GitHub (plusieurs milliers par an, répartis sur 200+ dépôts) et à la richesse inexploitée de ces données, l'équipe Maintenance et Validation a identifié l'opportunité d'automatiser le support de premier niveau par un pipeline intelligent de prétraitement alimentant une base de connaissances structurée. Le chapitre suivant détaille ce contexte, la problématique précise qui en découle, et l'état de l'art qui a guidé la solution retenue.
-
-%% ============================================================
-\chapter{Contexte du Projet}
-\label{chap:contexte}
-%% ============================================================
+C'est dans ce contexte opérationnel que le besoin d'un \textbf{chatbot IA spécialisé STM32} a émergé : face au volume croissant d'issues GitHub (plusieurs milliers par an, répartis sur 200+ dépôts) et à la richesse inexploitée de ces données, l'équipe Maintenance et Validation a identifié l'opportunité d'automatiser le support de premier niveau par un pipeline intelligent de prétraitement alimentant une base de connaissances structurée. Les sections suivantes détaillent cet écosystème, la problématique précise qui en découle, ainsi que les objectifs et contributions du projet.
 
 \section{L'Écosystème STM32 et les Dépôts GitHub}
 \label{sec:ecosysteme}
@@ -329,117 +324,18 @@ Support direct (email/forum) & Temps de réponse de 48h à 2 semaines & Blocage 
 
 \textbf{Constat quantifié} : Sur un benchmark de 20 questions techniques couvrant 5 séries MCU, Alfred générique obtient un score de 116/200 (58\%) tandis que notre solution avec Knowledge Base obtient 161/200 (80,5\%), soit un \textbf{gain de +39\%} en pertinence, actionnabilité et traçabilité (cf. Section~\ref{sec:etude_comparative} pour le détail de l'étude).
 
-\section{État de l'Art et Fondements Théoriques}
-\label{sec:etat_art}
+\section{Objectifs du Projet}
+\label{sec:objectifs}
 
-\subsection{Le Paradigme RAG}
-
-Notre projet repose sur le paradigme \textbf{RAG} (Retrieval-Augmented Generation) \cite{lewis2020rag}, qui combine la recherche documentaire avec la génération de texte par un LLM. Concrètement dans notre système, lorsqu'un ingénieur pose une question, le moteur de recherche de la KB \#793 récupère les documents les plus pertinents (issues, fichiers, diagnostic cards), puis le LLM (GPT-5.1 via Azure OpenAI) génère une réponse ancrée dans ces documents avec des citations vérifiables.
-
-Ce paradigme nous apporte trois avantages concrets :
-\begin{itemize}
-  \item \textbf{Réduction des hallucinations} : les réponses sont ancrées dans des issues GitHub réelles, pas dans les connaissances génériques du modèle
-  \item \textbf{Mise à jour sans ré-entraînement} : quand de nouvelles issues apparaissent, il suffit de relancer le pipeline et uploader --- pas besoin de ré-entraîner le modèle
-  \item \textbf{Traçabilité} : chaque réponse cite un numéro d'issue, une URL GitHub, une version firmware
-\end{itemize}
-
-La Figure~\ref{fig:rag_paradigm} illustre le flux RAG appliqué à notre système~: la question de l'ingénieur déclenche une recherche dans la KB \#793, les documents pertinents sont récupérés, puis le LLM génère une réponse sourcée. Le pipeline de prétraitement (partie gauche) est ce qui \textbf{alimente et conditionne} la qualité de la KB indexable.
-
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[node distance=1cm,
-  src/.style={rectangle, draw=stred, fill=red!8, text width=2.3cm, minimum height=0.8cm, align=center, font=\scriptsize},
-  proc/.style={rectangle, draw=stblue, fill=stlightblue!45, text width=2.3cm, minimum height=0.8cm, align=center, font=\scriptsize\bfseries},
-  kb/.style={rectangle, draw=storange, fill=storange!20, text width=2.1cm, minimum height=0.8cm, align=center, font=\scriptsize\bfseries},
-  llm/.style={rectangle, draw=stgreen, fill=stgreen!15, text width=2.1cm, minimum height=0.8cm, align=center, font=\scriptsize\bfseries},
-  arr/.style={-{Stealth[length=2.5mm]}, thick}
-]
-\node[src] (gh) {GitHub\\\scriptsize issues, fichiers, PDF};
-\node[proc, right=1.1cm of gh] (pipe) {Pipeline\\\scriptsize 7 stages};
-\node[kb, right=1.1cm of pipe] (kb) {KB \#793\\\scriptsize index hybride};
-\node[llm, right=1.1cm of kb] (llm) {GPT-5.1\\\scriptsize génération};
-\node[src, right=1.1cm of llm, draw=stblue, fill=stlightblue!30] (ans) {Réponse sourcée\\\scriptsize + citations};
-\node[below=1.1cm of kb, font=\scriptsize\bfseries, draw=gray, fill=codebg, text width=2.3cm, align=center, minimum height=0.7cm] (q) {Question\\ingénieur};
-\draw[arr] (gh) -- node[above, font=\tiny]{ingestion} (pipe);
-\draw[arr] (pipe) -- node[above, font=\tiny]{upload} (kb);
-\draw[arr] (q) -- node[right, font=\tiny]{retrieval} (kb);
-\draw[arr] (kb) -- node[above, font=\tiny]{docs} (llm);
-\draw[arr] (llm) -- (ans);
-\end{tikzpicture}
-\caption{Le paradigme RAG appliqué au projet : le pipeline conditionne la qualité de la KB interrogée à chaque question}
-\label{fig:rag_paradigm}
-\end{figure}
-
-\subsection{Preprocessing et Qualité de la KB}
-
-La qualité des réponses RAG dépend directement de la qualité des documents indexés --- c'est le principe ``\textbf{Garbage In, Garbage Out}''. Dans notre projet, nous avons constaté expérimentalement que :
-\begin{itemize}
-  \item Les headers CMSIS bruts (1,7~Mo de \texttt{\#define}) polluent le contexte du LLM avec du bruit inutile → d'où le filtre V3 ($-96\%$)
-  \item Les balises HTML des Release Notes diluent le signal technique → d'où le nettoyage \texttt{strip\_html()} ($-33\%$)
-  \item Les licences volumineuses dans le code source occupent de l'espace dans les chunks → d'où la suppression automatique
-\end{itemize}
-
-Pour le découpage en chunks, nous utilisons une approche \textbf{paragraph-based} pour les issues et \textbf{section-based} pour les fichiers, avec une taille maximale de 512 tokens et un overlap de 50 tokens.
-
-\subsection{TF-IDF pour la Similarité}
-
-Pour le calcul de similarité inter-issues, nous utilisons \textbf{TF-IDF} (Term Frequency -- Inverse Document Frequency) \cite{tfidf}, qui pondère les termes par leur spécificité dans le corpus. Nous avons choisi TF-IDF plutôt que des embeddings neuronaux car il est déterministe, interprétable et ne nécessite pas de modèle pré-entraîné --- ce qui est cohérent avec notre choix d'heuristiques plutôt que de ML pour la classification.
-
-\subsection{Alfred Vision pour la Description d'Images}
-
-Pour rendre les captures d'écran et figures PDF ``cherchables'' par le RAG, nous utilisons \textbf{Alfred Vision}, le service de description d'images interne de ST basé sur Azure OpenAI. Alfred reçoit une image et un prompt spécialisé STM32, et produit une description textuelle orientée diagnostic (noms de périphériques, messages d'erreur, valeurs de registres).
-
-\section{Étude Comparative des Solutions Existantes}
-\label{sec:etude_comparative_intro}
-
-Avant de concevoir notre pipeline, nous avons évalué les solutions existantes pour le support technique assisté par IA :
-
-\begin{longtable}{p{3cm}p{4.5cm}p{4.5cm}}
-\toprule
-\textbf{Solution} & \textbf{Ce qu'elle fait bien} & \textbf{Pourquoi insuffisante pour nous} \\
-\midrule
-Recherche GitHub native & Gratuite, intégrée & Pas de sémantique, pas de filtrage par composant/layer, résultats noyés dans le bruit \\
-Alfred (LLM ST générique) & Toujours disponible, connaissances larges & Pas d'accès aux issues GitHub, conseils génériques sans root cause (score 116/200) \\
-Stack Overflow & Communauté large & Non spécifique ST, solutions non vérifiées et souvent obsolètes \\
-GitHub Copilot & Complétion de code intelligente & Pas de KB custom, aucun accès aux issues et bugs connus \\
-\textbf{Notre approche} & Pipeline domain-specific, 4 artefacts, enrichissement IA & Pipeline custom à maintenir \\
-\bottomrule
-\end{longtable}
-
-\textbf{Conclusion} : aucune solution existante ne combine le preprocessing domain-aware, les artefacts de diagnostic structurés et l'enrichissement d'images. C'est ce constat qui a motivé la conception de notre pipeline.
-
-\section{Synthèse de la Solution Proposée}
-\label{sec:solution_proposee}
-
-Face à cette problématique et aux limites des solutions existantes, nous proposons un \textbf{pipeline intelligent de prétraitement en 7 étapes} qui transforme les données GitHub brutes en une Knowledge Base structurée, alimentant un chatbot IA spécialisé STM32 déployé sur la plateforme ST ChatGPT. L'architecture repose sur trois piliers fondamentaux :
+Les objectifs de ce projet de fin d'études sont les suivants :
 
 \begin{enumerate}
-  \item \textbf{Pipeline de preprocessing modulaire} : Ingestion → Nettoyage (V1+V3 par type) → Enrichissement NLP → Similarité TF-IDF → Chunking → Validation schéma → Delivery. Chaque étape est \textbf{rejouable indépendamment}, produit des artefacts JSON traçables, et peut être évaluée en isolation.
-  
-  \item \textbf{4 types d'artefacts complémentaires} couvrant l'intégralité du spectre de connaissances :
-  \begin{itemize}
-    \item \textbf{Issues structurées} : symptôme, root cause, fix, métadonnées enrichies (layer, component, severity, board)
-    \item \textbf{Fichiers documentés} : HAL/BSP/CMSIS/PDF extraits et nettoyés par type avec filtrage intelligent
-    \item \textbf{Resolver Cases} : chaînes Issue $\to$ PR $\to$ Commit avec preuves de résolution et fichiers modifiés
-    \item \textbf{Diagnostic Cards} : analyses structurées (symptôme $\to$ hypothèses $\to$ validation $\to$ fix $\to$ prévention)
-  \end{itemize}
-  
-  \item \textbf{Enrichissement IA multi-modal} : Alfred Vision AI convertit automatiquement les captures d'écran des issues et les figures techniques des PDFs en descriptions textuelles cherchables, rendant le contenu visuel exploitable par la recherche RAG.
-\end{enumerate}
-
-\section{Positionnement par Rapport à l'État de l'Art}
-\label{sec:positionnement}
-
-Notre approche se positionne comme une \textbf{solution RAG verticale} (domain-specific) par opposition aux solutions RAG horizontales (génériques). Les contributions originales par rapport à l'état de l'art sont :
-
-\begin{enumerate}
-  \item \textbf{Preprocessing domain-aware} : là où les solutions génériques indexent le contenu brut, notre pipeline applique un nettoyage adapté au type de fichier (HTML pour les Release Notes, filtrage intelligent pour les CMSIS headers, suppression de licence pour le code source)
-  
-  \item \textbf{Enrichissement métadonnées par heuristiques} : classification automatique des issues par layer architecturale, composant matériel, board, sévérité et type --- sans données d'entraînement supervisées, grâce à des heuristiques regex spécifiques au domaine STM32
-  
-  \item \textbf{Artefacts de diagnostic structurés} : les Diagnostic Cards et les Resolver Cases sont des formats d'artefacts originaux qui n'existent pas dans les pipelines RAG standards. Ils ont démontré un impact majeur sur la qualité (+33 points de Quality Index)
-  
-  \item \textbf{Enrichissement Vision IA des images} : l'utilisation d'Alfred Vision pour rendre cherchables les captures d'écran et les figures PDF est une contribution technique inédite dans le contexte STM32
+  \item \textbf{Concevoir} un pipeline de prétraitement automatisé capable d'ingérer les données brutes depuis l'API GitHub, de les nettoyer, enrichir et structurer pour un système RAG
+  \item \textbf{Implémenter} les 7 étapes du pipeline (ingestion, nettoyage V1+V3, enrichissement NLP, similarité TF-IDF, chunking, validation, delivery) avec une architecture modulaire et rejouable
+  \item \textbf{Déployer} un chatbot IA spécialisé STM32 sur la plateforme ST ChatGPT, alimenté par la Knowledge Base générée par le pipeline
+  \item \textbf{Évaluer} la qualité du système de bout en bout via un Quality Index sur 52 questions et une étude comparative avec Alfred générique
+  \item \textbf{Automatiser} la mise à jour continue via CI/CD (GitHub Actions) et des scripts d'orchestration
+  \item \textbf{Industrialiser} la solution pour couvrir l'intégralité des 25 séries STM32
 \end{enumerate}
 
 \section{Contributions Techniques Originales}
@@ -455,20 +351,6 @@ Notre approche se positionne comme une \textbf{solution RAG verticale} (domain-s
   \item \textbf{Architecture KB-first + NovaX fallback} avec description restrictive évitant le court-circuit de la KB
   \item \textbf{Workflow Delete+Add} résolvant les conflits de noms lors de l'upload des datasources
   \item \textbf{Couverture multi-séries} : 13 séries en production, 12 configurées, processus reproductible en 3 étapes
-\end{enumerate}
-
-\section{Objectifs du Projet}
-\label{sec:objectifs}
-
-Les objectifs de ce projet de fin d'études sont les suivants :
-
-\begin{enumerate}
-  \item \textbf{Concevoir} un pipeline de prétraitement automatisé capable d'ingérer les données brutes depuis l'API GitHub, de les nettoyer, enrichir et structurer pour un système RAG
-  \item \textbf{Implémenter} les 7 étapes du pipeline (ingestion, nettoyage V1+V3, enrichissement NLP, similarité TF-IDF, chunking, validation, delivery) avec une architecture modulaire et rejouable
-  \item \textbf{Déployer} un chatbot IA spécialisé STM32 sur la plateforme ST ChatGPT, alimenté par la Knowledge Base générée par le pipeline
-  \item \textbf{Évaluer} la qualité du système de bout en bout via un Quality Index sur 52 questions et une étude comparative avec Alfred générique
-  \item \textbf{Automatiser} la mise à jour continue via CI/CD (GitHub Actions) et des scripts d'orchestration
-  \item \textbf{Industrialiser} la solution pour couvrir l'intégralité des 25 séries STM32
 \end{enumerate}
 
 \section{Enjeux Éthiques et Responsabilité}
@@ -487,10 +369,6 @@ L'utilisation de l'intelligence artificielle dans un contexte de support techniq
   
   \item \textbf{Impact sur l'emploi} : le chatbot ne remplace pas les ingénieurs de support mais \textbf{augmente leur productivité} en automatisant la recherche de premier niveau. Les cas complexes nécessitent toujours une expertise humaine.
 \end{enumerate}
-
-\section{Plan du Rapport}
-
-Le plan détaillé est présenté dans l'Introduction Générale (page précédente).
 
 \section{Les 25 Séries STM32 Couvertes}
 \label{sec:25series}
@@ -532,9 +410,13 @@ STM32CubeWL3 & Configuré & 1 & --- & 3 \\
 \bottomrule
 \end{longtable}
 
+\section{Plan du Rapport}
+
+Ce rapport est désormais organisé en \textbf{cinq chapitres}. Le Chapitre~\ref{chap:contexte} (le présent chapitre) présente l'entreprise d'accueil, l'écosystème STM32/GitHub, la problématique et les objectifs. Le Chapitre~\ref{chap:etat_art} pose les fondements théoriques (RAG, preprocessing, TF-IDF, Alfred Vision) et la notion de pipeline de preprocessing. Le Chapitre~\ref{chap:conception} détaille l'analyse des besoins et la conception (méthodologie Scrum, adaptation de CRISP-DM --- et sa justification par rapport aux méthodologies alternatives ---, architecture cible). Le Chapitre~\ref{chap:realisation} couvre la réalisation : les 7 stages du pipeline et la configuration de la plateforme ST ChatGPT. Enfin, le Chapitre~\ref{chap:resultats_evaluation} présente les résultats, l'évaluation quantifiée et l'automatisation CI/CD, avant la conclusion générale.
+
 %% ============================================================
-\chapter{Spécification des Besoins et Méthodologie}
-\label{chap:besoins}
+\chapter{Analyse des Besoins et Conception}
+\label{chap:conception}
 %% ============================================================
 
 \section{Identification des Acteurs}
@@ -716,15 +598,127 @@ L'architecture cible du système s'articule en trois couches :
   \item \textbf{Couche Delivery (Plateforme)} : les artefacts JSON sont uploadés vers la KB \#793 sur la plateforme ST ChatGPT (Azure OpenAI). La persona ``ST GitHub Analyzer'' interroge cette KB via une recherche hybride (semantic + full-text) et génère des réponses sourcées.
 \end{enumerate}
 
-\textit{Note : le diagramme d'architecture détaillé est présenté en Figure~\ref{fig:pipeline_arch_tikz} au Chapitre~\ref{chap:methodologie}, et les diagrammes draw.io exportés sont référencés en Annexes.}
-
-% Note : l'état de l'art détaillé est intégré dans le Chapitre 1 (Section~\ref{sec:etat_art}).
-% Ce chapitre est supprimé pour éviter la redondance avec l'introduction.
-% Les concepts théoriques (RAG, TF-IDF, Alfred Vision) sont présentés dans leur contexte d'utilisation réelle dans le projet.
+\textit{Note : le diagramme d'architecture détaillé est présenté en Figure~\ref{fig:pipeline_arch_tikz} plus loin dans ce chapitre, et les diagrammes draw.io exportés sont référencés en Annexes.}
 
 %% ============================================================
-\chapter{Pipeline de Data Preprocessing}
+\chapter{État de l'Art et Fondements Théoriques}
+\label{chap:etat_art}
 %% ============================================================
+
+\section*{Introduction}
+
+Ce chapitre pose les fondements théoriques mobilisés par le projet : le paradigme RAG, les enjeux de qualité du preprocessing pour une base de connaissances, la similarité TF-IDF, et l'enrichissement visuel par Alfred Vision. Il situe ensuite notre solution par rapport aux approches existantes (recherche GitHub native, LLM générique, Stack Overflow, GitHub Copilot), avant de généraliser la réflexion à la notion de pipeline de preprocessing pour le RAG --- ses étapes canoniques, ses métriques de qualité et ses patterns d'architecture. Ce chapitre relève essentiellement de la phase \textbf{Data Understanding} de CRISP-DM, en posant les bases conceptuelles qui seront mobilisées pour la conception (Chapitre~\ref{chap:conception}).
+
+\section{Le Paradigme RAG}
+\label{sec:etat_art}
+
+Notre projet repose sur le paradigme \textbf{RAG} (Retrieval-Augmented Generation) \cite{lewis2020rag}, qui combine la recherche documentaire avec la génération de texte par un LLM. Concrètement dans notre système, lorsqu'un ingénieur pose une question, le moteur de recherche de la KB \#793 récupère les documents les plus pertinents (issues, fichiers, diagnostic cards), puis le LLM (GPT-5.1 via Azure OpenAI) génère une réponse ancrée dans ces documents avec des citations vérifiables.
+
+Ce paradigme nous apporte trois avantages concrets :
+\begin{itemize}
+  \item \textbf{Réduction des hallucinations} : les réponses sont ancrées dans des issues GitHub réelles, pas dans les connaissances génériques du modèle
+  \item \textbf{Mise à jour sans ré-entraînement} : quand de nouvelles issues apparaissent, il suffit de relancer le pipeline et uploader --- pas besoin de ré-entraîner le modèle
+  \item \textbf{Traçabilité} : chaque réponse cite un numéro d'issue, une URL GitHub, une version firmware
+\end{itemize}
+
+La Figure~\ref{fig:rag_paradigm} illustre le flux RAG appliqué à notre système~: la question de l'ingénieur déclenche une recherche dans la KB \#793, les documents pertinents sont récupérés, puis le LLM génère une réponse sourcée. Le pipeline de prétraitement (partie gauche) est ce qui \textbf{alimente et conditionne} la qualité de la KB indexable.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=1cm,
+  src/.style={rectangle, draw=stred, fill=red!8, text width=2.3cm, minimum height=0.8cm, align=center, font=\scriptsize},
+  proc/.style={rectangle, draw=stblue, fill=stlightblue!45, text width=2.3cm, minimum height=0.8cm, align=center, font=\scriptsize\bfseries},
+  kb/.style={rectangle, draw=storange, fill=storange!20, text width=2.1cm, minimum height=0.8cm, align=center, font=\scriptsize\bfseries},
+  llm/.style={rectangle, draw=stgreen, fill=stgreen!15, text width=2.1cm, minimum height=0.8cm, align=center, font=\scriptsize\bfseries},
+  arr/.style={-{Stealth[length=2.5mm]}, thick}
+]
+\node[src] (gh) {GitHub\\\scriptsize issues, fichiers, PDF};
+\node[proc, right=1.1cm of gh] (pipe) {Pipeline\\\scriptsize 7 stages};
+\node[kb, right=1.1cm of pipe] (kb) {KB \#793\\\scriptsize index hybride};
+\node[llm, right=1.1cm of kb] (llm) {GPT-5.1\\\scriptsize génération};
+\node[src, right=1.1cm of llm, draw=stblue, fill=stlightblue!30] (ans) {Réponse sourcée\\\scriptsize + citations};
+\node[below=1.1cm of kb, font=\scriptsize\bfseries, draw=gray, fill=codebg, text width=2.3cm, align=center, minimum height=0.7cm] (q) {Question\\ingénieur};
+\draw[arr] (gh) -- node[above, font=\tiny]{ingestion} (pipe);
+\draw[arr] (pipe) -- node[above, font=\tiny]{upload} (kb);
+\draw[arr] (q) -- node[right, font=\tiny]{retrieval} (kb);
+\draw[arr] (kb) -- node[above, font=\tiny]{docs} (llm);
+\draw[arr] (llm) -- (ans);
+\end{tikzpicture}
+\caption{Le paradigme RAG appliqué au projet : le pipeline conditionne la qualité de la KB interrogée à chaque question}
+\label{fig:rag_paradigm}
+\end{figure}
+
+\section{Preprocessing et Qualité de la Base de Connaissances}
+
+La qualité des réponses RAG dépend directement de la qualité des documents indexés --- c'est le principe ``\textbf{Garbage In, Garbage Out}''. Dans notre projet, nous avons constaté expérimentalement que :
+\begin{itemize}
+  \item Les headers CMSIS bruts (1,7~Mo de \texttt{\#define}) polluent le contexte du LLM avec du bruit inutile → d'où le filtre V3 ($-96\%$)
+  \item Les balises HTML des Release Notes diluent le signal technique → d'où le nettoyage \texttt{strip\_html()} ($-33\%$)
+  \item Les licences volumineuses dans le code source occupent de l'espace dans les chunks → d'où la suppression automatique
+\end{itemize}
+
+Pour le découpage en chunks, nous utilisons une approche \textbf{paragraph-based} pour les issues et \textbf{section-based} pour les fichiers, avec une taille maximale de 512 tokens et un overlap de 50 tokens.
+
+\section{TF-IDF pour la Similarité}
+
+Pour le calcul de similarité inter-issues, nous utilisons \textbf{TF-IDF} (Term Frequency -- Inverse Document Frequency) \cite{tfidf}, qui pondère les termes par leur spécificité dans le corpus. Nous avons choisi TF-IDF plutôt que des embeddings neuronaux car il est déterministe, interprétable et ne nécessite pas de modèle pré-entraîné --- ce qui est cohérent avec notre choix d'heuristiques plutôt que de ML pour la classification.
+
+\section{Alfred Vision pour la Description d'Images}
+
+Pour rendre les captures d'écran et figures PDF ``cherchables'' par le RAG, nous utilisons \textbf{Alfred Vision}, le service de description d'images interne de ST basé sur Azure OpenAI. Alfred reçoit une image et un prompt spécialisé STM32, et produit une description textuelle orientée diagnostic (noms de périphériques, messages d'erreur, valeurs de registres).
+
+\section{Étude Comparative des Solutions Existantes}
+\label{sec:etude_comparative_intro}
+
+Avant de concevoir notre pipeline, nous avons évalué les solutions existantes pour le support technique assisté par IA :
+
+\begin{longtable}{p{3cm}p{4.5cm}p{4.5cm}}
+\toprule
+\textbf{Solution} & \textbf{Ce qu'elle fait bien} & \textbf{Pourquoi insuffisante pour nous} \\
+\midrule
+Recherche GitHub native & Gratuite, intégrée & Pas de sémantique, pas de filtrage par composant/layer, résultats noyés dans le bruit \\
+Alfred (LLM ST générique) & Toujours disponible, connaissances larges & Pas d'accès aux issues GitHub, conseils génériques sans root cause (score 116/200) \\
+Stack Overflow & Communauté large & Non spécifique ST, solutions non vérifiées et souvent obsolètes \\
+GitHub Copilot & Complétion de code intelligente & Pas de KB custom, aucun accès aux issues et bugs connus \\
+\textbf{Notre approche} & Pipeline domain-specific, 4 artefacts, enrichissement IA & Pipeline custom à maintenir \\
+\bottomrule
+\end{longtable}
+
+\textbf{Conclusion} : aucune solution existante ne combine le preprocessing domain-aware, les artefacts de diagnostic structurés et l'enrichissement d'images. C'est ce constat qui a motivé la conception de notre pipeline.
+
+\section{Synthèse de la Solution Proposée}
+\label{sec:solution_proposee}
+
+Face à cette problématique et aux limites des solutions existantes, nous proposons un \textbf{pipeline intelligent de prétraitement en 7 étapes} qui transforme les données GitHub brutes en une Knowledge Base structurée, alimentant un chatbot IA spécialisé STM32 déployé sur la plateforme ST ChatGPT. L'architecture repose sur trois piliers fondamentaux :
+
+\begin{enumerate}
+  \item \textbf{Pipeline de preprocessing modulaire} : Ingestion → Nettoyage (V1+V3 par type) → Enrichissement NLP → Similarité TF-IDF → Chunking → Validation schéma → Delivery. Chaque étape est \textbf{rejouable indépendamment}, produit des artefacts JSON traçables, et peut être évaluée en isolation.
+  
+  \item \textbf{4 types d'artefacts complémentaires} couvrant l'intégralité du spectre de connaissances :
+  \begin{itemize}
+    \item \textbf{Issues structurées} : symptôme, root cause, fix, métadonnées enrichies (layer, component, severity, board)
+    \item \textbf{Fichiers documentés} : HAL/BSP/CMSIS/PDF extraits et nettoyés par type avec filtrage intelligent
+    \item \textbf{Resolver Cases} : chaînes Issue $\to$ PR $\to$ Commit avec preuves de résolution et fichiers modifiés
+    \item \textbf{Diagnostic Cards} : analyses structurées (symptôme $\to$ hypothèses $\to$ validation $\to$ fix $\to$ prévention)
+  \end{itemize}
+  
+  \item \textbf{Enrichissement IA multi-modal} : Alfred Vision AI convertit automatiquement les captures d'écran des issues et les figures techniques des PDFs en descriptions textuelles cherchables, rendant le contenu visuel exploitable par la recherche RAG.
+\end{enumerate}
+
+\section{Positionnement par Rapport à l'État de l'Art}
+\label{sec:positionnement}
+
+Notre approche se positionne comme une \textbf{solution RAG verticale} (domain-specific) par opposition aux solutions RAG horizontales (génériques). Les contributions originales par rapport à l'état de l'art sont :
+
+\begin{enumerate}
+  \item \textbf{Preprocessing domain-aware} : là où les solutions génériques indexent le contenu brut, notre pipeline applique un nettoyage adapté au type de fichier (HTML pour les Release Notes, filtrage intelligent pour les CMSIS headers, suppression de licence pour le code source)
+  
+  \item \textbf{Enrichissement métadonnées par heuristiques} : classification automatique des issues par layer architecturale, composant matériel, board, sévérité et type --- sans données d'entraînement supervisées, grâce à des heuristiques regex spécifiques au domaine STM32
+  
+  \item \textbf{Artefacts de diagnostic structurés} : les Diagnostic Cards et les Resolver Cases sont des formats d'artefacts originaux qui n'existent pas dans les pipelines RAG standards. Ils ont démontré un impact majeur sur la qualité (+33 points de Quality Index)
+  
+  \item \textbf{Enrichissement Vision IA des images} : l'utilisation d'Alfred Vision pour rendre cherchables les captures d'écran et les figures PDF est une contribution technique inédite dans le contexte STM32
+\end{enumerate}
 
 \section{Qu'est-ce qu'un Pipeline de Preprocessing ?}
 
