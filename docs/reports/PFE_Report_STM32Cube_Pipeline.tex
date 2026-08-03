@@ -415,192 +415,6 @@ STM32CubeWL3 & Configuré & 1 & --- & 3 \\
 Ce rapport est désormais organisé en \textbf{cinq chapitres}. Le Chapitre~\ref{chap:contexte} (le présent chapitre) présente l'entreprise d'accueil, l'écosystème STM32/GitHub, la problématique et les objectifs. Le Chapitre~\ref{chap:etat_art} pose les fondements théoriques (RAG, preprocessing, TF-IDF, Alfred Vision) et la notion de pipeline de preprocessing. Le Chapitre~\ref{chap:conception} détaille l'analyse des besoins et la conception (méthodologie Scrum, adaptation de CRISP-DM --- et sa justification par rapport aux méthodologies alternatives ---, architecture cible). Le Chapitre~\ref{chap:realisation} couvre la réalisation : les 7 stages du pipeline et la configuration de la plateforme ST ChatGPT. Enfin, le Chapitre~\ref{chap:resultats_evaluation} présente les résultats, l'évaluation quantifiée et l'automatisation CI/CD, avant la conclusion générale.
 
 %% ============================================================
-\chapter{Analyse des Besoins et Conception}
-\label{chap:conception}
-%% ============================================================
-
-\section{Identification des Acteurs}
-\label{sec:acteurs}
-
-Le système implique plusieurs catégories d'acteurs aux rôles et attentes distincts :
-
-\begin{longtable}{p{3.5cm}p{4cm}p{5.5cm}}
-\toprule
-\textbf{Acteur} & \textbf{Rôle} & \textbf{Interaction avec le système} \\
-\midrule
-\textbf{Ingénieur STM32} (client/interne) & Utilisateur final du chatbot & Pose des questions techniques, reçoit des diagnostics sourcés avec liens GitHub \\
-\textbf{Équipe Support ST} & Mainteneur de la KB & Lance le pipeline, valide les exports, surveille le Quality Index \\
-\textbf{Administrateur KB} & Gestionnaire de la plateforme & Crée les datasources, configure les personas et tools sur ST ChatGPT \\
-\textbf{Pipeline automatisé} & Agent de maintenance & Ingère périodiquement les nouvelles issues, met à jour la KB, déclenche les validations \\
-\textbf{GitHub API} & Source de données & Fournit les issues, PRs, commits, fichiers via l'API REST \\
-\textbf{Alfred Vision AI} & Service d'enrichissement & Décrit automatiquement les images et figures PDF \\
-\bottomrule
-\end{longtable}
-
-La Figure~\ref{fig:actors} positionne ces acteurs autour du système~: les acteurs \textbf{humains} (ingénieur, support, administrateur) à gauche, le \textbf{cœur logiciel} (pipeline + KB + persona) au centre, et les \textbf{services externes} (GitHub API, Alfred Vision) à droite.
-
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[node distance=0.7cm,
-  human/.style={rectangle, draw=stblue, fill=stlightblue!45, text width=2.6cm, minimum height=0.75cm, align=center, font=\scriptsize\bfseries, rounded corners=3pt},
-  core/.style={rectangle, draw=storange, fill=storange!20, text width=2.7cm, minimum height=0.8cm, align=center, font=\scriptsize\bfseries},
-  ext/.style={rectangle, draw=stgreen, fill=stgreen!15, text width=2.6cm, minimum height=0.75cm, align=center, font=\scriptsize},
-  arr/.style={-{Stealth[length=2mm]}, thick}
-]
-\node[human] (eng) {Ingénieur STM32};
-\node[human, below=0.5cm of eng] (sup) {Équipe Support ST};
-\node[human, below=0.5cm of sup] (adm) {Administrateur KB};
-\node[core, right=2cm of sup, yshift=0.9cm] (persona) {Persona\\ST GitHub Analyzer};
-\node[core, below=0.5cm of persona] (kb) {KB \#793};
-\node[core, below=0.5cm of kb] (pipe) {Pipeline automatisé};
-\node[ext, right=2cm of persona, yshift=-0.5cm] (gh) {GitHub API};
-\node[ext, below=0.5cm of gh] (alf) {Alfred Vision AI};
-\draw[arr] (eng) -- (persona);
-\draw[arr] (sup) -- (kb);
-\draw[arr] (adm) -- (persona);
-\draw[arr] (persona) -- (kb);
-\draw[arr] (pipe) -- (kb);
-\draw[arr] (gh) -- (pipe);
-\draw[arr] (alf) -- (pipe);
-\end{tikzpicture}
-\caption{Positionnement des acteurs autour du système : humains (gauche), cœur logiciel (centre), services externes (droite)}
-\label{fig:actors}
-\end{figure}
-
-\section{Besoins Fonctionnels}
-\label{sec:besoins_fonctionnels}
-
-\begin{longtable}{p{1cm}p{5cm}p{2cm}p{5cm}}
-\toprule
-\textbf{ID} & \textbf{Besoin} & \textbf{Priorité} & \textbf{Critère d'acceptation} \\
-\midrule
-BF1 & Ingérer automatiquement les issues, PRs, commits et fichiers depuis GitHub & Critique & 100\% des issues récupérées pour un repo donné \\
-BF2 & Nettoyer le contenu textuel en supprimant le bruit (bots, HTML, licences) & Critique & Ratio signal/bruit $> 90\%$ \\
-BF3 & Enrichir les issues avec des métadonnées structurées (layer, component, board, severity) & Haute & Couverture layer $\geq 85\%$, component $\geq 70\%$ \\
-BF4 & Calculer la similarité inter-issues et établir des liens & Moyenne & Liens pertinents (précision $> 80\%$) \\
-BF5 & Générer 4 types d'artefacts delivery (issues, files, resolver cases, diagnostic cards) & Critique & Conformité 100\% au JSON Schema \\
-BF6 & Uploader les artefacts vers la KB \#793 sur ST ChatGPT & Critique & Datasources créées et indexées \\
-BF7 & Décrire automatiquement les images des issues par Alfred Vision & Haute & Taux de succès $\geq 95\%$ \\
-BF8 & Décrire automatiquement les figures des PDFs de Release Notes & Moyenne & Intégration dans le texte livré \\
-BF9 & Valider les artefacts contre un JSON Schema avant upload & Critique & Gate bloquant en cas d'erreur \\
-BF10 & Fournir un chatbot IA qui répond aux questions STM32 avec citations & Critique & Quality Index $\geq 80/100$ \\
-\bottomrule
-\end{longtable}
-
-\section{Besoins Non Fonctionnels}
-\label{sec:besoins_non_fonctionnels}
-
-\begin{longtable}{p{1cm}p{4cm}p{3cm}p{5cm}}
-\toprule
-\textbf{ID} & \textbf{Besoin} & \textbf{Catégorie} & \textbf{Mesure} \\
-\midrule
-BNF1 & Le pipeline doit être rejouable par étape sans effet de bord & Modularité & Chaque stage indépendant avec entrée/sortie JSON \\
-BNF2 & Le pipeline doit traiter une série complète en moins de 30 minutes & Performance & Temps mesuré sur H7 (12 repos, 500 issues) \\
-BNF3 & Le pipeline doit être reproductible (mêmes entrées $\to$ mêmes sorties) & Idempotence & Tests de non-régression \\
-BNF4 & Le code doit être maintenable et extensible à de nouvelles séries & Maintenabilité & Ajout d'une série en 3 étapes documentées \\
-BNF5 & Les données sources proviennent des dépôts GitHub ST ; la KB et la plateforme restent internes & Sécurité / Confidentialité & Aucune donnée personnelle traitée au-delà des identifiants publics \\
-BNF6 & Le système doit supporter 25+ séries MCU sans refactoring & Scalabilité & Configs séparées par série \\
-BNF7 & La mise à jour de la KB doit être automatisable & Automatisation & Workflow CI/CD fonctionnel \\
-BNF8 & Le chatbot doit répondre en moins de 15 secondes & Temps de réponse & Mesure via API ST ChatGPT \\
-\bottomrule
-\end{longtable}
-
-\section{Contraintes et Décisions de Conception}
-\label{sec:contraintes}
-
-Le projet est soumis à plusieurs contraintes qui ont orienté les choix techniques :
-
-\begin{longtable}{p{4cm}p{5cm}p{4cm}}
-\toprule
-\textbf{Contrainte} & \textbf{Impact} & \textbf{Décision prise} \\
-\midrule
-Rate limiting GitHub API (5000 req/h) & Limite la vitesse d'ingestion & Sleep adaptatif + retry exponentiel \\
-Plateforme ST ChatGPT (Azure OpenAI) & Format et API imposés & Export JSON avec processor params base64 \\
-Pas de données d'entraînement supervisées & Impossible d'utiliser du ML classique pour la classification & Heuristiques regex domain-specific \\
-Headers CMSIS $>$ 1.7~Mo & Explosion de la taille des chunks et bruit dans le retrieval & Filtre V3 intelligent ($-96\%$) \\
-Images opaques dans les issues & Contenu diagnostique invisible pour la recherche textuelle & Enrichissement Alfred Vision AI \\
-Multi-séries (25+ repos) & Risque de dilution du contexte dans la KB & Datasources séparées par série + métadonnées de filtrage \\
-\bottomrule
-\end{longtable}
-
-\section{Sélection de la Méthodologie : Scrum Adapté}
-\label{sec:scrum}
-
-Le projet a été conduit selon une méthodologie \textbf{Scrum adaptée} au contexte d'un projet de fin d'études, avec des sprints de 2 semaines et des revues régulières avec l'encadrant entreprise.
-
-\subsection{Organisation en Sprints}
-
-\begin{longtable}{p{2cm}p{3cm}p{8cm}}
-\toprule
-\textbf{Sprint} & \textbf{Période} & \textbf{Objectifs et livrables} \\
-\midrule
-Sprint 1 & Fév -- Mars 2026 & Étude de l'existant, état de l'art RAG/NLP, POC ingestion H7 \\
-Sprint 2 & Mars 2026 & Pipeline H7 complet (ingestion → delivery), première version KB \\
-Sprint 3 & Avr 2026 & Création persona ST ChatGPT, calibration recherche hybride, premiers Quality Index \\
-Sprint 4 & Avr -- Mai 2026 & Diagnostic Cards + Resolver Cases, nettoyage V3, QI = 94 sur H7 \\
-Sprint 5 & Mai 2026 & Extension multi-séries (F4, H5, U5, WL), étude comparative Alfred vs Persona \\
-Sprint 6 & Mai -- Juin 2026 & Alfred Vision (images issues + PDF), enrichissement 13 séries \\
-Sprint 7 & Juin 2026 & Nouvelles séries (G4, L0, L1, L4), automatisation CI/CD, évaluation finale \\
-\bottomrule
-\end{longtable}
-
-La Figure~\ref{fig:sprint_timeline} présente la frise des 7 sprints et met en évidence les jalons majeurs~: pipeline H7 complet (S2), première persona (S3), saut de Quality Index à 94 grâce aux Diagnostic Cards (S4), et extension multi-séries (S5--S7).
-
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[node distance=0cm,
-  sp/.style={rectangle, draw=stblue, fill=stlightblue!45, text width=1.5cm, minimum height=0.9cm, align=center, font=\tiny\bfseries},
-  milestone/.style={font=\tiny, align=center, text width=1.7cm, stgreen},
-  arr/.style={-{Stealth[length=2mm]}, thick, draw=stblue}
-]
-\node[sp] (s1) {S1\\\scriptsize état de l'art};
-\node[sp, right=0.35cm of s1] (s2) {S2\\\scriptsize pipeline H7};
-\node[sp, right=0.35cm of s2] (s3) {S3\\\scriptsize persona};
-\node[sp, right=0.35cm of s3] (s4) {S4\\\scriptsize QI=94};
-\node[sp, right=0.35cm of s4] (s5) {S5\\\scriptsize multi-séries};
-\node[sp, right=0.35cm of s5] (s6) {S6\\\scriptsize Alfred Vision};
-\node[sp, right=0.35cm of s6] (s7) {S7\\\scriptsize CI/CD};
-\draw[arr] (s1) -- (s2);
-\draw[arr] (s2) -- (s3);
-\draw[arr] (s3) -- (s4);
-\draw[arr] (s4) -- (s5);
-\draw[arr] (s5) -- (s6);
-\draw[arr] (s6) -- (s7);
-\node[milestone, above=0.35cm of s4] {jalon majeur\\Diagnostic Cards};
-\draw[-{Stealth[length=1.5mm]}, stgreen] ($(s4.north)+(0,0.05)$) -- ++(0,0.25);
-\node[below=0.2cm of s1, font=\tiny, stgray] {Fév 2026};
-\node[below=0.2cm of s7, font=\tiny, stgray] {Juin 2026};
-\end{tikzpicture}
-\caption{Frise des 7 sprints Scrum et jalons majeurs du projet}
-\label{fig:sprint_timeline}
-\end{figure}
-
-\subsection{Artefacts Scrum Utilisés}
-
-\begin{itemize}
-  \item \textbf{Product Backlog} : liste priorisée des fonctionnalités (pipeline stages, types d'artefacts, enrichissement IA)
-  \item \textbf{Sprint Backlog} : sélection des tâches pour chaque sprint de 2 semaines
-  \item \textbf{Daily Stand-up} : point quotidien avec l'équipe ST (15 min)
-  \item \textbf{Sprint Review} : démonstration des livrables à l'encadrant (Quality Index, démo chatbot)
-  \item \textbf{Sprint Retrospective} : analyse des blocages et améliorations (ex: API rate limiting, JSON corruption)
-\end{itemize}
-
-\section{Architecture Cible}
-\label{sec:architecture_cible}
-
-L'architecture cible du système s'articule en trois couches :
-
-\begin{enumerate}
-  \item \textbf{Couche Data (Sources)} : les dépôts GitHub STMicroelectronics fournissent les données brutes via l'API REST. Les fichiers source sont récupérés par clonage local des repositories.
-  
-  \item \textbf{Couche Processing (Pipeline)} : le pipeline Python en 7 étapes transforme les données brutes en artefacts structurés JSON. Chaque étape lit un fichier d'entrée et produit un fichier de sortie, permettant la rejouabilité et le débogage en isolation.
-  
-  \item \textbf{Couche Delivery (Plateforme)} : les artefacts JSON sont uploadés vers la KB \#793 sur la plateforme ST ChatGPT (Azure OpenAI). La persona ``ST GitHub Analyzer'' interroge cette KB via une recherche hybride (semantic + full-text) et génère des réponses sourcées.
-\end{enumerate}
-
-\textit{Note : le diagramme d'architecture détaillé est présenté en Figure~\ref{fig:pipeline_arch_tikz} plus loin dans ce chapitre, et les diagrammes draw.io exportés sont référencés en Annexes.}
-
-%% ============================================================
 \chapter{État de l'Art et Fondements Théoriques}
 \label{chap:etat_art}
 %% ============================================================
@@ -850,24 +664,6 @@ Dernière étape avant l'indexation :
 
 \textbf{Critère de qualité} : conformité 100\% au schéma cible.
 
-\section{Notre Pipeline : Mapping Théorie $\to$ Implémentation}
-
-Le tableau suivant fait le lien entre les étapes canoniques et notre implémentation concrète :
-
-\begin{longtable}{p{3.5cm}p{3.5cm}p{6cm}}
-\toprule
-\textbf{Étape Canonique} & \textbf{Stage Pipeline} & \textbf{Implémentation} \\
-\midrule
-Collecte & Stage 1 (Ingestion) & \texttt{fetch\_issues.py}, \texttt{fetch\_files.py}, \texttt{repo\_sync\_service.py} \\
-Nettoyage & Stage 2 (Cleaning) & \texttt{clean\_issues.py}, \texttt{clean\_files.py} (V1), \texttt{clean\_files\_v3.py} (V3 par type) \\
-Enrichissement & Stage 3 (Enrichment) & \texttt{issues\_to\_docs\_v2.py} --- heuristiques NLP (layer, severity, board, component) \\
-Mise en Relation & Stage 4 (Similarity) & \texttt{compute\_issue\_similarity\_v2.py} --- TF-IDF cosine, top-$k$ voisins \\
-Découpage & Stage 5 (Chunking) & \texttt{docs\_to\_chunks\_*\_v2.py} --- validation locale ; en production, découpage \texttt{PARENT\_CHILD} (1000/3000) par la plateforme \\
-Validation & Stage 6 (Evaluation) & \texttt{validate\_schemas.py}, \texttt{test\_stats\_*\_v2.py} \\
-Export & Stage 7 (Delivery) & \texttt{export\_st\_ready\_*.py} --- 4 types d'artefacts JSON \\
-\bottomrule
-\end{longtable}
-
 \section{Métriques de Qualité d'un Pipeline}
 
 Pour évaluer la qualité d'un pipeline de preprocessing, on utilise des métriques à chaque niveau :
@@ -918,9 +714,117 @@ Pipeline OK → validate_schemas.py → PASS → Upload autorisé
 Ce pattern empêche la propagation de données corrompues vers la production.
 
 %% ============================================================
-\chapter{Méthodologie et Architecture}
-\label{chap:methodologie}
+\chapter{Analyse des Besoins et Conception}
+\label{chap:conception}
 %% ============================================================
+
+\section*{Introduction}
+
+Ce chapitre traduit la problématique et les fondements théoriques des chapitres précédents en une \textbf{conception concrète} : il identifie les acteurs et les besoins du système, justifie le choix méthodologique (Scrum adapté et CRISP-DM --- en le comparant explicitement aux méthodologies alternatives), détaille comment le pipeline s'adapte aux contraintes imposées par la plateforme de retrieval, puis présente l'architecture cible retenue. Ce chapitre couvre principalement les phases \textbf{Business Understanding} (besoins, acteurs) et \textbf{Modeling} (choix méthodologique, conception orientée retrieval) de CRISP-DM.
+
+\section{Identification des Acteurs}
+\label{sec:acteurs}
+
+Le système implique plusieurs catégories d'acteurs aux rôles et attentes distincts :
+
+\begin{longtable}{p{3.5cm}p{4cm}p{5.5cm}}
+\toprule
+\textbf{Acteur} & \textbf{Rôle} & \textbf{Interaction avec le système} \\
+\midrule
+\textbf{Ingénieur STM32} (client/interne) & Utilisateur final du chatbot & Pose des questions techniques, reçoit des diagnostics sourcés avec liens GitHub \\
+\textbf{Équipe Support ST} & Mainteneur de la KB & Lance le pipeline, valide les exports, surveille le Quality Index \\
+\textbf{Administrateur KB} & Gestionnaire de la plateforme & Crée les datasources, configure les personas et tools sur ST ChatGPT \\
+\textbf{Pipeline automatisé} & Agent de maintenance & Ingère périodiquement les nouvelles issues, met à jour la KB, déclenche les validations \\
+\textbf{GitHub API} & Source de données & Fournit les issues, PRs, commits, fichiers via l'API REST \\
+\textbf{Alfred Vision AI} & Service d'enrichissement & Décrit automatiquement les images et figures PDF \\
+\bottomrule
+\end{longtable}
+
+La Figure~\ref{fig:actors} positionne ces acteurs autour du système~: les acteurs \textbf{humains} (ingénieur, support, administrateur) à gauche, le \textbf{cœur logiciel} (pipeline + KB + persona) au centre, et les \textbf{services externes} (GitHub API, Alfred Vision) à droite.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=0.7cm,
+  human/.style={rectangle, draw=stblue, fill=stlightblue!45, text width=2.6cm, minimum height=0.75cm, align=center, font=\scriptsize\bfseries, rounded corners=3pt},
+  core/.style={rectangle, draw=storange, fill=storange!20, text width=2.7cm, minimum height=0.8cm, align=center, font=\scriptsize\bfseries},
+  ext/.style={rectangle, draw=stgreen, fill=stgreen!15, text width=2.6cm, minimum height=0.75cm, align=center, font=\scriptsize},
+  arr/.style={-{Stealth[length=2mm]}, thick}
+]
+\node[human] (eng) {Ingénieur STM32};
+\node[human, below=0.5cm of eng] (sup) {Équipe Support ST};
+\node[human, below=0.5cm of sup] (adm) {Administrateur KB};
+\node[core, right=2cm of sup, yshift=0.9cm] (persona) {Persona\\ST GitHub Analyzer};
+\node[core, below=0.5cm of persona] (kb) {KB \#793};
+\node[core, below=0.5cm of kb] (pipe) {Pipeline automatisé};
+\node[ext, right=2cm of persona, yshift=-0.5cm] (gh) {GitHub API};
+\node[ext, below=0.5cm of gh] (alf) {Alfred Vision AI};
+\draw[arr] (eng) -- (persona);
+\draw[arr] (sup) -- (kb);
+\draw[arr] (adm) -- (persona);
+\draw[arr] (persona) -- (kb);
+\draw[arr] (pipe) -- (kb);
+\draw[arr] (gh) -- (pipe);
+\draw[arr] (alf) -- (pipe);
+\end{tikzpicture}
+\caption{Positionnement des acteurs autour du système : humains (gauche), cœur logiciel (centre), services externes (droite)}
+\label{fig:actors}
+\end{figure}
+
+\section{Besoins Fonctionnels}
+\label{sec:besoins_fonctionnels}
+
+\begin{longtable}{p{1cm}p{5cm}p{2cm}p{5cm}}
+\toprule
+\textbf{ID} & \textbf{Besoin} & \textbf{Priorité} & \textbf{Critère d'acceptation} \\
+\midrule
+BF1 & Ingérer automatiquement les issues, PRs, commits et fichiers depuis GitHub & Critique & 100\% des issues récupérées pour un repo donné \\
+BF2 & Nettoyer le contenu textuel en supprimant le bruit (bots, HTML, licences) & Critique & Ratio signal/bruit $> 90\%$ \\
+BF3 & Enrichir les issues avec des métadonnées structurées (layer, component, board, severity) & Haute & Couverture layer $\geq 85\%$, component $\geq 70\%$ \\
+BF4 & Calculer la similarité inter-issues et établir des liens & Moyenne & Liens pertinents (précision $> 80\%$) \\
+BF5 & Générer 4 types d'artefacts delivery (issues, files, resolver cases, diagnostic cards) & Critique & Conformité 100\% au JSON Schema \\
+BF6 & Uploader les artefacts vers la KB \#793 sur ST ChatGPT & Critique & Datasources créées et indexées \\
+BF7 & Décrire automatiquement les images des issues par Alfred Vision & Haute & Taux de succès $\geq 95\%$ \\
+BF8 & Décrire automatiquement les figures des PDFs de Release Notes & Moyenne & Intégration dans le texte livré \\
+BF9 & Valider les artefacts contre un JSON Schema avant upload & Critique & Gate bloquant en cas d'erreur \\
+BF10 & Fournir un chatbot IA qui répond aux questions STM32 avec citations & Critique & Quality Index $\geq 80/100$ \\
+\bottomrule
+\end{longtable}
+
+\section{Besoins Non Fonctionnels}
+\label{sec:besoins_non_fonctionnels}
+
+\begin{longtable}{p{1cm}p{4cm}p{3cm}p{5cm}}
+\toprule
+\textbf{ID} & \textbf{Besoin} & \textbf{Catégorie} & \textbf{Mesure} \\
+\midrule
+BNF1 & Le pipeline doit être rejouable par étape sans effet de bord & Modularité & Chaque stage indépendant avec entrée/sortie JSON \\
+BNF2 & Le pipeline doit traiter une série complète en moins de 30 minutes & Performance & Temps mesuré sur H7 (12 repos, 500 issues) \\
+BNF3 & Le pipeline doit être reproductible (mêmes entrées $\to$ mêmes sorties) & Idempotence & Tests de non-régression \\
+BNF4 & Le code doit être maintenable et extensible à de nouvelles séries & Maintenabilité & Ajout d'une série en 3 étapes documentées \\
+BNF5 & Les données sources proviennent des dépôts GitHub ST ; la KB et la plateforme restent internes & Sécurité / Confidentialité & Aucune donnée personnelle traitée au-delà des identifiants publics \\
+BNF6 & Le système doit supporter 25+ séries MCU sans refactoring & Scalabilité & Configs séparées par série \\
+BNF7 & La mise à jour de la KB doit être automatisable & Automatisation & Workflow CI/CD fonctionnel \\
+BNF8 & Le chatbot doit répondre en moins de 15 secondes & Temps de réponse & Mesure via API ST ChatGPT \\
+\bottomrule
+\end{longtable}
+
+\section{Contraintes et Décisions de Conception}
+\label{sec:contraintes}
+
+Le projet est soumis à plusieurs contraintes qui ont orienté les choix techniques :
+
+\begin{longtable}{p{4cm}p{5cm}p{4cm}}
+\toprule
+\textbf{Contrainte} & \textbf{Impact} & \textbf{Décision prise} \\
+\midrule
+Rate limiting GitHub API (5000 req/h) & Limite la vitesse d'ingestion & Sleep adaptatif + retry exponentiel \\
+Plateforme ST ChatGPT (Azure OpenAI) & Format et API imposés & Export JSON avec processor params base64 \\
+Pas de données d'entraînement supervisées & Impossible d'utiliser du ML classique pour la classification & Heuristiques regex domain-specific \\
+Headers CMSIS $>$ 1.7~Mo & Explosion de la taille des chunks et bruit dans le retrieval & Filtre V3 intelligent ($-96\%$) \\
+Images opaques dans les issues & Contenu diagnostique invisible pour la recherche textuelle & Enrichissement Alfred Vision AI \\
+Multi-séries (25+ repos) & Risque de dilution du contexte dans la KB & Datasources séparées par série + métadonnées de filtrage \\
+\bottomrule
+\end{longtable}
 
 \section{Approche Méthodologique}
 
@@ -931,14 +835,121 @@ Le projet suit une approche itérative :
   \item \textbf{Phase 3} : Enrichissement IA (Alfred Vision) et évaluation
 \end{enumerate}
 
+\subsection{Sélection de la Méthodologie : Scrum Adapté}
+\label{sec:scrum}
+
+Le projet a été conduit selon une méthodologie \textbf{Scrum adaptée} au contexte d'un projet de fin d'études, avec des sprints de 2 semaines et des revues régulières avec l'encadrant entreprise.
+
+\subsubsection{Organisation en Sprints}
+
+\begin{longtable}{p{2cm}p{3cm}p{8cm}}
+\toprule
+\textbf{Sprint} & \textbf{Période} & \textbf{Objectifs et livrables} \\
+\midrule
+Sprint 1 & Fév -- Mars 2026 & Étude de l'existant, état de l'art RAG/NLP, POC ingestion H7 \\
+Sprint 2 & Mars 2026 & Pipeline H7 complet (ingestion → delivery), première version KB \\
+Sprint 3 & Avr 2026 & Création persona ST ChatGPT, calibration recherche hybride, premiers Quality Index \\
+Sprint 4 & Avr -- Mai 2026 & Diagnostic Cards + Resolver Cases, nettoyage V3, QI = 94 sur H7 \\
+Sprint 5 & Mai 2026 & Extension multi-séries (F4, H5, U5, WL), étude comparative Alfred vs Persona \\
+Sprint 6 & Mai -- Juin 2026 & Alfred Vision (images issues + PDF), enrichissement 13 séries \\
+Sprint 7 & Juin 2026 & Nouvelles séries (G4, L0, L1, L4), automatisation CI/CD, évaluation finale \\
+\bottomrule
+\end{longtable}
+
+La Figure~\ref{fig:sprint_timeline} présente la frise des 7 sprints et met en évidence les jalons majeurs~: pipeline H7 complet (S2), première persona (S3), saut de Quality Index à 94 grâce aux Diagnostic Cards (S4), et extension multi-séries (S5--S7).
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=0cm,
+  sp/.style={rectangle, draw=stblue, fill=stlightblue!45, text width=1.5cm, minimum height=0.9cm, align=center, font=\tiny\bfseries},
+  milestone/.style={font=\tiny, align=center, text width=1.7cm, stgreen},
+  arr/.style={-{Stealth[length=2mm]}, thick, draw=stblue}
+]
+\node[sp] (s1) {S1\\\scriptsize état de l'art};
+\node[sp, right=0.35cm of s1] (s2) {S2\\\scriptsize pipeline H7};
+\node[sp, right=0.35cm of s2] (s3) {S3\\\scriptsize persona};
+\node[sp, right=0.35cm of s3] (s4) {S4\\\scriptsize QI=94};
+\node[sp, right=0.35cm of s4] (s5) {S5\\\scriptsize multi-séries};
+\node[sp, right=0.35cm of s5] (s6) {S6\\\scriptsize Alfred Vision};
+\node[sp, right=0.35cm of s6] (s7) {S7\\\scriptsize CI/CD};
+\draw[arr] (s1) -- (s2);
+\draw[arr] (s2) -- (s3);
+\draw[arr] (s3) -- (s4);
+\draw[arr] (s4) -- (s5);
+\draw[arr] (s5) -- (s6);
+\draw[arr] (s6) -- (s7);
+\node[milestone, above=0.35cm of s4] {jalon majeur\\Diagnostic Cards};
+\draw[-{Stealth[length=1.5mm]}, stgreen] ($(s4.north)+(0,0.05)$) -- ++(0,0.25);
+\node[below=0.2cm of s1, font=\tiny, stgray] {Fév 2026};
+\node[below=0.2cm of s7, font=\tiny, stgray] {Juin 2026};
+\end{tikzpicture}
+\caption{Frise des 7 sprints Scrum et jalons majeurs du projet}
+\label{fig:sprint_timeline}
+\end{figure}
+
+\subsubsection{Artefacts Scrum Utilisés}
+
+\begin{itemize}
+  \item \textbf{Product Backlog} : liste priorisée des fonctionnalités (pipeline stages, types d'artefacts, enrichissement IA)
+  \item \textbf{Sprint Backlog} : sélection des tâches pour chaque sprint de 2 semaines
+  \item \textbf{Daily Stand-up} : point quotidien avec l'équipe ST (15 min)
+  \item \textbf{Sprint Review} : démonstration des livrables à l'encadrant (Quality Index, démo chatbot)
+  \item \textbf{Sprint Retrospective} : analyse des blocages et améliorations (ex: API rate limiting, JSON corruption)
+\end{itemize}
+
+\subsection{Pourquoi CRISP-DM ? Choix et Justification Méthodologique}
+\label{sec:pourquoi_crispdm}
+
+Le choix d'une méthodologie n'est jamais neutre : il structure la façon dont le problème est cadré, dont les données sont analysées, et dont la valeur du travail est démontrée. Plusieurs cadres méthodologiques auraient pu s'appliquer à ce projet. Cette section les compare explicitement à \textbf{CRISP-DM} et justifie pourquoi ce dernier a été retenu comme principe organisateur du rapport et de la démarche de conception, malgré l'absence d'un modèle prédictif entraîné.
+
+\textbf{Les alternatives considérées} :
+
+\begin{itemize}
+  \item \textbf{Agile/Scrum pur (sans surcouche data)} : Scrum organise \textit{le temps de travail} (sprints, revues, rétrospectives) mais ne dit rien sur \textit{comment raisonner sur les données} --- il ne prescrit ni analyse de la qualité des sources, ni méthode de validation d'un traitement de données, ni notion de \textit{Business Understanding} distincte du backlog produit. Nous l'utilisons (Section~\ref{sec:scrum}) pour le \textbf{pilotage temporel} du projet, mais il ne peut pas, à lui seul, structurer la \textbf{démarche data} (compréhension du corpus GitHub, choix des heuristiques, validation de la qualité).
+
+  \item \textbf{KDD} (\textit{Knowledge Discovery in Databases}) : cadre historique (Fayyad et al., 1996) centré sur la découverte de \textit{patterns} dans de grandes bases de données, en 5 étapes (sélection, prétraitement, transformation, data mining, interprétation/évaluation). KDD est plus \textbf{académique et exploratoire} que CRISP-DM : il ne formalise pas la phase de \textit{Business Understanding} ni la phase de \textit{Deployment}, deux dimensions pourtant essentielles ici puisque notre projet a une finalité industrielle explicite (un chatbot déployé en production, avec des utilisateurs réels et un cadrage métier fort dès le départ).
+
+  \item \textbf{SEMMA} (\textit{Sample, Explore, Modify, Model, Assess}) : méthodologie propriétaire SAS, centrée sur la préparation et la modélisation statistique d'un échantillon de données en vue d'un modèle prédictif. SEMMA suppose implicitement un pipeline \textit{modélisation supervisée classique} (échantillonnage, exploration statistique, modélisation, évaluation d'un score) --- un cadre mal adapté à un projet où il n'y a ni échantillonnage statistique, ni modèle à évaluer par une métrique de type AUC/RMSE, mais un pipeline de transformation texte-vers-artefacts alimentant un moteur de retrieval.
+
+  \item \textbf{TDSP} (\textit{Team Data Science Process}, Microsoft) : cadre plus récent et plus proche de CRISP-DM (il en reprend d'ailleurs largement l'esprit), avec un accent fort sur les \textbf{rôles d'équipe}, l'\textbf{infrastructure cloud} et l'\textbf{intégration CI/CD}. TDSP est pertinent pour de grandes équipes data science avec une gouvernance formalisée (rôles de \textit{Project Lead}, \textit{Data Scientist}, \textit{Solution Architect} distincts). Pour un projet de fin d'études mené par une seule personne, cette granularité organisationnelle est surdimensionnée ; en revanche, ses bonnes pratiques de \textit{Deployment} et de CI/CD ont été reprises \textbf{dans notre pipeline} (Chapitre~\ref{chap:resultats_evaluation}), sans adopter tout le cadre.
+
+  \item \textbf{Approche ad hoc / empirique} : consisterait à ne suivre aucun cadre formel et à documenter le travail au fil de l'eau. Cette option a été écartée car elle aurait rendu difficile la démonstration, devant un jury, que \textbf{chaque décision technique répond à un besoin métier identifié} --- exactement ce que CRISP-DM impose de justifier à travers ses six phases.
+\end{itemize}
+
+\textbf{Grille de comparaison synthétique} :
+
+\begin{longtable}{p{2.6cm}p{3.6cm}p{3.6cm}p{3.7cm}}
+\toprule
+\textbf{Critère} & \textbf{KDD} & \textbf{SEMMA} & \textbf{CRISP-DM} \\
+\midrule
+Phase métier explicite (\textit{Business Understanding}) & Absente & Absente & \textbf{Présente et structurante} \\
+Phase de déploiement explicite & Implicite (interprétation) & Absente & \textbf{Présente} (Deployment) \\
+Neutralité vis-à-vis du secteur/outil & Oui & Non (liée à SAS) & \textbf{Oui} (norme ouverte, inter-industries) \\
+Adoption industrielle et reconnaissance & Académique & Niche (SAS) & \textbf{Standard de facto le plus répandu} \\
+Adaptabilité à un projet non-supervisé/retrieval & Moyenne & Faible & \textbf{Bonne} (phase \textit{Modeling} réinterprétable, cf. Section~\ref{sec:crispdm_adaptation}) \\
+\bottomrule
+\end{longtable}
+
+\textbf{Pourquoi CRISP-DM l'emporte pour ce projet} : trois arguments déterminants ont guidé ce choix.
+
+\begin{enumerate}
+  \item \textbf{Un cycle complet, du besoin métier au déploiement.} Contrairement à KDD et SEMMA, CRISP-DM impose de partir d'un \textit{Business Understanding} explicite (la problématique du support STM32, Section~\ref{sec:problematique}) et de refermer la boucle par un \textit{Deployment} réel (upload KB, persona ST ChatGPT, CI/CD). Notre projet a précisément cette forme : un problème métier identifié en amont, une chaîne de transformation de données, et une mise en production effective mesurée en conditions réelles. Aucune autre méthodologie candidate ne couvre ce cycle complet aussi naturellement.
+
+  \item \textbf{Une phase \textit{Modeling} suffisamment flexible pour être réinterprétée honnêtement.} SEMMA et KDD supposent implicitement un modèle statistique ou un algorithme de \textit{data mining} au centre du processus ; les y substituer par nos décisions de conception retrieval (similarité TF-IDF, heuristiques, chunking \texttt{PARENT\_CHILD}) serait plus artificiel qu'avec CRISP-DM, dont la littérature reconnaît explicitement des usages élargis à des projets ne produisant pas de modèle prédictif au sens strict, tant que la logique itérative de valorisation des données est respectée (cf. justification détaillée en Section~\ref{sec:crispdm_adaptation}).
+
+  \item \textbf{Un standard reconnu, communicable et vérifiable par un jury.} CRISP-DM est le cadre le plus largement enseigné et audité dans les formations en science des données ; l'utiliser permet de \textbf{structurer la soutenance} autour d'un référentiel que le jury connaît déjà, et de démontrer une maîtrise méthodologique transférable au-delà de ce projet spécifique --- un avantage qu'un cadre propriétaire (SEMMA) ou strictement académique (KDD) n'offre pas.
+\end{enumerate}
+
+\textbf{Conclusion} : CRISP-DM n'est pas retenu par défaut ou par habitude, mais à l'issue d'une comparaison explicite qui a écarté KDD (trop académique, sans Deployment), SEMMA (trop liée à la modélisation statistique propriétaire) et l'approche ad hoc (non auditable). Scrum reste utilisé en complément pour le pilotage temporel (Section~\ref{sec:scrum}), les deux cadres étant \textbf{complémentaires et non concurrents} : Scrum organise le \textit{comment on travaille dans le temps}, CRISP-DM organise le \textit{comment on raisonne sur les données et la valeur produite}. La section suivante détaille précisément comment chacune des six phases de CRISP-DM a été adaptée à la nature data-centric et retrieval-centric de ce projet.
+
 %% ============================================================
-\section{Adaptation de CRISP-DM au Projet}
+\subsection{Adaptation de CRISP-DM au Projet}
 \label{sec:crispdm_adaptation}
 %% ============================================================
 
-Le projet est piloté par la méthodologie \textbf{CRISP-DM} (\textit{Cross-Industry Standard Process for Data Mining}). Cependant, CRISP-DM a été conçu à l'origine pour des projets de \textit{data mining} et d'apprentissage supervisé, où la phase centrale (\textit{Modeling}) consiste à entraîner un modèle prédictif. Or, \textbf{notre projet n'entraîne aucun modèle prédictif} : il s'agit d'un projet \textbf{orienté données} (data-centric) et \textbf{orienté recherche documentaire} (retrieval-centric). Cette section explicite l'adaptation de CRISP-DM à ce contexte particulier, et justifie pourquoi cette réinterprétation est appropriée.
+Le projet est piloté par la méthodologie \textbf{CRISP-DM} (\textit{Cross-Industry Standard Process for Data Mining}), retenue à l'issue de la comparaison méthodologique de la Section~\ref{sec:pourquoi_crispdm}. Cependant, CRISP-DM a été conçu à l'origine pour des projets de \textit{data mining} et d'apprentissage supervisé, où la phase centrale (\textit{Modeling}) consiste à entraîner un modèle prédictif. Or, \textbf{notre projet n'entraîne aucun modèle prédictif} : il s'agit d'un projet \textbf{orienté données} (data-centric) et \textbf{orienté recherche documentaire} (retrieval-centric). Cette section explicite l'adaptation de CRISP-DM à ce contexte particulier, et justifie pourquoi cette réinterprétation est appropriée.
 
-\subsection{Nature du Projet : Data-Centric et Retrieval-Centric}
+\subsubsection{Nature du Projet : Data-Centric et Retrieval-Centric}
 \label{sec:crispdm_nature}
 
 Le c\oe ur du projet n'est pas la prédiction mais la \textbf{transformation et la structuration de connaissances} pour un système de recherche existant (RAG déployé sur la plateforme ST ChatGPT). La valeur ne provient pas d'un modèle appris sur des données étiquetées, mais de la \textbf{qualité du prétraitement} et de la \textbf{compatibilité des artefacts produits} avec l'architecture de retrieval imposée par la plateforme.
@@ -955,7 +966,7 @@ En conséquence, la phase \textit{Modeling} de CRISP-DM ne peut pas être interp
 
 \textbf{Justification de l'adaptation} : cette réinterprétation est appropriée car elle respecte l'esprit de CRISP-DM (un processus itératif de valorisation des données) tout en reflétant honnêtement la réalité technique du projet. Prétendre qu'un modèle supervisé existe serait un contresens méthodologique~; à l'inverse, ignorer la phase \textit{Modeling} masquerait les décisions de conception les plus importantes (seuils, chunking, formats). Nous conservons donc les six phases de CRISP-DM comme \textbf{principe organisateur}, en explicitant la nature de chaque phase dans notre contexte.
 
-\subsection{Correspondance CRISP-DM \texorpdfstring{$\rightarrow$}{->} Pipeline}
+\subsubsection{Correspondance CRISP-DM \texorpdfstring{$\rightarrow$}{->} Pipeline}
 \label{sec:crispdm_mapping}
 
 Le tableau suivant établit la correspondance explicite entre les six phases de CRISP-DM et les étapes réelles de notre pipeline :
@@ -974,6 +985,25 @@ Le tableau suivant établit la correspondance explicite entre les six phases de 
 \end{longtable}
 
 \textbf{Lecture} : la phase \textit{Modeling} ne produit pas un modèle entraîné mais un ensemble de \textbf{décisions de conception} (seuils, découpage, formats) qui déterminent comment la connaissance est structurée pour être exploitable par le retrieval de la plateforme. Chaque section technique du rapport rappelle explicitement la phase CRISP-DM à laquelle elle appartient.
+
+\section{Notre Pipeline : Mapping Théorie $\to$ Implémentation}
+\label{sec:pipeline_mapping}
+
+Le tableau suivant fait le lien entre les étapes canoniques présentées au Chapitre~\ref{chap:etat_art} et notre implémentation concrète :
+
+\begin{longtable}{p{3.5cm}p{3.5cm}p{6cm}}
+\toprule
+\textbf{Étape Canonique} & \textbf{Stage Pipeline} & \textbf{Implémentation} \\
+\midrule
+Collecte & Stage 1 (Ingestion) & \texttt{fetch\_issues.py}, \texttt{fetch\_files.py}, \texttt{repo\_sync\_service.py} \\
+Nettoyage & Stage 2 (Cleaning) & \texttt{clean\_issues.py}, \texttt{clean\_files.py} (V1), \texttt{clean\_files\_v3.py} (V3 par type) \\
+Enrichissement & Stage 3 (Enrichment) & \texttt{issues\_to\_docs\_v2.py} --- heuristiques NLP (layer, severity, board, component) \\
+Mise en Relation & Stage 4 (Similarity) & \texttt{compute\_issue\_similarity\_v2.py} --- TF-IDF cosine, top-$k$ voisins \\
+Découpage & Stage 5 (Chunking) & \texttt{docs\_to\_chunks\_*\_v2.py} --- validation locale ; en production, découpage \texttt{PARENT\_CHILD} (1000/3000) par la plateforme \\
+Validation & Stage 6 (Evaluation) & \texttt{validate\_schemas.py}, \texttt{test\_stats\_*\_v2.py} \\
+Export & Stage 7 (Delivery) & \texttt{export\_st\_ready\_*.py} --- 4 types d'artefacts JSON \\
+\bottomrule
+\end{longtable}
 
 %% ============================================================
 \section{Contraintes de la Plateforme de Retrieval et Adaptation du Pipeline}
@@ -1144,6 +1174,21 @@ Compatibilité chunking & Fortuite & Conçue pour \texttt{PARENT\_CHILD} \\
 
 \textbf{Valeur des artefacts structurés} : les 4 types d'artefacts ne sont pas des chunks bruts mais des unités de connaissance conçues pour le retrieval. Les \textbf{diagnostic cards} (Symptôme $\to$ Root Cause $\to$ Fix) et les \textbf{resolver cases} (Issue $\to$ PR $\to$ Commit) apportent respectivement le raisonnement diagnostique et la traçabilité du correctif --- deux dimensions absentes d'un preprocessing générique et directement responsables du gain de Quality Index mesuré (Section~\ref{sec:evolution_incrementale}).
 
+\section{Architecture Cible}
+\label{sec:architecture_cible}
+
+L'architecture cible du système s'articule en trois couches :
+
+\begin{enumerate}
+  \item \textbf{Couche Data (Sources)} : les dépôts GitHub STMicroelectronics fournissent les données brutes via l'API REST. Les fichiers source sont récupérés par clonage local des repositories.
+  
+  \item \textbf{Couche Processing (Pipeline)} : le pipeline Python en 7 étapes transforme les données brutes en artefacts structurés JSON. Chaque étape lit un fichier d'entrée et produit un fichier de sortie, permettant la rejouabilité et le débogage en isolation.
+  
+  \item \textbf{Couche Delivery (Plateforme)} : les artefacts JSON sont uploadés vers la KB \#793 sur la plateforme ST ChatGPT (Azure OpenAI). La persona ``ST GitHub Analyzer'' interroge cette KB via une recherche hybride (semantic + full-text) et génère des réponses sourcées.
+\end{enumerate}
+
+\textit{Note : le diagramme d'architecture détaillé est présenté en Figure~\ref{fig:pipeline_arch_tikz} plus loin dans ce chapitre, et les diagrammes draw.io exportés sont référencés en Annexes.}
+
 \section{Architecture Globale}
 
 Le système s'articule autour de 3 couches :
@@ -1302,12 +1347,15 @@ La Figure~\ref{fig:data_flow} montre le parcours complet d'une donnée depuis Gi
 \end{figure}
 
 %% ============================================================
-\chapter{Implémentation}
+\chapter{Réalisation et Implémentation}
+\label{chap:realisation}
 %% ============================================================
 
-\textit{\small\textbf{\textcolor{stblue}{Phase CRISP-DM :}} ce chapitre couvre principalement la phase \textit{Data Preparation}, avec les décisions de \textit{Modeling} (similarité, heuristiques, formats d'artefacts) et la charnière vers le \textit{Deployment} (delivery et upload KB).}\par\smallskip
+\section*{Introduction}
 
-Ce chapitre décrit la \textbf{réalisation concrète} du pipeline de prétraitement, c'est-à-dire le passage des concepts (Chapitre~\ref{chap:methodologie}) à un système Python exécutable, rejouable et automatisé. Chaque stage y est présenté selon un même schéma : objectif, mécanisme et scripts, exemple de sortie JSON réel, et résultats quantifiés.
+\textit{\small\textbf{\textcolor{stblue}{Phase CRISP-DM :}} ce chapitre couvre principalement la phase \textit{Data Preparation}, avec les décisions de \textit{Modeling} (similarité, heuristiques, formats d'artefacts) et la charnière vers le \textit{Deployment} (delivery, upload KB et configuration de la plateforme ST ChatGPT).}\par\smallskip
+
+Ce chapitre décrit la \textbf{réalisation concrète} du pipeline de prétraitement, c'est-à-dire le passage des concepts et de la conception (Chapitre~\ref{chap:conception}) à un système Python exécutable, rejouable et automatisé. Chaque stage y est présenté selon un même schéma : objectif, mécanisme et scripts, exemple de sortie JSON réel, et résultats quantifiés. Il se conclut par la configuration de la plateforme ST ChatGPT qui exploite les artefacts produits.
 
 \section{Vue d'Orchestration du Pipeline}
 \label{sec:orchestration_pipeline}
@@ -3429,7 +3477,8 @@ Les configurations (fichiers \texttt{config\_*.json}) sont créées pour : G4, L
 %% ============================================================
 
 %% ============================================================
-\chapter{Conclusion et Perspectives}
+\chapter*{Conclusion Générale et Perspectives}
+\addcontentsline{toc}{chapter}{Conclusion Générale et Perspectives}
 \label{chap:conclusion}
 %% ============================================================
 

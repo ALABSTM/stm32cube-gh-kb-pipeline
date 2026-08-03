@@ -2450,8 +2450,11 @@ def run_new_request_with_followup_add(
                             "continuing with create."
                         )
 
-                recreate_attempts = 4
-                recreate_delay_seconds = 2
+                # Give backend indexing a brief grace period after delete before recreate.
+                time.sleep(2)
+
+                recreate_attempts = 6
+                recreate_delay_seconds = 3
                 for attempt in range(1, recreate_attempts + 1):
                     try:
                         recreated_response = run_datasource_request(
@@ -2488,12 +2491,56 @@ def run_new_request_with_followup_add(
                             recreate_exc.api_message,
                         )
                         if is_name_conflict and attempt < recreate_attempts:
+                            # Stale configured IDs can delete the wrong/non-existent datasource.
+                            # Re-resolve by name and delete the currently live conflicting ID.
+                            refreshed_id = resolve_existing_datasource_id_by_name(
+                                endpoint=endpoint,
+                                api_key=api_key,
+                                client_app_name=client_app_name,
+                                service_name=service_name,
+                                kb_id=kb_id,
+                                datasource_name=conflict_name,
+                                timeout_seconds=timeout_seconds,
+                                verify_ssl=verify_ssl,
+                                proxies=proxies,
+                                verbose=verbose,
+                            )
+
+                            if refreshed_id is not None:
+                                try:
+                                    run_datasource_request(
+                                        endpoint=endpoint,
+                                        api_key=api_key,
+                                        client_app_name=client_app_name,
+                                        service_name=service_name,
+                                        remote_user=remote_user,
+                                        kb_id=kb_id,
+                                        datasource_payload=int(refreshed_id),
+                                        file_paths=[],
+                                        request_types=[DEFAULT_TYPE_DELETE],
+                                        request_part_names=request_part_names,
+                                        payload_modes=payload_modes,
+                                        timestamp_modes=timestamp_modes,
+                                        max_retries=max_retries,
+                                        timeout_seconds=timeout_seconds,
+                                        verify_ssl=verify_ssl,
+                                        proxies=proxies,
+                                        verbose=verbose,
+                                    )
+                                    existing_datasource_id = int(refreshed_id)
+                                except ApiRejectedError as refreshed_delete_exc:
+                                    if not is_deleted_or_missing_datasource_error(
+                                        refreshed_delete_exc.error_code,
+                                        refreshed_delete_exc.api_message,
+                                    ):
+                                        raise
+
                             if verbose:
                                 print(
                                     "Replace recreate attempt hit name conflict; retrying after delay "
                                     f"({attempt}/{recreate_attempts})..."
                                 )
-                            time.sleep(recreate_delay_seconds)
+                            time.sleep(recreate_delay_seconds * attempt)
                             continue
                         raise
 
