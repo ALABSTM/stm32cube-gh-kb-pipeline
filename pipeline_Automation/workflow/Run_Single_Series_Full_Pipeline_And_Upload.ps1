@@ -699,17 +699,7 @@ function Invoke-UploadJsonAdd {
                     throw
                 }
 
-                $stamp = Get-Date -Format "yyyyMMdd_HHmmss"
-                $uniqueDatasourceName = "${DatasourceNameForFallback}_$stamp"
-                Write-Host "[WARN] Canonical datasource name '$DatasourceNameForFallback' is already reserved. Retrying with unique name '$uniqueDatasourceName'." -ForegroundColor Yellow
-
-                return Invoke-UploadJsonNew `
-                    -Label $Label `
-                    -FilePath $FilePath `
-                    -RootKey $RootKey `
-                    -DatasourceName $uniqueDatasourceName `
-                    -ProcessorParams $ProcessorParams `
-                    -AllowEmpty:$AllowEmpty
+                throw "Canonical datasource '$DatasourceNameForFallback' already exists but could not be resolved to a live ID. Aborting to avoid duplicate timestamped datasources. Fix kb_datasource_ids / upload snapshot IDs, then re-run."
             }
         }
 

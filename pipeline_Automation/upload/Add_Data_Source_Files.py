@@ -2402,10 +2402,11 @@ def run_new_request_with_followup_add(
                     )
 
         if existing_datasource_id is None:
-            create_response = create_with_unique_name_fallback(
-                f"unresolved existing ID for conflict name '{conflict_name}'"
+            raise RuntimeError(
+                f"Datasource '{conflict_name}' already exists but its live ID could not be resolved. "
+                "Aborting to avoid creating a duplicate timestamped datasource. "
+                "Update shared/config/config_all_series.json (kb_datasource_ids) or upload_datasource_ids snapshot and retry."
             )
-            return finalize_created_response(create_response)
         if existing_datasource_id is not None:
             if verbose:
                 print(
@@ -2416,9 +2417,45 @@ def run_new_request_with_followup_add(
             if existing_datasource_policy == "replace":
                 if verbose:
                     print(
-                        "Existing datasource policy=replace: using in-place upload on resolved datasource ID "
-                        f"{existing_datasource_id} to avoid delete/recreate conflicts."
+                        "Existing datasource policy=replace: clearing existing datasource content "
+                        f"for ID {existing_datasource_id}, then uploading fresh files into the same ID."
                     )
+
+                def clear_existing_datasource_content(target_id: int) -> None:
+                    """Delete datasource content for replace mode while preserving the datasource ID.
+
+                    If datasource is already missing/deleted, caller's add path will resolve/retry IDs.
+                    """
+                    delete_payload: dict[str, Any] = {"id": target_id}
+                    try:
+                        run_datasource_request(
+                            endpoint=endpoint,
+                            api_key=api_key,
+                            client_app_name=client_app_name,
+                            service_name=service_name,
+                            remote_user=remote_user,
+                            kb_id=kb_id,
+                            datasource_payload=delete_payload,
+                            file_paths=[],
+                            request_types=[DEFAULT_TYPE_DELETE],
+                            request_part_names=request_part_names,
+                            payload_modes=payload_modes,
+                            timestamp_modes=timestamp_modes,
+                            max_retries=max_retries,
+                            timeout_seconds=timeout_seconds,
+                            verify_ssl=verify_ssl,
+                            proxies=proxies,
+                            verbose=verbose,
+                        )
+                    except ApiRejectedError as delete_exc:
+                        # Ignore "already gone" datasource errors; add path below resolves/retries IDs.
+                        if not is_deleted_or_missing_datasource_error(
+                            delete_exc.error_code,
+                            delete_exc.api_message,
+                        ):
+                            raise
+
+                clear_existing_datasource_content(existing_datasource_id)
 
                 add_payload: dict[str, Any] = {"id": existing_datasource_id}
                 if requested_processor:
@@ -2497,6 +2534,8 @@ def run_new_request_with_followup_add(
                     retry_success = False
                     last_retry_exc: ApiRejectedError | None = None
                     for candidate_id in ordered_candidates:
+                        clear_existing_datasource_content(candidate_id)
+
                         add_payload_retry: dict[str, Any] = {"id": candidate_id}
                         if requested_processor:
                             add_payload_retry["processor"] = requested_processor
@@ -2535,10 +2574,11 @@ def run_new_request_with_followup_add(
 
                     if not retry_success:
                         tried = ", ".join(str(cid) for cid in ordered_candidates)
-                        create_response = create_with_unique_name_fallback(
-                            f"stale IDs after retries [{tried}] for conflict name '{conflict_name}'"
+                        raise RuntimeError(
+                            f"Datasource '{conflict_name}' exists but all resolved IDs appear stale/deleted [{tried}]. "
+                            "Aborting to avoid duplicate timestamped datasource creation. "
+                            "Fix kb_datasource_ids/upload snapshot IDs then retry."
                         )
-                        return finalize_created_response(create_response)
 
                 if existing_datasource_id is not None:
                     final_replace = dict(add_replace_response)
@@ -2547,7 +2587,7 @@ def run_new_request_with_followup_add(
                         "message",
                         (
                             f'Datasource "{conflict_name}" already existed; '
-                            "replace policy executed with in-place upload on existing datasource."
+                            "replace policy executed by clearing existing content and uploading fresh files into the same datasource ID."
                         ),
                     )
                     return final_replace
