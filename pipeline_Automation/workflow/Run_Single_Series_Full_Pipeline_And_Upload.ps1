@@ -624,7 +624,7 @@ function Invoke-UploadJsonAdd {
             throw "Replace mode requires -DatasourceNameForFallback for $Label to recreate datasource and refresh ID."
         }
 
-        Write-Host "[REPLACE] Recreating datasource for $Label: deleting DS#$DatasourceId then creating a fresh datasource with the same name." -ForegroundColor DarkCyan
+        Write-Host "[REPLACE] Recreating datasource for ${Label}: deleting DS#$DatasourceId then creating a fresh datasource with the same name." -ForegroundColor DarkCyan
 
         $deleteArgs = @(
             $uploader,
@@ -649,7 +649,7 @@ function Invoke-UploadJsonAdd {
             -ProcessorParams $ProcessorParams `
             -AllowEmpty:$AllowEmpty
 
-        Write-Host "[REPLACE] Datasource ID updated for $Label: DS#$DatasourceId -> DS#$newDatasourceId" -ForegroundColor DarkCyan
+        Write-Host "[REPLACE] Datasource ID updated for ${Label}: DS#$DatasourceId -> DS#$newDatasourceId" -ForegroundColor DarkCyan
         return $newDatasourceId
     } else {
         Write-Host "[ADD] Existing datasource mode is Add for $Label (DS#$DatasourceId): appending files." -ForegroundColor DarkCyan
