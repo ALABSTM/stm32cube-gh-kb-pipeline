@@ -620,27 +620,37 @@ function Invoke-UploadJsonAdd {
     }
 
     if ($ExistingDatasourceMode -eq "Replace") {
+        if ([string]::IsNullOrWhiteSpace($DatasourceNameForFallback)) {
+            throw "Replace mode requires -DatasourceNameForFallback for $Label to recreate datasource and refresh ID."
+        }
+
+        Write-Host "[REPLACE] Recreating datasource for $Label: deleting DS#$DatasourceId then creating a fresh datasource with the same name." -ForegroundColor DarkCyan
+
         $deleteArgs = @(
             $uploader,
             "--kb", "$KbId",
             "--operation", "delete",
             "--datasource-id", "$DatasourceId",
-            "--remote-user", $RemoteUser,
             "--delete-not-found-policy", "ignore",
+            "--remote-user", $RemoteUser,
             "--skip-auth-precheck",
             "--max-retries", "$uploadMaxRetries",
             "--timeout", "$uploadTimeoutSeconds"
         )
         $deleteArgs += @(Get-UploadAuthArgs)
 
-        $deleteOutput = Invoke-CapturedPython "Clear existing content for $Label in DS#$DatasourceId" $deleteArgs
-        $deleteText = ($deleteOutput -join "`n")
+        Invoke-CapturedPython "Delete existing datasource for $Label (DS#$DatasourceId)" $deleteArgs | Out-Null
 
-        if ($deleteText -match "Datasource not found") {
-            Write-Host "[WARN] DS#$DatasourceId for $Label not found during replace clear. Will attempt upload and fallback if needed." -ForegroundColor Yellow
-        } else {
-            Write-Host "[REPLACE] DS#$DatasourceId content cleared for $Label. Re-uploading into same datasource." -ForegroundColor DarkCyan
-        }
+        $newDatasourceId = Invoke-UploadJsonNew `
+            -Label "$Label (recreated)" `
+            -FilePath $FilePath `
+            -RootKey $RootKey `
+            -DatasourceName $DatasourceNameForFallback `
+            -ProcessorParams $ProcessorParams `
+            -AllowEmpty:$AllowEmpty
+
+        Write-Host "[REPLACE] Datasource ID updated for $Label: DS#$DatasourceId -> DS#$newDatasourceId" -ForegroundColor DarkCyan
+        return $newDatasourceId
     } else {
         Write-Host "[ADD] Existing datasource mode is Add for $Label (DS#$DatasourceId): appending files." -ForegroundColor DarkCyan
     }
@@ -679,28 +689,7 @@ function Invoke-UploadJsonAdd {
         )
 
         if ($isDatasourceMissing -and $DatasourceNameForFallback) {
-            Write-Host "[WARN] Upload failed because DS#$DatasourceId for $Label does not exist. Recreating datasource '$DatasourceNameForFallback'." -ForegroundColor Yellow
-
-            try {
-                return Invoke-UploadJsonNew `
-                    -Label $Label `
-                    -FilePath $FilePath `
-                    -RootKey $RootKey `
-                    -DatasourceName $DatasourceNameForFallback `
-                    -ProcessorParams $ProcessorParams `
-                    -AllowEmpty:$AllowEmpty
-            }
-            catch {
-                $newErrorText = $_.Exception.Message
-                $newNormalized = $newErrorText.ToLowerInvariant()
-                $hasNameConflict = $newNormalized -match "datasource with name .* already exists"
-
-                if (-not $hasNameConflict) {
-                    throw
-                }
-
-                throw "Canonical datasource '$DatasourceNameForFallback' already exists but could not be resolved to a live ID. Aborting to avoid duplicate timestamped datasources. Fix kb_datasource_ids / upload snapshot IDs, then re-run."
-            }
+            throw "Upload failed because DS#$DatasourceId for $Label does not exist in Add mode. Use Replace mode to recreate datasource and refresh ID, or fix configured datasource ID."
         }
 
             if ($isDatasourceMissing -and (-not $DatasourceNameForFallback)) {
