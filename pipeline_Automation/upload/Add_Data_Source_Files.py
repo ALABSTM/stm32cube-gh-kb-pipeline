@@ -432,12 +432,17 @@ def parse_processor_params_relaxed(raw: str) -> dict[str, Any] | None:
 
 
 def parse_csv_items(raw: str | None) -> list[str]:
+    """Split a comma-separated string into a list of trimmed, non-empty items."""
     if raw is None:
         return []
     return [item.strip() for item in raw.split(",") if item.strip()]
 
 
 def validate_remote_user_email(value: str) -> str:
+    """Validate --remote-user is a plausible single-'@' email address.
+
+    Raises ValueError if empty or malformed. Returns the trimmed email on success.
+    """
     email = value.strip()
     if not email:
         raise ValueError("--remote-user is required")
@@ -450,6 +455,10 @@ def validate_remote_user_email(value: str) -> str:
 
 
 def normalize_request_types(raw: str | None, default_type: str) -> list[str]:
+    """Parse --request-types into a deduplicated (case-insensitive) list, or
+    [default_type] if raw is empty. Multiple types let the caller retry a request
+    with alternate 'type' values understood by different API deployments.
+    """
     parsed = parse_csv_items(raw)
     if parsed:
         dedup: list[str] = []
@@ -466,6 +475,12 @@ def normalize_request_types(raw: str | None, default_type: str) -> list[str]:
 
 
 def normalize_payload_modes(raw: str | None) -> list[str]:
+    """Parse --payload-modes into a validated, deduplicated list.
+
+    Supported modes: 'wrapped-json-part' (JSON metadata as extra multipart part),
+    'wrapped' (JSON metadata as a form field), 'flat' (metadata as individual form
+    fields, recommended). Raises ValueError on unsupported mode names.
+    """
     parsed = parse_csv_items(raw)
     if not parsed:
         return list(DEFAULT_PAYLOAD_MODES)
@@ -481,6 +496,10 @@ def normalize_payload_modes(raw: str | None) -> list[str]:
 
 
 def normalize_timestamp_modes(raw: str | None) -> list[str]:
+    """Parse --timestamp-modes into a validated, deduplicated list ('ms' or 's').
+    Multiple modes let the caller retry with the alternate timestamp unit if the
+    API rejects one format as invalid.
+    """
     parsed = parse_csv_items(raw)
     if not parsed:
         return list(DEFAULT_TIMESTAMP_MODES)
@@ -496,6 +515,7 @@ def normalize_timestamp_modes(raw: str | None) -> list[str]:
 
 
 def timestamp_from_mode(mode: str) -> int:
+    """Return the current Unix timestamp in seconds ('s') or milliseconds ('ms')."""
     if mode == "ms":
         return int(time.time() * 1000)
     if mode == "s":
@@ -504,6 +524,11 @@ def timestamp_from_mode(mode: str) -> int:
 
 
 def api_error_info(response_json: Any) -> tuple[int | None, str]:
+    """Extract (error_code, message) from an API JSON response.
+
+    Returns (None, "") when the response has no errorCode or errorCode is 0/"0"
+    (i.e. the API call succeeded at the application level, even if HTTP 200).
+    """
     if not isinstance(response_json, dict):
         return None, ""
 
@@ -522,6 +547,10 @@ def api_error_info(response_json: Any) -> tuple[int | None, str]:
 
 
 def is_timeout_like_success_payload(response_json: Any) -> bool:
+    """Detect an HTTP 200 response with no errorCode but a body indicating a timeout
+    (e.g. message == "request timeout"). Such responses should be retried rather
+    than treated as a successful datasource operation.
+    """
     if not isinstance(response_json, dict):
         return False
 
@@ -537,6 +566,10 @@ def is_timeout_like_success_payload(response_json: Any) -> bool:
 
 
 def is_non_retryable_api_rejection(error_code: int | None, message: str) -> bool:
+    """Return True when the API error message indicates a permanent/client-side
+    rejection (bad request shape, invalid auth, already-exists conflicts, etc.)
+    that will not be fixed by retrying, so the retry loop should stop early.
+    """
     if error_code is None:
         return False
 
@@ -561,6 +594,9 @@ def is_non_retryable_api_rejection(error_code: int | None, message: str) -> bool
 
 
 def is_existing_file_conflict(error_code: int | None, message: str) -> bool:
+    """Return True if the API rejected the request because a file with the same
+    name already exists in the target datasource (errorCode 3000).
+    """
     if error_code != 3000:
         return False
     normalized = (message or "").strip().lower()
@@ -568,6 +604,9 @@ def is_existing_file_conflict(error_code: int | None, message: str) -> bool:
 
 
 def is_existing_datasource_name_conflict(error_code: int | None, message: str) -> bool:
+    """Return True if datasource creation failed because a datasource with the
+    requested name already exists (errorCode 1000).
+    """
     if error_code != 1000:
         return False
     normalized = (message or "").strip().lower()
@@ -575,6 +614,9 @@ def is_existing_datasource_name_conflict(error_code: int | None, message: str) -
 
 
 def is_missing_datasource_entity_error(error_code: int | None, message: str) -> bool:
+    """Return True if the API reports the target datasource ID does not exist
+    ("KbDatasourceEntity" not found), typically errorCode 1000.
+    """
     if error_code != 1000:
         return False
     normalized = (message or "").strip().lower()
@@ -582,6 +624,9 @@ def is_missing_datasource_entity_error(error_code: int | None, message: str) -> 
 
 
 def is_deleted_or_missing_datasource_error(error_code: int | None, message: str) -> bool:
+    """Return True if the target datasource is either deleted or does not exist,
+    combining the 'deleted datasource' (errorCode 3000) and missing-entity checks.
+    """
     normalized = (message or "").strip().lower()
     if error_code == 3000 and "cannot upload files to deleted datasource" in normalized:
         return True
@@ -589,6 +634,7 @@ def is_deleted_or_missing_datasource_error(error_code: int | None, message: str)
 
 
 def extract_existing_datasource_name(message: str) -> str | None:
+    """Extract the conflicting datasource name from an 'already exists' API error message."""
     match = re.search(r'datasource with name\s+"([^"]+)"\s+already exists', message or "", flags=re.IGNORECASE)
     if not match:
         return None
@@ -596,6 +642,12 @@ def extract_existing_datasource_name(message: str) -> str | None:
 
 
 def find_kb_entry_from_kb_list(kb_list_response: dict[str, Any], kb_id: int) -> dict[str, Any] | None:
+    """Find the KB entry matching kb_id inside a kb-list API response.
+
+    Falls back to the single KB entry if only one is present, then to a recursive
+    scan of the response tree in case the API nests 'kbs' under a different envelope.
+    Returns None if no match is found.
+    """
     if not isinstance(kb_list_response, dict):
         return None
 
@@ -642,6 +694,9 @@ def find_kb_entry_from_kb_list(kb_list_response: dict[str, Any], kb_id: int) -> 
 
 
 def list_datasource_entries_from_kb_entry(kb_entry: dict[str, Any] | None) -> list[dict[str, Any]]:
+    """Return the list of datasource dicts attached to a KB entry, tolerating the
+    dataSources/datasources/data_sources key name variants used by the API.
+    """
     if not isinstance(kb_entry, dict):
         return []
 
@@ -658,6 +713,10 @@ def list_datasource_entries_from_kb_entry(kb_entry: dict[str, Any] | None) -> li
 
 
 def datasource_entry_is_deleted(entry: dict[str, Any]) -> bool:
+    """Heuristically determine whether a datasource entry from kb-list is deleted/
+    inactive, checking several possible field names (deleted, isDeleted, deletedAt,
+    status/state, active) since the API response shape is not fully consistent.
+    """
     if not isinstance(entry, dict):
         return False
 
@@ -686,6 +745,7 @@ def datasource_entry_is_deleted(entry: dict[str, Any]) -> bool:
 
 
 def datasource_entry_sort_id(entry: dict[str, Any]) -> int:
+    """Return the numeric ID of a datasource entry for sorting, or -1 if missing/invalid."""
     try:
         return int(entry.get("id"))
     except Exception:
@@ -693,6 +753,10 @@ def datasource_entry_sort_id(entry: dict[str, Any]) -> int:
 
 
 def pick_preferred_datasource_entry(candidates: list[dict[str, Any]]) -> dict[str, Any] | None:
+    """Pick the best datasource entry among candidates: prefer the most recently
+    created (highest ID) non-deleted entry, falling back to the highest ID overall
+    if every candidate is marked deleted.
+    """
     if not candidates:
         return None
 
@@ -707,6 +771,11 @@ def find_datasource_entry_from_kb_list(
     datasource_id: int | None,
     datasource_name: str | None,
 ) -> dict[str, Any] | None:
+    """Locate a datasource entry within a kb-list response by ID first, then by name
+    (exact, then case-insensitive, then canonical-name-prefix fallback for ST-ready
+    naming conventions), and finally via a recursive scan of the whole response as a
+    last resort. Returns None if nothing matches.
+    """
     kb_entry = find_kb_entry_from_kb_list(kb_list_response, kb_id)
     data_sources = list_datasource_entries_from_kb_entry(kb_entry)
     if not data_sources:
@@ -740,7 +809,7 @@ def find_datasource_entry_from_kb_list(
         if preferred_lower is not None:
             return preferred_lower
 
-        # Fallback for canonical ST-ready datasource names.
+        # NOTE: fallback for canonical ST-ready datasource names.
         # When canonical names are reserved/deleted, the upload flow may create
         # unique suffixes (for example: DB_STready_WB0_Files_20260731_165249_933).
         # Reuse the latest active prefixed datasource instead of creating a new one.
@@ -795,6 +864,9 @@ def find_datasource_entry_from_kb_list(
 
 
 def parse_json_object_like(value: Any) -> dict[str, Any] | None:
+    """Return value as a dict if it already is one, or parse it as a JSON object if
+    it's a string that looks like '{...}'. Returns None otherwise.
+    """
     if isinstance(value, dict):
         return dict(value)
 
@@ -814,6 +886,12 @@ def parse_json_object_like(value: Any) -> dict[str, Any] | None:
 def extract_datasource_processor_config(
     datasource_entry: dict[str, Any] | None,
 ) -> tuple[str | None, dict[str, Any] | None]:
+    """Extract (processor, processor_params) from a datasource entry returned by
+    kb-list, tolerating several possible field-name variants (processor/parser/...,
+    processorParams/parserParams/...) and one level of nested config/settings dict.
+    Used to inherit processor config when uploading to an existing datasource
+    without explicit --processor/--processor-params.
+    """
     if not isinstance(datasource_entry, dict):
         return None, None
 
@@ -874,6 +952,9 @@ def resolve_datasource_processor_config_from_kb_list(
     datasource_id: int | None,
     datasource_name: str | None,
 ) -> tuple[str | None, dict[str, Any] | None]:
+    """Look up a datasource by ID/name in a kb-list response and return its
+    (processor, processor_params), or (None, None) if not found.
+    """
     datasource_entry = find_datasource_entry_from_kb_list(
         kb_list_response=kb_list_response,
         kb_id=kb_id,
@@ -888,6 +969,9 @@ def find_datasource_id_by_name_from_kb_list(
     kb_id: int,
     datasource_name: str,
 ) -> int | None:
+    """Return the numeric datasource ID matching datasource_name within kb_id's
+    kb-list entry, or None if not found.
+    """
     datasource_entry = find_datasource_entry_from_kb_list(
         kb_list_response=kb_list_response,
         kb_id=kb_id,
@@ -915,6 +999,12 @@ def resolve_existing_datasource_id_by_name(
     proxies: dict[str, str] | None,
     verbose: bool,
 ) -> int | None:
+    """Call kb-list and resolve the numeric datasource ID for datasource_name.
+
+    Used when creating a datasource fails with an 'already exists' name conflict,
+    so the caller can switch to an add/replace flow on the existing datasource
+    instead of failing. Returns None on lookup failure or if not found.
+    """
     try:
         kb_list_response = run_auth_precheck(
             endpoint=endpoint,
@@ -942,6 +1032,10 @@ def resolve_existing_datasource_id_by_name(
 
 
 def resolve_datasource_id_from_local_config_by_name(datasource_name: str) -> int | None:
+    """Fallback lookup: resolve a canonical 'DB_STready_<SERIES>_<Kind>' datasource
+    name to its known ID using shared/config/config_all_series.json
+    ('kb_datasource_ids' map), used when the kb-list API lookup fails.
+    """
     match = re.match(
         r"^DB_STready_([A-Za-z0-9]+)_(Issues|Files|Diagnostic|Resolver)$",
         (datasource_name or "").strip(),
@@ -992,6 +1086,11 @@ def resolve_datasource_id_from_delivery_snapshot_by_name(
     datasource_name: str,
     file_paths: list[Path],
 ) -> int | None:
+    """Fallback lookup: resolve a canonical datasource name to its known ID using the
+    'upload_datasource_ids_<slug>.json' snapshot file written alongside a series'
+    by_series delivery folder. Used when both the kb-list API lookup and the local
+    config lookup fail to resolve an existing datasource ID.
+    """
     if not file_paths:
         return None
 
@@ -1061,6 +1160,7 @@ def resolve_datasource_id_from_delivery_snapshot_by_name(
 
 
 def extract_existing_filename(message: str) -> str | None:
+    """Extract the conflicting filename from a 'cannot upload existing file' API error message."""
     match = re.search(r'cannot upload existing file "([^"]+)"', message or "", flags=re.IGNORECASE)
     if not match:
         return None
@@ -1068,10 +1168,19 @@ def extract_existing_filename(message: str) -> str | None:
 
 
 def is_split_part_filename(filename: str) -> bool:
+    """Return True if filename matches the '__partNNN.json' suffix used for
+    JSON-split upload parts (see prepare_file_paths_for_upload).
+    """
     return re.search(r"__part\d+\.json$", filename or "", flags=re.IGNORECASE) is not None
 
 
 def resolve_input_file_path(raw_item: str) -> Path:
+    """Resolve a --files CLI item to an absolute existing file path.
+
+    Tries, in order: path as given (relative to CWD), path relative to the repo
+    root, and (for bare filenames) each of default_search_dirs(). Raises
+    FileNotFoundError with the list of searched locations if nothing matches.
+    """
     raw_path = Path(raw_item).expanduser()
 
     # 1) Provided path relative to current working directory.
@@ -1100,6 +1209,10 @@ def resolve_input_file_path(raw_item: str) -> Path:
 
 
 def ensure_files_exist(paths: Iterable[str]) -> list[Path]:
+    """Resolve and validate every path in paths via resolve_input_file_path().
+
+    Raises ValueError if any resolved path is not a regular file, or if paths is empty.
+    """
     resolved: list[Path] = []
     for item in paths:
         path = resolve_input_file_path(item)
@@ -1114,6 +1227,9 @@ def ensure_files_exist(paths: Iterable[str]) -> list[Path]:
 
 
 def load_json_payload(path: Path) -> Any:
+    """Read and JSON-parse a file (BOM-tolerant). Raises ValueError with context on
+    read or parse failure.
+    """
     try:
         content = path.read_text(encoding="utf-8-sig")
     except OSError as exc:
@@ -1126,6 +1242,9 @@ def load_json_payload(path: Path) -> Any:
 
 
 def detect_named_array_roots(payload: Any) -> list[str]:
+    """Return the top-level keys of a JSON object payload whose value is a list
+    (candidate array roots), or [] if payload is not a dict.
+    """
     if not isinstance(payload, dict):
         return []
 
@@ -1143,6 +1262,12 @@ def ensure_add_processor_compatibility(
     processor_params: dict[str, Any] | None,
     file_paths: list[Path],
 ) -> None:
+    """Pre-flight check for --operation add: validate that a JSON file's root shape
+    (array vs. object-with-array-key) is compatible with the datasource's processor
+    (STANDARD requires array root, JSON requires a matching rootTagPath). Raises
+    ValueError early with an actionable message instead of letting the API reject
+    the upload with a less clear error.
+    """
     if operation != "add":
         return
 
@@ -1214,6 +1339,14 @@ def ensure_add_processor_compatibility(
 
 
 def flatten_json_root_array_file(source_path: Path, target_dir: Path, verbose: bool) -> tuple[Path, bool, bool]:
+    """Normalize a JSON file to an array root for processor JSON without rootTagPath.
+
+    If the payload is already a list, returns it unchanged. If it's a dict with a
+    single list-valued key (or one 'preferred' list key among several, e.g. 'issues',
+    'files', 'diagnostic_cards'), writes a flattened array-only copy under target_dir.
+    Returns (path_to_use, was_transformed, is_empty_array). Raises ValueError if no
+    usable array root can be found.
+    """
     payload = load_json_payload(source_path)
 
     if isinstance(payload, list):
@@ -1280,6 +1413,12 @@ def flatten_json_root_array_file(source_path: Path, target_dir: Path, verbose: b
 
 
 def extract_docs_array(payload: Any, root_tag_path: str | None) -> list[Any] | None:
+    """Return the list of documents from payload.
+
+    If root_tag_path is given, look up that key (case-insensitively) in a dict
+    payload. Otherwise, return payload directly if it is already a list.
+    Returns None if no array can be extracted.
+    """
     if root_tag_path:
         if not isinstance(payload, dict):
             return None
@@ -1306,6 +1445,13 @@ def normalize_json_for_upload(
     root_tag_path: str | None,
     verbose: bool,
 ) -> tuple[Path, bool, bool]:
+    """Normalize a JSON file for upload with processor JSON.
+
+    When root_tag_path is set, ensures the payload is wrapped as {root_tag_path: [...]},
+    writing a normalized copy under target_dir if needed. When root_tag_path is not
+    set, delegates to flatten_json_root_array_file(). Returns
+    (path_to_use, was_transformed, is_empty_array).
+    """
     payload = load_json_payload(source_path)
 
     if root_tag_path:
@@ -1360,6 +1506,18 @@ def prepare_file_paths_for_upload(
     json_split_min_mb: float,
     verbose: bool,
 ) -> tuple[list[Path], Path | None, list[str]]:
+    """Prepare JSON files for upload with processor JSON and --json-root-mode auto.
+
+    For each input file: normalize its JSON root (see normalize_json_for_upload),
+    optionally skip/fail on empty array payloads (--empty-json-policy), and split
+    large arrays into multiple '__partNNN.json' files when they exceed
+    --json-split-size documents (and, if set, --json-split-min-mb file size).
+    All transformed/split files are written to a temporary directory.
+
+    Returns (prepared_paths, temp_dir_or_None, skipped_empty_filenames). The caller
+    is responsible for deleting temp_dir after the upload (see shutil.rmtree in main()).
+    If processor is not JSON or json_root_mode != 'auto', returns file_paths unchanged.
+    """
     if processor != "JSON" or json_root_mode != "auto" or not file_paths:
         return file_paths, None, []
 
@@ -1415,6 +1573,9 @@ def prepare_file_paths_for_upload(
                         transformed_count += 1
                     continue
 
+                # Split the array into fixed-size chunks (json_split_size docs each),
+                # re-wrapping under root_tag_path if applicable, so each upload request
+                # stays within the API's accepted request/file size.
                 part_paths: list[Path] = []
                 part_index = 1
                 for start_idx in range(0, len(docs_for_split), json_split_size):
@@ -1476,6 +1637,12 @@ def build_datasource_payload(
     processor: str | None,
     processor_params: dict[str, Any] | None,
 ) -> Any:
+    """Build the 'datasource' field of the API payload for the given operation.
+
+    add -> {"id": ...}; delete -> raw datasource_id int; new -> {"name", "classification",
+    optional "tags"}. For add/new, also attaches processor/processorParams when set.
+    Raises ValueError if required fields for the operation are missing.
+    """
     if operation == "add":
         if datasource_id is None:
             raise ValueError("--datasource-id is required when --operation add")
@@ -1517,6 +1684,7 @@ def build_payload(
     request_type: str,
     timestamp_value: int,
 ) -> dict[str, Any]:
+    """Assemble the full JSON request body sent to the AI Bridge API."""
     return {
         "version": 1,
         "clientAppName": client_app_name,
@@ -1530,6 +1698,11 @@ def build_payload(
 
 
 def open_files_for_multipart(file_paths: list[Path]) -> tuple[list[tuple[str, tuple[str, Any, str]]], list[Any]]:
+    """Open each file for multipart/form-data upload under the 'files' field.
+
+    Returns (files_parts_for_requests, open_file_handles). The caller must close
+    every handle after the request completes (see post_datasource_request's finally block).
+    """
     files_parts: list[tuple[str, tuple[str, Any, str]]] = []
     handles: list[Any] = []
 
@@ -1555,6 +1728,13 @@ def post_datasource_request(
     verify_ssl: bool,
     proxies: dict[str, str] | None,
 ) -> requests.Response:
+    """Send a single POST request to the AI Bridge API for a datasource operation.
+
+    Generates a fresh auth token/nonce per call, then sends either a plain JSON body
+    (when there are no files, e.g. delete) or a multipart/form-data request carrying
+    the files plus the metadata encoded per payload_mode ('flat', 'wrapped', or
+    'wrapped-json-part'). Always closes opened file handles, even on error.
+    """
     timestamp = payload["timestamp"]
     nonce = random.randint(0, 999999)
     token = generate_token(client_app_name, auth_service_name, api_key, timestamp, nonce)
@@ -1632,6 +1812,14 @@ def run_auth_precheck(
     proxies: dict[str, str] | None,
     verbose: bool,
 ) -> dict[str, Any]:
+    """Validate credentials by calling the lightweight 'kb-list' request before the
+    real upload/delete operation.
+
+    Also used to fetch KB/datasource metadata (for processor inheritance and name
+    conflict resolution). Raises RuntimeError on network/HTTP failure, or
+    ApiRejectedError with a diagnostic hint on API-level rejection (bad token,
+    invalid app name, bad timestamp format).
+    """
     timestamp_value = int(time.time())
     nonce = random.randint(0, 999999)
     token = generate_token(client_app_name, service_name, api_key, timestamp_value, nonce)
@@ -1720,6 +1908,17 @@ def run_datasource_request(
     proxies: dict[str, str] | None,
     verbose: bool,
 ) -> dict[str, Any]:
+    """Send the datasource request, retrying across timestamp/request-type/payload-mode
+    combinations and transient HTTP/network failures with exponential backoff.
+
+    Iterates: attempt (1..max_retries) x timestamp_modes x request_types x
+    payload_modes x request_part_names, stopping as soon as a request succeeds
+    (HTTP 200 with no API errorCode). Client-side format errors (HTTP 4xx) trigger
+    trying the next combination; server-side errors (RETRYABLE_HTTP_CODES) trigger a
+    backoff-and-retry. Non-retryable API rejections (see is_non_retryable_api_rejection)
+    stop the whole loop early. Raises ApiRejectedError / RuntimeError with the last
+    observed error/hint if every combination fails.
+    """
     last_exception: Exception | None = None
     last_status: int | None = None
     last_text = ""
@@ -1897,6 +2096,16 @@ def run_add_request_skip_existing_files(
     fail_on_existing_files: bool,
     verbose: bool,
 ) -> dict[str, Any]:
+    """Upload files to an existing datasource one at a time, tolerating per-file
+    'already exists' conflicts (skip and continue) unless fail_on_existing_files is set
+    (split-part files are still tolerated even in strict mode, since re-uploading a
+    part is an idempotent retry scenario).
+
+    Uploading one file per request avoids a single large multipart request failing
+    entirely just because one file among many already exists. Returns the last
+    successful API response dict, annotated with 'uploaded_files' and
+    'skipped_existing_files'.
+    """
     uploaded_files: list[str] = []
     skipped_existing_files: list[str] = []
     last_response: dict[str, Any] | None = None
@@ -1987,6 +2196,17 @@ def run_new_request_with_followup_add(
     fail_on_existing_files: bool,
     verbose: bool,
 ) -> dict[str, Any]:
+    """Create a new datasource (--operation new) and upload its files, with automatic
+    fallback handling when the requested datasource name already exists.
+
+    Flow: create the datasource using the first file, then add the remaining files
+    one by one via run_add_request_skip_existing_files(). If creation fails because
+    the name is already taken, resolves the existing datasource's ID (via kb-list,
+    then local config, then delivery snapshot fallback) and either replaces its
+    content in place or appends to it, per existing_datasource_policy ('replace' or
+    'add'). If the resolved ID turns out stale/deleted, retries with other candidate
+    IDs, and as a last resort creates a new datasource under a unique timestamped name.
+    """
     if not file_paths:
         raise ValueError("At least one file is required for --operation new")
 
@@ -2441,6 +2661,9 @@ def run_new_request_with_followup_add(
 
 
 def parse_args() -> argparse.Namespace:
+    """Define and parse the command-line interface for this script (see module
+    docstring and --help for the full list of options).
+    """
     parser = argparse.ArgumentParser(
         description="Create a datasource, add files, or delete datasource files in an ST KB datasource"
     )
@@ -2606,6 +2829,9 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> None:
+    """CLI entry point: parse args, resolve credentials, validate/prepare inputs,
+    then dispatch to the add/new/delete datasource flow and print the JSON response.
+    """
     args = parse_args()
 
     remote_user = validate_remote_user_email(args.remote_user)

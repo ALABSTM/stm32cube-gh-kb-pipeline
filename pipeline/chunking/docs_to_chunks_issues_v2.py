@@ -38,6 +38,11 @@ def main() -> None:
     (with a warning) and excludes docs marked invalid before chunking.
     """
     cfg = load_config()
+    repos = cfg["repos"]
+    max_chars = cfg.get("chunk_max_chars_issue", 1200)
+
+    for repo in repos:
+        in_file = DATA_DIR / f"docs_issues_{repo.lower()}_v2_sim.json"
         if not in_file.exists():
             in_file = DATA_DIR / f"docs_issues_{repo.lower()}_v2.json"
 

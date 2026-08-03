@@ -69,4 +69,45 @@ Typical uses:
   keywords (correctness proxy) and forbidden patterns (hallucination proxy).
   Run: `python pipeline/evaluation/run_persona_kb_eval.py --run-id R1 --strategy-id S1_SEMANTIC_08`
 
-<!-- MORE-SCRIPTS-TO-APPEND -->
+- **`summarize_kb_strategy_results.py`** — Aggregates the manually-scored KB
+  strategy comparison CSV (from `run_kb_query_strategy_eval.py` /
+  `run_persona_kb_eval.py`) into a per-strategy weighted score and prints a
+  ranked recommendation.
+  Run: `python pipeline/evaluation/summarize_kb_strategy_results.py [--input PATH] [--run-id R0] [--strategy S1_SEMANTIC_08]`
+
+- **`test_stats_files_v2.py`** — Prints file_type/board/component
+  distribution stats and valid/total doc counts for a repo's enriched
+  "files" docs (README, release notes, project files, docs).
+  Run: `python pipeline/evaluation/test_stats_files_v2.py`
+
+- **`test_stats_issues_v2.py`** — Prints layer/severity/issue_kind/board/
+  component distribution stats for a repo's enriched "issues" docs.
+  Run: `python pipeline/evaluation/test_stats_issues_v2.py`
+
+- **`test_tfidf_search_files_v2.py`** — Interactive TF-IDF retrieval REPL
+  over a repo's enriched "files" docs; type a question to see top-K matches
+  with similarity scores.
+  Run: `python pipeline/evaluation/test_tfidf_search_files_v2.py`
+
+- **`test_tfidf_search_issues.py`** — Interactive TF-IDF retrieval REPL over
+  a repo's enriched "issues" docs (near-duplicate of
+  `test_tfidf_search_issues_v2.py`, default `top_k=10`).
+  Run: `python pipeline/evaluation/test_tfidf_search_issues.py`
+
+- **`test_tfidf_search_issues_v2.py`** — Interactive TF-IDF retrieval REPL
+  over a repo's enriched "issues" docs (near-duplicate of
+  `test_tfidf_search_issues.py`, default `top_k=5`).
+  Run: `python pipeline/evaluation/test_tfidf_search_issues_v2.py`
+
+- **`validate_alfred_coherence.py`** — Scores whether Alfred image
+  descriptions (issue images and PDF figures) are lexically/semantically
+  grounded in, and not contradicting, their source context; writes a CSV
+  report and a JSON summary with reliability classes.
+  Run: `python pipeline/evaluation/validate_alfred_coherence.py [--issue-glob GLOB] [--pdf-descriptions PATH] [--pdf-task-glob GLOB] [--threshold 0.12] [--semantic-mode lite] [--nli-mode lite] [--limit N]`
+
+- **`validate_schemas.py`** — Validates a repo's enriched docs and chunked
+  JSON outputs against their `shared/schemas/*.schema.json` contracts.
+  Run: `python -m pipeline.evaluation.validate_schemas`
+
+- **`__init__.py`** — Empty package marker for `pipeline.evaluation`; no
+  behavior of its own.

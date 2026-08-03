@@ -383,6 +383,22 @@ jobs:
           & $env:RUNNER_PYTHON_EXE -m pip install --upgrade pip
           & $env:RUNNER_PYTHON_EXE -m pip install -r requirements.txt
 
+      - name: Python syntax gate (pipeline + automation)
+        shell: powershell
+        run: |
+          $files = Get-ChildItem -Recurse -File -Include *.py -Path pipeline,pipeline_Automation,shared |
+            Where-Object { $_.FullName -notmatch "__pycache__" }
+          if (-not $files -or $files.Count -eq 0) {
+            throw "No Python files found for syntax gate."
+          }
+          foreach ($f in $files) {
+            & $env:RUNNER_PYTHON_EXE -m py_compile $f.FullName
+            if ($LASTEXITCODE -ne 0) {
+              throw "py_compile failed: $($f.FullName)"
+            }
+          }
+          Write-Host "Syntax gate passed for $($files.Count) files." -ForegroundColor Green
+
       - name: Run preprocessing only
         if: needs.prepare.outputs.mode != 'Upload'
         shell: powershell
@@ -482,6 +498,22 @@ jobs:
         run: |
           & $env:RUNNER_PYTHON_EXE -m pip install --upgrade pip
           & $env:RUNNER_PYTHON_EXE -m pip install -r requirements.txt
+
+      - name: Python syntax gate (pipeline + automation)
+        shell: powershell
+        run: |
+          $files = Get-ChildItem -Recurse -File -Include *.py -Path pipeline,pipeline_Automation,shared |
+            Where-Object { $_.FullName -notmatch "__pycache__" }
+          if (-not $files -or $files.Count -eq 0) {
+            throw "No Python files found for syntax gate."
+          }
+          foreach ($f in $files) {
+            & $env:RUNNER_PYTHON_EXE -m py_compile $f.FullName
+            if ($LASTEXITCODE -ne 0) {
+              throw "py_compile failed: $($f.FullName)"
+            }
+          }
+          Write-Host "Syntax gate passed for $($files.Count) files." -ForegroundColor Green
 
       - name: Download preprocessed artifacts
         if: needs.prepare.outputs.mode == 'Full'
@@ -693,6 +725,22 @@ jobs:
         run: |
           & $env:RUNNER_PYTHON_EXE -m pip install --upgrade pip
           & $env:RUNNER_PYTHON_EXE -m pip install -r requirements.txt
+
+      - name: Python syntax gate (pipeline + automation)
+        shell: powershell
+        run: |
+          $files = Get-ChildItem -Recurse -File -Include *.py -Path pipeline,pipeline_Automation,shared |
+            Where-Object { $_.FullName -notmatch "__pycache__" }
+          if (-not $files -or $files.Count -eq 0) {
+            throw "No Python files found for syntax gate."
+          }
+          foreach ($f in $files) {
+            & $env:RUNNER_PYTHON_EXE -m py_compile $f.FullName
+            if ($LASTEXITCODE -ne 0) {
+              throw "py_compile failed: $($f.FullName)"
+            }
+          }
+          Write-Host "Syntax gate passed for $($files.Count) files." -ForegroundColor Green
 
       - name: Download preprocessed artifacts
         if: needs.prepare.outputs.mode == 'Full'

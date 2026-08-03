@@ -1,4 +1,22 @@
-"""Create the missing U5 and WL resolver_cases datasources with all driver files."""
+"""Create the missing U5 and WL resolver_cases datasources with all driver files.
+
+One-off helper that (re)creates the 'STready_U5_resolver_cases_Datasource' and
+'STready_WL_resolver_cases_Datasource' datasources in KB #793 (ST GitHub Analyzer),
+uploading every st_ready_resolver_cases_*.json file found for the STM32CubeU5 and
+STM32CubeWL series, including per-driver subfolders under by_series/<series>/drivers/*.
+
+Delegates the actual upload to Add_Data_Source_Files.py (--operation new) via a
+subprocess call, one datasource per series.
+
+Required env vars: same as Add_Data_Source_Files.py (PERSONA_API_KEY /
+ST_GITHUB_ANALYZER_API_KEY / ST_CHATGPT_API_KEY / ST_AI_BRIDGE_API_KEY / ST_API_KEY).
+
+Required input files: datasets/07_delivery/st_ready/by_series/{stm32cubeu5,stm32cubewl}/
+resolver_cases_json/st_ready_resolver_cases_*.json (and drivers/*/resolver_cases_json/*.json).
+
+How to run:
+    python pipeline_Automation/upload/create_missing_resolver_datasources.py
+"""
 import subprocess
 import sys
 from pathlib import Path
@@ -12,6 +30,12 @@ PROCESSOR_PARAMS = '{"label": "{{label}}", "externalURL": "https://github.com/ST
 
 
 def find_resolver_files(series: str) -> list[Path]:
+    """Collect all st_ready_resolver_cases_*.json files for a series.
+
+    Looks under by_series/<series>/resolver_cases_json/ and, additionally, under each
+    by_series/<series>/drivers/<driver>/resolver_cases_json/ subfolder.
+    Returns the sorted list of matching file paths.
+    """
     files: list[Path] = []
     series_dir = BY_SERIES / series
     main_dir = series_dir / "resolver_cases_json"
@@ -30,6 +54,13 @@ def find_resolver_files(series: str) -> list[Path]:
 
 
 def create_resolver_datasource(series_label: str, ds_name: str, files: list[Path]):
+    """Create a new KB datasource named ds_name and upload all files to it.
+
+    Invokes Add_Data_Source_Files.py as a subprocess with --operation new,
+    processor JSON (rootTagPath='resolver_cases'), split at 1000 docs/file, and
+    empty JSON files skipped. Prints a warning (does not raise) if the subprocess
+    exits with a non-zero code.
+    """
     print(f"\n{'='*60}")
     print(f"Creating: {ds_name} ({len(files)} files)")
     print(f"{'='*60}")

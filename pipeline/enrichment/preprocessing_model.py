@@ -13,6 +13,7 @@ No file I/O happens here; callers (the CLI scripts above) read
 """
 
 import re
+import hashlib
 from typing import Any
 from urllib.parse import quote
 
@@ -216,6 +217,19 @@ def build_file_github_url(repo: str | None, path: str | None, owner: str = "STMi
     return f"https://github.com/{owner}/{repo}/blob/master/{path_escaped}"
 
 
+def build_stable_file_doc_id(repo: str | None, path: str | None) -> str:
+    """Build a deterministic file doc ID that is stable across Python runs.
+
+    Uses SHA1 over the normalized key ``<repo_lower>:<path_forward_slash>``
+    and keeps the existing ``<repo>-file-...`` prefix shape so downstream
+    chunk IDs and exports remain structurally compatible.
+    """
+    repo_key = (repo or "").lower()
+    path_key = (path or "").replace("\\", "/").lstrip("/")
+    digest = hashlib.sha1(f"{repo_key}:{path_key}".encode("utf-8")).hexdigest()[:16]
+    return f"{repo_key}-file-{digest}"
+
+
 class PreprocessingConfig:
     """Feature-flag configuration for the V2 preprocessing/enrichment models.
 
@@ -361,8 +375,8 @@ class PreprocessingModelFilesV2:
                 `file_type`, `media_urls`, `image_records`.
 
         Returns:
-            An enriched doc dict with a stable `id`
-            (`<repo>-file-<hash(path)>`), derived `mcu_series`, `github_url`
+            An enriched doc dict with a deterministic stable `id`
+            (`<repo>-file-<sha1(repo:path)>`), derived `mcu_series`, `github_url`
             (built from `repo`/`path` if not already present), `is_valid`
             flag (based on cleaned text length), and detected `board`,
             `component`, and `example_name` (extracted from an `Examples/`
@@ -375,11 +389,13 @@ class PreprocessingModelFilesV2:
         media_urls: list[str] = file_obj.get("media_urls") or []
         image_records: list[dict[str, Any]] = file_obj.get("image_records") or []
 
-        doc_id = f"{(repo or '').lower()}-file-{abs(hash(path))}"
+        legacy_doc_id = f"{(repo or '').lower()}-file-{abs(hash(path))}"
+        doc_id = build_stable_file_doc_id(repo=repo, path=path)
         is_valid = len(clean_text) >= 100
 
         doc: dict[str, Any] = {
             "id": doc_id,
+            "legacy_id": legacy_doc_id,
             "source_kind": "file",
             "repo": repo,
             "mcu_package": repo,

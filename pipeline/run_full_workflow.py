@@ -1,7 +1,5 @@
 import argparse
 
-from pipeline.chunking.docs_to_chunks_files_v2 import main as chunks_files_v2_main
-from pipeline.chunking.docs_to_chunks_issues_v2 import main as chunks_issues_v2_main
 from pipeline.cleaning.clean_files import main as clean_files_main
 from pipeline.cleaning.clean_files_v3 import main as clean_files_v3_main
 from pipeline.cleaning.clean_issues import main as clean_issues_main
@@ -22,6 +20,20 @@ from pipeline.ingestion.fetch_prs import main as fetch_prs_main
 from pipeline.ingestion.repo_sync_service import main as sync_local_repos_main
 from pipeline.similarity.compute_issue_similarity_v2 import main as similarity_main
 from shared.utils.paths import get_config_path
+
+
+def chunks_issues_v2_main() -> None:
+    """Lazy-load issue chunking so --skip-chunking avoids importing chunking modules."""
+    from pipeline.chunking.docs_to_chunks_issues_v2 import main as _main
+
+    _main()
+
+
+def chunks_files_v2_main() -> None:
+    """Lazy-load file chunking so --skip-chunking avoids importing chunking modules."""
+    from pipeline.chunking.docs_to_chunks_files_v2 import main as _main
+
+    _main()
 
 
 def _enrich_pdf_figures_main() -> None:

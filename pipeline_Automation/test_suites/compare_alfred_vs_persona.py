@@ -239,12 +239,25 @@ COMPARISON_QUESTIONS = [
 
 
 def _generate_token(client_app: str, api_key: str, timestamp: int, nonce: int) -> str:
+    """Compute the SHA1 auth token expected by the ST AI Bridge chat API.
+
+    Binds client app name, service, API key, timestamp and nonce together so
+    the server can validate the caller without the raw API key being
+    replayable on its own. Called separately for Alfred and for the persona
+    since each uses its own client app name / API key pair.
+    """
     data_string = f"{client_app}_{CHAT_SERVICE}_{api_key}_{timestamp}_{nonce}"
     return hashlib.sha1(data_string.encode("utf-8")).hexdigest()
 
 
 def _extract_text(response_json: dict) -> Optional[str]:
-    """Extract answer text from API response."""
+    """Extract the answer text from an AI Bridge response, trying known shapes.
+
+    Different personas/API versions have been observed to return the answer
+    under different keys ("completion", "text", "content", "message",
+    "answer", or OpenAI-style "choices[0].message.content"), so each shape is
+    tried in turn. Returns None if nothing usable is found.
+    """
     if not isinstance(response_json, dict):
         return None
 
@@ -267,7 +280,13 @@ def _extract_text(response_json: dict) -> Optional[str]:
 
 
 def ask_alfred(question: str, use_proxy: bool = False, retries: int = 3) -> str:
-    """Send question to Alfred (generic st_copilot persona)."""
+    """Send question to Alfred (generic st_copilot persona) and return its answer.
+
+    Retries with exponential backoff (2, 4, 8... seconds) on HTTP errors or
+    exceptions, since the AI Bridge endpoint can be transiently unavailable.
+    A new timestamp/nonce/token is generated per attempt because the token
+    embeds the timestamp and would be rejected as stale otherwise.
+    """
     system_prompt = (
         "You are a technical support assistant for STM32 microcontrollers. "
         "Answer user questions about STM32Cube firmware, HAL drivers, BSP, "
@@ -328,7 +347,12 @@ def ask_alfred(question: str, use_proxy: bool = False, retries: int = 3) -> str:
 
 
 def ask_persona(question: str, use_proxy: bool = False, retries: int = 3) -> str:
-    """Send question to ST GitHub Analyzer (KB-powered persona)."""
+    """Send question to ST GitHub Analyzer (KB-powered persona) and return its answer.
+
+    Same retry/backoff strategy as ask_alfred, but with no system prompt and a
+    plain-string user message: the persona's own system prompt and KB grounding
+    are configured server-side, so this client only forwards the raw question.
+    """
     for attempt in range(1, retries + 1):
         timestamp = int(time.time())
         nonce = random.randint(0, 999999)
@@ -400,7 +424,14 @@ EVALUATION_COLUMNS = [
 
 
 def export_comparison_excel(results: list[dict], output_path: Path):
-    """Export comparison results to a formatted Excel file."""
+    """Export side-by-side Alfred vs Persona comparison results to a 3-sheet Excel workbook.
+
+    Sheet 1 ("Comparison") holds one row per question with both answers plus
+    empty columns for a human grader to fill in. Sheet 2 ("Grille d'évaluation")
+    documents the scoring rubric. Sheet 3 ("Metadata") records run parameters
+    for traceability. Called both incrementally (every 5 questions, as a
+    crash-resilience checkpoint) and once at the very end.
+    """
     wb = Workbook()
 
     # --- Sheet 1: Side-by-side comparison ---
@@ -460,7 +491,8 @@ def export_comparison_excel(results: list[dict], output_path: Path):
             cell.alignment = wrap_align
             cell.border = thin_border
             cell.font = Font(size=9)
-            # Color Alfred/Persona columns
+            # Color-code the two answer columns so graders can visually tell
+            # which side (generic Alfred vs KB-powered persona) they are reading.
             if col_idx == 5:
                 cell.fill = alfred_fill
             elif col_idx == 6:
@@ -525,6 +557,15 @@ def export_comparison_excel(results: list[dict], output_path: Path):
 
 
 def main():
+    """CLI entry point: ask both Alfred and the persona every question, then export.
+
+    Validates that both sets of API credentials are present, resolves the
+    question list (optionally truncated via --max-questions), calls both
+    APIs sequentially per question (with a configurable delay to respect
+    rate limits), checkpoints the Excel export every 5 questions, and
+    finally writes both the Excel workbook and a raw JSON dump of the same
+    results for further/automated analysis.
+    """
     parser = argparse.ArgumentParser(
         description="Compare Alfred vs ST GitHub Analyzer responses"
     )
@@ -600,7 +641,8 @@ def main():
             "persona_answer": persona_answer,
         })
 
-        # Save progress every 5 questions
+        # Save progress every 5 questions (crash-resilience: avoid losing
+        # already-collected API answers if the run is interrupted).
         if idx % 5 == 0:
             export_comparison_excel(results, output_path)
             print(f"  [Progress saved: {idx}/{len(questions)}]")

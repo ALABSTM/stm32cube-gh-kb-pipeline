@@ -45,6 +45,10 @@ def main() -> None:
         in_file = DATA_DIR / f"clean_issues_{repo.lower()}.json"
         out_file = DATA_DIR / f"chunks_issues_{repo.lower()}.json"
 
+        if not in_file.exists():
+            print(f"[WARN] clean issues file not found: {in_file}")
+            continue
+
         print(f"Converting issues into chunks for {repo}")
         clean_issues = json.loads(in_file.read_text(encoding="utf-8"))
         chunks = [clean_issue_to_chunk(issue, ingest_version=ingest_version) for issue in clean_issues]

@@ -29,6 +29,7 @@ Usage:
 from __future__ import annotations
 
 import json
+import shutil
 from pathlib import Path
 
 try:
@@ -170,12 +171,25 @@ def build_questions() -> list[dict[str, str]]:
 QUESTIONS = build_questions()
 
 
+def backup_if_exists(path: Path) -> Path | None:
+    """Create a side-by-side .bak copy when the target output already exists."""
+    if not path.exists():
+        return None
+    backup_path = path.with_suffix(path.suffix + ".bak")
+    shutil.copy2(path, backup_path)
+    return backup_path
+
+
 def main() -> None:
     """Build the question list and write it to a styled .xlsx workbook.
 
     The Answer column is left blank; it is meant to be filled in afterwards,
     either manually or by ``fill_answers_from_alfred.py``.
     """
+    backup_path = backup_if_exists(XLSX_PATH)
+    if backup_path is not None:
+        print(f"Existing file backed up to: {backup_path}")
+
     wb = Workbook()
     ws = wb.active
     ws.title = "Quality Test Suite"

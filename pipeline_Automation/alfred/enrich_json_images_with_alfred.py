@@ -1,3 +1,40 @@
+"""
+Enrich ST-ready / PR JSON records by describing embedded images with Alfred Vision.
+
+Role in the automation layer:
+    ST-ready delivery JSON (issues, files, resolver cases, diagnostic cards) and raw
+    PR/issue JSON often reference screenshots via markdown/HTML image tags,
+    ``[IMAGE ATTACHED]`` markers, or an explicit ``image_urls`` field. This script
+    downloads each referenced image, sends it to the Alfred Vision API
+    (persona ``mdrf_stgithub_analyzer_client``) for a technical description plus
+    OCR text, and injects the result back into the record's main text field
+    (replacing the placeholder/marker) so downstream KB search and RAG retrieval
+    can use the image content as plain text. This is the script referenced by the
+    mode's "Alfred Image Enrichment" workflow, typically run against
+    ``issues_json/st_ready_issues_with_images_<repo>.json`` before KB upload.
+
+Inputs:
+    - One or more ``--input`` JSON files: either a top-level list of records, or a
+      dict with a list under a known key (``issues``, ``files``, ``resolver_cases``,
+      ``diagnostic_cards``, etc.).
+    - Alfred Vision API credentials via env vars: ``ALFRED_CLIENT_APP_NAME``,
+      ``ST_CHATGPT_API_KEY`` (or ``ST_AI_BRIDGE_API_KEY``/``ST_API_KEY``),
+      ``ALFRED_API_URL``.
+
+Outputs:
+    - A new JSON file (or the input file itself with ``--inplace``) with:
+      * the main text field updated to replace image placeholders with
+        ``[IMAGE DESCRIPTION] ...`` / ``[IMAGE TEXT] ...`` (unless ``--no-replace-text``),
+      * an ``image_analyses`` / ``image_analyses_count`` field per record (unless
+        ``--strip-analyses``),
+    - A companion ``<output>__alfred_summary.json`` with run statistics.
+
+Usage:
+    python pipeline_Automation/alfred/enrich_json_images_with_alfred.py --input <file> --inplace
+    python pipeline_Automation/alfred/enrich_json_images_with_alfred.py --input a.json --input b.json --use-proxy
+    python pipeline_Automation/alfred/enrich_json_images_with_alfred.py --input <file> --inplace --strip-analyses
+"""
+
 import argparse
 import base64
 import io
@@ -69,10 +106,12 @@ USER_PROMPT_TEMPLATE = (
 
 
 def normalize_url(value: str) -> str:
+    """Strip surrounding whitespace and angle brackets (``<url>`` markdown form) from a URL."""
     return (value or "").strip().strip("<>")
 
 
 def dedupe_keep_order(values: list[str]) -> list[str]:
+    """Return normalized values with duplicates removed, preserving first-seen order."""
     out: list[str] = []
     seen: set[str] = set()
     for value in values:
@@ -85,6 +124,7 @@ def dedupe_keep_order(values: list[str]) -> list[str]:
 
 
 def looks_like_image_url(value: str) -> bool:
+    """Heuristically decide whether a URL points to an image (extension or known host pattern)."""
     value = normalize_url(value)
     if not value.startswith("http://") and not value.startswith("https://"):
         return False
@@ -103,6 +143,7 @@ def looks_like_image_url(value: str) -> bool:
 
 
 def parse_markdown_image_url(raw_group: str) -> str:
+    """Extract the URL portion from a markdown image target, handling ``<url>`` and ``url "title"`` forms."""
     value = (raw_group or "").strip()
     if not value:
         return ""
@@ -115,6 +156,7 @@ def parse_markdown_image_url(raw_group: str) -> str:
 
 
 def extract_image_urls_from_text(text: str) -> list[str]:
+    """Find candidate image URLs in free text: markdown images, HTML <img> tags, and bare URLs."""
     if not isinstance(text, str) or not text:
         return []
 
@@ -139,6 +181,7 @@ def extract_image_urls_from_text(text: str) -> list[str]:
 
 
 def extract_image_urls_from_record(record: dict[str, Any]) -> list[str]:
+    """Collect all image URLs for a record from its ``image_urls`` field and known text fields."""
     urls: list[str] = []
 
     raw_urls = record.get("image_urls")
@@ -158,6 +201,7 @@ def extract_image_urls_from_record(record: dict[str, Any]) -> list[str]:
 
 
 def detect_mime_type(image_url: str, content_type_header: str | None) -> str:
+    """Determine an image MIME type from the HTTP response header, falling back to the URL extension."""
     if content_type_header:
         mime = content_type_header.split(";")[0].strip().lower()
         if mime.startswith("image/"):
@@ -176,6 +220,19 @@ def download_image_as_data_url(
     use_proxy: bool,
     max_image_bytes: int,
 ) -> tuple[str, str, int]:
+    """Download an image URL and return it as a base64 data URL, converting to PNG/JPG if needed.
+
+    Alfred's vision endpoint only accepts ``image/png`` or ``image/jpg`` payloads,
+    so any other detected MIME type is transcoded to PNG via Pillow. Streams the
+    download and aborts early if it exceeds ``max_image_bytes`` to avoid loading
+    unexpectedly large files into memory.
+
+    Returns:
+        Tuple of (data_url, mime_type, byte_size).
+
+    Raises:
+        ValueError: if the image is too large, empty, or cannot be converted.
+    """
     response = requests.get(
         image_url,
         timeout=timeout_seconds,
@@ -228,6 +285,7 @@ def download_image_as_data_url(
 
 
 def extract_text_from_response(response_json: dict[str, Any]) -> str | None:
+    """Best-effort extraction of the completion text from an Alfred API response, trying known response shapes."""
     if not isinstance(response_json, dict):
         return None
 
@@ -265,6 +323,11 @@ def extract_text_from_response(response_json: dict[str, Any]) -> str | None:
 
 
 def parse_description_sections(text: str) -> tuple[str, str]:
+    """Split Alfred's structured completion into (description, ocr_text) using the DESCRIPTION/OCR_TEXT markers.
+
+    Falls back to treating the whole text as the description if the expected
+    markers are absent, and treats a literal "NONE" OCR value as empty.
+    """
     value = (text or "").strip()
     if not value:
         return "", ""
@@ -295,6 +358,19 @@ def call_alfred_for_image(
     timeout_seconds: int,
     use_proxy: bool,
 ) -> dict[str, Any]:
+    """Send one image (as data URL) plus context to Alfred Vision and return its parsed analysis.
+
+    Retries across attempts and, within each attempt, tries both "seconds" and
+    "milliseconds" timestamp formats since the backend has been observed to
+    reject one or the other depending on deployment (error code 2000).
+
+    Returns:
+        Dict with keys ``completion``, ``description``, ``ocr_text``.
+
+    Raises:
+        ValueError: if required credentials are missing.
+        RuntimeError: if all retry attempts fail or the response has no usable text.
+    """
     if not VISION_CLIENT_APP_NAME:
         raise ValueError("Missing Alfred client app name. Set ALFRED_CLIENT_APP_NAME.")
     if not VISION_API_KEY:
@@ -406,6 +482,7 @@ def call_alfred_for_image(
 
 
 def build_record_context(record: dict[str, Any], image_url: str) -> str:
+    """Build a short context string (repo/id/title/url) sent to Alfred to help it interpret the image."""
     context_parts: list[str] = []
     for key in ("repo", "id", "issue_number", "pr_number", "issue_title", "title", "github_url"):
         value = record.get(key)
@@ -417,6 +494,7 @@ def build_record_context(record: dict[str, Any], image_url: str) -> str:
 
 
 def build_inline_image_text(analysis: dict[str, Any]) -> str:
+    """Format one image analysis as inline text (``[IMAGE DESCRIPTION] ... [IMAGE TEXT] ...``) for text replacement."""
     if analysis.get("status") != "ok":
         return "[IMAGE DESCRIPTION UNAVAILABLE]"
 
@@ -434,9 +512,11 @@ def build_inline_image_text(analysis: dict[str, Any]) -> str:
 
 
 def replace_markdown_image_tags(text: str, analyses_by_url: dict[str, dict[str, Any]]) -> tuple[str, int]:
+    """Replace markdown image tags in text with their Alfred analysis, when a matching URL was analyzed."""
     replaced = 0
 
     def _repl(match: re.Match[str]) -> str:
+        # Leave the tag untouched if this URL was not part of the analyzed set.
         nonlocal replaced
         parsed_url = parse_markdown_image_url(match.group(1))
         analysis = analyses_by_url.get(parsed_url)
@@ -449,6 +529,7 @@ def replace_markdown_image_tags(text: str, analyses_by_url: dict[str, dict[str, 
 
 
 def replace_html_image_tags(text: str, analyses_by_url: dict[str, dict[str, Any]]) -> tuple[str, int]:
+    """Replace HTML <img> tags in text with their Alfred analysis, when a matching URL was analyzed."""
     replaced = 0
 
     def _repl(match: re.Match[str]) -> str:
@@ -464,6 +545,12 @@ def replace_html_image_tags(text: str, analyses_by_url: dict[str, dict[str, Any]
 
 
 def replace_image_attached_markers(text: str, ordered_analyses: list[dict[str, Any]]) -> tuple[str, int]:
+    """Replace ``[IMAGE ATTACHED]`` markers in order with the corresponding analysis result.
+
+    Markers are matched positionally against ``ordered_analyses`` since raw
+    ``[IMAGE ATTACHED]`` markers (unlike markdown/HTML tags) carry no URL to
+    match by.
+    """
     idx = 0
 
     def _repl(_: re.Match[str]) -> str:
@@ -479,6 +566,7 @@ def replace_image_attached_markers(text: str, ordered_analyses: list[dict[str, A
 
 
 def select_main_text_field(record: dict[str, Any]) -> str | None:
+    """Return the name of the first known text field present on the record, or None if none match."""
     for key in ("st_ready_text", "resolver_card_text", "body", "clean_text", "text", "description"):
         value = record.get(key)
         if isinstance(value, str):
@@ -487,6 +575,11 @@ def select_main_text_field(record: dict[str, Any]) -> str | None:
 
 
 def append_image_context_block(text: str, analyses: list[dict[str, Any]]) -> str:
+    """Append a fallback "Image-derived context" section listing all image analyses.
+
+    Used when no recognizable image placeholder was found in the text, so the
+    analysis is not silently dropped.
+    """
     lines = ["", "", "Image-derived context:"]
     for idx, analysis in enumerate(analyses, start=1):
         url_value = str(analysis.get("image_url") or "")
@@ -507,6 +600,16 @@ def append_image_context_block(text: str, analyses: list[dict[str, Any]]) -> str
 
 
 def find_records_container(data: Any) -> tuple[Any, list[dict[str, Any]], str | None]:
+    """Locate the list of record dicts inside parsed JSON, whether it's a top-level list or nested under a known key.
+
+    Returns:
+        Tuple of (container, records, root_key). ``container`` is the original
+        parsed object (to be reassembled on write), ``root_key`` is the dict key
+        the records were found under (None if the input was a top-level list).
+
+    Raises:
+        ValueError: if the JSON structure doesn't match any supported shape.
+    """
     if isinstance(data, list):
         records = [item for item in data if isinstance(item, dict)]
         return data, records, None
@@ -550,6 +653,18 @@ def transform_records(
     append_when_no_placeholder: bool,
     strip_analyses: bool = False,
 ) -> dict[str, int]:
+    """Analyze images for each record and optionally rewrite its text field in place.
+
+    Iterates records that contain at least one image URL, calls Alfred for each
+    (unless already cached in this run, since the same screenshot can be quoted
+    in multiple text fields of the same record), stores an ``image_analyses``
+    list on the record, and — unless ``replace_text`` is False — replaces
+    markdown/HTML/``[IMAGE ATTACHED]`` placeholders in the main text field with
+    the analysis text.
+
+    Returns:
+        A stats dict with counters used for the run summary.
+    """
     stats = {
         "records_total": len(records),
         "records_processed": 0,
@@ -680,6 +795,7 @@ def transform_records(
 
 
 def build_output_path(input_path: Path, output_dir: Path | None, inplace: bool) -> Path:
+    """Compute the output file path: the input path itself if ``inplace``, else a sibling ``*_with_alfred_image_text`` file."""
     if inplace:
         return input_path
 
@@ -711,6 +827,15 @@ def process_file(
     append_when_no_placeholder: bool,
     strip_analyses: bool = False,
 ) -> dict[str, Any]:
+    """Load one input JSON file, enrich its records via Alfred, and write the result plus a summary file.
+
+    Returns:
+        A summary dict (also written to ``<output>__alfred_summary.json``) with
+        input/output paths and the stats from ``transform_records``.
+
+    Raises:
+        FileNotFoundError: if ``input_path`` does not exist.
+    """
     if not input_path.exists():
         raise FileNotFoundError(f"Input JSON file not found: {input_path}")
 
@@ -761,6 +886,7 @@ def process_file(
 
 
 def parse_args() -> argparse.Namespace:
+    """Define and parse the CLI arguments for this script."""
     parser = argparse.ArgumentParser(
         description=(
             "Read image URLs from ST-ready/PR JSON, send images (base64 data URL) to Alfred vision, "
@@ -839,6 +965,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> None:
+    """CLI entry point: process each ``--input`` file and print a JSON run summary."""
     args = parse_args()
 
     output_dir = Path(args.output_dir).resolve() if args.output_dir else None

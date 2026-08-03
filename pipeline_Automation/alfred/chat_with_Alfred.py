@@ -27,9 +27,11 @@ Usage:
 
 import argparse
 import base64
+import importlib.util
 import json
 import mimetypes
 import random
+import sys
 import time
 from pathlib import Path
 from typing import Any
@@ -37,7 +39,21 @@ from typing import Any
 import requests
 import urllib3
 
-from Get_Persona_KBs import apiKey, clientAppName, generate_token, proxies, url
+# Resolve shared AI Bridge credentials/helpers from upload/Get_Persona_KBs.py
+# without relying on cwd-dependent import paths.
+upload_dir = Path(__file__).resolve().parents[1] / "upload"
+persona_module_path = upload_dir / "Get_Persona_KBs.py"
+spec = importlib.util.spec_from_file_location("Get_Persona_KBs", str(persona_module_path))
+if spec is None or spec.loader is None:
+	raise RuntimeError(f"Cannot load persona helper module: {persona_module_path}")
+persona_mod = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(persona_mod)
+
+apiKey = persona_mod.apiKey
+clientAppName = persona_mod.clientAppName
+generate_token = persona_mod.generate_token
+proxies = persona_mod.proxies
+url = persona_mod.url
 
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)

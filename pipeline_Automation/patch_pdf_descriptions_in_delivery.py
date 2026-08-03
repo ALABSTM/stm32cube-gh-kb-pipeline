@@ -26,6 +26,11 @@ PLACEHOLDER_PATTERN = re.compile(
 
 
 def load_descriptions() -> dict[str, str]:
+    """Load the Alfred-generated figure_id -> description mapping from disk.
+
+    Returns an empty dict (with an error message) if the descriptions file is
+    missing or not a JSON object.
+    """
     if not DESCRIPTIONS_FILE.exists():
         print(f"[ERROR] Descriptions file not found: {DESCRIPTIONS_FILE}")
         return {}
@@ -42,6 +47,7 @@ def patch_file(file_path: Path, descriptions: dict[str, str], dry_run: bool = Fa
     replacements = 0
 
     def replace_placeholder(match: re.Match) -> str:
+        """Replace one "no technical description available yet" placeholder with its real description, if known."""
         nonlocal replacements
         figure_id = match.group(1)
         desc = descriptions.get(figure_id, "").strip()
@@ -65,6 +71,7 @@ def patch_file(file_path: Path, descriptions: dict[str, str], dry_run: bool = Fa
 
 
 def main():
+    """CLI entry point: patch placeholder figure descriptions across all delivery files in place."""
     parser = argparse.ArgumentParser(description="Patch PDF descriptions into delivery files")
     parser.add_argument("--dry-run", action="store_true", help="Show what would be changed without writing")
     args = parser.parse_args()

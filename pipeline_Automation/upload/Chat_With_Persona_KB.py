@@ -1,3 +1,20 @@
+"""Interactive/CLI tool to chat with the ST GitHub Analyzer persona and its KB
+(no upload performed by this script).
+
+Sends a user question (and optional system prompt) to the AI Bridge 'chat' service
+using the 'ST GitHub Analyzer' persona, so answers are grounded in KB #793
+('ST GITHUB ANALYZER_UNSTRUCTURED'). Useful to manually verify that uploaded
+ST-ready datasources answer real user queries correctly.
+
+Required env vars: same as Get_Persona_KBs.py (first non-empty wins):
+PERSONA_API_KEY, ST_GITHUB_ANALYZER_API_KEY, ST_CHATGPT_API_KEY,
+ST_AI_BRIDGE_API_KEY, ST_API_KEY. Credentials and clientAppName/proxies are
+imported from Get_Persona_KBs.py in this folder.
+
+How to run:
+    python pipeline_Automation/upload/Chat_With_Persona_KB.py -q "How to fix HAL_UART timeout on H7?"
+    python pipeline_Automation/upload/Chat_With_Persona_KB.py            # interactive REPL mode
+"""
 import argparse
 import json
 import random
@@ -255,6 +272,9 @@ def call_chat_for_persona(
 
 
 def main() -> None:
+    """CLI entry point: parse arguments and either send a single question (--question)
+    or start an interactive REPL loop that repeatedly calls call_chat_for_persona().
+    """
     parser = argparse.ArgumentParser(
         description="Chat service utilisant la persona et la KB ST GitHub Analyzer"
     )

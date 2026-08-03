@@ -35,6 +35,12 @@ def main() -> None:
     warning). Does not filter out invalid issues (no `is_valid` check).
     """
     cfg = load_config()
+    repos = cfg["repos"]
+    max_chars = cfg.get("chunk_max_chars_issue", 1200)
+
+    for repo in repos:
+        in_file = DATA_DIR / f"docs_issues_{repo.lower()}.json"
+        out_file = DATA_DIR / f"chunks_issues_{repo.lower()}.json"
 
         if not in_file.exists():
             print(f"[WARN] docs file not found: {in_file}")

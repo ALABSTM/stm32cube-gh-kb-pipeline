@@ -1,18 +1,39 @@
 """
-Fill the Answer column in the test suite by calling Alfred (st_copilot persona).
+Fill the Answer column of the quality test suite by calling Alfred (generic
+st_copilot persona) for every question, so graders can compare the KB-powered
+persona's answers (collected elsewhere, e.g. manually or via the KB chat UI)
+against Alfred's generic answers on a level Question/Tags basis.
 
-For each question, sends it to Alfred's chat API, collects the response,
-and writes the result to the Excel file.
+For each question, sends it to Alfred's chat API (same auth scheme as
+enrich_json_images_with_alfred.py), collects the text response, and writes a
+fresh Excel workbook (it does not edit an existing file in place).
+
+Input:
+    QUESTIONS list imported from generate_quality_test_suite.py, which is itself
+    built from shared/config/config*.json series configs (no datasets/*.json
+    dataset is read directly by this script).
+
+Output:
+    datasets/07_delivery/st_ready/quality_test_suite_all_series.xlsx
+    Sheet "Quality Test Suite" with columns:
+      A = Question (width 80), B = Answer (width 100, filled by Alfred), C = Tags (width 12)
+    Header row is bold/white-on-blue, data rows wrap text, all cells have thin
+    borders. The workbook is saved every 5 questions (crash-resilience) and once
+    more at the end with frozen header and AutoFilter applied.
 
 Usage:
     python pipeline_Automation/test_suites/fill_answers_from_alfred.py
 
 Requires: openpyxl, requests
+Required environment variables:
+    ALFRED_CLIENT_APP_NAME (defaults to "mdrf_stgithub_analyzer_client")
+    ST_CHATGPT_API_KEY / ST_AI_BRIDGE_API_KEY / ST_API_KEY (first one set wins)
 """
 
 import hashlib
 import os
 import random
+import shutil
 import sys
 import time
 from pathlib import Path
@@ -52,12 +73,25 @@ PERSONA = "st_copilot"
 
 
 def _generate_token(timestamp: int, nonce: int) -> str:
+    """Compute the SHA1 auth token expected by the Alfred/ST AI Bridge API.
+
+    The token binds the client app name, service name, API key, timestamp and
+    nonce together so the server can validate the request without the raw API
+    key travelling on the wire in a replayable form.
+    """
     data_string = f"{CLIENT_APP_NAME}_{CHAT_SERVICE}_{API_KEY}_{timestamp}_{nonce}"
     return hashlib.sha1(data_string.encode("utf-8")).hexdigest()
 
 
 def ask_alfred(question: str, retries: int = 3) -> str:
-    """Send question to Alfred and return the text answer."""
+    """Send question to Alfred and return the text answer.
+
+    Retries on HTTP errors or exceptions with exponential backoff
+    (2, 4, 8, ... seconds) since the AI Bridge API can be transiently
+    unavailable; a fresh timestamp/nonce/token is generated per attempt
+    because the token embeds the timestamp and would otherwise be rejected
+    as stale or replayed.
+    """
     system_prompt = (
         "You are a technical support assistant for STM32 microcontrollers. "
         "Answer user questions about STM32Cube firmware, HAL drivers, BSP, "
@@ -109,7 +143,9 @@ def ask_alfred(question: str, retries: int = 3) -> str:
             if completion:
                 return completion.strip()
 
-            # Fallback extraction
+            # Fallback extraction: different AI Bridge personas / API versions
+            # have been observed to return the text under different keys, so
+            # try each known shape before giving up.
             for key in ("text", "content", "message", "answer"):
                 val = data.get(key)
                 if isinstance(val, str) and val.strip():
@@ -133,7 +169,23 @@ def ask_alfred(question: str, retries: int = 3) -> str:
     return "(No answer after retries)"
 
 
+def backup_if_exists(path: Path) -> Path | None:
+    """Create a side-by-side .bak copy when the target output already exists."""
+    if not path.exists():
+        return None
+    backup_path = path.with_suffix(path.suffix + ".bak")
+    shutil.copy2(path, backup_path)
+    return backup_path
+
+
 def main():
+    """Call Alfred for every question in QUESTIONS and write answers to .xlsx.
+
+    Validates required credentials up front, then builds the workbook
+    incrementally: each question's answer is written as soon as it is
+    received, and the workbook is saved every 5 questions so a crash or
+    interruption does not lose already-collected answers.
+    """
     if not CLIENT_APP_NAME:
         raise SystemExit("Missing Alfred client app name. Set ALFRED_CLIENT_APP_NAME.")
     if not API_KEY:
@@ -141,6 +193,9 @@ def main():
 
     print(f"Calling Alfred ({PERSONA}) for {len(QUESTIONS)} questions...")
     print(f"Output: {XLSX_PATH}")
+    backup_path = backup_if_exists(XLSX_PATH)
+    if backup_path is not None:
+        print(f"Existing file backed up to: {backup_path}")
     print("=" * 60)
 
     wb = Workbook()
