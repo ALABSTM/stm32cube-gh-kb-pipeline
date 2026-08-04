@@ -711,11 +711,8 @@ def list_datasource_entries_from_kb_entry(kb_entry: dict[str, Any] | None) -> li
     # Fallback: kb-list shapes are inconsistent across environments; recursively
     # discover datasource-like entries from nested envelopes.
     def _looks_like_datasource(node: dict[str, Any]) -> bool:
-        ds_id = node.get("id")
-        if ds_id is None:
-            return False
         try:
-            int(ds_id)
+            datasource_entry_id(node)
         except Exception:
             return False
 
@@ -723,6 +720,9 @@ def list_datasource_entries_from_kb_entry(kb_entry: dict[str, Any] | None) -> li
             key in node
             for key in (
                 "name",
+                "datasourceName",
+                "dataSourceName",
+                "datasource_name",
                 "classification",
                 "processor",
                 "processorParams",
@@ -748,7 +748,7 @@ def list_datasource_entries_from_kb_entry(kb_entry: dict[str, Any] | None) -> li
     dedup: dict[int, dict[str, Any]] = {}
     for entry in candidates:
         try:
-            entry_id = int(entry.get("id"))
+            entry_id = datasource_entry_id(entry)
         except Exception:
             continue
         prev = dedup.get(entry_id)
@@ -760,6 +760,51 @@ def list_datasource_entries_from_kb_entry(kb_entry: dict[str, Any] | None) -> li
             dedup[entry_id] = entry
 
     return list(dedup.values())
+
+
+def datasource_entry_id(entry: dict[str, Any]) -> int:
+    """Return datasource numeric ID from a kb-list datasource entry.
+
+    Supports common API key variants observed across environments.
+    """
+    id_candidates = (
+        "id",
+        "datasourceId",
+        "dataSourceId",
+        "datasource_id",
+        "kbDatasourceId",
+    )
+    for key in id_candidates:
+        raw = entry.get(key)
+        if raw is None:
+            continue
+        try:
+            parsed = int(raw)
+        except Exception:
+            continue
+        if parsed > 0:
+            return parsed
+    raise ValueError("Datasource entry has no numeric ID")
+
+
+def datasource_entry_name(entry: dict[str, Any]) -> str:
+    """Return datasource name from a kb-list datasource entry, supporting
+    key-name variants.
+    """
+    name_candidates = (
+        "name",
+        "datasourceName",
+        "dataSourceName",
+        "datasource_name",
+    )
+    for key in name_candidates:
+        raw = entry.get(key)
+        if not isinstance(raw, str):
+            continue
+        value = raw.strip()
+        if value:
+            return value
+    return ""
 
 
 def datasource_entry_is_deleted(entry: dict[str, Any]) -> bool:
@@ -797,7 +842,7 @@ def datasource_entry_is_deleted(entry: dict[str, Any]) -> bool:
 def datasource_entry_sort_id(entry: dict[str, Any]) -> int:
     """Return the numeric ID of a datasource entry for sorting, or -1 if missing/invalid."""
     try:
-        return int(entry.get("id"))
+        return datasource_entry_id(entry)
     except Exception:
         return -1
 
@@ -832,7 +877,7 @@ def find_datasource_entry_from_kb_list(
     if datasource_id is not None:
         for ds in data_sources:
             try:
-                if int(ds.get("id")) == int(datasource_id):
+                if datasource_entry_id(ds) == int(datasource_id):
                     return ds
             except Exception:
                 continue
@@ -843,7 +888,7 @@ def find_datasource_entry_from_kb_list(
 
         exact_matches = [
             ds for ds in data_sources
-            if str(ds.get("name") or "").strip() == wanted_exact
+            if datasource_entry_name(ds) == wanted_exact
         ]
         preferred_exact = pick_preferred_datasource_entry(exact_matches)
         if preferred_exact is not None:
@@ -851,7 +896,7 @@ def find_datasource_entry_from_kb_list(
 
         lower_matches = [
             ds for ds in data_sources
-            if str(ds.get("name") or "").strip().lower() == wanted_lower
+            if datasource_entry_name(ds).lower() == wanted_lower
         ]
         preferred_lower = pick_preferred_datasource_entry(lower_matches)
         if preferred_lower is not None:
@@ -872,7 +917,7 @@ def find_datasource_entry_from_kb_list(
             prefixed_matches = [
                 ds
                 for ds in data_sources
-                if str(ds.get("name") or "").strip().lower().startswith(canonical_prefix_lower)
+                if datasource_entry_name(ds).lower().startswith(canonical_prefix_lower)
             ]
             preferred_prefixed = pick_preferred_datasource_entry(prefixed_matches)
             if preferred_prefixed is not None:
@@ -887,17 +932,17 @@ def find_datasource_entry_from_kb_list(
         while stack:
             node = stack.pop()
             if isinstance(node, dict):
-                ds_name = str(node.get("name") or "").strip()
-                ds_id = node.get("id")
-                if ds_id is not None:
-                    try:
-                        parsed_id = int(ds_id)
-                        if datasource_id is not None and parsed_id == int(datasource_id):
-                            nested_matches.append(node)
-                        elif wanted_exact and ds_name and (ds_name == wanted_exact or ds_name.lower() == wanted_lower):
-                            nested_matches.append(node)
-                    except Exception:
-                        pass
+                ds_name = datasource_entry_name(node)
+                try:
+                    parsed_id = datasource_entry_id(node)
+                except Exception:
+                    parsed_id = None
+
+                if parsed_id is not None:
+                    if datasource_id is not None and parsed_id == int(datasource_id):
+                        nested_matches.append(node)
+                    elif wanted_exact and ds_name and (ds_name == wanted_exact or ds_name.lower() == wanted_lower):
+                        nested_matches.append(node)
                 for value in node.values():
                     if isinstance(value, (dict, list)):
                         stack.append(value)
@@ -1032,7 +1077,7 @@ def find_datasource_id_by_name_from_kb_list(
         return None
 
     try:
-        return int(datasource_entry.get("id"))
+        return datasource_entry_id(datasource_entry)
     except Exception:
         return None
 
@@ -1066,10 +1111,10 @@ def find_all_datasource_ids_by_name_from_kb_list(
 
     for entry in entries:
         try:
-            entry_id = int(entry.get("id"))
+            entry_id = datasource_entry_id(entry)
         except Exception:
             continue
-        entry_name = str(entry.get("name") or "").strip()
+        entry_name = datasource_entry_name(entry)
         entry_lower = entry_name.lower()
         if entry_name == wanted_exact or entry_lower == wanted_lower:
             ids.add(entry_id)
@@ -1082,18 +1127,18 @@ def find_all_datasource_ids_by_name_from_kb_list(
     while stack:
         node = stack.pop()
         if isinstance(node, dict):
-            ds_name = str(node.get("name") or "").strip()
-            ds_id = node.get("id")
-            if ds_name and ds_id is not None:
-                try:
-                    parsed_id = int(ds_id)
-                    low = ds_name.lower()
-                    if ds_name == wanted_exact or low == wanted_lower:
-                        ids.add(parsed_id)
-                    elif canonical_prefix_lower and low.startswith(canonical_prefix_lower):
-                        ids.add(parsed_id)
-                except Exception:
-                    pass
+            ds_name = datasource_entry_name(node)
+            try:
+                parsed_id = datasource_entry_id(node)
+            except Exception:
+                parsed_id = None
+
+            if ds_name and parsed_id is not None:
+                low = ds_name.lower()
+                if ds_name == wanted_exact or low == wanted_lower:
+                    ids.add(parsed_id)
+                elif canonical_prefix_lower and low.startswith(canonical_prefix_lower):
+                    ids.add(parsed_id)
             for value in node.values():
                 if isinstance(value, (dict, list)):
                     stack.append(value)

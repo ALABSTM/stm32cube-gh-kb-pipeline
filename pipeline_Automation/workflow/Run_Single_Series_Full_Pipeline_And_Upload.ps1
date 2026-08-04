@@ -900,6 +900,33 @@ function Save-DatasourceIdsSnapshot {
     )
 
     New-Item -ItemType Directory -Force -Path $deliveryRoot | Out-Null
+
+    # Preserve previously known IDs when current stage does not provide them.
+    $existingSnapshot = $null
+    if (Test-Path -LiteralPath $idsOutput) {
+        try {
+            $existingSnapshot = Get-Content -LiteralPath $idsOutput -Raw | ConvertFrom-Json
+        } catch {
+            $existingSnapshot = $null
+        }
+    }
+
+    foreach ($name in @("issues", "files", "diagnostic", "resolver")) {
+        $currentValue = $Ids.$name
+        $currentId = 0
+        if ([int]::TryParse([string]$currentValue, [ref]$currentId) -and $currentId -gt 0) {
+            continue
+        }
+
+        if ($null -ne $existingSnapshot) {
+            $existingValue = $existingSnapshot.$name
+            $existingId = 0
+            if ([int]::TryParse([string]$existingValue, [ref]$existingId) -and $existingId -gt 0) {
+                $Ids[$name] = $existingId
+            }
+        }
+    }
+
     $Ids["uploaded_at"] = (Get-Date).ToString("s")
     if ($Reason) {
         $Ids["last_update_reason"] = $Reason
@@ -1024,17 +1051,16 @@ function Invoke-UploadSeries {
         series = $Series
         slug = $slug
         kb = $KbId
-        issues = $null
-        files = $null
-        diagnostic = $null
-        resolver = $null
+        issues = $(if ($IssuesDatasourceId -gt 0) { [int]$IssuesDatasourceId } else { $null })
+        files = $(if ($FilesDatasourceId -gt 0) { [int]$FilesDatasourceId } else { $null })
+        diagnostic = $(if ($DiagnosticDatasourceId -gt 0) { [int]$DiagnosticDatasourceId } else { $null })
+        resolver = $(if ($ResolverDatasourceId -gt 0) { [int]$ResolverDatasourceId } else { $null })
         last_successful_stage = $null
         uploaded_at = (Get-Date).ToString("s")
     }
 
     if ($ComponentIssuesOnly) {
         Write-Host "[SKIP] Monolithic issues datasource upload disabled by -ComponentIssuesOnly" -ForegroundColor Yellow
-        $ids.issues = $null
         Save-DatasourceIdsSnapshot -Ids $ids -Reason "issues_skipped_component_only"
     } else {
         if ($IssuesDatasourceId -gt 0) {
