@@ -234,53 +234,8 @@ function Upload-SeriesByComponent {
             -LinkUrl "https://github.com/STMicroelectronics/$Slug/issues" `
             -LinkLabel "ST GitHub Analyzer - $seriesCode - $componentLabel"
 
-        $existingId = $null
         if ($idCache.ContainsKey($datasourceName)) {
-            $existingId = [int]$idCache[$datasourceName]
-        }
-
-        if ($existingId -and $skipAddForRemaining) {
-            Write-Host "[info] cached IDs marked stale for this run; skipping add for $datasourceName and recreating with operation=new" -ForegroundColor DarkYellow
-            if ($idCache.ContainsKey($datasourceName)) {
-                $idCache.Remove($datasourceName)
-            }
-            $existingId = $null
-        }
-
-        if ($existingId) {
-            $args = @(
-                $uploader,
-                "--kb", "$KbId",
-                "--operation", "add",
-                "--datasource-id", "$existingId",
-                "--remote-user", $RemoteUser,
-                "--processor", "JSON",
-                "--processor-params", $processorParams,
-                "--json-root-mode", "auto",
-                "--empty-json-policy", "skip",
-                "--json-split-size", "$JsonSplitSize",
-                "--timeout", "60",
-                "--files", $filePath
-            )
-            $args += @(Get-UploadAuthArgs)
-
-            try {
-                Invoke-Uploader -Label "$datasourceName (add:$existingId)" -CommandArgs $args | Out-Null
-                continue
-            } catch {
-                $errText = [string]$_.Exception.Message
-                if ($errText -match "KbDataSourceEntity" -or $errText -match "does not exist \(already deleted or invalid\)") {
-                    Write-Host "[warn] cached datasource ID $existingId is invalid for $datasourceName; recreating with operation=new" -ForegroundColor Yellow
-                    # The per-component cache often expires in batch; after first invalid ID,
-                    # skip add for remaining components and recreate directly to avoid noisy failures.
-                    $skipAddForRemaining = $true
-                    if ($idCache.ContainsKey($datasourceName)) {
-                        $idCache.Remove($datasourceName)
-                    }
-                } else {
-                    throw
-                }
-            }
+            $idCache.Remove($datasourceName)
         }
 
         $args = @(
@@ -289,7 +244,7 @@ function Upload-SeriesByComponent {
             "--operation", "new",
             "--datasource-name", $datasourceName,
             "--datasource-classification", "PUBLIC",
-            "--existing-datasource-policy", "add",
+            "--existing-datasource-policy", "replace",
             "--remote-user", $RemoteUser,
             "--processor", "JSON",
             "--processor-params", $processorParams,
@@ -301,7 +256,8 @@ function Upload-SeriesByComponent {
         )
         $args += @(Get-UploadAuthArgs)
 
-        $outLines = Invoke-Uploader -Label "$datasourceName (new)" -CommandArgs $args
+        $outLines = Invoke-Uploader -Label "$datasourceName (replace)" -CommandArgs $args
+
         if (-not $DryRun) {
             $newId = Parse-DatasourceId -Lines $outLines
             if ($newId) {

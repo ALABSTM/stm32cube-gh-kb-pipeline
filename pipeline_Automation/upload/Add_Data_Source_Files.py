@@ -1124,31 +1124,46 @@ def resolve_existing_datasource_id_by_name(
     so the caller can switch to an add/replace flow on the existing datasource
     instead of failing. Returns None on lookup failure or if not found.
     """
-    try:
-        kb_list_response = run_auth_precheck(
-            endpoint=endpoint,
-            api_key=api_key,
-            client_app_name=client_app_name,
-            service_name=service_name,
-            remote_user=remote_user,
-            timeout_seconds=timeout_seconds,
-            verify_ssl=verify_ssl,
-            proxies=proxies,
-            verbose=verbose,
+    def _resolve_with_remote(user_value: str | None) -> int | None:
+        try:
+            kb_list_response = run_auth_precheck(
+                endpoint=endpoint,
+                api_key=api_key,
+                client_app_name=client_app_name,
+                service_name=service_name,
+                remote_user=user_value,
+                timeout_seconds=timeout_seconds,
+                verify_ssl=verify_ssl,
+                proxies=proxies,
+                verbose=verbose,
+            )
+        except Exception as exc:
+            if verbose:
+                print(
+                    "Failed to resolve datasource ID from kb-list after name conflict: "
+                    f"{exc}"
+                )
+            return None
+
+        return find_datasource_id_by_name_from_kb_list(
+            kb_list_response=kb_list_response,
+            kb_id=kb_id,
+            datasource_name=datasource_name,
         )
-    except Exception as exc:
+
+    resolved = _resolve_with_remote(remote_user)
+    if resolved is not None:
+        return resolved
+
+    if remote_user and str(remote_user).strip():
         if verbose:
             print(
-                "Failed to resolve datasource ID from kb-list after name conflict: "
-                f"{exc}"
+                "Datasource ID unresolved with remote_user-scoped kb-list; "
+                "retrying kb-list lookup without remote_user scope."
             )
-        return None
+        return _resolve_with_remote(None)
 
-    return find_datasource_id_by_name_from_kb_list(
-        kb_list_response=kb_list_response,
-        kb_id=kb_id,
-        datasource_name=datasource_name,
-    )
+    return None
 
 
 def resolve_existing_datasource_ids_by_name(
@@ -1165,31 +1180,99 @@ def resolve_existing_datasource_ids_by_name(
     verbose: bool,
 ) -> list[int]:
     """Call kb-list and resolve all numeric datasource IDs matching datasource_name."""
-    try:
-        kb_list_response = run_auth_precheck(
-            endpoint=endpoint,
-            api_key=api_key,
-            client_app_name=client_app_name,
-            service_name=service_name,
-            remote_user=remote_user,
-            timeout_seconds=timeout_seconds,
-            verify_ssl=verify_ssl,
-            proxies=proxies,
-            verbose=verbose,
-        )
-    except Exception as exc:
-        if verbose:
-            print(
-                "Failed to resolve datasource IDs from kb-list after name conflict: "
-                f"{exc}"
+    def _resolve_many_with_remote(user_value: str | None) -> list[int]:
+        try:
+            kb_list_response = run_auth_precheck(
+                endpoint=endpoint,
+                api_key=api_key,
+                client_app_name=client_app_name,
+                service_name=service_name,
+                remote_user=user_value,
+                timeout_seconds=timeout_seconds,
+                verify_ssl=verify_ssl,
+                proxies=proxies,
+                verbose=verbose,
             )
-        return []
+        except Exception as exc:
+            if verbose:
+                print(
+                    "Failed to resolve datasource IDs from kb-list after name conflict: "
+                    f"{exc}"
+                )
+            return []
 
-    return find_all_datasource_ids_by_name_from_kb_list(
-        kb_list_response=kb_list_response,
-        kb_id=kb_id,
-        datasource_name=datasource_name,
-    )
+        return find_all_datasource_ids_by_name_from_kb_list(
+            kb_list_response=kb_list_response,
+            kb_id=kb_id,
+            datasource_name=datasource_name,
+        )
+
+    scoped_ids = _resolve_many_with_remote(remote_user)
+    if not (remote_user and str(remote_user).strip()):
+        return scoped_ids
+
+    unscoped_ids = _resolve_many_with_remote(None)
+    merged: set[int] = set()
+    for candidate in [*scoped_ids, *unscoped_ids]:
+        try:
+            parsed = int(candidate)
+        except Exception:
+            continue
+        if parsed > 0:
+            merged.add(parsed)
+    return sorted(merged)
+
+
+def resolve_component_datasource_id_from_delivery_snapshot_by_name(
+    datasource_name: str,
+    file_paths: list[Path],
+) -> int | None:
+    """Fallback lookup for per-component datasource names like issues_WB0_ADC.
+
+    Reads datasets/.../issues_json/by_component/upload_ids_by_component_<series>.json
+    when available and returns the cached datasource ID for datasource_name.
+    """
+    if not file_paths:
+        return None
+
+    name_match = re.match(r"^issues_([A-Za-z0-9]+)_.+$", (datasource_name or "").strip(), flags=re.IGNORECASE)
+    if not name_match:
+        return None
+
+    series_code = name_match.group(1).lower()
+    first_path = file_paths[0].resolve()
+
+    by_component_dir: Path | None = None
+    current = first_path.parent
+    for _ in range(12):
+        if current.name.lower() == "by_component":
+            by_component_dir = current
+            break
+        if current.parent == current:
+            break
+        current = current.parent
+
+    if by_component_dir is None:
+        return None
+
+    snapshot_path = by_component_dir / f"upload_ids_by_component_{series_code}.json"
+    if not snapshot_path.exists():
+        return None
+
+    try:
+        payload = json.loads(snapshot_path.read_text(encoding="utf-8-sig"))
+    except Exception:
+        return None
+
+    if not isinstance(payload, dict):
+        return None
+
+    value = payload.get(datasource_name)
+    try:
+        parsed = int(value)
+        return parsed if parsed > 0 else None
+    except Exception:
+        return None
 
 
 def resolve_datasource_id_from_local_config_by_name(datasource_name: str) -> int | None:
@@ -2567,6 +2650,19 @@ def run_new_request_with_followup_add(
                     )
 
         if existing_datasource_id is None:
+            component_snapshot_id = resolve_component_datasource_id_from_delivery_snapshot_by_name(
+                conflict_name,
+                file_paths,
+            )
+            if component_snapshot_id is not None:
+                existing_datasource_id = component_snapshot_id
+                if verbose:
+                    print(
+                        "Datasource ID resolved from by_component upload ID snapshot "
+                        f"for '{conflict_name}': {existing_datasource_id}"
+                    )
+
+        if existing_datasource_id is None:
             raise RuntimeError(
                 f"Datasource '{conflict_name}' already exists but its live ID could not be resolved. "
                 "Aborting to avoid creating a duplicate timestamped datasource. "
@@ -2775,43 +2871,32 @@ def run_new_request_with_followup_add(
                     )
 
                     if live_id is not None:
-                        add_payload_fallback: dict[str, Any] = {"id": int(live_id)}
-                        if requested_processor:
-                            add_payload_fallback["processor"] = requested_processor
-                        if requested_processor_params:
-                            add_payload_fallback["processorParams"] = requested_processor_params
-
-                        add_fallback_response = run_add_request_skip_existing_files(
-                            endpoint=endpoint,
-                            api_key=api_key,
-                            client_app_name=client_app_name,
-                            service_name=service_name,
-                            remote_user=remote_user,
-                            kb_id=kb_id,
-                            datasource_payload=add_payload_fallback,
-                            file_paths=file_paths,
-                            request_types=[DEFAULT_TYPE_ADD],
-                            request_part_names=request_part_names,
-                            payload_modes=payload_modes,
-                            timestamp_modes=timestamp_modes,
-                            max_retries=max_retries,
-                            timeout_seconds=timeout_seconds,
-                            verify_ssl=verify_ssl,
-                            proxies=proxies,
-                            fail_on_existing_files=fail_on_existing_files,
-                            verbose=verbose,
-                        )
-
-                        final_fallback = dict(add_fallback_response)
-                        final_fallback["datasource"] = int(live_id)
-                        final_fallback.setdefault(
-                            "message",
-                            (
-                                f'Datasource "{conflict_name}" remained reserved after replace purge; '
-                                "fallback executed with add on live datasource ID."
-                            ),
-                        )
-                        return final_fallback
+                        try:
+                            run_datasource_request(
+                                endpoint=endpoint,
+                                api_key=api_key,
+                                client_app_name=client_app_name,
+                                service_name=service_name,
+                                remote_user=remote_user,
+                                kb_id=kb_id,
+                                datasource_payload=int(live_id),
+                                file_paths=[],
+                                request_types=[DEFAULT_TYPE_DELETE],
+                                request_part_names=request_part_names,
+                                payload_modes=payload_modes,
+                                timestamp_modes=timestamp_modes,
+                                max_retries=max_retries,
+                                timeout_seconds=timeout_seconds,
+                                verify_ssl=verify_ssl,
+                                proxies=proxies,
+                                verbose=verbose,
+                            )
+                        except ApiRejectedError as live_delete_exc:
+                            if not is_deleted_or_missing_datasource_error(
+                                live_delete_exc.error_code,
+                                live_delete_exc.api_message,
+                            ):
+                                raise
 
                     # Backend may keep the name reserved while list visibility lags.
                     # Wait briefly, then retry create and fallback add with candidate IDs.
@@ -2862,9 +2947,6 @@ def run_new_request_with_followup_add(
                             ):
                                 raise
 
-                        candidate_add_ids: list[int] = []
-                        seen_candidate_add_ids: set[int] = set()
-
                         resolved_ids = resolve_existing_datasource_ids_by_name(
                             endpoint=endpoint,
                             api_key=api_key,
@@ -2879,34 +2961,18 @@ def run_new_request_with_followup_add(
                             verbose=verbose,
                         )
 
-                        for candidate in [*resolved_ids, existing_datasource_id]:
+                        for candidate_delete in resolved_ids:
                             try:
-                                parsed_candidate = int(candidate)
-                            except Exception:
-                                continue
-                            if parsed_candidate <= 0 or parsed_candidate in seen_candidate_add_ids:
-                                continue
-                            seen_candidate_add_ids.add(parsed_candidate)
-                            candidate_add_ids.append(parsed_candidate)
-
-                        for candidate_add_id in candidate_add_ids:
-                            add_payload_candidate: dict[str, Any] = {"id": int(candidate_add_id)}
-                            if requested_processor:
-                                add_payload_candidate["processor"] = requested_processor
-                            if requested_processor_params:
-                                add_payload_candidate["processorParams"] = requested_processor_params
-
-                            try:
-                                add_settle_response = run_add_request_skip_existing_files(
+                                run_datasource_request(
                                     endpoint=endpoint,
                                     api_key=api_key,
                                     client_app_name=client_app_name,
                                     service_name=service_name,
                                     remote_user=remote_user,
                                     kb_id=kb_id,
-                                    datasource_payload=add_payload_candidate,
-                                    file_paths=file_paths,
-                                    request_types=[DEFAULT_TYPE_ADD],
+                                    datasource_payload=int(candidate_delete),
+                                    file_paths=[],
+                                    request_types=[DEFAULT_TYPE_DELETE],
                                     request_part_names=request_part_names,
                                     payload_modes=payload_modes,
                                     timestamp_modes=timestamp_modes,
@@ -2914,45 +2980,14 @@ def run_new_request_with_followup_add(
                                     timeout_seconds=timeout_seconds,
                                     verify_ssl=verify_ssl,
                                     proxies=proxies,
-                                    fail_on_existing_files=fail_on_existing_files,
                                     verbose=verbose,
                                 )
-                                final_settle_add = dict(add_settle_response)
-                                final_settle_add["datasource"] = int(candidate_add_id)
-                                final_settle_add.setdefault(
-                                    "message",
-                                    (
-                                        f'Datasource "{conflict_name}" was still reserved after replace purge; '
-                                        "fallback executed with add after settle wait."
-                                    ),
-                                )
-                                return final_settle_add
-                            except ApiRejectedError as settle_add_exc:
-                                if is_deleted_or_missing_datasource_error(
-                                    settle_add_exc.error_code,
-                                    settle_add_exc.api_message,
+                            except ApiRejectedError as settle_delete_exc:
+                                if not is_deleted_or_missing_datasource_error(
+                                    settle_delete_exc.error_code,
+                                    settle_delete_exc.api_message,
                                 ):
-                                    continue
-                                raise
-
-                    # Last-resort CI fallback: when backend keeps canonical name reserved
-                    # and the live datasource ID cannot be resolved, create a unique name
-                    # so the workflow can proceed without manual KB cleanup.
-                    if os.environ.get("GITHUB_ACTIONS", "").strip().lower() == "true":
-                        unique_create_response = create_with_unique_name_fallback(
-                            "replace conflict persisted after settle window"
-                        )
-                        final_unique_replace = finalize_created_response(unique_create_response)
-                        used_name = str(final_unique_replace.get("datasource_name_used") or "").strip()
-                        final_unique_replace.setdefault(
-                            "message",
-                            (
-                                f'Datasource "{conflict_name}" remained reserved after replace retries; '
-                                "created datasource with unique fallback name"
-                                + (f' "{used_name}".' if used_name else ".")
-                            ),
-                        )
-                        return final_unique_replace
+                                    raise
 
                     raise last_recreate_exc
 
