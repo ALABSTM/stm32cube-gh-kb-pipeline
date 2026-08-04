@@ -633,22 +633,7 @@ function Invoke-UploadJsonAdd {
             throw "Replace mode requires -DatasourceNameForFallback for $Label to recreate datasource and refresh ID."
         }
 
-        Write-Host "[REPLACE] Recreating datasource for ${Label}: deleting DS#$DatasourceId then creating a fresh datasource with the same name." -ForegroundColor DarkCyan
-
-        $deleteArgs = @(
-            $uploader,
-            "--kb", "$KbId",
-            "--operation", "delete",
-            "--datasource-id", "$DatasourceId",
-            "--delete-not-found-policy", "ignore",
-            "--remote-user", $RemoteUser,
-            "--skip-auth-precheck",
-            "--max-retries", "$uploadMaxRetries",
-            "--timeout", "$uploadTimeoutSeconds"
-        )
-        $deleteArgs += @(Get-UploadAuthArgs)
-
-        Invoke-CapturedPython "Delete existing datasource for $Label (DS#$DatasourceId)" $deleteArgs | Out-Null
+        Write-Host "[REPLACE] Refreshing datasource for ${Label}: requesting recreate with same name from uploader logic (no pre-delete in workflow)." -ForegroundColor DarkCyan
 
         $newDatasourceId = Invoke-UploadJsonNew `
             -Label "$Label (recreated)" `
