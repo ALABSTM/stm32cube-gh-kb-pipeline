@@ -651,20 +651,18 @@ def find_kb_entry_from_kb_list(kb_list_response: dict[str, Any], kb_id: int) -> 
         return None
 
     kbs = kb_list_response.get("kbs")
-    if not isinstance(kbs, list):
-        return None
+    if isinstance(kbs, list):
+        for kb in kbs:
+            if not isinstance(kb, dict):
+                continue
+            try:
+                if int(kb.get("id")) == int(kb_id):
+                    return kb
+            except Exception:
+                continue
 
-    for kb in kbs:
-        if not isinstance(kb, dict):
-            continue
-        try:
-            if int(kb.get("id")) == int(kb_id):
-                return kb
-        except Exception:
-            continue
-
-    if len(kbs) == 1 and isinstance(kbs[0], dict):
-        return kbs[0]
+        if len(kbs) == 1 and isinstance(kbs[0], dict):
+            return kbs[0]
 
     # Fallback: some API variants wrap payloads in nested objects.
     stack: list[Any] = [kb_list_response]
@@ -705,10 +703,63 @@ def list_datasource_entries_from_kb_entry(kb_entry: dict[str, Any] | None) -> li
         or kb_entry.get("data_sources")
         or []
     )
-    if not isinstance(data_sources, list):
-        return []
 
-    return [item for item in data_sources if isinstance(item, dict)]
+    candidates: list[dict[str, Any]] = []
+    if isinstance(data_sources, list):
+        candidates.extend([item for item in data_sources if isinstance(item, dict)])
+
+    # Fallback: kb-list shapes are inconsistent across environments; recursively
+    # discover datasource-like entries from nested envelopes.
+    def _looks_like_datasource(node: dict[str, Any]) -> bool:
+        ds_id = node.get("id")
+        if ds_id is None:
+            return False
+        try:
+            int(ds_id)
+        except Exception:
+            return False
+
+        return any(
+            key in node
+            for key in (
+                "name",
+                "classification",
+                "processor",
+                "processorParams",
+                "parser",
+                "tags",
+            )
+        )
+
+    stack: list[Any] = [kb_entry]
+    while stack:
+        node = stack.pop()
+        if isinstance(node, dict):
+            if _looks_like_datasource(node):
+                candidates.append(node)
+            for value in node.values():
+                if isinstance(value, (dict, list)):
+                    stack.append(value)
+        elif isinstance(node, list):
+            for item in node:
+                if isinstance(item, (dict, list)):
+                    stack.append(item)
+
+    dedup: dict[int, dict[str, Any]] = {}
+    for entry in candidates:
+        try:
+            entry_id = int(entry.get("id"))
+        except Exception:
+            continue
+        prev = dedup.get(entry_id)
+        if prev is None:
+            dedup[entry_id] = entry
+            continue
+        # Prefer richer entry payload when duplicate IDs are found.
+        if len(entry.keys()) > len(prev.keys()):
+            dedup[entry_id] = entry
+
+    return list(dedup.values())
 
 
 def datasource_entry_is_deleted(entry: dict[str, Any]) -> bool:
@@ -777,8 +828,6 @@ def find_datasource_entry_from_kb_list(
     """
     kb_entry = find_kb_entry_from_kb_list(kb_list_response, kb_id)
     data_sources = list_datasource_entries_from_kb_entry(kb_entry)
-    if not data_sources:
-        return None
 
     if datasource_id is not None:
         for ds in data_sources:
@@ -830,9 +879,9 @@ def find_datasource_entry_from_kb_list(
                 return preferred_prefixed
 
     # Fallback: scan the full response in case dataSources are exposed in a different envelope.
-    if datasource_name and datasource_name.strip():
-        wanted_exact = datasource_name.strip()
-        wanted_lower = wanted_exact.lower()
+    if (datasource_id is not None) or (datasource_name and datasource_name.strip()):
+        wanted_exact = datasource_name.strip() if (datasource_name and datasource_name.strip()) else ""
+        wanted_lower = wanted_exact.lower() if wanted_exact else ""
         nested_matches: list[dict[str, Any]] = []
         stack: list[Any] = [kb_list_response]
         while stack:
@@ -840,10 +889,12 @@ def find_datasource_entry_from_kb_list(
             if isinstance(node, dict):
                 ds_name = str(node.get("name") or "").strip()
                 ds_id = node.get("id")
-                if ds_name and ds_id is not None:
+                if ds_id is not None:
                     try:
-                        int(ds_id)
-                        if ds_name == wanted_exact or ds_name.lower() == wanted_lower:
+                        parsed_id = int(ds_id)
+                        if datasource_id is not None and parsed_id == int(datasource_id):
+                            nested_matches.append(node)
+                        elif wanted_exact and ds_name and (ds_name == wanted_exact or ds_name.lower() == wanted_lower):
                             nested_matches.append(node)
                     except Exception:
                         pass
@@ -986,6 +1037,74 @@ def find_datasource_id_by_name_from_kb_list(
         return None
 
 
+def find_all_datasource_ids_by_name_from_kb_list(
+    kb_list_response: dict[str, Any],
+    kb_id: int,
+    datasource_name: str,
+) -> list[int]:
+    """Return all datasource IDs matching datasource_name (exact/case-insensitive,
+    plus canonical prefix fallback) from kb-list response for the given KB.
+    """
+    if not datasource_name or not datasource_name.strip():
+        return []
+
+    wanted_exact = datasource_name.strip()
+    wanted_lower = wanted_exact.lower()
+    ids: set[int] = set()
+
+    kb_entry = find_kb_entry_from_kb_list(kb_list_response, kb_id)
+    entries = list_datasource_entries_from_kb_entry(kb_entry)
+
+    canonical_match = re.match(
+        r"^(DB_STready_[A-Za-z0-9]+_(Issues|Files|Diagnostic|Resolver))$",
+        wanted_exact,
+        flags=re.IGNORECASE,
+    )
+    canonical_prefix_lower = ""
+    if canonical_match:
+        canonical_prefix_lower = canonical_match.group(1).lower() + "_"
+
+    for entry in entries:
+        try:
+            entry_id = int(entry.get("id"))
+        except Exception:
+            continue
+        entry_name = str(entry.get("name") or "").strip()
+        entry_lower = entry_name.lower()
+        if entry_name == wanted_exact or entry_lower == wanted_lower:
+            ids.add(entry_id)
+            continue
+        if canonical_prefix_lower and entry_lower.startswith(canonical_prefix_lower):
+            ids.add(entry_id)
+
+    # Fallback scan for wrapped API envelopes.
+    stack: list[Any] = [kb_list_response]
+    while stack:
+        node = stack.pop()
+        if isinstance(node, dict):
+            ds_name = str(node.get("name") or "").strip()
+            ds_id = node.get("id")
+            if ds_name and ds_id is not None:
+                try:
+                    parsed_id = int(ds_id)
+                    low = ds_name.lower()
+                    if ds_name == wanted_exact or low == wanted_lower:
+                        ids.add(parsed_id)
+                    elif canonical_prefix_lower and low.startswith(canonical_prefix_lower):
+                        ids.add(parsed_id)
+                except Exception:
+                    pass
+            for value in node.values():
+                if isinstance(value, (dict, list)):
+                    stack.append(value)
+        elif isinstance(node, list):
+            for item in node:
+                if isinstance(item, (dict, list)):
+                    stack.append(item)
+
+    return sorted(ids)
+
+
 def resolve_existing_datasource_id_by_name(
     endpoint: str,
     api_key: str,
@@ -1026,6 +1145,47 @@ def resolve_existing_datasource_id_by_name(
         return None
 
     return find_datasource_id_by_name_from_kb_list(
+        kb_list_response=kb_list_response,
+        kb_id=kb_id,
+        datasource_name=datasource_name,
+    )
+
+
+def resolve_existing_datasource_ids_by_name(
+    endpoint: str,
+    api_key: str,
+    client_app_name: str,
+    service_name: str,
+    remote_user: str | None,
+    kb_id: int,
+    datasource_name: str,
+    timeout_seconds: int,
+    verify_ssl: bool,
+    proxies: dict[str, str] | None,
+    verbose: bool,
+) -> list[int]:
+    """Call kb-list and resolve all numeric datasource IDs matching datasource_name."""
+    try:
+        kb_list_response = run_auth_precheck(
+            endpoint=endpoint,
+            api_key=api_key,
+            client_app_name=client_app_name,
+            service_name=service_name,
+            remote_user=remote_user,
+            timeout_seconds=timeout_seconds,
+            verify_ssl=verify_ssl,
+            proxies=proxies,
+            verbose=verbose,
+        )
+    except Exception as exc:
+        if verbose:
+            print(
+                "Failed to resolve datasource IDs from kb-list after name conflict: "
+                f"{exc}"
+            )
+        return []
+
+    return find_all_datasource_ids_by_name_from_kb_list(
         kb_list_response=kb_list_response,
         kb_id=kb_id,
         datasource_name=datasource_name,
@@ -2426,41 +2586,79 @@ def run_new_request_with_followup_add(
                         f"{existing_datasource_id} then recreating datasource '{conflict_name}'."
                     )
 
-                delete_payload: int = int(existing_datasource_id)
-                try:
-                    run_datasource_request(
+                candidate_ids: list[int] = [int(existing_datasource_id)]
+                candidate_ids.extend(
+                    resolve_existing_datasource_ids_by_name(
                         endpoint=endpoint,
                         api_key=api_key,
                         client_app_name=client_app_name,
                         service_name=service_name,
                         remote_user=remote_user,
                         kb_id=kb_id,
-                        datasource_payload=delete_payload,
-                        file_paths=[],
-                        request_types=[DEFAULT_TYPE_DELETE],
-                        request_part_names=request_part_names,
-                        payload_modes=payload_modes,
-                        timestamp_modes=timestamp_modes,
-                        max_retries=max_retries,
+                        datasource_name=conflict_name,
                         timeout_seconds=timeout_seconds,
                         verify_ssl=verify_ssl,
                         proxies=proxies,
                         verbose=verbose,
                     )
-                except ApiRejectedError as delete_exc:
-                    if not is_deleted_or_missing_datasource_error(delete_exc.error_code, delete_exc.api_message):
-                        raise
-                    if verbose:
-                        print(
-                            "Datasource delete in replace mode reported missing/deleted state; "
-                            "continuing with create."
+                )
+                local_fallback_id = resolve_datasource_id_from_local_config_by_name(conflict_name)
+                if local_fallback_id is not None:
+                    candidate_ids.append(local_fallback_id)
+                snapshot_fallback_id = resolve_datasource_id_from_delivery_snapshot_by_name(conflict_name, file_paths)
+                if snapshot_fallback_id is not None:
+                    candidate_ids.append(snapshot_fallback_id)
+
+                ordered_delete_ids: list[int] = []
+                seen_delete_ids: set[int] = set()
+                for cid in candidate_ids:
+                    try:
+                        parsed = int(cid)
+                    except Exception:
+                        continue
+                    if parsed <= 0 or parsed in seen_delete_ids:
+                        continue
+                    seen_delete_ids.add(parsed)
+                    ordered_delete_ids.append(parsed)
+
+                for delete_id in ordered_delete_ids:
+                    try:
+                        run_datasource_request(
+                            endpoint=endpoint,
+                            api_key=api_key,
+                            client_app_name=client_app_name,
+                            service_name=service_name,
+                            remote_user=remote_user,
+                            kb_id=kb_id,
+                            datasource_payload=delete_id,
+                            file_paths=[],
+                            request_types=[DEFAULT_TYPE_DELETE],
+                            request_part_names=request_part_names,
+                            payload_modes=payload_modes,
+                            timestamp_modes=timestamp_modes,
+                            max_retries=max_retries,
+                            timeout_seconds=timeout_seconds,
+                            verify_ssl=verify_ssl,
+                            proxies=proxies,
+                            verbose=verbose,
                         )
+                        if verbose:
+                            print(f"Replace purge: deleted conflicting datasource id={delete_id}")
+                    except ApiRejectedError as delete_exc:
+                        if not is_deleted_or_missing_datasource_error(delete_exc.error_code, delete_exc.api_message):
+                            raise
+                        if verbose:
+                            print(
+                                "Datasource delete in replace mode reported missing/deleted state; "
+                                f"continuing (id={delete_id})."
+                            )
 
                 # Give backend indexing a brief grace period after delete before recreate.
                 time.sleep(2)
 
                 recreate_attempts = 6
                 recreate_delay_seconds = 3
+                last_recreate_exc: ApiRejectedError | None = None
                 for attempt in range(1, recreate_attempts + 1):
                     try:
                         recreated_response = run_datasource_request(
@@ -2496,10 +2694,11 @@ def run_new_request_with_followup_add(
                             recreate_exc.error_code,
                             recreate_exc.api_message,
                         )
+                        if is_name_conflict:
+                            last_recreate_exc = recreate_exc
                         if is_name_conflict and attempt < recreate_attempts:
-                            # Stale configured IDs can delete the wrong/non-existent datasource.
-                            # Re-resolve by name and delete the currently live conflicting ID.
-                            refreshed_id = resolve_existing_datasource_id_by_name(
+                            # Re-resolve by name and purge any still-live conflicting IDs.
+                            refreshed_ids = resolve_existing_datasource_ids_by_name(
                                 endpoint=endpoint,
                                 api_key=api_key,
                                 client_app_name=client_app_name,
@@ -2513,7 +2712,7 @@ def run_new_request_with_followup_add(
                                 verbose=verbose,
                             )
 
-                            if refreshed_id is not None:
+                            for refreshed_id in refreshed_ids:
                                 try:
                                     run_datasource_request(
                                         endpoint=endpoint,
@@ -2549,7 +2748,194 @@ def run_new_request_with_followup_add(
                                 )
                             time.sleep(recreate_delay_seconds * attempt)
                             continue
+                        if is_name_conflict:
+                            # Final name-conflict attempt: exit retry loop and trigger fallback below.
+                            break
                         raise
+
+                # Defensive fallback: some backend states keep name reservation
+                # visible after delete/recreate windows. Reuse the live datasource
+                # by name and continue upload instead of failing the whole run.
+                if last_recreate_exc and is_existing_datasource_name_conflict(
+                    last_recreate_exc.error_code,
+                    last_recreate_exc.api_message,
+                ):
+                    live_id = resolve_existing_datasource_id_by_name(
+                        endpoint=endpoint,
+                        api_key=api_key,
+                        client_app_name=client_app_name,
+                        service_name=service_name,
+                        remote_user=remote_user,
+                        kb_id=kb_id,
+                        datasource_name=conflict_name,
+                        timeout_seconds=timeout_seconds,
+                        verify_ssl=verify_ssl,
+                        proxies=proxies,
+                        verbose=verbose,
+                    )
+
+                    if live_id is not None:
+                        add_payload_fallback: dict[str, Any] = {"id": int(live_id)}
+                        if requested_processor:
+                            add_payload_fallback["processor"] = requested_processor
+                        if requested_processor_params:
+                            add_payload_fallback["processorParams"] = requested_processor_params
+
+                        add_fallback_response = run_add_request_skip_existing_files(
+                            endpoint=endpoint,
+                            api_key=api_key,
+                            client_app_name=client_app_name,
+                            service_name=service_name,
+                            remote_user=remote_user,
+                            kb_id=kb_id,
+                            datasource_payload=add_payload_fallback,
+                            file_paths=file_paths,
+                            request_types=[DEFAULT_TYPE_ADD],
+                            request_part_names=request_part_names,
+                            payload_modes=payload_modes,
+                            timestamp_modes=timestamp_modes,
+                            max_retries=max_retries,
+                            timeout_seconds=timeout_seconds,
+                            verify_ssl=verify_ssl,
+                            proxies=proxies,
+                            fail_on_existing_files=fail_on_existing_files,
+                            verbose=verbose,
+                        )
+
+                        final_fallback = dict(add_fallback_response)
+                        final_fallback["datasource"] = int(live_id)
+                        final_fallback.setdefault(
+                            "message",
+                            (
+                                f'Datasource "{conflict_name}" remained reserved after replace purge; '
+                                "fallback executed with add on live datasource ID."
+                            ),
+                        )
+                        return final_fallback
+
+                    # Backend may keep the name reserved while list visibility lags.
+                    # Wait briefly, then retry create and fallback add with candidate IDs.
+                    settle_attempts = 6
+                    settle_delay_seconds = 5
+                    for settle_attempt in range(1, settle_attempts + 1):
+                        if verbose:
+                            print(
+                                "Replace settle window: datasource name still reserved and unresolved; "
+                                f"attempt {settle_attempt}/{settle_attempts}."
+                            )
+
+                        time.sleep(settle_delay_seconds)
+
+                        try:
+                            recreated_after_settle = run_datasource_request(
+                                endpoint=endpoint,
+                                api_key=api_key,
+                                client_app_name=client_app_name,
+                                service_name=service_name,
+                                remote_user=remote_user,
+                                kb_id=kb_id,
+                                datasource_payload=datasource_payload,
+                                file_paths=[first_path],
+                                request_types=request_types,
+                                request_part_names=request_part_names,
+                                payload_modes=payload_modes,
+                                timestamp_modes=timestamp_modes,
+                                max_retries=max_retries,
+                                timeout_seconds=timeout_seconds,
+                                verify_ssl=verify_ssl,
+                                proxies=proxies,
+                                verbose=verbose,
+                            )
+                            final_settle_create = finalize_created_response(recreated_after_settle)
+                            final_settle_create.setdefault(
+                                "message",
+                                (
+                                    f'Datasource "{conflict_name}" was eventually released after replace purge; '
+                                    "recreate succeeded after settle wait."
+                                ),
+                            )
+                            return final_settle_create
+                        except ApiRejectedError as settle_create_exc:
+                            if not is_existing_datasource_name_conflict(
+                                settle_create_exc.error_code,
+                                settle_create_exc.api_message,
+                            ):
+                                raise
+
+                        candidate_add_ids: list[int] = []
+                        seen_candidate_add_ids: set[int] = set()
+
+                        resolved_ids = resolve_existing_datasource_ids_by_name(
+                            endpoint=endpoint,
+                            api_key=api_key,
+                            client_app_name=client_app_name,
+                            service_name=service_name,
+                            remote_user=remote_user,
+                            kb_id=kb_id,
+                            datasource_name=conflict_name,
+                            timeout_seconds=timeout_seconds,
+                            verify_ssl=verify_ssl,
+                            proxies=proxies,
+                            verbose=verbose,
+                        )
+
+                        for candidate in [*resolved_ids, existing_datasource_id]:
+                            try:
+                                parsed_candidate = int(candidate)
+                            except Exception:
+                                continue
+                            if parsed_candidate <= 0 or parsed_candidate in seen_candidate_add_ids:
+                                continue
+                            seen_candidate_add_ids.add(parsed_candidate)
+                            candidate_add_ids.append(parsed_candidate)
+
+                        for candidate_add_id in candidate_add_ids:
+                            add_payload_candidate: dict[str, Any] = {"id": int(candidate_add_id)}
+                            if requested_processor:
+                                add_payload_candidate["processor"] = requested_processor
+                            if requested_processor_params:
+                                add_payload_candidate["processorParams"] = requested_processor_params
+
+                            try:
+                                add_settle_response = run_add_request_skip_existing_files(
+                                    endpoint=endpoint,
+                                    api_key=api_key,
+                                    client_app_name=client_app_name,
+                                    service_name=service_name,
+                                    remote_user=remote_user,
+                                    kb_id=kb_id,
+                                    datasource_payload=add_payload_candidate,
+                                    file_paths=file_paths,
+                                    request_types=[DEFAULT_TYPE_ADD],
+                                    request_part_names=request_part_names,
+                                    payload_modes=payload_modes,
+                                    timestamp_modes=timestamp_modes,
+                                    max_retries=max_retries,
+                                    timeout_seconds=timeout_seconds,
+                                    verify_ssl=verify_ssl,
+                                    proxies=proxies,
+                                    fail_on_existing_files=fail_on_existing_files,
+                                    verbose=verbose,
+                                )
+                                final_settle_add = dict(add_settle_response)
+                                final_settle_add["datasource"] = int(candidate_add_id)
+                                final_settle_add.setdefault(
+                                    "message",
+                                    (
+                                        f'Datasource "{conflict_name}" was still reserved after replace purge; '
+                                        "fallback executed with add after settle wait."
+                                    ),
+                                )
+                                return final_settle_add
+                            except ApiRejectedError as settle_add_exc:
+                                if is_deleted_or_missing_datasource_error(
+                                    settle_add_exc.error_code,
+                                    settle_add_exc.api_message,
+                                ):
+                                    continue
+                                raise
+
+                    raise last_recreate_exc
 
             elif verbose:
                 print(

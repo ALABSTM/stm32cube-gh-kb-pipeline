@@ -111,9 +111,9 @@
                                               },
                               "STM32CubeH7":  {
                                                   "issues":  24406,
-                                                  "files":  29041,
-                                                  "diagnostic":  24408,
-                                                  "resolver":  24410
+                                                  "files":  32619,
+                                                  "diagnostic":  32585,
+                                                  "resolver":  32586
                                               },
                               "STM32CubeH7RS":  {
                                                     "issues":  29270,
@@ -171,8 +171,8 @@
                                               },
                               "STM32CubeWB0":  {
                                                    "issues":  31245,
-                                                   "files":  31264,
-                                                   "diagnostic":  31265,
+                                                   "files":  32620,
+                                                   "diagnostic":  32621,
                                                    "resolver":  29936
                                                },
                               "STM32CubeWBA":  {

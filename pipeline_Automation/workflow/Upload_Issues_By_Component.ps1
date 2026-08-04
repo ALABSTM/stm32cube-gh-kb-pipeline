@@ -208,6 +208,7 @@ function Upload-SeriesByComponent {
 
     $idCache = Load-IdCache -Path $idCachePath
     $items = @($summary.datasources)
+    $skipAddForRemaining = $false
 
     foreach ($item in $items) {
         $datasourceName = [string]$item.datasource_name
@@ -238,6 +239,14 @@ function Upload-SeriesByComponent {
             $existingId = [int]$idCache[$datasourceName]
         }
 
+        if ($existingId -and $skipAddForRemaining) {
+            Write-Host "[info] cached IDs marked stale for this run; skipping add for $datasourceName and recreating with operation=new" -ForegroundColor DarkYellow
+            if ($idCache.ContainsKey($datasourceName)) {
+                $idCache.Remove($datasourceName)
+            }
+            $existingId = $null
+        }
+
         if ($existingId) {
             $args = @(
                 $uploader,
@@ -262,6 +271,9 @@ function Upload-SeriesByComponent {
                 $errText = [string]$_.Exception.Message
                 if ($errText -match "KbDataSourceEntity" -or $errText -match "does not exist \(already deleted or invalid\)") {
                     Write-Host "[warn] cached datasource ID $existingId is invalid for $datasourceName; recreating with operation=new" -ForegroundColor Yellow
+                    # The per-component cache often expires in batch; after first invalid ID,
+                    # skip add for remaining components and recreate directly to avoid noisy failures.
+                    $skipAddForRemaining = $true
                     if ($idCache.ContainsKey($datasourceName)) {
                         $idCache.Remove($datasourceName)
                     }

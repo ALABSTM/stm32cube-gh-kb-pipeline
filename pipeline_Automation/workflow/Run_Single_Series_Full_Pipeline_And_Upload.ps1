@@ -506,14 +506,23 @@ function Invoke-IssuesByComponentUpload {
     }
 
     Write-Host "`n===== Upload issues by component for $Series =====" -ForegroundColor Cyan
-    & powershell -ExecutionPolicy Bypass -File $uploadScript `
-        -Series $Series `
-        -PythonExe $PythonExe `
-        -RemoteUser $RemoteUser `
-        -ApiKey $ApiKey `
-        -ClientAppName $ClientAppName `
-        -KbId $KbId `
-        -JsonSplitSize $JsonSplitSize
+    $uploadArgs = @(
+        "-ExecutionPolicy", "Bypass",
+        "-File", $uploadScript,
+        "-Series", $Series,
+        "-PythonExe", $PythonExe,
+        "-RemoteUser", $RemoteUser,
+        "-KbId", "$KbId",
+        "-JsonSplitSize", "$JsonSplitSize"
+    )
+    if (-not [string]::IsNullOrWhiteSpace($ApiKey)) {
+        $uploadArgs += @("-ApiKey", $ApiKey)
+    }
+    if (-not [string]::IsNullOrWhiteSpace($ClientAppName)) {
+        $uploadArgs += @("-ClientAppName", $ClientAppName)
+    }
+
+    & powershell @uploadArgs
     if ($LASTEXITCODE -ne 0) {
         throw "Upload issues by component failed for $Series"
     }
