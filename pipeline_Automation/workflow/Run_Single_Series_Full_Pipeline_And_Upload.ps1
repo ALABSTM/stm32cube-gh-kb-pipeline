@@ -388,11 +388,25 @@ function Invoke-AlfredIssueImageDescriptionsForSeries {
 }
 
 function Invoke-AlfredPdfFigureDescriptions {
-    $args = @("pipeline_Automation/alfred/enrich_pdf_figures_with_alfred.py")
-    if ($UseAlfredProxy) {
-        $args += "--use-proxy"
+    param([string[]]$Repos)
+
+    $targetRepos = @($Repos | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+    if ($targetRepos.Count -eq 0) {
+        $targetRepos = @(Get-ConfigRepos $configPath)
     }
-    Invoke-Step "Alfred PDF figure descriptions" $args
+
+    if ($targetRepos.Count -eq 0) {
+        Write-Host "[SKIP] No repos resolved for Alfred PDF figure descriptions (series=$Series)." -ForegroundColor Yellow
+        return
+    }
+
+    foreach ($repo in $targetRepos) {
+        $args = @("pipeline_Automation/alfred/enrich_pdf_figures_with_alfred.py", "--repo", $repo)
+        if ($UseAlfredProxy) {
+            $args += "--use-proxy"
+        }
+        Invoke-Step "Alfred PDF figure descriptions for $repo" $args
+    }
 }
 
 function Invoke-PlaceholderGate {
@@ -541,7 +555,8 @@ function Invoke-PreUploadAlfredFinalize {
     if ($SkipAlfredEnrichment) {
         Write-Host "[SKIP] Pre-upload Alfred finalize disabled by -SkipAlfredEnrichment" -ForegroundColor Yellow
     } else {
-        Invoke-AlfredPdfFigureDescriptions
+        $repos = Get-ConfigRepos $configPath
+        Invoke-AlfredPdfFigureDescriptions -Repos $repos
         Invoke-AlfredIssueImageDescriptionsForSeries
         Invoke-Step "Patch Alfred PDF descriptions into root and driver delivery files" @("pipeline_Automation/patch_pdf_descriptions_in_delivery.py")
     }
@@ -564,6 +579,7 @@ function Invoke-UploadJsonNew {
         [string]$RootKey,
         [string]$DatasourceName,
         [string]$ProcessorParams,
+        [int]$ExistingDatasourceIdHint = 0,
         [switch]$AllowEmpty
     )
 
@@ -591,6 +607,9 @@ function Invoke-UploadJsonNew {
         "--timeout", "$uploadTimeoutSeconds",
         "--files", (Resolve-Path $FilePath).Path
     )
+    if ($ExistingDatasourceIdHint -gt 0) {
+        $args += @("--existing-datasource-id-hint", "$ExistingDatasourceIdHint")
+    }
     $args += @(Get-UploadAuthArgs)
 
     $output = Invoke-CapturedPython "Create datasource and upload $Label" $args
@@ -641,6 +660,7 @@ function Invoke-UploadJsonAdd {
             -RootKey $RootKey `
             -DatasourceName $DatasourceNameForFallback `
             -ProcessorParams $ProcessorParams `
+            -ExistingDatasourceIdHint $DatasourceId `
             -AllowEmpty:$AllowEmpty
 
         Write-Host "[REPLACE] Datasource ID updated for ${Label}: DS#$DatasourceId -> DS#$newDatasourceId" -ForegroundColor DarkCyan

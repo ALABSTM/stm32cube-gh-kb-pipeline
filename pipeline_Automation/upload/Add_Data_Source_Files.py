@@ -2439,6 +2439,7 @@ def run_new_request_with_followup_add(
     timeout_seconds: int,
     verify_ssl: bool,
     proxies: dict[str, str] | None,
+    existing_datasource_id_hint: int | None,
     existing_datasource_policy: str,
     fail_on_existing_files: bool,
     verbose: bool,
@@ -2601,8 +2602,8 @@ def run_new_request_with_followup_add(
         )
 
         if existing_datasource_id is None:
-            resolve_attempts = 5
-            resolve_delay_seconds = 3
+            resolve_attempts = 20
+            resolve_delay_seconds = 5
             for attempt in range(2, resolve_attempts + 1):
                 if verbose:
                     print(
@@ -2659,6 +2660,19 @@ def run_new_request_with_followup_add(
                 if verbose:
                     print(
                         "Datasource ID resolved from by_component upload ID snapshot "
+                        f"for '{conflict_name}': {existing_datasource_id}"
+                    )
+
+        if existing_datasource_id is None and existing_datasource_id_hint is not None:
+            try:
+                parsed_hint_id = int(existing_datasource_id_hint)
+            except Exception:
+                parsed_hint_id = 0
+            if parsed_hint_id > 0:
+                existing_datasource_id = parsed_hint_id
+                if verbose:
+                    print(
+                        "Datasource ID resolved from existing datasource hint "
                         f"for '{conflict_name}': {existing_datasource_id}"
                     )
 
@@ -2749,11 +2763,11 @@ def run_new_request_with_followup_add(
                                 f"continuing (id={delete_id})."
                             )
 
-                # Give backend indexing a brief grace period after delete before recreate.
-                time.sleep(2)
+                # Give backend indexing a grace period after delete before recreate.
+                time.sleep(8)
 
-                recreate_attempts = 6
-                recreate_delay_seconds = 3
+                recreate_attempts = 10
+                recreate_delay_seconds = 6
                 last_recreate_exc: ApiRejectedError | None = None
                 for attempt in range(1, recreate_attempts + 1):
                     try:
@@ -2900,8 +2914,8 @@ def run_new_request_with_followup_add(
 
                     # Backend may keep the name reserved while list visibility lags.
                     # Wait briefly, then retry create and fallback add with candidate IDs.
-                    settle_attempts = 6
-                    settle_delay_seconds = 5
+                    settle_attempts = 12
+                    settle_delay_seconds = 10
                     for settle_attempt in range(1, settle_attempts + 1):
                         if verbose:
                             print(
@@ -3240,6 +3254,14 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     parser.add_argument(
+        "--existing-datasource-id-hint",
+        type=int,
+        help=(
+            "Optional known datasource ID for --operation new with --existing-datasource-policy replace. "
+            "Used as a deterministic fallback when name-based ID lookup cannot resolve the live datasource."
+        ),
+    )
+    parser.add_argument(
         "--delete-not-found-policy",
         choices=["fail", "ignore"],
         default="fail",
@@ -3528,6 +3550,7 @@ def main() -> None:
                 timeout_seconds=max(5, args.timeout),
                 verify_ssl=args.verify_ssl,
                 proxies=proxies,
+                existing_datasource_id_hint=args.existing_datasource_id_hint,
                 existing_datasource_policy=args.existing_datasource_policy,
                 fail_on_existing_files=args.fail_on_existing_files,
                 verbose=args.verbose,

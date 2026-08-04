@@ -234,8 +234,9 @@ function Upload-SeriesByComponent {
             -LinkUrl "https://github.com/STMicroelectronics/$Slug/issues" `
             -LinkLabel "ST GitHub Analyzer - $seriesCode - $componentLabel"
 
+        $existingIdHint = 0
         if ($idCache.ContainsKey($datasourceName)) {
-            $idCache.Remove($datasourceName)
+            $existingIdHint = [int]$idCache[$datasourceName]
         }
 
         $args = @(
@@ -254,6 +255,9 @@ function Upload-SeriesByComponent {
             "--timeout", "60",
             "--files", $filePath
         )
+        if ($existingIdHint -gt 0) {
+            $args += @("--existing-datasource-id-hint", "$existingIdHint")
+        }
         $args += @(Get-UploadAuthArgs)
 
         $outLines = Invoke-Uploader -Label "$datasourceName (replace)" -CommandArgs $args
