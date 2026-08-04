@@ -2935,6 +2935,25 @@ def run_new_request_with_followup_add(
                                     continue
                                 raise
 
+                    # Last-resort CI fallback: when backend keeps canonical name reserved
+                    # and the live datasource ID cannot be resolved, create a unique name
+                    # so the workflow can proceed without manual KB cleanup.
+                    if os.environ.get("GITHUB_ACTIONS", "").strip().lower() == "true":
+                        unique_create_response = create_with_unique_name_fallback(
+                            "replace conflict persisted after settle window"
+                        )
+                        final_unique_replace = finalize_created_response(unique_create_response)
+                        used_name = str(final_unique_replace.get("datasource_name_used") or "").strip()
+                        final_unique_replace.setdefault(
+                            "message",
+                            (
+                                f'Datasource "{conflict_name}" remained reserved after replace retries; '
+                                "created datasource with unique fallback name"
+                                + (f' "{used_name}".' if used_name else ".")
+                            ),
+                        )
+                        return final_unique_replace
+
                     raise last_recreate_exc
 
             elif verbose:
