@@ -33,7 +33,7 @@ datasets/03_enriched/
 datasets/04_similarity/
 datasets/05_chunked/
 datasets/06_evaluated/
-datasets/07_delivery/st_ready/by_series/
+# by_series/ is tracked via Git LFS (see .gitattributes) - do not ignore
 datasets/07_delivery/st_ready/issues_json/
 datasets/07_delivery/st_ready/files_json/
 datasets/07_delivery/st_ready/resolver_cases_json/
