@@ -1004,7 +1004,7 @@ function Sync-DatasourceIdsFromKbLive {
         if ([int]::TryParse([string]$ids.diagnostic, [ref]$tmp) -and $tmp -gt 0) { $newDiagnostic = $tmp }
         if ([int]::TryParse([string]$ids.resolver, [ref]$tmp) -and $tmp -gt 0) { $newResolver = $tmp }
 
-        Write-Host "[SYNC] Live KB datasource IDs resolved for $Series: issues=$newIssues files=$newFiles diagnostic=$newDiagnostic resolver=$newResolver" -ForegroundColor DarkCyan
+        Write-Host "[SYNC] Live KB datasource IDs resolved for ${Series}: issues=$newIssues files=$newFiles diagnostic=$newDiagnostic resolver=$newResolver" -ForegroundColor DarkCyan
 
         return @{
             issues = $newIssues
@@ -1014,7 +1014,7 @@ function Sync-DatasourceIdsFromKbLive {
         }
     }
     catch {
-        Write-Host "[WARN] Live KB ID sync failed for $Series: $($_.Exception.Message)" -ForegroundColor Yellow
+        Write-Host "[WARN] Live KB ID sync failed for ${Series}: $($_.Exception.Message)" -ForegroundColor Yellow
         return @{
             issues = $CurrentIssuesId
             files = $CurrentFilesId
