@@ -952,6 +952,78 @@ function Save-DatasourceIdsSnapshot {
     }
 }
 
+function Sync-DatasourceIdsFromKbLive {
+    param(
+        [int]$CurrentIssuesId,
+        [int]$CurrentFilesId,
+        [int]$CurrentDiagnosticId,
+        [int]$CurrentResolverId
+    )
+
+    $resolverScript = "pipeline_Automation/upload/Resolve_Live_Datasource_Ids.py"
+    if (-not (Test-Path -LiteralPath $resolverScript)) {
+        Write-Host "[WARN] Live KB ID resolver script not found: $resolverScript" -ForegroundColor Yellow
+        return @{
+            issues = $CurrentIssuesId
+            files = $CurrentFilesId
+            diagnostic = $CurrentDiagnosticId
+            resolver = $CurrentResolverId
+        }
+    }
+
+    $args = @(
+        $resolverScript,
+        "--kb", "$KbId",
+        "--series", $Series,
+        "--remote-user", $RemoteUser,
+        "--timeout", "60"
+    )
+    $args += @(Get-UploadAuthArgs)
+
+    try {
+        $output = Invoke-CapturedPython "Resolve live datasource IDs from KB for $Series" $args
+        $rawJson = ($output | Where-Object { $_ -and $_.Trim().StartsWith("{") } | Select-Object -Last 1)
+        if (-not $rawJson) {
+            throw "Resolver returned no JSON payload."
+        }
+
+        $resolved = $rawJson | ConvertFrom-Json
+        $ids = $resolved.resolved_ids
+        if ($null -eq $ids) {
+            throw "Resolver JSON does not contain resolved_ids."
+        }
+
+        $newIssues = $CurrentIssuesId
+        $newFiles = $CurrentFilesId
+        $newDiagnostic = $CurrentDiagnosticId
+        $newResolver = $CurrentResolverId
+
+        $tmp = 0
+        if ([int]::TryParse([string]$ids.issues, [ref]$tmp) -and $tmp -gt 0) { $newIssues = $tmp }
+        if ([int]::TryParse([string]$ids.files, [ref]$tmp) -and $tmp -gt 0) { $newFiles = $tmp }
+        if ([int]::TryParse([string]$ids.diagnostic, [ref]$tmp) -and $tmp -gt 0) { $newDiagnostic = $tmp }
+        if ([int]::TryParse([string]$ids.resolver, [ref]$tmp) -and $tmp -gt 0) { $newResolver = $tmp }
+
+        Write-Host "[SYNC] Live KB datasource IDs resolved for $Series: issues=$newIssues files=$newFiles diagnostic=$newDiagnostic resolver=$newResolver" -ForegroundColor DarkCyan
+
+        return @{
+            issues = $newIssues
+            files = $newFiles
+            diagnostic = $newDiagnostic
+            resolver = $newResolver
+        }
+    }
+    catch {
+        Write-Host "[WARN] Live KB ID sync failed for $Series: $($_.Exception.Message)" -ForegroundColor Yellow
+        return @{
+            issues = $CurrentIssuesId
+            files = $CurrentFilesId
+            diagnostic = $CurrentDiagnosticId
+            resolver = $CurrentResolverId
+        }
+    }
+}
+
 function Invoke-UploadSeries {
     if (-not (Test-Path -LiteralPath $deliveryRoot)) {
         throw "Delivery root not found for ${Series}: $deliveryRoot. Upload mode requires pre-generated delivery artifacts. Run with -Mode Full, or run with -Mode Prepare then upload from the same workflow run/artifacts."
@@ -1021,6 +1093,19 @@ function Invoke-UploadSeries {
             Write-Host "[WARN] Could not parse datasource IDs from $globalConfigPath. Proceeding without global fallback." -ForegroundColor Yellow
         }
     }
+
+    # Runtime synchronization from KB is the source of truth.
+    # This keeps automation aligned even when repo config IDs are stale.
+    $synced = Sync-DatasourceIdsFromKbLive `
+        -CurrentIssuesId $IssuesDatasourceId `
+        -CurrentFilesId $FilesDatasourceId `
+        -CurrentDiagnosticId $DiagnosticDatasourceId `
+        -CurrentResolverId $ResolverDatasourceId
+
+    $IssuesDatasourceId = [int]$synced.issues
+    $FilesDatasourceId = [int]$synced.files
+    $DiagnosticDatasourceId = [int]$synced.diagnostic
+    $ResolverDatasourceId = [int]$synced.resolver
 
     $issuesFile = "$deliveryRoot/issues_json/st_ready_issues_with_images_$slug.json"
     $filesFile = "$deliveryRoot/files_json/st_ready_files_${slug}_v3.json"

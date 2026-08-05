@@ -3153,7 +3153,15 @@ def run_new_request_with_followup_add(
                                 continue
                             raise
 
-                    raise last_recreate_exc
+                    # Anti-duplication guard: do not create a unique datasource name here.
+                    # If we cannot resolve a live datasource ID for the canonical name,
+                    # fail explicitly so operators can re-run after backend settles or
+                    # refresh configured IDs, without creating duplicate datasources.
+                    raise RuntimeError(
+                        f"Replace fallback exhausted for datasource '{conflict_name}'. "
+                        "Canonical datasource name is still reserved and no usable live datasource ID "
+                        "could be resolved; aborting to prevent duplicate datasource creation."
+                    ) from last_recreate_exc
 
             elif verbose:
                 print(
