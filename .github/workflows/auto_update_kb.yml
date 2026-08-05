@@ -534,6 +534,7 @@ jobs:
           clean: true
           submodules: false
           persist-credentials: false
+          lfs: true
           fetch-depth: 1
 
       - name: Enable long paths (Windows)
@@ -762,6 +763,7 @@ jobs:
           clean: true
           submodules: false
           persist-credentials: false
+          lfs: true
           fetch-depth: 1
 
       - name: Enable long paths (Windows)

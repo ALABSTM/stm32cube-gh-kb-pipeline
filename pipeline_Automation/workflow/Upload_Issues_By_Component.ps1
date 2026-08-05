@@ -24,6 +24,8 @@ param(
     [int]$KbId = 793,
     [int]$JsonSplitSize = 1000,
     [string]$PythonExe = "",
+    [ValidateSet("add", "replace")]
+    [string]$ExistingDatasourcePolicy = "add",
     [switch]$DryRun
 )
 
@@ -169,6 +171,11 @@ function Load-IdCache {
 
     try {
         $rawText = Get-Content -LiteralPath $Path -Raw
+        if ($rawText -match "^version\s+https://git-lfs.github.com/spec/v1") {
+            Write-Host "[warn] Component ID cache is a Git LFS pointer (not materialized): $Path" -ForegroundColor Yellow
+            Write-Host "[warn] This run has no concrete component IDs from cache; enable LFS checkout or provide IDs by another source." -ForegroundColor DarkYellow
+            return @{}
+        }
         $raw = $rawText | ConvertFrom-Json
     } catch {
         Write-Host "[warn] Invalid JSON in component ID cache, ignoring file: $Path" -ForegroundColor Yellow
@@ -269,7 +276,7 @@ function Upload-SeriesByComponent {
             "--operation", "new",
             "--datasource-name", $datasourceName,
             "--datasource-classification", "PUBLIC",
-            "--existing-datasource-policy", "replace",
+            "--existing-datasource-policy", $ExistingDatasourcePolicy,
             "--remote-user", $RemoteUser,
             "--processor", "JSON",
             "--processor-params", $processorParams,
@@ -284,7 +291,7 @@ function Upload-SeriesByComponent {
         }
         $args += @(Get-UploadAuthArgs)
 
-        $outLines = Invoke-Uploader -Label "$datasourceName (replace)" -CommandArgs $args
+        $outLines = Invoke-Uploader -Label "$datasourceName ($ExistingDatasourcePolicy)" -CommandArgs $args
 
         if (-not $DryRun) {
             $newId = Parse-DatasourceId -Lines $outLines

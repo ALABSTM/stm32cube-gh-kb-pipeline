@@ -171,8 +171,8 @@
                                               },
                               "STM32CubeWB0":  {
                                                    "issues":  32581,
-                                                   "files":  32652,
-                                                   "diagnostic":  32653,
+                                                   "files":  32662,
+                                                   "diagnostic":  32663,
                                                    "resolver":  29936
                                                },
                               "STM32CubeWBA":  {

@@ -527,7 +527,8 @@ function Invoke-IssuesByComponentUpload {
         "-PythonExe", $PythonExe,
         "-RemoteUser", $RemoteUser,
         "-KbId", "$KbId",
-        "-JsonSplitSize", "$JsonSplitSize"
+        "-JsonSplitSize", "$JsonSplitSize",
+        "-ExistingDatasourcePolicy", "add"
     )
     if (-not [string]::IsNullOrWhiteSpace($ApiKey)) {
         $uploadArgs += @("-ApiKey", $ApiKey)
@@ -997,14 +998,35 @@ function Sync-DatasourceIdsFromKbLive {
         $newFiles = $CurrentFilesId
         $newDiagnostic = $CurrentDiagnosticId
         $newResolver = $CurrentResolverId
+        $liveIssuesResolved = $false
+        $liveFilesResolved = $false
+        $liveDiagnosticResolved = $false
+        $liveResolverResolved = $false
 
         $tmp = 0
-        if ([int]::TryParse([string]$ids.issues, [ref]$tmp) -and $tmp -gt 0) { $newIssues = $tmp }
-        if ([int]::TryParse([string]$ids.files, [ref]$tmp) -and $tmp -gt 0) { $newFiles = $tmp }
-        if ([int]::TryParse([string]$ids.diagnostic, [ref]$tmp) -and $tmp -gt 0) { $newDiagnostic = $tmp }
-        if ([int]::TryParse([string]$ids.resolver, [ref]$tmp) -and $tmp -gt 0) { $newResolver = $tmp }
+        if ([int]::TryParse([string]$ids.issues, [ref]$tmp) -and $tmp -gt 0) {
+            $newIssues = $tmp
+            $liveIssuesResolved = $true
+        }
+        if ([int]::TryParse([string]$ids.files, [ref]$tmp) -and $tmp -gt 0) {
+            $newFiles = $tmp
+            $liveFilesResolved = $true
+        }
+        if ([int]::TryParse([string]$ids.diagnostic, [ref]$tmp) -and $tmp -gt 0) {
+            $newDiagnostic = $tmp
+            $liveDiagnosticResolved = $true
+        }
+        if ([int]::TryParse([string]$ids.resolver, [ref]$tmp) -and $tmp -gt 0) {
+            $newResolver = $tmp
+            $liveResolverResolved = $true
+        }
 
-        Write-Host "[SYNC] Live KB datasource IDs resolved for ${Series}: issues=$newIssues files=$newFiles diagnostic=$newDiagnostic resolver=$newResolver" -ForegroundColor DarkCyan
+        $liveResolvedCount = @($liveIssuesResolved, $liveFilesResolved, $liveDiagnosticResolved, $liveResolverResolved | Where-Object { $_ }).Count
+        if ($liveResolvedCount -eq 0) {
+            Write-Host "[WARN] Live KB resolver returned no datasource IDs for ${Series}. Keeping current IDs: issues=$newIssues files=$newFiles diagnostic=$newDiagnostic resolver=$newResolver" -ForegroundColor Yellow
+        } else {
+            Write-Host "[SYNC] Live KB datasource IDs resolved for ${Series} ($liveResolvedCount/4 from KB): issues=$newIssues files=$newFiles diagnostic=$newDiagnostic resolver=$newResolver" -ForegroundColor DarkCyan
+        }
 
         return @{
             issues = $newIssues

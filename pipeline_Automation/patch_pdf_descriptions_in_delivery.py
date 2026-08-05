@@ -32,10 +32,15 @@ def load_descriptions() -> dict[str, str]:
     missing or not a JSON object.
     """
     if not DESCRIPTIONS_FILE.exists():
-        print(f"[ERROR] Descriptions file not found: {DESCRIPTIONS_FILE}")
+        print(f"[WARN] Descriptions file not found: {DESCRIPTIONS_FILE}")
         return {}
-    data = json.loads(DESCRIPTIONS_FILE.read_text(encoding="utf-8"))
+    try:
+        data = json.loads(DESCRIPTIONS_FILE.read_text(encoding="utf-8"))
+    except Exception as exc:
+        print(f"[WARN] Failed to parse descriptions JSON: {exc}")
+        return {}
     if not isinstance(data, dict):
+        print("[WARN] Descriptions JSON is not an object; skipping PDF patch.")
         return {}
     return {str(k): str(v) for k, v in data.items() if isinstance(v, str)}
 
@@ -78,7 +83,7 @@ def main():
 
     descriptions = load_descriptions()
     if not descriptions:
-        print("[ERROR] No descriptions loaded. Aborting.")
+        print("[WARN] No descriptions loaded. Skipping PDF patch step.")
         return
 
     print(f"Loaded {len(descriptions)} PDF figure descriptions from {DESCRIPTIONS_FILE.name}")
