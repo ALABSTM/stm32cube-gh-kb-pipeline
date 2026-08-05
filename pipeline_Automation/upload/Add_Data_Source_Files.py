@@ -773,6 +773,11 @@ def datasource_entry_id(entry: dict[str, Any]) -> int:
         "dataSourceId",
         "datasource_id",
         "kbDatasourceId",
+        "kbDataSourceId",
+        "datasourceID",
+        "dataSourceID",
+        "entityId",
+        "entityID",
     )
     for key in id_candidates:
         raw = entry.get(key)
@@ -784,6 +789,26 @@ def datasource_entry_id(entry: dict[str, Any]) -> int:
             continue
         if parsed > 0:
             return parsed
+
+    # Fallback: some kb-list variants nest datasource metadata.
+    nested_candidates = (
+        "datasource",
+        "dataSource",
+        "kbDatasource",
+        "kbDataSource",
+        "source",
+        "entity",
+    )
+    for key in nested_candidates:
+        raw_nested = entry.get(key)
+        if not isinstance(raw_nested, dict):
+            continue
+        try:
+            nested_id = datasource_entry_id(raw_nested)
+        except Exception:
+            continue
+        if nested_id > 0:
+            return nested_id
     raise ValueError("Datasource entry has no numeric ID")
 
 
@@ -796,6 +821,11 @@ def datasource_entry_name(entry: dict[str, Any]) -> str:
         "datasourceName",
         "dataSourceName",
         "datasource_name",
+        "displayName",
+        "display_name",
+        "title",
+        "label",
+        "datasource",
     )
     for key in name_candidates:
         raw = entry.get(key)
@@ -804,6 +834,22 @@ def datasource_entry_name(entry: dict[str, Any]) -> str:
         value = raw.strip()
         if value:
             return value
+
+    nested_candidates = (
+        "datasource",
+        "dataSource",
+        "kbDatasource",
+        "kbDataSource",
+        "source",
+        "entity",
+    )
+    for key in nested_candidates:
+        raw_nested = entry.get(key)
+        if not isinstance(raw_nested, dict):
+            continue
+        nested_name = datasource_entry_name(raw_nested)
+        if nested_name:
+            return nested_name
     return ""
 
 
