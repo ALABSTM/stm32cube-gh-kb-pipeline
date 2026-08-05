@@ -154,8 +154,8 @@
                                               },
                               "STM32CubeU3":  {
                                                   "issues":  29907,
-                                                  "files":  32644,
-                                                  "diagnostic":  32645
+                                                  "files":  32677,
+                                                  "diagnostic":  32678
                                               },
                               "STM32CubeU5":  {
                                                   "issues":  28167,
@@ -171,8 +171,8 @@
                                               },
                               "STM32CubeWB0":  {
                                                    "issues":  32581,
-                                                   "files":  32662,
-                                                   "diagnostic":  32663,
+                                                   "files":  32675,
+                                                   "diagnostic":  32676,
                                                    "resolver":  29936
                                                },
                               "STM32CubeWBA":  {

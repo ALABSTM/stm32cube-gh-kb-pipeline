@@ -715,19 +715,21 @@ def list_datasource_entries_from_kb_entry(kb_entry: dict[str, Any] | None) -> li
             datasource_entry_id(node)
         except Exception:
             return False
-
+        # Require datasource-specific metadata to avoid classifying KB entries
+        # (which also have generic id/name fields) as datasources.
         return any(
             key in node
             for key in (
-                "name",
-                "datasourceName",
-                "dataSourceName",
-                "datasource_name",
                 "classification",
                 "processor",
                 "processorParams",
                 "parser",
                 "tags",
+                "datasourceName",
+                "dataSourceName",
+                "datasource_id",
+                "kbDatasourceId",
+                "kbDataSourceId",
             )
         )
 
