@@ -277,6 +277,7 @@ function Upload-SeriesByComponent {
             "--datasource-name", $datasourceName,
             "--datasource-classification", "PUBLIC",
             "--existing-datasource-policy", $ExistingDatasourcePolicy,
+            "--name-conflict-unresolved-policy", "skip",
             "--remote-user", $RemoteUser,
             "--processor", "JSON",
             "--processor-params", $processorParams,

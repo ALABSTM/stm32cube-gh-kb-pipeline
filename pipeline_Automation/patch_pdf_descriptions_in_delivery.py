@@ -12,6 +12,7 @@ Usage:
 
 import argparse
 import json
+import os
 import re
 from pathlib import Path
 
@@ -32,7 +33,9 @@ def load_descriptions() -> dict[str, str]:
     missing or not a JSON object.
     """
     if not DESCRIPTIONS_FILE.exists():
-        print(f"[WARN] Descriptions file not found: {DESCRIPTIONS_FILE}")
+        level = "INFO" if os.environ.get("GITHUB_ACTIONS") == "true" else "WARN"
+        print(f"[{level}] Descriptions file not found: {DESCRIPTIONS_FILE}")
+        print("[INFO] PDF patch step is optional; continuing without Alfred PDF descriptions.")
         return {}
     try:
         data = json.loads(DESCRIPTIONS_FILE.read_text(encoding="utf-8"))
@@ -83,7 +86,7 @@ def main():
 
     descriptions = load_descriptions()
     if not descriptions:
-        print("[WARN] No descriptions loaded. Skipping PDF patch step.")
+        print("[INFO] No descriptions loaded. Skipping PDF patch step.")
         return
 
     print(f"Loaded {len(descriptions)} PDF figure descriptions from {DESCRIPTIONS_FILE.name}")

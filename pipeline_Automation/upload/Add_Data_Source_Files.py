@@ -2486,6 +2486,7 @@ def run_new_request_with_followup_add(
     proxies: dict[str, str] | None,
     existing_datasource_id_hint: int | None,
     existing_datasource_policy: str,
+    unresolved_name_conflict_policy: str,
     fail_on_existing_files: bool,
     verbose: bool,
 ) -> dict[str, Any]:
@@ -2722,6 +2723,23 @@ def run_new_request_with_followup_add(
                     )
 
         if existing_datasource_id is None:
+            if unresolved_name_conflict_policy == "skip":
+                skip_message = (
+                    f"Datasource '{conflict_name}' already exists but its live ID could not be resolved. "
+                    "Skipping this upload entry to avoid creating a duplicate datasource."
+                )
+                if verbose:
+                    print(skip_message)
+                return {
+                    "service": service_name,
+                    "type": request_types[0] if request_types else DEFAULT_TYPE_NEW,
+                    "datasource": None,
+                    "datasource_name_used": conflict_name,
+                    "skipped": True,
+                    "skip_reason": "unresolved_existing_datasource_id",
+                    "uploaded_files": [],
+                    "message": skip_message,
+                }
             raise RuntimeError(
                 f"Datasource '{conflict_name}' already exists but its live ID could not be resolved. "
                 "Aborting to avoid creating a duplicate timestamped datasource. "
@@ -3420,6 +3438,15 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     parser.add_argument(
+        "--name-conflict-unresolved-policy",
+        choices=["fail", "skip"],
+        default="fail",
+        help=(
+            "When --operation new hits datasource name conflict but existing ID cannot be resolved: "
+            "fail (default) or skip the upload entry."
+        ),
+    )
+    parser.add_argument(
         "--delete-not-found-policy",
         choices=["fail", "ignore"],
         default="fail",
@@ -3710,6 +3737,7 @@ def main() -> None:
                 proxies=proxies,
                 existing_datasource_id_hint=args.existing_datasource_id_hint,
                 existing_datasource_policy=args.existing_datasource_policy,
+                unresolved_name_conflict_policy=args.name_conflict_unresolved_policy,
                 fail_on_existing_files=args.fail_on_existing_files,
                 verbose=args.verbose,
             )
