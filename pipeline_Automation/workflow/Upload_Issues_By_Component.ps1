@@ -167,7 +167,25 @@ function Load-IdCache {
         return @{}
     }
 
-    $raw = Get-Content -LiteralPath $Path -Raw | ConvertFrom-Json
+    try {
+        $rawText = Get-Content -LiteralPath $Path -Raw
+        $raw = $rawText | ConvertFrom-Json
+    } catch {
+        Write-Host "[warn] Invalid JSON in component ID cache, ignoring file: $Path" -ForegroundColor Yellow
+        $backupPath = "$Path.invalid"
+        try {
+            $rawText | Set-Content -LiteralPath $backupPath -Encoding UTF8
+            Write-Host "[warn] Corrupted cache content saved to: $backupPath" -ForegroundColor DarkYellow
+        } catch {
+            Write-Host "[warn] Failed to persist corrupted cache backup: $($_.Exception.Message)" -ForegroundColor DarkYellow
+        }
+        return @{}
+    }
+
+    if ($null -eq $raw) {
+        return @{}
+    }
+
     $cache = @{}
     foreach ($p in $raw.PSObject.Properties) {
         $v = 0
@@ -200,7 +218,13 @@ function Upload-SeriesByComponent {
         return
     }
 
-    $summary = Get-Content -LiteralPath $summaryPath -Raw | ConvertFrom-Json
+    try {
+        $summary = Get-Content -LiteralPath $summaryPath -Raw | ConvertFrom-Json
+    } catch {
+        Write-Host "[skip] invalid summary JSON for ${Slug}: $summaryPath" -ForegroundColor Yellow
+        Write-Host "[skip] parse error: $($_.Exception.Message)" -ForegroundColor DarkYellow
+        return
+    }
     if ($null -eq $summary -or $null -eq $summary.datasources) {
         Write-Host "[skip] no datasources in summary for $Slug" -ForegroundColor Yellow
         return
