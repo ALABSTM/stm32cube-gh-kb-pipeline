@@ -3048,6 +3048,111 @@ def run_new_request_with_followup_add(
                                 ):
                                     raise
 
+                    # Final fallback: if canonical name remains reserved, do not fail the whole run.
+                    # Try in-place add on any candidate ID (resolved by name, local snapshot/config, or explicit hint).
+                    fallback_candidates: list[int] = []
+
+                    fallback_candidates.extend(
+                        resolve_existing_datasource_ids_by_name(
+                            endpoint=endpoint,
+                            api_key=api_key,
+                            client_app_name=client_app_name,
+                            service_name=service_name,
+                            remote_user=remote_user,
+                            kb_id=kb_id,
+                            datasource_name=conflict_name,
+                            timeout_seconds=timeout_seconds,
+                            verify_ssl=verify_ssl,
+                            proxies=proxies,
+                            verbose=verbose,
+                        )
+                    )
+
+                    fallback_local_id = resolve_datasource_id_from_local_config_by_name(conflict_name)
+                    if fallback_local_id is not None:
+                        fallback_candidates.append(fallback_local_id)
+
+                    fallback_snapshot_id = resolve_datasource_id_from_delivery_snapshot_by_name(conflict_name, file_paths)
+                    if fallback_snapshot_id is not None:
+                        fallback_candidates.append(fallback_snapshot_id)
+
+                    fallback_component_snapshot_id = resolve_component_datasource_id_from_delivery_snapshot_by_name(
+                        conflict_name,
+                        file_paths,
+                    )
+                    if fallback_component_snapshot_id is not None:
+                        fallback_candidates.append(fallback_component_snapshot_id)
+
+                    if existing_datasource_id_hint is not None:
+                        try:
+                            parsed_hint_id = int(existing_datasource_id_hint)
+                        except Exception:
+                            parsed_hint_id = 0
+                        if parsed_hint_id > 0:
+                            fallback_candidates.append(parsed_hint_id)
+
+                    if existing_datasource_id is not None:
+                        fallback_candidates.append(int(existing_datasource_id))
+
+                    ordered_fallback_ids: list[int] = []
+                    seen_fallback_ids: set[int] = set()
+                    for candidate in fallback_candidates:
+                        try:
+                            parsed = int(candidate)
+                        except Exception:
+                            continue
+                        if parsed <= 0 or parsed in seen_fallback_ids:
+                            continue
+                        seen_fallback_ids.add(parsed)
+                        ordered_fallback_ids.append(parsed)
+
+                    for candidate_id in ordered_fallback_ids:
+                        add_payload_fallback: dict[str, Any] = {"id": candidate_id}
+                        if requested_processor:
+                            add_payload_fallback["processor"] = requested_processor
+                        if requested_processor_params:
+                            add_payload_fallback["processorParams"] = requested_processor_params
+
+                        try:
+                            add_fallback_response = run_add_request_skip_existing_files(
+                                endpoint=endpoint,
+                                api_key=api_key,
+                                client_app_name=client_app_name,
+                                service_name=service_name,
+                                remote_user=remote_user,
+                                kb_id=kb_id,
+                                datasource_payload=add_payload_fallback,
+                                file_paths=file_paths,
+                                request_types=[DEFAULT_TYPE_ADD],
+                                request_part_names=request_part_names,
+                                payload_modes=payload_modes,
+                                timestamp_modes=timestamp_modes,
+                                max_retries=max_retries,
+                                timeout_seconds=timeout_seconds,
+                                verify_ssl=verify_ssl,
+                                proxies=proxies,
+                                fail_on_existing_files=fail_on_existing_files,
+                                verbose=verbose,
+                            )
+
+                            final_fallback = dict(add_fallback_response)
+                            final_fallback["datasource"] = candidate_id
+                            final_fallback.setdefault(
+                                "message",
+                                (
+                                    f'Datasource "{conflict_name}" remained reserved after replace recreate attempts; '
+                                    f"fallback switched to in-place add on datasource id {candidate_id}."
+                                ),
+                            )
+                            return final_fallback
+                        except ApiRejectedError as add_fallback_exc:
+                            if is_deleted_or_missing_datasource_error(
+                                add_fallback_exc.error_code,
+                                add_fallback_exc.api_message,
+                            ):
+                                continue
+                            raise
+
                     raise last_recreate_exc
 
             elif verbose:

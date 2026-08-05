@@ -799,6 +799,11 @@ function Invoke-UploadSubrepoDeliveryAdd {
         return
     }
 
+    if ($ComponentIssuesOnly -and $Label -eq "issues") {
+        Write-Host "[SKIP] Driver/subrepo issues upload to monolithic datasource disabled by -ComponentIssuesOnly (issues are handled by per-component datasources)." -ForegroundColor Yellow
+        return
+    }
+
     if ($effectiveDatasourceId -le 0) {
         if ($filesList.Count -gt 0) {
             Write-Host "[SKIP] No datasource ID available for $Label; $($filesList.Count) driver/subrepo file(s) not uploaded" -ForegroundColor Yellow
