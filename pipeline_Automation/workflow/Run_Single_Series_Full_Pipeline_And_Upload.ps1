@@ -70,7 +70,7 @@ if (-not $PythonExe) {
     }
 }
 
-$cfgAll = Read-JsonFileSafe -Path $globalConfigPath
+$cfgAll = ((Get-Content -LiteralPath $globalConfigPath -Raw).TrimStart([char]0xFEFF)) | ConvertFrom-Json
 $seriesMap = @{}
 foreach ($seriesFull in @($cfgAll.all_series)) {
     $name = [string]$seriesFull
