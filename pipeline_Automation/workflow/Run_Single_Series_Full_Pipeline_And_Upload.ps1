@@ -883,6 +883,29 @@ function Set-OrAddProperty {
     }
 }
 
+function Get-OptionalPositiveIntProperty {
+    param(
+        [AllowNull()][object]$Target,
+        [Parameter(Mandatory = $true)][string]$Name
+    )
+
+    if ($null -eq $Target) {
+        return 0
+    }
+
+    $prop = $Target.PSObject.Properties[$Name]
+    if ($null -eq $prop -or $null -eq $prop.Value) {
+        return 0
+    }
+
+    $parsed = 0
+    if ([int]::TryParse([string]$prop.Value, [ref]$parsed) -and $parsed -gt 0) {
+        return $parsed
+    }
+
+    return 0
+}
+
 function Sync-GlobalConfigDatasourceIds {
     param(
         [Parameter(Mandatory = $true)]
@@ -952,7 +975,11 @@ function Save-DatasourceIdsSnapshot {
         }
 
         if ($null -ne $existingSnapshot) {
-            $existingValue = $existingSnapshot.$name
+            $existingValue = $null
+            $existingProp = $existingSnapshot.PSObject.Properties[$name]
+            if ($null -ne $existingProp) {
+                $existingValue = $existingProp.Value
+            }
             $existingId = 0
             if ([int]::TryParse([string]$existingValue, [ref]$existingId) -and $existingId -gt 0) {
                 $Ids[$name] = $existingId
@@ -1102,17 +1129,21 @@ function Invoke-UploadSeries {
         try {
             $saved = ((Get-Content -LiteralPath $idsOutput -Raw).TrimStart([char]0xFEFF)) | ConvertFrom-Json
             if ($null -ne $saved) {
-                if (($IssuesDatasourceId -le 0) -and ($saved.issues -as [int]) -gt 0) {
-                    $IssuesDatasourceId = [int]$saved.issues
+                $savedIssues = Get-OptionalPositiveIntProperty -Target $saved -Name "issues"
+                if (($IssuesDatasourceId -le 0) -and $savedIssues -gt 0) {
+                    $IssuesDatasourceId = $savedIssues
                 }
-                if (($FilesDatasourceId -le 0) -and ($saved.files -as [int]) -gt 0) {
-                    $FilesDatasourceId = [int]$saved.files
+                $savedFiles = Get-OptionalPositiveIntProperty -Target $saved -Name "files"
+                if (($FilesDatasourceId -le 0) -and $savedFiles -gt 0) {
+                    $FilesDatasourceId = $savedFiles
                 }
-                if (($DiagnosticDatasourceId -le 0) -and ($saved.diagnostic -as [int]) -gt 0) {
-                    $DiagnosticDatasourceId = [int]$saved.diagnostic
+                $savedDiagnostic = Get-OptionalPositiveIntProperty -Target $saved -Name "diagnostic"
+                if (($DiagnosticDatasourceId -le 0) -and $savedDiagnostic -gt 0) {
+                    $DiagnosticDatasourceId = $savedDiagnostic
                 }
-                if (($ResolverDatasourceId -le 0) -and ($saved.resolver -as [int]) -gt 0) {
-                    $ResolverDatasourceId = [int]$saved.resolver
+                $savedResolver = Get-OptionalPositiveIntProperty -Target $saved -Name "resolver"
+                if (($ResolverDatasourceId -le 0) -and $savedResolver -gt 0) {
+                    $ResolverDatasourceId = $savedResolver
                 }
 
                 Write-Host "[UPLOAD] Reusing datasource IDs from $idsOutput when available." -ForegroundColor DarkCyan
@@ -1135,17 +1166,21 @@ function Invoke-UploadSeries {
             }
 
             if ($null -ne $seriesEntry) {
-                if (($IssuesDatasourceId -le 0) -and ($seriesEntry.issues -as [int]) -gt 0) {
-                    $IssuesDatasourceId = [int]$seriesEntry.issues
+                $cfgIssues = Get-OptionalPositiveIntProperty -Target $seriesEntry -Name "issues"
+                if (($IssuesDatasourceId -le 0) -and $cfgIssues -gt 0) {
+                    $IssuesDatasourceId = $cfgIssues
                 }
-                if (($FilesDatasourceId -le 0) -and ($seriesEntry.files -as [int]) -gt 0) {
-                    $FilesDatasourceId = [int]$seriesEntry.files
+                $cfgFiles = Get-OptionalPositiveIntProperty -Target $seriesEntry -Name "files"
+                if (($FilesDatasourceId -le 0) -and $cfgFiles -gt 0) {
+                    $FilesDatasourceId = $cfgFiles
                 }
-                if (($DiagnosticDatasourceId -le 0) -and ($seriesEntry.diagnostic -as [int]) -gt 0) {
-                    $DiagnosticDatasourceId = [int]$seriesEntry.diagnostic
+                $cfgDiagnostic = Get-OptionalPositiveIntProperty -Target $seriesEntry -Name "diagnostic"
+                if (($DiagnosticDatasourceId -le 0) -and $cfgDiagnostic -gt 0) {
+                    $DiagnosticDatasourceId = $cfgDiagnostic
                 }
-                if (($ResolverDatasourceId -le 0) -and ($seriesEntry.resolver -as [int]) -gt 0) {
-                    $ResolverDatasourceId = [int]$seriesEntry.resolver
+                $cfgResolver = Get-OptionalPositiveIntProperty -Target $seriesEntry -Name "resolver"
+                if (($ResolverDatasourceId -le 0) -and $cfgResolver -gt 0) {
+                    $ResolverDatasourceId = $cfgResolver
                 }
 
                 Write-Host "[UPLOAD] Reusing datasource IDs from $globalConfigPath for ${seriesRepo} when available." -ForegroundColor DarkCyan
