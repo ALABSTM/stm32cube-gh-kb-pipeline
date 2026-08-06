@@ -655,17 +655,27 @@ function Invoke-UploadJsonAdd {
 
         Write-Host "[REPLACE] Refreshing datasource for ${Label}: requesting recreate with same name from uploader logic (no pre-delete in workflow)." -ForegroundColor DarkCyan
 
-        $newDatasourceId = Invoke-UploadJsonNew `
-            -Label "$Label (recreated)" `
-            -FilePath $FilePath `
-            -RootKey $RootKey `
-            -DatasourceName $DatasourceNameForFallback `
-            -ProcessorParams $ProcessorParams `
-            -ExistingDatasourceIdHint $DatasourceId `
-            -AllowEmpty:$AllowEmpty
+        try {
+            $newDatasourceId = Invoke-UploadJsonNew `
+                -Label "$Label (recreated)" `
+                -FilePath $FilePath `
+                -RootKey $RootKey `
+                -DatasourceName $DatasourceNameForFallback `
+                -ProcessorParams $ProcessorParams `
+                -ExistingDatasourceIdHint $DatasourceId `
+                -AllowEmpty:$AllowEmpty
 
-        Write-Host "[REPLACE] Datasource ID updated for ${Label}: DS#$DatasourceId -> DS#$newDatasourceId" -ForegroundColor DarkCyan
-        return $newDatasourceId
+            Write-Host "[REPLACE] Datasource ID updated for ${Label}: DS#$DatasourceId -> DS#$newDatasourceId" -ForegroundColor DarkCyan
+            return $newDatasourceId
+        }
+        catch {
+            $replaceError = $_.Exception.Message
+            if ($replaceError -match "Replace fallback exhausted for datasource") {
+                Write-Host "[WARN] Replace fallback exhausted for ${Label}; continuing with in-place add on existing DS#$DatasourceId." -ForegroundColor Yellow
+            } else {
+                throw
+            }
+        }
     } else {
         Write-Host "[ADD] Existing datasource mode is Add for $Label (DS#$DatasourceId): appending files." -ForegroundColor DarkCyan
     }
