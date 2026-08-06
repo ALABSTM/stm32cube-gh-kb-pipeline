@@ -122,13 +122,6 @@ function ConvertFrom-JsonSafeText {
     return $normalized | ConvertFrom-Json
 }
 
-function Read-JsonFileSafe {
-    param([string]$Path)
-
-    $raw = Get-Content -LiteralPath $Path -Raw
-    return ConvertFrom-JsonSafeText -RawText $raw -Source $Path
-}
-
 function Get-UploadAuthArgs {
     $authArgs = @()
     if ($ApiKey) {
@@ -257,7 +250,7 @@ function Test-JsonRootIsEmpty {
         return $true
     }
 
-    $json = Read-JsonFileSafe -Path $Path
+    $json = ((Get-Content -LiteralPath $Path -Raw).TrimStart([char]0xFEFF)) | ConvertFrom-Json
     if ($null -eq $json) {
         return $true
     }
@@ -284,7 +277,7 @@ function Assert-RequiredFile {
 
 function Get-ConfigRepos {
     param([string]$Path)
-    $cfg = Read-JsonFileSafe -Path $Path
+    $cfg = ((Get-Content -LiteralPath $Path -Raw).TrimStart([char]0xFEFF)) | ConvertFrom-Json
     return @($cfg.repos | ForEach-Object { [string]$_ })
 }
 
@@ -902,7 +895,7 @@ function Sync-GlobalConfigDatasourceIds {
     }
 
     try {
-        $cfg = Read-JsonFileSafe -Path $globalConfigPath
+        $cfg = ((Get-Content -LiteralPath $globalConfigPath -Raw).TrimStart([char]0xFEFF)) | ConvertFrom-Json
         if ($null -eq $cfg -or $null -eq $cfg.kb_datasource_ids) {
             Write-Host "[WARN] Invalid global config structure, skip datasource sync: $globalConfigPath" -ForegroundColor Yellow
             return
@@ -945,7 +938,7 @@ function Save-DatasourceIdsSnapshot {
     $existingSnapshot = $null
     if (Test-Path -LiteralPath $idsOutput) {
         try {
-            $existingSnapshot = Read-JsonFileSafe -Path $idsOutput
+            $existingSnapshot = ((Get-Content -LiteralPath $idsOutput -Raw).TrimStart([char]0xFEFF)) | ConvertFrom-Json
         } catch {
             $existingSnapshot = $null
         }
@@ -1107,7 +1100,7 @@ function Invoke-UploadSeries {
 
     if ($reuseLocalSnapshot -and (Test-Path -LiteralPath $idsOutput)) {
         try {
-            $saved = Read-JsonFileSafe -Path $idsOutput
+            $saved = ((Get-Content -LiteralPath $idsOutput -Raw).TrimStart([char]0xFEFF)) | ConvertFrom-Json
             if ($null -ne $saved) {
                 if (($IssuesDatasourceId -le 0) -and ($saved.issues -as [int]) -gt 0) {
                     $IssuesDatasourceId = [int]$saved.issues
@@ -1132,7 +1125,7 @@ function Invoke-UploadSeries {
     # Fallback to shared/config/config_all_series.json when no local snapshot IDs are available.
     if ((($IssuesDatasourceId -le 0) -or ($FilesDatasourceId -le 0) -or ($DiagnosticDatasourceId -le 0) -or ($ResolverDatasourceId -le 0)) -and (Test-Path -LiteralPath $globalConfigPath)) {
         try {
-            $cfg = Read-JsonFileSafe -Path $globalConfigPath
+            $cfg = ((Get-Content -LiteralPath $globalConfigPath -Raw).TrimStart([char]0xFEFF)) | ConvertFrom-Json
             $seriesEntry = $null
             if ($null -ne $cfg -and $null -ne $cfg.kb_datasource_ids) {
                 $prop = $cfg.kb_datasource_ids.PSObject.Properties[$seriesRepo]
