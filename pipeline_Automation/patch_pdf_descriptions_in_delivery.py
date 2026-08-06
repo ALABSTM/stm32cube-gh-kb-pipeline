@@ -7,6 +7,7 @@ data/pdf_image_descriptions.json.
 
 Usage:
     python pipeline_Automation/patch_pdf_descriptions_in_delivery.py
+    python pipeline_Automation/patch_pdf_descriptions_in_delivery.py --series U3
     python pipeline_Automation/patch_pdf_descriptions_in_delivery.py --dry-run
 """
 
@@ -26,26 +27,69 @@ PLACEHOLDER_PATTERN = re.compile(
 )
 
 
-def load_descriptions() -> dict[str, str]:
-    """Load the Alfred-generated figure_id -> description mapping from disk.
+def series_to_slug(series: str) -> str:
+    value = (series or "").strip().lower()
+    if not value:
+        return ""
+    if value.startswith("stm32cube"):
+        return value
+    return f"stm32cube{value}"
 
-    Returns an empty dict (with an error message) if the descriptions file is
-    missing or not a JSON object.
+
+def build_description_candidates(series: str | None) -> list[Path]:
+    candidates: list[Path] = [DESCRIPTIONS_FILE]
+
+    if series:
+        slug = series_to_slug(series)
+        if slug:
+            series_root = DELIVERY_DIR / slug
+            candidates.append(series_root / "pdf_image_descriptions.json")
+            candidates.append(series_root / "meta" / "pdf_image_descriptions.json")
+            candidates.append(series_root / "metadata" / "pdf_image_descriptions.json")
+            for nested in sorted(series_root.rglob("pdf_image_descriptions.json")):
+                if nested not in candidates:
+                    candidates.append(nested)
+
+    seen: set[str] = set()
+    unique: list[Path] = []
+    for item in candidates:
+        key = str(item.resolve()) if item.exists() else str(item)
+        if key in seen:
+            continue
+        seen.add(key)
+        unique.append(item)
+    return unique
+
+
+def load_descriptions(series: str | None = None) -> tuple[dict[str, str], Path | None]:
+    """Load Alfred figure descriptions from default and series-local locations.
+
+    Returns the descriptions map and the source path that was used.
     """
-    if not DESCRIPTIONS_FILE.exists():
-        level = "INFO" if os.environ.get("GITHUB_ACTIONS") == "true" else "WARN"
-        print(f"[{level}] Descriptions file not found: {DESCRIPTIONS_FILE}")
-        print("[INFO] PDF patch step is optional; continuing without Alfred PDF descriptions.")
-        return {}
-    try:
-        data = json.loads(DESCRIPTIONS_FILE.read_text(encoding="utf-8"))
-    except Exception as exc:
-        print(f"[WARN] Failed to parse descriptions JSON: {exc}")
-        return {}
-    if not isinstance(data, dict):
-        print("[WARN] Descriptions JSON is not an object; skipping PDF patch.")
-        return {}
-    return {str(k): str(v) for k, v in data.items() if isinstance(v, str)}
+    candidates = build_description_candidates(series)
+
+    for path in candidates:
+        if not path.exists():
+            continue
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except Exception as exc:
+            print(f"[WARN] Failed to parse descriptions JSON at {path}: {exc}")
+            continue
+        if not isinstance(data, dict):
+            print(f"[WARN] Descriptions JSON is not an object at {path}; skipping this file.")
+            continue
+
+        cleaned = {str(k): str(v) for k, v in data.items() if isinstance(v, str) and str(v).strip()}
+        if cleaned:
+            return cleaned, path
+        print(f"[INFO] Descriptions file is empty at {path}; trying next candidate.")
+
+    level = "INFO" if os.environ.get("GITHUB_ACTIONS") == "true" else "WARN"
+    for path in candidates:
+        print(f"[{level}] Descriptions file not found: {path}")
+    print("[INFO] PDF patch step is optional; continuing without Alfred PDF descriptions.")
+    return {}, None
 
 
 def patch_file(file_path: Path, descriptions: dict[str, str], dry_run: bool = False) -> int:
@@ -81,16 +125,26 @@ def patch_file(file_path: Path, descriptions: dict[str, str], dry_run: bool = Fa
 def main():
     """CLI entry point: patch placeholder figure descriptions across all delivery files in place."""
     parser = argparse.ArgumentParser(description="Patch PDF descriptions into delivery files")
+    parser.add_argument("--series", default="", help="Series code or slug (e.g. U3 or stm32cubeu3)")
     parser.add_argument("--dry-run", action="store_true", help="Show what would be changed without writing")
     args = parser.parse_args()
 
-    descriptions = load_descriptions()
+    series = args.series.strip()
+    target_delivery_dir = DELIVERY_DIR
+    if series:
+        target_delivery_dir = DELIVERY_DIR / series_to_slug(series)
+        if not target_delivery_dir.exists():
+            print(f"[WARN] Delivery directory not found for series '{series}': {target_delivery_dir}")
+            return
+
+    descriptions, source_path = load_descriptions(series=series or None)
     if not descriptions:
         print("[INFO] No descriptions loaded. Skipping PDF patch step.")
         return
 
-    print(f"Loaded {len(descriptions)} PDF figure descriptions from {DESCRIPTIONS_FILE.name}")
-    print(f"Scanning delivery files in: {DELIVERY_DIR}")
+    source_label = source_path.name if source_path else DESCRIPTIONS_FILE.name
+    print(f"Loaded {len(descriptions)} PDF figure descriptions from {source_label}")
+    print(f"Scanning delivery files in: {target_delivery_dir}")
     print(f"{'DRY RUN - no files will be modified' if args.dry_run else 'LIVE - files will be patched'}")
     print("=" * 60)
 
@@ -101,7 +155,7 @@ def main():
     patterns = ("st_ready_files_*.json", "*_pdf_enriched*.json")
     candidates = []
     for pattern in patterns:
-        candidates.extend(DELIVERY_DIR.rglob(pattern))
+        candidates.extend(target_delivery_dir.rglob(pattern))
 
     for json_file in sorted(set(candidates)):
         if "summary" in json_file.name:

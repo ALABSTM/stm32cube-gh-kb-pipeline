@@ -499,7 +499,7 @@ function Invoke-PrepareSeries {
     if ($SkipAlfredEnrichment) {
         Write-Host "[SKIP] Patch Alfred PDF descriptions disabled by -SkipAlfredEnrichment" -ForegroundColor Yellow
     } else {
-        Invoke-Step "Patch Alfred PDF descriptions into root and driver delivery files" @("pipeline_Automation/patch_pdf_descriptions_in_delivery.py")
+        Invoke-Step "Patch Alfred PDF descriptions into root and driver delivery files" @("pipeline_Automation/patch_pdf_descriptions_in_delivery.py", "--series", $Series)
     }
 
     if (-not $SkipSchemaValidation) {
@@ -576,7 +576,7 @@ function Invoke-PreUploadAlfredFinalize {
         $repos = Get-ConfigRepos $configPath
         Invoke-AlfredPdfFigureDescriptions -Repos $repos
         Invoke-AlfredIssueImageDescriptionsForSeries
-        Invoke-Step "Patch Alfred PDF descriptions into root and driver delivery files" @("pipeline_Automation/patch_pdf_descriptions_in_delivery.py")
+        Invoke-Step "Patch Alfred PDF descriptions into root and driver delivery files" @("pipeline_Automation/patch_pdf_descriptions_in_delivery.py", "--series", $Series)
     }
 
     if (-not $SkipSchemaValidation) {
