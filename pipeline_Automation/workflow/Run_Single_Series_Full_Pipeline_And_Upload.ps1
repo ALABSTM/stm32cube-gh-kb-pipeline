@@ -70,7 +70,7 @@ if (-not $PythonExe) {
     }
 }
 
-$cfgAll = Get-Content -LiteralPath $globalConfigPath -Raw | ConvertFrom-Json
+$cfgAll = Read-JsonFileSafe -Path $globalConfigPath
 $seriesMap = @{}
 foreach ($seriesFull in @($cfgAll.all_series)) {
     $name = [string]$seriesFull
@@ -104,6 +104,30 @@ $uploader = "pipeline_Automation/upload/Add_Data_Source_Files.py"
 $idsOutput = Join-Path $deliveryRoot "upload_datasource_ids_$slug.json"
 $uploadMaxRetries = 5
 $uploadTimeoutSeconds = 60
+$script:EffectiveDatasourceMode = $ExistingDatasourceMode
+
+function ConvertFrom-JsonSafeText {
+    param(
+        [AllowNull()]
+        [string]$RawText,
+        [string]$Source = "JSON payload"
+    )
+
+    if ([string]::IsNullOrWhiteSpace($RawText)) {
+        throw "Invalid or empty JSON in ${Source}."
+    }
+
+    # Strip UTF-8 BOM if present. PowerShell 5 Set-Content -Encoding UTF8 writes BOM.
+    $normalized = $RawText.TrimStart([char]0xFEFF)
+    return $normalized | ConvertFrom-Json
+}
+
+function Read-JsonFileSafe {
+    param([string]$Path)
+
+    $raw = Get-Content -LiteralPath $Path -Raw
+    return ConvertFrom-JsonSafeText -RawText $raw -Source $Path
+}
 
 function Get-UploadAuthArgs {
     $authArgs = @()
@@ -233,7 +257,7 @@ function Test-JsonRootIsEmpty {
         return $true
     }
 
-    $json = Get-Content -LiteralPath $Path -Raw | ConvertFrom-Json
+    $json = Read-JsonFileSafe -Path $Path
     if ($null -eq $json) {
         return $true
     }
@@ -260,7 +284,7 @@ function Assert-RequiredFile {
 
 function Get-ConfigRepos {
     param([string]$Path)
-    $cfg = Get-Content -LiteralPath $Path -Raw | ConvertFrom-Json
+    $cfg = Read-JsonFileSafe -Path $Path
     return @($cfg.repos | ForEach-Object { [string]$_ })
 }
 
@@ -602,7 +626,7 @@ function Invoke-UploadJsonNew {
         "--json-root-mode", "auto",
         "--empty-json-policy", "skip",
         "--json-split-size", "$JsonSplitSize",
-        "--existing-datasource-policy", $ExistingDatasourceMode.ToLowerInvariant(),
+        "--existing-datasource-policy", $script:EffectiveDatasourceMode.ToLowerInvariant(),
         "--skip-auth-precheck",
         "--max-retries", "$uploadMaxRetries",
         "--timeout", "$uploadTimeoutSeconds",
@@ -648,7 +672,7 @@ function Invoke-UploadJsonAdd {
         return $DatasourceId
     }
 
-    if ($ExistingDatasourceMode -eq "Replace") {
+    if ($script:EffectiveDatasourceMode -eq "Replace") {
         if ([string]::IsNullOrWhiteSpace($DatasourceNameForFallback)) {
             throw "Replace mode requires -DatasourceNameForFallback for $Label to recreate datasource and refresh ID."
         }
@@ -878,7 +902,7 @@ function Sync-GlobalConfigDatasourceIds {
     }
 
     try {
-        $cfg = Get-Content -LiteralPath $globalConfigPath -Raw | ConvertFrom-Json
+        $cfg = Read-JsonFileSafe -Path $globalConfigPath
         if ($null -eq $cfg -or $null -eq $cfg.kb_datasource_ids) {
             Write-Host "[WARN] Invalid global config structure, skip datasource sync: $globalConfigPath" -ForegroundColor Yellow
             return
@@ -921,7 +945,7 @@ function Save-DatasourceIdsSnapshot {
     $existingSnapshot = $null
     if (Test-Path -LiteralPath $idsOutput) {
         try {
-            $existingSnapshot = Get-Content -LiteralPath $idsOutput -Raw | ConvertFrom-Json
+            $existingSnapshot = Read-JsonFileSafe -Path $idsOutput
         } catch {
             $existingSnapshot = $null
         }
@@ -979,6 +1003,10 @@ function Sync-DatasourceIdsFromKbLive {
             files = $CurrentFilesId
             diagnostic = $CurrentDiagnosticId
             resolver = $CurrentResolverId
+            live_issues_resolved = $false
+            live_files_resolved = $false
+            live_diagnostic_resolved = $false
+            live_resolver_resolved = $false
         }
     }
 
@@ -998,7 +1026,7 @@ function Sync-DatasourceIdsFromKbLive {
             throw "Resolver returned no JSON payload."
         }
 
-        $resolved = $rawJson | ConvertFrom-Json
+        $resolved = ConvertFrom-JsonSafeText -RawText $rawJson -Source "live resolver output"
         $ids = $resolved.resolved_ids
         if ($null -eq $ids) {
             throw "Resolver JSON does not contain resolved_ids."
@@ -1043,6 +1071,10 @@ function Sync-DatasourceIdsFromKbLive {
             files = $newFiles
             diagnostic = $newDiagnostic
             resolver = $newResolver
+            live_issues_resolved = $liveIssuesResolved
+            live_files_resolved = $liveFilesResolved
+            live_diagnostic_resolved = $liveDiagnosticResolved
+            live_resolver_resolved = $liveResolverResolved
         }
     }
     catch {
@@ -1052,6 +1084,10 @@ function Sync-DatasourceIdsFromKbLive {
             files = $CurrentFilesId
             diagnostic = $CurrentDiagnosticId
             resolver = $CurrentResolverId
+            live_issues_resolved = $false
+            live_files_resolved = $false
+            live_diagnostic_resolved = $false
+            live_resolver_resolved = $false
         }
     }
 }
@@ -1071,7 +1107,7 @@ function Invoke-UploadSeries {
 
     if ($reuseLocalSnapshot -and (Test-Path -LiteralPath $idsOutput)) {
         try {
-            $saved = Get-Content -LiteralPath $idsOutput -Raw | ConvertFrom-Json
+            $saved = Read-JsonFileSafe -Path $idsOutput
             if ($null -ne $saved) {
                 if (($IssuesDatasourceId -le 0) -and ($saved.issues -as [int]) -gt 0) {
                     $IssuesDatasourceId = [int]$saved.issues
@@ -1096,7 +1132,7 @@ function Invoke-UploadSeries {
     # Fallback to shared/config/config_all_series.json when no local snapshot IDs are available.
     if ((($IssuesDatasourceId -le 0) -or ($FilesDatasourceId -le 0) -or ($DiagnosticDatasourceId -le 0) -or ($ResolverDatasourceId -le 0)) -and (Test-Path -LiteralPath $globalConfigPath)) {
         try {
-            $cfg = Get-Content -LiteralPath $globalConfigPath -Raw | ConvertFrom-Json
+            $cfg = Read-JsonFileSafe -Path $globalConfigPath
             $seriesEntry = $null
             if ($null -ne $cfg -and $null -ne $cfg.kb_datasource_ids) {
                 $prop = $cfg.kb_datasource_ids.PSObject.Properties[$seriesRepo]
@@ -1138,6 +1174,18 @@ function Invoke-UploadSeries {
     $FilesDatasourceId = [int]$synced.files
     $DiagnosticDatasourceId = [int]$synced.diagnostic
     $ResolverDatasourceId = [int]$synced.resolver
+
+    $script:EffectiveDatasourceMode = $ExistingDatasourceMode
+    if (
+        ($script:EffectiveDatasourceMode -eq "Replace") -and
+        ($env:GITHUB_ACTIONS -eq "true") -and
+        (-not [bool]$synced.live_files_resolved) -and
+        (-not [bool]$synced.live_diagnostic_resolved)
+    ) {
+        Write-Host "[WARN] Live KB resolver did not return files/diagnostic IDs for ${Series} in GitHub Actions." -ForegroundColor Yellow
+        Write-Host "[WARN] Auto-switching ExistingDatasourceMode Replace -> Add to avoid replace deadlock on reserved datasource names." -ForegroundColor Yellow
+        $script:EffectiveDatasourceMode = "Add"
+    }
 
     $issuesFile = "$deliveryRoot/issues_json/st_ready_issues_with_images_$slug.json"
     $filesFile = "$deliveryRoot/files_json/st_ready_files_${slug}_v3.json"
