@@ -122,6 +122,34 @@ def patch_file(file_path: Path, descriptions: dict[str, str], dry_run: bool = Fa
     return replacements
 
 
+def scan_existing_pdf_descriptions(target_delivery_dir: Path) -> tuple[int, int]:
+    """Return (files_with_descriptions, files_with_placeholders) in delivery JSON files."""
+    files_with_descriptions = 0
+    files_with_placeholders = 0
+
+    patterns = ("st_ready_files_*.json", "*_pdf_enriched*.json")
+    candidates: list[Path] = []
+    for pattern in patterns:
+        candidates.extend(target_delivery_dir.rglob(pattern))
+
+    for json_file in sorted(set(candidates)):
+        if "summary" in json_file.name:
+            continue
+        if json_file.parent.name != "files_json":
+            continue
+        try:
+            content = json_file.read_text(encoding="utf-8")
+        except Exception:
+            continue
+
+        if "[FIGURE_DESCRIPTIONS]" in content:
+            files_with_descriptions += 1
+        if PLACEHOLDER_PATTERN.search(content):
+            files_with_placeholders += 1
+
+    return files_with_descriptions, files_with_placeholders
+
+
 def main():
     """CLI entry point: patch placeholder figure descriptions across all delivery files in place."""
     parser = argparse.ArgumentParser(description="Patch PDF descriptions into delivery files")
@@ -139,6 +167,17 @@ def main():
 
     descriptions, source_path = load_descriptions(series=series or None)
     if not descriptions:
+        described_files, placeholder_files = scan_existing_pdf_descriptions(target_delivery_dir)
+        if described_files > 0:
+            print(
+                "[INFO] Alfred PDF descriptions are already present in delivery output "
+                f"({described_files} file(s) contain [FIGURE_DESCRIPTIONS])."
+            )
+        if placeholder_files > 0:
+            print(
+                "[WARN] PDF placeholders still exist in delivery output "
+                f"({placeholder_files} file(s))."
+            )
         print("[INFO] No descriptions loaded. Skipping PDF patch step.")
         return
 
