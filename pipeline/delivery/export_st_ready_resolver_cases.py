@@ -175,7 +175,33 @@ def load_files_lookup(repo: str) -> dict[str, dict[str, Any]]:
     if not files_path.exists():
         return {}
 
-    payload = json.loads(files_path.read_text(encoding="utf-8"))
+    try:
+        raw = files_path.read_text(encoding="utf-8-sig")
+    except OSError as exc:
+        print(f"[WARN] Could not read files lookup for {repo}: {files_path} ({exc})")
+        return {}
+
+    raw_stripped = raw.lstrip()
+    if not raw_stripped:
+        print(f"[WARN] Empty files lookup for {repo}: {files_path}. Proceeding without file enrichment.")
+        return {}
+
+    if raw_stripped.startswith("version https://git-lfs.github.com/spec/v1"):
+        print(
+            f"[WARN] Files lookup for {repo} appears to be a Git LFS pointer: {files_path}. "
+            "Proceeding without file enrichment."
+        )
+        return {}
+
+    try:
+        payload = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        print(
+            f"[WARN] Invalid files lookup JSON for {repo}: {files_path} "
+            f"({exc}). Proceeding without file enrichment."
+        )
+        return {}
+
     docs = payload.get("files") if isinstance(payload, dict) else []
 
     lookup: dict[str, dict[str, Any]] = {}
