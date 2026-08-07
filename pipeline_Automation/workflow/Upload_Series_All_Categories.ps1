@@ -23,7 +23,6 @@
 
 param(
     [Parameter(Mandatory = $true)]
-    [ValidateSet("G4", "L0", "L1", "L4", "L5", "N6", "U0", "U3")]
     [string]$Series,
 
     [string]$RemoteUser    = "abir.gharbi@st.com",
@@ -51,22 +50,40 @@ $ErrorActionPreference = "Stop"
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot "..\..")
 Set-Location $repoRoot
 
-$seriesMap = @{
-    "G4" = "stm32cubeg4"
-    "L0" = "stm32cubel0"
-    "L1" = "stm32cubel1"
-    "L4" = "stm32cubel4"
-    "L5" = "stm32cubel5"
-    "N6" = "stm32cuben6"
-    "U0" = "stm32cubeu0"
-    "U3" = "stm32cubeu3"
+$allSeriesConfigPath = "shared/config/config_all_series.json"
+
+if (-not (Test-Path -LiteralPath $allSeriesConfigPath)) {
+    throw "Missing config file: $allSeriesConfigPath"
+}
+
+$cfgAll = Get-Content -LiteralPath $allSeriesConfigPath -Raw | ConvertFrom-Json
+
+$seriesMap = @{}
+foreach ($seriesFull in @($cfgAll.all_series)) {
+    $name = [string]$seriesFull
+    if (-not $name.StartsWith("STM32Cube")) {
+        continue
+    }
+    $seriesCode = $name.Substring(9).ToUpperInvariant()
+    $seriesMap[$seriesCode] = $name.ToLowerInvariant()
+}
+
+$seriesInput = [string]$Series
+if ($seriesInput.StartsWith("STM32Cube")) {
+    $Series = $seriesInput.Substring(9).ToUpperInvariant()
+} else {
+    $Series = $seriesInput.ToUpperInvariant()
+}
+
+if (-not $seriesMap.ContainsKey($Series)) {
+    $allowed = ($seriesMap.Keys | Sort-Object) -join ", "
+    throw "Unsupported series '$Series'. Allowed (from $allSeriesConfigPath): $allowed"
 }
 
 $slug         = $seriesMap[$Series]
 $deliveryRoot = "datasets/07_delivery/st_ready/by_series/$slug"
 $uploader     = "pipeline_Automation/upload/Add_Data_Source_Files.py"
 $idsFile      = "$deliveryRoot/upload_ids_${slug}.json"
-$allSeriesConfigPath = "shared/config/config_all_series.json"
 $allSeriesKey = "STM32Cube$Series"
 
 Write-Host "`n===== Upload all categories for $Series =====" -ForegroundColor Cyan
