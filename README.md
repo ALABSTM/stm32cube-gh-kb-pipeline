@@ -151,13 +151,6 @@ Use this section as the operational entry point for day-to-day work.
 3. If driver file upload fails with JSON decode, check for empty/LFS-pointer JSON inputs.
 4. If self-hosted upload is skipped, inspect runner availability gate and token permissions.
 
-### For Release or Handover
-
-1. Freeze run parameters used for the validated series.
-2. Keep datasource ID snapshots under by-series delivery outputs.
-3. Archive workflow run links for reproducibility.
-4. Run one final `Full` execution on a reference series.
-
 ## Operational Notes
 
 - This repository contains very large JSON artifacts; first push can be long.
