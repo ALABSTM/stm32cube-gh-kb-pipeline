@@ -1572,6 +1572,18 @@ def load_json_payload(path: Path) -> Any:
     except OSError as exc:
         raise ValueError(f"Failed to read JSON file for upload: {path}: {exc}") from exc
 
+    stripped = content.lstrip()
+    if not stripped:
+        print(f"[WARN] Empty JSON file for upload: {path}. Treating as empty payload.")
+        return []
+
+    if stripped.startswith("version https://git-lfs.github.com/spec/v1"):
+        print(
+            "[WARN] JSON file appears to be a Git LFS pointer for upload: "
+            f"{path}. Treating as empty payload."
+        )
+        return []
+
     try:
         return json.loads(content)
     except json.JSONDecodeError as exc:
