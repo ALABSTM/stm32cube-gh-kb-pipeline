@@ -79,7 +79,6 @@ PFE_Chatbot_STM32Cube/
 │   └── utils/
 ├── datasets/                    # Structured outputs by stage (raw -> delivery)
 ├── data/                        # Operational/legacy artifacts used by scripts
-├── docs/                        # PFE report, workshop material, guides
 ├── .github/workflows/           # CI/CD workflows
 └── requirements.txt
 ```
@@ -127,11 +126,38 @@ Recommended first validation on a new repo/environment:
 3. Run `manual_auto_update_kb.yml` with `series=C0`, `mode=Upload`, `existing_datasource_mode=Add`.
 4. Run `manual_auto_update_kb.yml` with `series=C0`, `mode=Full`.
 
-## Project References
+## Practical Work Guides
 
-- Main report: `docs/reports/PFE_Report_STM32Cube_Pipeline.tex`
-- Workshop guide: `docs/Atelier_Pratique_Pipeline_STM32Cube.md`
-- Encadrant run checklist: `docs/guides/st_repo_actions_handover_checklist_fr.md`
+Use this section as the operational entry point for day-to-day work.
+
+### For New Team Members
+
+1. Run API smoke validation first.
+2. Execute one controlled `Prepare` run on `C0`.
+3. Execute one controlled `Upload` run on `C0` with `existing_datasource_mode=Add`.
+4. Validate generated datasource IDs and upload logs.
+
+### For Daily Pipeline Operations
+
+1. Prefer `manual_auto_update_kb.yml` for supervised runs.
+2. Use `mode=Prepare` to debug preprocessing without touching KB.
+3. Use `mode=Upload` only when ST-ready delivery is already validated.
+4. Use `mode=Full` for end-to-end production-like execution.
+5. Keep `component_issues_only=true` when per-component issues flow is required.
+
+### For Incident Triage
+
+1. If authentication fails, verify `ST_GITHUB_ANALYZER_API_KEY` and `ST_REMOTE_USER` first.
+2. If resolver export fails on empty JSON, confirm you are running the latest branch commit.
+3. If driver file upload fails with JSON decode, check for empty/LFS-pointer JSON inputs.
+4. If self-hosted upload is skipped, inspect runner availability gate and token permissions.
+
+### For Release or Handover
+
+1. Freeze run parameters used for the validated series.
+2. Keep datasource ID snapshots under by-series delivery outputs.
+3. Archive workflow run links for reproducibility.
+4. Run one final `Full` execution on a reference series (recommended: `C0`).
 
 ## Operational Notes
 
