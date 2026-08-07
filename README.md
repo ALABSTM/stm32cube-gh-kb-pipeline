@@ -121,10 +121,10 @@ Compatibility note:
 ## Quick Start (Validation Sequence)
 
 Recommended first validation on a new repo/environment:
-1. Run `smoke_test_st_api.yml`.
-2. Run `manual_auto_update_kb.yml` with `series=C0`, `mode=Prepare`.
-3. Run `manual_auto_update_kb.yml` with `series=C0`, `mode=Upload`, `existing_datasource_mode=Add`.
-4. Run `manual_auto_update_kb.yml` with `series=C0`, `mode=Full`.
+
+1. Run `manual_auto_update_kb.yml` with `series=C0`, `mode=Prepare`.
+2. Run `manual_auto_update_kb.yml` with `series=C0`, `mode=Upload`, `existing_datasource_mode=Add`.
+3. Run `manual_auto_update_kb.yml` with `series=C0`, `mode=Full`.
 
 ## Practical Work Guides
 
@@ -132,10 +132,9 @@ Use this section as the operational entry point for day-to-day work.
 
 ### For New Team Members
 
-1. Run API smoke validation first.
-2. Execute one controlled `Prepare` run on `C0`.
-3. Execute one controlled `Upload` run on `C0` with `existing_datasource_mode=Add`.
-4. Validate generated datasource IDs and upload logs.
+1. Execute one controlled `Prepare` run on `C0`.
+2. Execute one controlled `Upload` run on `C0` with `existing_datasource_mode=Add`.
+3. Validate generated datasource IDs and upload logs.
 
 ### For Daily Pipeline Operations
 
@@ -157,7 +156,7 @@ Use this section as the operational entry point for day-to-day work.
 1. Freeze run parameters used for the validated series.
 2. Keep datasource ID snapshots under by-series delivery outputs.
 3. Archive workflow run links for reproducibility.
-4. Run one final `Full` execution on a reference series (recommended: `C0`).
+4. Run one final `Full` execution on a reference series.
 
 ## Operational Notes
 
