@@ -39,6 +39,11 @@ datasets/07_delivery/st_ready/files_json/
 datasets/07_delivery/st_ready/resolver_cases_json/
 datasets/07_delivery/st_ready/diagnostic_cards_json/
 
+# Ignore documentation by default, but keep guides trackable.
+docs/*
+!docs/guides/
+!docs/guides/**
+
 # Keep only test suite and summaries in delivery
 !datasets/07_delivery/st_ready/*.csv
 !datasets/07_delivery/st_ready/summary_*.json
