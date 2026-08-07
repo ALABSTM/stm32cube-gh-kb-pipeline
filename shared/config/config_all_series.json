@@ -2,6 +2,7 @@
     "owner":  "STMicroelectronics",
     "all_series":  [
                        "STM32CubeC0",
+                       "STM32CubeC5",
                        "STM32CubeF0",
                        "STM32CubeF1",
                        "STM32CubeF2",
@@ -29,6 +30,7 @@
                    ],
     "series_config_files":  {
                                 "STM32CubeC0":  "config_c0.json",
+                                "STM32CubeC5":  "config_c5.json",
                                 "STM32CubeF0":  "config_f0.json",
                                 "STM32CubeF1":  "config_f1.json",
                                 "STM32CubeF2":  "config_f2.json",
@@ -59,6 +61,11 @@
                                                   "issues":  29193,
                                                   "files":  29192,
                                                   "diagnostic":  29212
+                                              },
+                              "STM32CubeC5":  {
+                                                  "issues":  null,
+                                                  "files":  null,
+                                                  "diagnostic":  null
                                               },
                               "STM32CubeF0":  {
                                                   "issues":  29195,

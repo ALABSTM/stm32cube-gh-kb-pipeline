@@ -1,162 +1,184 @@
-# STM32Cube Data Pipeline for ST Knowledge Base
+# STM32Cube Preprocessing Pipeline (PFE — STMicroelectronics)
 
-This repository contains the PFE project developed at STMicroelectronics to transform STM32Cube GitHub data into structured, traceable, and upload-ready knowledge for the ST internal AI assistant.
+This repository implements an intelligent **preprocessing and delivery pipeline**
+that turns the public **STM32Cube** GitHub organization (issues, pull requests,
+commits, source files, PDF figures) into a clean, enriched, chunked knowledge
+base ready to power a **Retrieval-Augmented Generation (RAG) chatbot** on ST's
+internal **AI Bridge** platform.
 
-The current project state is centered on:
-- industrial preprocessing of STM32Cube repositories,
-- multimodal enrichment for visual evidence (Alfred Vision),
-- ST-ready delivery exports,
-- automated upload to ST AI Bridge KB,
-- CI/CD execution in both self-hosted and github-hosted modes.
+It is the codebase for a *Projet de Fin d'Études* (PFE) at STMicroelectronics,
+and includes both the engineering pipeline/automation and the LaTeX academic
+report describing the work.
 
-## Scope and Current Coverage
-
-- Target ecosystem: STM32Cube public repositories (main series and driver sub-repos)
-- Coverage: 25 STM32 series configured
-- Delivery outputs: 4 artifact families
-  - issues cards
-  - files cards
-  - resolver cases (issue -> PR -> commit)
-  - diagnostic cards
-- KB target: ST AI Bridge Knowledge Base `#793`
-- Operating model: per-series execution with reproducible automation workflows
-
-## End-to-End Functional Architecture
+## What this project does
 
 ```mermaid
 flowchart LR
-    A[GitHub Sources<br/>Issues PRs Commits Files PDFs] --> B[Ingestion]
-    B --> C[Cleaning V3<br/>Type-aware normalization]
-    C --> D[Enrichment V2<br/>Metadata + STM32 heuristics]
-    D --> E[Similarity & Linkage<br/>Issue PR Commit chains]
-    E --> F[Delivery Export<br/>ST-ready JSON by series]
-    F --> G[Upload Automation<br/>Datasources in KB #793]
-    G --> H[ST GitHub Analyzer Persona<br/>KB-first retrieval]
-
-    I[Alfred Vision<br/>Image/PDF description] --> D
-    I --> F
+    A[GitHub API / local repo clones] -->|ingestion| B[Raw data]
+    B -->|cleaning| C[Clean text]
+    C -->|enrichment| D["docs_v2 (metadata + heuristics)"]
+    D -->|similarity| E[Linked issues]
+    E -->|chunking| F[RAG-ready chunks]
+    F -->|evaluation| G[Stats / retrieval / schema checks]
+    F -->|delivery| H["ST-ready JSON (datasets/07_delivery)"]
+    H -->|upload| I["ST AI Bridge Knowledge Base (KB #793)"]
 ```
 
-## CI/CD Automation Architecture
+1. **Ingestion** — fetch issues, PRs, commits, files and PDFs from
+   `STMicroelectronics/STM32Cube*` repos (GitHub API + local git clones).
+2. **Cleaning** — normalize and sanitize raw text.
+3. **Enrichment** — extract metadata and apply STM32Cube-specific heuristics to
+   build structured `docs_v2` documents.
+4. **Similarity** — link related issues (TF-IDF).
+5. **Chunking** — split enriched docs into retrieval-friendly chunks.
+6. **Evaluation** — validate schemas, measure stats, simulate TF-IDF retrieval,
+   check coherence of AI (Alfred)-generated content.
+7. **Delivery** — export "ST-ready" JSON per series/repo.
+8. **Upload** — push the ST-ready JSON to the ST AI Bridge persona Knowledge
+   Base so it can be queried by the chatbot.
 
-```mermaid
-flowchart TD
-    T[Trigger<br/>manual or scheduled] --> P[Prepare matrix inputs]
-    P --> R[Runner availability check]
-    R --> Q[Preprocess per series<br/>windows-latest]
+All 8 steps are orchestrated for every STM32Cube series (F0…H7, L0…L5, U0…U5,
+WB/WBA/WL, N6, C0, G0/G4, …) so the resulting knowledge base covers the whole
+STM32Cube ecosystem (main repos + BSP/HAL/driver/middleware sub-repos).
 
-    Q --> U{Upload execution target}
-    U -->|self-hosted| S[Upload per series<br/>self-hosted runner]
-    U -->|github-hosted| C[Upload per series<br/>windows-latest]
+## Repository structure
 
-    S --> K[ST AI Bridge KB #793]
-    C --> K
 ```
-
-Design intent:
-- `github-hosted` path is used for cloud validation and portability.
-- `self-hosted` path is used when internal network constraints require local runner execution.
-
-## Repository Layout
-
-```text
 PFE_Chatbot_STM32Cube/
-├── pipeline/                    # Core preprocessing and export logic
-│   ├── ingestion/
-│   ├── cleaning/
-│   ├── enrichment/
-│   ├── similarity/
-│   ├── delivery/
-│   └── evaluation/
-├── pipeline_Automation/         # Workflow orchestration + upload + operational scripts
-│   ├── workflow/
-│   ├── upload/
-│   ├── alfred/
-│   └── test_suites/
-├── shared/                      # Configs, schemas, shared utils
-│   ├── config/
-│   ├── schemas/
-│   └── utils/
-├── datasets/                    # Structured outputs by stage (raw -> delivery)
-├── data/                        # Operational/legacy artifacts used by scripts
-├── .github/workflows/           # CI/CD workflows
-└── requirements.txt
+├── pipeline/                  # Core preprocessing stages (see pipeline/README.md)
+│   ├── ingestion/             # Fetch raw data from GitHub / local clones
+│   ├── cleaning/              # Text normalization
+│   ├── enrichment/            # Metadata extraction, docs_v2 generation
+│   ├── similarity/            # Related-issue linking
+│   ├── chunking/              # RAG chunk generation
+│   ├── evaluation/            # Stats, retrieval tests, schema/coherence validation
+│   ├── delivery/              # ST-ready JSON export
+│   └── run_full_workflow.py   # End-to-end orchestration for one repo/series
+├── pipeline_Automation/       # Orchestration, upload, AI enrichment, CI (see its README.md)
+│   ├── workflow/              # Multi-series pipeline drivers
+│   ├── upload/                # ST AI Bridge KB upload scripts
+│   ├── alfred/                # Internal "Alfred" LLM enrichment/chat
+│   ├── test_suites/           # QA test suite generation & grading
+│   ├── utils/                 # Maintenance scripts
+│   ├── jenkins/               # CI pipeline definition
+│   └── bridge/                # Reserved for future AI Bridge client code
+├── shared/                    # Config, schemas, and utilities shared by all stages
+│   ├── config/                # Global + per-series JSON configuration
+│   ├── schemas/                # JSON Schema contracts for docs/chunks
+│   └── utils/                 # Path resolution helpers
+├── datasets/                  # Pipeline outputs by maturity stage (01_raw → 07_delivery)
+├── data/                      # Legacy/flat pipeline artifacts (chunks_*.json, etc.)
+├── docs/                      # PFE report (LaTeX), guides, presentations, diagrams
+├── GitHub_repos/              # Local clones of STM32Cube repos (gitignored, regenerable)
+├── memories/                  # Local agent memory notes (gitignored)
+├── .github/                   # Copilot agents/skills/instructions for this repo
+└── requirements.txt           # Python dependencies
 ```
 
-## Workflows Used in Production
+Every major subfolder has its own `README.md` with details and usage — see the
+[Documentation map](#documentation-map) below.
 
-- `.github/workflows/manual_auto_update_kb.yml`
-  - main operational workflow for controlled runs
-- `.github/workflows/auto_update_kb.yml`
-  - scheduled and manual automated runs
-- `.github/workflows/smoke_test_st_api.yml`
-  - connectivity/authentication smoke test for ST API
+## Getting started
 
-### Supported Modes
+### Prerequisites
 
-- `Prepare`: preprocessing and export only
-- `Upload`: upload pre-generated ST-ready outputs only
-- `Full`: prepare + upload
+- Python 3.10+ (a `.venv` virtual environment is expected at the repo root)
+- `pip install -r requirements.txt` (installs `requests`, `scikit-learn`,
+  `jsonschema`, `openpyxl`, `opencv-python-headless`, `PyMuPDF`, `python-pptx`)
+- A GitHub token (for `pipeline/ingestion`) and, for upload/enrichment steps, an
+  ST AI Bridge API key exported as one of `PERSONA_API_KEY`,
+  `ST_GITHUB_ANALYZER_API_KEY`, `ST_CHATGPT_API_KEY`, `ST_AI_BRIDGE_API_KEY`, or
+  `ST_API_KEY` (see [pipeline_Automation/upload/README.md](pipeline_Automation/upload/README.md))
 
-### Upload Targets
+### Setup (Windows / PowerShell)
 
-- `self-hosted`
-- `github-hosted`
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
 
-## Required Secrets (GitHub Actions)
+### Run the pipeline for one repo
 
-Configure in repository settings:
-- `ST_GITHUB_ANALYZER_API_KEY` (required for upload)
-- `ST_REMOTE_USER` (recommended)
-- one Alfred key alias (or set all three for compatibility)
-  - `ST_CHATGPT_API_KEY`
-  - `ST_AI_BRIDGE_API_KEY`
-  - `ST_API_KEY`
-- `RUNNER_CHECK_TOKEN` (recommended for reliable self-hosted availability check)
+```powershell
+python -m pipeline.run_full_workflow --export-st-ready
+```
 
-Compatibility note:
-- The three Alfred key names exist for backward compatibility between workflows/scripts.
-- Upload authentication uses `ST_GITHUB_ANALYZER_API_KEY`.
+### Run for a specific STM32Cube series
 
-## Quick Start (Validation Sequence)
+```powershell
+$env:STM32CUBE_CONFIG = "shared/config/config_f4.json"
+python -m pipeline.run_full_workflow --export-st-ready --skip-chunking --continue-on-error
+```
 
-Recommended first validation on a new repo/environment:
+### Run across all series / upload to the KB
 
-1. Run `manual_auto_update_kb.yml` with `series=C0`, `mode=Prepare`.
-2. Run `manual_auto_update_kb.yml` with `series=C0`, `mode=Upload`, `existing_datasource_mode=Add`.
-3. Run `manual_auto_update_kb.yml` with `series=C0`, `mode=Full`.
+See [pipeline_Automation/workflow/README.md](pipeline_Automation/workflow/README.md)
+and [pipeline_Automation/upload/README.md](pipeline_Automation/upload/README.md),
+or the full command reference in
+[docs/pipeline_commands_reference.md](docs/pipeline_commands_reference.md).
 
-## Practical Work Guides
+## Documentation map
 
-Use this section as the operational entry point for day-to-day work.
+| Area | Where |
+|---|---|
+| Pipeline stages (ingestion → delivery) | [pipeline/README.md](pipeline/README.md) |
+| Orchestration, upload, AI enrichment, CI | [pipeline_Automation/README.md](pipeline_Automation/README.md) |
+| Shared config & schemas | [shared/README.md](shared/README.md) |
+| Dataset layout (01_raw → 07_delivery) | [datasets/README.md](datasets/README.md) |
+| Command cheat-sheet | [docs/pipeline_commands_reference.md](docs/pipeline_commands_reference.md) |
+| PFE academic report (French, LaTeX) | [docs/reports/PFE_Report_STM32Cube_Pipeline.tex](docs/reports/PFE_Report_STM32Cube_Pipeline.tex) |
+| Copilot agent system for this repo | [.github/AGENTS.md](.github/AGENTS.md) |
 
-### For New Team Members
+## Configuration
 
-1. Execute one controlled `Prepare` run on `C0`.
-2. Execute one controlled `Upload` run on `C0` with `existing_datasource_mode=Add`.
-3. Validate generated datasource IDs and upload logs.
+All scripts resolve configuration through
+[shared/utils/paths.py](shared/utils/paths.py) (`get_config_path()`):
 
-### For Daily Pipeline Operations
+1. `STM32CUBE_CONFIG` env var, if set (points to a `shared/config/config_<series>.json`).
+2. `shared/config/config.json` (default active config).
+3. Legacy fallback under `src/config/config.json`.
 
-1. Prefer `manual_auto_update_kb.yml` for supervised runs.
-2. Use `mode=Prepare` to debug preprocessing without touching KB.
-3. Use `mode=Upload` only when ST-ready delivery is already validated.
-4. Use `mode=Full` for end-to-end production-like execution.
-5. Keep `component_issues_only=true` when per-component issues flow is required.
+See [shared/config/README.md](shared/config/README.md) for the full list of
+per-series config files.
 
-### For Incident Triage
+## Report (LaTeX)
 
-1. If authentication fails, verify `ST_GITHUB_ANALYZER_API_KEY` and `ST_REMOTE_USER` first.
-2. If resolver export fails on empty JSON, confirm you are running the latest branch commit.
-3. If driver file upload fails with JSON decode, check for empty/LFS-pointer JSON inputs.
-4. If self-hosted upload is skipped, inspect runner availability gate and token permissions.
+The academic report is written in French, following the CRISP-DM methodology,
+and lives in `docs/reports/`. Compile from that directory:
 
-## Operational Notes
+```powershell
+cd docs/reports
+pdflatex PFE_Report_STM32Cube_Pipeline.tex
+```
 
-- This repository contains very large JSON artifacts; first push can be long.
-- GitHub Enterprise warnings around 50 MB files are expected for some generated artifacts.
-- `.gitignore` does not untrack files already committed in history.
+## Coding conventions
 
-## Internal Usage
+- Python: type hints, `pathlib` for paths, `json` for configs, `argparse` for CLIs.
+- Config resolved via `STM32CUBE_CONFIG` env var (never hardcode series paths).
+- Tests: `py_compile` for syntax checks, `jsonschema` for data contract validation
+  (see `pipeline/evaluation/validate_schemas.py`).
+- Code comments/docstrings: English. The PFE report itself: French.
+- Never hardcode API keys/tokens — always read them from environment variables
+  or a local (gitignored) runtime config file.
 
-Internal STMicroelectronics PFE project.
+## Known housekeeping items (not deleted — for maintainer review)
+
+The following are safe cleanup candidates found while documenting the project;
+they are left in place intentionally since automatic deletion wasn't requested:
+
+- Stray root scripts: `.tmp_extract_issue_example.py`, `.tmp_inspect_checklist.py`
+- Leftover LaTeX build log: `texput.log` (root and `docs/texput.log`)
+- `tmp/` — leftover sample JSON/py files from manual debugging
+- `docs/reports/*.aux|.log|.out|.toc` — regenerable LaTeX build artifacts
+- `__pycache__/` folders throughout `pipeline/`, `pipeline_Automation/`, `shared/`
+  (already excluded from git via `.gitignore`)
+- `actions-runner/` — local self-hosted GitHub Actions runner **containing
+  `.credentials` files**; already gitignored, keep local-only, do not commit
+- `GitHub_repos/` — local clones of STM32Cube repos used as a raw data source;
+  already gitignored, large, regenerable via `pipeline/ingestion/repo_sync_service.py`
+
+## License / usage
+
+Internal STMicroelectronics PFE project. Not licensed for external distribution.
+
