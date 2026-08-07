@@ -11,12 +11,12 @@ rem  UPDATELOG = _diag/SelfUpdate-UTC.log
 rem  RESTARTINTERACTIVERUNNER = 0/1
 
 setlocal
-set runnerpid=5240
+set runnerpid=22112
 set runnerprocessname=Runner.Listener.exe
 set rootfolder=C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner
 set existrunnerversion=2.334.0
 set downloadrunnerversion=2.336.0
-set logfile=C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_diag\SelfUpdate-20260805-021434.log
+set logfile=C:\Users\gharbiab\OneDrive - STMicroelectronics\Desktop\PFE_Chatbot_STM32Cube\actions-runner\_diag\SelfUpdate-20260807-021434.log
 set restartinteractiverunner=0
 
 rem log user who run the script
