@@ -143,6 +143,92 @@ def _extract_text_from_chat_response(response_json: Dict[str, Any]) -> Optional[
     return _extract_from_any(response_json)
 
 
+def _collect_source_debug_rows(response_json: Dict[str, Any]) -> list[Dict[str, Any]]:
+    """Best-effort extraction of citation/source metadata from chat responses.
+
+    API envelopes vary by environment; this scans recursively for source-like
+    objects and returns compact rows (doc/file/datasource/url/title) to help
+    diagnose broken source links (e.g. storage-file 404 on a docId).
+    """
+    rows: list[Dict[str, Any]] = []
+    seen: set[tuple[str, str, str]] = set()
+
+    source_keys = (
+        "source",
+        "sources",
+        "citation",
+        "citations",
+        "reference",
+        "references",
+        "document",
+        "documents",
+    )
+
+    id_keys = ("docId", "doc_id", "documentId", "document_id", "id", "fileId", "file_id")
+    ds_keys = ("datasourceId", "datasource_id", "dataSourceId", "data_source_id", "kbDatasourceId")
+    url_keys = ("externalURL", "externalUrl", "url", "link")
+    title_keys = ("label", "title", "name", "filename", "fileName")
+
+    def _first_string(obj: Dict[str, Any], keys: tuple[str, ...]) -> str:
+        for k in keys:
+            value = obj.get(k)
+            if isinstance(value, str) and value.strip():
+                return value.strip()
+        return ""
+
+    def _first_id(obj: Dict[str, Any], keys: tuple[str, ...]) -> str:
+        for k in keys:
+            if k not in obj:
+                continue
+            value = obj.get(k)
+            if value is None:
+                continue
+            try:
+                return str(int(value))
+            except Exception:
+                if isinstance(value, str) and value.strip():
+                    return value.strip()
+        return ""
+
+    def _add_if_source_like(obj: Dict[str, Any]) -> None:
+        doc_id = _first_id(obj, id_keys)
+        ds_id = _first_id(obj, ds_keys)
+        url = _first_string(obj, url_keys)
+        title = _first_string(obj, title_keys)
+
+        # Keep only objects that look like real source references.
+        if not (doc_id or ds_id or url):
+            return
+
+        row = {
+            "doc_id": doc_id,
+            "datasource_id": ds_id,
+            "external_url": url,
+            "title": title,
+        }
+        key = (row["doc_id"], row["datasource_id"], row["external_url"])
+        if key in seen:
+            return
+        seen.add(key)
+        rows.append(row)
+
+    def _walk(node: Any) -> None:
+        if isinstance(node, dict):
+            _add_if_source_like(node)
+            for k, value in node.items():
+                if isinstance(value, (dict, list)):
+                    _walk(value)
+                elif isinstance(value, list) and k in source_keys:
+                    _walk(value)
+        elif isinstance(node, list):
+            for item in node:
+                if isinstance(item, (dict, list)):
+                    _walk(item)
+
+    _walk(response_json)
+    return rows
+
+
 def call_chat_for_persona(
     user_prompt: str,
     system_prompt: Optional[str] = None,
@@ -242,6 +328,27 @@ def call_chat_for_persona(
 
             if debug:
                 print(f"[Chat][Debug] Reponse JSON keys: {list(response_json.keys())}")
+                raw_sources = response_json.get("sources")
+                if raw_sources is not None:
+                    try:
+                        rendered_sources = json.dumps(raw_sources, ensure_ascii=False, indent=2)
+                    except Exception:
+                        rendered_sources = str(raw_sources)
+                    print("[Chat][Debug] Champ sources brut:")
+                    print(rendered_sources[:8000])
+                source_rows = _collect_source_debug_rows(response_json)
+                if source_rows:
+                    print("[Chat][Debug] Sources/Citations detectees:")
+                    for row in source_rows[:40]:
+                        print(
+                            "  - "
+                            f"doc_id={row.get('doc_id') or '-'} "
+                            f"datasource_id={row.get('datasource_id') or '-'} "
+                            f"url={row.get('external_url') or '-'} "
+                            f"title={row.get('title') or '-'}"
+                        )
+                else:
+                    print("[Chat][Debug] Aucune source/citation explicite detectee.")
 
             if error_code not in (None, 0):
                 print(

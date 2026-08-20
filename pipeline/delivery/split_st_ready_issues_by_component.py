@@ -434,21 +434,33 @@ def split_payload_by_component(
 
 
 def resolve_source_files(input_root: Path, pattern: str) -> list[Path]:
-    """Resolve source files using `pattern`, falling back through
-    `FALLBACK_INPUT_PATTERNS` in order if nothing matches.
+    """Resolve one best source file per `issues_json` directory.
 
-    This lets the script work whether or not Alfred image enrichment has run
-    yet, and whether or not the with-images export variant was used.
+    Priority per directory:
+    1) `pattern` (usually Alfred-enriched with-images)
+    2) each pattern in `FALLBACK_INPUT_PATTERNS`, in order
+
+    This guarantees coverage of root + drivers/subrepos even when each repo has
+    a different available variant (with Alfred, with-images only, or plain issues).
     """
-    files = sorted(input_root.glob(pattern))
-    if files:
-        return files
+    pattern_priority = [pattern] + list(FALLBACK_INPUT_PATTERNS)
+    issues_dirs = sorted({path.parent for path in input_root.glob("**/issues_json/*.json")})
 
-    fallback_files: list[Path] = []
-    for fallback_pattern in FALLBACK_INPUT_PATTERNS:
-        fallback_files.extend(sorted(input_root.glob(fallback_pattern)))
+    selected: list[Path] = []
+    for issues_dir in issues_dirs:
+        chosen: Path | None = None
+        for pat in pattern_priority:
+            # Convert repo-root pattern to issues_json-local file glob.
+            local_glob = pat.split("issues_json/", 1)[-1]
+            matches = sorted(issues_dir.glob(local_glob))
+            if matches:
+                chosen = matches[0]
+                break
+        if chosen is not None:
+            selected.append(chosen)
+
     # Preserve deterministic order and remove duplicates.
-    return sorted(set(fallback_files))
+    return sorted(set(selected))
 
 
 def main() -> None:

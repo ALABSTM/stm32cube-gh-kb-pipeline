@@ -215,32 +215,50 @@ function Save-IdCache {
 function Upload-SeriesByComponent {
     param([string]$Slug)
 
-    $byComponentDir = "datasets/07_delivery/st_ready/by_series/$Slug/issues_json/by_component"
+    $seriesRoot = "datasets/07_delivery/st_ready/by_series/$Slug"
+    $byComponentDir = "$seriesRoot/issues_json/by_component"
     $seriesCode = ($Slug -replace "^stm32cube", "").ToUpper()
-    $summaryPath = Join-Path $byComponentDir "summary_by_component_$($seriesCode.ToLower()).json"
+    $summaryName = "summary_by_component_$($seriesCode.ToLower()).json"
     $idCachePath = Join-Path $byComponentDir "upload_ids_by_component_$($seriesCode.ToLower()).json"
 
-    if (-not (Test-Path -LiteralPath $summaryPath)) {
-        Write-Host "[skip] summary not found for ${Slug}: $summaryPath" -ForegroundColor Yellow
-        return
-    }
+    $summaryFiles = @(
+        Get-ChildItem -Path $seriesRoot -Recurse -File -Filter $summaryName -ErrorAction SilentlyContinue |
+            Where-Object { $_.DirectoryName -match "issues_json[\\/]by_component$" } |
+            Sort-Object FullName
+    )
 
-    try {
-        $summary = Get-Content -LiteralPath $summaryPath -Raw | ConvertFrom-Json
-    } catch {
-        Write-Host "[skip] invalid summary JSON for ${Slug}: $summaryPath" -ForegroundColor Yellow
-        Write-Host "[skip] parse error: $($_.Exception.Message)" -ForegroundColor DarkYellow
-        return
-    }
-    if ($null -eq $summary -or $null -eq $summary.datasources) {
-        Write-Host "[skip] no datasources in summary for $Slug" -ForegroundColor Yellow
+    if ($summaryFiles.Count -eq 0) {
+        Write-Host "[skip] no by-component summaries found for ${Slug}" -ForegroundColor Yellow
         return
     }
 
     $idCache = Load-IdCache -Path $idCachePath
-    $items = @($summary.datasources)
-    $skipAddForRemaining = $false
+    $items = @()
+    foreach ($summaryFile in $summaryFiles) {
+        try {
+            $summary = Get-Content -LiteralPath $summaryFile.FullName -Raw | ConvertFrom-Json
+        } catch {
+            Write-Host "[skip] invalid summary JSON for ${Slug}: $($summaryFile.FullName)" -ForegroundColor Yellow
+            Write-Host "[skip] parse error: $($_.Exception.Message)" -ForegroundColor DarkYellow
+            continue
+        }
 
+        if ($null -eq $summary -or $null -eq $summary.datasources) {
+            Write-Host "[skip] no datasources in summary: $($summaryFile.FullName)" -ForegroundColor Yellow
+            continue
+        }
+
+        $items += @($summary.datasources)
+    }
+
+    if ($items.Count -eq 0) {
+        Write-Host "[skip] no datasource rows found in by-component summaries for $Slug" -ForegroundColor Yellow
+        return
+    }
+
+    # Group files by datasource to avoid repeated replace/new on the same datasource.
+    # Pattern: one "new" (with selected policy) for first file, then "add" for remaining.
+    $grouped = @{}
     foreach ($item in $items) {
         $datasourceName = [string]$item.datasource_name
         $filePath = [string]$item.output_file
@@ -259,18 +277,31 @@ function Upload-SeriesByComponent {
             continue
         }
 
-        $componentLabel = if ($null -eq $item.component -or [string]::IsNullOrWhiteSpace([string]$item.component)) { "GENERAL" } else { [string]$item.component }
-        $processorParams = New-ProcessorParamsBase64 `
-            -RootTagPath "issues" `
-            -LinkUrl "https://github.com/STMicroelectronics/$Slug/issues" `
-            -LinkLabel "ST GitHub Analyzer - $seriesCode - $componentLabel"
+        if (-not $grouped.ContainsKey($datasourceName)) {
+            $grouped[$datasourceName] = @()
+        }
+        $grouped[$datasourceName] += $filePath
+    }
+
+    $processorParams = New-ProcessorParamsBase64 `
+        -RootTagPath "issues" `
+        -LinkUrl "https://github.com/STMicroelectronics/{{repo}}/issues/{{issue_number}}" `
+        -LinkLabel "{{repo}} issue #{{issue_number}} - {{issue_title}}"
+
+    foreach ($datasourceName in ($grouped.Keys | Sort-Object)) {
+        $filePaths = @($grouped[$datasourceName] | Sort-Object -Unique)
+        if ($filePaths.Count -eq 0) {
+            continue
+        }
 
         $existingIdHint = 0
         if ($idCache.ContainsKey($datasourceName)) {
             $existingIdHint = [int]$idCache[$datasourceName]
         }
 
-        $args = @(
+        # First file: create/reuse datasource according to selected policy.
+        $firstFile = $filePaths[0]
+        $newArgs = @(
             $uploader,
             "--kb", "$KbId",
             "--operation", "new",
@@ -285,24 +316,78 @@ function Upload-SeriesByComponent {
             "--empty-json-policy", "skip",
             "--json-split-size", "$JsonSplitSize",
             "--timeout", "60",
-            "--files", $filePath
+            "--files", $firstFile
         )
         if ($existingIdHint -gt 0) {
-            $args += @("--existing-datasource-id-hint", "$existingIdHint")
+            $newArgs += @("--existing-datasource-id-hint", "$existingIdHint")
         }
-        $args += @(Get-UploadAuthArgs)
+        $newArgs += @(Get-UploadAuthArgs)
 
-        $outLines = Invoke-Uploader -Label "$datasourceName ($ExistingDatasourcePolicy)" -CommandArgs $args
+        $newOutLines = Invoke-Uploader -Label "$datasourceName ($ExistingDatasourcePolicy/new)" -CommandArgs $newArgs
 
+        $activeDatasourceId = 0
         if (-not $DryRun) {
-            $newId = Parse-DatasourceId -Lines $outLines
-            if ($newId) {
-                $idCache[$datasourceName] = $newId
+            $parsedId = Parse-DatasourceId -Lines $newOutLines
+            if ($parsedId) {
+                $activeDatasourceId = [int]$parsedId
+                $idCache[$datasourceName] = $activeDatasourceId
                 Save-IdCache -Cache $idCache -Path $idCachePath
-                Write-Host "[saved] $datasourceName -> $newId" -ForegroundColor DarkCyan
-            } else {
-                Write-Host "[warn] datasource ID not found in output for $datasourceName" -ForegroundColor Yellow
+                Write-Host "[saved] $datasourceName -> $activeDatasourceId" -ForegroundColor DarkCyan
+            } elseif ($existingIdHint -gt 0) {
+                $activeDatasourceId = $existingIdHint
+                Write-Host "[warn] datasource ID not found in output for $datasourceName; fallback to cached ID $activeDatasourceId for add uploads." -ForegroundColor Yellow
             }
+        }
+
+        # Remaining files: append into the resolved datasource ID.
+        if ($filePaths.Count -le 1) {
+            continue
+        }
+
+        if ($DryRun) {
+            foreach ($extraFile in $filePaths[1..($filePaths.Count - 1)]) {
+                $addArgsDry = @(
+                    $uploader,
+                    "--kb", "$KbId",
+                    "--operation", "add",
+                    "--datasource-id", "<resolved-at-runtime>",
+                    "--remote-user", $RemoteUser,
+                    "--processor", "JSON",
+                    "--processor-params", $processorParams,
+                    "--json-root-mode", "auto",
+                    "--empty-json-policy", "skip",
+                    "--json-split-size", "$JsonSplitSize",
+                    "--timeout", "60",
+                    "--files", $extraFile
+                )
+                $addArgsDry += @(Get-UploadAuthArgs)
+                Invoke-Uploader -Label "$datasourceName (add)" -CommandArgs $addArgsDry | Out-Null
+            }
+            continue
+        }
+
+        if ($activeDatasourceId -le 0) {
+            Write-Host "[warn] could not resolve datasource ID for $datasourceName; skipping add uploads for remaining files." -ForegroundColor Yellow
+            continue
+        }
+
+        foreach ($extraFile in $filePaths[1..($filePaths.Count - 1)]) {
+            $addArgs = @(
+                $uploader,
+                "--kb", "$KbId",
+                "--operation", "add",
+                "--datasource-id", "$activeDatasourceId",
+                "--remote-user", $RemoteUser,
+                "--processor", "JSON",
+                "--processor-params", $processorParams,
+                "--json-root-mode", "auto",
+                "--empty-json-policy", "skip",
+                "--json-split-size", "$JsonSplitSize",
+                "--timeout", "60",
+                "--files", $extraFile
+            )
+            $addArgs += @(Get-UploadAuthArgs)
+            Invoke-Uploader -Label "$datasourceName (add)" -CommandArgs $addArgs | Out-Null
         }
     }
 

@@ -440,7 +440,7 @@ function Upload-Category {
 if ($ComponentIssuesOnly) {
     Write-Host "[SKIP] Monolithic issues upload disabled by -ComponentIssuesOnly" -ForegroundColor Yellow
 } elseif (-not $SkipIssues) {
-    Upload-Category "issues" "issues" "{{github_url}}" "{{repo}} issue #{{issue_number}} - {{issue_title}}"
+    Upload-Category "issues" "issues" "https://github.com/STMicroelectronics/{{repo}}/issues/{{issue_number}}" "{{repo}} issue #{{issue_number}} - {{issue_title}}"
 }
 if (-not $SkipFiles)     { Upload-Category "files"           "files"           "{{github_url}}" "{{repo}} {{file_type}} - {{path}}" }
 if (-not $SkipDiagnostic){ Upload-Category "diagnostic_cards" "diagnostic_cards" "{{externalURL}}" "{{repo}} diagnostic #{{issue_number}} - {{title}}" }

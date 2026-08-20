@@ -1,0 +1,455 @@
+file,repo,issue_number,issue_title,current_component,inferred_components,best_component,best_count
+docs_issues_32f412gdiscovery-bsp_v2.json,32f412gdiscovery-bsp,1,Bug in BSP_TS_Reset (stm32412g_discovery_ts.c): Infinite loop during touch screen reset sequence,,GPIO(1),GPIO,1
+docs_issues_32f469idiscovery-bsp_v2.json,32f469idiscovery-bsp,2,Misspelling in comments,,LCD(1),LCD,1
+docs_issues_stm32cubec0_v2.json,STM32CubeC0,3,IAR STM32C0 patch : Failed to load flash loader FlashSTM32C03xx6.flash,,FLASH(6),FLASH,6
+docs_issues_stm32cubec0_v2.json,STM32CubeC0,5,I2C Master Memory Read function actually sends a write command,,I2C(3),I2C,3
+docs_issues_stm32cubec0_v2.json,STM32CubeC0,6,DMAMUX1_DMA1_CH4_5_IRQHandler,,DMAMUX(1),DMAMUX,1
+docs_issues_stm32cubef0_v2.json,STM32CubeF0,5,Fault in HAL_CEC code,,CEC(6),CEC,6
+docs_issues_stm32cubef0_v2.json,STM32CubeF0,7,HAL I2C OA1EN always set even when slave is not used,,I2C(17),I2C,17
+docs_issues_stm32cubef0_v2.json,STM32CubeF0,11,Overflow error when compiling with GCC 10.1,,CORTEX(1),CORTEX,1
+docs_issues_stm32cubef0_v2.json,STM32CubeF0,16,SystemCoreClockUpdate() wrong value for STM32F030xC running PLL,,"RCC(13), FLASH(1)",RCC,13
+docs_issues_stm32cubef0_v2.json,STM32CubeF0,17,-Woverflow warning caused by HAL CRC function,,CRC(3),CRC,3
+docs_issues_stm32cubef0_v2.json,STM32CubeF0,18,Question about the HSI48RDY bit in RCC->CR2,,RCC(2),RCC,2
+docs_issues_stm32cubef0_v2.json,STM32CubeF0,19,I2C Slave address generate wrong?,,I2C(8),I2C,8
+docs_issues_stm32cubef1_v2.json,STM32CubeF1,5,Broken reset handler for SMT32F103xE?,,FLASH(1),FLASH,1
+docs_issues_stm32cubef1_v2.json,STM32CubeF1,10,LL GPIO driver problem,,GPIO(4),GPIO,4
+docs_issues_stm32cubef1_v2.json,STM32CubeF1,18,Syntax failure in stm32f1xx_hal_tim.h,,TIM(2),TIM,2
+docs_issues_stm32cubef1_v2.json,STM32CubeF1,20,STM3210C_EVAL: LCD module image corruption with BSP Example ,,"LCD(6), JPEG(2), FLASH(1)",LCD,6
+docs_issues_stm32cubef1_v2.json,STM32CubeF1,26,Error behavior of LL_GPIO_SetPinPull() in LL_GPIO_Init(),,GPIO(10),GPIO,10
+docs_issues_stm32cubef1_v2.json,STM32CubeF1,29,Function LL_RTC_TIME_Init  confusion RTC_Format,,RTC(1),RTC,1
+docs_issues_stm32cubef1_v2.json,STM32CubeF1,32,stm32f1xx_hal_rtc.c -- inefficient code in HAL_RTC_Init() function,,RTC(2),RTC,2
+docs_issues_stm32cubef1_v2.json,STM32CubeF1,42,Discrepancy in FLASH->ACR register LATENCY bits definition between CMSIS and Reference Manual,,FLASH(3),FLASH,3
+docs_issues_stm32cubef1_v2.json,STM32CubeF1,43,stm32f1xx_hal_iwdg.c:126:83: error: 'LSI_STARTUP_TIME' undeclared,,IWDG(4),IWDG,4
+docs_issues_stm32cubef1_v2.json,STM32CubeF1,57,CubeMX TIM Remap with LL Generation,,"TIM(5), GPIO(3)",TIM,5
+docs_issues_stm32cubef1_v2.json,STM32CubeF1,58,HAL_RTC_Init() loses time,,RTC(7),RTC,7
+docs_issues_stm32cubef1_v2.json,STM32CubeF1,62,"No error actually, I had misinterpreted information.",,FLASH(3),FLASH,3
+docs_issues_stm32cubef1_v2.json,STM32CubeF1,71,There is not DAC Instances in the stm32f103xb.h,,DAC(4),DAC,4
+docs_issues_stm32cubef3_v2.json,STM32CubeF3,1,HRTIM_TIM_TypeDef is undefined,,TIM(1),TIM,1
+docs_issues_stm32cubef3_v2.json,STM32CubeF3,3,Comment bug stm32f3xx_ll_opamp.h NONINVERT macros,,"OPAMP(6), GPIO(4)",OPAMP,6
+docs_issues_stm32cubef3_v2.json,STM32CubeF3,7,RXNE flag doesn't behave correctly while using HAL_SPI_Receive() in bidirectional mode,,"SPI(6), TIM(1)",SPI,6
+docs_issues_stm32cubef3_v2.json,STM32CubeF3,16,EEPROM Page Size and Number of Pages,,I2C(1),I2C,1
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,3,Bit position of TimeFormat in HAL_RTC,,RTC(3),RTC,3
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,7,I2C HAL driver problem with HAL_I2C_Mem_Read_IT,,I2C(7),I2C,7
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,16,STemWin MIPI DSI driver in video mode,,"DSI(3), LCD(1)",DSI,3
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,17,stm32f4xx_hal_rcc.c  line:545  check RCC_PLLCFGR_PLLP  registers error,,RCC(6),RCC,6
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,24,I found issue in stm32f4xx_hal_i2c.c,,I2C(1),I2C,1
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,25,HAL_Delay_us (Feature Request),,"CORTEX(1), TIM(1)",CORTEX,1
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,30,template file system_stm32f4xx.c should support userdefined location of vectortable,,FLASH(3),FLASH,3
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,45,STM32 F411E I2C hang ,,"I2C(5), SPI(2)",I2C,5
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,53,Definition of I2C_MEMADD_SIZE_16BIT has an incorrect value,,I2C(1),I2C,1
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,55,Move GPIO read/write/toggle into implementation into header,,GPIO(5),GPIO,5
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,58,HAL RTC Output,,RTC(5),RTC,5
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,61,I2C issue where two consecutive start bits are generated when reading in memory mode,,I2C(3),I2C,3
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,66,HARDFAULT when sbmus is enabled,,I2C(1),I2C,1
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,67,Hardcoded address in use,,FLASH(7),FLASH,7
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,69,PLL can't be updated when PLL is already used for sysclock,,GPIO(2),GPIO,2
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,70,STM32F412Vx defined GPIOF_BASE and GPIOG_BASE,,"CORTEX(23), GPIO(5), RCC(1)",CORTEX,23
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,74,RTC initialization (defect),,RTC(8),RTC,8
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,76,I2C Slave Driver Race Condition,,I2C(10),I2C,10
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,80,Touchscreen presses not detected on versions D/E of STM32F429-Discovery board,,FLASH(1),FLASH,1
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,84,stm32f4xx_hal_rcc.c has a broken check for clock init,,RCC(2),RCC,2
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,88,HAL_FLASH_Program_IT and HAL_FLASH_EndOfOperationCallback,,FLASH(1),FLASH,1
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,94,Nucleo F411RE SPI not working,,"SPI(6), CRC(1)",SPI,6
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,96,i2c: how to receive uknown byte count,,I2C(3),I2C,3
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,101,EEprom flash hal driver incorrect lock/unlock sequence,,FLASH(9),FLASH,9
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,147,Check value of pllm in function HAL_RCC_GetSysClockFreq of stm32f4xx_hal_rcc.c:911,,RCC(7),RCC,7
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,156,HAL_SRAM_Write_16b is 32b,,LCD(2),LCD,2
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,157,Trigger event triggered in MX_TIMx_Init (TIM_Base_SetConfig) causing triggering of slave timers initialised first,,TIM(8),TIM,8
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,158,__HAL_RCC_APB2_FORCE_RESET cause mcu reset!,,"FLASH(3), RCC(1)",FLASH,3
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,163,Unnecessary 64-bit calculations result in 700+ bytes increase in firmware size,,RCC(4),RCC,4
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,167,PWM oversight on STM32CubeMX + HAL combination,,"TIM(8), GPIO(1)",TIM,8
+docs_issues_stm32cubef4_v2.json,STM32CubeF4,192,Update HAL to define STM32F401xD variants,,FLASH(1),FLASH,1
+docs_issues_stm32cubef7_v2.json,STM32CubeF7,3,EXTI-HAL (i.e. not GPIO-HAL using EXTI) ,,"EXTI(10), GPIO(5)",EXTI,10
+docs_issues_stm32cubef7_v2.json,STM32CubeF7,4,Inconsistent GPIO macro names,,GPIO(3),GPIO,3
+docs_issues_stm32cubef7_v2.json,STM32CubeF7,6,QSPI locks up at STM32F746G-DISCO board,,QSPI(3),QSPI,3
+docs_issues_stm32cubef7_v2.json,STM32CubeF7,13,stm32f7xx_hal_rcc.c - Assert Failed,,RCC(1),RCC,1
+docs_issues_stm32cubef7_v2.json,STM32CubeF7,15,Excess garbage.,,CAN(1),CAN,1
+docs_issues_stm32cubef7_v2.json,STM32CubeF7,16,HAL_EXTI_SetConfigLine() generates the continuous interrupt. ,,EXTI(13),EXTI,13
+docs_issues_stm32cubef7_v2.json,STM32CubeF7,24,Questionable logic when setting the number of flash wait states,,FLASH(3),FLASH,3
+docs_issues_stm32cubef7_v2.json,STM32CubeF7,28,Memory corruption when FPU is used,,CORTEX(2),CORTEX,2
+docs_issues_stm32cubef7_v2.json,STM32CubeF7,33,Can't configure PLL on STM32F722 with CubeF7 v1.16,,RCC(1),RCC,1
+docs_issues_stm32cubef7_v2.json,STM32CubeF7,52,QSPI times out on 32F769IDISCOVERY,,QSPI(2),QSPI,2
+docs_issues_stm32cubef7_v2.json,STM32CubeF7,56,FLASH sector description is wrong for NUCLEO F722ZE,,FLASH(4),FLASH,4
+docs_issues_stm32cubef7_v2.json,STM32CubeF7,62,PWR_STOP_RTC example doesn't work,,PWR(2),PWR,2
+docs_issues_stm32cubef7_v2.json,STM32CubeF7,64,Nucleo F746ZG not working when generating code with all peripherals initialized,,GPIO(1),GPIO,1
+docs_issues_stm32cubef7_v2.json,STM32CubeF7,66,How to generate fontX.c file?,,LCD(1),LCD,1
+docs_issues_stm32cubef7_v2.json,STM32CubeF7,75,GUI_Delay STemWin doesn't work as expected for STM32769I-DISCO,,LCD(1),LCD,1
+docs_issues_stm32cubef7_v2.json,STM32CubeF7,79,The function HAL_I2C_Mem_Read_IT and HAL_I2C_Mem_Write_IT are blocking until the first ACK,,I2C(5),I2C,5
+docs_issues_stm32cubef7_v2.json,STM32CubeF7,80,STM32F769 - STOP Mode + LCD / DSI - Screen not working on wake up,,"LCD(4), DSI(3), LTDC(1)",LCD,4
+docs_issues_stm32cubef7_v2.json,STM32CubeF7,85,Settings of the main internal Regulator output voltage is not working,,"CORTEX(1), RCC(1)",CORTEX,1
+docs_issues_stm32cubef7_v2.json,STM32CubeF7,88,Some text can be more comfortable.,,LTDC(1),LTDC,1
+docs_issues_stm32cubef7_v2.json,STM32CubeF7,91,Nucleo-F756zg: Debug support for StopMode does not work,,PWR(3),PWR,3
+docs_issues_stm32cubef7_v2.json,STM32CubeF7,96,Spontaneous setting of RDP 1 after reset when saving option bytes,,FLASH(3),FLASH,3
+docs_issues_stm32cubef7_v2.json,STM32CubeF7,98,Wrong information about boot address through option bytes,,FLASH(3),FLASH,3
+docs_issues_stm32cubef7_v2.json,STM32CubeF7,106,Timers: HAL_TIM_PWM_Stop() disable timer even channel 5 or channel 6 are enabled,,TIM(4),TIM,4
+docs_issues_stm32cubef7_v2.json,STM32CubeF7,110,TIM: dirty state SR register after invoke TIM_Base_SetConfig(),,TIM(4),TIM,4
+docs_issues_stm32cubef7_v2.json,STM32CubeF7,124,SCB_EnableDCache(): Add check for already enabled DCache,,DCACHE(6),DCACHE,6
+docs_issues_stm32cubeg0_v2.json,STM32CubeG0,3,Consistent RCC definitions,,RCC(6),RCC,6
+docs_issues_stm32cubeg0_v2.json,STM32CubeG0,4,LL RTC - wrong reference to RTC,,RTC(7),RTC,7
+docs_issues_stm32cubeg0_v2.json,STM32CubeG0,5,Naming inconsistency for Flash Busy flag,,FLASH(3),FLASH,3
+docs_issues_stm32cubeg0_v2.json,STM32CubeG0,7,STM32G0 HAL_GPIO_EXTI_Callback() incompatibility,,"EXTI(5), GPIO(1)",EXTI,5
+docs_issues_stm32cubeg0_v2.json,STM32CubeG0,9,HDMI CEC extra byte sent.,,CEC(6),CEC,6
+docs_issues_stm32cubeg0_v2.json,STM32CubeG0,16,__RAM_FUNC breaks when inlined by GCC LTO,,FLASH(2),FLASH,2
+docs_issues_stm32cubeg0_v2.json,STM32CubeG0,17,HAL_SPI_TransmitReceive_IT argument misalignment,,"SPI(2), HSPI(1)",SPI,2
+docs_issues_stm32cubeg0_v2.json,STM32CubeG0,19,I2C Slave examples for STM32G0316-DISCO board,,I2C(18),I2C,18
+docs_issues_stm32cubeg0_v2.json,STM32CubeG0,23,HAL_TIM_IC_START_IT does not enable CC2E for duty&freq capture,,TIM(2),TIM,2
+docs_issues_stm32cubeg0_v2.json,STM32CubeG0,30,STM32 RTC loses one second after each reset,,RTC(3),RTC,3
+docs_issues_stm32cubeg0_v2.json,STM32CubeG0,31,I2C addr flag not reset inside I2C_ITAddrCplt,,I2C(2),I2C,2
+docs_issues_stm32cubeg0_v2.json,STM32CubeG0,35,HAL_I2C_Slave_Trasmit_IT always fails on second call,,I2C(3),I2C,3
+docs_issues_stm32cubeg0_v2.json,STM32CubeG0,37,LL Syscfg comments incorrectly identify COMP EXTI lines,,"EXTI(9), COMP(2)",EXTI,9
+docs_issues_stm32cubeg0_v2.json,STM32CubeG0,42,LL Function for checking UCPD RxErr Flag is missing,,UCPD(4),UCPD,4
+docs_issues_stm32cubeg0_v2.json,STM32CubeG0,43,missing linker description file *.ld,,CRC(1),CRC,1
+docs_issues_stm32cubeg0_v2.json,STM32CubeG0,46,"The `HAL_I2C_IsDeviceReady()` may return an error, even if the I2C device is OK",,I2C(12),I2C,12
+docs_issues_stm32cubeg0_v2.json,STM32CubeG0,56,PREFETCH_ENABLE not implemented,,FLASH(5),FLASH,5
+docs_issues_stm32cubeg4_v2.json,STM32CubeG4,2,STM32Cube_FW_G4_V1.1.0 HRTIM_Buck_Sync_Rect cannot not directly import,,HRTIM(3),HRTIM,3
+docs_issues_stm32cubeg4_v2.json,STM32CubeG4,6,HAL_GPIO doesn't have EXTI enable / disable API. ,,"EXTI(10), GPIO(5)",EXTI,10
+docs_issues_stm32cubeg4_v2.json,STM32CubeG4,7,NUCLEO-G431RB/Examples/PWR/PWR_SHUTDOWN doesn't work,,"EXTI(3), PWR(3)",EXTI,3
+docs_issues_stm32cubeg4_v2.json,STM32CubeG4,12,HRTIM Fault Source Settings using LL Drivers,,HRTIM(4),HRTIM,4
+docs_issues_stm32cubeg4_v2.json,STM32CubeG4,14,TIM_InputCapture HAL Example uwDiffCapture always the same value when changing APB2 prescaler,,TIM(14),TIM,14
+docs_issues_stm32cubeg4_v2.json,STM32CubeG4,17,Feature request: HRTIM add option to disable fault blanking window,,HRTIM(4),HRTIM,4
+docs_issues_stm32cubeg4_v2.json,STM32CubeG4,19,G491 and G4A1 wrong RAM size in linker script,,"CORTEX(1), FLASH(1)",CORTEX,1
+docs_issues_stm32cubeg4_v2.json,STM32CubeG4,21,module DAC does not work on STMG473,,DAC(2),DAC,2
+docs_issues_stm32cubeg4_v2.json,STM32CubeG4,22,Some RTC Macro did'nt use pHandle ,,RTC(4),RTC,4
+docs_issues_stm32cubeg4_v2.json,STM32CubeG4,23,[Feature Request] Pass arbitrary data pointer in callbacks,,"SPI(4), I2C(2), HSPI(1)",SPI,4
+docs_issues_stm32cubeg4_v2.json,STM32CubeG4,25,Readme on NUCLEO-G474RE/Examples/OPAMP/OPAMP_PGA/readme.txt,,OPAMP(5),OPAMP,5
+docs_issues_stm32cubeg4_v2.json,STM32CubeG4,34,Flash latency inconsistency between STM32CubeG4 and RM0440,,FLASH(3),FLASH,3
+docs_issues_stm32cubeg4_v2.json,STM32CubeG4,42,SPI parameter,,SPI(3),SPI,3
+docs_issues_stm32cubeg4_v2.json,STM32CubeG4,54,stm32g4 ll opamp: spell mistake on L268,,OPAMP(2),OPAMP,2
+docs_issues_stm32cubeh5_v2.json,STM32CubeH5,1,File Missing and Projects not working on IAR,,GPIO(1),GPIO,1
+docs_issues_stm32cubeh5_v2.json,STM32CubeH5,8,Missing link template files for MDK-ARM,,FLASH(2),FLASH,2
+docs_issues_stm32cubeh5_v2.json,STM32CubeH5,9,Register bit name typo causes compiler warning due to bug,,PWR(1),PWR,1
+docs_issues_stm32cubeh5_v2.json,STM32CubeH5,12,STM32H573I-DK HardFault while using TrustZone examples,,"GTZC(6), CORTEX(1), FLASH(1)",GTZC,6
+docs_issues_stm32cubeh5_v2.json,STM32CubeH5,13,EEPROM emulation problem on STM32H563ZI,,FLASH(1),FLASH,1
+docs_issues_stm32cubeh5_v2.json,STM32CubeH5,14,STM32H563/573: HAL_SPI)TransmitReceive not working on 1.8V,,SPI(8),SPI,8
+docs_issues_stm32cubeh5_v2.json,STM32CubeH5,19,Can you give a simple example of IWDG with HAL_IWDG_RegisterCallback?,,"IWDG(9), I2C(6), RTC(2)",IWDG,9
+docs_issues_stm32cubeh5_v2.json,STM32CubeH5,23,Incorrect doc-string for FLASH_EraseInitTypeDef in `stm32h55xx_hal_flash_ex.h` ?,,FLASH(1),FLASH,1
+docs_issues_stm32cubeh5_v2.json,STM32CubeH5,30,image_macros_preprocessed_bl2.c is compiled and linked into the application on 2nd build in STM32CubeIDE,,FLASH(1),FLASH,1
+docs_issues_stm32cubeh5_v2.json,STM32CubeH5,31,Misleading bitoperation in OEMiROT_Boot clock configuration,,RCC(6),RCC,6
+docs_issues_stm32cubeh5_v2.json,STM32CubeH5,35,"[Bug]: NetX Duo `_nx_tcp_socket_send_internal` corrupts retried packets — upstream fix exists, not yet bundled in STM32CubeH5",,FLASH(1),FLASH,1
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,2,HRTIM_TIM_TypeDef is undefined,,TIM(1),TIM,1
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,3,SDMMC_BASE is undefined,,SDMMC(5),SDMMC,5
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,8,enabling unwanted global interrupts,,LPTIM(1),LPTIM,1
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,13,DSI/emWin crash on dual-core H7,,"DSI(5), LCD(3), DMA2D(1)",DSI,5
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,14,Regression in QSPI vs. v1.3.0,,"QSPI(3), FLASH(1), SPI(1)",QSPI,3
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,19,__HAL_RCC_AHB3_FORCE_RESET() sometime causes microprocessor to reset,,"RCC(10), FLASH(3)",RCC,10
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,20,The HAL_NOR_ProgramBuffer() has a few defects,,"FLASH(7), FMC(1)",FLASH,7
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,21,SDMMC: Hard-coded clock dividers only work for 200MHz MMCCLK,,SDMMC(3),SDMMC,3
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,24,HAL_RTC_Init() looses time,,"RTC(9), RCC(1)",RTC,9
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,25,Wrong timer identifiers on some HRTIM functions doc,,HRTIM(5),HRTIM,5
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,32,CubeMX: 0-pointer access in generated code if TIM6 is used for HAL tick and DAC is enabled,,"DAC(4), TIM(2)",DAC,4
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,34,Dual Core boot up example,,"HSEM(4), FLASH(3)",HSEM,4
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,35,"Spelling: ""secion"" instead of ""section"" in >900 places",,MDMA(1),MDMA,1
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,41,Uninitialized local variable VidCfg,,DSI(2),DSI,2
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,46,HAL_RCCEx_PeriphCLKConfig not setting the HRTIM1 clock source,,HRTIM(3),HRTIM,3
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,47,ExtMem_Boot: hardfault caused by unaligned memory access,,"FLASH(5), OSPI(3)",FLASH,5
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,51,Version control management,,GPIO(2),GPIO,2
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,88,CubeMX GPIO not initialized in STM32H747-DISCO?,,GPIO(4),GPIO,4
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,89,HAL_SDRAM_Init should take timing argument as const,,FMC(1),FMC,1
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,91,TIM15 is missing in macro IS_TIM_SLAVE_INSTANCE,,TIM(2),TIM,2
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,101,RCC_AHB2RSTR register for DCMI resetting on STM32H743VI,,DCMI(7),DCMI,7
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,124,MDMA Link Nodes not Double Word Aligned by CubeMX as Required,,MDMA(4),MDMA,4
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,125,H747/dual core CM7 continues execution after wakeup from standby mode with RTC.,,"RTC(12), HSEM(6), FLASH(3)",RTC,12
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,131,FatFs Application for STM32H745I-DISCO not working properly,,FLASH(1),FLASH,1
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,133,Query: Declaring a Global variable in External MRAM / SRAM and simultaneously initializing it within the same (C language) statement.,,"FMC(1), GPIO(1)",FMC,1
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,134,"Query: Tweaking __main or updating / modifying SystemInit() to call System Clock Configure, Peripheral Configure and FMC Initialization before calling Zero Initialization of memory",,"FMC(14), FLASH(1), GPIO(1)",FMC,14
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,138,MX25LM51245G timing is not respected,,FLASH(2),FLASH,2
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,142,Wrong pin config in stm32h747i_eval_nor.c,,FMC(3),FMC,3
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,143,Wrong pin config in stm32h747i_eval_nor.c,,FMC(1),FMC,1
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,144,Wrong pin config in stm32h747i_eval_nor.c,,FMC(1),FMC,1
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,145,"Request: Please modify following functions SystemClock_Config(), PeriphCommonClock_Config(), and MX_FMC_Init() along with its called functions so as not to use variables",,"FMC(1), GPIO(1)",FMC,1
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,146,Example: MDMA_RepeatBlock_Rotation - Readme says 90° rotation but not done in source code,,MDMA(4),MDMA,4
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,150,Bank mapping support is broken,,"FLASH(6), LCD(1)",FLASH,6
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,152,Not able to flash any code on NUCLEO-H745ZI-Q using STM32CubeIDE,,"FLASH(5), CORTEX(1)",FLASH,5
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,154,Missing implementation of HAL SPI master automatic SUSP in receive mode,,"SPI(5), HSPI(1)",SPI,5
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,155,Early system initialization and correct use of HAL_PWREx_ConfigSupply(),,PWR(1),PWR,1
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,159,Nucleo-STM32H743ZI2 board gets hung at SystemClock_Config();,,RCC(1),RCC,1
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,161,Wrong paralle NOR setting,,FMC(1),FMC,1
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,164,HAL_DSI_MspInit bad generation for STM32H747,,DSI(2),DSI,2
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,173,Can provide CubeMX configuration file？,,QSPI(1),QSPI,1
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,176,NOR Flash driver does not support large flash chips (i.e. greater than ,,"FLASH(10), FMC(2)",FLASH,10
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,183,Typos in MCU header files,,CORTEX(3),CORTEX,3
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,184,I2C: discrepancy between the HAL driver and the RM0433 reference manual,,I2C(11),I2C,11
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,185,Minor typos in Extended FLASH HAL,,FLASH(2),FLASH,2
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,190,[STM32H750-DB] ExtMem_Application: hardfault caused and Unable to jump to Application,,FLASH(4),FLASH,4
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,198,DOC and API have a bug in describing STM32H7 ETH->DMACTDRLR (ETH_DMACTXRLR) register,,ETH(4),ETH,4
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,201,"BSP driver for STM32H743I/753I -EVAL, fix for using LEDs without the I2C I/O extender",,I2C(4),I2C,4
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,202,Flash Dual bank for H735 and H725,,FLASH(6),FLASH,6
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,216,QSPI FIFO Threshold mask wrong,,QSPI(3),QSPI,3
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,217,QSPI FIFO Threshold register does not accept values greater than 15,,"QSPI(2), SPI(1)",QSPI,2
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,218,const-qualify buffers for CRC calculation,,CRC(3),CRC,3
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,221,Wrong name for RCC Clock Security System callback,,RCC(3),RCC,3
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,225,NOR Flash driver does not support x8 commands,,"FLASH(6), FMC(2)",FLASH,6
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,227,HAL_PWREx_HoldCore(PWR_CORE_CPU1) Does not stop execution in CM7,,"CORTEX(6), EXTI(1), HSEM(1)",CORTEX,6
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,228,Another EEPROM emulation example bug,,FLASH(1),FLASH,1
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,236,STM32H730 SPI clock (SCK) bug,,"SPI(14), HSPI(2)",SPI,14
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,242,SAI_AudioPlayback on h745 Discovery Board with Keil Armclang,,SAI(2),SAI,2
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,247,RTC Accuracy issue,,RTC(11),RTC,11
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,252,Potential buffer overflow in WiFi SPI driver,,"SPI(4), HSPI(2)",SPI,4
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,258,Octo-SPI multiplexed mode unavailable,,"SPI(2), OSPI(1)",SPI,2
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,275,STM32H7B3I-DK PLL3 VCO output exceeds 560MHz limit,,LCD(1),LCD,1
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,277,IWDG Max timeout value,,IWDG(2),IWDG,2
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,281,Configuration register SYSCFG_PMCR set wrong value when config pins like PC3_C as GPIO,,GPIO(11),GPIO,11
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,294,JPEG utils not setting ConvertedDataCount variable in YCbCr to RGB functions,,JPEG(3),JPEG,3
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,297,STM32H747 SWD can not connect anymore,,GPIO(2),GPIO,2
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,299,jpeg_utils.c:  pure red or pure blue pixel conversion from RGB to YCbCr will result in values too large to hold in a uint8_t buffer.,,"JPEG(3), DCMI(1)",JPEG,3
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,309,NUCLEO-H743ZI EEPROM_Emulation Bug,,FLASH(2),FLASH,2
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,313,Wrong selections in stm32h743 hrtim's dead time settings,,"HRTIM(3), CORTEX(1)",HRTIM,3
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,314,STM32CubeH7 1.12.1 SAI4 configuration is broken,,SAI(1),SAI,1
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,318,"Unable to build project:  ""stm32h7xx_hal.h"" not found",,GPIO(3),GPIO,3
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,323,STM32H7 LTDC RGB666 Problem,,LTDC(4),LTDC,4
+docs_issues_stm32cubeh7_v2.json,STM32CubeH7,334,"STM32H743i FMC NOR Example, wrong pin definition",,FMC(4),FMC,4
+docs_issues_stm32cubeh7rs_v2.json,STM32CubeH7RS,2,Template_XIP does not build in stm32ide,,CORTEX(18),CORTEX,18
+docs_issues_stm32cubeh7rs_v2.json,STM32CubeH7RS,5,Adresses of SAI1 and SAI2 in CMSIS file is swapped,,SAI(1),SAI,1
+docs_issues_stm32cubeh7rs_v2.json,STM32CubeH7RS,8,PKA ECC DoubleBaseLadder RAM offsets overlap inputs/outputs -> invalid secp256r1 point on STM32H7S3L8,,"PKA(15), HASH(7), RNG(3)",PKA,15
+docs_issues_stm32cubel0_v2.json,STM32CubeL0,2,CRC routines problem with GCC -fstrict-aliasing,,"CRC(10), CORTEX(1), FLASH(1)",CRC,10
+docs_issues_stm32cubel0_v2.json,STM32CubeL0,7,__HAL_TSC_GET_GROUP_STATUS returns status for incorrect TSC group,,TSC(5),TSC,5
+docs_issues_stm32cubel0_v2.json,STM32CubeL0,15,RCC->CRRCR register accesses should have RCC_HSI48_SUPPORT compilation guard,,"RCC(5), PWR(1)",RCC,5
+docs_issues_stm32cubel0_v2.json,STM32CubeL0,16,MCO register is incorrect width in some SystemInit examples,,"PWR(1), RCC(1)",PWR,1
+docs_issues_stm32cubel0_v2.json,STM32CubeL0,21,HAL_MPU_ConfigRegion() and HAL_MPU_Enable() barrier instructions are not compliant with the ARM specs,,CORTEX(1),CORTEX,1
+docs_issues_stm32cubel0_v2.json,STM32CubeL0,26,i2c slave mode gets stuck,,I2C(14),I2C,14
+docs_issues_stm32cubel0_v2.json,STM32CubeL0,33,IS_LPTIM_PERIOD() lower value should be 0,,LPTIM(3),LPTIM,3
+docs_issues_stm32cubel1_v2.json,STM32CubeL1,1,HRTIM_TIM_TypeDef is undefined,,TIM(1),TIM,1
+docs_issues_stm32cubel1_v2.json,STM32CubeL1,2,Duplicate defines when using CMSIS 5 headers,,CORTEX(1),CORTEX,1
+docs_issues_stm32cubel1_v2.json,STM32CubeL1,6,FLASH_SIZE incorrectly reports flash size for cat.2 devices with DEV_ID 0x429,,FLASH(3),FLASH,3
+docs_issues_stm32cubel1_v2.json,STM32CubeL1,8,GPIOx BRR registers incorrectly defined,,GPIO(2),GPIO,2
+docs_issues_stm32cubel1_v2.json,STM32CubeL1,13,"Preprocessor directives in ""stm32l1xx_ll_spi.h""",,SPI(2),SPI,2
+docs_issues_stm32cubel1_v2.json,STM32CubeL1,16,FLASH_SIZE incorrectly reports flash size for cat.3 devices with DEV_ID 0x436,,FLASH(6),FLASH,6
+docs_issues_stm32cubel4_v2.json,STM32CubeL4,5,MISRA C Compliance,,I2C(1),I2C,1
+docs_issues_stm32cubel4_v2.json,STM32CubeL4,8,SPI2 with LL lib  run abnormal  in STM32L431,,GPIO(1),GPIO,1
+docs_issues_stm32cubel4_v2.json,STM32CubeL4,10,Using Microphone with B-L475E-IOT01A,,DFSDM(2),DFSDM,2
+docs_issues_stm32cubel4_v2.json,STM32CubeL4,11,HAL_LL wrong generation in RTC,,RTC(4),RTC,4
+docs_issues_stm32cubel4_v2.json,STM32CubeL4,19,cast pointer to a bigger data is danger,,HSPI(5),HSPI,5
+docs_issues_stm32cubel4_v2.json,STM32CubeL4,23,STM32L431 with X-CUBE-EEPROM_V3.0.0. Problem writing to flash memory.,,FLASH(7),FLASH,7
+docs_issues_stm32cubel4_v2.json,STM32CubeL4,27,A wrong byte be send in the SMBus mode,,I2C(1),I2C,1
+docs_issues_stm32cubel4_v2.json,STM32CubeL4,29,WWDG comments reference APIs that do not exist,,WWDG(3),WWDG,3
+docs_issues_stm32cubel4_v2.json,STM32CubeL4,30,missing volatile type for _IT functions,,SPI(1),SPI,1
+docs_issues_stm32cubel4_v2.json,STM32CubeL4,34,Legacy OPAMP_POWERMODE_NORMAL used in IS_OPAMP_POWERMODE() ,,OPAMP(2),OPAMP,2
+docs_issues_stm32cubel4_v2.json,STM32CubeL4,37,stm32l4xx_hal_rcc embedding a directive within macro arguments is not portable,,RCC(1),RCC,1
+docs_issues_stm32cubel4_v2.json,STM32CubeL4,51,RCC_APB1ENR1_RTCAPBEN define missing from stm32l476xx.h,,RTC(2),RTC,2
+docs_issues_stm32cubel4_v2.json,STM32CubeL4,52,IS_TIM_CCX_INSTANCE() doesn't compile when using LL TIM driver,,TIM(4),TIM,4
+docs_issues_stm32cubel4_v2.json,STM32CubeL4,55,dsiPllInit.PLLNDIV too large for 32L4R9IDISCOVERY board,,DSI(4),DSI,4
+docs_issues_stm32cubel4_v2.json,STM32CubeL4,61,32L4R9IDISCOVERY FLASH_FastProgram; Problem with source=destination,,FLASH(6),FLASH,6
+docs_issues_stm32cubel4_v2.json,STM32CubeL4,66,Error in LL_CRS_ConfigSynchronization function (L4 and G4 and H7),,CRS(6),CRS,6
+docs_issues_stm32cubel4_v2.json,STM32CubeL4,70,STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_gpio_ex.h: GPIO_AF14_TIM2 missing for STM32L4P5xx || STM32L4Q5xx,,GPIO(1),GPIO,1
+docs_issues_stm32cubel4_v2.json,STM32CubeL4,78,Lack of __HAL_GPIO_EXT_DISABLE_IT or equivalent,,"EXTI(6), GPIO(1)",EXTI,6
+docs_issues_stm32cubel4_v2.json,STM32CubeL4,80,TX IRQ remains active after HAL_I2C_Mem_Read_DMA,,I2C(1),I2C,1
+docs_issues_stm32cubel4_v2.json,STM32CubeL4,85,How to find out the pinout and configuration or ioc. file in L496G-DISCROVERY DFSDM?,,DFSDM(6),DFSDM,6
+docs_issues_stm32cubel4_v2.json,STM32CubeL4,86,Use const parameters for initialization functions,,FLASH(1),FLASH,1
+docs_issues_stm32cubel4_v2.json,STM32CubeL4,88,Adafruit LCD Shield V2 seesaw version not supported,,LCD(2),LCD,2
+docs_issues_stm32cubel4_v2.json,STM32CubeL4,91,HAL_I2C_Master_Abort_IT  mode HAL_I2C_MODE_MEM not supported,,I2C(2),I2C,2
+docs_issues_stm32cubel4_v2.json,STM32CubeL4,95,SDMMC SD_FindSCR() problem,,SDMMC(2),SDMMC,2
+docs_issues_stm32cubel5_v2.json,STM32CubeL5,11,TFM not updated for STM32L562E-DK,,"FLASH(6), OSPI(2)",FLASH,6
+docs_issues_stm32cuben6_v2.json,STM32CubeN6,5,Not able to build VENC_SDCard_Appli,,FLASH(2),FLASH,2
+docs_issues_stm32cuben6_v2.json,STM32CubeN6,10,SWD access to peripheral registers fails when SYSCFG clock deactivated,,"RCC(2), CORTEX(1)",RCC,2
+docs_issues_stm32cuben6_v2.json,STM32CubeN6,17,PDM2PCM library missing for CM55,,SAI(1),SAI,1
+docs_issues_stm32cubeu0_v2.json,STM32CubeU0,3,warning: unused variable in stm32u0xx_hal_rtc.h,,RTC(7),RTC,7
+docs_issues_stm32cubeu0_v2.json,STM32CubeU0,4,stm32u0xx_hal_rtc_ex.h: #define RTC_BKP_NB inconssitency to DS14581 - Rev 2,,RTC(4),RTC,4
+docs_issues_stm32cubeu0_v2.json,STM32CubeU0,9,Circular dependency and HAL_StatusTypeDef,,I2C(1),I2C,1
+docs_issues_stm32cubeu3_v2.json,STM32CubeU3,1,ROT OEMiROT_App examples print menu issue,,FLASH(1),FLASH,1
+docs_issues_stm32cubeu5_v2.json,STM32CubeU5,2,Uninitialized variables in ThreadX module,,CORTEX(1),CORTEX,1
+docs_issues_stm32cubeu5_v2.json,STM32CubeU5,6,stm32u5xx_hal_timebase_tim_template.c: HAL_InitTick() initialization sequence error,,TIM(1),TIM,1
+docs_issues_stm32cubeu5_v2.json,STM32CubeU5,11,Using FileX with STM32U5 internal nor flash,,FLASH(6),FLASH,6
+docs_issues_stm32cubeu5_v2.json,STM32CubeU5,19,stm32u585xx.h incorrectly defines FLASH_PAGE_NB,,FLASH(5),FLASH,5
+docs_issues_stm32cubeu5_v2.json,STM32CubeU5,26,HAL_MMC_ReadBlocks CRC error in 8 bit mode SDMMC,,"SDMMC(3), CRC(2)",SDMMC,3
+docs_issues_stm32cubeu5_v2.json,STM32CubeU5,35,Integrating W25Q128JW component into STM32CubeU5,,"FLASH(2), SPI(1)",FLASH,2
+docs_issues_stm32cubeu5_v2.json,STM32CubeU5,39,"FileX boot record, ensuring data persistence ",,"SPI(4), FLASH(2)",SPI,4
+docs_issues_stm32cubeu5_v2.json,STM32CubeU5,42,CRYP Key & IV configuration does not respect configured DataType,,CRYP(2),CRYP,2
+docs_issues_stm32cubeu5_v2.json,STM32CubeU5,45,SBSFU,,FLASH(3),FLASH,3
+docs_issues_stm32cubeu5_v2.json,STM32CubeU5,46,SBSFU app imgtool bug,,FLASH(3),FLASH,3
+docs_issues_stm32cubeu5_v2.json,STM32CubeU5,53,NUCLEO-U5A5ZJ-Q HSE clock configuration,,GPIO(1),GPIO,1
+docs_issues_stm32cubeu5_v2.json,STM32CubeU5,56,SAI STM32U585,,"SAI(9), RCC(2), DMA(1)",SAI,9
+docs_issues_stm32cubeu5_v2.json,STM32CubeU5,63,Wrong RNG Nist Compliance Values on stm32u545xx,,RNG(3),RNG,3
+docs_issues_stm32cubeu5_v2.json,STM32CubeU5,66,possible wrong lpbam code generation,,SPI(2),SPI,2
+docs_issues_stm32cubewb_v2.json,STM32CubeWB,1,Example PKA: HAL_PKA_ECCMulFastMode,,PKA(3),PKA,3
+docs_issues_stm32cubewb_v2.json,STM32CubeWB,3,Example PKA: curve25519,,PKA(4),PKA,4
+docs_issues_stm32cubewb_v2.json,STM32CubeWB,8,DeviceInfoTable incomplete/not matching documentation,,FLASH(2),FLASH,2
+docs_issues_stm32cubewb_v2.json,STM32CubeWB,16,Typo in comments in LL TIM_InputCapture example,,TIM(1),TIM,1
+docs_issues_stm32cubewb_v2.json,STM32CubeWB,23,stm32wb55 firmware hang if add more than 5 services,,FLASH(1),FLASH,1
+docs_issues_stm32cubewb_v2.json,STM32CubeWB,29,v1.2.0 stm32wb5x_FUS_fw.bin version is not reported correctly and fails to upgrade,,FLASH(2),FLASH,2
+docs_issues_stm32cubewb_v2.json,STM32CubeWB,32,STM32CubeWB/Projects/P-NUCLEO-WB55.Nucleo/Examples/QSPI+READWRITE_IT/,,QSPI(2),QSPI,2
+docs_issues_stm32cubewb_v2.json,STM32CubeWB,37,Fix assert_param(IS_RCC_PERIPHCLOCK....,,RNG(2),RNG,2
+docs_issues_stm32cubewb_v2.json,STM32CubeWB,44,STM32WB55Rx prefetch setting does not follow ioc file,,RCC(1),RCC,1
+docs_issues_stm32cubewb_v2.json,STM32CubeWB,47,Init_Exti() does not enable interrupt lines,,"HSEM(1), IPCC(1)",HSEM,1
+docs_issues_stm32cubewb_v2.json,STM32CubeWB,65,Firmware Examples project for LL - I2C reader has flaw. ,,I2C(6),I2C,6
+docs_issues_stm32cubewb_v2.json,STM32CubeWB,68,Confusing effects of CFG_HW_RESET_BY_FW flag,,RTC(7),RTC,7
+docs_issues_stm32cubewb_v2.json,STM32CubeWB,70,HAL Flash missing support for STM32WB10xx,,"FLASH(8), RCC(1), TIM(1)",FLASH,8
+docs_issues_stm32cubewb_v2.json,STM32CubeWB,73,Wrong Start Address for stm32wb1x_BLE_Stack_light_fw,,FLASH(1),FLASH,1
+docs_issues_stm32cubewb_v2.json,STM32CubeWB,74,SHCI_C2_FLASH_StoreData not supported feature,,FLASH(1),FLASH,1
+docs_issues_stm32cubewb_v2.json,STM32CubeWB,88,Abnormal Execution Times During Low Power Mode and Bluetooth Communication,,"HSEM(1), LPTIM(1)",HSEM,1
+docs_issues_stm32cubewb_v2.json,STM32CubeWB,89,"CFG_LPM_SUPPORTED Abnormal during connection, There is a probability of getting stuck when exiting stop2 mode.",,"FLASH(2), HSEM(2), RCC(1)",FLASH,2
+docs_issues_stm32cubewb_v2.json,STM32CubeWB,98,ota update TAG_OTA_START flash position is not 0x140,,FLASH(3),FLASH,3
+docs_issues_stm32cubewb_v2.json,STM32CubeWB,99,CPU2 crash report during SHCI_C2_BLE_Init(...),,"HSEM(1), IPCC(1), RCC(1)",HSEM,1
+docs_issues_stm32cubewb_v2.json,STM32CubeWB,102,Failed to erase sectors when downloading the program for the first time,,FLASH(1),FLASH,1
+docs_issues_stm32cubewb_v2.json,STM32CubeWB,105,Allow user code in hci_notify_asynch_evt,,IWDG(2),IWDG,2
+docs_issues_stm32cubewb_v2.json,STM32CubeWB,115,STM32WB BLE Stack 1.23.0 Not Working on STM32WB55CGU6 – Firmware Version Shows v0.0.0.0,,FLASH(1),FLASH,1
+docs_issues_stm32cubewba_v2.json,STM32CubeWBA,2,No example is present to use PTA peripheral,,GPIO(3),GPIO,3
+docs_issues_stm32cubewba_v2.json,STM32CubeWBA,5,Unsafe access to RTC_SSR when RTC shadow registers are bypassed (Inconsistent RTC time readings),,RTC(12),RTC,12
+docs_issues_stm32cubewba_v2.json,STM32CubeWBA,7,Proposal for replacing DWT-based microsecond delays in BLE stack platform abstraction code,,TIM(1),TIM,1
+docs_issues_stm32cubewl_v2.json,STM32CubeWL,1,problem compilling example from ST32cubeWL : Sigfox_AT_Slave,,CORTEX(1),CORTEX,1
+docs_issues_stm32cubewl_v2.json,STM32CubeWL,2,LoRaWAN Class A LowPowerMode,,RTC(1),RTC,1
+docs_issues_stm32cubewl_v2.json,STM32CubeWL,11,stm32wle stuck during software reset,,FLASH(2),FLASH,2
+docs_issues_stm32cubewl_v2.json,STM32CubeWL,15,SBSFU doesn't support correct YMODEM protocol,,CRC(2),CRC,2
+docs_issues_stm32cubewl_v2.json,STM32CubeWL,17,HAL: CRYP: HAL_CRYP_SetConfig parameters not initialized,,CRYP(3),CRYP,3
+docs_issues_stm32cubewl_v2.json,STM32CubeWL,19,STM32CubeMX does not generate user-configured pin for a new project based on LoRaWAN Skeleton,,"GPIO(2), FLASH(1)",GPIO,2
+docs_issues_stm32cubewl_v2.json,STM32CubeWL,26,LmHandlerJoin can only be called a fixed number of times if no join occurs,,CRC(1),CRC,1
+docs_issues_stm32cubewl_v2.json,STM32CubeWL,35,"External Interrupt hangs STM32WLE5CC when MCU reads SPI EEPROM, or Using I2C",,"I2C(6), SPI(6)",I2C,6
+docs_issues_stm32cubewl_v2.json,STM32CubeWL,56,RTC Accuracy issue,,RTC(17),RTC,17
+docs_issues_stm32cubewl_v2.json,STM32CubeWL,60,NVM DATA RESTORED not working with STM32WLE5xB (fix included),,FLASH(1),FLASH,1
+docs_issues_stm32cubewl_v2.json,STM32CubeWL,61,HAL_GetTick() running 1.024x fast (v1.3.0),,"RTC(4), TIM(1)",RTC,4
+docs_issues_stm32cubewl_v2.json,STM32CubeWL,72,LoRaWAN Timer does not work with RTC_BINARY_MIX,,RTC(1),RTC,1
+docs_issues_stm32cubewl_v2.json,STM32CubeWL,75,Fragdecoder not working as expected sometimes.,,CRC(3),CRC,3
+docs_issues_stm32cubewl_v2.json,STM32CubeWL,77,FLASH_IF_INT_CLEAR_ERROR causes to hard fault,,FLASH(39),FLASH,39
+docs_issues_stm32cubewl_v2.json,STM32CubeWL,90,CUBE MX Exti generation issue,,EXTI(3),EXTI,3
+docs_issues_stm32cubewl_v2.json,STM32CubeWL,95,Device not wake up after RTC-time and send message with Lora P2P.,,"RTC(13), PWR(1)",RTC,13
+docs_issues_stm32cubewl_v2.json,STM32CubeWL,99,Deep sleep is never achieved with SUBGRF_SetRxDutyCycle,,"GPIO(5), RTC(1)",GPIO,5
+docs_issues_stm32cubewl_v2.json,STM32CubeWL,100,Not able to achieve Shutdown/STOP2 mode in STM32WL55xx with Single core (M4 alone),,PWR(1),PWR,1
+docs_issues_stm32cubewl_v2.json,STM32CubeWL,101,ABP in Release v1.4.0,,PWR(4),PWR,4
+docs_issues_stm32cubewl_v2.json,STM32CubeWL,103,Discrepancy MX Codebase Flash_if.c,,FLASH(4),FLASH,4
+docs_issues_stm32cubewl_v2.json,STM32CubeWL,109,[Bug]: Sigfox_AT_Slave: System crash (Error_Handler) on mass-erased devices due to NULL pointer in flash_if.c,,"FLASH(3), PWR(1)",FLASH,3
+docs_issues_cmsis_device_c0_v2.json,cmsis_device_c0,3,There is no FLASH_ACR_LATENCY_1 for STM32C0 devices,,FLASH(3),FLASH,3
+docs_issues_cmsis_device_f1_v2.json,cmsis_device_f1,1,"cmsis_device_f1/Include/stm32f103xb.h line L4223-L4232 lose ""TIM_CCER_CC4NP"" define",,TIM(2),TIM,2
+docs_issues_cmsis_device_f1_v2.json,cmsis_device_f1,5,An issue with flash offset on PlatformIO,,FLASH(4),FLASH,4
+docs_issues_cmsis_device_f4_v2.json,cmsis_device_f4,8,inconsistent naming of macros accross families,,GPIO(2),GPIO,2
+docs_issues_cmsis_device_g0_v2.json,cmsis_device_g0,1,Latest device pack (1.3.0) in uvision fails to compile cmsis_device_g0/Source/Templates/system_stm32g0xx.c,,RCC(2),RCC,2
+docs_issues_cmsis_device_g0_v2.json,cmsis_device_g0,6,TIMx status register documented as 16-bit wide but declared as 32-bit wide,,TIM(4),TIM,4
+docs_issues_cmsis_device_g0_v2.json,cmsis_device_g0,7,[Bug]: Missing AES/RNG interrupt vector,,"FLASH(5), RNG(4)",FLASH,5
+docs_issues_cmsis_device_g4_v2.json,cmsis_device_g4,1,"Repository forces one to fork it, if it is necessary to move the vector table",,FLASH(1),FLASH,1
+docs_issues_cmsis_device_h7_v2.json,cmsis_device_h7,2,Wrong comment for VECT_TAB_OFFSET,,CORTEX(1),CORTEX,1
+docs_issues_cmsis_device_h7_v2.json,cmsis_device_h7,6,Usage clarification: KEYR1 and KEYR2 Flash Registers,,FLASH(4),FLASH,4
+docs_issues_cmsis_device_h7_v2.json,cmsis_device_h7,9,Incorrect RTC register,,RTC(4),RTC,4
+docs_issues_cmsis_device_h7_v2.json,cmsis_device_h7,12,"D1 Domain Core prescaler array ""D1CorePrescTable[16]"" non-zero values for values from 0b0100 to 0b111",,RCC(1),RCC,1
+docs_issues_cmsis_device_h7_v2.json,cmsis_device_h7,23,Incorrect values in D1CorePrescTable,,RCC(13),RCC,13
+docs_issues_cmsis_device_l4_v2.json,cmsis_device_l4,2,"Startup code calls SystemInit() too early, and clears out global variables set by SystemInit()",,FLASH(3),FLASH,3
+docs_issues_cmsis_device_l4_v2.json,cmsis_device_l4,6,Faulty Mask FLASH_ECCR_ADDR_ECC_Msk for in stm32l4r9xx.h,,FLASH(1),FLASH,1
+docs_issues_cmsis_device_u0_v2.json,cmsis_device_u0,6,FLASH_OPTR_BOR* defines don't match the datasheet or the STM32CubeProgrammer,,FLASH(1),FLASH,1
+docs_issues_cmsis_device_u0_v2.json,cmsis_device_u0,7,FLASH_ECCR_ADDR_ECC_Msk seems to be too narrow,,FLASH(10),FLASH,10
+docs_issues_cmsis_device_u5_v2.json,cmsis_device_u5,5,Incorrect JPEG register definitions,,JPEG(2),JPEG,2
+docs_issues_stm32-lsm6dso_v2.json,stm32-lsm6dso,1,Device ID readout fails after soft-reset,,"SPI(10), I2C(1)",SPI,10
+docs_issues_stm32-mt25ql512abb_v2.json,stm32-mt25ql512abb,1,mt25qu512abb BlockErase problem with 4096th 4kBytes sub-sector,,"FLASH(5), SPI(1)",FLASH,5
+docs_issues_stm32-mt25ql512abb_v2.json,stm32-mt25ql512abb,3,dummy cycles,,FLASH(2),FLASH,2
+docs_issues_stm32-mw-cmsis-rtos-tx_v2.json,stm32-mw-cmsis-rtos-tx,1,Evaluation of a NULL pointer is undefined behavior.,,CORTEX(1),CORTEX,1
+docs_issues_stm32-mw-filex_v2.json,stm32-mw-filex,2,Support for cortex m33,,CORTEX(2),CORTEX,2
+docs_issues_stm32-mw-mbedtls_v2.json,stm32-mw-mbedtls,1,Framework submodule not added,,HASH(1),HASH,1
+docs_issues_stm32-mw-mbedtls_v2.json,stm32-mw-mbedtls,3,Add hardware accelerated alt implementation templates for version 3.6,,HASH(1),HASH,1
+docs_issues_stm32-mw-openbl_v2.json,stm32-mw-openbl,3,Some functions are placed in the RAM,,"FLASH(5), SPI(1)",FLASH,5
+docs_issues_stm32-mw-openbl_v2.json,stm32-mw-openbl,5,Where is Get Memory Checksum command (i2c interface),,I2C(5),I2C,5
+docs_issues_stm32-s25fl128s_v2.json,stm32-s25fl128s,2,Function S25FL128S_ReadStatusRegister does not work,,"QSPI(2), FLASH(1), OSPI(1)",QSPI,2
+docs_issues_stm324x9i-eval-bsp_v2.json,stm324x9i-eval-bsp,1,FSC NOR Flash AccessTime,,FLASH(3),FLASH,3
+docs_issues_stm32f0xx-hal-driver_v2.json,stm32f0xx-hal-driver,5,Question about the HSI48RDY bit in RCC->CR2,,RCC(2),RCC,2
+docs_issues_stm32f0xx-hal-driver_v2.json,stm32f0xx-hal-driver,6,FLASH_OB_GetRDP has 32-bit return type but HAL_FLASHEx_OBErase implicitly converts it to 8-bits,,CORTEX(1),CORTEX,1
+docs_issues_stm32f0xx-hal-driver_v2.json,stm32f0xx-hal-driver,8,Unused parameter warning in function 'LL_RCC_ConfigMCO',,RCC(1),RCC,1
+docs_issues_stm32f0xx-hal-driver_v2.json,stm32f0xx-hal-driver,12,Backport CAN driver fix from STM32F4 HAL driver,,CAN(2),CAN,2
+docs_issues_stm32f1xx-hal-driver_v2.json,stm32f1xx-hal-driver,3,SetPinMode and SetPinPull sequence,,GPIO(6),GPIO,6
+docs_issues_stm32f1xx-hal-driver_v2.json,stm32f1xx-hal-driver,6,Bug in HAL_FLASHEx_Erase_IT - if process already ongoing then pFlash remains locked,,FLASH(1),FLASH,1
+docs_issues_stm32f1xx-hal-driver_v2.json,stm32f1xx-hal-driver,11,"STM32F1xx RTC BKP Registers 16bit, but HAL requests 32bits",,RTC(4),RTC,4
+docs_issues_stm32f1xx-hal-driver_v2.json,stm32f1xx-hal-driver,16,HAL_FLASHEx_OBProgram erases write protection if read protection is also selected,,FLASH(2),FLASH,2
+docs_issues_stm32f2xx-hal-driver_v2.json,stm32f2xx-hal-driver,2,Constant interrupts during 2nd byte of 2 or 3 byte I2C receive. ,,"I2C(2), GPIO(1)",I2C,2
+docs_issues_stm32f3xx-hal-driver_v2.json,stm32f3xx-hal-driver,1,LL: OPAMP functional modes assert incomplete,,OPAMP(15),OPAMP,15
+docs_issues_stm32f3xx-hal-driver_v2.json,stm32f3xx-hal-driver,2,Polling I2C EEPROM for internal write cycle immediately returns HAL_ERROR,,I2C(4),I2C,4
+docs_issues_stm32f3xx-hal-driver_v2.json,stm32f3xx-hal-driver,3,"I2C buffer overflow or IRQ flooding, when receiving extra bytes as slave in interrupt mode",,I2C(8),I2C,8
+docs_issues_stm32f4xx-hal-driver_v2.json,stm32f4xx-hal-driver,2,(void)(tmpreg); is causing warnings,,TIM(2),TIM,2
+docs_issues_stm32f4xx-hal-driver_v2.json,stm32f4xx-hal-driver,6,Set all free pins as analog,,GPIO(1),GPIO,1
+docs_issues_stm32f4xx-hal-driver_v2.json,stm32f4xx-hal-driver,7,i2c: receive unknown bytes count,,I2C(3),I2C,3
+docs_issues_stm32f4xx-hal-driver_v2.json,stm32f4xx-hal-driver,13,RCC_I2SCLKSOURCE_EXT has wrong value,,RCC(1),RCC,1
+docs_issues_stm32f4xx-hal-driver_v2.json,stm32f4xx-hal-driver,14,ETH: HAL_ETH_ReleaseTxPacket Does Not Increment Descriptor Index Correctly in All Cases,,ETH(2),ETH,2
+docs_issues_stm32f4xx-hal-driver_v2.json,stm32f4xx-hal-driver,27,Redefines for STM32F423,,RCC(3),RCC,3
+docs_issues_stm32f4xx-hal-driver_v2.json,stm32f4xx-hal-driver,31,Update interrupt flag in TIMx->SR is not cleared upon Time Base configuration,,TIM(8),TIM,8
+docs_issues_stm32f4xx-hal-driver_v2.json,stm32f4xx-hal-driver,32,The TxE flag should never be cleared through the I2C's DR register at any time.,,I2C(4),I2C,4
+docs_issues_stm32f4xx-hal-driver_v2.json,stm32f4xx-hal-driver,33,The TxE flag should never be cleared through the I2C's DR register at any time.,,I2C(3),I2C,3
+docs_issues_stm32f4xx-hal-driver_v2.json,stm32f4xx-hal-driver,35,CRYP_GCMCCM_SetHeaderPhase out bounds read in mask array,,CRYP(1),CRYP,1
+docs_issues_stm32f4xx-hal-driver_v2.json,stm32f4xx-hal-driver,36,RTC Bug in HAL libraries ,,RTC(3),RTC,3
+docs_issues_stm32f4xx-hal-driver_v2.json,stm32f4xx-hal-driver,46,HAL GPIO assert fails for GPIO_AF3_TIM10 on STM32F4 devices,,GPIO(3),GPIO,3
+docs_issues_stm32f7xx-hal-driver_v2.json,stm32f7xx-hal-driver,1,Bug in CRC32 calculation ,,CRC(6),CRC,6
+docs_issues_stm32f7xx-hal-driver_v2.json,stm32f7xx-hal-driver,6,Bug found in  HAL_NAND_Read_Page_8b and HAL_NAND_Read_SpareArea_8b,,FLASH(2),FLASH,2
+docs_issues_stm32f7xx-hal-driver_v2.json,stm32f7xx-hal-driver,11,SPI generates too many clocks in Bidirectional mode,,"SPI(13), TIM(1)",SPI,13
+docs_issues_stm32f7xx-hal-driver_v2.json,stm32f7xx-hal-driver,13,Cannot program internal flash with double word,,FLASH(4),FLASH,4
+docs_issues_stm32f7xx-hal-driver_v2.json,stm32f7xx-hal-driver,22,Proposal: Prevent unused argument warning in HAL_EXTI_GetPending and HAL_EXTI_ClearPending,,EXTI(4),EXTI,4
+docs_issues_stm32f7xx-hal-driver_v2.json,stm32f7xx-hal-driver,25,HAL CRC functions not const-correct.,,CRC(2),CRC,2
+docs_issues_stm32g0xx-hal-driver_v2.json,stm32g0xx-hal-driver,1,Issue if tick rollover occurs while waiting for flash (from the forum),,FLASH(3),FLASH,3
+docs_issues_stm32g0xx-hal-driver_v2.json,stm32g0xx-hal-driver,4,Timeout parameter in HAL_I2C_Master_Receive/HAL_I2C_Mem_Read not used for I2C_WaitOnFlagUntilTimeout function,,I2C(3),I2C,3
+docs_issues_stm32g0xx-hal-driver_v2.json,stm32g0xx-hal-driver,6,HAL I2C produces unwanted NACKs in slave mode,,"I2C(11), FLASH(1)",I2C,11
+docs_issues_stm32g0xx-hal-driver_v2.json,stm32g0xx-hal-driver,7,HAL_GPIO_EXTI_Callback missing from STM32G0 HAL GPIO API,,GPIO(5),GPIO,5
+docs_issues_stm32g0xx-hal-driver_v2.json,stm32g0xx-hal-driver,12,LL_TIM_ClearFlag_UPDATE() does not respect the reserved bits,,TIM(3),TIM,3
+docs_issues_stm32g0xx-hal-driver_v2.json,stm32g0xx-hal-driver,13,Polling I2C EEPROM for internal write cycle immediately returns HAL_ERROR,,I2C(2),I2C,2
+docs_issues_stm32g0xx-hal-driver_v2.json,stm32g0xx-hal-driver,17,[Question]: HAL_TIM_PWM_Stop stops complete htim instance,,TIM(1),TIM,1
+docs_issues_stm32g4xx-hal-driver_v2.json,stm32g4xx-hal-driver,9,Lack of FLASH_OB_BootConfig Functionality in STM32G4 HAL Library,,FLASH(2),FLASH,2
+docs_issues_stm32g4xx-hal-driver_v2.json,stm32g4xx-hal-driver,15,HAL driver always asserts when full assert is activated and i2c speed is set to Fast Mode Plus,,I2C(4),I2C,4
+docs_issues_stm32g4xx-hal-driver_v2.json,stm32g4xx-hal-driver,17,[HAL][SPI] State stuck in HAL_SPI_STATE_BUSY_RX when invalid parameters are passed to Rx functions,,SPI(7),SPI,7
+docs_issues_stm32g4xx-hal-driver_v2.json,stm32g4xx-hal-driver,18,IS_TIM_PERIOD assertion fails when using dithering,,TIM(1),TIM,1
+docs_issues_stm32g4xx-hal-driver_v2.json,stm32g4xx-hal-driver,24,I2C Slave,,I2C(5),I2C,5
+docs_issues_stm32g4xx-hal-driver_v2.json,stm32g4xx-hal-driver,29,I2C Thread Safety Calling null and not clearing interrupts when set to null,,"I2C(13), DMA(1)",I2C,13
+docs_issues_stm32g4xx-hal-driver_v2.json,stm32g4xx-hal-driver,33,[Bug]: stm32g4xx_ll_dma use wrong DMAMUX channel offset for DMA2,,DMAMUX(9),DMAMUX,9
+docs_issues_stm32g4xx-hal-driver_v2.json,stm32g4xx-hal-driver,34,[Bug]: Macro definition issues in `stm32g4xx_hal_hrtim.h` file in v1.2.6,,HRTIM(2),HRTIM,2
+docs_issues_stm32h5xx-hal-driver_v2.json,stm32h5xx-hal-driver,9,stm32h5xx_ll_i3c.c doesn't compile when both USE_HAL_DRIVER and USE_FULL_LL_DRIVER are defined,,CORTEX(1),CORTEX,1
+docs_issues_stm32h5xx-hal-driver_v2.json,stm32h5xx-hal-driver,10,Wrong RCC_PERIPHCLK_RTC setup in HAL,,RTC(1),RTC,1
+docs_issues_stm32h5xx-hal-driver_v2.json,stm32h5xx-hal-driver,30,[Bug]: SPI is disabled too early,,"HSPI(11), SPI(10)",HSPI,11
+docs_issues_stm32h5xx-hal-driver_v2.json,stm32h5xx-hal-driver,31,[Bug]: HAL RCC VCO computation are incorrect for fractional multiplier,,RCC(2),RCC,2
+docs_issues_stm32h5xx-hal-driver_v2.json,stm32h5xx-hal-driver,33,[Bug]: stm32h5xx_hal_spi.c does not operate correctly in blocking mode when optimised,,"LCD(4), SPI(4)",LCD,4
+docs_issues_stm32h735g-dk-bsp_v2.json,stm32h735g-dk-bsp,2,BSP OSPI drive using the ISS66WVH8M8 external RAM,,"OSPI(3), LCD(1)",OSPI,3
+docs_issues_stm32h735g-dk-bsp_v2.json,stm32h735g-dk-bsp,3,STM32H735G-DK C03 BSP demo freezes,,LCD(1),LCD,1
+docs_issues_stm32h743i-eval-bsp_v2.json,stm32h743i-eval-bsp,1,Fix for using LEDs without the I2C I/O extender,,I2C(2),I2C,2
+docs_issues_stm32h743i-eval-bsp_v2.json,stm32h743i-eval-bsp,5,BSP_I2C1_Init calls the wrong MX_I2C1_Init function,,I2C(7),I2C,7
+docs_issues_stm32h747i-disco-bsp_v2.json,stm32h747i-disco-bsp,4,Wrong default for `LCD_LAYER_0_ADDRESS` and `LCD_LAYER_1_ADDRESS`,,LCD(3),LCD,3
+docs_issues_stm32h747i-disco-bsp_v2.json,stm32h747i-disco-bsp,5,Hardcoded default SAI slot,,SAI(4),SAI,4
+docs_issues_stm32h747i-disco-bsp_v2.json,stm32h747i-disco-bsp,9,WM8994 will not do analog output to Green Jack if using SAI frequency less than 16kHz,,"SAI(5), GPIO(1)",SAI,5
+docs_issues_stm32h7rsxx-hal-driver_v2.json,stm32h7rsxx-hal-driver,5,Error transmitting SPI-Master Full Duplex,,"HSPI(5), SPI(5)",HSPI,5
+docs_issues_stm32h7rsxx-hal-driver_v2.json,stm32h7rsxx-hal-driver,6,Overflow when transmitting SPI data,,"SPI(5), HSPI(2), DCACHE(1)",SPI,5
+docs_issues_stm32h7rsxx-hal-driver_v2.json,stm32h7rsxx-hal-driver,7,Issue with  HAL_GPIO_DeInit(),,GPIO(1),GPIO,1
+docs_issues_stm32h7rsxx-hal-driver_v2.json,stm32h7rsxx-hal-driver,9,SDIO HAL ReadExtended / WriteExtended does not calculate number of blocks correctly,,SDMMC(3),SDMMC,3
+docs_issues_stm32h7xx-hal-driver_v2.json,stm32h7xx-hal-driver,7,"Bug in stm32h7xx_hal_rcc_ex.c - wrong #define for HRTIM1 (versions 1.7, 1.8)",,HRTIM(2),HRTIM,2
+docs_issues_stm32h7xx-hal-driver_v2.json,stm32h7xx-hal-driver,9,EXTI reset values for IMR1-3 seems to be wrong,,EXTI(8),EXTI,8
+docs_issues_stm32h7xx-hal-driver_v2.json,stm32h7xx-hal-driver,10,Issues in LL_RTC_TIME_Init() and LL_RTC_DATE_Init(),,RTC(1),RTC,1
+docs_issues_stm32h7xx-hal-driver_v2.json,stm32h7xx-hal-driver,12,Memory alignment issues in HAL_SPI_TransmitReceive,,"SPI(4), HSPI(1), TIM(1)",SPI,4
+docs_issues_stm32h7xx-hal-driver_v2.json,stm32h7xx-hal-driver,13,Overflow and underflow issue in HAL_SPI_TransmitReceive(),,"HSPI(3), SPI(3), RCC(1)",HSPI,3
+docs_issues_stm32h7xx-hal-driver_v2.json,stm32h7xx-hal-driver,25,Error in LL_CRS_ConfigSynchronization function (L4 and G4),,CRS(3),CRS,3
+docs_issues_stm32h7xx-hal-driver_v2.json,stm32h7xx-hal-driver,30,SDMMC stuck with HAL_SD_ERROR_DATA_TIMEOUT,,SDMMC(2),SDMMC,2
+docs_issues_stm32h7xx-hal-driver_v2.json,stm32h7xx-hal-driver,31,DMA2D_IRQHandler called with empty ISR register,,"DMA2D(15), FLASH(1), FMC(1)",DMA2D,15
+docs_issues_stm32h7xx-hal-driver_v2.json,stm32h7xx-hal-driver,34,"stm32h7xx_hal_ospi.c does not compile when assert_param actually evaluates ""expr""",,OSPI(1),OSPI,1
+docs_issues_stm32h7xx-hal-driver_v2.json,stm32h7xx-hal-driver,35,SPI Extra clock pulse generated when CFG2 registers is written without AFCNTR bit set,,"SPI(6), LCD(2)",SPI,6
+docs_issues_stm32h7xx-hal-driver_v2.json,stm32h7xx-hal-driver,36,CRYP api upgrade,,CRYP(9),CRYP,9
+docs_issues_stm32h7xx-hal-driver_v2.json,stm32h7xx-hal-driver,38,BusFault when calculating a HASH,,HASH(3),HASH,3
+docs_issues_stm32h7xx-hal-driver_v2.json,stm32h7xx-hal-driver,39,Need for HAL_SPI_TransmitFollowedByReceive function,,"SPI(3), GPIO(1), HSPI(1)",SPI,3
+docs_issues_stm32h7xx-hal-driver_v2.json,stm32h7xx-hal-driver,56,Please provide a stm32h7xx_ll_dts.h/c,,DTS(1),DTS,1
+docs_issues_stm32h7xx-hal-driver_v2.json,stm32h7xx-hal-driver,57,ll_delayblock is available when hal qspi module is enable instead of ospi,,"OSPI(4), QSPI(2), SDMMC(1)",OSPI,4
+docs_issues_stm32h7xx-hal-driver_v2.json,stm32h7xx-hal-driver,60,SDMMC MMC HighSpeed/DDR ClockDiv too high at 52MHz,,SDMMC(5),SDMMC,5
+docs_issues_stm32h7xx-hal-driver_v2.json,stm32h7xx-hal-driver,77,ospi: driver is more restrictive than necessary,,"OSPI(6), SPI(3), PSSI(2)",OSPI,6
+docs_issues_stm32h7xx-hal-driver_v2.json,stm32h7xx-hal-driver,79,RTC bug in HAL (Clearing RTC_CR_BYPSHAD bit) - wrong retype (uint8_t),,RTC(2),RTC,2
+docs_issues_stm32h7xx-hal-driver_v2.json,stm32h7xx-hal-driver,80,LL driver routine RCC_GetHCLKClockFreq ignores D1CPRE divider from D1CFGR register,,"RCC(10), FLASH(4), PWR(4)",RCC,10
+docs_issues_stm32h7xx-hal-driver_v2.json,stm32h7xx-hal-driver,83,[HAL][EXTI] Typo in comments of EXTI hal driver,,EXTI(7),EXTI,7
+docs_issues_stm32h7xx-hal-driver_v2.json,stm32h7xx-hal-driver,84,[HAL][EXTI] Typo in comments of EXTI hal driver,,EXTI(4),EXTI,4
+docs_issues_stm32h7xx-hal-driver_v2.json,stm32h7xx-hal-driver,88,AES GCM Invalid Tag Generation after Decryption,,"CRYP(9), FLASH(1)",CRYP,9
+docs_issues_stm32h7xx-hal-driver_v2.json,stm32h7xx-hal-driver,97,impossibility of simultaneous operation of two OSPI in quad mode,,"OSPI(3), GPIO(1)",OSPI,3
+docs_issues_stm32h7xx-hal-driver_v2.json,stm32h7xx-hal-driver,103,HAL_DSI_Read not handle 2 bytes read properly,,DSI(14),DSI,14
+docs_issues_stm32h7xx-hal-driver_v2.json,stm32h7xx-hal-driver,109,[Bug]: `HAL_SD_ConfigWideBusOperation` applies UHS clock bypass on 3.3V bus when `USE_SD_TRANSCEIVER == 0`,,"SDMMC(4), CRC(1), RCC(1)",SDMMC,4
+docs_issues_stm32l0xx-hal-driver_v2.json,stm32l0xx-hal-driver,1,Improper EXTI reset in HAL_GPIO_DeInit(),,"EXTI(35), GPIO(16)",EXTI,35
+docs_issues_stm32l0xx-hal-driver_v2.json,stm32l0xx-hal-driver,3,An I2C NACK during memory address transfer goes undetected.,,"I2C(19), EXTI(1)",I2C,19
+docs_issues_stm32l0xx-hal-driver_v2.json,stm32l0xx-hal-driver,5,I2C Slave mode problem while receiving data - buffer overrun,,I2C(5),I2C,5
+docs_issues_stm32l0xx-hal-driver_v2.json,stm32l0xx-hal-driver,11,The macro __HAL_FLASH_CLEAR_FLAG does not work properly,,FLASH(5),FLASH,5
+docs_issues_stm32l4xx-hal-driver_v2.json,stm32l4xx-hal-driver,3,`HAL_I2C_Master_Transmit` timeout parameter behaves unexpectedly,,I2C(9),I2C,9
+docs_issues_stm32l4xx-hal-driver_v2.json,stm32l4xx-hal-driver,7,TX IRQ remains active after HAL_I2C_Mem_Read_DMA,,I2C(1),I2C,1
+docs_issues_stm32l4xx-hal-driver_v2.json,stm32l4xx-hal-driver,8,HAL_SPI_TransmitReceive() always returns HAL_BUSY after the first transaction,,HSPI(3),HSPI,3
+docs_issues_stm32l4xx-hal-driver_v2.json,stm32l4xx-hal-driver,9,HAL_I2C_Mem_Write_IT does not correctly initialize hi2c->XferSize,,I2C(2),I2C,2
+docs_issues_stm32l4xx-hal-driver_v2.json,stm32l4xx-hal-driver,20,HAL_I2C_IsDeviceReady broken since v1.13.5,,I2C(3),I2C,3
+docs_issues_stm32l4xx-hal-driver_v2.json,stm32l4xx-hal-driver,21,I2C_TransferConfig Mode Sets bit in SADD?,,I2C(5),I2C,5
+docs_issues_stm32l4xx-hal-driver_v2.json,stm32l4xx-hal-driver,25,"Possible bug in definition of IS_OB_USER_TYPE() for L496, L4A6",,FLASH(2),FLASH,2
+docs_issues_stm32l4xx-hal-driver_v2.json,stm32l4xx-hal-driver,27,STM32L496 Errata 2.19.4 Not Addressed In HAL,,I2C(4),I2C,4
+docs_issues_stm32u0xx-hal-driver_v2.json,stm32u0xx-hal-driver,3,Error in stm32u0xx_hal_pwr_ex.h documentation,,"FLASH(1), PWR(1)",FLASH,1
+docs_issues_stm32u0xx-hal-driver_v2.json,stm32u0xx-hal-driver,4,Possible optimization in CRC_Handle_8() in stm32u0xx_hal_crc.c,,CRC(2),CRC,2
+docs_issues_stm32u0xx-hal-driver_v2.json,stm32u0xx-hal-driver,5,HAL_CRC_Accumulate interface throws warnings if used with 8 or 16 byte arrays.,,"CRC(12), CORTEX(1)",CRC,12
+docs_issues_stm32u0xx-nucleo-bsp_v2.json,stm32u0xx-nucleo-bsp,1,BSP_BUTTON_USER_IT_PRIORITY is out of range for the cortex-m0+,,CORTEX(3),CORTEX,3
+docs_issues_stm32u3xx-hal-driver_v2.json,stm32u3xx-hal-driver,2,Invalid description of LL_RCC_GetSysClkSource,,RCC(1),RCC,1
+docs_issues_stm32u5xx-hal-driver_v2.json,stm32u5xx-hal-driver,5,stm32u5xx_hal_dma_ex.c doesn't build with arm-none-eabi-gcc,,CORTEX(1),CORTEX,1
+docs_issues_stm32u5xx-hal-driver_v2.json,stm32u5xx-hal-driver,9,Janitorial: Wrong literal used in GTZC MPCWM2 setup code,,GTZC(2),GTZC,2
+docs_issues_stm32u5xx-hal-driver_v2.json,stm32u5xx-hal-driver,11,Handling of `Wake up from Stop 3` interrupt,,PWR(12),PWR,12
+docs_issues_stm32u5xx-hal-driver_v2.json,stm32u5xx-hal-driver,13,SPI transmit not works as expected,,"SPI(10), HSPI(1)",SPI,10
+docs_issues_stm32u5xx-hal-driver_v2.json,stm32u5xx-hal-driver,14,SPI suspend not handled in blocking mode Receive,,"SPI(4), DMA(2)",SPI,4
+docs_issues_stm32u5xx-hal-driver_v2.json,stm32u5xx-hal-driver,15,HAL_I2C_IsDeviceReady() NACK Bug,,I2C(1),I2C,1
+docs_issues_stm32u5xx-hal-driver_v2.json,stm32u5xx-hal-driver,16,HAL XSPI DTR read 1 byte,,"HSPI(10), XSPI(2)",HSPI,10
+docs_issues_stm32u5xx-hal-driver_v2.json,stm32u5xx-hal-driver,20,SPI receive timeout,,SPI(3),SPI,3
+docs_issues_stm32wb0x-hal-driver_v2.json,stm32wb0x-hal-driver,4,Misleading LL definitions: LSCO / CLKSLOWSEL,,"IWDG(1), RTC(1)",IWDG,1
+docs_issues_stm32wbaxx-nucleo-bsp_v2.json,stm32wbaxx-nucleo-bsp,1,Excessive power draw on development boards due to LED GPIO configuration,,GPIO(7),GPIO,7
+docs_issues_stm32wbxx-hal-driver_v2.json,stm32wbxx-hal-driver,2,Transmit buffer parameters of the QSPI/SPI functions can be of type `const uint8_t *`,,"QSPI(4), SPI(4), HSPI(2)",QSPI,4
+docs_issues_stm32wbxx-hal-driver_v2.json,stm32wbxx-hal-driver,3,Add a Macro to Retrieve Row Size for FLASH Fast Programming Operations,,FLASH(6),FLASH,6
+docs_issues_stm32wlxx-hal-driver_v2.json,stm32wlxx-hal-driver,1,"code stop in function HAL_I2C_IsDeviceReady, ",,I2C(7),I2C,7
+docs_issues_stm32wlxx-hal-driver_v2.json,stm32wlxx-hal-driver,10,Wrong bit checks in `FLASH_FlushCaches` (stm32wlxx_hal_driver),,FLASH(5),FLASH,5
+docs_issues_stm32wlxx-hal-driver_v2.json,stm32wlxx-hal-driver,11,RTC init: time/date set in separate INIT sessions violates RM sequence (risk of mismatch around midnight),,"RTC(6), FLASH(1)",RTC,6

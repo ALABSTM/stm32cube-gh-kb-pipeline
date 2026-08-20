@@ -243,10 +243,12 @@ def compose_st_ready_text(doc: dict[str, Any], comments_chars: int) -> str:
 
     root_cause_hint = first_sentence(comments_norm or main_norm, max_chars=260)
     fix_hint = first_sentence(main_norm, max_chars=320)
+    source_url = normalize_whitespace(doc.get("github_url") or "")
 
     lines = [
         f"Problem: {issue_title}",
         f"Context: {context_line}",
+        f"Source URL: {source_url or 'Not available'}",
         f"Root cause: {root_cause_hint or 'Not explicitly stated in issue thread.'}",
         f"Fix: {fix_hint or 'Inspect issue details and follow accepted workaround.'}",
         "Constraints: Validate against exact MCU/board configuration and CubeMX/CubeH7 version before applying.",
@@ -398,6 +400,10 @@ def export_repo_json(repo: str, include_invalid: bool, comments_chars: int) -> t
 
         image_urls = extract_issue_image_urls(doc)
         images_count = max(int(doc.get("images_count") or 0), len(image_urls))
+        github_url = doc.get("github_url")
+        issue_number = doc.get("issue_number")
+        issue_title = doc.get("issue_title")
+        repo_name = doc.get("repo")
 
         payload_docs.append(
             {
@@ -406,8 +412,8 @@ def export_repo_json(repo: str, include_invalid: bool, comments_chars: int) -> t
                 "repo": doc.get("repo"),
                 "root_path": "issues",
                 "mcu_series": doc.get("mcu_series"),
-                "issue_number": doc.get("issue_number"),
-                "issue_title": doc.get("issue_title"),
+                "issue_number": issue_number,
+                "issue_title": issue_title,
                 "state": doc.get("state"),
                 "layer": doc.get("layer"),
                 "component": doc.get("component"),
@@ -415,7 +421,9 @@ def export_repo_json(repo: str, include_invalid: bool, comments_chars: int) -> t
                 "severity": doc.get("severity"),
                 "board": doc.get("board"),
                 "labels": doc.get("labels") or [],
-                "github_url": doc.get("github_url"),
+                "github_url": github_url,
+                "externalURL": github_url,
+                "label": f"{repo_name} issue #{issue_number} - {issue_title}",
                 "image_urls": image_urls,
                 "image_urls_count": len(image_urls),
                 "images_count": images_count,

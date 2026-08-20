@@ -23,10 +23,16 @@ Ce guide permet d'executer et valider l'automatisation STM32Cube sur le depot ST
 - [ ] `.github/workflows/auto_update_kb.yml`
 
 ### 1.3 Secrets requis
-- [ ] `RUNNER_CHECK_TOKEN`
-- [ ] `ST_CHATGPT_API_KEY`
-- [ ] `ST_GITHUB_ANALYZER_API_KEY`
-- [ ] `ST_REMOTE_USER`
+A ajouter dans: Settings > Secrets and variables > Actions > New repository secret (onglet "Secrets", pas "Variables").
+
+- [ ] `RUNNER_CHECK_TOKEN` — token utilise par le job `runner-check` pour interroger l'API GitHub (`/actions/runners`) et verifier la disponibilite du runner self-hosted. Fallback possible sur `github.token` si absent.
+- [ ] `ST_GITHUB_ANALYZER_API_KEY` — cle prioritaire pour l'upload KB (persona ST GitHub Analyzer). Utilisee en premier par `Add_Data_Source_Files.py`.
+- [ ] `ST_CHATGPT_API_KEY` — cle ST ChatGPT utilisee par le smoke test (`smoke_test_st_api.yml`) et en fallback pour l'upload.
+- [ ] `ST_AI_BRIDGE_API_KEY` — cle de secours (fallback) pour l'authentification AI Bridge, utilisee si les deux precedentes sont absentes.
+- [ ] `ST_API_KEY` — derniere cle de secours (fallback final) pour l'authentification, utilisee si aucune des cles ci-dessus n'est definie.
+- [ ] `ST_REMOTE_USER` — utilisateur distant utilise pour le precheck d'authentification upload (self-hosted). Si absent, un utilisateur par defaut est utilise (warning non bloquant).
+
+Remarque: seuls des **secrets** sont necessaires ici, aucune **variable** (`vars.*`) n'est utilisee par les workflows actuels.
 
 
 ### 1.4 Runner (si mode self-hosted)
@@ -107,7 +113,7 @@ Action: terminer ou abort la rebase, puis rebase propre et push
 
 ### Cas D - Upload auth precheck failed
 Cause probable: secret manquant ou invalide
-Action: verifier `ST_GITHUB_ANALYZER_API_KEY` et `ST_REMOTE_USER`
+Action: verifier dans l'ordre `ST_GITHUB_ANALYZER_API_KEY`, `ST_CHATGPT_API_KEY`, `ST_AI_BRIDGE_API_KEY`, `ST_API_KEY` (la premiere cle non vide est utilisee), ainsi que `ST_REMOTE_USER`
 
 ---
 

@@ -32,7 +32,7 @@ ADD_SCRIPT = PROJECT_ROOT / "pipeline_Automation" / "Add_Data_Source_Files.py"
 KB_ID = 793
 DATASOURCE_ID = 28122  # STready_F4_Diagnostic_Datasource
 
-PROCESSOR_PARAMS = '{"label": "{{label}}", "externalURL": "https://github.com/STMicroelectronics/{{repo}}/issues/{{evidence_refs[0].id}}", "rootTagPath": "diagnostic_cards"}'
+PROCESSOR_PARAMS = '{"label": "{{label}}", "externalURL": "{{externalURL}}", "rootTagPath": "diagnostic_cards"}'
 
 
 def find_all_f4_diagnostic_json() -> list[Path]:

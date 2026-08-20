@@ -68,53 +68,20 @@ if (-not (Test-Path -LiteralPath $splitScript)) {
 function Invoke-Split {
     param([string]$Slug)
 
-    $issuesDir = "datasets/07_delivery/st_ready/by_series/$Slug/issues_json"
-    if (-not (Test-Path -LiteralPath $issuesDir)) {
-        Write-Host "[skip] issues_json not found for $Slug" -ForegroundColor Yellow
+    $seriesRoot = "datasets/07_delivery/st_ready/by_series/$Slug"
+    if (-not (Test-Path -LiteralPath $seriesRoot)) {
+        Write-Host "[skip] series delivery root not found for $Slug" -ForegroundColor Yellow
         return
     }
 
-    $alfredFile = Get-ChildItem -LiteralPath $issuesDir -Filter "st_ready_issues_with_images_*_with_alfred_image_text.json" -ErrorAction SilentlyContinue |
-        Sort-Object FullName |
-        Select-Object -First 1
-
-    if (-not $alfredFile) {
-        $alfredFile = Get-ChildItem -LiteralPath $issuesDir -Filter "st_ready_issues_*_with_alfred_image_text.json" -ErrorAction SilentlyContinue |
-            Where-Object { $_.Name -notmatch "summary" } |
-            Sort-Object FullName |
-            Select-Object -First 1
-    }
-
-    $fallbackFile = Get-ChildItem -LiteralPath $issuesDir -Filter "st_ready_issues_with_images_*.json" -ErrorAction SilentlyContinue |
-        Where-Object { $_.Name -notmatch "summary|with_alfred_image_text" } |
-        Sort-Object FullName |
-        Select-Object -First 1
-
-    if (-not $fallbackFile) {
-        $fallbackFile = Get-ChildItem -LiteralPath $issuesDir -Filter "st_ready_issues_*.json" -ErrorAction SilentlyContinue |
-            Where-Object { $_.Name -notmatch "summary|with_alfred_image_text|with_images" } |
-            Sort-Object FullName |
-            Select-Object -First 1
-    }
-
-    $inputFile = $null
-    if ($alfredFile) {
-        $inputFile = $alfredFile.FullName
-    } elseif ($fallbackFile) {
-        $inputFile = $fallbackFile.FullName
-    }
-
-    if (-not $inputFile) {
-        Write-Host "[skip] no st_ready_issues_with_images JSON found for $Slug" -ForegroundColor Yellow
-        return
-    }
-
-    $args = @("-m", $splitModule, "--input-file", $inputFile)
+    # Split every matching issues payload under the whole series tree
+    # (root repo + drivers/subrepos), not only the root issues_json folder.
+    $args = @("-m", $splitModule, "--input-root", $seriesRoot)
     if ($DryRun) {
         $args += "--dry-run"
     }
 
-    Write-Host "[split] $Slug -> $inputFile" -ForegroundColor Cyan
+    Write-Host "[split] $Slug -> $seriesRoot" -ForegroundColor Cyan
     & $PythonExe @args
     if ($LASTEXITCODE -ne 0) {
         throw "Split failed for $Slug"

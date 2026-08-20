@@ -1230,7 +1230,7 @@ function Invoke-UploadSeries {
 
     $issuesParams = New-ProcessorParamsArg `
         -RootTagPath "issues" `
-        -LinkUrlTemplate "{{github_url}}" `
+        -LinkUrlTemplate "https://github.com/STMicroelectronics/{{repo}}/issues/{{issue_number}}" `
         -LinkLabelTemplate "{{repo}} issue #{{issue_number}} - {{issue_title}}"
     $filesParams = New-ProcessorParamsArg `
         -RootTagPath "files" `

@@ -62,7 +62,7 @@ DATASOURCES = {
     },
     "diagnostic": {
         "name": "STready_U5_Diagnostic_Datasource",
-        "processor_params": '{"label": "{{label}}", "externalURL": "https://github.com/STMicroelectronics/{{repo}}/issues/{{evidence_refs[0].id}}", "rootTagPath": "diagnostic_cards"}',
+        "processor_params": '{"label": "{{label}}", "externalURL": "{{externalURL}}", "rootTagPath": "diagnostic_cards"}',
         "subdir": "diagnostic_cards_json",
         "glob": "st_ready_diagnostic_cards_*.json",
     },

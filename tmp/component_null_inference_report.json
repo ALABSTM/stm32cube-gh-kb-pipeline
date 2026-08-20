@@ -1,0 +1,4542 @@
+[
+  {
+    "file": "docs_issues_32f412gdiscovery-bsp_v2.json",
+    "repo": "32f412gdiscovery-bsp",
+    "issue_number": 1,
+    "issue_title": "Bug in BSP_TS_Reset (stm32412g_discovery_ts.c): Infinite loop during touch screen reset sequence",
+    "current_component": null,
+    "inferred_components": "GPIO(1)",
+    "best_component": "GPIO",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_32f469idiscovery-bsp_v2.json",
+    "repo": "32f469idiscovery-bsp",
+    "issue_number": 2,
+    "issue_title": "Misspelling in comments",
+    "current_component": null,
+    "inferred_components": "LCD(1)",
+    "best_component": "LCD",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubec0_v2.json",
+    "repo": "STM32CubeC0",
+    "issue_number": 3,
+    "issue_title": "IAR STM32C0 patch : Failed to load flash loader FlashSTM32C03xx6.flash",
+    "current_component": null,
+    "inferred_components": "FLASH(6)",
+    "best_component": "FLASH",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32cubec0_v2.json",
+    "repo": "STM32CubeC0",
+    "issue_number": 5,
+    "issue_title": "I2C Master Memory Read function actually sends a write command",
+    "current_component": null,
+    "inferred_components": "I2C(3)",
+    "best_component": "I2C",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubec0_v2.json",
+    "repo": "STM32CubeC0",
+    "issue_number": 6,
+    "issue_title": "DMAMUX1_DMA1_CH4_5_IRQHandler",
+    "current_component": null,
+    "inferred_components": "DMAMUX(1)",
+    "best_component": "DMAMUX",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubef0_v2.json",
+    "repo": "STM32CubeF0",
+    "issue_number": 5,
+    "issue_title": "Fault in HAL_CEC code",
+    "current_component": null,
+    "inferred_components": "CEC(6)",
+    "best_component": "CEC",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32cubef0_v2.json",
+    "repo": "STM32CubeF0",
+    "issue_number": 7,
+    "issue_title": "HAL I2C OA1EN always set even when slave is not used",
+    "current_component": null,
+    "inferred_components": "I2C(17)",
+    "best_component": "I2C",
+    "best_count": 17
+  },
+  {
+    "file": "docs_issues_stm32cubef0_v2.json",
+    "repo": "STM32CubeF0",
+    "issue_number": 11,
+    "issue_title": "Overflow error when compiling with GCC 10.1",
+    "current_component": null,
+    "inferred_components": "CORTEX(1)",
+    "best_component": "CORTEX",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubef0_v2.json",
+    "repo": "STM32CubeF0",
+    "issue_number": 16,
+    "issue_title": "SystemCoreClockUpdate() wrong value for STM32F030xC running PLL",
+    "current_component": null,
+    "inferred_components": "RCC(13), FLASH(1)",
+    "best_component": "RCC",
+    "best_count": 13
+  },
+  {
+    "file": "docs_issues_stm32cubef0_v2.json",
+    "repo": "STM32CubeF0",
+    "issue_number": 17,
+    "issue_title": "-Woverflow warning caused by HAL CRC function",
+    "current_component": null,
+    "inferred_components": "CRC(3)",
+    "best_component": "CRC",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubef0_v2.json",
+    "repo": "STM32CubeF0",
+    "issue_number": 18,
+    "issue_title": "Question about the HSI48RDY bit in RCC->CR2",
+    "current_component": null,
+    "inferred_components": "RCC(2)",
+    "best_component": "RCC",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubef0_v2.json",
+    "repo": "STM32CubeF0",
+    "issue_number": 19,
+    "issue_title": "I2C Slave address generate wrong?",
+    "current_component": null,
+    "inferred_components": "I2C(8)",
+    "best_component": "I2C",
+    "best_count": 8
+  },
+  {
+    "file": "docs_issues_stm32cubef1_v2.json",
+    "repo": "STM32CubeF1",
+    "issue_number": 5,
+    "issue_title": "Broken reset handler for SMT32F103xE?",
+    "current_component": null,
+    "inferred_components": "FLASH(1)",
+    "best_component": "FLASH",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubef1_v2.json",
+    "repo": "STM32CubeF1",
+    "issue_number": 10,
+    "issue_title": "LL GPIO driver problem",
+    "current_component": null,
+    "inferred_components": "GPIO(4)",
+    "best_component": "GPIO",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubef1_v2.json",
+    "repo": "STM32CubeF1",
+    "issue_number": 18,
+    "issue_title": "Syntax failure in stm32f1xx_hal_tim.h",
+    "current_component": null,
+    "inferred_components": "TIM(2)",
+    "best_component": "TIM",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubef1_v2.json",
+    "repo": "STM32CubeF1",
+    "issue_number": 20,
+    "issue_title": "STM3210C_EVAL: LCD module image corruption with BSP Example ",
+    "current_component": null,
+    "inferred_components": "LCD(6), JPEG(2), FLASH(1)",
+    "best_component": "LCD",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32cubef1_v2.json",
+    "repo": "STM32CubeF1",
+    "issue_number": 26,
+    "issue_title": "Error behavior of LL_GPIO_SetPinPull() in LL_GPIO_Init()",
+    "current_component": null,
+    "inferred_components": "GPIO(10)",
+    "best_component": "GPIO",
+    "best_count": 10
+  },
+  {
+    "file": "docs_issues_stm32cubef1_v2.json",
+    "repo": "STM32CubeF1",
+    "issue_number": 29,
+    "issue_title": "Function LL_RTC_TIME_Init  confusion RTC_Format",
+    "current_component": null,
+    "inferred_components": "RTC(1)",
+    "best_component": "RTC",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubef1_v2.json",
+    "repo": "STM32CubeF1",
+    "issue_number": 32,
+    "issue_title": "stm32f1xx_hal_rtc.c -- inefficient code in HAL_RTC_Init() function",
+    "current_component": null,
+    "inferred_components": "RTC(2)",
+    "best_component": "RTC",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubef1_v2.json",
+    "repo": "STM32CubeF1",
+    "issue_number": 42,
+    "issue_title": "Discrepancy in FLASH->ACR register LATENCY bits definition between CMSIS and Reference Manual",
+    "current_component": null,
+    "inferred_components": "FLASH(3)",
+    "best_component": "FLASH",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubef1_v2.json",
+    "repo": "STM32CubeF1",
+    "issue_number": 43,
+    "issue_title": "stm32f1xx_hal_iwdg.c:126:83: error: 'LSI_STARTUP_TIME' undeclared",
+    "current_component": null,
+    "inferred_components": "IWDG(4)",
+    "best_component": "IWDG",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubef1_v2.json",
+    "repo": "STM32CubeF1",
+    "issue_number": 57,
+    "issue_title": "CubeMX TIM Remap with LL Generation",
+    "current_component": null,
+    "inferred_components": "TIM(5), GPIO(3)",
+    "best_component": "TIM",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32cubef1_v2.json",
+    "repo": "STM32CubeF1",
+    "issue_number": 58,
+    "issue_title": "HAL_RTC_Init() loses time",
+    "current_component": null,
+    "inferred_components": "RTC(7)",
+    "best_component": "RTC",
+    "best_count": 7
+  },
+  {
+    "file": "docs_issues_stm32cubef1_v2.json",
+    "repo": "STM32CubeF1",
+    "issue_number": 62,
+    "issue_title": "No error actually, I had misinterpreted information.",
+    "current_component": null,
+    "inferred_components": "FLASH(3)",
+    "best_component": "FLASH",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubef1_v2.json",
+    "repo": "STM32CubeF1",
+    "issue_number": 71,
+    "issue_title": "There is not DAC Instances in the stm32f103xb.h",
+    "current_component": null,
+    "inferred_components": "DAC(4)",
+    "best_component": "DAC",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubef3_v2.json",
+    "repo": "STM32CubeF3",
+    "issue_number": 1,
+    "issue_title": "HRTIM_TIM_TypeDef is undefined",
+    "current_component": null,
+    "inferred_components": "TIM(1)",
+    "best_component": "TIM",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubef3_v2.json",
+    "repo": "STM32CubeF3",
+    "issue_number": 3,
+    "issue_title": "Comment bug stm32f3xx_ll_opamp.h NONINVERT macros",
+    "current_component": null,
+    "inferred_components": "OPAMP(6), GPIO(4)",
+    "best_component": "OPAMP",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32cubef3_v2.json",
+    "repo": "STM32CubeF3",
+    "issue_number": 7,
+    "issue_title": "RXNE flag doesn't behave correctly while using HAL_SPI_Receive() in bidirectional mode",
+    "current_component": null,
+    "inferred_components": "SPI(6), TIM(1)",
+    "best_component": "SPI",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32cubef3_v2.json",
+    "repo": "STM32CubeF3",
+    "issue_number": 16,
+    "issue_title": "EEPROM Page Size and Number of Pages",
+    "current_component": null,
+    "inferred_components": "I2C(1)",
+    "best_component": "I2C",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 3,
+    "issue_title": "Bit position of TimeFormat in HAL_RTC",
+    "current_component": null,
+    "inferred_components": "RTC(3)",
+    "best_component": "RTC",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 7,
+    "issue_title": "I2C HAL driver problem with HAL_I2C_Mem_Read_IT",
+    "current_component": null,
+    "inferred_components": "I2C(7)",
+    "best_component": "I2C",
+    "best_count": 7
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 16,
+    "issue_title": "STemWin MIPI DSI driver in video mode",
+    "current_component": null,
+    "inferred_components": "DSI(3), LCD(1)",
+    "best_component": "DSI",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 17,
+    "issue_title": "stm32f4xx_hal_rcc.c  line:545  check RCC_PLLCFGR_PLLP  registers error",
+    "current_component": null,
+    "inferred_components": "RCC(6)",
+    "best_component": "RCC",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 24,
+    "issue_title": "I found issue in stm32f4xx_hal_i2c.c",
+    "current_component": null,
+    "inferred_components": "I2C(1)",
+    "best_component": "I2C",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 25,
+    "issue_title": "HAL_Delay_us (Feature Request)",
+    "current_component": null,
+    "inferred_components": "CORTEX(1), TIM(1)",
+    "best_component": "CORTEX",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 30,
+    "issue_title": "template file system_stm32f4xx.c should support userdefined location of vectortable",
+    "current_component": null,
+    "inferred_components": "FLASH(3)",
+    "best_component": "FLASH",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 45,
+    "issue_title": "STM32 F411E I2C hang ",
+    "current_component": null,
+    "inferred_components": "I2C(5), SPI(2)",
+    "best_component": "I2C",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 53,
+    "issue_title": "Definition of I2C_MEMADD_SIZE_16BIT has an incorrect value",
+    "current_component": null,
+    "inferred_components": "I2C(1)",
+    "best_component": "I2C",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 55,
+    "issue_title": "Move GPIO read/write/toggle into implementation into header",
+    "current_component": null,
+    "inferred_components": "GPIO(5)",
+    "best_component": "GPIO",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 58,
+    "issue_title": "HAL RTC Output",
+    "current_component": null,
+    "inferred_components": "RTC(5)",
+    "best_component": "RTC",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 61,
+    "issue_title": "I2C issue where two consecutive start bits are generated when reading in memory mode",
+    "current_component": null,
+    "inferred_components": "I2C(3)",
+    "best_component": "I2C",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 66,
+    "issue_title": "HARDFAULT when sbmus is enabled",
+    "current_component": null,
+    "inferred_components": "I2C(1)",
+    "best_component": "I2C",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 67,
+    "issue_title": "Hardcoded address in use",
+    "current_component": null,
+    "inferred_components": "FLASH(7)",
+    "best_component": "FLASH",
+    "best_count": 7
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 69,
+    "issue_title": "PLL can't be updated when PLL is already used for sysclock",
+    "current_component": null,
+    "inferred_components": "GPIO(2)",
+    "best_component": "GPIO",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 70,
+    "issue_title": "STM32F412Vx defined GPIOF_BASE and GPIOG_BASE",
+    "current_component": null,
+    "inferred_components": "CORTEX(23), GPIO(5), RCC(1)",
+    "best_component": "CORTEX",
+    "best_count": 23
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 74,
+    "issue_title": "RTC initialization (defect)",
+    "current_component": null,
+    "inferred_components": "RTC(8)",
+    "best_component": "RTC",
+    "best_count": 8
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 76,
+    "issue_title": "I2C Slave Driver Race Condition",
+    "current_component": null,
+    "inferred_components": "I2C(10)",
+    "best_component": "I2C",
+    "best_count": 10
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 80,
+    "issue_title": "Touchscreen presses not detected on versions D/E of STM32F429-Discovery board",
+    "current_component": null,
+    "inferred_components": "FLASH(1)",
+    "best_component": "FLASH",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 84,
+    "issue_title": "stm32f4xx_hal_rcc.c has a broken check for clock init",
+    "current_component": null,
+    "inferred_components": "RCC(2)",
+    "best_component": "RCC",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 88,
+    "issue_title": "HAL_FLASH_Program_IT and HAL_FLASH_EndOfOperationCallback",
+    "current_component": null,
+    "inferred_components": "FLASH(1)",
+    "best_component": "FLASH",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 94,
+    "issue_title": "Nucleo F411RE SPI not working",
+    "current_component": null,
+    "inferred_components": "SPI(6), CRC(1)",
+    "best_component": "SPI",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 96,
+    "issue_title": "i2c: how to receive uknown byte count",
+    "current_component": null,
+    "inferred_components": "I2C(3)",
+    "best_component": "I2C",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 101,
+    "issue_title": "EEprom flash hal driver incorrect lock/unlock sequence",
+    "current_component": null,
+    "inferred_components": "FLASH(9)",
+    "best_component": "FLASH",
+    "best_count": 9
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 147,
+    "issue_title": "Check value of pllm in function HAL_RCC_GetSysClockFreq of stm32f4xx_hal_rcc.c:911",
+    "current_component": null,
+    "inferred_components": "RCC(7)",
+    "best_component": "RCC",
+    "best_count": 7
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 156,
+    "issue_title": "HAL_SRAM_Write_16b is 32b",
+    "current_component": null,
+    "inferred_components": "LCD(2)",
+    "best_component": "LCD",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 157,
+    "issue_title": "Trigger event triggered in MX_TIMx_Init (TIM_Base_SetConfig) causing triggering of slave timers initialised first",
+    "current_component": null,
+    "inferred_components": "TIM(8)",
+    "best_component": "TIM",
+    "best_count": 8
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 158,
+    "issue_title": "__HAL_RCC_APB2_FORCE_RESET cause mcu reset!",
+    "current_component": null,
+    "inferred_components": "FLASH(3), RCC(1)",
+    "best_component": "FLASH",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 163,
+    "issue_title": "Unnecessary 64-bit calculations result in 700+ bytes increase in firmware size",
+    "current_component": null,
+    "inferred_components": "RCC(4)",
+    "best_component": "RCC",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 167,
+    "issue_title": "PWM oversight on STM32CubeMX + HAL combination",
+    "current_component": null,
+    "inferred_components": "TIM(8), GPIO(1)",
+    "best_component": "TIM",
+    "best_count": 8
+  },
+  {
+    "file": "docs_issues_stm32cubef4_v2.json",
+    "repo": "STM32CubeF4",
+    "issue_number": 192,
+    "issue_title": "Update HAL to define STM32F401xD variants",
+    "current_component": null,
+    "inferred_components": "FLASH(1)",
+    "best_component": "FLASH",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubef7_v2.json",
+    "repo": "STM32CubeF7",
+    "issue_number": 3,
+    "issue_title": "EXTI-HAL (i.e. not GPIO-HAL using EXTI) ",
+    "current_component": null,
+    "inferred_components": "EXTI(10), GPIO(5)",
+    "best_component": "EXTI",
+    "best_count": 10
+  },
+  {
+    "file": "docs_issues_stm32cubef7_v2.json",
+    "repo": "STM32CubeF7",
+    "issue_number": 4,
+    "issue_title": "Inconsistent GPIO macro names",
+    "current_component": null,
+    "inferred_components": "GPIO(3)",
+    "best_component": "GPIO",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubef7_v2.json",
+    "repo": "STM32CubeF7",
+    "issue_number": 6,
+    "issue_title": "QSPI locks up at STM32F746G-DISCO board",
+    "current_component": null,
+    "inferred_components": "QSPI(3)",
+    "best_component": "QSPI",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubef7_v2.json",
+    "repo": "STM32CubeF7",
+    "issue_number": 13,
+    "issue_title": "stm32f7xx_hal_rcc.c - Assert Failed",
+    "current_component": null,
+    "inferred_components": "RCC(1)",
+    "best_component": "RCC",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubef7_v2.json",
+    "repo": "STM32CubeF7",
+    "issue_number": 15,
+    "issue_title": "Excess garbage.",
+    "current_component": null,
+    "inferred_components": "CAN(1)",
+    "best_component": "CAN",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubef7_v2.json",
+    "repo": "STM32CubeF7",
+    "issue_number": 16,
+    "issue_title": "HAL_EXTI_SetConfigLine() generates the continuous interrupt. ",
+    "current_component": null,
+    "inferred_components": "EXTI(13)",
+    "best_component": "EXTI",
+    "best_count": 13
+  },
+  {
+    "file": "docs_issues_stm32cubef7_v2.json",
+    "repo": "STM32CubeF7",
+    "issue_number": 24,
+    "issue_title": "Questionable logic when setting the number of flash wait states",
+    "current_component": null,
+    "inferred_components": "FLASH(3)",
+    "best_component": "FLASH",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubef7_v2.json",
+    "repo": "STM32CubeF7",
+    "issue_number": 28,
+    "issue_title": "Memory corruption when FPU is used",
+    "current_component": null,
+    "inferred_components": "CORTEX(2)",
+    "best_component": "CORTEX",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubef7_v2.json",
+    "repo": "STM32CubeF7",
+    "issue_number": 33,
+    "issue_title": "Can't configure PLL on STM32F722 with CubeF7 v1.16",
+    "current_component": null,
+    "inferred_components": "RCC(1)",
+    "best_component": "RCC",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubef7_v2.json",
+    "repo": "STM32CubeF7",
+    "issue_number": 52,
+    "issue_title": "QSPI times out on 32F769IDISCOVERY",
+    "current_component": null,
+    "inferred_components": "QSPI(2)",
+    "best_component": "QSPI",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubef7_v2.json",
+    "repo": "STM32CubeF7",
+    "issue_number": 56,
+    "issue_title": "FLASH sector description is wrong for NUCLEO F722ZE",
+    "current_component": null,
+    "inferred_components": "FLASH(4)",
+    "best_component": "FLASH",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubef7_v2.json",
+    "repo": "STM32CubeF7",
+    "issue_number": 62,
+    "issue_title": "PWR_STOP_RTC example doesn't work",
+    "current_component": null,
+    "inferred_components": "PWR(2)",
+    "best_component": "PWR",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubef7_v2.json",
+    "repo": "STM32CubeF7",
+    "issue_number": 64,
+    "issue_title": "Nucleo F746ZG not working when generating code with all peripherals initialized",
+    "current_component": null,
+    "inferred_components": "GPIO(1)",
+    "best_component": "GPIO",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubef7_v2.json",
+    "repo": "STM32CubeF7",
+    "issue_number": 66,
+    "issue_title": "How to generate fontX.c file?",
+    "current_component": null,
+    "inferred_components": "LCD(1)",
+    "best_component": "LCD",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubef7_v2.json",
+    "repo": "STM32CubeF7",
+    "issue_number": 75,
+    "issue_title": "GUI_Delay STemWin doesn't work as expected for STM32769I-DISCO",
+    "current_component": null,
+    "inferred_components": "LCD(1)",
+    "best_component": "LCD",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubef7_v2.json",
+    "repo": "STM32CubeF7",
+    "issue_number": 79,
+    "issue_title": "The function HAL_I2C_Mem_Read_IT and HAL_I2C_Mem_Write_IT are blocking until the first ACK",
+    "current_component": null,
+    "inferred_components": "I2C(5)",
+    "best_component": "I2C",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32cubef7_v2.json",
+    "repo": "STM32CubeF7",
+    "issue_number": 80,
+    "issue_title": "STM32F769 - STOP Mode + LCD / DSI - Screen not working on wake up",
+    "current_component": null,
+    "inferred_components": "LCD(4), DSI(3), LTDC(1)",
+    "best_component": "LCD",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubef7_v2.json",
+    "repo": "STM32CubeF7",
+    "issue_number": 85,
+    "issue_title": "Settings of the main internal Regulator output voltage is not working",
+    "current_component": null,
+    "inferred_components": "CORTEX(1), RCC(1)",
+    "best_component": "CORTEX",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubef7_v2.json",
+    "repo": "STM32CubeF7",
+    "issue_number": 88,
+    "issue_title": "Some text can be more comfortable.",
+    "current_component": null,
+    "inferred_components": "LTDC(1)",
+    "best_component": "LTDC",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubef7_v2.json",
+    "repo": "STM32CubeF7",
+    "issue_number": 91,
+    "issue_title": "Nucleo-F756zg: Debug support for StopMode does not work",
+    "current_component": null,
+    "inferred_components": "PWR(3)",
+    "best_component": "PWR",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubef7_v2.json",
+    "repo": "STM32CubeF7",
+    "issue_number": 96,
+    "issue_title": "Spontaneous setting of RDP 1 after reset when saving option bytes",
+    "current_component": null,
+    "inferred_components": "FLASH(3)",
+    "best_component": "FLASH",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubef7_v2.json",
+    "repo": "STM32CubeF7",
+    "issue_number": 98,
+    "issue_title": "Wrong information about boot address through option bytes",
+    "current_component": null,
+    "inferred_components": "FLASH(3)",
+    "best_component": "FLASH",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubef7_v2.json",
+    "repo": "STM32CubeF7",
+    "issue_number": 106,
+    "issue_title": "Timers: HAL_TIM_PWM_Stop() disable timer even channel 5 or channel 6 are enabled",
+    "current_component": null,
+    "inferred_components": "TIM(4)",
+    "best_component": "TIM",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubef7_v2.json",
+    "repo": "STM32CubeF7",
+    "issue_number": 110,
+    "issue_title": "TIM: dirty state SR register after invoke TIM_Base_SetConfig()",
+    "current_component": null,
+    "inferred_components": "TIM(4)",
+    "best_component": "TIM",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubef7_v2.json",
+    "repo": "STM32CubeF7",
+    "issue_number": 124,
+    "issue_title": "SCB_EnableDCache(): Add check for already enabled DCache",
+    "current_component": null,
+    "inferred_components": "DCACHE(6)",
+    "best_component": "DCACHE",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32cubeg0_v2.json",
+    "repo": "STM32CubeG0",
+    "issue_number": 3,
+    "issue_title": "Consistent RCC definitions",
+    "current_component": null,
+    "inferred_components": "RCC(6)",
+    "best_component": "RCC",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32cubeg0_v2.json",
+    "repo": "STM32CubeG0",
+    "issue_number": 4,
+    "issue_title": "LL RTC - wrong reference to RTC",
+    "current_component": null,
+    "inferred_components": "RTC(7)",
+    "best_component": "RTC",
+    "best_count": 7
+  },
+  {
+    "file": "docs_issues_stm32cubeg0_v2.json",
+    "repo": "STM32CubeG0",
+    "issue_number": 5,
+    "issue_title": "Naming inconsistency for Flash Busy flag",
+    "current_component": null,
+    "inferred_components": "FLASH(3)",
+    "best_component": "FLASH",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubeg0_v2.json",
+    "repo": "STM32CubeG0",
+    "issue_number": 7,
+    "issue_title": "STM32G0 HAL_GPIO_EXTI_Callback() incompatibility",
+    "current_component": null,
+    "inferred_components": "EXTI(5), GPIO(1)",
+    "best_component": "EXTI",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32cubeg0_v2.json",
+    "repo": "STM32CubeG0",
+    "issue_number": 9,
+    "issue_title": "HDMI CEC extra byte sent.",
+    "current_component": null,
+    "inferred_components": "CEC(6)",
+    "best_component": "CEC",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32cubeg0_v2.json",
+    "repo": "STM32CubeG0",
+    "issue_number": 16,
+    "issue_title": "__RAM_FUNC breaks when inlined by GCC LTO",
+    "current_component": null,
+    "inferred_components": "FLASH(2)",
+    "best_component": "FLASH",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubeg0_v2.json",
+    "repo": "STM32CubeG0",
+    "issue_number": 17,
+    "issue_title": "HAL_SPI_TransmitReceive_IT argument misalignment",
+    "current_component": null,
+    "inferred_components": "SPI(2), HSPI(1)",
+    "best_component": "SPI",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubeg0_v2.json",
+    "repo": "STM32CubeG0",
+    "issue_number": 19,
+    "issue_title": "I2C Slave examples for STM32G0316-DISCO board",
+    "current_component": null,
+    "inferred_components": "I2C(18)",
+    "best_component": "I2C",
+    "best_count": 18
+  },
+  {
+    "file": "docs_issues_stm32cubeg0_v2.json",
+    "repo": "STM32CubeG0",
+    "issue_number": 23,
+    "issue_title": "HAL_TIM_IC_START_IT does not enable CC2E for duty&freq capture",
+    "current_component": null,
+    "inferred_components": "TIM(2)",
+    "best_component": "TIM",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubeg0_v2.json",
+    "repo": "STM32CubeG0",
+    "issue_number": 30,
+    "issue_title": "STM32 RTC loses one second after each reset",
+    "current_component": null,
+    "inferred_components": "RTC(3)",
+    "best_component": "RTC",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubeg0_v2.json",
+    "repo": "STM32CubeG0",
+    "issue_number": 31,
+    "issue_title": "I2C addr flag not reset inside I2C_ITAddrCplt",
+    "current_component": null,
+    "inferred_components": "I2C(2)",
+    "best_component": "I2C",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubeg0_v2.json",
+    "repo": "STM32CubeG0",
+    "issue_number": 35,
+    "issue_title": "HAL_I2C_Slave_Trasmit_IT always fails on second call",
+    "current_component": null,
+    "inferred_components": "I2C(3)",
+    "best_component": "I2C",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubeg0_v2.json",
+    "repo": "STM32CubeG0",
+    "issue_number": 37,
+    "issue_title": "LL Syscfg comments incorrectly identify COMP EXTI lines",
+    "current_component": null,
+    "inferred_components": "EXTI(9), COMP(2)",
+    "best_component": "EXTI",
+    "best_count": 9
+  },
+  {
+    "file": "docs_issues_stm32cubeg0_v2.json",
+    "repo": "STM32CubeG0",
+    "issue_number": 42,
+    "issue_title": "LL Function for checking UCPD RxErr Flag is missing",
+    "current_component": null,
+    "inferred_components": "UCPD(4)",
+    "best_component": "UCPD",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubeg0_v2.json",
+    "repo": "STM32CubeG0",
+    "issue_number": 43,
+    "issue_title": "missing linker description file *.ld",
+    "current_component": null,
+    "inferred_components": "CRC(1)",
+    "best_component": "CRC",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeg0_v2.json",
+    "repo": "STM32CubeG0",
+    "issue_number": 46,
+    "issue_title": "The `HAL_I2C_IsDeviceReady()` may return an error, even if the I2C device is OK",
+    "current_component": null,
+    "inferred_components": "I2C(12)",
+    "best_component": "I2C",
+    "best_count": 12
+  },
+  {
+    "file": "docs_issues_stm32cubeg0_v2.json",
+    "repo": "STM32CubeG0",
+    "issue_number": 56,
+    "issue_title": "PREFETCH_ENABLE not implemented",
+    "current_component": null,
+    "inferred_components": "FLASH(5)",
+    "best_component": "FLASH",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32cubeg4_v2.json",
+    "repo": "STM32CubeG4",
+    "issue_number": 2,
+    "issue_title": "STM32Cube_FW_G4_V1.1.0 HRTIM_Buck_Sync_Rect cannot not directly import",
+    "current_component": null,
+    "inferred_components": "HRTIM(3)",
+    "best_component": "HRTIM",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubeg4_v2.json",
+    "repo": "STM32CubeG4",
+    "issue_number": 6,
+    "issue_title": "HAL_GPIO doesn't have EXTI enable / disable API. ",
+    "current_component": null,
+    "inferred_components": "EXTI(10), GPIO(5)",
+    "best_component": "EXTI",
+    "best_count": 10
+  },
+  {
+    "file": "docs_issues_stm32cubeg4_v2.json",
+    "repo": "STM32CubeG4",
+    "issue_number": 7,
+    "issue_title": "NUCLEO-G431RB/Examples/PWR/PWR_SHUTDOWN doesn't work",
+    "current_component": null,
+    "inferred_components": "EXTI(3), PWR(3)",
+    "best_component": "EXTI",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubeg4_v2.json",
+    "repo": "STM32CubeG4",
+    "issue_number": 12,
+    "issue_title": "HRTIM Fault Source Settings using LL Drivers",
+    "current_component": null,
+    "inferred_components": "HRTIM(4)",
+    "best_component": "HRTIM",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubeg4_v2.json",
+    "repo": "STM32CubeG4",
+    "issue_number": 14,
+    "issue_title": "TIM_InputCapture HAL Example uwDiffCapture always the same value when changing APB2 prescaler",
+    "current_component": null,
+    "inferred_components": "TIM(14)",
+    "best_component": "TIM",
+    "best_count": 14
+  },
+  {
+    "file": "docs_issues_stm32cubeg4_v2.json",
+    "repo": "STM32CubeG4",
+    "issue_number": 17,
+    "issue_title": "Feature request: HRTIM add option to disable fault blanking window",
+    "current_component": null,
+    "inferred_components": "HRTIM(4)",
+    "best_component": "HRTIM",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubeg4_v2.json",
+    "repo": "STM32CubeG4",
+    "issue_number": 19,
+    "issue_title": "G491 and G4A1 wrong RAM size in linker script",
+    "current_component": null,
+    "inferred_components": "CORTEX(1), FLASH(1)",
+    "best_component": "CORTEX",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeg4_v2.json",
+    "repo": "STM32CubeG4",
+    "issue_number": 21,
+    "issue_title": "module DAC does not work on STMG473",
+    "current_component": null,
+    "inferred_components": "DAC(2)",
+    "best_component": "DAC",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubeg4_v2.json",
+    "repo": "STM32CubeG4",
+    "issue_number": 22,
+    "issue_title": "Some RTC Macro did'nt use pHandle ",
+    "current_component": null,
+    "inferred_components": "RTC(4)",
+    "best_component": "RTC",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubeg4_v2.json",
+    "repo": "STM32CubeG4",
+    "issue_number": 23,
+    "issue_title": "[Feature Request] Pass arbitrary data pointer in callbacks",
+    "current_component": null,
+    "inferred_components": "SPI(4), I2C(2), HSPI(1)",
+    "best_component": "SPI",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubeg4_v2.json",
+    "repo": "STM32CubeG4",
+    "issue_number": 25,
+    "issue_title": "Readme on NUCLEO-G474RE/Examples/OPAMP/OPAMP_PGA/readme.txt",
+    "current_component": null,
+    "inferred_components": "OPAMP(5)",
+    "best_component": "OPAMP",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32cubeg4_v2.json",
+    "repo": "STM32CubeG4",
+    "issue_number": 34,
+    "issue_title": "Flash latency inconsistency between STM32CubeG4 and RM0440",
+    "current_component": null,
+    "inferred_components": "FLASH(3)",
+    "best_component": "FLASH",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubeg4_v2.json",
+    "repo": "STM32CubeG4",
+    "issue_number": 42,
+    "issue_title": "SPI parameter",
+    "current_component": null,
+    "inferred_components": "SPI(3)",
+    "best_component": "SPI",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubeg4_v2.json",
+    "repo": "STM32CubeG4",
+    "issue_number": 54,
+    "issue_title": "stm32g4 ll opamp: spell mistake on L268",
+    "current_component": null,
+    "inferred_components": "OPAMP(2)",
+    "best_component": "OPAMP",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubeh5_v2.json",
+    "repo": "STM32CubeH5",
+    "issue_number": 1,
+    "issue_title": "File Missing and Projects not working on IAR",
+    "current_component": null,
+    "inferred_components": "GPIO(1)",
+    "best_component": "GPIO",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeh5_v2.json",
+    "repo": "STM32CubeH5",
+    "issue_number": 8,
+    "issue_title": "Missing link template files for MDK-ARM",
+    "current_component": null,
+    "inferred_components": "FLASH(2)",
+    "best_component": "FLASH",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubeh5_v2.json",
+    "repo": "STM32CubeH5",
+    "issue_number": 9,
+    "issue_title": "Register bit name typo causes compiler warning due to bug",
+    "current_component": null,
+    "inferred_components": "PWR(1)",
+    "best_component": "PWR",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeh5_v2.json",
+    "repo": "STM32CubeH5",
+    "issue_number": 12,
+    "issue_title": "STM32H573I-DK HardFault while using TrustZone examples",
+    "current_component": null,
+    "inferred_components": "GTZC(6), CORTEX(1), FLASH(1)",
+    "best_component": "GTZC",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32cubeh5_v2.json",
+    "repo": "STM32CubeH5",
+    "issue_number": 13,
+    "issue_title": "EEPROM emulation problem on STM32H563ZI",
+    "current_component": null,
+    "inferred_components": "FLASH(1)",
+    "best_component": "FLASH",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeh5_v2.json",
+    "repo": "STM32CubeH5",
+    "issue_number": 14,
+    "issue_title": "STM32H563/573: HAL_SPI)TransmitReceive not working on 1.8V",
+    "current_component": null,
+    "inferred_components": "SPI(8)",
+    "best_component": "SPI",
+    "best_count": 8
+  },
+  {
+    "file": "docs_issues_stm32cubeh5_v2.json",
+    "repo": "STM32CubeH5",
+    "issue_number": 19,
+    "issue_title": "Can you give a simple example of IWDG with HAL_IWDG_RegisterCallback?",
+    "current_component": null,
+    "inferred_components": "IWDG(9), I2C(6), RTC(2)",
+    "best_component": "IWDG",
+    "best_count": 9
+  },
+  {
+    "file": "docs_issues_stm32cubeh5_v2.json",
+    "repo": "STM32CubeH5",
+    "issue_number": 23,
+    "issue_title": "Incorrect doc-string for FLASH_EraseInitTypeDef in `stm32h55xx_hal_flash_ex.h` ?",
+    "current_component": null,
+    "inferred_components": "FLASH(1)",
+    "best_component": "FLASH",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeh5_v2.json",
+    "repo": "STM32CubeH5",
+    "issue_number": 30,
+    "issue_title": "image_macros_preprocessed_bl2.c is compiled and linked into the application on 2nd build in STM32CubeIDE",
+    "current_component": null,
+    "inferred_components": "FLASH(1)",
+    "best_component": "FLASH",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeh5_v2.json",
+    "repo": "STM32CubeH5",
+    "issue_number": 31,
+    "issue_title": "Misleading bitoperation in OEMiROT_Boot clock configuration",
+    "current_component": null,
+    "inferred_components": "RCC(6)",
+    "best_component": "RCC",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32cubeh5_v2.json",
+    "repo": "STM32CubeH5",
+    "issue_number": 35,
+    "issue_title": "[Bug]: NetX Duo `_nx_tcp_socket_send_internal` corrupts retried packets — upstream fix exists, not yet bundled in STM32CubeH5",
+    "current_component": null,
+    "inferred_components": "FLASH(1)",
+    "best_component": "FLASH",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 2,
+    "issue_title": "HRTIM_TIM_TypeDef is undefined",
+    "current_component": null,
+    "inferred_components": "TIM(1)",
+    "best_component": "TIM",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 3,
+    "issue_title": "SDMMC_BASE is undefined",
+    "current_component": null,
+    "inferred_components": "SDMMC(5)",
+    "best_component": "SDMMC",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 8,
+    "issue_title": "enabling unwanted global interrupts",
+    "current_component": null,
+    "inferred_components": "LPTIM(1)",
+    "best_component": "LPTIM",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 13,
+    "issue_title": "DSI/emWin crash on dual-core H7",
+    "current_component": null,
+    "inferred_components": "DSI(5), LCD(3), DMA2D(1)",
+    "best_component": "DSI",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 14,
+    "issue_title": "Regression in QSPI vs. v1.3.0",
+    "current_component": null,
+    "inferred_components": "QSPI(3), FLASH(1), SPI(1)",
+    "best_component": "QSPI",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 19,
+    "issue_title": "__HAL_RCC_AHB3_FORCE_RESET() sometime causes microprocessor to reset",
+    "current_component": null,
+    "inferred_components": "RCC(10), FLASH(3)",
+    "best_component": "RCC",
+    "best_count": 10
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 20,
+    "issue_title": "The HAL_NOR_ProgramBuffer() has a few defects",
+    "current_component": null,
+    "inferred_components": "FLASH(7), FMC(1)",
+    "best_component": "FLASH",
+    "best_count": 7
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 21,
+    "issue_title": "SDMMC: Hard-coded clock dividers only work for 200MHz MMCCLK",
+    "current_component": null,
+    "inferred_components": "SDMMC(3)",
+    "best_component": "SDMMC",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 24,
+    "issue_title": "HAL_RTC_Init() looses time",
+    "current_component": null,
+    "inferred_components": "RTC(9), RCC(1)",
+    "best_component": "RTC",
+    "best_count": 9
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 25,
+    "issue_title": "Wrong timer identifiers on some HRTIM functions doc",
+    "current_component": null,
+    "inferred_components": "HRTIM(5)",
+    "best_component": "HRTIM",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 32,
+    "issue_title": "CubeMX: 0-pointer access in generated code if TIM6 is used for HAL tick and DAC is enabled",
+    "current_component": null,
+    "inferred_components": "DAC(4), TIM(2)",
+    "best_component": "DAC",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 34,
+    "issue_title": "Dual Core boot up example",
+    "current_component": null,
+    "inferred_components": "HSEM(4), FLASH(3)",
+    "best_component": "HSEM",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 35,
+    "issue_title": "Spelling: \"secion\" instead of \"section\" in >900 places",
+    "current_component": null,
+    "inferred_components": "MDMA(1)",
+    "best_component": "MDMA",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 41,
+    "issue_title": "Uninitialized local variable VidCfg",
+    "current_component": null,
+    "inferred_components": "DSI(2)",
+    "best_component": "DSI",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 46,
+    "issue_title": "HAL_RCCEx_PeriphCLKConfig not setting the HRTIM1 clock source",
+    "current_component": null,
+    "inferred_components": "HRTIM(3)",
+    "best_component": "HRTIM",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 47,
+    "issue_title": "ExtMem_Boot: hardfault caused by unaligned memory access",
+    "current_component": null,
+    "inferred_components": "FLASH(5), OSPI(3)",
+    "best_component": "FLASH",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 51,
+    "issue_title": "Version control management",
+    "current_component": null,
+    "inferred_components": "GPIO(2)",
+    "best_component": "GPIO",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 88,
+    "issue_title": "CubeMX GPIO not initialized in STM32H747-DISCO?",
+    "current_component": null,
+    "inferred_components": "GPIO(4)",
+    "best_component": "GPIO",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 89,
+    "issue_title": "HAL_SDRAM_Init should take timing argument as const",
+    "current_component": null,
+    "inferred_components": "FMC(1)",
+    "best_component": "FMC",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 91,
+    "issue_title": "TIM15 is missing in macro IS_TIM_SLAVE_INSTANCE",
+    "current_component": null,
+    "inferred_components": "TIM(2)",
+    "best_component": "TIM",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 101,
+    "issue_title": "RCC_AHB2RSTR register for DCMI resetting on STM32H743VI",
+    "current_component": null,
+    "inferred_components": "DCMI(7)",
+    "best_component": "DCMI",
+    "best_count": 7
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 124,
+    "issue_title": "MDMA Link Nodes not Double Word Aligned by CubeMX as Required",
+    "current_component": null,
+    "inferred_components": "MDMA(4)",
+    "best_component": "MDMA",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 125,
+    "issue_title": "H747/dual core CM7 continues execution after wakeup from standby mode with RTC.",
+    "current_component": null,
+    "inferred_components": "RTC(12), HSEM(6), FLASH(3)",
+    "best_component": "RTC",
+    "best_count": 12
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 131,
+    "issue_title": "FatFs Application for STM32H745I-DISCO not working properly",
+    "current_component": null,
+    "inferred_components": "FLASH(1)",
+    "best_component": "FLASH",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 133,
+    "issue_title": "Query: Declaring a Global variable in External MRAM / SRAM and simultaneously initializing it within the same (C language) statement.",
+    "current_component": null,
+    "inferred_components": "FMC(1), GPIO(1)",
+    "best_component": "FMC",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 134,
+    "issue_title": "Query: Tweaking __main or updating / modifying SystemInit() to call System Clock Configure, Peripheral Configure and FMC Initialization before calling Zero Initialization of memory",
+    "current_component": null,
+    "inferred_components": "FMC(14), FLASH(1), GPIO(1)",
+    "best_component": "FMC",
+    "best_count": 14
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 138,
+    "issue_title": "MX25LM51245G timing is not respected",
+    "current_component": null,
+    "inferred_components": "FLASH(2)",
+    "best_component": "FLASH",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 142,
+    "issue_title": "Wrong pin config in stm32h747i_eval_nor.c",
+    "current_component": null,
+    "inferred_components": "FMC(3)",
+    "best_component": "FMC",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 143,
+    "issue_title": "Wrong pin config in stm32h747i_eval_nor.c",
+    "current_component": null,
+    "inferred_components": "FMC(1)",
+    "best_component": "FMC",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 144,
+    "issue_title": "Wrong pin config in stm32h747i_eval_nor.c",
+    "current_component": null,
+    "inferred_components": "FMC(1)",
+    "best_component": "FMC",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 145,
+    "issue_title": "Request: Please modify following functions SystemClock_Config(), PeriphCommonClock_Config(), and MX_FMC_Init() along with its called functions so as not to use variables",
+    "current_component": null,
+    "inferred_components": "FMC(1), GPIO(1)",
+    "best_component": "FMC",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 146,
+    "issue_title": "Example: MDMA_RepeatBlock_Rotation - Readme says 90° rotation but not done in source code",
+    "current_component": null,
+    "inferred_components": "MDMA(4)",
+    "best_component": "MDMA",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 150,
+    "issue_title": "Bank mapping support is broken",
+    "current_component": null,
+    "inferred_components": "FLASH(6), LCD(1)",
+    "best_component": "FLASH",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 152,
+    "issue_title": "Not able to flash any code on NUCLEO-H745ZI-Q using STM32CubeIDE",
+    "current_component": null,
+    "inferred_components": "FLASH(5), CORTEX(1)",
+    "best_component": "FLASH",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 154,
+    "issue_title": "Missing implementation of HAL SPI master automatic SUSP in receive mode",
+    "current_component": null,
+    "inferred_components": "SPI(5), HSPI(1)",
+    "best_component": "SPI",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 155,
+    "issue_title": "Early system initialization and correct use of HAL_PWREx_ConfigSupply()",
+    "current_component": null,
+    "inferred_components": "PWR(1)",
+    "best_component": "PWR",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 159,
+    "issue_title": "Nucleo-STM32H743ZI2 board gets hung at SystemClock_Config();",
+    "current_component": null,
+    "inferred_components": "RCC(1)",
+    "best_component": "RCC",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 161,
+    "issue_title": "Wrong paralle NOR setting",
+    "current_component": null,
+    "inferred_components": "FMC(1)",
+    "best_component": "FMC",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 164,
+    "issue_title": "HAL_DSI_MspInit bad generation for STM32H747",
+    "current_component": null,
+    "inferred_components": "DSI(2)",
+    "best_component": "DSI",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 173,
+    "issue_title": "Can provide CubeMX configuration file？",
+    "current_component": null,
+    "inferred_components": "QSPI(1)",
+    "best_component": "QSPI",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 176,
+    "issue_title": "NOR Flash driver does not support large flash chips (i.e. greater than ",
+    "current_component": null,
+    "inferred_components": "FLASH(10), FMC(2)",
+    "best_component": "FLASH",
+    "best_count": 10
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 183,
+    "issue_title": "Typos in MCU header files",
+    "current_component": null,
+    "inferred_components": "CORTEX(3)",
+    "best_component": "CORTEX",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 184,
+    "issue_title": "I2C: discrepancy between the HAL driver and the RM0433 reference manual",
+    "current_component": null,
+    "inferred_components": "I2C(11)",
+    "best_component": "I2C",
+    "best_count": 11
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 185,
+    "issue_title": "Minor typos in Extended FLASH HAL",
+    "current_component": null,
+    "inferred_components": "FLASH(2)",
+    "best_component": "FLASH",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 190,
+    "issue_title": "[STM32H750-DB] ExtMem_Application: hardfault caused and Unable to jump to Application",
+    "current_component": null,
+    "inferred_components": "FLASH(4)",
+    "best_component": "FLASH",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 198,
+    "issue_title": "DOC and API have a bug in describing STM32H7 ETH->DMACTDRLR (ETH_DMACTXRLR) register",
+    "current_component": null,
+    "inferred_components": "ETH(4)",
+    "best_component": "ETH",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 201,
+    "issue_title": "BSP driver for STM32H743I/753I -EVAL, fix for using LEDs without the I2C I/O extender",
+    "current_component": null,
+    "inferred_components": "I2C(4)",
+    "best_component": "I2C",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 202,
+    "issue_title": "Flash Dual bank for H735 and H725",
+    "current_component": null,
+    "inferred_components": "FLASH(6)",
+    "best_component": "FLASH",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 216,
+    "issue_title": "QSPI FIFO Threshold mask wrong",
+    "current_component": null,
+    "inferred_components": "QSPI(3)",
+    "best_component": "QSPI",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 217,
+    "issue_title": "QSPI FIFO Threshold register does not accept values greater than 15",
+    "current_component": null,
+    "inferred_components": "QSPI(2), SPI(1)",
+    "best_component": "QSPI",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 218,
+    "issue_title": "const-qualify buffers for CRC calculation",
+    "current_component": null,
+    "inferred_components": "CRC(3)",
+    "best_component": "CRC",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 221,
+    "issue_title": "Wrong name for RCC Clock Security System callback",
+    "current_component": null,
+    "inferred_components": "RCC(3)",
+    "best_component": "RCC",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 225,
+    "issue_title": "NOR Flash driver does not support x8 commands",
+    "current_component": null,
+    "inferred_components": "FLASH(6), FMC(2)",
+    "best_component": "FLASH",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 227,
+    "issue_title": "HAL_PWREx_HoldCore(PWR_CORE_CPU1) Does not stop execution in CM7",
+    "current_component": null,
+    "inferred_components": "CORTEX(6), EXTI(1), HSEM(1)",
+    "best_component": "CORTEX",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 228,
+    "issue_title": "Another EEPROM emulation example bug",
+    "current_component": null,
+    "inferred_components": "FLASH(1)",
+    "best_component": "FLASH",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 236,
+    "issue_title": "STM32H730 SPI clock (SCK) bug",
+    "current_component": null,
+    "inferred_components": "SPI(14), HSPI(2)",
+    "best_component": "SPI",
+    "best_count": 14
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 242,
+    "issue_title": "SAI_AudioPlayback on h745 Discovery Board with Keil Armclang",
+    "current_component": null,
+    "inferred_components": "SAI(2)",
+    "best_component": "SAI",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 247,
+    "issue_title": "RTC Accuracy issue",
+    "current_component": null,
+    "inferred_components": "RTC(11)",
+    "best_component": "RTC",
+    "best_count": 11
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 252,
+    "issue_title": "Potential buffer overflow in WiFi SPI driver",
+    "current_component": null,
+    "inferred_components": "SPI(4), HSPI(2)",
+    "best_component": "SPI",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 258,
+    "issue_title": "Octo-SPI multiplexed mode unavailable",
+    "current_component": null,
+    "inferred_components": "SPI(2), OSPI(1)",
+    "best_component": "SPI",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 275,
+    "issue_title": "STM32H7B3I-DK PLL3 VCO output exceeds 560MHz limit",
+    "current_component": null,
+    "inferred_components": "LCD(1)",
+    "best_component": "LCD",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 277,
+    "issue_title": "IWDG Max timeout value",
+    "current_component": null,
+    "inferred_components": "IWDG(2)",
+    "best_component": "IWDG",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 281,
+    "issue_title": "Configuration register SYSCFG_PMCR set wrong value when config pins like PC3_C as GPIO",
+    "current_component": null,
+    "inferred_components": "GPIO(11)",
+    "best_component": "GPIO",
+    "best_count": 11
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 294,
+    "issue_title": "JPEG utils not setting ConvertedDataCount variable in YCbCr to RGB functions",
+    "current_component": null,
+    "inferred_components": "JPEG(3)",
+    "best_component": "JPEG",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 297,
+    "issue_title": "STM32H747 SWD can not connect anymore",
+    "current_component": null,
+    "inferred_components": "GPIO(2)",
+    "best_component": "GPIO",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 299,
+    "issue_title": "jpeg_utils.c:  pure red or pure blue pixel conversion from RGB to YCbCr will result in values too large to hold in a uint8_t buffer.",
+    "current_component": null,
+    "inferred_components": "JPEG(3), DCMI(1)",
+    "best_component": "JPEG",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 309,
+    "issue_title": "NUCLEO-H743ZI EEPROM_Emulation Bug",
+    "current_component": null,
+    "inferred_components": "FLASH(2)",
+    "best_component": "FLASH",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 313,
+    "issue_title": "Wrong selections in stm32h743 hrtim's dead time settings",
+    "current_component": null,
+    "inferred_components": "HRTIM(3), CORTEX(1)",
+    "best_component": "HRTIM",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 314,
+    "issue_title": "STM32CubeH7 1.12.1 SAI4 configuration is broken",
+    "current_component": null,
+    "inferred_components": "SAI(1)",
+    "best_component": "SAI",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 318,
+    "issue_title": "Unable to build project:  \"stm32h7xx_hal.h\" not found",
+    "current_component": null,
+    "inferred_components": "GPIO(3)",
+    "best_component": "GPIO",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 323,
+    "issue_title": "STM32H7 LTDC RGB666 Problem",
+    "current_component": null,
+    "inferred_components": "LTDC(4)",
+    "best_component": "LTDC",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubeh7_v2.json",
+    "repo": "STM32CubeH7",
+    "issue_number": 334,
+    "issue_title": "STM32H743i FMC NOR Example, wrong pin definition",
+    "current_component": null,
+    "inferred_components": "FMC(4)",
+    "best_component": "FMC",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubeh7rs_v2.json",
+    "repo": "STM32CubeH7RS",
+    "issue_number": 2,
+    "issue_title": "Template_XIP does not build in stm32ide",
+    "current_component": null,
+    "inferred_components": "CORTEX(18)",
+    "best_component": "CORTEX",
+    "best_count": 18
+  },
+  {
+    "file": "docs_issues_stm32cubeh7rs_v2.json",
+    "repo": "STM32CubeH7RS",
+    "issue_number": 5,
+    "issue_title": "Adresses of SAI1 and SAI2 in CMSIS file is swapped",
+    "current_component": null,
+    "inferred_components": "SAI(1)",
+    "best_component": "SAI",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeh7rs_v2.json",
+    "repo": "STM32CubeH7RS",
+    "issue_number": 8,
+    "issue_title": "PKA ECC DoubleBaseLadder RAM offsets overlap inputs/outputs -> invalid secp256r1 point on STM32H7S3L8",
+    "current_component": null,
+    "inferred_components": "PKA(15), HASH(7), RNG(3)",
+    "best_component": "PKA",
+    "best_count": 15
+  },
+  {
+    "file": "docs_issues_stm32cubel0_v2.json",
+    "repo": "STM32CubeL0",
+    "issue_number": 2,
+    "issue_title": "CRC routines problem with GCC -fstrict-aliasing",
+    "current_component": null,
+    "inferred_components": "CRC(10), CORTEX(1), FLASH(1)",
+    "best_component": "CRC",
+    "best_count": 10
+  },
+  {
+    "file": "docs_issues_stm32cubel0_v2.json",
+    "repo": "STM32CubeL0",
+    "issue_number": 7,
+    "issue_title": "__HAL_TSC_GET_GROUP_STATUS returns status for incorrect TSC group",
+    "current_component": null,
+    "inferred_components": "TSC(5)",
+    "best_component": "TSC",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32cubel0_v2.json",
+    "repo": "STM32CubeL0",
+    "issue_number": 15,
+    "issue_title": "RCC->CRRCR register accesses should have RCC_HSI48_SUPPORT compilation guard",
+    "current_component": null,
+    "inferred_components": "RCC(5), PWR(1)",
+    "best_component": "RCC",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32cubel0_v2.json",
+    "repo": "STM32CubeL0",
+    "issue_number": 16,
+    "issue_title": "MCO register is incorrect width in some SystemInit examples",
+    "current_component": null,
+    "inferred_components": "PWR(1), RCC(1)",
+    "best_component": "PWR",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubel0_v2.json",
+    "repo": "STM32CubeL0",
+    "issue_number": 21,
+    "issue_title": "HAL_MPU_ConfigRegion() and HAL_MPU_Enable() barrier instructions are not compliant with the ARM specs",
+    "current_component": null,
+    "inferred_components": "CORTEX(1)",
+    "best_component": "CORTEX",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubel0_v2.json",
+    "repo": "STM32CubeL0",
+    "issue_number": 26,
+    "issue_title": "i2c slave mode gets stuck",
+    "current_component": null,
+    "inferred_components": "I2C(14)",
+    "best_component": "I2C",
+    "best_count": 14
+  },
+  {
+    "file": "docs_issues_stm32cubel0_v2.json",
+    "repo": "STM32CubeL0",
+    "issue_number": 33,
+    "issue_title": "IS_LPTIM_PERIOD() lower value should be 0",
+    "current_component": null,
+    "inferred_components": "LPTIM(3)",
+    "best_component": "LPTIM",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubel1_v2.json",
+    "repo": "STM32CubeL1",
+    "issue_number": 1,
+    "issue_title": "HRTIM_TIM_TypeDef is undefined",
+    "current_component": null,
+    "inferred_components": "TIM(1)",
+    "best_component": "TIM",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubel1_v2.json",
+    "repo": "STM32CubeL1",
+    "issue_number": 2,
+    "issue_title": "Duplicate defines when using CMSIS 5 headers",
+    "current_component": null,
+    "inferred_components": "CORTEX(1)",
+    "best_component": "CORTEX",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubel1_v2.json",
+    "repo": "STM32CubeL1",
+    "issue_number": 6,
+    "issue_title": "FLASH_SIZE incorrectly reports flash size for cat.2 devices with DEV_ID 0x429",
+    "current_component": null,
+    "inferred_components": "FLASH(3)",
+    "best_component": "FLASH",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubel1_v2.json",
+    "repo": "STM32CubeL1",
+    "issue_number": 8,
+    "issue_title": "GPIOx BRR registers incorrectly defined",
+    "current_component": null,
+    "inferred_components": "GPIO(2)",
+    "best_component": "GPIO",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubel1_v2.json",
+    "repo": "STM32CubeL1",
+    "issue_number": 13,
+    "issue_title": "Preprocessor directives in \"stm32l1xx_ll_spi.h\"",
+    "current_component": null,
+    "inferred_components": "SPI(2)",
+    "best_component": "SPI",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubel1_v2.json",
+    "repo": "STM32CubeL1",
+    "issue_number": 16,
+    "issue_title": "FLASH_SIZE incorrectly reports flash size for cat.3 devices with DEV_ID 0x436",
+    "current_component": null,
+    "inferred_components": "FLASH(6)",
+    "best_component": "FLASH",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32cubel4_v2.json",
+    "repo": "STM32CubeL4",
+    "issue_number": 5,
+    "issue_title": "MISRA C Compliance",
+    "current_component": null,
+    "inferred_components": "I2C(1)",
+    "best_component": "I2C",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubel4_v2.json",
+    "repo": "STM32CubeL4",
+    "issue_number": 8,
+    "issue_title": "SPI2 with LL lib  run abnormal  in STM32L431",
+    "current_component": null,
+    "inferred_components": "GPIO(1)",
+    "best_component": "GPIO",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubel4_v2.json",
+    "repo": "STM32CubeL4",
+    "issue_number": 10,
+    "issue_title": "Using Microphone with B-L475E-IOT01A",
+    "current_component": null,
+    "inferred_components": "DFSDM(2)",
+    "best_component": "DFSDM",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubel4_v2.json",
+    "repo": "STM32CubeL4",
+    "issue_number": 11,
+    "issue_title": "HAL_LL wrong generation in RTC",
+    "current_component": null,
+    "inferred_components": "RTC(4)",
+    "best_component": "RTC",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubel4_v2.json",
+    "repo": "STM32CubeL4",
+    "issue_number": 19,
+    "issue_title": "cast pointer to a bigger data is danger",
+    "current_component": null,
+    "inferred_components": "HSPI(5)",
+    "best_component": "HSPI",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32cubel4_v2.json",
+    "repo": "STM32CubeL4",
+    "issue_number": 23,
+    "issue_title": "STM32L431 with X-CUBE-EEPROM_V3.0.0. Problem writing to flash memory.",
+    "current_component": null,
+    "inferred_components": "FLASH(7)",
+    "best_component": "FLASH",
+    "best_count": 7
+  },
+  {
+    "file": "docs_issues_stm32cubel4_v2.json",
+    "repo": "STM32CubeL4",
+    "issue_number": 27,
+    "issue_title": "A wrong byte be send in the SMBus mode",
+    "current_component": null,
+    "inferred_components": "I2C(1)",
+    "best_component": "I2C",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubel4_v2.json",
+    "repo": "STM32CubeL4",
+    "issue_number": 29,
+    "issue_title": "WWDG comments reference APIs that do not exist",
+    "current_component": null,
+    "inferred_components": "WWDG(3)",
+    "best_component": "WWDG",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubel4_v2.json",
+    "repo": "STM32CubeL4",
+    "issue_number": 30,
+    "issue_title": "missing volatile type for _IT functions",
+    "current_component": null,
+    "inferred_components": "SPI(1)",
+    "best_component": "SPI",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubel4_v2.json",
+    "repo": "STM32CubeL4",
+    "issue_number": 34,
+    "issue_title": "Legacy OPAMP_POWERMODE_NORMAL used in IS_OPAMP_POWERMODE() ",
+    "current_component": null,
+    "inferred_components": "OPAMP(2)",
+    "best_component": "OPAMP",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubel4_v2.json",
+    "repo": "STM32CubeL4",
+    "issue_number": 37,
+    "issue_title": "stm32l4xx_hal_rcc embedding a directive within macro arguments is not portable",
+    "current_component": null,
+    "inferred_components": "RCC(1)",
+    "best_component": "RCC",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubel4_v2.json",
+    "repo": "STM32CubeL4",
+    "issue_number": 51,
+    "issue_title": "RCC_APB1ENR1_RTCAPBEN define missing from stm32l476xx.h",
+    "current_component": null,
+    "inferred_components": "RTC(2)",
+    "best_component": "RTC",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubel4_v2.json",
+    "repo": "STM32CubeL4",
+    "issue_number": 52,
+    "issue_title": "IS_TIM_CCX_INSTANCE() doesn't compile when using LL TIM driver",
+    "current_component": null,
+    "inferred_components": "TIM(4)",
+    "best_component": "TIM",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubel4_v2.json",
+    "repo": "STM32CubeL4",
+    "issue_number": 55,
+    "issue_title": "dsiPllInit.PLLNDIV too large for 32L4R9IDISCOVERY board",
+    "current_component": null,
+    "inferred_components": "DSI(4)",
+    "best_component": "DSI",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubel4_v2.json",
+    "repo": "STM32CubeL4",
+    "issue_number": 61,
+    "issue_title": "32L4R9IDISCOVERY FLASH_FastProgram; Problem with source=destination",
+    "current_component": null,
+    "inferred_components": "FLASH(6)",
+    "best_component": "FLASH",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32cubel4_v2.json",
+    "repo": "STM32CubeL4",
+    "issue_number": 66,
+    "issue_title": "Error in LL_CRS_ConfigSynchronization function (L4 and G4 and H7)",
+    "current_component": null,
+    "inferred_components": "CRS(6)",
+    "best_component": "CRS",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32cubel4_v2.json",
+    "repo": "STM32CubeL4",
+    "issue_number": 70,
+    "issue_title": "STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_gpio_ex.h: GPIO_AF14_TIM2 missing for STM32L4P5xx || STM32L4Q5xx",
+    "current_component": null,
+    "inferred_components": "GPIO(1)",
+    "best_component": "GPIO",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubel4_v2.json",
+    "repo": "STM32CubeL4",
+    "issue_number": 78,
+    "issue_title": "Lack of __HAL_GPIO_EXT_DISABLE_IT or equivalent",
+    "current_component": null,
+    "inferred_components": "EXTI(6), GPIO(1)",
+    "best_component": "EXTI",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32cubel4_v2.json",
+    "repo": "STM32CubeL4",
+    "issue_number": 80,
+    "issue_title": "TX IRQ remains active after HAL_I2C_Mem_Read_DMA",
+    "current_component": null,
+    "inferred_components": "I2C(1)",
+    "best_component": "I2C",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubel4_v2.json",
+    "repo": "STM32CubeL4",
+    "issue_number": 85,
+    "issue_title": "How to find out the pinout and configuration or ioc. file in L496G-DISCROVERY DFSDM?",
+    "current_component": null,
+    "inferred_components": "DFSDM(6)",
+    "best_component": "DFSDM",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32cubel4_v2.json",
+    "repo": "STM32CubeL4",
+    "issue_number": 86,
+    "issue_title": "Use const parameters for initialization functions",
+    "current_component": null,
+    "inferred_components": "FLASH(1)",
+    "best_component": "FLASH",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubel4_v2.json",
+    "repo": "STM32CubeL4",
+    "issue_number": 88,
+    "issue_title": "Adafruit LCD Shield V2 seesaw version not supported",
+    "current_component": null,
+    "inferred_components": "LCD(2)",
+    "best_component": "LCD",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubel4_v2.json",
+    "repo": "STM32CubeL4",
+    "issue_number": 91,
+    "issue_title": "HAL_I2C_Master_Abort_IT  mode HAL_I2C_MODE_MEM not supported",
+    "current_component": null,
+    "inferred_components": "I2C(2)",
+    "best_component": "I2C",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubel4_v2.json",
+    "repo": "STM32CubeL4",
+    "issue_number": 95,
+    "issue_title": "SDMMC SD_FindSCR() problem",
+    "current_component": null,
+    "inferred_components": "SDMMC(2)",
+    "best_component": "SDMMC",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubel5_v2.json",
+    "repo": "STM32CubeL5",
+    "issue_number": 11,
+    "issue_title": "TFM not updated for STM32L562E-DK",
+    "current_component": null,
+    "inferred_components": "FLASH(6), OSPI(2)",
+    "best_component": "FLASH",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32cuben6_v2.json",
+    "repo": "STM32CubeN6",
+    "issue_number": 5,
+    "issue_title": "Not able to build VENC_SDCard_Appli",
+    "current_component": null,
+    "inferred_components": "FLASH(2)",
+    "best_component": "FLASH",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cuben6_v2.json",
+    "repo": "STM32CubeN6",
+    "issue_number": 10,
+    "issue_title": "SWD access to peripheral registers fails when SYSCFG clock deactivated",
+    "current_component": null,
+    "inferred_components": "RCC(2), CORTEX(1)",
+    "best_component": "RCC",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cuben6_v2.json",
+    "repo": "STM32CubeN6",
+    "issue_number": 17,
+    "issue_title": "PDM2PCM library missing for CM55",
+    "current_component": null,
+    "inferred_components": "SAI(1)",
+    "best_component": "SAI",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeu0_v2.json",
+    "repo": "STM32CubeU0",
+    "issue_number": 3,
+    "issue_title": "warning: unused variable in stm32u0xx_hal_rtc.h",
+    "current_component": null,
+    "inferred_components": "RTC(7)",
+    "best_component": "RTC",
+    "best_count": 7
+  },
+  {
+    "file": "docs_issues_stm32cubeu0_v2.json",
+    "repo": "STM32CubeU0",
+    "issue_number": 4,
+    "issue_title": "stm32u0xx_hal_rtc_ex.h: #define RTC_BKP_NB inconssitency to DS14581 - Rev 2",
+    "current_component": null,
+    "inferred_components": "RTC(4)",
+    "best_component": "RTC",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubeu0_v2.json",
+    "repo": "STM32CubeU0",
+    "issue_number": 9,
+    "issue_title": "Circular dependency and HAL_StatusTypeDef",
+    "current_component": null,
+    "inferred_components": "I2C(1)",
+    "best_component": "I2C",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeu3_v2.json",
+    "repo": "STM32CubeU3",
+    "issue_number": 1,
+    "issue_title": "ROT OEMiROT_App examples print menu issue",
+    "current_component": null,
+    "inferred_components": "FLASH(1)",
+    "best_component": "FLASH",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeu5_v2.json",
+    "repo": "STM32CubeU5",
+    "issue_number": 2,
+    "issue_title": "Uninitialized variables in ThreadX module",
+    "current_component": null,
+    "inferred_components": "CORTEX(1)",
+    "best_component": "CORTEX",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeu5_v2.json",
+    "repo": "STM32CubeU5",
+    "issue_number": 6,
+    "issue_title": "stm32u5xx_hal_timebase_tim_template.c: HAL_InitTick() initialization sequence error",
+    "current_component": null,
+    "inferred_components": "TIM(1)",
+    "best_component": "TIM",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeu5_v2.json",
+    "repo": "STM32CubeU5",
+    "issue_number": 11,
+    "issue_title": "Using FileX with STM32U5 internal nor flash",
+    "current_component": null,
+    "inferred_components": "FLASH(6)",
+    "best_component": "FLASH",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32cubeu5_v2.json",
+    "repo": "STM32CubeU5",
+    "issue_number": 19,
+    "issue_title": "stm32u585xx.h incorrectly defines FLASH_PAGE_NB",
+    "current_component": null,
+    "inferred_components": "FLASH(5)",
+    "best_component": "FLASH",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32cubeu5_v2.json",
+    "repo": "STM32CubeU5",
+    "issue_number": 26,
+    "issue_title": "HAL_MMC_ReadBlocks CRC error in 8 bit mode SDMMC",
+    "current_component": null,
+    "inferred_components": "SDMMC(3), CRC(2)",
+    "best_component": "SDMMC",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubeu5_v2.json",
+    "repo": "STM32CubeU5",
+    "issue_number": 35,
+    "issue_title": "Integrating W25Q128JW component into STM32CubeU5",
+    "current_component": null,
+    "inferred_components": "FLASH(2), SPI(1)",
+    "best_component": "FLASH",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubeu5_v2.json",
+    "repo": "STM32CubeU5",
+    "issue_number": 39,
+    "issue_title": "FileX boot record, ensuring data persistence ",
+    "current_component": null,
+    "inferred_components": "SPI(4), FLASH(2)",
+    "best_component": "SPI",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubeu5_v2.json",
+    "repo": "STM32CubeU5",
+    "issue_number": 42,
+    "issue_title": "CRYP Key & IV configuration does not respect configured DataType",
+    "current_component": null,
+    "inferred_components": "CRYP(2)",
+    "best_component": "CRYP",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubeu5_v2.json",
+    "repo": "STM32CubeU5",
+    "issue_number": 45,
+    "issue_title": "SBSFU",
+    "current_component": null,
+    "inferred_components": "FLASH(3)",
+    "best_component": "FLASH",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubeu5_v2.json",
+    "repo": "STM32CubeU5",
+    "issue_number": 46,
+    "issue_title": "SBSFU app imgtool bug",
+    "current_component": null,
+    "inferred_components": "FLASH(3)",
+    "best_component": "FLASH",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubeu5_v2.json",
+    "repo": "STM32CubeU5",
+    "issue_number": 53,
+    "issue_title": "NUCLEO-U5A5ZJ-Q HSE clock configuration",
+    "current_component": null,
+    "inferred_components": "GPIO(1)",
+    "best_component": "GPIO",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubeu5_v2.json",
+    "repo": "STM32CubeU5",
+    "issue_number": 56,
+    "issue_title": "SAI STM32U585",
+    "current_component": null,
+    "inferred_components": "SAI(9), RCC(2), DMA(1)",
+    "best_component": "SAI",
+    "best_count": 9
+  },
+  {
+    "file": "docs_issues_stm32cubeu5_v2.json",
+    "repo": "STM32CubeU5",
+    "issue_number": 63,
+    "issue_title": "Wrong RNG Nist Compliance Values on stm32u545xx",
+    "current_component": null,
+    "inferred_components": "RNG(3)",
+    "best_component": "RNG",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubeu5_v2.json",
+    "repo": "STM32CubeU5",
+    "issue_number": 66,
+    "issue_title": "possible wrong lpbam code generation",
+    "current_component": null,
+    "inferred_components": "SPI(2)",
+    "best_component": "SPI",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubewb_v2.json",
+    "repo": "STM32CubeWB",
+    "issue_number": 1,
+    "issue_title": "Example PKA: HAL_PKA_ECCMulFastMode",
+    "current_component": null,
+    "inferred_components": "PKA(3)",
+    "best_component": "PKA",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubewb_v2.json",
+    "repo": "STM32CubeWB",
+    "issue_number": 3,
+    "issue_title": "Example PKA: curve25519",
+    "current_component": null,
+    "inferred_components": "PKA(4)",
+    "best_component": "PKA",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubewb_v2.json",
+    "repo": "STM32CubeWB",
+    "issue_number": 8,
+    "issue_title": "DeviceInfoTable incomplete/not matching documentation",
+    "current_component": null,
+    "inferred_components": "FLASH(2)",
+    "best_component": "FLASH",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubewb_v2.json",
+    "repo": "STM32CubeWB",
+    "issue_number": 16,
+    "issue_title": "Typo in comments in LL TIM_InputCapture example",
+    "current_component": null,
+    "inferred_components": "TIM(1)",
+    "best_component": "TIM",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubewb_v2.json",
+    "repo": "STM32CubeWB",
+    "issue_number": 23,
+    "issue_title": "stm32wb55 firmware hang if add more than 5 services",
+    "current_component": null,
+    "inferred_components": "FLASH(1)",
+    "best_component": "FLASH",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubewb_v2.json",
+    "repo": "STM32CubeWB",
+    "issue_number": 29,
+    "issue_title": "v1.2.0 stm32wb5x_FUS_fw.bin version is not reported correctly and fails to upgrade",
+    "current_component": null,
+    "inferred_components": "FLASH(2)",
+    "best_component": "FLASH",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubewb_v2.json",
+    "repo": "STM32CubeWB",
+    "issue_number": 32,
+    "issue_title": "STM32CubeWB/Projects/P-NUCLEO-WB55.Nucleo/Examples/QSPI+READWRITE_IT/",
+    "current_component": null,
+    "inferred_components": "QSPI(2)",
+    "best_component": "QSPI",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubewb_v2.json",
+    "repo": "STM32CubeWB",
+    "issue_number": 37,
+    "issue_title": "Fix assert_param(IS_RCC_PERIPHCLOCK....",
+    "current_component": null,
+    "inferred_components": "RNG(2)",
+    "best_component": "RNG",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubewb_v2.json",
+    "repo": "STM32CubeWB",
+    "issue_number": 44,
+    "issue_title": "STM32WB55Rx prefetch setting does not follow ioc file",
+    "current_component": null,
+    "inferred_components": "RCC(1)",
+    "best_component": "RCC",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubewb_v2.json",
+    "repo": "STM32CubeWB",
+    "issue_number": 47,
+    "issue_title": "Init_Exti() does not enable interrupt lines",
+    "current_component": null,
+    "inferred_components": "HSEM(1), IPCC(1)",
+    "best_component": "HSEM",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubewb_v2.json",
+    "repo": "STM32CubeWB",
+    "issue_number": 65,
+    "issue_title": "Firmware Examples project for LL - I2C reader has flaw. ",
+    "current_component": null,
+    "inferred_components": "I2C(6)",
+    "best_component": "I2C",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32cubewb_v2.json",
+    "repo": "STM32CubeWB",
+    "issue_number": 68,
+    "issue_title": "Confusing effects of CFG_HW_RESET_BY_FW flag",
+    "current_component": null,
+    "inferred_components": "RTC(7)",
+    "best_component": "RTC",
+    "best_count": 7
+  },
+  {
+    "file": "docs_issues_stm32cubewb_v2.json",
+    "repo": "STM32CubeWB",
+    "issue_number": 70,
+    "issue_title": "HAL Flash missing support for STM32WB10xx",
+    "current_component": null,
+    "inferred_components": "FLASH(8), RCC(1), TIM(1)",
+    "best_component": "FLASH",
+    "best_count": 8
+  },
+  {
+    "file": "docs_issues_stm32cubewb_v2.json",
+    "repo": "STM32CubeWB",
+    "issue_number": 73,
+    "issue_title": "Wrong Start Address for stm32wb1x_BLE_Stack_light_fw",
+    "current_component": null,
+    "inferred_components": "FLASH(1)",
+    "best_component": "FLASH",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubewb_v2.json",
+    "repo": "STM32CubeWB",
+    "issue_number": 74,
+    "issue_title": "SHCI_C2_FLASH_StoreData not supported feature",
+    "current_component": null,
+    "inferred_components": "FLASH(1)",
+    "best_component": "FLASH",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubewb_v2.json",
+    "repo": "STM32CubeWB",
+    "issue_number": 88,
+    "issue_title": "Abnormal Execution Times During Low Power Mode and Bluetooth Communication",
+    "current_component": null,
+    "inferred_components": "HSEM(1), LPTIM(1)",
+    "best_component": "HSEM",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubewb_v2.json",
+    "repo": "STM32CubeWB",
+    "issue_number": 89,
+    "issue_title": "CFG_LPM_SUPPORTED Abnormal during connection, There is a probability of getting stuck when exiting stop2 mode.",
+    "current_component": null,
+    "inferred_components": "FLASH(2), HSEM(2), RCC(1)",
+    "best_component": "FLASH",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubewb_v2.json",
+    "repo": "STM32CubeWB",
+    "issue_number": 98,
+    "issue_title": "ota update TAG_OTA_START flash position is not 0x140",
+    "current_component": null,
+    "inferred_components": "FLASH(3)",
+    "best_component": "FLASH",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubewb_v2.json",
+    "repo": "STM32CubeWB",
+    "issue_number": 99,
+    "issue_title": "CPU2 crash report during SHCI_C2_BLE_Init(...)",
+    "current_component": null,
+    "inferred_components": "HSEM(1), IPCC(1), RCC(1)",
+    "best_component": "HSEM",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubewb_v2.json",
+    "repo": "STM32CubeWB",
+    "issue_number": 102,
+    "issue_title": "Failed to erase sectors when downloading the program for the first time",
+    "current_component": null,
+    "inferred_components": "FLASH(1)",
+    "best_component": "FLASH",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubewb_v2.json",
+    "repo": "STM32CubeWB",
+    "issue_number": 105,
+    "issue_title": "Allow user code in hci_notify_asynch_evt",
+    "current_component": null,
+    "inferred_components": "IWDG(2)",
+    "best_component": "IWDG",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubewb_v2.json",
+    "repo": "STM32CubeWB",
+    "issue_number": 115,
+    "issue_title": "STM32WB BLE Stack 1.23.0 Not Working on STM32WB55CGU6 – Firmware Version Shows v0.0.0.0",
+    "current_component": null,
+    "inferred_components": "FLASH(1)",
+    "best_component": "FLASH",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubewba_v2.json",
+    "repo": "STM32CubeWBA",
+    "issue_number": 2,
+    "issue_title": "No example is present to use PTA peripheral",
+    "current_component": null,
+    "inferred_components": "GPIO(3)",
+    "best_component": "GPIO",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubewba_v2.json",
+    "repo": "STM32CubeWBA",
+    "issue_number": 5,
+    "issue_title": "Unsafe access to RTC_SSR when RTC shadow registers are bypassed (Inconsistent RTC time readings)",
+    "current_component": null,
+    "inferred_components": "RTC(12)",
+    "best_component": "RTC",
+    "best_count": 12
+  },
+  {
+    "file": "docs_issues_stm32cubewba_v2.json",
+    "repo": "STM32CubeWBA",
+    "issue_number": 7,
+    "issue_title": "Proposal for replacing DWT-based microsecond delays in BLE stack platform abstraction code",
+    "current_component": null,
+    "inferred_components": "TIM(1)",
+    "best_component": "TIM",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubewl_v2.json",
+    "repo": "STM32CubeWL",
+    "issue_number": 1,
+    "issue_title": "problem compilling example from ST32cubeWL : Sigfox_AT_Slave",
+    "current_component": null,
+    "inferred_components": "CORTEX(1)",
+    "best_component": "CORTEX",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubewl_v2.json",
+    "repo": "STM32CubeWL",
+    "issue_number": 2,
+    "issue_title": "LoRaWAN Class A LowPowerMode",
+    "current_component": null,
+    "inferred_components": "RTC(1)",
+    "best_component": "RTC",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubewl_v2.json",
+    "repo": "STM32CubeWL",
+    "issue_number": 11,
+    "issue_title": "stm32wle stuck during software reset",
+    "current_component": null,
+    "inferred_components": "FLASH(2)",
+    "best_component": "FLASH",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubewl_v2.json",
+    "repo": "STM32CubeWL",
+    "issue_number": 15,
+    "issue_title": "SBSFU doesn't support correct YMODEM protocol",
+    "current_component": null,
+    "inferred_components": "CRC(2)",
+    "best_component": "CRC",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubewl_v2.json",
+    "repo": "STM32CubeWL",
+    "issue_number": 17,
+    "issue_title": "HAL: CRYP: HAL_CRYP_SetConfig parameters not initialized",
+    "current_component": null,
+    "inferred_components": "CRYP(3)",
+    "best_component": "CRYP",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubewl_v2.json",
+    "repo": "STM32CubeWL",
+    "issue_number": 19,
+    "issue_title": "STM32CubeMX does not generate user-configured pin for a new project based on LoRaWAN Skeleton",
+    "current_component": null,
+    "inferred_components": "GPIO(2), FLASH(1)",
+    "best_component": "GPIO",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32cubewl_v2.json",
+    "repo": "STM32CubeWL",
+    "issue_number": 26,
+    "issue_title": "LmHandlerJoin can only be called a fixed number of times if no join occurs",
+    "current_component": null,
+    "inferred_components": "CRC(1)",
+    "best_component": "CRC",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubewl_v2.json",
+    "repo": "STM32CubeWL",
+    "issue_number": 35,
+    "issue_title": "External Interrupt hangs STM32WLE5CC when MCU reads SPI EEPROM, or Using I2C",
+    "current_component": null,
+    "inferred_components": "I2C(6), SPI(6)",
+    "best_component": "I2C",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32cubewl_v2.json",
+    "repo": "STM32CubeWL",
+    "issue_number": 56,
+    "issue_title": "RTC Accuracy issue",
+    "current_component": null,
+    "inferred_components": "RTC(17)",
+    "best_component": "RTC",
+    "best_count": 17
+  },
+  {
+    "file": "docs_issues_stm32cubewl_v2.json",
+    "repo": "STM32CubeWL",
+    "issue_number": 60,
+    "issue_title": "NVM DATA RESTORED not working with STM32WLE5xB (fix included)",
+    "current_component": null,
+    "inferred_components": "FLASH(1)",
+    "best_component": "FLASH",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubewl_v2.json",
+    "repo": "STM32CubeWL",
+    "issue_number": 61,
+    "issue_title": "HAL_GetTick() running 1.024x fast (v1.3.0)",
+    "current_component": null,
+    "inferred_components": "RTC(4), TIM(1)",
+    "best_component": "RTC",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubewl_v2.json",
+    "repo": "STM32CubeWL",
+    "issue_number": 72,
+    "issue_title": "LoRaWAN Timer does not work with RTC_BINARY_MIX",
+    "current_component": null,
+    "inferred_components": "RTC(1)",
+    "best_component": "RTC",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubewl_v2.json",
+    "repo": "STM32CubeWL",
+    "issue_number": 75,
+    "issue_title": "Fragdecoder not working as expected sometimes.",
+    "current_component": null,
+    "inferred_components": "CRC(3)",
+    "best_component": "CRC",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubewl_v2.json",
+    "repo": "STM32CubeWL",
+    "issue_number": 77,
+    "issue_title": "FLASH_IF_INT_CLEAR_ERROR causes to hard fault",
+    "current_component": null,
+    "inferred_components": "FLASH(39)",
+    "best_component": "FLASH",
+    "best_count": 39
+  },
+  {
+    "file": "docs_issues_stm32cubewl_v2.json",
+    "repo": "STM32CubeWL",
+    "issue_number": 90,
+    "issue_title": "CUBE MX Exti generation issue",
+    "current_component": null,
+    "inferred_components": "EXTI(3)",
+    "best_component": "EXTI",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32cubewl_v2.json",
+    "repo": "STM32CubeWL",
+    "issue_number": 95,
+    "issue_title": "Device not wake up after RTC-time and send message with Lora P2P.",
+    "current_component": null,
+    "inferred_components": "RTC(13), PWR(1)",
+    "best_component": "RTC",
+    "best_count": 13
+  },
+  {
+    "file": "docs_issues_stm32cubewl_v2.json",
+    "repo": "STM32CubeWL",
+    "issue_number": 99,
+    "issue_title": "Deep sleep is never achieved with SUBGRF_SetRxDutyCycle",
+    "current_component": null,
+    "inferred_components": "GPIO(5), RTC(1)",
+    "best_component": "GPIO",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32cubewl_v2.json",
+    "repo": "STM32CubeWL",
+    "issue_number": 100,
+    "issue_title": "Not able to achieve Shutdown/STOP2 mode in STM32WL55xx with Single core (M4 alone)",
+    "current_component": null,
+    "inferred_components": "PWR(1)",
+    "best_component": "PWR",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32cubewl_v2.json",
+    "repo": "STM32CubeWL",
+    "issue_number": 101,
+    "issue_title": "ABP in Release v1.4.0",
+    "current_component": null,
+    "inferred_components": "PWR(4)",
+    "best_component": "PWR",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubewl_v2.json",
+    "repo": "STM32CubeWL",
+    "issue_number": 103,
+    "issue_title": "Discrepancy MX Codebase Flash_if.c",
+    "current_component": null,
+    "inferred_components": "FLASH(4)",
+    "best_component": "FLASH",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32cubewl_v2.json",
+    "repo": "STM32CubeWL",
+    "issue_number": 109,
+    "issue_title": "[Bug]: Sigfox_AT_Slave: System crash (Error_Handler) on mass-erased devices due to NULL pointer in flash_if.c",
+    "current_component": null,
+    "inferred_components": "FLASH(3), PWR(1)",
+    "best_component": "FLASH",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_cmsis_device_c0_v2.json",
+    "repo": "cmsis_device_c0",
+    "issue_number": 3,
+    "issue_title": "There is no FLASH_ACR_LATENCY_1 for STM32C0 devices",
+    "current_component": null,
+    "inferred_components": "FLASH(3)",
+    "best_component": "FLASH",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_cmsis_device_f1_v2.json",
+    "repo": "cmsis_device_f1",
+    "issue_number": 1,
+    "issue_title": "cmsis_device_f1/Include/stm32f103xb.h line L4223-L4232 lose \"TIM_CCER_CC4NP\" define",
+    "current_component": null,
+    "inferred_components": "TIM(2)",
+    "best_component": "TIM",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_cmsis_device_f1_v2.json",
+    "repo": "cmsis_device_f1",
+    "issue_number": 5,
+    "issue_title": "An issue with flash offset on PlatformIO",
+    "current_component": null,
+    "inferred_components": "FLASH(4)",
+    "best_component": "FLASH",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_cmsis_device_f4_v2.json",
+    "repo": "cmsis_device_f4",
+    "issue_number": 8,
+    "issue_title": "inconsistent naming of macros accross families",
+    "current_component": null,
+    "inferred_components": "GPIO(2)",
+    "best_component": "GPIO",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_cmsis_device_g0_v2.json",
+    "repo": "cmsis_device_g0",
+    "issue_number": 1,
+    "issue_title": "Latest device pack (1.3.0) in uvision fails to compile cmsis_device_g0/Source/Templates/system_stm32g0xx.c",
+    "current_component": null,
+    "inferred_components": "RCC(2)",
+    "best_component": "RCC",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_cmsis_device_g0_v2.json",
+    "repo": "cmsis_device_g0",
+    "issue_number": 6,
+    "issue_title": "TIMx status register documented as 16-bit wide but declared as 32-bit wide",
+    "current_component": null,
+    "inferred_components": "TIM(4)",
+    "best_component": "TIM",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_cmsis_device_g0_v2.json",
+    "repo": "cmsis_device_g0",
+    "issue_number": 7,
+    "issue_title": "[Bug]: Missing AES/RNG interrupt vector",
+    "current_component": null,
+    "inferred_components": "FLASH(5), RNG(4)",
+    "best_component": "FLASH",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_cmsis_device_g4_v2.json",
+    "repo": "cmsis_device_g4",
+    "issue_number": 1,
+    "issue_title": "Repository forces one to fork it, if it is necessary to move the vector table",
+    "current_component": null,
+    "inferred_components": "FLASH(1)",
+    "best_component": "FLASH",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_cmsis_device_h7_v2.json",
+    "repo": "cmsis_device_h7",
+    "issue_number": 2,
+    "issue_title": "Wrong comment for VECT_TAB_OFFSET",
+    "current_component": null,
+    "inferred_components": "CORTEX(1)",
+    "best_component": "CORTEX",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_cmsis_device_h7_v2.json",
+    "repo": "cmsis_device_h7",
+    "issue_number": 6,
+    "issue_title": "Usage clarification: KEYR1 and KEYR2 Flash Registers",
+    "current_component": null,
+    "inferred_components": "FLASH(4)",
+    "best_component": "FLASH",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_cmsis_device_h7_v2.json",
+    "repo": "cmsis_device_h7",
+    "issue_number": 9,
+    "issue_title": "Incorrect RTC register",
+    "current_component": null,
+    "inferred_components": "RTC(4)",
+    "best_component": "RTC",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_cmsis_device_h7_v2.json",
+    "repo": "cmsis_device_h7",
+    "issue_number": 12,
+    "issue_title": "D1 Domain Core prescaler array \"D1CorePrescTable[16]\" non-zero values for values from 0b0100 to 0b111",
+    "current_component": null,
+    "inferred_components": "RCC(1)",
+    "best_component": "RCC",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_cmsis_device_h7_v2.json",
+    "repo": "cmsis_device_h7",
+    "issue_number": 23,
+    "issue_title": "Incorrect values in D1CorePrescTable",
+    "current_component": null,
+    "inferred_components": "RCC(13)",
+    "best_component": "RCC",
+    "best_count": 13
+  },
+  {
+    "file": "docs_issues_cmsis_device_l4_v2.json",
+    "repo": "cmsis_device_l4",
+    "issue_number": 2,
+    "issue_title": "Startup code calls SystemInit() too early, and clears out global variables set by SystemInit()",
+    "current_component": null,
+    "inferred_components": "FLASH(3)",
+    "best_component": "FLASH",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_cmsis_device_l4_v2.json",
+    "repo": "cmsis_device_l4",
+    "issue_number": 6,
+    "issue_title": "Faulty Mask FLASH_ECCR_ADDR_ECC_Msk for in stm32l4r9xx.h",
+    "current_component": null,
+    "inferred_components": "FLASH(1)",
+    "best_component": "FLASH",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_cmsis_device_u0_v2.json",
+    "repo": "cmsis_device_u0",
+    "issue_number": 6,
+    "issue_title": "FLASH_OPTR_BOR* defines don't match the datasheet or the STM32CubeProgrammer",
+    "current_component": null,
+    "inferred_components": "FLASH(1)",
+    "best_component": "FLASH",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_cmsis_device_u0_v2.json",
+    "repo": "cmsis_device_u0",
+    "issue_number": 7,
+    "issue_title": "FLASH_ECCR_ADDR_ECC_Msk seems to be too narrow",
+    "current_component": null,
+    "inferred_components": "FLASH(10)",
+    "best_component": "FLASH",
+    "best_count": 10
+  },
+  {
+    "file": "docs_issues_cmsis_device_u5_v2.json",
+    "repo": "cmsis_device_u5",
+    "issue_number": 5,
+    "issue_title": "Incorrect JPEG register definitions",
+    "current_component": null,
+    "inferred_components": "JPEG(2)",
+    "best_component": "JPEG",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32-lsm6dso_v2.json",
+    "repo": "stm32-lsm6dso",
+    "issue_number": 1,
+    "issue_title": "Device ID readout fails after soft-reset",
+    "current_component": null,
+    "inferred_components": "SPI(10), I2C(1)",
+    "best_component": "SPI",
+    "best_count": 10
+  },
+  {
+    "file": "docs_issues_stm32-mt25ql512abb_v2.json",
+    "repo": "stm32-mt25ql512abb",
+    "issue_number": 1,
+    "issue_title": "mt25qu512abb BlockErase problem with 4096th 4kBytes sub-sector",
+    "current_component": null,
+    "inferred_components": "FLASH(5), SPI(1)",
+    "best_component": "FLASH",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32-mt25ql512abb_v2.json",
+    "repo": "stm32-mt25ql512abb",
+    "issue_number": 3,
+    "issue_title": "dummy cycles",
+    "current_component": null,
+    "inferred_components": "FLASH(2)",
+    "best_component": "FLASH",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32-mw-cmsis-rtos-tx_v2.json",
+    "repo": "stm32-mw-cmsis-rtos-tx",
+    "issue_number": 1,
+    "issue_title": "Evaluation of a NULL pointer is undefined behavior.",
+    "current_component": null,
+    "inferred_components": "CORTEX(1)",
+    "best_component": "CORTEX",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32-mw-filex_v2.json",
+    "repo": "stm32-mw-filex",
+    "issue_number": 2,
+    "issue_title": "Support for cortex m33",
+    "current_component": null,
+    "inferred_components": "CORTEX(2)",
+    "best_component": "CORTEX",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32-mw-mbedtls_v2.json",
+    "repo": "stm32-mw-mbedtls",
+    "issue_number": 1,
+    "issue_title": "Framework submodule not added",
+    "current_component": null,
+    "inferred_components": "HASH(1)",
+    "best_component": "HASH",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32-mw-mbedtls_v2.json",
+    "repo": "stm32-mw-mbedtls",
+    "issue_number": 3,
+    "issue_title": "Add hardware accelerated alt implementation templates for version 3.6",
+    "current_component": null,
+    "inferred_components": "HASH(1)",
+    "best_component": "HASH",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32-mw-openbl_v2.json",
+    "repo": "stm32-mw-openbl",
+    "issue_number": 3,
+    "issue_title": "Some functions are placed in the RAM",
+    "current_component": null,
+    "inferred_components": "FLASH(5), SPI(1)",
+    "best_component": "FLASH",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32-mw-openbl_v2.json",
+    "repo": "stm32-mw-openbl",
+    "issue_number": 5,
+    "issue_title": "Where is Get Memory Checksum command (i2c interface)",
+    "current_component": null,
+    "inferred_components": "I2C(5)",
+    "best_component": "I2C",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32-s25fl128s_v2.json",
+    "repo": "stm32-s25fl128s",
+    "issue_number": 2,
+    "issue_title": "Function S25FL128S_ReadStatusRegister does not work",
+    "current_component": null,
+    "inferred_components": "QSPI(2), FLASH(1), OSPI(1)",
+    "best_component": "QSPI",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm324x9i-eval-bsp_v2.json",
+    "repo": "stm324x9i-eval-bsp",
+    "issue_number": 1,
+    "issue_title": "FSC NOR Flash AccessTime",
+    "current_component": null,
+    "inferred_components": "FLASH(3)",
+    "best_component": "FLASH",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32f0xx-hal-driver_v2.json",
+    "repo": "stm32f0xx-hal-driver",
+    "issue_number": 5,
+    "issue_title": "Question about the HSI48RDY bit in RCC->CR2",
+    "current_component": null,
+    "inferred_components": "RCC(2)",
+    "best_component": "RCC",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32f0xx-hal-driver_v2.json",
+    "repo": "stm32f0xx-hal-driver",
+    "issue_number": 6,
+    "issue_title": "FLASH_OB_GetRDP has 32-bit return type but HAL_FLASHEx_OBErase implicitly converts it to 8-bits",
+    "current_component": null,
+    "inferred_components": "CORTEX(1)",
+    "best_component": "CORTEX",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32f0xx-hal-driver_v2.json",
+    "repo": "stm32f0xx-hal-driver",
+    "issue_number": 8,
+    "issue_title": "Unused parameter warning in function 'LL_RCC_ConfigMCO'",
+    "current_component": null,
+    "inferred_components": "RCC(1)",
+    "best_component": "RCC",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32f0xx-hal-driver_v2.json",
+    "repo": "stm32f0xx-hal-driver",
+    "issue_number": 12,
+    "issue_title": "Backport CAN driver fix from STM32F4 HAL driver",
+    "current_component": null,
+    "inferred_components": "CAN(2)",
+    "best_component": "CAN",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32f1xx-hal-driver_v2.json",
+    "repo": "stm32f1xx-hal-driver",
+    "issue_number": 3,
+    "issue_title": "SetPinMode and SetPinPull sequence",
+    "current_component": null,
+    "inferred_components": "GPIO(6)",
+    "best_component": "GPIO",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32f1xx-hal-driver_v2.json",
+    "repo": "stm32f1xx-hal-driver",
+    "issue_number": 6,
+    "issue_title": "Bug in HAL_FLASHEx_Erase_IT - if process already ongoing then pFlash remains locked",
+    "current_component": null,
+    "inferred_components": "FLASH(1)",
+    "best_component": "FLASH",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32f1xx-hal-driver_v2.json",
+    "repo": "stm32f1xx-hal-driver",
+    "issue_number": 11,
+    "issue_title": "STM32F1xx RTC BKP Registers 16bit, but HAL requests 32bits",
+    "current_component": null,
+    "inferred_components": "RTC(4)",
+    "best_component": "RTC",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32f1xx-hal-driver_v2.json",
+    "repo": "stm32f1xx-hal-driver",
+    "issue_number": 16,
+    "issue_title": "HAL_FLASHEx_OBProgram erases write protection if read protection is also selected",
+    "current_component": null,
+    "inferred_components": "FLASH(2)",
+    "best_component": "FLASH",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32f2xx-hal-driver_v2.json",
+    "repo": "stm32f2xx-hal-driver",
+    "issue_number": 2,
+    "issue_title": "Constant interrupts during 2nd byte of 2 or 3 byte I2C receive. ",
+    "current_component": null,
+    "inferred_components": "I2C(2), GPIO(1)",
+    "best_component": "I2C",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32f3xx-hal-driver_v2.json",
+    "repo": "stm32f3xx-hal-driver",
+    "issue_number": 1,
+    "issue_title": "LL: OPAMP functional modes assert incomplete",
+    "current_component": null,
+    "inferred_components": "OPAMP(15)",
+    "best_component": "OPAMP",
+    "best_count": 15
+  },
+  {
+    "file": "docs_issues_stm32f3xx-hal-driver_v2.json",
+    "repo": "stm32f3xx-hal-driver",
+    "issue_number": 2,
+    "issue_title": "Polling I2C EEPROM for internal write cycle immediately returns HAL_ERROR",
+    "current_component": null,
+    "inferred_components": "I2C(4)",
+    "best_component": "I2C",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32f3xx-hal-driver_v2.json",
+    "repo": "stm32f3xx-hal-driver",
+    "issue_number": 3,
+    "issue_title": "I2C buffer overflow or IRQ flooding, when receiving extra bytes as slave in interrupt mode",
+    "current_component": null,
+    "inferred_components": "I2C(8)",
+    "best_component": "I2C",
+    "best_count": 8
+  },
+  {
+    "file": "docs_issues_stm32f4xx-hal-driver_v2.json",
+    "repo": "stm32f4xx-hal-driver",
+    "issue_number": 2,
+    "issue_title": "(void)(tmpreg); is causing warnings",
+    "current_component": null,
+    "inferred_components": "TIM(2)",
+    "best_component": "TIM",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32f4xx-hal-driver_v2.json",
+    "repo": "stm32f4xx-hal-driver",
+    "issue_number": 6,
+    "issue_title": "Set all free pins as analog",
+    "current_component": null,
+    "inferred_components": "GPIO(1)",
+    "best_component": "GPIO",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32f4xx-hal-driver_v2.json",
+    "repo": "stm32f4xx-hal-driver",
+    "issue_number": 7,
+    "issue_title": "i2c: receive unknown bytes count",
+    "current_component": null,
+    "inferred_components": "I2C(3)",
+    "best_component": "I2C",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32f4xx-hal-driver_v2.json",
+    "repo": "stm32f4xx-hal-driver",
+    "issue_number": 13,
+    "issue_title": "RCC_I2SCLKSOURCE_EXT has wrong value",
+    "current_component": null,
+    "inferred_components": "RCC(1)",
+    "best_component": "RCC",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32f4xx-hal-driver_v2.json",
+    "repo": "stm32f4xx-hal-driver",
+    "issue_number": 14,
+    "issue_title": "ETH: HAL_ETH_ReleaseTxPacket Does Not Increment Descriptor Index Correctly in All Cases",
+    "current_component": null,
+    "inferred_components": "ETH(2)",
+    "best_component": "ETH",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32f4xx-hal-driver_v2.json",
+    "repo": "stm32f4xx-hal-driver",
+    "issue_number": 27,
+    "issue_title": "Redefines for STM32F423",
+    "current_component": null,
+    "inferred_components": "RCC(3)",
+    "best_component": "RCC",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32f4xx-hal-driver_v2.json",
+    "repo": "stm32f4xx-hal-driver",
+    "issue_number": 31,
+    "issue_title": "Update interrupt flag in TIMx->SR is not cleared upon Time Base configuration",
+    "current_component": null,
+    "inferred_components": "TIM(8)",
+    "best_component": "TIM",
+    "best_count": 8
+  },
+  {
+    "file": "docs_issues_stm32f4xx-hal-driver_v2.json",
+    "repo": "stm32f4xx-hal-driver",
+    "issue_number": 32,
+    "issue_title": "The TxE flag should never be cleared through the I2C's DR register at any time.",
+    "current_component": null,
+    "inferred_components": "I2C(4)",
+    "best_component": "I2C",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32f4xx-hal-driver_v2.json",
+    "repo": "stm32f4xx-hal-driver",
+    "issue_number": 33,
+    "issue_title": "The TxE flag should never be cleared through the I2C's DR register at any time.",
+    "current_component": null,
+    "inferred_components": "I2C(3)",
+    "best_component": "I2C",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32f4xx-hal-driver_v2.json",
+    "repo": "stm32f4xx-hal-driver",
+    "issue_number": 35,
+    "issue_title": "CRYP_GCMCCM_SetHeaderPhase out bounds read in mask array",
+    "current_component": null,
+    "inferred_components": "CRYP(1)",
+    "best_component": "CRYP",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32f4xx-hal-driver_v2.json",
+    "repo": "stm32f4xx-hal-driver",
+    "issue_number": 36,
+    "issue_title": "RTC Bug in HAL libraries ",
+    "current_component": null,
+    "inferred_components": "RTC(3)",
+    "best_component": "RTC",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32f4xx-hal-driver_v2.json",
+    "repo": "stm32f4xx-hal-driver",
+    "issue_number": 46,
+    "issue_title": "HAL GPIO assert fails for GPIO_AF3_TIM10 on STM32F4 devices",
+    "current_component": null,
+    "inferred_components": "GPIO(3)",
+    "best_component": "GPIO",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32f7xx-hal-driver_v2.json",
+    "repo": "stm32f7xx-hal-driver",
+    "issue_number": 1,
+    "issue_title": "Bug in CRC32 calculation ",
+    "current_component": null,
+    "inferred_components": "CRC(6)",
+    "best_component": "CRC",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32f7xx-hal-driver_v2.json",
+    "repo": "stm32f7xx-hal-driver",
+    "issue_number": 6,
+    "issue_title": "Bug found in  HAL_NAND_Read_Page_8b and HAL_NAND_Read_SpareArea_8b",
+    "current_component": null,
+    "inferred_components": "FLASH(2)",
+    "best_component": "FLASH",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32f7xx-hal-driver_v2.json",
+    "repo": "stm32f7xx-hal-driver",
+    "issue_number": 11,
+    "issue_title": "SPI generates too many clocks in Bidirectional mode",
+    "current_component": null,
+    "inferred_components": "SPI(13), TIM(1)",
+    "best_component": "SPI",
+    "best_count": 13
+  },
+  {
+    "file": "docs_issues_stm32f7xx-hal-driver_v2.json",
+    "repo": "stm32f7xx-hal-driver",
+    "issue_number": 13,
+    "issue_title": "Cannot program internal flash with double word",
+    "current_component": null,
+    "inferred_components": "FLASH(4)",
+    "best_component": "FLASH",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32f7xx-hal-driver_v2.json",
+    "repo": "stm32f7xx-hal-driver",
+    "issue_number": 22,
+    "issue_title": "Proposal: Prevent unused argument warning in HAL_EXTI_GetPending and HAL_EXTI_ClearPending",
+    "current_component": null,
+    "inferred_components": "EXTI(4)",
+    "best_component": "EXTI",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32f7xx-hal-driver_v2.json",
+    "repo": "stm32f7xx-hal-driver",
+    "issue_number": 25,
+    "issue_title": "HAL CRC functions not const-correct.",
+    "current_component": null,
+    "inferred_components": "CRC(2)",
+    "best_component": "CRC",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32g0xx-hal-driver_v2.json",
+    "repo": "stm32g0xx-hal-driver",
+    "issue_number": 1,
+    "issue_title": "Issue if tick rollover occurs while waiting for flash (from the forum)",
+    "current_component": null,
+    "inferred_components": "FLASH(3)",
+    "best_component": "FLASH",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32g0xx-hal-driver_v2.json",
+    "repo": "stm32g0xx-hal-driver",
+    "issue_number": 4,
+    "issue_title": "Timeout parameter in HAL_I2C_Master_Receive/HAL_I2C_Mem_Read not used for I2C_WaitOnFlagUntilTimeout function",
+    "current_component": null,
+    "inferred_components": "I2C(3)",
+    "best_component": "I2C",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32g0xx-hal-driver_v2.json",
+    "repo": "stm32g0xx-hal-driver",
+    "issue_number": 6,
+    "issue_title": "HAL I2C produces unwanted NACKs in slave mode",
+    "current_component": null,
+    "inferred_components": "I2C(11), FLASH(1)",
+    "best_component": "I2C",
+    "best_count": 11
+  },
+  {
+    "file": "docs_issues_stm32g0xx-hal-driver_v2.json",
+    "repo": "stm32g0xx-hal-driver",
+    "issue_number": 7,
+    "issue_title": "HAL_GPIO_EXTI_Callback missing from STM32G0 HAL GPIO API",
+    "current_component": null,
+    "inferred_components": "GPIO(5)",
+    "best_component": "GPIO",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32g0xx-hal-driver_v2.json",
+    "repo": "stm32g0xx-hal-driver",
+    "issue_number": 12,
+    "issue_title": "LL_TIM_ClearFlag_UPDATE() does not respect the reserved bits",
+    "current_component": null,
+    "inferred_components": "TIM(3)",
+    "best_component": "TIM",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32g0xx-hal-driver_v2.json",
+    "repo": "stm32g0xx-hal-driver",
+    "issue_number": 13,
+    "issue_title": "Polling I2C EEPROM for internal write cycle immediately returns HAL_ERROR",
+    "current_component": null,
+    "inferred_components": "I2C(2)",
+    "best_component": "I2C",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32g0xx-hal-driver_v2.json",
+    "repo": "stm32g0xx-hal-driver",
+    "issue_number": 17,
+    "issue_title": "[Question]: HAL_TIM_PWM_Stop stops complete htim instance",
+    "current_component": null,
+    "inferred_components": "TIM(1)",
+    "best_component": "TIM",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32g4xx-hal-driver_v2.json",
+    "repo": "stm32g4xx-hal-driver",
+    "issue_number": 9,
+    "issue_title": "Lack of FLASH_OB_BootConfig Functionality in STM32G4 HAL Library",
+    "current_component": null,
+    "inferred_components": "FLASH(2)",
+    "best_component": "FLASH",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32g4xx-hal-driver_v2.json",
+    "repo": "stm32g4xx-hal-driver",
+    "issue_number": 15,
+    "issue_title": "HAL driver always asserts when full assert is activated and i2c speed is set to Fast Mode Plus",
+    "current_component": null,
+    "inferred_components": "I2C(4)",
+    "best_component": "I2C",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32g4xx-hal-driver_v2.json",
+    "repo": "stm32g4xx-hal-driver",
+    "issue_number": 17,
+    "issue_title": "[HAL][SPI] State stuck in HAL_SPI_STATE_BUSY_RX when invalid parameters are passed to Rx functions",
+    "current_component": null,
+    "inferred_components": "SPI(7)",
+    "best_component": "SPI",
+    "best_count": 7
+  },
+  {
+    "file": "docs_issues_stm32g4xx-hal-driver_v2.json",
+    "repo": "stm32g4xx-hal-driver",
+    "issue_number": 18,
+    "issue_title": "IS_TIM_PERIOD assertion fails when using dithering",
+    "current_component": null,
+    "inferred_components": "TIM(1)",
+    "best_component": "TIM",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32g4xx-hal-driver_v2.json",
+    "repo": "stm32g4xx-hal-driver",
+    "issue_number": 24,
+    "issue_title": "I2C Slave",
+    "current_component": null,
+    "inferred_components": "I2C(5)",
+    "best_component": "I2C",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32g4xx-hal-driver_v2.json",
+    "repo": "stm32g4xx-hal-driver",
+    "issue_number": 29,
+    "issue_title": "I2C Thread Safety Calling null and not clearing interrupts when set to null",
+    "current_component": null,
+    "inferred_components": "I2C(13), DMA(1)",
+    "best_component": "I2C",
+    "best_count": 13
+  },
+  {
+    "file": "docs_issues_stm32g4xx-hal-driver_v2.json",
+    "repo": "stm32g4xx-hal-driver",
+    "issue_number": 33,
+    "issue_title": "[Bug]: stm32g4xx_ll_dma use wrong DMAMUX channel offset for DMA2",
+    "current_component": null,
+    "inferred_components": "DMAMUX(9)",
+    "best_component": "DMAMUX",
+    "best_count": 9
+  },
+  {
+    "file": "docs_issues_stm32g4xx-hal-driver_v2.json",
+    "repo": "stm32g4xx-hal-driver",
+    "issue_number": 34,
+    "issue_title": "[Bug]: Macro definition issues in `stm32g4xx_hal_hrtim.h` file in v1.2.6",
+    "current_component": null,
+    "inferred_components": "HRTIM(2)",
+    "best_component": "HRTIM",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32h5xx-hal-driver_v2.json",
+    "repo": "stm32h5xx-hal-driver",
+    "issue_number": 9,
+    "issue_title": "stm32h5xx_ll_i3c.c doesn't compile when both USE_HAL_DRIVER and USE_FULL_LL_DRIVER are defined",
+    "current_component": null,
+    "inferred_components": "CORTEX(1)",
+    "best_component": "CORTEX",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32h5xx-hal-driver_v2.json",
+    "repo": "stm32h5xx-hal-driver",
+    "issue_number": 10,
+    "issue_title": "Wrong RCC_PERIPHCLK_RTC setup in HAL",
+    "current_component": null,
+    "inferred_components": "RTC(1)",
+    "best_component": "RTC",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32h5xx-hal-driver_v2.json",
+    "repo": "stm32h5xx-hal-driver",
+    "issue_number": 30,
+    "issue_title": "[Bug]: SPI is disabled too early",
+    "current_component": null,
+    "inferred_components": "HSPI(11), SPI(10)",
+    "best_component": "HSPI",
+    "best_count": 11
+  },
+  {
+    "file": "docs_issues_stm32h5xx-hal-driver_v2.json",
+    "repo": "stm32h5xx-hal-driver",
+    "issue_number": 31,
+    "issue_title": "[Bug]: HAL RCC VCO computation are incorrect for fractional multiplier",
+    "current_component": null,
+    "inferred_components": "RCC(2)",
+    "best_component": "RCC",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32h5xx-hal-driver_v2.json",
+    "repo": "stm32h5xx-hal-driver",
+    "issue_number": 33,
+    "issue_title": "[Bug]: stm32h5xx_hal_spi.c does not operate correctly in blocking mode when optimised",
+    "current_component": null,
+    "inferred_components": "LCD(4), SPI(4)",
+    "best_component": "LCD",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32h735g-dk-bsp_v2.json",
+    "repo": "stm32h735g-dk-bsp",
+    "issue_number": 2,
+    "issue_title": "BSP OSPI drive using the ISS66WVH8M8 external RAM",
+    "current_component": null,
+    "inferred_components": "OSPI(3), LCD(1)",
+    "best_component": "OSPI",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32h735g-dk-bsp_v2.json",
+    "repo": "stm32h735g-dk-bsp",
+    "issue_number": 3,
+    "issue_title": "STM32H735G-DK C03 BSP demo freezes",
+    "current_component": null,
+    "inferred_components": "LCD(1)",
+    "best_component": "LCD",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32h743i-eval-bsp_v2.json",
+    "repo": "stm32h743i-eval-bsp",
+    "issue_number": 1,
+    "issue_title": "Fix for using LEDs without the I2C I/O extender",
+    "current_component": null,
+    "inferred_components": "I2C(2)",
+    "best_component": "I2C",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32h743i-eval-bsp_v2.json",
+    "repo": "stm32h743i-eval-bsp",
+    "issue_number": 5,
+    "issue_title": "BSP_I2C1_Init calls the wrong MX_I2C1_Init function",
+    "current_component": null,
+    "inferred_components": "I2C(7)",
+    "best_component": "I2C",
+    "best_count": 7
+  },
+  {
+    "file": "docs_issues_stm32h747i-disco-bsp_v2.json",
+    "repo": "stm32h747i-disco-bsp",
+    "issue_number": 4,
+    "issue_title": "Wrong default for `LCD_LAYER_0_ADDRESS` and `LCD_LAYER_1_ADDRESS`",
+    "current_component": null,
+    "inferred_components": "LCD(3)",
+    "best_component": "LCD",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32h747i-disco-bsp_v2.json",
+    "repo": "stm32h747i-disco-bsp",
+    "issue_number": 5,
+    "issue_title": "Hardcoded default SAI slot",
+    "current_component": null,
+    "inferred_components": "SAI(4)",
+    "best_component": "SAI",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32h747i-disco-bsp_v2.json",
+    "repo": "stm32h747i-disco-bsp",
+    "issue_number": 9,
+    "issue_title": "WM8994 will not do analog output to Green Jack if using SAI frequency less than 16kHz",
+    "current_component": null,
+    "inferred_components": "SAI(5), GPIO(1)",
+    "best_component": "SAI",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32h7rsxx-hal-driver_v2.json",
+    "repo": "stm32h7rsxx-hal-driver",
+    "issue_number": 5,
+    "issue_title": "Error transmitting SPI-Master Full Duplex",
+    "current_component": null,
+    "inferred_components": "HSPI(5), SPI(5)",
+    "best_component": "HSPI",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32h7rsxx-hal-driver_v2.json",
+    "repo": "stm32h7rsxx-hal-driver",
+    "issue_number": 6,
+    "issue_title": "Overflow when transmitting SPI data",
+    "current_component": null,
+    "inferred_components": "SPI(5), HSPI(2), DCACHE(1)",
+    "best_component": "SPI",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32h7rsxx-hal-driver_v2.json",
+    "repo": "stm32h7rsxx-hal-driver",
+    "issue_number": 7,
+    "issue_title": "Issue with  HAL_GPIO_DeInit()",
+    "current_component": null,
+    "inferred_components": "GPIO(1)",
+    "best_component": "GPIO",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32h7rsxx-hal-driver_v2.json",
+    "repo": "stm32h7rsxx-hal-driver",
+    "issue_number": 9,
+    "issue_title": "SDIO HAL ReadExtended / WriteExtended does not calculate number of blocks correctly",
+    "current_component": null,
+    "inferred_components": "SDMMC(3)",
+    "best_component": "SDMMC",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32h7xx-hal-driver_v2.json",
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 7,
+    "issue_title": "Bug in stm32h7xx_hal_rcc_ex.c - wrong #define for HRTIM1 (versions 1.7, 1.8)",
+    "current_component": null,
+    "inferred_components": "HRTIM(2)",
+    "best_component": "HRTIM",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32h7xx-hal-driver_v2.json",
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 9,
+    "issue_title": "EXTI reset values for IMR1-3 seems to be wrong",
+    "current_component": null,
+    "inferred_components": "EXTI(8)",
+    "best_component": "EXTI",
+    "best_count": 8
+  },
+  {
+    "file": "docs_issues_stm32h7xx-hal-driver_v2.json",
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 10,
+    "issue_title": "Issues in LL_RTC_TIME_Init() and LL_RTC_DATE_Init()",
+    "current_component": null,
+    "inferred_components": "RTC(1)",
+    "best_component": "RTC",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32h7xx-hal-driver_v2.json",
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 12,
+    "issue_title": "Memory alignment issues in HAL_SPI_TransmitReceive",
+    "current_component": null,
+    "inferred_components": "SPI(4), HSPI(1), TIM(1)",
+    "best_component": "SPI",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32h7xx-hal-driver_v2.json",
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 13,
+    "issue_title": "Overflow and underflow issue in HAL_SPI_TransmitReceive()",
+    "current_component": null,
+    "inferred_components": "HSPI(3), SPI(3), RCC(1)",
+    "best_component": "HSPI",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32h7xx-hal-driver_v2.json",
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 25,
+    "issue_title": "Error in LL_CRS_ConfigSynchronization function (L4 and G4)",
+    "current_component": null,
+    "inferred_components": "CRS(3)",
+    "best_component": "CRS",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32h7xx-hal-driver_v2.json",
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 30,
+    "issue_title": "SDMMC stuck with HAL_SD_ERROR_DATA_TIMEOUT",
+    "current_component": null,
+    "inferred_components": "SDMMC(2)",
+    "best_component": "SDMMC",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32h7xx-hal-driver_v2.json",
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 31,
+    "issue_title": "DMA2D_IRQHandler called with empty ISR register",
+    "current_component": null,
+    "inferred_components": "DMA2D(15), FLASH(1), FMC(1)",
+    "best_component": "DMA2D",
+    "best_count": 15
+  },
+  {
+    "file": "docs_issues_stm32h7xx-hal-driver_v2.json",
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 34,
+    "issue_title": "stm32h7xx_hal_ospi.c does not compile when assert_param actually evaluates \"expr\"",
+    "current_component": null,
+    "inferred_components": "OSPI(1)",
+    "best_component": "OSPI",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32h7xx-hal-driver_v2.json",
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 35,
+    "issue_title": "SPI Extra clock pulse generated when CFG2 registers is written without AFCNTR bit set",
+    "current_component": null,
+    "inferred_components": "SPI(6), LCD(2)",
+    "best_component": "SPI",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32h7xx-hal-driver_v2.json",
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 36,
+    "issue_title": "CRYP api upgrade",
+    "current_component": null,
+    "inferred_components": "CRYP(9)",
+    "best_component": "CRYP",
+    "best_count": 9
+  },
+  {
+    "file": "docs_issues_stm32h7xx-hal-driver_v2.json",
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 38,
+    "issue_title": "BusFault when calculating a HASH",
+    "current_component": null,
+    "inferred_components": "HASH(3)",
+    "best_component": "HASH",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32h7xx-hal-driver_v2.json",
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 39,
+    "issue_title": "Need for HAL_SPI_TransmitFollowedByReceive function",
+    "current_component": null,
+    "inferred_components": "SPI(3), GPIO(1), HSPI(1)",
+    "best_component": "SPI",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32h7xx-hal-driver_v2.json",
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 56,
+    "issue_title": "Please provide a stm32h7xx_ll_dts.h/c",
+    "current_component": null,
+    "inferred_components": "DTS(1)",
+    "best_component": "DTS",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32h7xx-hal-driver_v2.json",
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 57,
+    "issue_title": "ll_delayblock is available when hal qspi module is enable instead of ospi",
+    "current_component": null,
+    "inferred_components": "OSPI(4), QSPI(2), SDMMC(1)",
+    "best_component": "OSPI",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32h7xx-hal-driver_v2.json",
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 60,
+    "issue_title": "SDMMC MMC HighSpeed/DDR ClockDiv too high at 52MHz",
+    "current_component": null,
+    "inferred_components": "SDMMC(5)",
+    "best_component": "SDMMC",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32h7xx-hal-driver_v2.json",
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 77,
+    "issue_title": "ospi: driver is more restrictive than necessary",
+    "current_component": null,
+    "inferred_components": "OSPI(6), SPI(3), PSSI(2)",
+    "best_component": "OSPI",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32h7xx-hal-driver_v2.json",
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 79,
+    "issue_title": "RTC bug in HAL (Clearing RTC_CR_BYPSHAD bit) - wrong retype (uint8_t)",
+    "current_component": null,
+    "inferred_components": "RTC(2)",
+    "best_component": "RTC",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32h7xx-hal-driver_v2.json",
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 80,
+    "issue_title": "LL driver routine RCC_GetHCLKClockFreq ignores D1CPRE divider from D1CFGR register",
+    "current_component": null,
+    "inferred_components": "RCC(10), FLASH(4), PWR(4)",
+    "best_component": "RCC",
+    "best_count": 10
+  },
+  {
+    "file": "docs_issues_stm32h7xx-hal-driver_v2.json",
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 83,
+    "issue_title": "[HAL][EXTI] Typo in comments of EXTI hal driver",
+    "current_component": null,
+    "inferred_components": "EXTI(7)",
+    "best_component": "EXTI",
+    "best_count": 7
+  },
+  {
+    "file": "docs_issues_stm32h7xx-hal-driver_v2.json",
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 84,
+    "issue_title": "[HAL][EXTI] Typo in comments of EXTI hal driver",
+    "current_component": null,
+    "inferred_components": "EXTI(4)",
+    "best_component": "EXTI",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32h7xx-hal-driver_v2.json",
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 88,
+    "issue_title": "AES GCM Invalid Tag Generation after Decryption",
+    "current_component": null,
+    "inferred_components": "CRYP(9), FLASH(1)",
+    "best_component": "CRYP",
+    "best_count": 9
+  },
+  {
+    "file": "docs_issues_stm32h7xx-hal-driver_v2.json",
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 97,
+    "issue_title": "impossibility of simultaneous operation of two OSPI in quad mode",
+    "current_component": null,
+    "inferred_components": "OSPI(3), GPIO(1)",
+    "best_component": "OSPI",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32h7xx-hal-driver_v2.json",
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 103,
+    "issue_title": "HAL_DSI_Read not handle 2 bytes read properly",
+    "current_component": null,
+    "inferred_components": "DSI(14)",
+    "best_component": "DSI",
+    "best_count": 14
+  },
+  {
+    "file": "docs_issues_stm32h7xx-hal-driver_v2.json",
+    "repo": "stm32h7xx-hal-driver",
+    "issue_number": 109,
+    "issue_title": "[Bug]: `HAL_SD_ConfigWideBusOperation` applies UHS clock bypass on 3.3V bus when `USE_SD_TRANSCEIVER == 0`",
+    "current_component": null,
+    "inferred_components": "SDMMC(4), CRC(1), RCC(1)",
+    "best_component": "SDMMC",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32l0xx-hal-driver_v2.json",
+    "repo": "stm32l0xx-hal-driver",
+    "issue_number": 1,
+    "issue_title": "Improper EXTI reset in HAL_GPIO_DeInit()",
+    "current_component": null,
+    "inferred_components": "EXTI(35), GPIO(16)",
+    "best_component": "EXTI",
+    "best_count": 35
+  },
+  {
+    "file": "docs_issues_stm32l0xx-hal-driver_v2.json",
+    "repo": "stm32l0xx-hal-driver",
+    "issue_number": 3,
+    "issue_title": "An I2C NACK during memory address transfer goes undetected.",
+    "current_component": null,
+    "inferred_components": "I2C(19), EXTI(1)",
+    "best_component": "I2C",
+    "best_count": 19
+  },
+  {
+    "file": "docs_issues_stm32l0xx-hal-driver_v2.json",
+    "repo": "stm32l0xx-hal-driver",
+    "issue_number": 5,
+    "issue_title": "I2C Slave mode problem while receiving data - buffer overrun",
+    "current_component": null,
+    "inferred_components": "I2C(5)",
+    "best_component": "I2C",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32l0xx-hal-driver_v2.json",
+    "repo": "stm32l0xx-hal-driver",
+    "issue_number": 11,
+    "issue_title": "The macro __HAL_FLASH_CLEAR_FLAG does not work properly",
+    "current_component": null,
+    "inferred_components": "FLASH(5)",
+    "best_component": "FLASH",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32l4xx-hal-driver_v2.json",
+    "repo": "stm32l4xx-hal-driver",
+    "issue_number": 3,
+    "issue_title": "`HAL_I2C_Master_Transmit` timeout parameter behaves unexpectedly",
+    "current_component": null,
+    "inferred_components": "I2C(9)",
+    "best_component": "I2C",
+    "best_count": 9
+  },
+  {
+    "file": "docs_issues_stm32l4xx-hal-driver_v2.json",
+    "repo": "stm32l4xx-hal-driver",
+    "issue_number": 7,
+    "issue_title": "TX IRQ remains active after HAL_I2C_Mem_Read_DMA",
+    "current_component": null,
+    "inferred_components": "I2C(1)",
+    "best_component": "I2C",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32l4xx-hal-driver_v2.json",
+    "repo": "stm32l4xx-hal-driver",
+    "issue_number": 8,
+    "issue_title": "HAL_SPI_TransmitReceive() always returns HAL_BUSY after the first transaction",
+    "current_component": null,
+    "inferred_components": "HSPI(3)",
+    "best_component": "HSPI",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32l4xx-hal-driver_v2.json",
+    "repo": "stm32l4xx-hal-driver",
+    "issue_number": 9,
+    "issue_title": "HAL_I2C_Mem_Write_IT does not correctly initialize hi2c->XferSize",
+    "current_component": null,
+    "inferred_components": "I2C(2)",
+    "best_component": "I2C",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32l4xx-hal-driver_v2.json",
+    "repo": "stm32l4xx-hal-driver",
+    "issue_number": 20,
+    "issue_title": "HAL_I2C_IsDeviceReady broken since v1.13.5",
+    "current_component": null,
+    "inferred_components": "I2C(3)",
+    "best_component": "I2C",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32l4xx-hal-driver_v2.json",
+    "repo": "stm32l4xx-hal-driver",
+    "issue_number": 21,
+    "issue_title": "I2C_TransferConfig Mode Sets bit in SADD?",
+    "current_component": null,
+    "inferred_components": "I2C(5)",
+    "best_component": "I2C",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32l4xx-hal-driver_v2.json",
+    "repo": "stm32l4xx-hal-driver",
+    "issue_number": 25,
+    "issue_title": "Possible bug in definition of IS_OB_USER_TYPE() for L496, L4A6",
+    "current_component": null,
+    "inferred_components": "FLASH(2)",
+    "best_component": "FLASH",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32l4xx-hal-driver_v2.json",
+    "repo": "stm32l4xx-hal-driver",
+    "issue_number": 27,
+    "issue_title": "STM32L496 Errata 2.19.4 Not Addressed In HAL",
+    "current_component": null,
+    "inferred_components": "I2C(4)",
+    "best_component": "I2C",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32u0xx-hal-driver_v2.json",
+    "repo": "stm32u0xx-hal-driver",
+    "issue_number": 3,
+    "issue_title": "Error in stm32u0xx_hal_pwr_ex.h documentation",
+    "current_component": null,
+    "inferred_components": "FLASH(1), PWR(1)",
+    "best_component": "FLASH",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32u0xx-hal-driver_v2.json",
+    "repo": "stm32u0xx-hal-driver",
+    "issue_number": 4,
+    "issue_title": "Possible optimization in CRC_Handle_8() in stm32u0xx_hal_crc.c",
+    "current_component": null,
+    "inferred_components": "CRC(2)",
+    "best_component": "CRC",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32u0xx-hal-driver_v2.json",
+    "repo": "stm32u0xx-hal-driver",
+    "issue_number": 5,
+    "issue_title": "HAL_CRC_Accumulate interface throws warnings if used with 8 or 16 byte arrays.",
+    "current_component": null,
+    "inferred_components": "CRC(12), CORTEX(1)",
+    "best_component": "CRC",
+    "best_count": 12
+  },
+  {
+    "file": "docs_issues_stm32u0xx-nucleo-bsp_v2.json",
+    "repo": "stm32u0xx-nucleo-bsp",
+    "issue_number": 1,
+    "issue_title": "BSP_BUTTON_USER_IT_PRIORITY is out of range for the cortex-m0+",
+    "current_component": null,
+    "inferred_components": "CORTEX(3)",
+    "best_component": "CORTEX",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32u3xx-hal-driver_v2.json",
+    "repo": "stm32u3xx-hal-driver",
+    "issue_number": 2,
+    "issue_title": "Invalid description of LL_RCC_GetSysClkSource",
+    "current_component": null,
+    "inferred_components": "RCC(1)",
+    "best_component": "RCC",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32u5xx-hal-driver_v2.json",
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 5,
+    "issue_title": "stm32u5xx_hal_dma_ex.c doesn't build with arm-none-eabi-gcc",
+    "current_component": null,
+    "inferred_components": "CORTEX(1)",
+    "best_component": "CORTEX",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32u5xx-hal-driver_v2.json",
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 9,
+    "issue_title": "Janitorial: Wrong literal used in GTZC MPCWM2 setup code",
+    "current_component": null,
+    "inferred_components": "GTZC(2)",
+    "best_component": "GTZC",
+    "best_count": 2
+  },
+  {
+    "file": "docs_issues_stm32u5xx-hal-driver_v2.json",
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 11,
+    "issue_title": "Handling of `Wake up from Stop 3` interrupt",
+    "current_component": null,
+    "inferred_components": "PWR(12)",
+    "best_component": "PWR",
+    "best_count": 12
+  },
+  {
+    "file": "docs_issues_stm32u5xx-hal-driver_v2.json",
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 13,
+    "issue_title": "SPI transmit not works as expected",
+    "current_component": null,
+    "inferred_components": "SPI(10), HSPI(1)",
+    "best_component": "SPI",
+    "best_count": 10
+  },
+  {
+    "file": "docs_issues_stm32u5xx-hal-driver_v2.json",
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 14,
+    "issue_title": "SPI suspend not handled in blocking mode Receive",
+    "current_component": null,
+    "inferred_components": "SPI(4), DMA(2)",
+    "best_component": "SPI",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32u5xx-hal-driver_v2.json",
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 15,
+    "issue_title": "HAL_I2C_IsDeviceReady() NACK Bug",
+    "current_component": null,
+    "inferred_components": "I2C(1)",
+    "best_component": "I2C",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32u5xx-hal-driver_v2.json",
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 16,
+    "issue_title": "HAL XSPI DTR read 1 byte",
+    "current_component": null,
+    "inferred_components": "HSPI(10), XSPI(2)",
+    "best_component": "HSPI",
+    "best_count": 10
+  },
+  {
+    "file": "docs_issues_stm32u5xx-hal-driver_v2.json",
+    "repo": "stm32u5xx-hal-driver",
+    "issue_number": 20,
+    "issue_title": "SPI receive timeout",
+    "current_component": null,
+    "inferred_components": "SPI(3)",
+    "best_component": "SPI",
+    "best_count": 3
+  },
+  {
+    "file": "docs_issues_stm32wb0x-hal-driver_v2.json",
+    "repo": "stm32wb0x-hal-driver",
+    "issue_number": 4,
+    "issue_title": "Misleading LL definitions: LSCO / CLKSLOWSEL",
+    "current_component": null,
+    "inferred_components": "IWDG(1), RTC(1)",
+    "best_component": "IWDG",
+    "best_count": 1
+  },
+  {
+    "file": "docs_issues_stm32wbaxx-nucleo-bsp_v2.json",
+    "repo": "stm32wbaxx-nucleo-bsp",
+    "issue_number": 1,
+    "issue_title": "Excessive power draw on development boards due to LED GPIO configuration",
+    "current_component": null,
+    "inferred_components": "GPIO(7)",
+    "best_component": "GPIO",
+    "best_count": 7
+  },
+  {
+    "file": "docs_issues_stm32wbxx-hal-driver_v2.json",
+    "repo": "stm32wbxx-hal-driver",
+    "issue_number": 2,
+    "issue_title": "Transmit buffer parameters of the QSPI/SPI functions can be of type `const uint8_t *`",
+    "current_component": null,
+    "inferred_components": "QSPI(4), SPI(4), HSPI(2)",
+    "best_component": "QSPI",
+    "best_count": 4
+  },
+  {
+    "file": "docs_issues_stm32wbxx-hal-driver_v2.json",
+    "repo": "stm32wbxx-hal-driver",
+    "issue_number": 3,
+    "issue_title": "Add a Macro to Retrieve Row Size for FLASH Fast Programming Operations",
+    "current_component": null,
+    "inferred_components": "FLASH(6)",
+    "best_component": "FLASH",
+    "best_count": 6
+  },
+  {
+    "file": "docs_issues_stm32wlxx-hal-driver_v2.json",
+    "repo": "stm32wlxx-hal-driver",
+    "issue_number": 1,
+    "issue_title": "code stop in function HAL_I2C_IsDeviceReady, ",
+    "current_component": null,
+    "inferred_components": "I2C(7)",
+    "best_component": "I2C",
+    "best_count": 7
+  },
+  {
+    "file": "docs_issues_stm32wlxx-hal-driver_v2.json",
+    "repo": "stm32wlxx-hal-driver",
+    "issue_number": 10,
+    "issue_title": "Wrong bit checks in `FLASH_FlushCaches` (stm32wlxx_hal_driver)",
+    "current_component": null,
+    "inferred_components": "FLASH(5)",
+    "best_component": "FLASH",
+    "best_count": 5
+  },
+  {
+    "file": "docs_issues_stm32wlxx-hal-driver_v2.json",
+    "repo": "stm32wlxx-hal-driver",
+    "issue_number": 11,
+    "issue_title": "RTC init: time/date set in separate INIT sessions violates RM sequence (risk of mismatch around midnight)",
+    "current_component": null,
+    "inferred_components": "RTC(6), FLASH(1)",
+    "best_component": "RTC",
+    "best_count": 6
+  }
+]
