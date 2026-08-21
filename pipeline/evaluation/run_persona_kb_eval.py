@@ -1,3 +1,60 @@
+"""Evaluate the ST GitHub Analyzer persona end-to-end (KB retrieval + LLM answer).
+
+Role in the evaluation stage
+-----------------------------
+Unlike run_kb_query_strategy_eval.py (which only tests raw KB retrieval),
+this script calls the full chat persona API (``service=chat``), so it
+measures the complete user-facing pipeline: retrieval + persona system
+prompt + LLM generation. For each benchmark question it records the answer
+text, cited sources, whether expected keywords appear (proxy for
+correctness), and whether forbidden patterns appear (proxy for
+hallucination), then upserts the results into a shared comparison CSV keyed
+by (run_id, strategy_id, query_id) so multiple strategies/personas can be
+compared over time.
+
+Inputs
+------
+- Question set: CSV or ``.xlsx`` file with columns such as ``query_id``/
+  ``query_text``/``expected_repo_or_card``/``expected_keywords``/
+  ``keywords_mode``/``forbidden_regex`` (default
+  ``docs/evaluation/all_series_test_suite_50q.xlsx``).
+- Strategy matrix CSV (default ``docs/evaluation/kb_strategy_matrix.csv``)
+  used only to *label* the run with the KB parameters assumed to be
+  configured on the backend (this script does not change them itself).
+- ST AI Bridge chat API (``service=chat``), reached via credentials/helpers
+  imported from pipeline_Automation/upload/Get_Persona_KBs.py.
+
+Outputs
+------
+- Per-run artifacts directory under ``docs/evaluation/runs/`` with
+  ``run_manifest.json``, ``responses_raw.jsonl`` (full API responses), and
+  ``responses_flat.csv`` (flattened answer/sources per question).
+- Upserted rows in the comparison CSV (default
+  ``docs/evaluation/kb_strategy_comparison_template.csv``).
+
+Usage (CLI)
+-----------
+    python pipeline/evaluation/run_persona_kb_eval.py \\
+        --run-id R1 --strategy-id S1_SEMANTIC_08
+
+Key arguments:
+    --questions            Path to the question set (CSV or .xlsx).
+    --xlsx-sheet           Optional sheet name when --questions is .xlsx.
+    --output-csv           Path to the comparison CSV to upsert into.
+    --run-id               Required run identifier (e.g. R1).
+    --strategy-id          Required strategy id, must exist in --strategy-matrix.
+    --persona              Persona name to query (default: ST GitHub Analyzer).
+    --strategy-matrix      Path to the strategy definitions CSV (label only).
+    --remote-user          Remote user identity forwarded to the API.
+    --temperature          LLM sampling temperature.
+    --max-retries          Max retry attempts per question on transient errors.
+    --request-timeout      Per-request timeout in seconds.
+    --max-response-tokens  Max tokens requested from the LLM per answer.
+    --delay                Delay in seconds between requests (rate limiting).
+    --use-proxy            Route requests through the configured proxy.
+    --limit                Only evaluate the first N questions (smoke testing).
+"""
+
 import argparse
 import csv
 import json
@@ -25,6 +82,8 @@ from pipeline_Automation.upload.Get_Persona_KBs import (
     url,
 )
 
+# The internal ST AI Bridge endpoint uses a self-signed/internal certificate;
+# disable the resulting urllib3 warning noise for these evaluation runs.
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
@@ -34,6 +93,18 @@ DEFAULT_STRATEGY_MATRIX = PROJECT_ROOT / "docs" / "evaluation" / "kb_strategy_ma
 
 
 def is_proxy_tunnel_error(message: str) -> bool:
+    """Detect error messages caused by an unstable/misconfigured HTTP proxy.
+
+    Used to trigger a transparent no-proxy retry instead of failing the whole
+    question, since intermittent corporate proxy issues are common and
+    unrelated to the actual API/persona behavior being evaluated.
+
+    Args:
+        message: Exception message or HTTP error text.
+
+    Returns:
+        True if the message matches known proxy failure signatures.
+    """
     text = (message or "").lower()
     return (
         "proxyerror" in text
@@ -44,6 +115,19 @@ def is_proxy_tunnel_error(message: str) -> bool:
 
 
 def infer_query_type(question: str, tags: str = "") -> str:
+    """Heuristically classify a question as error_message/api_symbol/how_to.
+
+    Used to auto-tag questions loaded from .xlsx test suites that don't
+    already specify a ``query_type`` column, so results can be sliced by
+    question intent in analysis.
+
+    Args:
+        question: The question text.
+        tags: Optional free-text tags/notes associated with the question.
+
+    Returns:
+        One of "error_message", "api_symbol", or "how_to" (default).
+    """
     text = (question or "").lower()
     tag_text = (tags or "").lower()
 
@@ -55,6 +139,16 @@ def infer_query_type(question: str, tags: str = "") -> str:
 
 
 def load_questions_csv(path: Path) -> list[dict[str, str]]:
+    """Load a benchmark question set from a CSV file.
+
+    Args:
+        path: CSV with at minimum ``query_id`` and ``query_text`` columns.
+
+    Returns:
+        List of row dicts, one per valid question (rows missing id or text
+        are skipped). Rows are returned as-is (no auto-tagging), unlike
+        load_questions_xlsx.
+    """
     questions: list[dict[str, str]] = []
     with path.open("r", encoding="utf-8", newline="") as f:
         reader = csv.DictReader(f)
@@ -67,6 +161,24 @@ def load_questions_csv(path: Path) -> list[dict[str, str]]:
 
 
 def load_questions_xlsx(path: Path, sheet_name: str = "") -> list[dict[str, str]]:
+    """Load a benchmark question set from an Excel test-suite workbook.
+
+    Args:
+        path: ``.xlsx`` file with a header row containing a question column
+            (one of "question"/"query"/"prompt") and optionally a tags column
+            ("tags"/"tag"/"category").
+        sheet_name: Optional sheet to read; defaults to the workbook's active sheet.
+
+    Returns:
+        List of synthesized row dicts with generated ``query_id`` values
+        (``Q001``, ``Q002``, ...) and an auto-inferred ``query_type``.
+        ``expected_keywords``/``forbidden_regex`` are left empty since the
+        xlsx test suites don't carry them (only CSV comparison sheets do).
+
+    Raises:
+        RuntimeError: If openpyxl is not installed.
+        ValueError: If no recognizable question column is found in the header.
+    """
     try:
         from openpyxl import load_workbook
     except Exception as exc:
@@ -134,6 +246,7 @@ def load_questions_xlsx(path: Path, sheet_name: str = "") -> list[dict[str, str]
 
 
 def load_questions(path: Path, sheet_name: str = "") -> list[dict[str, str]]:
+    """Dispatch to the CSV or Excel loader based on file extension."""
     if path.suffix.lower() == ".xlsx":
         return load_questions_xlsx(path, sheet_name=sheet_name)
     return load_questions_csv(path)
@@ -141,6 +254,12 @@ def load_questions(path: Path, sheet_name: str = "") -> list[dict[str, str]]:
 
 @dataclass
 class EvalRow:
+    """One flattened evaluation result row for a single (run, strategy, query).
+
+    Mirrors the output CSV schema used by upsert_evaluation_rows; kept as a
+    dataclass for type-checked construction before serialization.
+    """
+
     run_id: str
     run_date: str
     strategy_id: str
@@ -162,6 +281,21 @@ class EvalRow:
 
 
 def load_strategy_matrix(path: Path) -> dict[str, dict[str, str]]:
+    """Load named KB search strategies (thresholds/doc counts) from a CSV.
+
+    Note this script does not apply these parameters to the backend itself;
+    they are only recorded as labels/metadata for the run (see the printed
+    warning in main()).
+
+    Args:
+        path: CSV with a ``strategy_id`` column plus strategy parameter columns.
+
+    Returns:
+        Mapping of strategy_id -> row dict.
+
+    Raises:
+        FileNotFoundError: If the strategy matrix file does not exist.
+    """
     if not path.exists():
         raise FileNotFoundError(f"Strategy matrix not found: {path}")
 
@@ -176,6 +310,19 @@ def load_strategy_matrix(path: Path) -> dict[str, dict[str, str]]:
 
 
 def extract_text(response_json: dict[str, Any]) -> str:
+    """Extract the persona's answer text from a chat API response payload.
+
+    Tries several known response shapes in priority order (``completion``,
+    then common alias keys, then an OpenAI-style ``choices`` array), since
+    the chat API's exact response schema can vary by backend/version.
+
+    Args:
+        response_json: Parsed JSON response from the chat API.
+
+    Returns:
+        The extracted answer text, or an empty string if none of the known
+        shapes matched.
+    """
     if not isinstance(response_json, dict):
         return ""
 
@@ -206,6 +353,19 @@ def extract_text(response_json: dict[str, Any]) -> str:
 
 
 def extract_sources(response_json: Any) -> list[str]:
+    """Recursively search a chat API response for cited source/document entries.
+
+    Walks the entire response tree (not just a fixed key) because sources can
+    be nested at different depths depending on the persona/backend version.
+    Both dict-shaped source items (title/url/repo/...) and plain string items
+    are supported.
+
+    Args:
+        response_json: Parsed JSON response from the chat API (any shape).
+
+    Returns:
+        Deduplicated list of human-readable source strings, in first-seen order.
+    """
     sources: list[str] = []
 
     def walk(node: Any) -> None:
@@ -252,6 +412,30 @@ def call_persona(
     request_timeout: int,
     max_response_tokens: int,
 ) -> tuple[str, dict[str, Any], float]:
+    """Call the ST AI Bridge chat API for one question against a given persona.
+
+    Handles HMAC-style request signing (generate_token), retries with
+    exponential backoff on transient HTTP/network errors, and automatically
+    falls back to a direct (no-proxy) connection when the configured proxy
+    appears to be causing tunnel/502 failures, so evaluation runs are
+    resilient to flaky corporate proxy infrastructure.
+
+    Args:
+        question: The natural-language question to send.
+        persona: Persona name to query (e.g. "ST GitHub Analyzer").
+        remote_user: Identity forwarded to the API for auditing/rate limiting.
+        temperature: LLM sampling temperature.
+        use_proxy: Whether to route the request through the configured proxy
+            (may be overridden to False mid-run on proxy failures).
+        max_retries: Maximum number of attempts before giving up.
+        request_timeout: Per-request timeout in seconds.
+        max_response_tokens: Max tokens requested from the LLM.
+
+    Returns:
+        Tuple of (answer_text, raw_response_json, latency_seconds). On
+        failure after all retries, answer_text is empty and the response
+        dict contains an "error" key.
+    """
     last_error = ""
     effective_use_proxy = use_proxy
     proxy_fallback_used = False
@@ -334,6 +518,19 @@ def call_persona(
 
 
 def match_expected(answer_text: str, expected_keywords: str, mode: str) -> str:
+    """Check whether the answer contains the expected keyword(s), as a correctness proxy.
+
+    Args:
+        answer_text: The persona's answer text.
+        expected_keywords: ``|``-separated list of regex patterns; empty means
+            "no expectation defined for this question".
+        mode: "all" requires every pattern to match; anything else (default
+            "any") requires at least one match.
+
+    Returns:
+        "1" if the match condition is satisfied, "0" otherwise, or "" when no
+        expected_keywords were provided (nothing to check).
+    """
     expected_keywords = (expected_keywords or "").strip()
     if not expected_keywords:
         return ""
@@ -350,6 +547,17 @@ def match_expected(answer_text: str, expected_keywords: str, mode: str) -> str:
 
 
 def detect_hallucination(answer_text: str, forbidden_regex: str) -> str:
+    """Check whether the answer contains a forbidden pattern, as a hallucination proxy.
+
+    Args:
+        answer_text: The persona's answer text.
+        forbidden_regex: Regex pattern that should NOT appear in a correct
+            answer (e.g. a wrong API name); empty means no check is defined.
+
+    Returns:
+        "1" if the forbidden pattern is found, "0" if not, or "" when
+        forbidden_regex is empty or an invalid regex.
+    """
     forbidden_regex = (forbidden_regex or "").strip()
     if not forbidden_regex:
         return ""
@@ -360,6 +568,18 @@ def detect_hallucination(answer_text: str, forbidden_regex: str) -> str:
 
 
 def write_run_artifacts(run_dir: Path, rows: list[dict[str, Any]], manifest: dict[str, Any]) -> None:
+    """Persist raw per-question persona responses and a flattened CSV for one run.
+
+    Args:
+        run_dir: Directory to create for this run's artifacts.
+        rows: Per-question result dicts (query id/text, answer, sources, latency, error).
+        manifest: Run configuration metadata (persona, strategy params, CLI
+            args) to record alongside the raw responses for reproducibility.
+
+    Side effects:
+        Writes ``run_manifest.json``, ``responses_raw.jsonl``, and
+        ``responses_flat.csv`` under run_dir.
+    """
     run_dir.mkdir(parents=True, exist_ok=True)
 
     manifest_path = run_dir / "run_manifest.json"
@@ -393,6 +613,20 @@ def write_run_artifacts(run_dir: Path, rows: list[dict[str, Any]], manifest: dic
 
 
 def upsert_evaluation_rows(output_csv: Path, new_rows: list[EvalRow]) -> None:
+    """Merge new evaluation rows into the comparison CSV, replacing same-key rows.
+
+    Keyed by (run_id, strategy_id, query_id) so re-running the same
+    run_id/strategy_id combination overwrites its previous rows instead of
+    duplicating them, letting comparisons accumulate across many runs/
+    strategies/personas over time in a single CSV.
+
+    Args:
+        output_csv: Path to the comparison CSV (created if it doesn't exist).
+        new_rows: EvalRow entries produced by the current run.
+
+    Side effects:
+        Overwrites output_csv with the merged, sorted row set.
+    """
     fieldnames = [
         "run_id",
         "run_date",
@@ -460,6 +694,7 @@ def upsert_evaluation_rows(output_csv: Path, new_rows: list[EvalRow]) -> None:
 
 
 def main() -> None:
+    """CLI entry point: run the persona over a question set and record results."""
     parser = argparse.ArgumentParser(description="Run persona API on a question set and update evaluation CSV.")
     parser.add_argument("--questions", default="docs/evaluation/all_series_test_suite_50q.xlsx")
     parser.add_argument("--xlsx-sheet", default="", help="Optional sheet name when --questions is an xlsx file")

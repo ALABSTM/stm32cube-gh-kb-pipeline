@@ -22,6 +22,7 @@ import hashlib
 import io
 import json
 import mimetypes
+import os
 import random
 import time
 from pathlib import Path
@@ -43,9 +44,14 @@ DATA_DIR = PROJECT_ROOT / "data"
 DESCRIPTIONS_FILE = DATA_DIR / "pdf_image_descriptions.json"
 
 # --- Alfred Vision API credentials ---
-CLIENT_APP_NAME = "mdrf_stgithub_analyzer_client"
-API_KEY = "46f2335f-873f-4704-afea-634ed6c92620"
-API_URL = "https://api-ai-bridge.st.com/chatgpt/api/client-apps"
+CLIENT_APP_NAME = os.getenv("ALFRED_CLIENT_APP_NAME", "mdrf_stgithub_analyzer_client").strip()
+API_KEY = (
+    os.getenv("ST_CHATGPT_API_KEY")
+    or os.getenv("ST_AI_BRIDGE_API_KEY")
+    or os.getenv("ST_API_KEY")
+    or ""
+).strip()
+API_URL = os.getenv("ALFRED_API_URL", "https://api-ai-bridge.st.com/chatgpt/api/client-apps").strip()
 CHAT_SERVICE = "chat"
 DEFAULT_PERSONA = "st_copilot"
 
@@ -63,6 +69,7 @@ SYSTEM_PROMPT = (
 
 
 def generate_token(timestamp: int, nonce: int) -> str:
+    """Compute the SHA1 auth token expected by the Alfred chat/vision API for one request."""
     data_string = f"{CLIENT_APP_NAME}_{CHAT_SERVICE}_{API_KEY}_{timestamp}_{nonce}"
     return hashlib.sha1(data_string.encode("utf-8")).hexdigest()
 
@@ -99,6 +106,12 @@ def load_image_as_data_url(image_path: Path, max_bytes: int = 6_000_000) -> str:
 
 
 def extract_text_from_response(response_json: dict) -> str | None:
+    """Best-effort extraction of the completion text from an Alfred API response.
+
+    Checks several known response shapes (``completion``, ``text``/``content``/
+    ``message``/``answer``, OpenAI-style ``choices``) since the exact shape can
+    vary by backend/persona.
+    """
     if not isinstance(response_json, dict):
         return None
 
@@ -129,6 +142,11 @@ def call_alfred_for_figure(
     timeout: int = 120,
 ) -> str:
     """Send a figure crop to Alfred Vision and return the description."""
+    if not CLIENT_APP_NAME:
+        raise ValueError("Missing Alfred client app name. Set ALFRED_CLIENT_APP_NAME.")
+    if not API_KEY:
+        raise ValueError("Missing Alfred API key. Set ST_CHATGPT_API_KEY (or ST_AI_BRIDGE_API_KEY/ST_API_KEY).")
+
     user_prompt = (
         f"{prompt}\n\n"
         f"Page context (surrounding text):\n{page_context[:2000]}"
@@ -250,6 +268,13 @@ def load_tasks_from_file(task_file: Path) -> list[dict[str, Any]]:
 
 
 def main():
+    """CLI entry point: load pending PDF figure tasks, describe them via Alfred, and save results.
+
+    Loads any existing descriptions so re-runs are incremental (skips figures
+    already described unless ``--force``), processes tasks from all matching
+    ``pdf_image_tasks_*.jsonl`` files, and periodically saves progress every 10
+    figures in case of interruption.
+    """
     parser = argparse.ArgumentParser(description="Enrich PDF figures with Alfred Vision descriptions")
     parser.add_argument("--repo", type=str, default=None, help="Filter by repo name (e.g. STM32CubeH7)")
     parser.add_argument("--max-figures", type=int, default=None, help="Max figures to process")

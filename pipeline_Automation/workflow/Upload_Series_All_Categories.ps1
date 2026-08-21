@@ -23,7 +23,6 @@
 
 param(
     [Parameter(Mandatory = $true)]
-    [ValidateSet("G4", "L0", "L1", "L4", "L5", "N6", "U0", "U3")]
     [string]$Series,
 
     [string]$RemoteUser    = "abir.gharbi@st.com",
@@ -40,7 +39,9 @@ param(
     [switch]$SkipIssues,
     [switch]$SkipFiles,
     [switch]$SkipDiagnostic,
-    [switch]$SkipResolver
+    [switch]$SkipResolver,
+    [switch]$EnableIssuesByComponentFlow,
+    [switch]$ComponentIssuesOnly
 )
 
 Set-StrictMode -Version Latest
@@ -49,22 +50,40 @@ $ErrorActionPreference = "Stop"
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot "..\..")
 Set-Location $repoRoot
 
-$seriesMap = @{
-    "G4" = "stm32cubeg4"
-    "L0" = "stm32cubel0"
-    "L1" = "stm32cubel1"
-    "L4" = "stm32cubel4"
-    "L5" = "stm32cubel5"
-    "N6" = "stm32cuben6"
-    "U0" = "stm32cubeu0"
-    "U3" = "stm32cubeu3"
+$allSeriesConfigPath = "shared/config/config_all_series.json"
+
+if (-not (Test-Path -LiteralPath $allSeriesConfigPath)) {
+    throw "Missing config file: $allSeriesConfigPath"
+}
+
+$cfgAll = Get-Content -LiteralPath $allSeriesConfigPath -Raw | ConvertFrom-Json
+
+$seriesMap = @{}
+foreach ($seriesFull in @($cfgAll.all_series)) {
+    $name = [string]$seriesFull
+    if (-not $name.StartsWith("STM32Cube")) {
+        continue
+    }
+    $seriesCode = $name.Substring(9).ToUpperInvariant()
+    $seriesMap[$seriesCode] = $name.ToLowerInvariant()
+}
+
+$seriesInput = [string]$Series
+if ($seriesInput.StartsWith("STM32Cube")) {
+    $Series = $seriesInput.Substring(9).ToUpperInvariant()
+} else {
+    $Series = $seriesInput.ToUpperInvariant()
+}
+
+if (-not $seriesMap.ContainsKey($Series)) {
+    $allowed = ($seriesMap.Keys | Sort-Object) -join ", "
+    throw "Unsupported series '$Series'. Allowed (from $allSeriesConfigPath): $allowed"
 }
 
 $slug         = $seriesMap[$Series]
 $deliveryRoot = "datasets/07_delivery/st_ready/by_series/$slug"
 $uploader     = "pipeline_Automation/upload/Add_Data_Source_Files.py"
 $idsFile      = "$deliveryRoot/upload_ids_${slug}.json"
-$allSeriesConfigPath = "shared/config/config_all_series.json"
 $allSeriesKey = "STM32Cube$Series"
 
 Write-Host "`n===== Upload all categories for $Series =====" -ForegroundColor Cyan
@@ -418,10 +437,38 @@ function Upload-Category {
 }
 
 # ---- Main --------------------------------------------------------
-if (-not $SkipIssues)    { Upload-Category "issues"          "issues"          "{{github_url}}" "{{repo}} issue #{{issue_number}} - {{issue_title}}" }
+if ($ComponentIssuesOnly) {
+    Write-Host "[SKIP] Monolithic issues upload disabled by -ComponentIssuesOnly" -ForegroundColor Yellow
+} elseif (-not $SkipIssues) {
+    Upload-Category "issues" "issues" "https://github.com/STMicroelectronics/{{repo}}/issues/{{issue_number}}" "{{repo}} issue #{{issue_number}} - {{issue_title}}"
+}
 if (-not $SkipFiles)     { Upload-Category "files"           "files"           "{{github_url}}" "{{repo}} {{file_type}} - {{path}}" }
 if (-not $SkipDiagnostic){ Upload-Category "diagnostic_cards" "diagnostic_cards" "{{externalURL}}" "{{repo}} diagnostic #{{issue_number}} - {{title}}" }
 if (-not $SkipResolver)  { Upload-Category "resolver_cases"  "resolver_cases"  "{{externalURL}}" "{{repo}} resolver #{{issue_number}} - {{issue_title}}" }
+
+if ($EnableIssuesByComponentFlow) {
+    $splitScript = Join-Path $repoRoot "pipeline_Automation/workflow/Split_Issues_By_Component.ps1"
+    $uploadScript = Join-Path $repoRoot "pipeline_Automation/workflow/Upload_Issues_By_Component.ps1"
+
+    if (-not (Test-Path -LiteralPath $splitScript)) {
+        throw "Issues-by-component split script not found: $splitScript"
+    }
+    if (-not (Test-Path -LiteralPath $uploadScript)) {
+        throw "Issues-by-component upload script not found: $uploadScript"
+    }
+
+    Write-Host "`n===== Issues by component: split ($Series) =====" -ForegroundColor Cyan
+    & powershell -ExecutionPolicy Bypass -File $splitScript -Series $Series -PythonExe $PythonExe
+    if ($LASTEXITCODE -ne 0) {
+        throw "Issues-by-component split failed for $Series"
+    }
+
+    Write-Host "`n===== Issues by component: upload ($Series) =====" -ForegroundColor Cyan
+    & powershell -ExecutionPolicy Bypass -File $uploadScript -Series $Series -PythonExe $PythonExe -RemoteUser $RemoteUser -KbId $KbId -JsonSplitSize $JsonSplitSize
+    if ($LASTEXITCODE -ne 0) {
+        throw "Issues-by-component upload failed for $Series"
+    }
+}
 
 Write-Host "`n===== $Series upload complete =====" -ForegroundColor Green
 Write-Host "Final IDs:" -ForegroundColor Gray

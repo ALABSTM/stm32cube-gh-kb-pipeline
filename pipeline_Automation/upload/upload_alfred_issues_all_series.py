@@ -4,6 +4,24 @@ Upload Alfred-enriched issues JSON to existing issues datasources.
 These files contain image text descriptions from Alfred vision AI,
 providing richer context for KB retrieval.
 
+Multi-series batch uploader: appends the Alfred-enriched issues JSON (produced by
+pipeline_Automation/alfred/enrich_json_images_with_alfred.py, where
+[IMAGE ATTACHED] markers are replaced with [IMAGE DESCRIPTION] text) for every
+STM32Cube series to KB #793 (ST GitHub Analyzer), reusing the existing per-series
+issues datasource IDs listed in SERIES_DATASOURCES below. For each series, tries
+three candidate filenames (with-images+alfred, alfred-only, with-images-only) and
+skips the series if none is found.
+
+NOTE: --remote-user is hardcoded below ("abir.gharbi@st.com"); update it if you run
+this script under a different ST account.
+
+Required env vars: same as Add_Data_Source_Files.py (PERSONA_API_KEY /
+ST_GITHUB_ANALYZER_API_KEY / ST_CHATGPT_API_KEY / ST_AI_BRIDGE_API_KEY / ST_API_KEY).
+
+Required input files: datasets/07_delivery/st_ready/by_series/<series>/issues_json/
+st_ready_issues_with_images_<series>_with_alfred_image_text.json (or one of the
+fallback filenames tried in main()).
+
 Usage:
     python pipeline_Automation/upload_alfred_issues_all_series.py --dry-run
     python pipeline_Automation/upload_alfred_issues_all_series.py --verbose
@@ -40,6 +58,10 @@ SERIES_DATASOURCES = {
 
 
 def main():
+    """CLI entry point: for each configured series, locate the Alfred-enriched issues
+    JSON (trying multiple known filenames) and upload/append it to the series'
+    existing issues datasource via Add_Data_Source_Files.py --operation add.
+    """
     import argparse
     parser = argparse.ArgumentParser(description="Upload Alfred issues to existing datasources")
     parser.add_argument("--verbose", action="store_true")

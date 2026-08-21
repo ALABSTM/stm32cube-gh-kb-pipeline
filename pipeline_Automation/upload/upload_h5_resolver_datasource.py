@@ -1,6 +1,22 @@
 """
 Upload all H5 resolver cases JSON (main repo + drivers) to datasource #28164.
 
+Series-specific batch uploader: appends every st_ready_resolver_cases_*.json file for
+STM32CubeH5 (main repo plus per-driver sub-repos under by_series/stm32cubeh5/drivers/*)
+to existing KB #793 (ST GitHub Analyzer) datasource #28164
+(STready_H5_resolver_cases_Datasource), splitting payloads at 1000 docs/part, via
+Add_Data_Source_Files.py (--operation add --json-split-size 1000).
+
+NOTE: --remote-user is hardcoded below ("abir.gharbi@st.com"); update it if you run
+this script under a different ST account.
+
+Required env vars: same as Add_Data_Source_Files.py (PERSONA_API_KEY /
+ST_GITHUB_ANALYZER_API_KEY / ST_CHATGPT_API_KEY / ST_AI_BRIDGE_API_KEY / ST_API_KEY).
+
+Required input files: datasets/07_delivery/st_ready/by_series/stm32cubeh5/
+resolver_cases_json/st_ready_resolver_cases_stm32cubeh5.json (and
+drivers/*/resolver_cases_json/*.json).
+
 Usage:
     python pipeline_Automation/upload_h5_resolver_datasource.py [--dry-run] [--verbose]
 """
@@ -20,6 +36,7 @@ PROCESSOR_PARAMS = '{"label": "{{label}}", "externalURL": "https://github.com/ST
 
 
 def find_all_h5_resolver_json() -> list[Path]:
+    """Collect all st_ready_resolver_cases_*.json for H5 (main + drivers)."""
     files: list[Path] = []
     main = BY_SERIES / "stm32cubeh5" / "resolver_cases_json" / "st_ready_resolver_cases_stm32cubeh5.json"
     if main.exists():
@@ -36,6 +53,9 @@ def find_all_h5_resolver_json() -> list[Path]:
 
 
 def main():
+    """CLI entry point: find H5 resolver cases JSON files, optionally list them
+    (--dry-run), then upload each one via Add_Data_Source_Files.py --operation add.
+    """
     import argparse
     parser = argparse.ArgumentParser(description="Upload H5 resolver cases to datasource #28164")
     parser.add_argument("--verbose", action="store_true")

@@ -58,6 +58,7 @@ def fix_file_deep(file_path: Path, descriptions: dict[str, str]) -> bool:
     )
 
     def rebuild_block(match):
+        """Rebuild one [FIGURE_DESCRIPTIONS]...[/FIGURE_DESCRIPTIONS] block with properly escaped text."""
         block_content = match.group(1)
         # Extract figure_ids from the block (they follow "- " at start of lines or after newline)
         # The figure_id format: REPO:path/to/file.pdf:pN:fN
@@ -102,6 +103,12 @@ def fix_file_deep(file_path: Path, descriptions: dict[str, str]) -> bool:
 
 
 def main():
+    """Scan delivery ``st_ready_files_*.json`` files and deep-repair any invalid JSON found.
+
+    For each file that fails to parse as JSON, rebuilds its
+    ``[FIGURE_DESCRIPTIONS]`` blocks from the source ``pdf_image_descriptions.json``
+    with correct escaping, then re-validates before writing.
+    """
     # Load descriptions
     if not DESCRIPTIONS_FILE.exists():
         print("[ERROR] pdf_image_descriptions.json not found")

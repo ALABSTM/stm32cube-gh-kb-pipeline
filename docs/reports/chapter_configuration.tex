@@ -1,14 +1,17 @@
 %% ============================================================
-%% Chapitre : Configuration de la Plateforme ST ChatGPT
+%% Section : Configuration de la Plateforme ST ChatGPT
 %% Fichier séparé pour permettre le repositionnement dans le rapport
+%% Intégré au Chapitre 4 (Réalisation et Implémentation) via \input
 %% ============================================================
 
-\chapter{Configuration de la Plateforme ST ChatGPT}
+\section{Configuration de la Plateforme ST ChatGPT}
 \label{chap:configuration}
 
-Ce chapitre détaille la configuration de la persona \textbf{ST GitHub Analyzer} sur la plateforme ST ChatGPT, les justifications de chaque paramètre, l'automatisation CI/CD de la mise à jour KB, et l'évolution incrémentale du Quality Index qui a guidé nos choix.
+\textit{\small\textbf{\textcolor{stblue}{Phase CRISP-DM :}} cette section couvre la phase \textit{Deployment} (mise en production sur la plateforme ST ChatGPT).}\par\smallskip
 
-\section{Architecture de la Plateforme}
+Cette section détaille la configuration de la persona \textbf{ST GitHub Analyzer} sur la plateforme ST ChatGPT et les justifications de chaque paramètre.
+
+\subsection{Architecture de la Plateforme}
 
 La plateforme ST ChatGPT est un service Azure OpenAI interne déployé par STMicroelectronics. Elle permet de créer des \textbf{personas} --- des agents conversationnels spécialisés --- équipés de deux types d'outils :
 
@@ -17,9 +20,9 @@ La plateforme ST ChatGPT est un service Azure OpenAI interne déployé par STMic
   \item \textbf{Persona-as-a-Tool} : appel à un autre agent comme fallback
 \end{itemize}
 
-\section{Configuration du Tool KB}
+\subsection{Configuration du Tool KB}
 
-\subsection{Paramètres Retenus}
+\subsubsection{Paramètres Retenus}
 
 \begin{longtable}{p{5cm}p{4cm}p{4cm}}
 \toprule
@@ -37,7 +40,7 @@ Modèle LLM & GPT-5.1 & GPT-4o (précédent) \\
 
 \textbf{Lecture opérationnelle} : la configuration S0 reste le point d'équilibre courant, car elle combine une bonne stabilité (QI=65) et un volume documentaire maîtrisé. La configuration S1 obtient le meilleur score mesuré (QI=66) en augmentant le rappel ; elle est donc le candidat prioritaire pour la configuration finale, sous réserve de validation du test complet en cours.
 
-\subsection{Justification : Recherche Hybride}
+\subsubsection{Justification : Recherche Hybride}
 
 La recherche \textbf{hybride} (Semantic + Full-text) est supérieure aux deux modes isolés dans notre contexte :
 
@@ -53,7 +56,7 @@ Full-text seul & Match exact sur les identifiants techniques & Rate les reformul
 
 \textbf{Résultat mesuré} : sur le benchmark complet de 96 questions, la recherche hybride surpasse les configurations mono-mode. Le semantic-only (S5) atteint 41/100 et le fulltext-heavy (S4) 47/100, alors que les stratégies hybrides équilibrées atteignent 63--66/100. Le résultat confirme que les questions STM32 combinent deux signaux complémentaires : des formulations naturelles (``problème LoRa join'', ``DMA corruption'') et des identifiants exacts (\texttt{HAL\_SPI\_Transmit\_DMA}, \texttt{NUCLEO-H743ZI}, noms de fichiers). Une stratégie purement sémantique perd les ancres exactes ; une stratégie trop full-text perd les reformulations.
 
-\subsection{Justification : Seuil Sémantique à 0.55}
+\subsubsection{Justification : Seuil Sémantique à 0.55}
 \label{sec:seuil_semantique}
 
 Le \textbf{seuil sémantique} (Semantic Threshold) est le score minimum de similarité qu'un document doit atteindre pour être retourné par la recherche sémantique. Un score de 1.0 signifie une correspondance parfaite, 0.0 aucune similarité. Ce seuil contrôle directement le compromis entre \textbf{rappel} (ne rien rater) et \textbf{précision} (pas de bruit).
@@ -98,7 +101,7 @@ S6 Fulltext-only & Full-text & -- & 0 & 20 & N/A & Test final en cours au 01/07/
 \label{fig:kb_strategy_qi}
 \end{figure}
 
-\subsection{Justification : 20 Documents Sémantiques + 12 Full-text}
+\subsubsection{Justification : 20 Documents Sémantiques + 12 Full-text}
 \label{sec:max_documents}
 
 Le paramètre \textbf{Max Doc Count} limite le nombre de documents retournés par chaque mode de recherche. Ce nombre est injecté dans le contexte du LLM, qui doit ensuite synthétiser une réponse à partir de ces documents. Un nombre trop élevé sature la fenêtre de contexte et ralentit la réponse ; un nombre trop bas risque de manquer le document pertinent.
@@ -111,7 +114,7 @@ Le paramètre \textbf{Max Doc Count} limite le nombre de documents retournés pa
 
 \textbf{Total de documents par requête} : S0 retourne jusqu'à $25 + 12 = 37$ documents, et S1 jusqu'à $35 + 15 = 50$ documents. S1 améliore le rappel mais consomme plus de contexte ; il doit donc être accompagné d'un prompt de synthèse strict pour éviter que le LLM ne mélange plusieurs séries ou périphériques.
 
-\subsection{Définition : Search Type (Hybrid)}
+\subsubsection{Définition : Search Type (Hybrid)}
 \label{sec:search_type}
 
 Le \textbf{Search Type} détermine l'algorithme de recherche utilisé pour interroger la Knowledge Base. La plateforme ST ChatGPT supporte trois modes :
@@ -150,7 +153,7 @@ La Figure~\ref{fig:hybrid_search} schématise la fusion~: la requête est trait�
 \label{fig:hybrid_search}
 \end{figure}
 
-\subsection{Tool Description}
+\subsubsection{Tool Description}
 
 La description du tool KB est critique car elle guide le LLM dans sa décision d'appeler ou non le tool :
 
@@ -166,9 +169,9 @@ La description du tool KB est critique car elle guide le LLM dans sa décision d
   \item \textbf{Exemples de cas d'usage} → le LLM sait \textit{quand} appeler le tool vs répondre directement
 \end{enumerate}
 
-\section{Configuration du Tool NovaX (Fallback)}
+\subsection{Configuration du Tool NovaX (Fallback)}
 
-\subsection{Problème Identifié}
+\subsubsection{Problème Identifié}
 
 Lors de l'ajout initial d'un fallback généraliste, le Quality Index a chuté lorsque la persona appelait le fallback au lieu de chercher dans la KB. Le problème n'était pas le modèle lui-même, mais le \textbf{routage} : une description trop large encourage le LLM principal à déléguer trop tôt, ce qui remplace des réponses traçables issues de la KB par des réponses générales.
 
@@ -176,7 +179,7 @@ Lors de l'ajout initial d'un fallback généraliste, le Quality Index a chuté l
 \small\texttt{[Description initiale, trop permissive]} ``I can help with STM32 questions. Forward the user's question.''
 \end{quote}
 
-\subsection{Fix : NovaX comme Fallback Strictement Secondaire}
+\subsubsection{Fix : NovaX comme Fallback Strictement Secondaire}
 
 Le fallback utilisé est désormais \textbf{NovaX}, un agent STM32 basé sur STM32 Bugzilla et STCommunity Knowledge Articles. Sa description force explicitement la priorité de la KB Unstructured :
 
@@ -186,7 +189,7 @@ Le fallback utilisé est désormais \textbf{NovaX}, un agent STM32 basé sur STM
 
 \textbf{Rôle exact de NovaX} : NovaX n'est pas une source primaire pour les issues GitHub STM32Cube. Il sert à couvrir les questions hors périmètre de la KB : explications générales HAL/LL, middleware (FreeRTOS, lwIP, USB, FatFs), raisonnement STM32CubeMX, limitations matérielles, arbitrages de conception embedded, ou séries/périphériques absents de la KB.
 
-\subsection{Impact Mesuré}
+\subsubsection{Impact Mesuré}
 
 \begin{longtable}{lcc}
 \toprule
@@ -201,7 +204,7 @@ KB + NovaX restrictif & en validation & Test final S1 en cours \\
 
 La leçon : dans une architecture multi-tools, la \textbf{description du tool contrôle le comportement de routage} du LLM. NovaX doit être appelé uniquement après une recherche KB non concluante. Cette contrainte protège la traçabilité : si la KB contient une issue, un fichier, une diagnostic card ou un resolver case pertinent, la réponse doit rester ancrée dans ces documents.
 
-\section{System Prompt de la Persona}
+\subsection{System Prompt de la Persona}
 
 Le system prompt guide le comportement global de la persona. Les éléments clés :
 
@@ -218,11 +221,11 @@ Le system prompt guide le comportement global de la persona. Les éléments clé
   \item \textbf{Interdiction} : ne jamais dire ``je ne sais pas'' sans avoir cherché dans la KB
 \end{enumerate}
 
-\section{Évolution Incrémentale du Quality Index}
+\subsection{Évolution Incrémentale du Quality Index}
 
 Le Quality Index a évolué de manière incrémentale au fil des améliorations du contenu KB et de la configuration. Chaque test mesure la qualité des réponses du chatbot sur un jeu de questions techniques.
 
-\subsection{Chronologie des Tests}
+\subsubsection{Chronologie des Tests}
 
 \begin{longtable}{p{2.4cm}p{5.2cm}ccp{3.2cm}}
 \toprule
@@ -274,9 +277,9 @@ La Figure~\ref{fig:qi_config_evolution} visualise l'évolution historique. La Fi
 
 \textit{Le graphique en barres montre l'évolution : Issues seules (54) $\to$ +Prompt (57) $\to$ +Hybrid (61) $\to$ +Diag Cards (94, $\uparrow$+33) $\to$ Real Cases (88) $\to$ Multi 4Q (83) $\to$ Multi 52Q (54, dilution multi-séries). Le saut majeur de 61 à 94 démontre l'impact des Diagnostic Cards.}
 
-\subsection{Analyse de l'Évolution}
+\subsubsection{Analyse de l'Évolution}
 
-\subsubsection{Phase 1 : Issues seules (QI = 54)}
+\paragraph{Phase 1 : Issues seules (QI = 54)}
 
 Le score initial de 54 avec les issues H7 seules montre que les issues structurées (symptôme, root cause, fix) fournissent déjà une base solide pour le RAG. Les lacunes :
 \begin{itemize}
@@ -285,7 +288,7 @@ Le score initial de 54 avec les issues H7 seules montre que les issues structur�
   \item Pas de cartes de diagnostic → les problèmes complexes multi-étapes mal couverts
 \end{itemize}
 
-\subsubsection{Phase 2 : Ajout des Resolver Cases et Diagnostic Cards (QI = 94)}
+\paragraph{Phase 2 : Ajout des Resolver Cases et Diagnostic Cards (QI = 94)}
 
 Le saut de 61 à \textbf{94} est le gain le plus important du projet. Les \textbf{Diagnostic Cards} structurent l'information sous forme :
 
@@ -300,7 +303,7 @@ Les \textbf{Resolver Cases} ajoutent la dimension de traçabilité :
 Issue \#42 → PR \#87 → Commit abc123 → Fichier modifié : \texttt{stm32f4xx\_hal\_spi.c}
 \end{quote}
 
-\subsubsection{Phase 3 : Passage multi-séries (QI = 54)}
+\paragraph{Phase 3 : Passage multi-séries (QI = 54)}
 
 Le score chute à 54 lors de l'ajout de 4 nouvelles séries (F4, H5, U5, WL). Cette chute s'explique par :
 
@@ -312,7 +315,7 @@ Le score chute à 54 lors de l'ajout de 4 nouvelles séries (F4, H5, U5, WL). Ce
 
 \textbf{Leçon} : le passage à l'échelle nécessite un \textbf{filtrage par série} plus agressif dans les métadonnées des documents, ou un prompt qui pousse la persona à inclure le nom de la série dans ses queries KB.
 
-\subsection{Raisonnement de Chaque Amélioration}
+\subsubsection{Raisonnement de Chaque Amélioration}
 
 \begin{longtable}{p{4cm}p{5cm}p{4cm}}
 \toprule
@@ -328,7 +331,7 @@ PDF descriptions & Rendre les figures PDF cherchables & +1 estimé \\
 \bottomrule
 \end{longtable}
 
-\section{Automatisation CI/CD et Opérations}
+\subsection{Automatisation CI/CD et Opérations}
 \label{sec:automation_cicd}
 
 L'objectif de l'automatisation est de garantir une mise à jour \textbf{reproductible}, \textbf{traçable} et \textbf{sûre} de la KB \#793, sans dépendre d'interventions manuelles ad hoc. L'architecture retenue sépare l'orchestration cloud (GitHub Actions) et l'exécution réseau ST (runner self-hosted), indispensable pour atteindre l'API interne ST AI Bridge.
@@ -340,7 +343,7 @@ L'objectif de l'automatisation est de garantir une mise à jour \textbf{reproduc
 \label{fig:cicd_automation}
 \end{figure}
 
-\subsection{Principe d'Architecture}
+\subsubsection{Principe d'Architecture}
 
 Le flux d'exécution suit trois phases :
 \begin{enumerate}
@@ -351,7 +354,7 @@ Le flux d'exécution suit trois phases :
 
 Cette structuration explicite réduit le risque opérationnel : une erreur de qualité en phase \textit{Validate} arrête la publication avant impact utilisateur.
 
-\subsection{Workflow GitHub Actions}
+\subsubsection{Workflow GitHub Actions}
 
 Le workflow principal \texttt{.github/workflows/auto\_update\_kb.yml} implémente :
 \begin{itemize}
@@ -364,7 +367,7 @@ Le workflow principal \texttt{.github/workflows/auto\_update\_kb.yml} implément
 
 Le contrôle de disponibilité du runner évite les faux positifs : si aucun runner ST n'est disponible, le workflow échoue explicitement avec un message d'exploitation, plutôt que de terminer en vert sans traitement.
 
-\subsection{Script Orchestrateur Unifié}
+\subsubsection{Script Orchestrateur Unifié}
 
 La brique centrale est \texttt{pipeline\_Automation/workflow/Run\_Single\_Series\_Full\_Pipeline\_And\_Upload.ps1}. Elle unifie la chaîne complète pour une série et fournit trois modes d'exploitation :
 
@@ -384,7 +387,7 @@ Commande opérationnelle de référence :
   -Series H7 -Mode Full
 \end{lstlisting}
 
-\subsection{Garde-fous Qualité Avant Publication}
+\subsubsection{Garde-fous Qualité Avant Publication}
 
 L'automatisation intègre deux verrous critiques :
 \begin{enumerate}
@@ -394,7 +397,7 @@ L'automatisation intègre deux verrous critiques :
 
 La politique \texttt{PlaceholderPolicy} est paramétrable (\texttt{Fail}, \texttt{Warn}, \texttt{Off}), mais \texttt{Fail} est la valeur recommandée en production pour préserver la qualité perçue des réponses.
 
-\subsection{Stratégie d'Upload et Traçabilité}
+\subsubsection{Stratégie d'Upload et Traçabilité}
 
 L'upload vers KB \#793 est réalisé via \texttt{Add\_Data\_Source\_Files.py} selon deux cas :
 \begin{itemize}
@@ -411,7 +414,7 @@ datasets/07_delivery/st_ready/by_series/<serie>/upload_datasource_ids_<serie>.js
 
 et synchronisés dans \texttt{shared/config/config\_all\_series.json} pour assurer la continuité entre les exécutions.
 
-\subsection{Runbook Opérateur (Production)}
+\subsubsection{Runbook Opérateur (Production)}
 
 Le runbook recommandé est :
 \begin{enumerate}
@@ -423,10 +426,10 @@ Le runbook recommandé est :
 
 Cette discipline d'exploitation est essentielle pour les soutenances internes : elle permet de démontrer à la fois la robustesse technique et la gouvernance de la chaîne de livraison.
 
-\section{Couverture Actuelle et Future}
+\subsection{Couverture Actuelle et Future}
 \label{sec:couverture}
 
-\subsection{13 Séries en Production}
+\subsubsection{13 Séries en Production}
 
 Les 13 séries MCU suivantes sont entièrement traitées par le pipeline et uploadées vers la KB \#793 :
 
@@ -452,7 +455,7 @@ STM32CubeWL & 5 & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark
 
 \textit{Note : ``---'' pour Resolver signifie que les issues de cette série n'ont pas de chaînes Issue$\to$PR$\to$Commit complètes, pas que le pipeline ne supporte pas le format.}
 
-\subsection{4 Nouvelles Séries Exportées (Pipeline Terminé)}
+\subsubsection{4 Nouvelles Séries Exportées (Pipeline Terminé)}
 
 Les 4 séries suivantes ont été entièrement traitées par le pipeline, avec les artefacts delivery générés et prêts à l'upload :
 
@@ -474,7 +477,7 @@ STM32CubeL4 & 68 & 5\,231 & 1 & 8 & Prêt à uploader \\
   \item \textbf{Alfred Images} : 25 images échouées (API 404 intermittent) sur G4, L0, L4. Corrigible par re-run du script d'enrichissement.
 \end{itemize}
 
-\subsection{8 Séries Configurées (Prêtes à Lancer)}
+\subsubsection{8 Séries Configurées (Prêtes à Lancer)}
 
 Les configurations (fichiers \texttt{config\_*.json}) sont créées pour : L5, N6, U0, U3, WB, WB0, WBA, WL3. Le déploiement nécessite :
 \begin{enumerate}

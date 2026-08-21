@@ -1,14 +1,57 @@
+"""Cleaning stage (V1): normalize raw file content and classify each file's type.
+
+Role in the pipeline
+---------------------
+Consumes `data/raw_files_<repo>.json` (from `pipeline/ingestion/fetch_files.py`)
+and produces `data/clean_files_<repo>.json`: whitespace-normalized text plus a
+`file_type` classification (e.g. driver_source, root_readme, release_notes)
+used by later stages, notably `pipeline/cleaning/clean_files_v3.py` (which
+applies type-aware cleaning on top of this output) and enrichment
+(`files_to_docs_v2.py`).
+
+Inputs
+------
+- Config: resolved via `shared.utils.paths.get_config_path()` (default
+  `shared/config/config_all_series.json`, overridable with `STM32CUBE_CONFIG`).
+  Uses `repos`.
+- `data/raw_files_<repo>.json` for each configured repo.
+
+Outputs
+-------
+- `data/clean_files_<repo>.json`: list of cleaned file records with
+  `clean_text`, `file_type`, and passthrough metadata (path, github_url,
+  image/PDF task references).
+
+How to run
+----------
+No CLI arguments; run as a module: `python -m pipeline.cleaning.clean_files`.
+"""
+
 import json
 
 from shared.utils.paths import DATA_DIR, get_config_path
 
 
 def load_config() -> dict:
+    """Load and parse the active pipeline configuration JSON file.
+
+    Returns:
+        The parsed configuration as a dict.
+    """
     cfg_path = get_config_path()
     return json.loads(cfg_path.read_text(encoding="utf-8"))
 
 
 def is_bsp_board_root(path: str) -> bool:
+    """Check if a top-level folder name looks like a board/BSP folder.
+
+    Args:
+        path: A forward-slash file path (first segment is checked).
+
+    Returns:
+        True if the first path segment starts with "stm32" and contains a
+        known board-type suffix tag ("-dk", "-eval", "-disco", "nucleo").
+    """
     root = path.split("/", 1)[0]
     if not root.startswith("stm32"):
         return False
@@ -16,6 +59,21 @@ def is_bsp_board_root(path: str) -> bool:
 
 
 def detect_file_type(path: str) -> str:
+    """Classify a repo-relative file path into a coarse `file_type` category.
+
+    The classification drives type-aware cleaning downstream (see
+    `clean_files_v3.clean_by_type`) and metadata used in enrichment/delivery.
+    Rules are checked in priority order (e.g. release notes before generic
+    README detection) since some paths could match more than one pattern.
+
+    Args:
+        path: File path relative to the repo root (OS-native separators ok).
+
+    Returns:
+        One of a fixed set of type labels (e.g. "documentation_pdf",
+        "release_notes", "project_readme", "driver_source", ... or "other"
+        if nothing matches).
+    """
     p = path.replace("\\", "/").lower()
 
     if p.startswith(("documentation/", "documentations/")) and p.endswith(".pdf"):
@@ -73,6 +131,14 @@ def detect_file_type(path: str) -> str:
 
 
 def clean_content(text: str) -> str:
+    """Normalize line endings and strip surrounding whitespace.
+
+    Args:
+        text: Raw file content.
+
+    Returns:
+        The normalized text, or an empty string if input is falsy.
+    """
     if not text:
         return ""
     text = text.replace("\r\n", "\n").replace("\r", "\n")
@@ -80,6 +146,15 @@ def clean_content(text: str) -> str:
 
 
 def clean_files_for_repo(repo: str) -> None:
+    """Clean and classify all raw files for a single repo, writing the result to disk.
+
+    Args:
+        repo: Repository name (used to resolve input/output file paths).
+
+    Side Effects:
+        Writes `data/clean_files_<repo>.json`. Prints a warning and returns
+        early if the input raw file does not exist.
+    """
     in_file = DATA_DIR / f"raw_files_{repo.lower()}.json"
     out_file = DATA_DIR / f"clean_files_{repo.lower()}.json"
 
@@ -128,6 +203,7 @@ def clean_files_for_repo(repo: str) -> None:
 
 
 def main() -> None:
+    """Entry point: clean and classify raw files for every configured repo."""
     cfg = load_config()
     repos = cfg["repos"]
 

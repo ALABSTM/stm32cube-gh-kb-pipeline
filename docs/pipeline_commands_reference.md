@@ -332,9 +332,11 @@ Si le datasource reste bloque apres plusieurs rollbacks, creer un nouveau dataso
 
 ---
 
-## 14. GitHub Actions Automation (Self-Hosted Runner)
+## 14. GitHub Actions Automation (Dual Upload Target)
 
-Workflow principal : `.github/workflows/auto_update_kb.yml`
+Workflows principaux :
+- `.github/workflows/auto_update_kb.yml`
+- `.github/workflows/manual_auto_update_kb.yml`
 
 Le workflow exécute, pour chaque série, le script :
 
@@ -342,16 +344,28 @@ Le workflow exécute, pour chaque série, le script :
 .\pipeline_Automation\workflow\Run_Single_Series_Full_Pipeline_And_Upload.ps1
 ```
 
+### Architecture disponible
+
+- **Chemin 1 (défaut, stable prod)** : upload sur runner `self-hosted`
+- **Chemin 2 (test cloud)** : upload sur runner `github-hosted` (`windows-latest`)
+
+La sélection se fait avec l'input workflow :
+- `upload_execution_target`: `self-hosted` | `github-hosted`
+
+Valeur par défaut : `self-hosted`.
+
 ### Prérequis
 
-- Runner self-hosted Windows `online` dans le repo GitHub
+- Runner self-hosted Windows `online` dans le repo GitHub (obligatoire pour le mode `self-hosted`)
 - Secrets GitHub Actions configurés :
-    - `ST_CHATGPT_API_KEY`
+    - `ST_GITHUB_ANALYZER_API_KEY`
+    - `ST_CHATGPT_API_KEY` (ou `ST_AI_BRIDGE_API_KEY` / `ST_API_KEY`)
     - `ST_REMOTE_USER`
 
 ### Trigger automatique
 
 - Cron bi-mensuel : 1er et 15 du mois à 03:00 UTC
+- Exécution par défaut en `self-hosted`
 
 ### Trigger manuel (GitHub UI)
 
@@ -360,13 +374,20 @@ Dans **Actions > Auto Update KB > Run workflow** :
 - `series`: `G4,L0,L1,L4,L5,N6,U0,U3,WB,WB0,WBA,WL3` (ou sous-ensemble)
 - `mode`: `Full` | `Prepare` | `Upload`
 - `existing_datasource_mode`: `Replace` | `Add`
+- `upload_execution_target`: `self-hosted` | `github-hosted`
 - `skip_drivers`: `true/false`
 - `skip_schema_validation`: `true/false`
 - `continue_on_workflow_error`: `true/false`
 - `placeholder_policy`: `Fail` | `Warn` | `Off`
 - `max_parallel`: `1` (recommandé avec un seul runner)
 
-### Vérification rapide runner local
+### Mode d'utilisation sans risque
+
+1. **Production normale** : laisser `upload_execution_target=self-hosted`.
+2. **Test cloud organisation interne** : lancer une seule série avec `upload_execution_target=github-hosted`.
+3. **Si pas d'accès réseau ST côté cloud** : relancer immédiatement avec `upload_execution_target=self-hosted` (aucune modification de code nécessaire).
+
+### Vérification rapide runner local (mode self-hosted)
 
 ```powershell
 cd .\actions-runner

@@ -15,8 +15,14 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DELIVERY_DIR = PROJECT_ROOT / "datasets" / "07_delivery" / "st_ready" / "by_series"
 
 
-def fix_json_file(file_path: Path) -> bool:
-    """Try to fix a JSON file with control characters. Returns True if fixed."""
+def fix_json_file(file_path: Path) -> bool | None:
+    """Try to fix a JSON file with control characters.
+
+    Returns:
+        True: file was repaired and rewritten.
+        False: file was already valid JSON.
+        None: file is still invalid and could not be parsed/repaired.
+    """
     content = file_path.read_text(encoding="utf-8")
 
     # First check if it's valid already
@@ -31,7 +37,7 @@ def fix_json_file(file_path: Path) -> bool:
         data = json.loads(content, strict=False)
     except json.JSONDecodeError as exc:
         print(f"  [ERROR] Cannot parse even with strict=False: {exc}")
-        return False
+        return None
 
     # Re-serialize properly (this escapes all control chars)
     file_path.write_text(
@@ -42,6 +48,7 @@ def fix_json_file(file_path: Path) -> bool:
 
 
 def main():
+    """Scan delivery ``st_ready_files_*.json`` files and fix any with unescaped control characters."""
     print(f"Scanning delivery files for corrupted JSON...")
     print(f"Directory: {DELIVERY_DIR}")
     print("=" * 60)
@@ -67,6 +74,8 @@ def main():
                 fixed += 1
             elif result is False:
                 already_ok += 1
+            else:
+                failed += 1
 
     print("=" * 60)
     print(f"Fixed: {fixed}, Already OK: {already_ok}, Failed: {failed}")

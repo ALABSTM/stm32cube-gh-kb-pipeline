@@ -1,6 +1,22 @@
 """
 Upload PDF-enriched files to KB #793 for all 13 series.
 
+Multi-series batch uploader: for each STM32Cube series listed in
+SERIES_FILES_DATASOURCES, finds the best available files JSON (preferring the
+v3 / PDF-enriched variant produced by the PDF figure/enrichment pipeline over the
+base files export) and appends it to that series' existing KB #793
+(ST GitHub Analyzer) files datasource, splitting payloads at
+--json-split-size (default 200) docs/part.
+
+NOTE: --remote-user is hardcoded below ("abir.gharbi@st.com"); update it if you run
+this script under a different ST account.
+
+Required env vars: same as Add_Data_Source_Files.py (PERSONA_API_KEY /
+ST_GITHUB_ANALYZER_API_KEY / ST_CHATGPT_API_KEY / ST_AI_BRIDGE_API_KEY / ST_API_KEY).
+
+Required input files: datasets/07_delivery/st_ready/by_series/<series>/files_json/
+st_ready_files_<series>_v3.json (or _pdf_enriched.json, or the base st_ready_files_<series>.json).
+
 Usage:
     python pipeline_Automation/upload/upload_pdf_enriched_files_all_series.py --dry-run
     python pipeline_Automation/upload/upload_pdf_enriched_files_all_series.py
@@ -35,7 +51,8 @@ SERIES_FILES_DATASOURCES = {
     "stm32cubewl": 29045,   # V3
 }
 
-# Processor params for files
+# Processor params for files, base64-encoded (not secret data) to safely pass the
+# '{{...}}' Mustache-style template placeholders through PowerShell without escaping.
 PROCESSOR_PARAMS = 'eyJsYWJlbCI6ICJ7e3JlcG99fSB7e2ZpbGVfdHlwZX19IC0ge3twYXRofX0iLCAiZXh0ZXJuYWxVUkwiOiAiaHR0cHM6Ly9naXRodWIuY29tL1NUTWljcm9lbGVjdHJvbmljcy97e3JlcG99fS97e3Jvb3RfZGlyfX0ve3tyb290X3JlZn19L3t7cGF0aF91cmx9fSIsICJyb290VGFnUGF0aCI6ICJmaWxlcyJ9'
 
 DEFAULT_JSON_SPLIT_SIZE = 200
@@ -62,6 +79,11 @@ def find_files_json(series: str) -> Path | None:
 
 
 def main():
+    """CLI entry point: for each selected series (or --only-series), find the best
+    files JSON and upload/append it to that series' existing files datasource via
+    Add_Data_Source_Files.py --operation add, throttled by UPLOAD_DELAY_SEC between
+    uploads to avoid API rate limiting.
+    """
     import argparse
     parser = argparse.ArgumentParser(description="Upload PDF-enriched files to KB")
     parser.add_argument("--dry-run", action="store_true")

@@ -1,3 +1,23 @@
+"""Path-resolution helpers shared by every ST-ready delivery export/split script.
+
+This module is the single source of truth for where delivery artifacts live
+under `datasets/07_delivery/st_ready/`. It resolves:
+
+- The per-series output tree (`by_series/<series>/...`), grouping BSP/HAL/CMSIS
+  sub-repos (e.g. `stm32h7xx-hal-driver`) under their parent series folder
+  (e.g. `by_series/stm32cubeh7/drivers/stm32h7xx-hal-driver/`) instead of
+  exporting them as standalone top-level series.
+- Per-repo artifact directories/files for each artifact type used by the
+  `export_st_ready_*.py` scripts (`issues_json`, `files_json`,
+  `resolver_cases_json`, `diagnostic_cards_json`, ...).
+- A legacy flat layout (`st_ready/<artifact_dir>/...`) kept as a
+  backward-compatible mirror/fallback for consumers that have not migrated
+  to the per-series layout yet.
+
+No files are read or written here beyond the config lookups needed to build
+the repo -> series mapping; this module only computes `Path` objects.
+"""
+
 import os
 import json
 from pathlib import Path
@@ -8,7 +28,9 @@ from shared.utils.paths import PROJECT_ROOT
 ST_READY_ROOT = PROJECT_ROOT / "datasets" / "07_delivery" / "st_ready"
 ST_READY_BY_SERIES_ROOT = ST_READY_ROOT / "by_series"
 
-# Map sub-repos (drivers/BSP) to their parent series folder
+# Static repo -> series lookup table, used as a fallback/back-compat baseline
+# and then extended/overridden by `_load_config_repo_series_map()` below,
+# which treats `shared/config/config_*.json` as the source of truth.
 _REPO_TO_SERIES: dict[str, str] = {}
 
 # H7 sub-repos
@@ -119,10 +141,18 @@ for _r in [
 
 
 def repo_slug(repo: str) -> str:
+    """Normalize a repo name to its lowercase slug used as a dict/path key."""
     return str(repo).strip().lower()
 
 
 def _extract_repo_series_mapping(cfg: dict) -> dict[str, str]:
+    """Derive a repo-slug -> series-slug mapping from one config's `repos` list.
+
+    Each series config lists the main `stm32cube<series>` repo alongside its
+    HAL/CMSIS/BSP sub-repos. The first `stm32cube*`-prefixed entry is taken as
+    the series anchor; every other repo in the same list is mapped to it so
+    sub-repos are exported under the series folder instead of standalone.
+    """
     mapping: dict[str, str] = {}
     repos = cfg.get("repos")
     if not isinstance(repos, list) or not repos:
@@ -183,6 +213,13 @@ _REPO_TO_SERIES.update(_load_config_repo_series_map())
 
 
 def get_repo_series_root(repo: str) -> Path:
+    """Return the by-series output root directory for a given repo.
+
+    If the repo is a known sub-repo (HAL/CMSIS/BSP), its artifacts are nested
+    under its parent series' `drivers/<sub-repo>/` folder so all delivery
+    artifacts for one MCU series stay together. Otherwise the repo is assumed
+    to be a main series repo and gets its own top-level folder.
+    """
     slug = repo_slug(repo)
     parent_series = _REPO_TO_SERIES.get(slug)
     if parent_series:
@@ -192,22 +229,38 @@ def get_repo_series_root(repo: str) -> Path:
 
 
 def get_repo_artifact_dir(repo: str, artifact_dir: str) -> Path:
+    """Return the directory for one artifact type (e.g. `issues_json`) of a repo."""
     return get_repo_series_root(repo) / artifact_dir
 
 
 def get_repo_artifact_file(repo: str, artifact_dir: str, file_name: str) -> Path:
+    """Return the full path to a specific artifact file for a repo."""
     return get_repo_artifact_dir(repo, artifact_dir) / file_name
 
 
 def get_legacy_artifact_dir(artifact_dir: str) -> Path:
+    """Return the flat (pre-by-series) directory for one artifact type.
+
+    Kept so older consumers/scripts that still read from the flat
+    `st_ready/<artifact_dir>/` layout keep working; export scripts write a
+    mirror copy here in addition to the by-series path.
+    """
     return ST_READY_ROOT / artifact_dir
 
 
 def get_legacy_artifact_file(artifact_dir: str, file_name: str) -> Path:
+    """Return the full path to an artifact file in the legacy flat layout."""
     return get_legacy_artifact_dir(artifact_dir) / file_name
 
 
 def get_existing_repo_artifact_file(repo: str, artifact_dir: str, file_name: str) -> Path:
+    """Resolve an artifact file, preferring the by-series path but falling
+    back to the legacy flat path if that is the only one that exists.
+
+    Used by downstream export scripts (e.g. resolver cases, diagnostic cards)
+    that need to read an upstream artifact (like `st_ready_files_<repo>.json`)
+    without knowing in advance which layout produced it.
+    """
     repo_file = get_repo_artifact_file(repo, artifact_dir, file_name)
     if repo_file.exists():
         return repo_file

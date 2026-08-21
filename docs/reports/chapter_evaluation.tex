@@ -431,8 +431,8 @@ STM32CubeU5 & 112 & 1\,982 & 23 & 19 \\
 1. Ingestion & 99.7\% & 1.0 & $\geq 95\%$ & \textcolor{green!60!black}{\textbf{EXCELLENT}} \\
 2. Cleaning V3 & 100.0\% & 1.5 & $\geq 95\%$ & \textcolor{green!60!black}{\textbf{EXCELLENT}} \\
 3a. Enrichissement NLP & 72.2\% & 1.4 & $\geq 85\%$ & \textcolor{orange}{\textbf{ACCEPTABLE}} \\
-3b. Alfred images issues & 98.5\% & 0.4 & $\geq 95\%$ & \textcolor{green!60!black}{\textbf{EXCELLENT}} \\
-3c. Alfred figures PDF & 41.7\% & 0.2 & $\geq 70\%$ & \textcolor{red}{\textbf{INSUFFISANT}} \\
+3b. Alfred images issues & 99.3\% & 0.4 & $\geq 95\%$ & \textcolor{green!60!black}{\textbf{EXCELLENT}} \\
+3c. Alfred figures PDF & 36.5\% & 0.2 & $\geq 70\%$ & \textcolor{red}{\textbf{INSUFFISANT}} \\
 4. Similarité TF-IDF & 22.0\% & 0.5 & $\geq 70\%$ & \textcolor{red}{\textbf{INSUFFISANT}} \\
 5. Delivery & 100.0\% & 2.0 & $\geq 95\%$ & \textcolor{green!60!black}{\textbf{EXCELLENT}} \\
 \bottomrule
@@ -445,11 +445,11 @@ STM32CubeU5 & 112 & 1\,982 & 23 & 19 \\
 \label{sec:score_global_calcul}
 
 \begin{equation}
-S_{\text{global}} = \frac{1.0 \times 99.7 + 1.5 \times 100.0 + 1.4 \times 72.2 + 0.4 \times 98.5 + 0.2 \times 41.7 + 0.5 \times 22.0 + 2.0 \times 100.0}{1.0 + 1.5 + 1.4 + 0.4 + 0.2 + 0.5 + 2.0}
+S_{\text{global}} = \frac{1.0 \times 99.7 + 1.5 \times 100.0 + 1.4 \times 72.2 + 0.4 \times 99.3 + 0.2 \times 36.5 + 0.5 \times 22.0 + 2.0 \times 100.0}{1.0 + 1.5 + 1.4 + 0.4 + 0.2 + 0.5 + 2.0}
 \end{equation}
 
 \begin{equation}
-S_{\text{global}} = \frac{99.7 + 150.0 + 101.1 + 39.4 + 8.3 + 11.0 + 200.0}{7.0} = \frac{609.5}{7.0} = \boxed{87.1\%} \quad \text{(BON)}
+S_{\text{global}} = \frac{99.7 + 150.0 + 101.1 + 39.7 + 7.3 + 11.0 + 200.0}{7.0} = \frac{608.8}{7.0} = \boxed{87.0\%} \quad \text{(BON)}
 \label{eq:score_global_numerique}
 \end{equation}
 
@@ -462,7 +462,7 @@ S_{\text{global}} = \frac{99.7 + 150.0 + 101.1 + 39.4 + 8.3 + 11.0 + 200.0}{7.0}
 Ingestion & 1.0 & Prérequis sans transformation intellectuelle \\
 Cleaning & 1.5 & Transformation déterministe significative \\
 Enrichissement NLP & 1.4 & Classification exploitée pour filtrage et re-ranking \\
-Alfred issues & 0.4 & Enrichissement multimodal mature (98.5\% fiable) \\
+Alfred issues & 0.4 & Enrichissement multimodal mature (99.3\% fiable) \\
 Alfred PDF & 0.2 & Enrichissement encore exploratoire \\
 Similarité & 0.5 & Impact optionnel~; score bas sans conséquence sur le QI \\
 Delivery & \textbf{2.0} & Étape critique~: produit les Diagnostic Cards ($+33$~pts QI) \\
@@ -489,14 +489,14 @@ Le score global reste au verdict \textbf{BON} plutôt qu'EXCELLENT car deux sous
 \addplot[fill=blue!40] coordinates {(14.2,Score Global)};
 \addplot[fill=green!40] coordinates {(21.4,Score Global)};
 \addplot[fill=orange!60] coordinates {(14.4,Score Global)};
-\addplot[fill=cyan!45] coordinates {(5.6,Score Global)};
-\addplot[fill=yellow!55] coordinates {(1.2,Score Global)};
+\addplot[fill=cyan!45] coordinates {(5.7,Score Global)};
+\addplot[fill=yellow!55] coordinates {(1.0,Score Global)};
 \addplot[fill=red!30] coordinates {(1.6,Score Global)};
 \addplot[fill=purple!40] coordinates {(28.6,Score Global)};
 \legend{Ingestion, Cleaning, Enrichissement, Alfred issues, Alfred PDF, Similarité, Delivery}
 \end{axis}
 \end{tikzpicture}
-\caption{Décomposition du score global 87.1\%~: contribution pondérée de chaque stage}
+\caption{Décomposition du score global 87.0\%~: contribution pondérée de chaque stage}
 \label{fig:score_decomposition}
 \end{figure}
 
@@ -599,19 +599,21 @@ où $O$ est le ratio de tokens partagés (overlap), et $m_p$, $m_h$ les magnitud
 \toprule
 \textbf{Source} & \textbf{N} & $\overline{L}$ & $\overline{S}$ & $\overline{P}_{\text{contrad}}$ & $\overline{S}_{\text{coh}}$ & \textbf{Cas à risque} \\
 \midrule
-Images d'issues & 200 & 0.9357 & -- & 0.1567 & 0.5021 & 3/200 (1.5\%) \\
-Figures PDF & 242 & 0.1971 & 0.1961 & 0.0309 & 0.1825 & 141/242 (58.3\%) \\
+Images d'issues & 400 & 0.9419 & 0.3335 & 0.1625 & 0.4995 & 3/400 (0.75\%) \\
+Figures PDF & 301 & 0.1730 & 0.1714 & 0.0270 & 0.1600 & 191/301 (63.5\%) \\
 \bottomrule
 \end{tabular}
-\caption{Métriques de cohérence Alfred décomposées par source visuelle}
+\caption{Métriques de cohérence Alfred décomposées par source visuelle (campagne rejouée le 2026-06-xx, jeu de données étendu à 701 items via \texttt{validate\_alfred\_coherence.py --semantic-mode lite --nli-mode lite})}
 \label{tab:alfred_coherence}
 \end{table}
 
+\textit{\footnotesize Note~: cette table reflète une exécution rejouée du script de validation sur le jeu de données actuel (701 items, contre 442 lors de la campagne initiale). Le volume d'images d'issues et de figures PDF a augmenté avec l'enrichissement continu de la KB. Toutes les colonnes, y compris $\overline{S}$ pour les images d'issues, sont désormais directement lues depuis \texttt{alfred\_coherence\_summary.json} et le CSV détaillé associé, sans valeur agrégée manquante.}\par\smallskip
+
 \textbf{Confiance contextuelle}~:
 \begin{itemize}
-  \item Images d'issues~: $T_{\text{ctx}} = 98.5\%$ (197/200 au-dessus du seuil)
-  \item Figures PDF~: $T_{\text{ctx}} = 41.7\%$ (101/242 au-dessus du seuil)
-  \item Total~: $T_{\text{ctx}} = 67.4\%$
+  \item Images d'issues~: $T_{\text{ctx}} = 99.3\%$ (397/400 au-dessus du seuil)
+  \item Figures PDF~: $T_{\text{ctx}} = 36.5\%$ (110/301 au-dessus du seuil)
+  \item Total~: $T_{\text{ctx}} = 72.3\%$ (507/701)
 \end{itemize}
 
 \begin{figure}[H]
@@ -629,9 +631,9 @@ Figures PDF & 242 & 0.1971 & 0.1961 & 0.0309 & 0.1825 & 141/242 (58.3\%) \\
     bar width=0.9cm,
     enlarge x limits=0.3,
 ]
-\addplot[fill=green!55!black] coordinates {(Images issues,98.5)};
-\addplot[fill=orange!70] coordinates {(Figures PDF,41.7)};
-\addplot[fill=blue!45] coordinates {(Total,67.4)};
+\addplot[fill=green!55!black] coordinates {(Images issues,99.3)};
+\addplot[fill=orange!70] coordinates {(Figures PDF,36.5)};
+\addplot[fill=blue!45] coordinates {(Total,72.3)};
 \end{axis}
 \end{tikzpicture}
 \caption{Confiance contextuelle Alfred --- seuil d'alerte $\tau = 0.12$}
@@ -641,7 +643,7 @@ Figures PDF & 242 & 0.1971 & 0.1961 & 0.0309 & 0.1825 & 141/242 (58.3\%) \\
 \subsection{Analyse de l'Écart Issues vs PDF}
 \label{sec:alfred_analyse_ecart}
 
-L'écart significatif entre les deux sources ($\overline{L} = 0.94$ pour les issues vs $0.20$ pour les PDF) est \textbf{structurel et non accidentel}~:
+L'écart significatif entre les deux sources ($\overline{L} = 0.94$ pour les issues vs $0.17$ pour les PDF) est \textbf{structurel et non accidentel}~:
 
 \begin{longtable}{p{5.5cm}p{7cm}}
 \toprule
@@ -827,11 +829,11 @@ KB S1 Recall+ + NovaX & \textbf{66} & Meilleur compromis mesuré \\
 \toprule
 \textbf{Paramètre} & \textbf{Valeur} \\
 \midrule
-Jeu de test & 20 questions techniques, 5 séries (H7, F4, H5, U5, WL) \\
+Jeu de test & 20 questions techniques, 5 séries (H7, F4, H5, U5, WL), 12 catégories \\
 Critère de sélection & Questions ciblant des problèmes réels documentés dans des issues GitHub \\
+Script de génération & \texttt{pipeline\_Automation/test\_suites/compare\_alfred\_vs\_persona.py} \\
 Grille de scoring & 6 critères, max 10 pts/réponse \\
-Évaluateur & Expert STM32 (auteur du pipeline) \\
-Température LLM & 0 (déterministe) \\
+Température LLM & 0.3 \\
 \bottomrule
 \end{longtable}
 
@@ -852,36 +854,57 @@ Source vérifiable (fichier, commit) & +1 & Traçabilité \\
 \bottomrule
 \end{longtable}
 
+\subsection{Méthodologie de Notation~: d'une Grille Manuelle Vide à un Score Automatique Reproductible}
+\label{sec:comparative_methodo_notation}
+
+Le script d'origine exporte un classeur Excel à 3 feuilles (comparaison brute, grille d'évaluation, métadonnées) destiné à recevoir une notation manuelle experte selon les 6 critères ci-dessus. \textbf{Un audit de ce classeur a révélé que les colonnes de notation manuelle n'avaient jamais été renseignées}~: aucune valeur humaine ne soutenait les scores initialement publiés dans cette section. Plutôt que de conserver des chiffres non traçables, la grille a été appliquée \textbf{automatiquement et de façon déterministe} sur les 20 transcriptions brutes (\texttt{comparison\_alfred\_vs\_persona.json}) via un script dédié~: \texttt{pipeline/evaluation/score\_alfred\_vs\_persona\_rubric.py}. Chaque critère est détecté par un motif explicite~: expression régulière pour les numéros d'issue (\texttt{\#\textbackslash d+}), les fonctions \texttt{HAL\_}/\texttt{LL\_}, les mentions de version, les blocs de code ou étapes numérotées (fix actionnable), et le vocabulaire de bas niveau (registre, cache, MPU, errata) pour le workaround.
+
+\textbf{Limite méthodologique assumée}~: ce détecteur favorise structurellement les réponses riches en blocs de code et listes numérotées (style caractéristique d'Alfred) au détriment des réponses de type citation/synthèse (style caractéristique de la Persona KB), notamment sur le critère "fix actionnable". Les scores ci-dessous doivent donc être lus comme une \textbf{approximation objective et reproductible}, et non comme un jugement qualitatif fin~; ils remplacent une notation manuelle qui n'a jamais été réalisée, avec l'avantage d'être immédiatement reproductibles (\texttt{python -m pipeline.evaluation.score\_alfred\_vs\_persona\_rubric}).
+
 \subsection{Résultats Synthétiques}
 
 \begin{table}[H]
 \centering
 \begin{tabular}{lccc}
 \toprule
-\textbf{KPI} & \textbf{Alfred} & \textbf{Persona KB} & \textbf{Gain} \\
+\textbf{KPI} & \textbf{Alfred} & \textbf{Persona KB} & \textbf{Écart} \\
 \midrule
-Score moyen / réponse & 5.8/10 & \textbf{8.1/10} & +39\% \\
-Taux de réponse & \textbf{100\%} (20/20) & 80\% (16/20) & Alfred plus disponible \\
-Questions à score max (10) & 0 & \textbf{4} & KB = précision maximale \\
-Citations vérifiables & 0\% & \textbf{87\%} & Traçabilité unique \\
-Fix actionnable immédiat & 25\% & \textbf{75\%} & $\times 3$ actionnabilité \\
+Score moyen / réponse (0--10) & \textbf{3.85} & 3.50 & $-9\%$ \\
+Taux de réponse (réponse produite) & \textbf{100\%} (20/20) & 70\% (14/20) & Alfred plus fiable opérationnellement \\
+Citation issue GitHub & 0\% & \textbf{35\%} & Traçabilité propre à la KB \\
+Source vérifiable (fichier/commit/RN) & 10\% & \textbf{65\%} & KB $\times 6.5$ plus vérifiable \\
+Information version-spécifique & 5\% & \textbf{25\%} & KB $\times 5$ plus précise \\
+Fonction HAL/LL exacte nommée & \textbf{45\%} & 25\% & Alfred plus précis syntaxiquement \\
+Fix actionnable (heuristique code/étapes) & \textbf{95\%} & 40\% & Biais du détecteur (cf.~\ref{sec:comparative_methodo_notation}) \\
 \bottomrule
 \end{tabular}
-\caption{Métriques comparatives Alfred vs Persona KB}
+\caption{Métriques comparatives Alfred vs Persona KB --- notation automatique reproductible sur les 20 transcriptions réelles}
 \label{tab:comparative_final}
 \end{table}
 
+\textbf{Lecture honnête du résultat}~: contrairement à la version précédente de cette étude (non traçable), le score moyen brut ne favorise pas la Persona KB. Ceci s'explique par deux effets cumulés~: (1)~30\% des réponses Persona sont des non-réponses (timeout API ou "information non trouvée dans la KB"), notées~0, ce qui pénalise lourdement la moyenne~; (2)~le détecteur automatique de "fix actionnable" est structurellement biaisé en faveur du style rédactionnel d'Alfred (code/listes). La \textbf{vraie valeur ajoutée mesurée de la KB n'est donc pas le score moyen brut, mais la traçabilité}~: citation d'issue ($\times$ infini, 0\%~$\to$~35\%), source vérifiable ($\times 6.5$) et précision de version ($\times 5$) --- trois dimensions qu'un LLM générique ne peut structurellement pas fournir sans accès à la KB.
+
 \subsection{Analyse par Catégorie}
 
-\begin{longtable}{p{4cm}ccp{5cm}}
+\begin{longtable}{p{3.6cm}ccp{6cm}}
 \toprule
-\textbf{Catégorie} & \textbf{Alfred} & \textbf{Persona} & \textbf{Analyse} \\
+\textbf{Catégorie (n)} & \textbf{Alfred} & \textbf{Persona} & \textbf{Observation} \\
 \midrule
-Issue-specific (8 Q) & 5.9 & \textbf{9.2} & KB contient l'issue exacte \\
-Migration/Version (3 Q) & 3.7 & \textbf{9.7} & Info version impossible sans KB \\
-General knowledge (2 Q) & 7.0 & 7.0 & LLM suffit (pas de différence) \\
-Documentation (2 Q) & 5.0 & 4.0 & KB limitée quand doc absente \\
+Issue-specific (7) & \textbf{4.29} & 3.14 & Persona pénalisée par 2 timeouts sur 7 (non-réponse~=~0) \\
+Migration/Version (1) & 6.00 & \textbf{7.00} & Cite l'issue exacte de release notes \\
+Release Notes (1) & \textbf{7.00} & 4.00 & Cas isolé, Alfred plus complet ici \\
+HAL Behavior (1) & 3.00 & \textbf{4.00} & Cite l'issue GitHub source du comportement \\
+Security/TrustZone (1) & 5.00 & \textbf{6.00} & Écart faible, les deux répondent correctement \\
+LoRaWAN (1) & 4.00 & \textbf{7.00} & Cite issue + source vérifiable \\
+RF/Radio (1) & 2.00 & \textbf{7.00} & Domaine protocolaire très spécifique, KB décisive \\
+RTOS Integration (1) & \textbf{5.00} & 0.00 & Timeout Persona --- risque opérationnel réel \\
+Low Power (1) & \textbf{4.00} & 0.00 & Timeout Persona --- risque opérationnel réel \\
+General Knowledge (2) & 2.50 & \textbf{4.00} & KB légèrement supérieure même hors contexte issue \\
+Documentation (2) & \textbf{2.00} & 1.50 & Les deux sont faibles quand la doc source est absente \\
+Architecture (1) & 2.00 & 2.00 & Égalité \\
 \bottomrule
+\caption{Score moyen (/10) par catégorie --- notation automatique reproductible. Catégories à $n=1$ indicatives uniquement (non généralisables statistiquement).}
+\label{tab:comparative_categories}
 \end{longtable}
 
 \begin{figure}[H]
@@ -889,32 +912,33 @@ Documentation (2 Q) & 5.0 & 4.0 & KB limitée quand doc absente \\
 \begin{tikzpicture}
 \begin{axis}[
     ybar,
-    width=12cm, height=5.5cm,
-    bar width=0.5cm,
+    width=13cm, height=5.5cm,
+    bar width=0.55cm,
     ylabel={Score moyen (/10)},
     ymin=0, ymax=11,
-    symbolic x coords={Issue-specific, Migration, General, Documentation, Global},
+    symbolic x coords={Issue-specific, Version/RN, Protocoles domaine, Périph./RTOS, Général/Doc/Archi, Global},
     xtick=data,
-    legend style={at={(0.5,-0.25)}, anchor=north, legend columns=2},
+    legend style={at={(0.5,-0.3)}, anchor=north, legend columns=2},
     nodes near coords,
     every node near coord/.append style={font=\small},
-    enlarge x limits=0.15,
+    enlarge x limits=0.12,
 ]
-\addplot[fill=red!50] coordinates {(Issue-specific,5.9) (Migration,3.7) (General,7.0) (Documentation,5.0) (Global,5.8)};
-\addplot[fill=green!50] coordinates {(Issue-specific,9.2) (Migration,9.7) (General,7.0) (Documentation,4.0) (Global,8.1)};
+\addplot[fill=red!50] coordinates {(Issue-specific,4.29) (Version/RN,6.5) (Protocoles domaine,3.67) (Périph./RTOS,4.0) (Général/Doc/Archi,2.2) (Global,3.85)};
+\addplot[fill=green!50] coordinates {(Issue-specific,3.14) (Version/RN,5.5) (Protocoles domaine,6.67) (Périph./RTOS,1.33) (Général/Doc/Archi,2.6) (Global,3.50)};
 \legend{Alfred (baseline), Persona KB}
 \end{axis}
 \end{tikzpicture}
-\caption{Comparaison Alfred vs Persona KB par catégorie de question}
+\caption{Comparaison Alfred vs Persona KB par groupe de catégories (regroupement des 12 catégories brutes en 5 familles pour lisibilité)}
 \label{fig:comparative_chart}
 \end{figure}
 
 \textbf{Conclusions de l'étude comparative}~:
 \begin{enumerate}
-  \item La KB améliore la qualité de $+39\%$ sur les réponses obtenues
-  \item L'avantage est \textbf{maximal} sur les questions issue-specific et version-sensitive ($+56\%$)
-  \item Alfred reste supérieur en disponibilité (100\% vs 80\%) et sur les questions générales
-  \item L'architecture optimale est \textbf{KB-first + NovaX fallback restrictif}
+  \item Le score moyen brut ne favorise \textbf{pas} clairement la Persona KB (3.50 vs 3.85/10)~: cette apparente régression par rapport à une version antérieure non traçable de cette étude s'explique entièrement par le taux de non-réponse Persona (30\%, 6/20), et non par une infériorité de contenu quand elle répond effectivement.
+  \item La \textbf{vraie valeur ajoutée de la KB est la traçabilité}~: citation d'issue GitHub (0\%~$\to$~35\%), source vérifiable (10\%~$\to$~65\%) et précision de version (5\%~$\to$~25\%) --- trois signaux qu'Alfred générique ne peut structurellement pas produire.
+  \item Sur les \textbf{domaines protocolaires spécifiques} (LoRaWAN, RF/Radio, TrustZone --- regroupement "Protocoles domaine"), la KB est nettement supérieure (6.67 vs 3.67/10)~: c'est exactement le type de connaissance fine que le générique ne possède pas.
+  \item Le \textbf{risque opérationnel principal identifié est la fiabilité de la Persona}, pas sa qualité de contenu~: 2 des 6 non-réponses tombent précisément sur des catégories (RTOS Integration, Low Power) où une réponse KB aurait probablement été forte, ce qui plaide pour un traitement des timeouts API (retry, budget de temps plus généreux) plutôt qu'un changement de contenu de la KB.
+  \item L'architecture optimale reste \textbf{KB-first + NovaX fallback restrictif}~: elle protège la traçabilité quand la KB répond, et un fallback (NovaX ou, à défaut, Alfred générique) doit absorber les cas de non-réponse pour ne pas laisser l'utilisateur sans réponse du tout.
 \end{enumerate}
 
 %% ============================================================
@@ -1065,11 +1089,11 @@ Ce chapitre démontre que~:
   
   \item L'\textbf{architecture KB-first + NovaX restrictif} protège la traçabilité tout en couvrant les lacunes de la KB~: le routage est un paramètre critique.
   
-  \item La \textbf{confiance contextuelle} distingue les images d'issues (98.5\%, matures) des figures PDF (41.7\%, à améliorer), évitant une moyenne trompeuse.
+  \item La \textbf{confiance contextuelle} distingue les images d'issues (99.3\%, matures) des figures PDF (36.5\%, à améliorer), évitant une moyenne trompeuse.
   
   \item Les seuils sont des \textbf{seuils opérationnels internes}, cohérents avec les normes ISO et calibrés empiriquement~; ils ne prétendent pas à l'universalité.
   
-  \item Le système atteint un \textbf{gain de $+39\%$} vs Alfred générique sur les questions techniques spécifiques, avec une traçabilité (87\% de citations vérifiables) inaccessible à un LLM sans KB.
+  \item L'étude comparative Alfred vs Persona KB, rejouée avec une notation automatique reproductible, montre que \textbf{la valeur ajoutée réelle de la KB est la traçabilité} (citation d'issue~: 0\%~$\to$~35\%~; source vérifiable~: 10\%~$\to$~65\%~; précision de version~: 5\%~$\to$~25\%) plutôt qu'un score moyen brut supérieur~; elle révèle aussi un \textbf{risque de fiabilité opérationnelle} de la Persona (30\% de non-réponses) à traiter en priorité.
 \end{enumerate}
 
 \textbf{Score optimal vs compromis opérationnel}~: le meilleur score mesuré (QI~94 sur H7) n'est pas le point de fonctionnement optimal pour la production. Le QI~66 (S1 Recall+ sur 96 questions multi-séries) représente un meilleur compromis opérationnel car il couvre 25 séries et 96 questions réalistes, au lieu de 1 série sur 50 questions sélectionnées. Le score de production est plus bas mais plus représentatif de l'expérience utilisateur réelle.

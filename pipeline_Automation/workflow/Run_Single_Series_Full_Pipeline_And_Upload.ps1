@@ -21,13 +21,14 @@
 
 param(
     [Parameter(Mandatory = $true)]
-    [ValidateSet("G4", "L0", "L1", "L4", "L5", "N6", "U0", "U3", "WB", "WB0", "WBA", "WL3")]
     [string]$Series,
 
     [ValidateSet("Full", "Prepare", "Upload")]
     [string]$Mode = "Full",
 
     [string]$RemoteUser = "abir.gharbi@st.com",
+    [string]$ApiKey = "",
+    [string]$ClientAppName = "",
     [int]$KbId = 793,
     [string]$PythonExe = "",
     [int]$JsonSplitSize = 1000,
@@ -45,7 +46,9 @@ param(
     [switch]$SkipAlfredEnrichment,
     [switch]$SkipPlaceholderGate,
     [switch]$RunAlfredBeforeUpload,
-    [switch]$UseAlfredProxy
+    [switch]$UseAlfredProxy,
+    [switch]$EnableIssuesByComponentFlow,
+    [switch]$ComponentIssuesOnly
 )
 
 Set-StrictMode -Version Latest
@@ -53,6 +56,7 @@ $ErrorActionPreference = "Stop"
 
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot "..\..")
 Set-Location $repoRoot
+$globalConfigPath = "shared/config/config_all_series.json"
 
 # Auto-detect venv python if not specified.
 if (-not $PythonExe) {
@@ -66,19 +70,29 @@ if (-not $PythonExe) {
     }
 }
 
-$seriesMap = @{
-    "G4" = @{ Slug = "stm32cubeg4"; Repo = "STM32CubeG4"; Config = "shared/config/config_g4.json" }
-    "L0" = @{ Slug = "stm32cubel0"; Repo = "STM32CubeL0"; Config = "shared/config/config_l0.json" }
-    "L1" = @{ Slug = "stm32cubel1"; Repo = "STM32CubeL1"; Config = "shared/config/config_l1.json" }
-    "L4" = @{ Slug = "stm32cubel4"; Repo = "STM32CubeL4"; Config = "shared/config/config_l4.json" }
-    "L5" = @{ Slug = "stm32cubel5"; Repo = "STM32CubeL5"; Config = "shared/config/config_l5.json" }
-    "N6" = @{ Slug = "stm32cuben6"; Repo = "STM32CubeN6"; Config = "shared/config/config_n6.json" }
-    "U0" = @{ Slug = "stm32cubeu0"; Repo = "STM32CubeU0"; Config = "shared/config/config_u0.json" }
-    "U3" = @{ Slug = "stm32cubeu3"; Repo = "STM32CubeU3"; Config = "shared/config/config_u3.json" }
-    "WB" = @{ Slug = "stm32cubewb"; Repo = "STM32CubeWB"; Config = "shared/config/config_wb.json" }
-    "WB0" = @{ Slug = "stm32cubewb0"; Repo = "STM32CubeWB0"; Config = "shared/config/config_wb0.json" }
-    "WBA" = @{ Slug = "stm32cubewba"; Repo = "STM32CubeWBA"; Config = "shared/config/config_wba.json" }
-    "WL3" = @{ Slug = "stm32cubewl3"; Repo = "STM32CubeWL3"; Config = "shared/config/config_wl3.json" }
+$cfgAll = ((Get-Content -LiteralPath $globalConfigPath -Raw).TrimStart([char]0xFEFF)) | ConvertFrom-Json
+$seriesMap = @{}
+foreach ($seriesFull in @($cfgAll.all_series)) {
+    $name = [string]$seriesFull
+    if (-not $name.StartsWith("STM32Cube")) {
+        continue
+    }
+    $seriesCode = $name.Substring(9).ToUpperInvariant()
+    $cfgFile = $cfgAll.series_config_files.$name
+    if (-not $cfgFile) {
+        continue
+    }
+    $seriesMap[$seriesCode] = @{
+        Slug = $name.ToLowerInvariant()
+        Repo = $name
+        Config = "shared/config/$cfgFile"
+    }
+}
+
+$Series = $Series.ToUpperInvariant()
+if (-not $seriesMap.ContainsKey($Series)) {
+    $allowed = ($seriesMap.Keys | Sort-Object) -join ", "
+    throw "Unsupported series '$Series'. Allowed (from $globalConfigPath): $allowed"
 }
 
 $seriesInfo = $seriesMap[$Series]
@@ -88,9 +102,36 @@ $configPath = $seriesInfo.Config
 $deliveryRoot = "datasets/07_delivery/st_ready/by_series/$slug"
 $uploader = "pipeline_Automation/upload/Add_Data_Source_Files.py"
 $idsOutput = Join-Path $deliveryRoot "upload_datasource_ids_$slug.json"
-$globalConfigPath = "shared/config/config_all_series.json"
 $uploadMaxRetries = 5
-$uploadTimeoutSeconds = 300
+$uploadTimeoutSeconds = 60
+$script:EffectiveDatasourceMode = $ExistingDatasourceMode
+
+function ConvertFrom-JsonSafeText {
+    param(
+        [AllowNull()]
+        [string]$RawText,
+        [string]$Source = "JSON payload"
+    )
+
+    if ([string]::IsNullOrWhiteSpace($RawText)) {
+        throw "Invalid or empty JSON in ${Source}."
+    }
+
+    # Strip UTF-8 BOM if present. PowerShell 5 Set-Content -Encoding UTF8 writes BOM.
+    $normalized = $RawText.TrimStart([char]0xFEFF)
+    return $normalized | ConvertFrom-Json
+}
+
+function Get-UploadAuthArgs {
+    $authArgs = @()
+    if ($ApiKey) {
+        $authArgs += @("--api-key", $ApiKey)
+    }
+    if ($ClientAppName) {
+        $authArgs += @("--client-app-name", $ClientAppName)
+    }
+    return $authArgs
+}
 
 function Invoke-Step {
     param(
@@ -209,7 +250,7 @@ function Test-JsonRootIsEmpty {
         return $true
     }
 
-    $json = Get-Content -LiteralPath $Path -Raw | ConvertFrom-Json
+    $json = ((Get-Content -LiteralPath $Path -Raw).TrimStart([char]0xFEFF)) | ConvertFrom-Json
     if ($null -eq $json) {
         return $true
     }
@@ -236,7 +277,7 @@ function Assert-RequiredFile {
 
 function Get-ConfigRepos {
     param([string]$Path)
-    $cfg = Get-Content -LiteralPath $Path -Raw | ConvertFrom-Json
+    $cfg = ((Get-Content -LiteralPath $Path -Raw).TrimStart([char]0xFEFF)) | ConvertFrom-Json
     return @($cfg.repos | ForEach-Object { [string]$_ })
 }
 
@@ -364,11 +405,25 @@ function Invoke-AlfredIssueImageDescriptionsForSeries {
 }
 
 function Invoke-AlfredPdfFigureDescriptions {
-    $args = @("pipeline_Automation/alfred/enrich_pdf_figures_with_alfred.py")
-    if ($UseAlfredProxy) {
-        $args += "--use-proxy"
+    param([string[]]$Repos)
+
+    $targetRepos = @($Repos | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+    if ($targetRepos.Count -eq 0) {
+        $targetRepos = @(Get-ConfigRepos $configPath)
     }
-    Invoke-Step "Alfred PDF figure descriptions" $args
+
+    if ($targetRepos.Count -eq 0) {
+        Write-Host "[SKIP] No repos resolved for Alfred PDF figure descriptions (series=$Series)." -ForegroundColor Yellow
+        return
+    }
+
+    foreach ($repo in $targetRepos) {
+        $args = @("pipeline_Automation/alfred/enrich_pdf_figures_with_alfred.py", "--repo", $repo)
+        if ($UseAlfredProxy) {
+            $args += "--use-proxy"
+        }
+        Invoke-Step "Alfred PDF figure descriptions for $repo" $args
+    }
 }
 
 function Invoke-PlaceholderGate {
@@ -444,7 +499,7 @@ function Invoke-PrepareSeries {
     if ($SkipAlfredEnrichment) {
         Write-Host "[SKIP] Patch Alfred PDF descriptions disabled by -SkipAlfredEnrichment" -ForegroundColor Yellow
     } else {
-        Invoke-Step "Patch Alfred PDF descriptions into root and driver delivery files" @("pipeline_Automation/patch_pdf_descriptions_in_delivery.py")
+        Invoke-Step "Patch Alfred PDF descriptions into root and driver delivery files" @("pipeline_Automation/patch_pdf_descriptions_in_delivery.py", "--series", $Series)
     }
 
     if (-not $SkipSchemaValidation) {
@@ -455,6 +510,53 @@ function Invoke-PrepareSeries {
         Write-Host "[SKIP] Placeholder gate disabled by -SkipPlaceholderGate" -ForegroundColor Yellow
     } else {
         Invoke-PlaceholderGate
+    }
+
+    if ($EnableIssuesByComponentFlow) {
+        Invoke-IssuesByComponentSplit
+    }
+}
+
+function Invoke-IssuesByComponentSplit {
+    $splitScript = Join-Path $repoRoot "pipeline_Automation/workflow/Split_Issues_By_Component.ps1"
+    if (-not (Test-Path -LiteralPath $splitScript)) {
+        throw "Issues-by-component split script not found: $splitScript"
+    }
+
+    Write-Host "`n===== Split issues by component for $Series =====" -ForegroundColor Cyan
+    & powershell -ExecutionPolicy Bypass -File $splitScript -Series $Series -PythonExe $PythonExe
+    if ($LASTEXITCODE -ne 0) {
+        throw "Split issues by component failed for $Series"
+    }
+}
+
+function Invoke-IssuesByComponentUpload {
+    $uploadScript = Join-Path $repoRoot "pipeline_Automation/workflow/Upload_Issues_By_Component.ps1"
+    if (-not (Test-Path -LiteralPath $uploadScript)) {
+        throw "Issues-by-component upload script not found: $uploadScript"
+    }
+
+    Write-Host "`n===== Upload issues by component for $Series =====" -ForegroundColor Cyan
+    $uploadArgs = @(
+        "-ExecutionPolicy", "Bypass",
+        "-File", $uploadScript,
+        "-Series", $Series,
+        "-PythonExe", $PythonExe,
+        "-RemoteUser", $RemoteUser,
+        "-KbId", "$KbId",
+        "-JsonSplitSize", "$JsonSplitSize",
+        "-ExistingDatasourcePolicy", "add"
+    )
+    if (-not [string]::IsNullOrWhiteSpace($ApiKey)) {
+        $uploadArgs += @("-ApiKey", $ApiKey)
+    }
+    if (-not [string]::IsNullOrWhiteSpace($ClientAppName)) {
+        $uploadArgs += @("-ClientAppName", $ClientAppName)
+    }
+
+    & powershell @uploadArgs
+    if ($LASTEXITCODE -ne 0) {
+        throw "Upload issues by component failed for $Series"
     }
 }
 
@@ -471,9 +573,10 @@ function Invoke-PreUploadAlfredFinalize {
     if ($SkipAlfredEnrichment) {
         Write-Host "[SKIP] Pre-upload Alfred finalize disabled by -SkipAlfredEnrichment" -ForegroundColor Yellow
     } else {
-        Invoke-AlfredPdfFigureDescriptions
+        $repos = Get-ConfigRepos $configPath
+        Invoke-AlfredPdfFigureDescriptions -Repos $repos
         Invoke-AlfredIssueImageDescriptionsForSeries
-        Invoke-Step "Patch Alfred PDF descriptions into root and driver delivery files" @("pipeline_Automation/patch_pdf_descriptions_in_delivery.py")
+        Invoke-Step "Patch Alfred PDF descriptions into root and driver delivery files" @("pipeline_Automation/patch_pdf_descriptions_in_delivery.py", "--series", $Series)
     }
 
     if (-not $SkipSchemaValidation) {
@@ -494,6 +597,7 @@ function Invoke-UploadJsonNew {
         [string]$RootKey,
         [string]$DatasourceName,
         [string]$ProcessorParams,
+        [int]$ExistingDatasourceIdHint = 0,
         [switch]$AllowEmpty
     )
 
@@ -515,12 +619,16 @@ function Invoke-UploadJsonNew {
         "--json-root-mode", "auto",
         "--empty-json-policy", "skip",
         "--json-split-size", "$JsonSplitSize",
-        "--existing-datasource-policy", $ExistingDatasourceMode.ToLowerInvariant(),
+        "--existing-datasource-policy", $script:EffectiveDatasourceMode.ToLowerInvariant(),
         "--skip-auth-precheck",
         "--max-retries", "$uploadMaxRetries",
         "--timeout", "$uploadTimeoutSeconds",
         "--files", (Resolve-Path $FilePath).Path
     )
+    if ($ExistingDatasourceIdHint -gt 0) {
+        $args += @("--existing-datasource-id-hint", "$ExistingDatasourceIdHint")
+    }
+    $args += @(Get-UploadAuthArgs)
 
     $output = Invoke-CapturedPython "Create datasource and upload $Label" $args
     $id = Get-DatasourceIdFromOutput $output
@@ -557,19 +665,34 @@ function Invoke-UploadJsonAdd {
         return $DatasourceId
     }
 
-    if ($ExistingDatasourceMode -eq "Replace") {
-        if (-not $DatasourceNameForFallback) {
-            throw "Replace mode for $Label requires -DatasourceNameForFallback."
+    if ($script:EffectiveDatasourceMode -eq "Replace") {
+        if ([string]::IsNullOrWhiteSpace($DatasourceNameForFallback)) {
+            throw "Replace mode requires -DatasourceNameForFallback for $Label to recreate datasource and refresh ID."
         }
 
-        Write-Host "[REPLACE] Name-based replace for $Label using '$DatasourceNameForFallback' (avoids stale datasource ID races)." -ForegroundColor DarkCyan
-        return Invoke-UploadJsonNew `
-            -Label $Label `
-            -FilePath $FilePath `
-            -RootKey $RootKey `
-            -DatasourceName $DatasourceNameForFallback `
-            -ProcessorParams $ProcessorParams `
-            -AllowEmpty:$AllowEmpty
+        Write-Host "[REPLACE] Refreshing datasource for ${Label}: requesting recreate with same name from uploader logic (no pre-delete in workflow)." -ForegroundColor DarkCyan
+
+        try {
+            $newDatasourceId = Invoke-UploadJsonNew `
+                -Label "$Label (recreated)" `
+                -FilePath $FilePath `
+                -RootKey $RootKey `
+                -DatasourceName $DatasourceNameForFallback `
+                -ProcessorParams $ProcessorParams `
+                -ExistingDatasourceIdHint $DatasourceId `
+                -AllowEmpty:$AllowEmpty
+
+            Write-Host "[REPLACE] Datasource ID updated for ${Label}: DS#$DatasourceId -> DS#$newDatasourceId" -ForegroundColor DarkCyan
+            return $newDatasourceId
+        }
+        catch {
+            $replaceError = $_.Exception.Message
+            if ($replaceError -match "Replace fallback exhausted for datasource") {
+                Write-Host "[WARN] Replace fallback exhausted for ${Label}; continuing with in-place add on existing DS#$DatasourceId." -ForegroundColor Yellow
+            } else {
+                throw
+            }
+        }
     } else {
         Write-Host "[ADD] Existing datasource mode is Add for $Label (DS#$DatasourceId): appending files." -ForegroundColor DarkCyan
     }
@@ -590,6 +713,7 @@ function Invoke-UploadJsonAdd {
         "--timeout", "$uploadTimeoutSeconds",
         "--files", (Resolve-Path $FilePath).Path
     )
+    $args += @(Get-UploadAuthArgs)
 
     try {
         Invoke-CapturedPython "Upload $Label into existing DS#$DatasourceId" $args | Out-Null
@@ -607,14 +731,7 @@ function Invoke-UploadJsonAdd {
         )
 
         if ($isDatasourceMissing -and $DatasourceNameForFallback) {
-            Write-Host "[WARN] Upload failed because DS#$DatasourceId for $Label does not exist. Recreating datasource '$DatasourceNameForFallback'." -ForegroundColor Yellow
-            return Invoke-UploadJsonNew `
-                -Label $Label `
-                -FilePath $FilePath `
-                -RootKey $RootKey `
-                -DatasourceName $DatasourceNameForFallback `
-                -ProcessorParams $ProcessorParams `
-                -AllowEmpty:$AllowEmpty
+            throw "Upload failed because DS#$DatasourceId for $Label does not exist in Add mode. Use Replace mode to recreate datasource and refresh ID, or fix configured datasource ID."
         }
 
             if ($isDatasourceMissing -and (-not $DatasourceNameForFallback)) {
@@ -710,6 +827,11 @@ function Invoke-UploadSubrepoDeliveryAdd {
         return
     }
 
+    if ($ComponentIssuesOnly -and $Label -eq "issues") {
+        Write-Host "[SKIP] Driver/subrepo issues upload to monolithic datasource disabled by -ComponentIssuesOnly (issues are handled by per-component datasources)." -ForegroundColor Yellow
+        return
+    }
+
     if ($effectiveDatasourceId -le 0) {
         if ($filesList.Count -gt 0) {
             Write-Host "[SKIP] No datasource ID available for $Label; $($filesList.Count) driver/subrepo file(s) not uploaded" -ForegroundColor Yellow
@@ -739,6 +861,7 @@ function Invoke-UploadSubrepoDeliveryAdd {
             "--timeout", "$uploadTimeoutSeconds",
             "--files", $file.FullName
         )
+        $args += @(Get-UploadAuthArgs)
         Invoke-CapturedPython "Upload driver/subrepo $($file.Directory.Parent.Name) $Label into ${Series} DS#$effectiveDatasourceId" $args | Out-Null
     }
 }
@@ -760,6 +883,29 @@ function Set-OrAddProperty {
     }
 }
 
+function Get-OptionalPositiveIntProperty {
+    param(
+        [AllowNull()][object]$Target,
+        [Parameter(Mandatory = $true)][string]$Name
+    )
+
+    if ($null -eq $Target) {
+        return 0
+    }
+
+    $prop = $Target.PSObject.Properties[$Name]
+    if ($null -eq $prop -or $null -eq $prop.Value) {
+        return 0
+    }
+
+    $parsed = 0
+    if ([int]::TryParse([string]$prop.Value, [ref]$parsed) -and $parsed -gt 0) {
+        return $parsed
+    }
+
+    return 0
+}
+
 function Sync-GlobalConfigDatasourceIds {
     param(
         [Parameter(Mandatory = $true)]
@@ -772,7 +918,7 @@ function Sync-GlobalConfigDatasourceIds {
     }
 
     try {
-        $cfg = Get-Content -LiteralPath $globalConfigPath -Raw | ConvertFrom-Json
+        $cfg = ((Get-Content -LiteralPath $globalConfigPath -Raw).TrimStart([char]0xFEFF)) | ConvertFrom-Json
         if ($null -eq $cfg -or $null -eq $cfg.kb_datasource_ids) {
             Write-Host "[WARN] Invalid global config structure, skip datasource sync: $globalConfigPath" -ForegroundColor Yellow
             return
@@ -810,6 +956,37 @@ function Save-DatasourceIdsSnapshot {
     )
 
     New-Item -ItemType Directory -Force -Path $deliveryRoot | Out-Null
+
+    # Preserve previously known IDs when current stage does not provide them.
+    $existingSnapshot = $null
+    if (Test-Path -LiteralPath $idsOutput) {
+        try {
+            $existingSnapshot = ((Get-Content -LiteralPath $idsOutput -Raw).TrimStart([char]0xFEFF)) | ConvertFrom-Json
+        } catch {
+            $existingSnapshot = $null
+        }
+    }
+
+    foreach ($name in @("issues", "files", "diagnostic", "resolver")) {
+        $currentValue = $Ids.$name
+        $currentId = 0
+        if ([int]::TryParse([string]$currentValue, [ref]$currentId) -and $currentId -gt 0) {
+            continue
+        }
+
+        if ($null -ne $existingSnapshot) {
+            $existingValue = $null
+            $existingProp = $existingSnapshot.PSObject.Properties[$name]
+            if ($null -ne $existingProp) {
+                $existingValue = $existingProp.Value
+            }
+            $existingId = 0
+            if ([int]::TryParse([string]$existingValue, [ref]$existingId) -and $existingId -gt 0) {
+                $Ids[$name] = $existingId
+            }
+        }
+    }
+
     $Ids["uploaded_at"] = (Get-Date).ToString("s")
     if ($Reason) {
         $Ids["last_update_reason"] = $Reason
@@ -830,6 +1007,111 @@ function Save-DatasourceIdsSnapshot {
     }
 }
 
+function Sync-DatasourceIdsFromKbLive {
+    param(
+        [int]$CurrentIssuesId,
+        [int]$CurrentFilesId,
+        [int]$CurrentDiagnosticId,
+        [int]$CurrentResolverId
+    )
+
+    $resolverScript = "pipeline_Automation/upload/Resolve_Live_Datasource_Ids.py"
+    if (-not (Test-Path -LiteralPath $resolverScript)) {
+        Write-Host "[WARN] Live KB ID resolver script not found: $resolverScript" -ForegroundColor Yellow
+        return @{
+            issues = $CurrentIssuesId
+            files = $CurrentFilesId
+            diagnostic = $CurrentDiagnosticId
+            resolver = $CurrentResolverId
+            live_issues_resolved = $false
+            live_files_resolved = $false
+            live_diagnostic_resolved = $false
+            live_resolver_resolved = $false
+        }
+    }
+
+    $args = @(
+        $resolverScript,
+        "--kb", "$KbId",
+        "--series", $Series,
+        "--remote-user", $RemoteUser,
+        "--timeout", "60"
+    )
+    $args += @(Get-UploadAuthArgs)
+
+    try {
+        $output = Invoke-CapturedPython "Resolve live datasource IDs from KB for $Series" $args
+        $rawJson = ($output | Where-Object { $_ -and $_.Trim().StartsWith("{") } | Select-Object -Last 1)
+        if (-not $rawJson) {
+            throw "Resolver returned no JSON payload."
+        }
+
+        $resolved = ConvertFrom-JsonSafeText -RawText $rawJson -Source "live resolver output"
+        $ids = $resolved.resolved_ids
+        if ($null -eq $ids) {
+            throw "Resolver JSON does not contain resolved_ids."
+        }
+
+        $newIssues = $CurrentIssuesId
+        $newFiles = $CurrentFilesId
+        $newDiagnostic = $CurrentDiagnosticId
+        $newResolver = $CurrentResolverId
+        $liveIssuesResolved = $false
+        $liveFilesResolved = $false
+        $liveDiagnosticResolved = $false
+        $liveResolverResolved = $false
+
+        $tmp = 0
+        if ([int]::TryParse([string]$ids.issues, [ref]$tmp) -and $tmp -gt 0) {
+            $newIssues = $tmp
+            $liveIssuesResolved = $true
+        }
+        if ([int]::TryParse([string]$ids.files, [ref]$tmp) -and $tmp -gt 0) {
+            $newFiles = $tmp
+            $liveFilesResolved = $true
+        }
+        if ([int]::TryParse([string]$ids.diagnostic, [ref]$tmp) -and $tmp -gt 0) {
+            $newDiagnostic = $tmp
+            $liveDiagnosticResolved = $true
+        }
+        if ([int]::TryParse([string]$ids.resolver, [ref]$tmp) -and $tmp -gt 0) {
+            $newResolver = $tmp
+            $liveResolverResolved = $true
+        }
+
+        $liveResolvedCount = @($liveIssuesResolved, $liveFilesResolved, $liveDiagnosticResolved, $liveResolverResolved | Where-Object { $_ }).Count
+        if ($liveResolvedCount -eq 0) {
+            Write-Host "[WARN] Live KB resolver returned no datasource IDs for ${Series}. Keeping current IDs: issues=$newIssues files=$newFiles diagnostic=$newDiagnostic resolver=$newResolver" -ForegroundColor Yellow
+        } else {
+            Write-Host "[SYNC] Live KB datasource IDs resolved for ${Series} ($liveResolvedCount/4 from KB): issues=$newIssues files=$newFiles diagnostic=$newDiagnostic resolver=$newResolver" -ForegroundColor DarkCyan
+        }
+
+        return @{
+            issues = $newIssues
+            files = $newFiles
+            diagnostic = $newDiagnostic
+            resolver = $newResolver
+            live_issues_resolved = $liveIssuesResolved
+            live_files_resolved = $liveFilesResolved
+            live_diagnostic_resolved = $liveDiagnosticResolved
+            live_resolver_resolved = $liveResolverResolved
+        }
+    }
+    catch {
+        Write-Host "[WARN] Live KB ID sync failed for ${Series}: $($_.Exception.Message)" -ForegroundColor Yellow
+        return @{
+            issues = $CurrentIssuesId
+            files = $CurrentFilesId
+            diagnostic = $CurrentDiagnosticId
+            resolver = $CurrentResolverId
+            live_issues_resolved = $false
+            live_files_resolved = $false
+            live_diagnostic_resolved = $false
+            live_resolver_resolved = $false
+        }
+    }
+}
+
 function Invoke-UploadSeries {
     if (-not (Test-Path -LiteralPath $deliveryRoot)) {
         throw "Delivery root not found for ${Series}: $deliveryRoot. Upload mode requires pre-generated delivery artifacts. Run with -Mode Full, or run with -Mode Prepare then upload from the same workflow run/artifacts."
@@ -845,19 +1127,23 @@ function Invoke-UploadSeries {
 
     if ($reuseLocalSnapshot -and (Test-Path -LiteralPath $idsOutput)) {
         try {
-            $saved = Get-Content -LiteralPath $idsOutput -Raw | ConvertFrom-Json
+            $saved = ((Get-Content -LiteralPath $idsOutput -Raw).TrimStart([char]0xFEFF)) | ConvertFrom-Json
             if ($null -ne $saved) {
-                if (($IssuesDatasourceId -le 0) -and ($saved.issues -as [int]) -gt 0) {
-                    $IssuesDatasourceId = [int]$saved.issues
+                $savedIssues = Get-OptionalPositiveIntProperty -Target $saved -Name "issues"
+                if (($IssuesDatasourceId -le 0) -and $savedIssues -gt 0) {
+                    $IssuesDatasourceId = $savedIssues
                 }
-                if (($FilesDatasourceId -le 0) -and ($saved.files -as [int]) -gt 0) {
-                    $FilesDatasourceId = [int]$saved.files
+                $savedFiles = Get-OptionalPositiveIntProperty -Target $saved -Name "files"
+                if (($FilesDatasourceId -le 0) -and $savedFiles -gt 0) {
+                    $FilesDatasourceId = $savedFiles
                 }
-                if (($DiagnosticDatasourceId -le 0) -and ($saved.diagnostic -as [int]) -gt 0) {
-                    $DiagnosticDatasourceId = [int]$saved.diagnostic
+                $savedDiagnostic = Get-OptionalPositiveIntProperty -Target $saved -Name "diagnostic"
+                if (($DiagnosticDatasourceId -le 0) -and $savedDiagnostic -gt 0) {
+                    $DiagnosticDatasourceId = $savedDiagnostic
                 }
-                if (($ResolverDatasourceId -le 0) -and ($saved.resolver -as [int]) -gt 0) {
-                    $ResolverDatasourceId = [int]$saved.resolver
+                $savedResolver = Get-OptionalPositiveIntProperty -Target $saved -Name "resolver"
+                if (($ResolverDatasourceId -le 0) -and $savedResolver -gt 0) {
+                    $ResolverDatasourceId = $savedResolver
                 }
 
                 Write-Host "[UPLOAD] Reusing datasource IDs from $idsOutput when available." -ForegroundColor DarkCyan
@@ -870,7 +1156,7 @@ function Invoke-UploadSeries {
     # Fallback to shared/config/config_all_series.json when no local snapshot IDs are available.
     if ((($IssuesDatasourceId -le 0) -or ($FilesDatasourceId -le 0) -or ($DiagnosticDatasourceId -le 0) -or ($ResolverDatasourceId -le 0)) -and (Test-Path -LiteralPath $globalConfigPath)) {
         try {
-            $cfg = Get-Content -LiteralPath $globalConfigPath -Raw | ConvertFrom-Json
+            $cfg = ((Get-Content -LiteralPath $globalConfigPath -Raw).TrimStart([char]0xFEFF)) | ConvertFrom-Json
             $seriesEntry = $null
             if ($null -ne $cfg -and $null -ne $cfg.kb_datasource_ids) {
                 $prop = $cfg.kb_datasource_ids.PSObject.Properties[$seriesRepo]
@@ -880,17 +1166,21 @@ function Invoke-UploadSeries {
             }
 
             if ($null -ne $seriesEntry) {
-                if (($IssuesDatasourceId -le 0) -and ($seriesEntry.issues -as [int]) -gt 0) {
-                    $IssuesDatasourceId = [int]$seriesEntry.issues
+                $cfgIssues = Get-OptionalPositiveIntProperty -Target $seriesEntry -Name "issues"
+                if (($IssuesDatasourceId -le 0) -and $cfgIssues -gt 0) {
+                    $IssuesDatasourceId = $cfgIssues
                 }
-                if (($FilesDatasourceId -le 0) -and ($seriesEntry.files -as [int]) -gt 0) {
-                    $FilesDatasourceId = [int]$seriesEntry.files
+                $cfgFiles = Get-OptionalPositiveIntProperty -Target $seriesEntry -Name "files"
+                if (($FilesDatasourceId -le 0) -and $cfgFiles -gt 0) {
+                    $FilesDatasourceId = $cfgFiles
                 }
-                if (($DiagnosticDatasourceId -le 0) -and ($seriesEntry.diagnostic -as [int]) -gt 0) {
-                    $DiagnosticDatasourceId = [int]$seriesEntry.diagnostic
+                $cfgDiagnostic = Get-OptionalPositiveIntProperty -Target $seriesEntry -Name "diagnostic"
+                if (($DiagnosticDatasourceId -le 0) -and $cfgDiagnostic -gt 0) {
+                    $DiagnosticDatasourceId = $cfgDiagnostic
                 }
-                if (($ResolverDatasourceId -le 0) -and ($seriesEntry.resolver -as [int]) -gt 0) {
-                    $ResolverDatasourceId = [int]$seriesEntry.resolver
+                $cfgResolver = Get-OptionalPositiveIntProperty -Target $seriesEntry -Name "resolver"
+                if (($ResolverDatasourceId -le 0) -and $cfgResolver -gt 0) {
+                    $ResolverDatasourceId = $cfgResolver
                 }
 
                 Write-Host "[UPLOAD] Reusing datasource IDs from $globalConfigPath for ${seriesRepo} when available." -ForegroundColor DarkCyan
@@ -898,6 +1188,31 @@ function Invoke-UploadSeries {
         } catch {
             Write-Host "[WARN] Could not parse datasource IDs from $globalConfigPath. Proceeding without global fallback." -ForegroundColor Yellow
         }
+    }
+
+    # Runtime synchronization from KB is the source of truth.
+    # This keeps automation aligned even when repo config IDs are stale.
+    $synced = Sync-DatasourceIdsFromKbLive `
+        -CurrentIssuesId $IssuesDatasourceId `
+        -CurrentFilesId $FilesDatasourceId `
+        -CurrentDiagnosticId $DiagnosticDatasourceId `
+        -CurrentResolverId $ResolverDatasourceId
+
+    $IssuesDatasourceId = [int]$synced.issues
+    $FilesDatasourceId = [int]$synced.files
+    $DiagnosticDatasourceId = [int]$synced.diagnostic
+    $ResolverDatasourceId = [int]$synced.resolver
+
+    $script:EffectiveDatasourceMode = $ExistingDatasourceMode
+    if (
+        ($script:EffectiveDatasourceMode -eq "Replace") -and
+        ($env:GITHUB_ACTIONS -eq "true") -and
+        (-not [bool]$synced.live_files_resolved) -and
+        (-not [bool]$synced.live_diagnostic_resolved)
+    ) {
+        Write-Host "[WARN] Live KB resolver did not return files/diagnostic IDs for ${Series} in GitHub Actions." -ForegroundColor Yellow
+        Write-Host "[WARN] Auto-switching ExistingDatasourceMode Replace -> Add to avoid replace deadlock on reserved datasource names." -ForegroundColor Yellow
+        $script:EffectiveDatasourceMode = "Add"
     }
 
     $issuesFile = "$deliveryRoot/issues_json/st_ready_issues_with_images_$slug.json"
@@ -915,7 +1230,7 @@ function Invoke-UploadSeries {
 
     $issuesParams = New-ProcessorParamsArg `
         -RootTagPath "issues" `
-        -LinkUrlTemplate "{{github_url}}" `
+        -LinkUrlTemplate "https://github.com/STMicroelectronics/{{repo}}/issues/{{issue_number}}" `
         -LinkLabelTemplate "{{repo}} issue #{{issue_number}} - {{issue_title}}"
     $filesParams = New-ProcessorParamsArg `
         -RootTagPath "files" `
@@ -934,41 +1249,46 @@ function Invoke-UploadSeries {
         series = $Series
         slug = $slug
         kb = $KbId
-        issues = $null
-        files = $null
-        diagnostic = $null
-        resolver = $null
+        issues = $(if ($IssuesDatasourceId -gt 0) { [int]$IssuesDatasourceId } else { $null })
+        files = $(if ($FilesDatasourceId -gt 0) { [int]$FilesDatasourceId } else { $null })
+        diagnostic = $(if ($DiagnosticDatasourceId -gt 0) { [int]$DiagnosticDatasourceId } else { $null })
+        resolver = $(if ($ResolverDatasourceId -gt 0) { [int]$ResolverDatasourceId } else { $null })
         last_successful_stage = $null
         uploaded_at = (Get-Date).ToString("s")
     }
 
-    if ($IssuesDatasourceId -gt 0) {
-        $ids.issues = Invoke-UploadJsonAdd `
-            -Label "${Series} issues" `
-            -FilePath $issuesFile `
-            -RootKey "issues" `
-            -DatasourceId $IssuesDatasourceId `
-            -ProcessorParams $issuesParams `
-            -DatasourceNameForFallback "DB_STready_${Series}_Issues"
-    } elseif ((Test-JsonRootIsEmpty -Path $issuesFile -RootKey "issues") -and ($driverIssueNonEmptyFiles.Count -gt 0)) {
-        $firstIssueFile = $driverIssueNonEmptyFiles[0]
-        $ids.issues = Invoke-UploadJsonNew `
-            -Label "${Series} issues from driver/subrepo $($firstIssueFile.Directory.Parent.Name)" `
-            -FilePath $firstIssueFile.FullName `
-            -RootKey "issues" `
-            -DatasourceName "DB_STready_${Series}_Issues" `
-            -ProcessorParams $issuesParams
-        $driverIssueFiles = @($driverIssueFiles | Where-Object { $_.FullName -ne $firstIssueFile.FullName })
+    if ($ComponentIssuesOnly) {
+        Write-Host "[SKIP] Monolithic issues datasource upload disabled by -ComponentIssuesOnly" -ForegroundColor Yellow
+        Save-DatasourceIdsSnapshot -Ids $ids -Reason "issues_skipped_component_only"
     } else {
-        $ids.issues = Invoke-UploadJsonNew `
-            -Label "${Series} issues" `
-            -FilePath $issuesFile `
-            -RootKey "issues" `
-            -DatasourceName "DB_STready_${Series}_Issues" `
-            -ProcessorParams $issuesParams `
-            -AllowEmpty
+        if ($IssuesDatasourceId -gt 0) {
+            $ids.issues = Invoke-UploadJsonAdd `
+                -Label "${Series} issues" `
+                -FilePath $issuesFile `
+                -RootKey "issues" `
+                -DatasourceId $IssuesDatasourceId `
+                -ProcessorParams $issuesParams `
+                -DatasourceNameForFallback "DB_STready_${Series}_Issues"
+        } elseif ((Test-JsonRootIsEmpty -Path $issuesFile -RootKey "issues") -and ($driverIssueNonEmptyFiles.Count -gt 0)) {
+            $firstIssueFile = $driverIssueNonEmptyFiles[0]
+            $ids.issues = Invoke-UploadJsonNew `
+                -Label "${Series} issues from driver/subrepo $($firstIssueFile.Directory.Parent.Name)" `
+                -FilePath $firstIssueFile.FullName `
+                -RootKey "issues" `
+                -DatasourceName "DB_STready_${Series}_Issues" `
+                -ProcessorParams $issuesParams
+            $driverIssueFiles = @($driverIssueFiles | Where-Object { $_.FullName -ne $firstIssueFile.FullName })
+        } else {
+            $ids.issues = Invoke-UploadJsonNew `
+                -Label "${Series} issues" `
+                -FilePath $issuesFile `
+                -RootKey "issues" `
+                -DatasourceName "DB_STready_${Series}_Issues" `
+                -ProcessorParams $issuesParams `
+                -AllowEmpty
+        }
+        Save-DatasourceIdsSnapshot -Ids $ids -Reason "issues"
     }
-    Save-DatasourceIdsSnapshot -Ids $ids -Reason "issues"
 
     if ($FilesDatasourceId -gt 0) {
         $ids.files = Invoke-UploadJsonAdd `
@@ -1053,6 +1373,11 @@ function Invoke-UploadSeries {
     Invoke-UploadSubrepoDeliveryAdd -Label "files" -Files $driverFiles -RootKey "files" -DatasourceId $ids.files -ProcessorParams $filesParams
     Invoke-UploadSubrepoDeliveryAdd -Label "diagnostic cards" -Files $driverDiagnosticFiles -RootKey "diagnostic_cards" -DatasourceId $ids.diagnostic -ProcessorParams $diagnosticParams
     Invoke-UploadSubrepoDeliveryAdd -Label "resolver cases" -Files $driverResolverFiles -RootKey "resolver_cases" -DatasourceId $ids.resolver -ProcessorParams $resolverParams
+
+    if ($EnableIssuesByComponentFlow) {
+        Invoke-IssuesByComponentSplit
+        Invoke-IssuesByComponentUpload
+    }
 
     Write-Host "`n===== $Series upload summary =====" -ForegroundColor Cyan
     $ids | ConvertTo-Json -Depth 4 | Write-Host

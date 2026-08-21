@@ -1,3 +1,27 @@
+"""Service module: thin GitHub REST API client used by the ingestion stage.
+
+Role in the pipeline
+---------------------
+`GitHubService` wraps `requests` with retry/backoff, pagination, and rate
+limiting, and exposes higher-level fetch methods used by
+`fetch_issues.py`, `fetch_prs.py` and `fetch_commits.py` to build the raw
+JSON artifacts under `data/`.
+
+Inputs
+------
+- GitHub REST API v3 (`https://api.github.com`), authenticated via a
+  personal access token read from an environment variable (default
+  `GITHUB_TOKEN`, configurable via the `token_env` constructor argument).
+
+Outputs
+-------
+- Python dicts/lists representing issues, comments, pull requests, PR files,
+  and commits. This module does not write any files itself; callers persist
+  the results.
+
+This module has no CLI entry point; it is imported, not run directly.
+"""
+
 import os
 import re
 import time
@@ -9,6 +33,12 @@ from urllib3.util import Retry
 
 
 class GitHubService:
+    """Minimal GitHub REST API client for the STM32Cube ingestion pipeline.
+
+    Handles authentication, HTTP retries (via `urllib3.Retry`), pagination,
+    and configurable inter-request sleeps to stay under GitHub's rate limits.
+    """
+
     def __init__(
         self,
         owner: str,
@@ -21,6 +51,23 @@ class GitHubService:
         request_timeout: float = 30.0,
         max_request_attempts: int = 3,
     ) -> None:
+        """Configure the client and its underlying `requests.Session`.
+
+        Args:
+            owner: GitHub organization/user that owns the target repos.
+            token_env: Name of the environment variable holding the GitHub
+                token. If unset/None, requests are made unauthenticated
+                (much lower rate limits).
+            issues_sleep: Delay (seconds) between issue list pages.
+            comments_sleep: Delay between issue comments pages.
+            prs_sleep: Delay between pull request list pages.
+            pr_details_sleep: Delay between PR detail/files/commits requests.
+            commits_sleep: Delay between commit detail requests.
+            request_timeout: Per-request timeout in seconds.
+            max_request_attempts: Max attempts for `_safe_get` before giving up
+                on transient network errors (separate from the HTTP-level
+                `Retry` adapter, which handles 429/5xx responses).
+        """
         self.owner = owner
         self.issues_sleep = issues_sleep
         self.comments_sleep = comments_sleep
@@ -54,6 +101,20 @@ class GitHubService:
         self.session.mount("http://", adapter)
 
     def _safe_get(self, url: str, params: dict[str, Any], context: str) -> requests.Response | None:
+        """Perform a GET request with manual retries for transient network errors.
+
+        This is a second layer of resilience on top of the `Retry` adapter
+        (which only kicks in for actual HTTP responses like 429/5xx); this
+        catches lower-level exceptions such as connection resets/timeouts.
+
+        Args:
+            url: Target URL.
+            params: Query parameters.
+            context: Human-readable description used in log messages.
+
+        Returns:
+            The `requests.Response`, or None if all attempts failed.
+        """
         for attempt in range(1, self.max_request_attempts + 1):
             try:
                 return self.session.get(url, params=params, timeout=self.request_timeout)
@@ -62,9 +123,22 @@ class GitHubService:
                 if attempt == self.max_request_attempts:
                     print(f"  [ERROR] {context} failed after retries.")
                     return None
+                # Linear backoff: wait longer on each subsequent attempt.
                 time.sleep(1.5 * attempt)
 
     def _extract_issue_numbers(self, *texts: str | None) -> list[int]:
+        """Extract issue numbers referenced in free-form text (PR/commit bodies).
+
+        Scans for several common GitHub referencing conventions: bare "#123",
+        "issues/123" or "issue/123" URLs, "issue #123" wording, and resolver
+        verbs like "fixes #123" / "closes #123".
+
+        Args:
+            *texts: Any number of text fragments to scan (e.g. title and body).
+
+        Returns:
+            A de-duplicated list of issue numbers, in first-seen order.
+        """
         issue_numbers: list[int] = []
         seen: set[int] = set()
 
@@ -89,6 +163,19 @@ class GitHubService:
         return issue_numbers
 
     def fetch_all_issues(self, repo: str) -> list[dict[str, Any]]:
+        """Fetch all issues (all states) for a repo, including their comments.
+
+        Note: GitHub's `/issues` endpoint also returns pull requests; entries
+        containing a `pull_request` key are skipped since PRs are fetched
+        separately via `fetch_all_pull_requests`.
+
+        Args:
+            repo: Repository name (without owner).
+
+        Returns:
+            A list of issue dicts with title, state, labels, timestamps, body,
+            comments, and the GitHub URL.
+        """
         issues: list[dict[str, Any]] = []
         page = 1
 
@@ -109,10 +196,12 @@ class GitHubService:
 
             data = resp.json()
             if not data:
+                # Empty page means we've paginated past the last page.
                 break
 
             for item in data:
                 if "pull_request" in item:
+                    # Skip PRs surfaced by the issues endpoint; handled separately.
                     continue
 
                 issue_number = item["number"]
@@ -145,6 +234,16 @@ class GitHubService:
         issue_number: int,
         comments_url: str,
     ) -> list[dict[str, Any]]:
+        """Fetch all comments for a single issue, following pagination.
+
+        Args:
+            repo: Repository name (used for logging only).
+            issue_number: Issue number (used for logging only).
+            comments_url: The `comments_url` field from the issue payload.
+
+        Returns:
+            A list of comment dicts (author, created_at, body).
+        """
         comments: list[dict[str, Any]] = []
         page = 1
 
@@ -181,6 +280,18 @@ class GitHubService:
         return comments
 
     def fetch_all_pull_requests(self, repo: str) -> list[dict[str, Any]]:
+        """Fetch all pull requests (all states) for a repo, with full detail.
+
+        For each PR summary returned by the list endpoint, fetches the full
+        detail (including linked issues and changed files) via
+        `fetch_pull_request_detail`.
+
+        Args:
+            repo: Repository name (without owner).
+
+        Returns:
+            A list of enriched PR detail dicts.
+        """
         pull_requests: list[dict[str, Any]] = []
         page = 1
 
@@ -216,6 +327,17 @@ class GitHubService:
         return pull_requests
 
     def fetch_pull_request_detail(self, repo: str, pr_number: int) -> dict[str, Any] | None:
+        """Fetch full detail for one pull request, including its changed files.
+
+        Args:
+            repo: Repository name.
+            pr_number: Pull request number.
+
+        Returns:
+            A dict with PR metadata (state, merge info, refs, counts) plus
+            `linked_issue_numbers` (parsed from title/body) and
+            `files_changed`; or None if the request failed.
+        """
         url = f"https://api.github.com/repos/{self.owner}/{repo}/pulls/{pr_number}"
         resp = self._safe_get(url, {}, context=f"fetch pull request #{pr_number} for {repo}")
         if resp is None:
@@ -259,6 +381,16 @@ class GitHubService:
         }
 
     def fetch_pull_request_files(self, repo: str, pr_number: int) -> list[dict[str, Any]]:
+        """Fetch the list of files changed by a pull request, following pagination.
+
+        Args:
+            repo: Repository name.
+            pr_number: Pull request number.
+
+        Returns:
+            A list of dicts describing each changed file (filename, status,
+            additions/deletions/changes, blob/raw URLs).
+        """
         files_changed: list[dict[str, Any]] = []
         page = 1
 
@@ -301,6 +433,19 @@ class GitHubService:
         return files_changed
 
     def fetch_pull_request_commits(self, repo: str, pr_number: int) -> list[dict[str, Any]]:
+        """Fetch the raw commit summaries associated with a pull request.
+
+        Note: this returns the GitHub API's summary payload as-is (not the
+        normalized shape used elsewhere); full detail is resolved separately
+        by `fetch_commit_detail` in `fetch_commits_for_pull_requests`.
+
+        Args:
+            repo: Repository name.
+            pr_number: Pull request number.
+
+        Returns:
+            A list of raw commit summary dicts from the GitHub API.
+        """
         commits: list[dict[str, Any]] = []
         page = 1
 
@@ -330,6 +475,18 @@ class GitHubService:
         return commits
 
     def fetch_commit_detail(self, repo: str, sha: str) -> dict[str, Any] | None:
+        """Fetch full detail for a single commit by SHA.
+
+        Args:
+            repo: Repository name.
+            sha: Commit SHA.
+
+        Returns:
+            A normalized commit dict (author, committer, message, timestamps,
+            stats, files_changed with per-file patches, and
+            `linked_issue_numbers` parsed from the commit message); or None
+            if the request failed.
+        """
         url = f"https://api.github.com/repos/{self.owner}/{repo}/commits/{sha}"
         resp = self._safe_get(url, {}, context=f"fetch commit {sha} for {repo}")
         if resp is None:
@@ -377,6 +534,24 @@ class GitHubService:
         repo: str,
         pull_requests: list[dict[str, Any]],
     ) -> list[dict[str, Any]]:
+        """Resolve and de-duplicate full commit details for a set of pull requests.
+
+        Iterates over each PR's commits (via `fetch_pull_request_commits`) and
+        fetches full detail once per unique SHA (via `fetch_commit_detail`),
+        since the same commit can be shared across multiple PRs (e.g. after a
+        rebase). Each resulting commit record aggregates the set of PR numbers
+        and linked issue numbers across all PRs it belongs to.
+
+        Args:
+            repo: Repository name.
+            pull_requests: PR detail dicts (as returned by
+                `fetch_pull_request_detail`), used for their `pr_number` and
+                `linked_issue_numbers`.
+
+        Returns:
+            A de-duplicated list of commit dicts, sorted by committed date
+            then SHA.
+        """
         commits_by_sha: dict[str, dict[str, Any]] = {}
 
         for pull_request in pull_requests:
@@ -393,6 +568,7 @@ class GitHubService:
                     continue
 
                 if sha not in commits_by_sha:
+                    # Only fetch full commit detail once per unique SHA (expensive call).
                     detail = self.fetch_commit_detail(repo, sha)
                     if detail is None:
                         continue

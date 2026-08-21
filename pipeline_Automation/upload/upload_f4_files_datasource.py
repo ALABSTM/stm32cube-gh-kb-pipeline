@@ -1,6 +1,18 @@
 """
 Upload all F4 files JSON (main repo + drivers) to datasource #28103.
 
+Series-specific batch uploader: appends every st_ready_files_*.json file for
+STM32CubeF4 (main repo plus per-driver sub-repos under by_series/stm32cubef4/drivers/*)
+to existing KB #793 (ST GitHub Analyzer) datasource #28103
+(STready_F4_Files_Datasource_JSON_V2), splitting each payload into parts of at most
+1000 documents via Add_Data_Source_Files.py (--operation add --json-split-size 1000).
+
+Required env vars: same as Add_Data_Source_Files.py (PERSONA_API_KEY /
+ST_GITHUB_ANALYZER_API_KEY / ST_CHATGPT_API_KEY / ST_AI_BRIDGE_API_KEY / ST_API_KEY).
+
+Required input files: datasets/07_delivery/st_ready/by_series/stm32cubef4/
+files_json/st_ready_files_stm32cubef4.json (and drivers/*/files_json/*.json).
+
 Usage:
     python pipeline_Automation/upload_f4_files_datasource.py --remote-user prenom.nom@st.com [--verbose]
 """
@@ -44,6 +56,9 @@ def find_all_f4_files_json() -> list[Path]:
 
 
 def main():
+    """CLI entry point: find F4 files JSON files, optionally list them (--dry-run),
+    then upload each one via Add_Data_Source_Files.py --operation add.
+    """
     parser = argparse.ArgumentParser(description="Upload F4 files to datasource #28103")
     parser.add_argument("--remote-user", required=True, help="Your ST email (e.g. first.last@st.com)")
     parser.add_argument("--verbose", action="store_true")

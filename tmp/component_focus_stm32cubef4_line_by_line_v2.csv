@@ -1,0 +1,35 @@
+issue_number,issue_title,current_component,new_component,confidence,score,hits,top_candidates,source_file
+3,Bit position of TimeFormat in HAL_RTC,,RTC,high,52,27,"RTC(score=52,hits=27), TIM(score=22,hits=11)",data/docs_issues_stm32cubef4_v2.json
+7,I2C HAL driver problem with HAL_I2C_Mem_Read_IT,,I2C,high,105,59,"I2C(score=105,hits=59), CAN(score=6,hits=5), TIM(score=6,hits=3)",data/docs_issues_stm32cubef4_v2.json
+15,STM32F407 Discovery working as Slave Transmiter not correct.,,SPI,high,12,6,"SPI(score=12,hits=6), CAN(score=3,hits=3), COMP(score=2,hits=1)",data/docs_issues_stm32cubef4_v2.json
+17,stm32f4xx_hal_rcc.c  line:545  check RCC_PLLCFGR_PLLP  registers error,,RCC,high,335,204,"RCC(score=335,hits=204), ETH(score=4,hits=2), CAN(score=3,hits=2)",data/docs_issues_stm32cubef4_v2.json
+24,I found issue in stm32f4xx_hal_i2c.c,,I2C,high,142,71,"I2C(score=142,hits=71), CAN(score=6,hits=6), TIM(score=6,hits=3)",data/docs_issues_stm32cubef4_v2.json
+26,BSP_AUDIO_IN_Record,,DFSDM,high,10,5,"DFSDM(score=10,hits=5), COMP(score=2,hits=1), TIM(score=2,hits=1)",data/docs_issues_stm32cubef4_v2.json
+30,template file system_stm32f4xx.c should support userdefined location of vectortable,,FLASH,high,15,11,"FLASH(score=15,hits=11), COMP(score=6,hits=3), CAN(score=5,hits=5)",data/docs_issues_stm32cubef4_v2.json
+45,STM32 F411E I2C hang ,,I2C,high,29,18,"I2C(score=29,hits=18), SPI(score=2,hits=2), TIM(score=2,hits=1)",data/docs_issues_stm32cubef4_v2.json
+53,Definition of I2C_MEMADD_SIZE_16BIT has an incorrect value,,I2C,high,26,16,"I2C(score=26,hits=16), COMP(score=2,hits=1)",data/docs_issues_stm32cubef4_v2.json
+55,Move GPIO read/write/toggle into implementation into header,,GPIO,high,12,8,"GPIO(score=12,hits=8), CAN(score=6,hits=5), COMP(score=6,hits=3)",data/docs_issues_stm32cubef4_v2.json
+58,HAL RTC Output,,RTC,high,95,55,"RTC(score=95,hits=55), CAN(score=2,hits=2), ETH(score=2,hits=1)",data/docs_issues_stm32cubef4_v2.json
+61,I2C issue where two consecutive start bits are generated when reading in memory mode,,I2C,high,40,22,"I2C(score=40,hits=22)",data/docs_issues_stm32cubef4_v2.json
+67,Hardcoded address in use,,FLASH,high,56,33,"FLASH(score=56,hits=33), RCC(score=21,hits=14), CAN(score=10,hits=6)",data/docs_issues_stm32cubef4_v2.json
+69,PLL can't be updated when PLL is already used for sysclock,,RCC,high,101,58,"RCC(score=101,hits=58), GPIO(score=8,hits=6), CAN(score=7,hits=7)",data/docs_issues_stm32cubef4_v2.json
+70,STM32F412Vx defined GPIOF_BASE and GPIOG_BASE,,RCC,high,117,55,"RCC(score=117,hits=55), FLASH(score=104,hits=46), GPIO(score=81,hits=41)",data/docs_issues_stm32cubef4_v2.json
+74,RTC initialization (defect),,RTC,high,146,86,"RTC(score=146,hits=86), TIM(score=10,hits=5), COMP(score=2,hits=1)",data/docs_issues_stm32cubef4_v2.json
+75,Assertion: 'REENT malloc succeeded' failed.,,GPIO,high,18,10,"GPIO(score=18,hits=10), COMP(score=4,hits=2), TIM(score=4,hits=2)",data/docs_issues_stm32cubef4_v2.json
+76,I2C Slave Driver Race Condition,,I2C,high,171,95,"I2C(score=171,hits=95), ETH(score=12,hits=6), TIM(score=4,hits=2)",data/docs_issues_stm32cubef4_v2.json
+79,"STM32F401-Discovery Templates_LL, System Clock Configuration Error.",,RCC,high,48,26,"RCC(score=48,hits=26), CAN(score=1,hits=1)",data/docs_issues_stm32cubef4_v2.json
+81,Bug in HAL_EXTI_GetConfigLine(),,EXTI,high,20,10,"EXTI(score=20,hits=10), GPIO(score=4,hits=2)",data/docs_issues_stm32cubef4_v2.json
+84,stm32f4xx_hal_rcc.c has a broken check for clock init,,RCC,high,56,28,"RCC(score=56,hits=28), COMP(score=2,hits=1), ETH(score=2,hits=1)",data/docs_issues_stm32cubef4_v2.json
+88,HAL_FLASH_Program_IT and HAL_FLASH_EndOfOperationCallback,,FLASH,high,126,62,"FLASH(score=126,hits=62), CAN(score=4,hits=3), ETH(score=2,hits=1)",data/docs_issues_stm32cubef4_v2.json
+94,Nucleo F411RE SPI not working,,GPIO,high,33,18,"GPIO(score=33,hits=18), SPI(score=26,hits=17), HSPI(score=2,hits=1)",data/docs_issues_stm32cubef4_v2.json
+95,Please confirm whether this is a bug in “I2C_RequestMemoryRead”,,I2C,high,19,11,"I2C(score=19,hits=11), ETH(score=4,hits=2)",data/docs_issues_stm32cubef4_v2.json
+101,EEprom flash hal driver incorrect lock/unlock sequence,,FLASH,high,46,27,"FLASH(score=46,hits=27), COMP(score=4,hits=2), CAN(score=2,hits=2)",data/docs_issues_stm32cubef4_v2.json
+105,SDMMC_CmdSetRelAddMmc is needed to correctly address MMCs,,SDMMC,high,75,49,"SDMMC(score=75,hits=49), TIM(score=2,hits=1)",data/docs_issues_stm32cubef4_v2.json
+147,Check value of pllm in function HAL_RCC_GetSysClockFreq of stm32f4xx_hal_rcc.c:911,,RCC,high,105,59,"RCC(score=105,hits=59), CAN(score=2,hits=2)",data/docs_issues_stm32cubef4_v2.json
+151,PWR_CSR_EWUP3_Msk in stm32f412vx.h is (1 << PWR_CSR_EWUP1_Pos),,PWR,high,24,16,"PWR(score=24,hits=16)",data/docs_issues_stm32cubef4_v2.json
+157,Trigger event triggered in MX_TIMx_Init (TIM_Base_SetConfig) causing triggering of slave timers initialised first,,TIM,high,135,74,"TIM(score=135,hits=74), CAN(score=7,hits=6), COMP(score=4,hits=2)",data/docs_issues_stm32cubef4_v2.json
+158,__HAL_RCC_APB2_FORCE_RESET cause mcu reset!,,RCC,high,41,21,"RCC(score=41,hits=21), FLASH(score=3,hits=3), CAN(score=2,hits=2)",data/docs_issues_stm32cubef4_v2.json
+160,STM32F429 + LAN8742a (custom board) problem with lwip,,ETH,high,19,9,"ETH(score=19,hits=9), TIM(score=4,hits=2), COMP(score=2,hits=1)",data/docs_issues_stm32cubef4_v2.json
+163,Unnecessary 64-bit calculations result in 700+ bytes increase in firmware size,,RCC,high,41,26,"RCC(score=41,hits=26), COMP(score=8,hits=4)",data/docs_issues_stm32cubef4_v2.json
+167,PWM oversight on STM32CubeMX + HAL combination,,TIM,high,116,69,"TIM(score=116,hits=69), COMP(score=16,hits=8), CAN(score=3,hits=3)",data/docs_issues_stm32cubef4_v2.json
+183,stm32f401retx_FLASH.ld wrong code generation,,FLASH,high,16,8,"FLASH(score=16,hits=8), COMP(score=4,hits=2), CAN(score=1,hits=1)",data/docs_issues_stm32cubef4_v2.json

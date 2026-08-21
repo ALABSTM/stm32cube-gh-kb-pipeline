@@ -7,6 +7,22 @@ Creates 4 datasources:
   - STready_WL_resolver_cases_Datasource
   - STready_WL_Diagnostic_Datasource
 
+All-in-one series bootstrap script for STM32CubeWL: for each of the four ST-ready
+document kinds (issues, files, resolver_cases, diagnostic_cards), creates a new KB
+#793 (ST GitHub Analyzer) datasource (--operation new) using every matching JSON
+file found under by_series/stm32cubewl/ (main repo + drivers/*), or, when re-run
+with --upload-only and explicit --*-id flags, appends files to already-created
+datasources (--operation add). Alfred-enriched and summary_*.json files are skipped.
+
+NOTE: --remote-user is hardcoded below ("abir.gharbi@st.com"); update it if you run
+this script under a different ST account.
+
+Required env vars: same as Add_Data_Source_Files.py (PERSONA_API_KEY /
+ST_GITHUB_ANALYZER_API_KEY / ST_CHATGPT_API_KEY / ST_AI_BRIDGE_API_KEY / ST_API_KEY).
+
+Required input files: datasets/07_delivery/st_ready/by_series/stm32cubewl/
+{issues,files,resolver_cases,diagnostic_cards}_json/*.json (and drivers/*/... equivalents).
+
 Usage:
     python pipeline_Automation/upload_wl_all_datasources.py --dry-run
     python pipeline_Automation/upload_wl_all_datasources.py --verbose
@@ -46,7 +62,7 @@ DATASOURCES = {
     },
     "diagnostic": {
         "name": "STready_WL_Diagnostic_Datasource",
-        "processor_params": '{"label": "{{label}}", "externalURL": "https://github.com/STMicroelectronics/{{repo}}/issues/{{evidence_refs[0].id}}", "rootTagPath": "diagnostic_cards"}',
+        "processor_params": '{"label": "{{label}}", "externalURL": "{{externalURL}}", "rootTagPath": "diagnostic_cards"}',
         "subdir": "diagnostic_cards_json",
         "glob": "st_ready_diagnostic_cards_*.json",
     },
@@ -54,6 +70,10 @@ DATASOURCES = {
 
 
 def find_json_files(subdir: str, glob_pattern: str) -> list[Path]:
+    """Collect JSON files matching glob_pattern under the WL main repo and driver
+    sub-repos for the given document-kind subdir (e.g. 'issues_json'), skipping
+    Alfred-enriched and summary_*.json files.
+    """
     files: list[Path] = []
     series_dir = BY_SERIES / SERIES
 
@@ -129,6 +149,10 @@ def upload_files(datasource_id: int, processor_params: str, files: list[Path], v
 
 
 def main():
+    """CLI entry point: list matching files per document kind, then either create
+    the four WL datasources (default / --create-only) or append files to existing
+    ones (--upload-only with --issues-id/--files-id/--resolver-id/--diagnostic-id).
+    """
     parser = argparse.ArgumentParser(description="Create WL datasources and upload data")
     parser.add_argument("--verbose", action="store_true")
     parser.add_argument("--dry-run", action="store_true", help="List files without creating/uploading")

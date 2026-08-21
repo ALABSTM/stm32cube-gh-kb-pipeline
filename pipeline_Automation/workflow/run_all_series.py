@@ -1,6 +1,24 @@
 """
-Run the full pipeline for multiple series, each with its own config
-(HAL driver + CMSIS + BSP sub-repos).
+Orchestrate the STM32Cube preprocessing pipeline across several STM32 series.
+
+Role in the automation layer:
+    Each STM32 series (F4, H5, U5, WL, C0, H7) has its own
+    ``shared/config/config_<series>.json`` describing the HAL driver + CMSIS + BSP
+    sub-repos to process for that series. The core pipeline entry point
+    (``pipeline.run_full_workflow``) only reads a single main config file
+    (``shared/config/config.json``), so this script temporarily swaps that main
+    config for each requested series' config, runs the full workflow
+    (ingestion -> cleaning -> enrichment -> similarity -> chunking -> optional
+    ST-ready delivery export), then restores the original (H7 default) config,
+    even if the run fails.
+
+Inputs:
+    - ``shared/config/config_<series>.json`` for each requested series.
+    - CLI flags selecting which pipeline stages to skip/run.
+
+Outputs:
+    - Standard pipeline artifacts under ``datasets/`` for each processed series.
+    - A console summary (OK/FAILED) per series printed at the end of the run.
 
 Usage:
     python -m pipeline_Automation.run_all_series --series f4 h5 u5 wl --continue-on-error --export-st-ready
@@ -84,6 +102,7 @@ def run_pipeline_for_series(
 
 
 def main():
+    """CLI entry point: parse arguments and run the pipeline sequentially for each requested series."""
     parser = argparse.ArgumentParser(description="Run pipeline for multiple STM32 series.")
     parser.add_argument(
         "--series",

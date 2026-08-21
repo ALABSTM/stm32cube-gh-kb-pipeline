@@ -1,6 +1,19 @@
 """
 Upload all F4 resolver cases JSON to datasource #28118.
 
+Series-specific batch uploader: appends every st_ready_resolver_cases_*.json file
+for STM32CubeF4 (main repo plus per-driver sub-repos under by_series/stm32cubef4/drivers/*)
+to existing KB #793 (ST GitHub Analyzer) datasource #28118
+(STready_F4_resolver_cases_Datasource) via Add_Data_Source_Files.py
+(--operation add).
+
+Required env vars: same as Add_Data_Source_Files.py (PERSONA_API_KEY /
+ST_GITHUB_ANALYZER_API_KEY / ST_CHATGPT_API_KEY / ST_AI_BRIDGE_API_KEY / ST_API_KEY).
+
+Required input files: datasets/07_delivery/st_ready/by_series/stm32cubef4/
+resolver_cases_json/st_ready_resolver_cases_stm32cubef4.json (and
+drivers/*/resolver_cases_json/*.json).
+
 Usage:
     python pipeline_Automation/upload_f4_resolver_datasource.py --remote-user abir.gharbi@st.com [--verbose]
     python pipeline_Automation/upload_f4_resolver_datasource.py --remote-user abir.gharbi@st.com --dry-run
@@ -45,6 +58,9 @@ def find_all_f4_resolver_json() -> list[Path]:
 
 
 def main():
+    """CLI entry point: find F4 resolver cases JSON files, optionally list them
+    (--dry-run), then upload each one via Add_Data_Source_Files.py --operation add.
+    """
     parser = argparse.ArgumentParser(description="Upload F4 resolver cases to datasource #28118")
     parser.add_argument("--remote-user", required=True, help="Your ST email (e.g. first.last@st.com)")
     parser.add_argument("--verbose", action="store_true")

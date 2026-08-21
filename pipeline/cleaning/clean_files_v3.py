@@ -416,6 +416,12 @@ def clean_files_v3_for_repo(repo: str) -> None:
 
 
 def main() -> None:
+    """Entry point: run type-aware cleaning (V3) for every repo in the selected config(s).
+
+    Reads `data/clean_files_<repo>.json` (V1 output) for each repo across the
+    target config(s) (see `load_target_configs`) and writes
+    `data/clean_files_<repo>_v3.json`, leaving the V1 files untouched.
+    """
     configs = load_target_configs()
 
     print("=" * 60)

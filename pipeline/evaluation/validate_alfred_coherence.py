@@ -1,3 +1,70 @@
+"""Validate coherence of Alfred image descriptions against their source context.
+
+This script checks whether Alfred (internal LLM Vision API) generated image
+descriptions and OCR text are actually grounded in / consistent with the
+surrounding text they were derived from, for two sources:
+
+1. Issue images: `image_analyses` entries inside ST-ready enriched issue
+   JSON files (`st_ready_issues_with_images_*.json`), where the "context" is
+   the issue body/clean_text.
+2. PDF figures: entries in a PDF figure descriptions map, where the
+   "context" is the surrounding page text captured in PDF task files.
+
+For each image/figure it computes a lexical grounding score (token overlap
+with the context), an optional semantic similarity score, and an optional
+contradiction probability (does the description contradict the context),
+then combines them into a single `coherence_score` and a reliability class
+(EXCELLENT/BON/ACCEPTABLE/INSUFFISANT). Rows below a configurable threshold
+are flagged as low-coherence with machine-readable reason codes.
+
+Semantic similarity and contradiction detection each support three modes:
+- "off": skipped entirely (score recorded as None/0).
+- "lite": dependency-free heuristic proxies (token Jaccard + char-trigram
+  cosine for semantics; polarity-opposite heuristic for contradiction) so
+  the script runs without `sentence-transformers`/`transformers` installed.
+- "auto"/"required": use real ML models (`sentence-transformers` for
+  semantic similarity, an NLI `transformers` pipeline for contradiction),
+  falling back to unavailable (auto) or raising (required) if the
+  dependency/model cannot be loaded.
+
+Role in the evaluation stage: this is the automated coherence-QA gate for
+Alfred-enriched content, catching cases where an image description was
+hallucinated, generic, or contradicts the ticket/document it was attached
+to — separate from `eval_image_descriptions.py`, which focuses on
+success/failure rates and short/low-quality descriptions rather than
+context coherence.
+
+Inputs:
+    - Issue JSON files matching `--issue-glob` (default
+      `datasets/07_delivery/st_ready/by_series/**/issues_json/st_ready_issues_with_images_*.json`),
+      each containing records with an `image_analyses` list.
+    - PDF figure descriptions map at `--pdf-descriptions` (default
+      `data/pdf_image_descriptions.json`), a dict of `image_id -> description`.
+    - PDF task files matching `--pdf-task-glob` (default
+      `data/pdf_image_tasks_*.jsonl`), JSONL files with `image_id` and
+      `page_context_text` per line.
+
+Outputs:
+    - CSV report at `--output-csv` (default
+      `docs/evaluation/alfred_coherence_report.csv`) with one row per
+      evaluated image/figure.
+    - Summary JSON at `--output-summary-json` (default
+      `docs/evaluation/alfred_coherence_summary.json`) with aggregate counts,
+      low-coherence rate, and per-source breakdowns plus the scoring config used.
+    - Console: scan/availability info and a short summary table.
+
+CLI usage:
+    python pipeline/evaluation/validate_alfred_coherence.py \
+        [--issue-glob GLOB] [--pdf-descriptions PATH] [--pdf-task-glob GLOB] \
+        [--threshold 0.12] [--semantic-mode {off,lite,auto,required}] \
+        [--nli-mode {off,lite,auto,required}] [--semantic-model NAME] \
+        [--nli-model NAME] [--alpha-lexical 0.4] [--beta-semantic 0.6] \
+        [--gamma-contradiction 0.8] [--semantic-alert-threshold 0.55] \
+        [--contradiction-alert-threshold 0.5] [--excellent-threshold 0.95] \
+        [--good-threshold 0.85] [--acceptable-threshold 0.70] [--limit N] \
+        [--output-csv PATH] [--output-summary-json PATH]
+"""
+
 import argparse
 import csv
 import json
@@ -10,6 +77,8 @@ from typing import Any, Optional
 from shared.utils.paths import PROJECT_ROOT
 
 
+# Common English/French stopwords excluded from lexical token overlap so
+# grounding scores reflect meaningful shared terms, not filler words.
 STOPWORDS = {
     "the", "and", "for", "with", "that", "this", "from", "into", "when", "then", "than",
     "have", "has", "had", "was", "were", "are", "is", "be", "been", "being", "will", "would",
@@ -33,6 +102,8 @@ POSITIVE_HINTS = {
 
 @dataclass
 class CoherenceRow:
+    """One evaluated row of the coherence CSV report (one image or PDF figure)."""
+
     source: str
     series: str
     repo: str
@@ -57,6 +128,8 @@ class CoherenceRow:
 
 @dataclass
 class ScoringConfig:
+    """Weights and thresholds controlling final coherence scoring and classification."""
+
     alpha_lexical: float
     beta_semantic: float
     gamma_contradiction: float
@@ -69,7 +142,20 @@ class ScoringConfig:
 
 
 class SemanticScorer:
+    """Computes semantic similarity between a description and its source context.
+
+    Backed by a `sentence-transformers` model in "auto"/"required" mode, a
+    dependency-free heuristic in "lite" mode, or disabled in "off" mode.
+    """
+
     def __init__(self, model_name: str, mode: str):
+        """Configure the scorer and attempt to load its backing model (if any).
+
+        Args:
+            model_name: HuggingFace `sentence-transformers` model id, used
+                only when `mode` is "auto" or "required".
+            mode: One of "off", "lite", "auto", "required".
+        """
         self.model_name = model_name
         self.mode = mode
         self.available = False
@@ -78,6 +164,13 @@ class SemanticScorer:
         self._load()
 
     def _load(self) -> None:
+        """Load the sentence-transformers model, unless mode is "off"/"lite".
+
+        Side effects:
+            Sets `self.available`/`self.error_message`. Re-raises the load
+            exception only when `mode == "required"`, so "auto" mode can
+            silently fall back to unavailable (score() then returns None).
+        """
         if self.mode == "off":
             self.error_message = "semantic_disabled"
             return
@@ -97,6 +190,16 @@ class SemanticScorer:
                 raise
 
     def score(self, a: str, b: str) -> Optional[float]:
+        """Return a [0, 1] semantic similarity score between two texts, or None if unavailable.
+
+        Args:
+            a: First text (e.g. Alfred description).
+            b: Second text (e.g. source context).
+
+        Returns:
+            Similarity in [0, 1], or None if the model failed to load
+            ("auto" mode) or scoring is disabled ("off" mode).
+        """
         if self.mode == "lite":
             return semantic_lite_score(a, b)
         if not self.available:
@@ -110,7 +213,21 @@ class SemanticScorer:
 
 
 class NLIContradictionScorer:
+    """Computes the probability that a description contradicts its source context.
+
+    Backed by a Natural Language Inference (NLI) `transformers` pipeline in
+    "auto"/"required" mode, a dependency-free polarity heuristic in "lite"
+    mode, or disabled in "off" mode.
+    """
+
     def __init__(self, model_name: str, mode: str):
+        """Configure the scorer and attempt to load its backing NLI pipeline (if any).
+
+        Args:
+            model_name: HuggingFace NLI model id, used only when `mode` is
+                "auto" or "required".
+            mode: One of "off", "lite", "auto", "required".
+        """
         self.model_name = model_name
         self.mode = mode
         self.available = False
@@ -119,6 +236,12 @@ class NLIContradictionScorer:
         self._load()
 
     def _load(self) -> None:
+        """Load the transformers text-classification (NLI) pipeline, unless mode is "off"/"lite".
+
+        Side effects:
+            Sets `self.available`/`self.error_message`. Re-raises the load
+            exception only when `mode == "required"`.
+        """
         if self.mode == "off":
             self.error_message = "nli_disabled"
             return
@@ -142,6 +265,16 @@ class NLIContradictionScorer:
                 raise
 
     def contradiction_probability(self, premise: str, hypothesis: str) -> Optional[float]:
+        """Return the probability in [0, 1] that `hypothesis` contradicts `premise`.
+
+        Args:
+            premise: The trusted source text (e.g. issue body / page context).
+            hypothesis: The generated text to check (e.g. Alfred description).
+
+        Returns:
+            Contradiction probability in [0, 1], or None if the NLI pipeline
+            is unavailable ("auto" mode) or scoring is disabled ("off" mode).
+        """
         if self.mode == "lite":
             return contradiction_lite_probability(premise, hypothesis)
         if not self.available:
@@ -150,6 +283,8 @@ class NLIContradictionScorer:
             return 0.0
 
         out = self._clf(f"premise: {premise} hypothesis: {hypothesis}")
+        # top_k=None returns scores for all labels; some pipelines nest the
+        # list one level deeper for a single input, hence this unwrap.
         preds = out[0] if out and isinstance(out[0], list) else out
         if not isinstance(preds, list):
             return None
@@ -164,6 +299,16 @@ class NLIContradictionScorer:
 
 
 def tokenize(text: str) -> list[str]:
+    """Lowercase-tokenize text into meaningful words, dropping stopwords and pure numbers.
+
+    Args:
+        text: Input text.
+
+    Returns:
+        List of lowercase alphanumeric tokens (min length 3), excluding
+        `STOPWORDS` and digit-only tokens, used as the basis for lexical
+        overlap and polarity heuristics.
+    """
     if not text:
         return []
     out: list[str] = []
@@ -177,6 +322,16 @@ def tokenize(text: str) -> list[str]:
 
 
 def overlap_ratio(content: str, context: str) -> float:
+    """Fraction of `content` tokens that also appear in `context` (lexical grounding proxy).
+
+    Args:
+        content: Generated text to check (e.g. Alfred description or OCR text).
+        context: Trusted source text the content should be grounded in.
+
+    Returns:
+        Ratio in [0, 1] of shared tokens over `content`'s token set size; 0.0
+        if `content` has no meaningful tokens.
+    """
     content_tokens = set(tokenize(content))
     context_tokens = set(tokenize(context))
     if not content_tokens:
@@ -186,6 +341,16 @@ def overlap_ratio(content: str, context: str) -> float:
 
 
 def _char_ngrams(text: str, n: int = 3) -> dict[str, int]:
+    """Build a character n-gram frequency map, used as a fuzzy-match signal for `semantic_lite_score`.
+
+    Args:
+        text: Input text.
+        n: N-gram size (default trigrams).
+
+    Returns:
+        Dict mapping each n-gram to its occurrence count; empty if `text` is
+        shorter than `n` characters after whitespace normalization.
+    """
     normalized = re.sub(r"\s+", " ", text.lower()).strip()
     if len(normalized) < n:
         return {}
@@ -197,6 +362,16 @@ def _char_ngrams(text: str, n: int = 3) -> dict[str, int]:
 
 
 def _cosine_counts(a: dict[str, int], b: dict[str, int]) -> float:
+    """Cosine similarity between two sparse count vectors (e.g. character n-gram frequencies).
+
+    Args:
+        a: First frequency map.
+        b: Second frequency map.
+
+    Returns:
+        Cosine similarity in [0, 1] (both inputs are non-negative counts);
+        0.0 if either map is empty.
+    """
     if not a or not b:
         return 0.0
     dot = 0.0
@@ -225,10 +400,24 @@ def semantic_lite_score(a: str, b: str) -> float:
     g2 = _char_ngrams(b, n=3)
     char_cos = _cosine_counts(g1, g2)
 
+    # Blend word-level (jaccard) and character-level (trigram cosine)
+    # similarity so near-duplicate phrasing still scores well even when
+    # exact word overlap is low (e.g. singular/plural, minor rewording).
     return clamp01(0.7 * token_jaccard + 0.3 * char_cos)
 
 
 def _polarity_signal(text: str) -> tuple[int, float]:
+    """Estimate whether a text leans positive/negative and how strongly.
+
+    Args:
+        text: Input text.
+
+    Returns:
+        Tuple of (sign, magnitude): sign is 1 (positive-leaning),
+        -1 (negative-leaning), or 0 (neutral/no signal); magnitude in [0, 1]
+        scales with how much the positive/negative hint counts diverge
+        relative to total token count.
+    """
     toks = tokenize(text)
     if not toks:
         return (0, 0.0)
@@ -250,6 +439,9 @@ def contradiction_lite_probability(premise: str, hypothesis: str) -> float:
 
     ps, pm = _polarity_signal(premise)
     hs, hm = _polarity_signal(hypothesis)
+    # Contradiction is only plausible when both texts discuss the same topic
+    # (token overlap) but disagree in sentiment/polarity (e.g. premise says
+    # "works", hypothesis says "fails").
     opposite = (ps != 0 and hs != 0 and ps != hs)
 
     if opposite and overlap >= 0.2:
@@ -260,10 +452,21 @@ def contradiction_lite_probability(premise: str, hypothesis: str) -> float:
 
 
 def clamp01(x: float) -> float:
+    """Clamp a float into the [0, 1] range."""
     return max(0.0, min(1.0, x))
 
 
 def classify_score(score: float, cfg: ScoringConfig) -> str:
+    """Map a numeric coherence score to a reliability class using `cfg`'s thresholds.
+
+    Args:
+        score: Final coherence score in [0, 1].
+        cfg: Scoring configuration providing excellent/good/acceptable thresholds.
+
+    Returns:
+        One of "EXCELLENT", "BON", "ACCEPTABLE", "INSUFFISANT" (French labels
+        kept for consistency with existing reports/dashboards).
+    """
     if score >= cfg.excellent_threshold:
         return "EXCELLENT"
     if score >= cfg.good_threshold:
@@ -279,6 +482,19 @@ def compute_final_score(
     contradiction_prob: Optional[float],
     cfg: ScoringConfig,
 ) -> float:
+    """Combine lexical grounding, semantic similarity, and contradiction penalty into one score.
+
+    Args:
+        lexical_score: Token-overlap grounding score in [0, 1].
+        semantic_score: Semantic similarity in [0, 1], or None if not computed.
+        contradiction_prob: Contradiction probability in [0, 1], or None if not computed.
+        cfg: Scoring configuration providing the alpha/beta/gamma weights.
+
+    Returns:
+        Final coherence score in [0, 1]: a weighted average of lexical and
+        semantic scores (re-normalized if semantic is missing), then
+        multiplied down by a contradiction penalty.
+    """
     lex_w = max(0.0, cfg.alpha_lexical)
     sem_w = max(0.0, cfg.beta_semantic) if semantic_score is not None else 0.0
     support = lex_w + sem_w
@@ -287,14 +503,33 @@ def compute_final_score(
         base = lexical_score
     else:
         sem = semantic_score if semantic_score is not None else 0.0
+        # Re-normalize weights by whatever signals are actually available,
+        # so missing semantic scoring doesn't silently zero out the base score.
         base = (lex_w * lexical_score + sem_w * sem) / support
 
     contradiction = contradiction_prob if contradiction_prob is not None else 0.0
+    # Contradiction acts as a multiplicative penalty rather than a subtractive
+    # one, so a high-grounding description that still contradicts context is
+    # pulled down proportionally rather than just losing a fixed amount.
     penalty = clamp01(cfg.gamma_contradiction * contradiction)
     return clamp01(base * (1.0 - penalty))
 
 
 def clean_context(text: str) -> str:
+    """Strip Alfred-appended/inline enrichment markers from a context field before comparison.
+
+    Without this, comparing a description to "context" that already contains
+    Alfred's own output (appended by `enrich_json_images_with_alfred.py`)
+    would trivially inflate the coherence score by comparing text to itself.
+
+    Args:
+        text: Raw context text (e.g. issue body), possibly Alfred-enriched.
+
+    Returns:
+        Context text with the "Image-derived context:" appended section and
+        inline `[IMAGE DESCRIPTION]`/`[IMAGE TEXT]` tags removed, whitespace
+        collapsed.
+    """
     if not text:
         return ""
     cleaned = text
@@ -312,6 +547,15 @@ def clean_context(text: str) -> str:
 
 
 def pick_context_field(record: dict[str, Any]) -> tuple[str, str]:
+    """Pick the first non-empty candidate field to use as an issue/record's grounding context.
+
+    Args:
+        record: Issue/PR record dict.
+
+    Returns:
+        Tuple of (field_name, cleaned_text). Returns ("", "") if none of the
+        candidate fields are present/non-empty.
+    """
     # Prefer raw fields first to avoid leakage from enriched text.
     for key in ("body", "clean_text", "text", "description", "resolver_card_text", "st_ready_text"):
         value = record.get(key)
@@ -321,6 +565,16 @@ def pick_context_field(record: dict[str, Any]) -> tuple[str, str]:
 
 
 def parse_issue_records(path: Path) -> list[dict[str, Any]]:
+    """Load an issue JSON file's records, tolerating both list-root and dict-root shapes.
+
+    Args:
+        path: Path to an ST-ready enriched issue JSON file.
+
+    Returns:
+        List of record dicts. Handles both a top-level JSON array and a
+        dict with one of several known list-valued keys (different delivery
+        exports use different root shapes); returns an empty list otherwise.
+    """
     data = json.loads(path.read_text(encoding="utf-8"))
     if isinstance(data, list):
         return [x for x in data if isinstance(x, dict)]
@@ -333,6 +587,14 @@ def parse_issue_records(path: Path) -> list[dict[str, Any]]:
 
 
 def detect_series_from_path(path: Path) -> str:
+    """Infer the STM32 series name (e.g. "H7") from a `by_series/<series>/...` file path.
+
+    Args:
+        path: File path, expected to contain a `by_series` segment.
+
+    Returns:
+        The path segment following `by_series`, or "unknown" if not found.
+    """
     parts = [p.lower() for p in path.parts]
     if "by_series" in parts:
         i = parts.index("by_series")
@@ -348,6 +610,21 @@ def evaluate_issue_image_coherence(
     nli_scorer: NLIContradictionScorer,
     limit: int,
 ) -> list[CoherenceRow]:
+    """Score every Alfred image analysis found across a set of issue JSON files.
+
+    Args:
+        issue_files: Enriched issue JSON files to scan (matches from `--issue-glob`).
+        cfg: Scoring configuration (weights/thresholds).
+        semantic_scorer: Semantic similarity scorer.
+        nli_scorer: Contradiction probability scorer.
+        limit: Max total rows to produce (0 = unlimited); used to cap runtime
+            on large corpora or when models are slow to run.
+
+    Returns:
+        List of `CoherenceRow` entries, one per `image_analyses` entry found,
+        including a zero-score flagged row for analyses whose `status` is
+        not "ok" (e.g. UNAVAILABLE/error).
+    """
     rows: list[CoherenceRow] = []
 
     for issue_file in issue_files:
@@ -374,6 +651,9 @@ def evaluate_issue_image_coherence(
                 err = str(analysis.get("error") or "").strip()
 
                 if status != "ok":
+                    # Analyses that failed/are unavailable get an automatic
+                    # zero coherence score — there is no description to
+                    # ground, so they cannot be trusted regardless of context.
                     score = 0.0
                     reliability = classify_score(score, cfg)
                     row = CoherenceRow(
@@ -405,6 +685,9 @@ def evaluate_issue_image_coherence(
 
                 desc_overlap = overlap_ratio(desc, context)
                 ocr_overlap = overlap_ratio(ocr, context) if ocr else 0.0
+                # Weight the description more than OCR text since OCR often
+                # captures noisy/partial text (UI labels, error codes) that
+                # overlaps context less reliably than a full description.
                 lexical_score = 0.7 * desc_overlap + 0.3 * ocr_overlap if (desc and ocr) else desc_overlap
                 semantic_score = semantic_scorer.score(desc, context)
                 contradiction_prob = nli_scorer.contradiction_probability(context, desc)
@@ -465,6 +748,16 @@ def evaluate_issue_image_coherence(
 
 
 def load_pdf_tasks_map(task_files: list[Path]) -> dict[str, dict[str, Any]]:
+    """Load and index PDF figure extraction tasks by `image_id` for context lookup.
+
+    Args:
+        task_files: JSONL files matching `--pdf-task-glob`, each line a task
+            dict with an `image_id` and `page_context_text`.
+
+    Returns:
+        Dict mapping `image_id` (as string) to its task dict. Malformed JSON
+        lines and entries without an `image_id` are silently skipped.
+    """
     out: dict[str, dict[str, Any]] = {}
     for path in task_files:
         for line in path.read_text(encoding="utf-8").splitlines():
@@ -492,6 +785,25 @@ def evaluate_pdf_figure_coherence(
     nli_scorer: NLIContradictionScorer,
     limit: int,
 ) -> list[CoherenceRow]:
+    """Score every PDF figure description against its source page context.
+
+    Args:
+        descriptions_file: JSON file mapping `image_id -> description` text.
+        task_files: JSONL task files providing `page_context_text` per `image_id`
+            (joined via `load_pdf_tasks_map`).
+        cfg: Scoring configuration (weights/thresholds).
+        semantic_scorer: Semantic similarity scorer.
+        nli_scorer: Contradiction probability scorer.
+        limit: Max rows to produce (0 = unlimited); typically the remaining
+            budget after issue-image rows have already consumed part of a
+            shared `--limit`.
+
+    Returns:
+        List of `CoherenceRow` entries, one per figure description. Returns
+        an empty list if the descriptions file is missing or not a dict.
+        Descriptions containing "UNAVAILABLE" or starting with "[" (Alfred
+        placeholder markers) get an automatic zero score.
+    """
     rows: list[CoherenceRow] = []
 
     if not descriptions_file.exists():
@@ -511,6 +823,8 @@ def evaluate_pdf_figure_coherence(
         page_context = str(task.get("page_context_text") or "")
         image_path = str(task.get("image_path") or "")
 
+        # Placeholder/unavailable descriptions carry no grounded information,
+        # so short-circuit with a zero score rather than scoring them normally.
         is_placeholder = "UNAVAILABLE" in desc.upper() or desc.startswith("[")
         if is_placeholder:
             score = 0.0
@@ -600,6 +914,15 @@ def evaluate_pdf_figure_coherence(
 
 
 def write_csv(path: Path, rows: list[CoherenceRow]) -> None:
+    """Write coherence rows to a CSV report, creating parent directories as needed.
+
+    Args:
+        path: Output CSV path.
+        rows: Rows to write (order preserved).
+
+    Side effects:
+        Creates `path.parent` if missing and overwrites `path`.
+    """
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(
@@ -633,6 +956,17 @@ def write_csv(path: Path, rows: list[CoherenceRow]) -> None:
 
 
 def summarize(rows: list[CoherenceRow]) -> dict[str, Any]:
+    """Aggregate coherence rows into overall and per-source summary statistics.
+
+    Args:
+        rows: All evaluated `CoherenceRow` entries (issue images + PDF figures).
+
+    Returns:
+        Dict with `total_checked`, `low_coherence` count/rate, and a
+        `by_source` breakdown (per "issue_image"/"pdf_figure" source) of
+        count, low-coherence rate, average score, and reliability class
+        distribution. Used both for the console summary and the JSON report.
+    """
     total = len(rows)
     low = sum(r.flag_low_coherence for r in rows)
     by_source: dict[str, dict[str, Any]] = {}
@@ -665,6 +999,14 @@ def summarize(rows: list[CoherenceRow]) -> dict[str, Any]:
 
 
 def main() -> None:
+    """Parse CLI args, evaluate issue-image and PDF-figure coherence, and write reports.
+
+    Side effects:
+        Writes the CSV report to `--output-csv` and the summary JSON to
+        `--output-summary-json`; prints a console summary. Raises
+        `ValueError` if threshold arguments are out of range or inconsistently
+        ordered.
+    """
     parser = argparse.ArgumentParser(
         description=(
             "Validate Alfred output coherence against source context for issue images and PDF figures."

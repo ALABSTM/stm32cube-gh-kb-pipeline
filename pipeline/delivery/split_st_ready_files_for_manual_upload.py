@@ -1,3 +1,35 @@
+"""CLI: split large ST-ready `files_json` payloads into small parts for manual upload.
+
+The ST AI Bridge datasource web UI (manual upload, no API) has practical
+size/doc-count limits per uploaded JSON file. This script scans
+`st_ready_files_<repo>.json` exports under `datasets/07_delivery/st_ready/by_series/`
+and splits any large-enough file into multiple smaller JSON parts that each
+keep the same root array key (`files` by default) so they remain valid
+standalone ST-ready payloads.
+
+Inputs:
+- `datasets/07_delivery/st_ready/by_series/**/files_json/st_ready_files_*.json`
+  (glob pattern configurable via `--input-dir`/`--pattern`), produced by
+  `export_st_ready_files.py`.
+
+Outputs, under `datasets/07_delivery/st_ready/manual_upload/files_json_split/<repo>/`
+(base configurable via `--output-dir`):
+- `<source_stem>__part<NNN>.json`: one JSON part per split chunk.
+- `summary_<source_stem>__manual_split.json`: per-source split manifest
+  (rules used, parts produced).
+- `summary_manual_split_files_json.json` (at the output root): overall run
+  manifest (processed/skipped/errored sources, totals).
+
+Splitting can be driven by a fixed `--target-parts` count, or by
+`--max-docs-per-part`/`--max-payload-kb` thresholds (checked together), and
+is skipped for sources below `--min-source-size-kb` unless `--split-all` is
+passed.
+
+Run:
+    python -m pipeline.delivery.split_st_ready_files_for_manual_upload
+    python -m pipeline.delivery.split_st_ready_files_for_manual_upload --target-parts 4 --clean-output
+"""
+
 import argparse
 import json
 import os
@@ -24,14 +56,22 @@ DEFAULT_TARGET_PARTS = 0
 
 
 def utc_now_iso() -> str:
+    """Return the current UTC time as a second-precision ISO 8601 string."""
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
 
 def utc_now_for_path() -> str:
+    """Return the current UTC time formatted for use in a folder/file name."""
     return datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
 
 
 def on_rm_error(func: Any, path: str, _exc_info: Any) -> None:
+    """`shutil.rmtree` error handler: clear read-only attributes and retry.
+
+    Windows can leave files read-only (e.g. checked out from git), which
+    blocks deletion; this best-effort handler unblocks that without failing
+    the whole cleanup operation.
+    """
     try:
         os.chmod(path, stat.S_IWRITE | stat.S_IREAD)
     except OSError:
@@ -43,6 +83,12 @@ def on_rm_error(func: Any, path: str, _exc_info: Any) -> None:
 
 
 def remove_path_with_retry(path: Path, retries: int = 2) -> bool:
+    """Delete a file or directory, retrying briefly on transient lock errors.
+
+    Returns True on success (or if the path was already gone), False if it
+    remains locked after all retries — the caller then falls back to a
+    fresh output directory instead of failing the whole run.
+    """
     for attempt in range(retries + 1):
         try:
             if path.is_dir():
@@ -66,6 +112,11 @@ def remove_path_with_retry(path: Path, retries: int = 2) -> bool:
 
 
 def clean_directory_contents(output_dir: Path) -> list[str]:
+    """Delete every entry inside `output_dir` (not the directory itself).
+
+    Returns the names of entries that could not be removed, so the caller
+    can decide whether to fall back to a differently named output directory.
+    """
     if not output_dir.exists():
         return []
 
@@ -77,15 +128,20 @@ def clean_directory_contents(output_dir: Path) -> list[str]:
 
 
 def build_fallback_output_dir(base_output_dir: Path) -> Path:
+    """Build a timestamped sibling directory to use when cleaning the
+    requested output directory failed (e.g. a file is locked by another process).
+    """
     return base_output_dir.parent / f"{base_output_dir.name}__run_{utc_now_for_path()}"
 
 
 def write_json(path: Path, payload: dict[str, Any]) -> None:
+    """Write `payload` as pretty-printed UTF-8 JSON, creating parent dirs."""
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def load_json_object(path: Path) -> dict[str, Any]:
+    """Load a JSON file and ensure its root is an object (not an array)."""
     payload = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(payload, dict):
         raise ValueError(f"Expected JSON object at root for {path.name}")
@@ -93,6 +149,9 @@ def load_json_object(path: Path) -> dict[str, Any]:
 
 
 def extract_docs(payload: dict[str, Any], root_tag_path: str, source_name: str) -> list[Any]:
+    """Return the array stored under `root_tag_path` in `payload`, or raise
+    if it is missing/not a list (the payload does not match the expected schema).
+    """
     docs = payload.get(root_tag_path)
     if not isinstance(docs, list):
         raise ValueError(
@@ -102,11 +161,21 @@ def extract_docs(payload: dict[str, Any], root_tag_path: str, source_name: str) 
 
 
 def estimate_payload_size_bytes(root_tag_path: str, docs: list[Any]) -> int:
+    """Estimate the serialized JSON size (in bytes) of `{root_tag_path: docs}`.
+
+    Used as a proxy for the actual upload payload size when deciding split
+    boundaries, without writing the file to disk first.
+    """
     payload = {root_tag_path: docs}
     return len(json.dumps(payload, ensure_ascii=False).encode("utf-8"))
 
 
 def estimate_st_ready_text_chars(docs: list[Any]) -> int:
+    """Sum the character length of each doc's `st_ready_text` field.
+
+    Reported per part in the split summary as a rough proxy for how much
+    retrieval-relevant text content each uploaded part carries.
+    """
     total = 0
     for doc in docs:
         if isinstance(doc, dict):
@@ -117,6 +186,7 @@ def estimate_st_ready_text_chars(docs: list[Any]) -> int:
 
 
 def infer_repo_name_from_source(source_path: Path) -> str:
+    """Derive the repo name from a `st_ready_files_<repo>.json` file stem."""
     prefix = "st_ready_files_"
     stem = source_path.stem
     if stem.startswith(prefix):
@@ -130,6 +200,9 @@ def split_docs_into_parts(
     max_docs_per_part: int,
     max_payload_bytes: int,
 ) -> list[list[Any]]:
+    """Greedily group `docs` into parts respecting both a max doc count and
+    a max estimated payload size per part (whichever limit is hit first).
+    """
     if not docs:
         return []
 
@@ -161,6 +234,12 @@ def split_docs_into_parts(
 
 
 def split_docs_into_target_parts(docs: list[Any], target_parts: int) -> list[list[Any]]:
+    """Split `docs` into exactly `target_parts` contiguous, near-equal-sized
+    chunks (extra remainder docs distributed to the first chunks).
+
+    Used instead of `split_docs_into_parts` when the caller wants a fixed
+    number of upload parts regardless of size/doc-count thresholds.
+    """
     if not docs:
         return []
     if target_parts <= 0:
@@ -187,6 +266,12 @@ def split_part_by_payload_limit(
     root_tag_path: str,
     max_payload_bytes: int,
 ) -> list[list[Any]]:
+    """Recursively bisect `part_docs` until each resulting sub-part's
+    estimated payload size is within `max_payload_bytes`.
+
+    Applied after `split_docs_into_target_parts`, since a fixed-count split
+    can still produce an oversized part when doc sizes are uneven.
+    """
     if max_payload_bytes <= 0 or len(part_docs) <= 1:
         return [part_docs]
 
@@ -212,6 +297,9 @@ def split_part_by_payload_limit(
 
 
 def main() -> None:
+    """CLI entry point: scan for large `files_json` exports and split them
+    into manual-upload-ready parts, writing per-source and overall manifests.
+    """
     parser = argparse.ArgumentParser(
         description=(
             "Split large ST-ready files_json payloads into smaller JSON parts for manual "

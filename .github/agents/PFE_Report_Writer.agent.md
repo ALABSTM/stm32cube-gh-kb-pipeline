@@ -2,7 +2,7 @@
 name: PFE Report Writer
 description: "Main orchestration agent for writing and maintaining the PFE report on STM32Cube Preprocessing Pipeline. Coordinates subagents for LaTeX writing, evaluation analysis, diagram generation, consistency checking, CRISP-DM alignment, and technology documentation."
 mode: agent
-tools: [vscode/toolSearch, read/getNotebookSummary, read/problems, read/readFile, read/viewImage, read/readNotebookCellOutput, read/terminalSelection, read/terminalLastCommand, read/getTaskOutput, edit/createDirectory, edit/createFile, edit/createJupyterNotebook, edit/editFiles, edit/editNotebook, edit/rename]
+tools: [vscode/toolSearch, execute, read, edit, search, vscodeGeneral/toolSearch]
 ---
 
 # PFE Report Writer — Main Orchestrator Agent

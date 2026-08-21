@@ -1,0 +1,352 @@
+{
+  "summary": {
+    "patch_file": "tmp/component_backfill_patch_high_confidence_v2.json",
+    "target_files_in_patch": 68,
+    "files_touched": 68,
+    "issues_updated": 543,
+    "issues_not_found": 0,
+    "issues_already_set": 0
+  },
+  "per_file_stats": {
+    "data/docs_issues_32f412gdiscovery-bsp_v2.json": {
+      "updated": 1,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32cubec0_v2.json": {
+      "updated": 3,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32cubef0_v2.json": {
+      "updated": 8,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32cubef1_v2.json": {
+      "updated": 12,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32cubef2_v2.json": {
+      "updated": 5,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32cubef3_v2.json": {
+      "updated": 4,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32cubef4_v2.json": {
+      "updated": 34,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32cubef7_v2.json": {
+      "updated": 34,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32cubeg0_v2.json": {
+      "updated": 19,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32cubeg4_v2.json": {
+      "updated": 21,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32cubeh5_v2.json": {
+      "updated": 13,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32cubeh7_v2.json": {
+      "updated": 73,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32cubeh7rs_v2.json": {
+      "updated": 3,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32cubel0_v2.json": {
+      "updated": 11,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32cubel1_v2.json": {
+      "updated": 5,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32cubel4_v2.json": {
+      "updated": 34,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32cubel5_v2.json": {
+      "updated": 1,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32cuben6_v2.json": {
+      "updated": 2,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32cubeu0_v2.json": {
+      "updated": 4,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32cubeu5_v2.json": {
+      "updated": 12,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32cubewb_v2.json": {
+      "updated": 19,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32cubewba_v2.json": {
+      "updated": 2,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32cubewl_v2.json": {
+      "updated": 21,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_cmsis_device_c0_v2.json": {
+      "updated": 1,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_cmsis_device_f4_v2.json": {
+      "updated": 3,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_cmsis_device_g0_v2.json": {
+      "updated": 5,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_cmsis_device_h7_v2.json": {
+      "updated": 8,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_cmsis_device_l4_v2.json": {
+      "updated": 1,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_cmsis_device_u0_v2.json": {
+      "updated": 4,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_cmsis_device_u5_v2.json": {
+      "updated": 3,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32-ism330dhcx_v2.json": {
+      "updated": 1,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32-lan8742_v2.json": {
+      "updated": 1,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32-lsm6dso_v2.json": {
+      "updated": 1,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32-mt25ql512abb_v2.json": {
+      "updated": 1,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32-mw-cmsis-rtos-tx_v2.json": {
+      "updated": 1,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32-mw-fatfs_v2.json": {
+      "updated": 1,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32-mw-filex_v2.json": {
+      "updated": 1,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32-mw-mcuboot_v2.json": {
+      "updated": 1,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32-mw-openbl_v2.json": {
+      "updated": 1,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32-s25fl128s_v2.json": {
+      "updated": 1,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm324x9i-eval-bsp_v2.json": {
+      "updated": 1,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32f0xx-hal-driver_v2.json": {
+      "updated": 4,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32f1xx-hal-driver_v2.json": {
+      "updated": 5,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32f2xx-hal-driver_v2.json": {
+      "updated": 2,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32f3xx-hal-driver_v2.json": {
+      "updated": 3,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32f4xx-hal-driver_v2.json": {
+      "updated": 12,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32f7xx-hal-driver_v2.json": {
+      "updated": 6,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32g0xx-hal-driver_v2.json": {
+      "updated": 9,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32g4xx-hal-driver_v2.json": {
+      "updated": 12,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32h5xx-hal-driver_v2.json": {
+      "updated": 6,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32h735g-dk-bsp_v2.json": {
+      "updated": 4,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32h743i-eval-bsp_v2.json": {
+      "updated": 1,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32h747i-disco-bsp_v2.json": {
+      "updated": 3,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32h7rsxx-hal-driver_v2.json": {
+      "updated": 4,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32h7xx-hal-driver_v2.json": {
+      "updated": 42,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32h7xx-nucleo-bsp_v2.json": {
+      "updated": 1,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32l0xx-hal-driver_v2.json": {
+      "updated": 5,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32l4xx-hal-driver_v2.json": {
+      "updated": 13,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32n6570-dk-bsp_v2.json": {
+      "updated": 1,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32n6xx-hal-driver_v2.json": {
+      "updated": 1,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32u0xx-hal-driver_v2.json": {
+      "updated": 4,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32u3xx-hal-driver_v2.json": {
+      "updated": 2,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32u5xx-hal-driver_v2.json": {
+      "updated": 17,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32wb0x-hal-driver_v2.json": {
+      "updated": 1,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32wbaxx-hal-driver_v2.json": {
+      "updated": 2,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32wbxx-hal-driver_v2.json": {
+      "updated": 2,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32wl3x-hal-driver_v2.json": {
+      "updated": 1,
+      "not_found": 0,
+      "already_set": 0
+    },
+    "data/docs_issues_stm32wlxx-hal-driver_v2.json": {
+      "updated": 3,
+      "not_found": 0,
+      "already_set": 0
+    }
+  }
+}

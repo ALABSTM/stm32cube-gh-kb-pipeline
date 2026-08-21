@@ -2,6 +2,7 @@
     "owner":  "STMicroelectronics",
     "all_series":  [
                        "STM32CubeC0",
+                       "STM32CubeC5",
                        "STM32CubeF0",
                        "STM32CubeF1",
                        "STM32CubeF2",
@@ -29,6 +30,7 @@
                    ],
     "series_config_files":  {
                                 "STM32CubeC0":  "config_c0.json",
+                                "STM32CubeC5":  "config_c5.json",
                                 "STM32CubeF0":  "config_f0.json",
                                 "STM32CubeF1":  "config_f1.json",
                                 "STM32CubeF2":  "config_f2.json",
@@ -59,6 +61,11 @@
                                                   "issues":  29193,
                                                   "files":  29192,
                                                   "diagnostic":  29212
+                                              },
+                              "STM32CubeC5":  {
+                                                  "issues":  null,
+                                                  "files":  null,
+                                                  "diagnostic":  null
                                               },
                               "STM32CubeF0":  {
                                                   "issues":  29195,
@@ -111,9 +118,9 @@
                                               },
                               "STM32CubeH7":  {
                                                   "issues":  24406,
-                                                  "files":  29041,
-                                                  "diagnostic":  24408,
-                                                  "resolver":  24410
+                                                  "files":  32619,
+                                                  "diagnostic":  32585,
+                                                  "resolver":  32586
                                               },
                               "STM32CubeH7RS":  {
                                                     "issues":  29270,
@@ -154,8 +161,8 @@
                                               },
                               "STM32CubeU3":  {
                                                   "issues":  29907,
-                                                  "files":  29908,
-                                                  "diagnostic":  null
+                                                  "files":  32687,
+                                                  "diagnostic":  32688
                                               },
                               "STM32CubeU5":  {
                                                   "issues":  28167,
@@ -170,9 +177,9 @@
                                                   "resolver":  30949
                                               },
                               "STM32CubeWB0":  {
-                                                   "issues":  31245,
-                                                   "files":  31246,
-                                                   "diagnostic":  31107,
+                                                   "issues":  32581,
+                                                   "files":  32681,
+                                                   "diagnostic":  32682,
                                                    "resolver":  29936
                                                },
                               "STM32CubeWBA":  {
@@ -195,7 +202,8 @@
     "kb_id":  793,
     "alfred_api":  {
                        "client_app_name":  "mdrf_stgithub_analyzer_client",
-                       "api_key":  "46f2335f-873f-4704-afea-634ed6c92620",
+                       "api_key":  null,
+                       "api_key_env":  "ST_CHATGPT_API_KEY",
                        "api_url":  "https://api-ai-bridge.st.com/chatgpt/api/client-apps",
                        "use_proxy":  false
                    },

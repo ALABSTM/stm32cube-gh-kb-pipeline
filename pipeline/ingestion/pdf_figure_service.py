@@ -1,3 +1,34 @@
+"""Service module: multimodal PDF extraction (text + rendered figures) for STM32Cube documentation PDFs.
+
+Role in the pipeline
+---------------------
+Used by `pipeline/ingestion/file_collect_service.py` (via `extract_pdf_multimodal`)
+when ingesting PDF files under a repo's `Documentation(s)/` folder. Beyond
+plain text extraction, this module renders each PDF page to a PNG, detects
+candidate figure/diagram regions with OpenCV, crops them, and prepares
+vision-model description "tasks" (later consumed by an external image
+description pipeline, e.g. Alfred). Existing descriptions are re-injected as
+`[FIGURE_DESCRIPTIONS]` blocks into the page text so figures remain
+searchable/retrievable in the RAG knowledge base.
+
+Inputs
+------
+- A PDF file path plus repo/path metadata for URL and asset-folder naming.
+- `data/pdf_image_descriptions.json`: optional map of `figure_id -> description`
+  text produced by a prior vision-model enrichment pass.
+
+Outputs
+-------
+- Rendered page PNGs under `data/pdf_pages/<repo>/<slugified_path>/`.
+- Cropped figure PNGs under `data/pdf_figures/<repo>/<slugified_path>/`.
+- `data/pdf_image_tasks_<repo>.jsonl`: one JSON line per figure still missing
+  a description, ready to be consumed by a vision-description worker.
+- Return value of `extract_pdf_multimodal`: page text enriched with figure
+  description blocks, plus figure records/counts and the task file path.
+
+This module has no CLI entry point; it is imported, not run directly.
+"""
+
 import json
 import re
 from pathlib import Path
@@ -14,10 +45,31 @@ except Exception:
 
 
 def slugify(path_text: str) -> str:
+    """Turn a relative file path into a filesystem-safe folder-name fragment.
+
+    Args:
+        path_text: A relative path such as "Documentation/UM1234.pdf".
+
+    Returns:
+        The path with any character outside `[a-zA-Z0-9._/-]` replaced by "_",
+        with leading/trailing slashes stripped.
+    """
     return re.sub(r"[^a-zA-Z0-9._/-]+", "_", path_text).strip("/")
 
 
 def make_figure_id(repo_name: str, rel_path: str, page_number: int, figure_index: int) -> str:
+    """Build a stable, unique identifier for a detected figure.
+
+    Args:
+        repo_name: Repository name.
+        rel_path: PDF path relative to the repo root.
+        page_number: 1-based page number.
+        figure_index: 1-based figure index within the page.
+
+    Returns:
+        A string of the form "<repo>:<rel_path>:p<page>:f<index>", used both
+        as a lookup key in the descriptions map and as a task identifier.
+    """
     return f"{repo_name}:{rel_path}:p{page_number}:f{figure_index}"
 
 
@@ -25,6 +77,15 @@ def make_figure_id(repo_name: str, rel_path: str, page_number: int, figure_index
 
 
 def extract_pdf_text_by_page(pdf_path: Path) -> list[str]:
+    """Extract plain text from a PDF, one entry per page, using `pypdf`.
+
+    Args:
+        pdf_path: Path to the PDF file.
+
+    Returns:
+        A list of page texts (index 0 = page 1), or an empty list if `pypdf`
+        is unavailable or extraction fails.
+    """
     if PdfReader is None:
         print(f"[WARN] pypdf unavailable for {pdf_path}")
         return []
@@ -41,15 +102,19 @@ def extract_pdf_text_by_page(pdf_path: Path) -> list[str]:
 
 
 def extract_pdf_text_blocks(pdf_path: Path, zoom: float = 2.0) -> dict[int, list[dict[str, Any]]]:
-    """
-    Extrait les blocs texte avec leurs bounding boxes,
-    remis à l’échelle du rendu utilisé pour les pages PNG.
-    Retour:
-    {
-      1: [{"bbox": [x0,y0,x1,y1], "text": "..."}],
-      2: [...],
-      ...
-    }
+    """Extract text blocks with bounding boxes, scaled to match the rendered page images.
+
+    This is used to tell apart real figures from blocks of body text when
+    detecting candidate figure regions (see `text_overlap_ratio`).
+
+    Args:
+        pdf_path: Path to the PDF file.
+        zoom: Rendering zoom factor; must match the zoom used in
+            `render_pdf_pages` so bounding boxes line up with the PNG pixels.
+
+    Returns:
+        A dict mapping 1-based page number to a list of
+        `{"bbox": [x0, y0, x1, y1], "text": str}` entries.
     """
     page_blocks: dict[int, list[dict[str, Any]]] = {}
 
@@ -91,6 +156,18 @@ def extract_pdf_text_blocks(pdf_path: Path, zoom: float = 2.0) -> dict[int, list
 # =========================
 
 def render_pdf_pages(pdf_path: Path, out_dir: Path, zoom: float = 2.0) -> list[dict[str, Any]]:
+    """Render every page of a PDF to a PNG image using PyMuPDF (fitz).
+
+    Args:
+        pdf_path: Path to the PDF file.
+        out_dir: Directory to write `page_NNN.png` files to (created if needed).
+        zoom: Rendering zoom factor (higher = higher resolution, matches the
+            scale used by `extract_pdf_text_blocks` for bbox alignment).
+
+    Returns:
+        A list of dicts with `page_number`, `image_path`, `width`, `height`
+        for each rendered page.
+    """
     out_dir.mkdir(parents=True, exist_ok=True)
 
     rendered_pages: list[dict[str, Any]] = []
@@ -122,20 +199,32 @@ def render_pdf_pages(pdf_path: Path, out_dir: Path, zoom: float = 2.0) -> list[d
 # =========================
 
 def rect_area_xywh(r: tuple[int, int, int, int]) -> int:
+    """Compute the area of a rectangle given as (x, y, w, h)."""
     return max(r[2], 0) * max(r[3], 0)
 
 
 def rect_to_xyxy(r: tuple[int, int, int, int]) -> tuple[int, int, int, int]:
+    """Convert an (x, y, w, h) rectangle to (x0, y0, x1, y1) corner form."""
     x, y, w, h = r
     return x, y, x + w, y + h
 
 
 def xyxy_to_xywh(r: tuple[int, int, int, int]) -> tuple[int, int, int, int]:
+    """Convert an (x0, y0, x1, y1) rectangle back to (x, y, w, h) form."""
     x0, y0, x1, y1 = r
     return x0, y0, x1 - x0, y1 - y0
 
 
 def intersection_area_xywh(a: tuple[int, int, int, int], b_xyxy: tuple[int, int, int, int]) -> int:
+    """Compute the overlap area between an (x, y, w, h) rect and an (x0, y0, x1, y1) rect.
+
+    Args:
+        a: Rectangle in (x, y, w, h) form.
+        b_xyxy: Rectangle in (x0, y0, x1, y1) form.
+
+    Returns:
+        The intersection area, or 0 if the rectangles do not overlap.
+    """
     ax0, ay0, ax1, ay1 = rect_to_xyxy(a)
     bx0, by0, bx1, by1 = b_xyxy
 
@@ -150,6 +239,19 @@ def intersection_area_xywh(a: tuple[int, int, int, int], b_xyxy: tuple[int, int,
 
 
 def close_or_overlap(a: tuple[int, int, int, int], b: tuple[int, int, int, int], gap: int = 30) -> bool:
+    """Check whether two rectangles overlap or are within `gap` pixels of each other.
+
+    Used to decide whether two nearby figure-candidate regions likely belong
+    to the same diagram and should be merged.
+
+    Args:
+        a: First rectangle (x, y, w, h).
+        b: Second rectangle (x, y, w, h).
+        gap: Maximum pixel gap that still counts as "close".
+
+    Returns:
+        True if the rectangles overlap or are close enough to merge.
+    """
     ax0, ay0, ax1, ay1 = rect_to_xyxy(a)
     bx0, by0, bx1, by1 = rect_to_xyxy(b)
 
@@ -163,6 +265,7 @@ def close_or_overlap(a: tuple[int, int, int, int], b: tuple[int, int, int, int],
 
 
 def union_xywh(a: tuple[int, int, int, int], b: tuple[int, int, int, int]) -> tuple[int, int, int, int]:
+    """Compute the bounding rectangle that encloses both input rectangles."""
     ax0, ay0, ax1, ay1 = rect_to_xyxy(a)
     bx0, by0, bx1, by1 = rect_to_xyxy(b)
 
@@ -182,9 +285,18 @@ def merge_close_regions(
     regions: list[tuple[int, int, int, int]],
     gap: int = 30,
 ) -> list[tuple[int, int, int, int]]:
-    """
-    Fusionne les régions chevauchantes ou proches.
-    Meilleur que le merge overlap strict.
+    """Merge overlapping or nearby candidate regions into single bounding boxes.
+
+    A raw contour-detection pass tends to split one diagram into several
+    disjoint blobs (e.g. separate boxes and arrows); this greedily unions any
+    regions that are close/overlapping until no more merges are possible.
+
+    Args:
+        regions: List of candidate rectangles in (x, y, w, h) form.
+        gap: Maximum pixel gap to still consider two regions mergeable.
+
+    Returns:
+        The merged list of rectangles, sorted top-to-bottom, left-to-right.
     """
     if not regions:
         return []
@@ -217,6 +329,19 @@ def text_overlap_ratio(
     region: tuple[int, int, int, int],
     text_blocks: list[dict[str, Any]],
 ) -> float:
+    """Compute the fraction of a candidate region's area covered by text blocks.
+
+    Used to filter out regions that are actually paragraphs of body text
+    (mis-detected as figures) rather than real diagrams.
+
+    Args:
+        region: Candidate rectangle in (x, y, w, h) form.
+        text_blocks: Text blocks (with bbox) from `extract_pdf_text_blocks`
+            for the same page.
+
+    Returns:
+        A ratio in [0, 1]; 0 if the region has no area.
+    """
     area = rect_area_xywh(region)
     if area <= 0:
         return 0.0
@@ -232,6 +357,14 @@ def text_overlap_ratio(
 
 
 def looks_like_caption(text: str) -> bool:
+    """Heuristically detect whether a text snippet looks like a figure caption.
+
+    Args:
+        text: Candidate caption text.
+
+    Returns:
+        True if the (lowercased) text contains a common figure/diagram keyword.
+    """
     t = (text or "").strip().lower()
     caption_keywords = [
         "figure",
@@ -250,11 +383,23 @@ def detect_candidate_figure_regions(
     page_image_path: Path,
     text_blocks: list[dict[str, Any]] | None = None,
 ) -> list[tuple[int, int, int, int]]:
-    """
-    Détection plus robuste :
-    - On détecte des blobs graphiques
-    - On fusionne mieux
-    - On élimine les régions trop textuelles
+    """Detect likely figure/diagram bounding boxes on a rendered PDF page image.
+
+    Approach: threshold the grayscale page to isolate non-white ink, apply a
+    morphological close to group nearby strokes/shapes into blobs, then filter
+    contours by size/aspect-ratio and merge nearby ones (see
+    `merge_close_regions`). Finally, regions that are mostly covered by real
+    text blocks (see `text_overlap_ratio`) are dropped since they are more
+    likely paragraphs or text-heavy screenshots than genuine diagrams.
+
+    Args:
+        page_image_path: Path to the rendered page PNG.
+        text_blocks: Text blocks (with bbox) for this page, from
+            `extract_pdf_text_blocks`, used for the text-overlap filter.
+
+    Returns:
+        A list of candidate figure rectangles in (x, y, w, h) form, sorted
+        top-to-bottom, left-to-right.
     """
     img = cv2.imread(str(page_image_path))
     if img is None:
@@ -328,6 +473,20 @@ def crop_figures_from_page(
     rel_path: str,
     page_number: int,
 ) -> list[dict[str, Any]]:
+    """Crop each detected figure region out of a rendered page image and save it as PNG.
+
+    Args:
+        page_image_path: Path to the rendered page PNG.
+        regions: Candidate figure rectangles in (x, y, w, h) form.
+        out_dir: Directory to write cropped figure PNGs to (created if needed).
+        repo_name: Repository name (used to build the figure id).
+        rel_path: PDF path relative to the repo root (used to build the figure id).
+        page_number: 1-based page number these regions belong to.
+
+    Returns:
+        A list of figure record dicts (`figure_id`, `page_number`,
+        `figure_index`, `bbox`, `path`).
+    """
     out_dir.mkdir(parents=True, exist_ok=True)
 
     img = cv2.imread(str(page_image_path))
@@ -369,6 +528,25 @@ def build_pdf_figure_tasks(
     figure_records: list[dict[str, Any]],
     descriptions_map: dict[str, str],
 ) -> list[dict[str, Any]]:
+    """Build vision-model description tasks for figures that lack a description yet.
+
+    Each task bundles enough context (surrounding page text, crop path, a
+    fixed prompt) for an external image-description worker (e.g. Alfred) to
+    produce a technical description later re-injected via
+    `inject_figure_descriptions_into_pages`.
+
+    Args:
+        repo_name: Repository name.
+        rel_path: PDF path relative to the repo root.
+        source_pdf_url: GitHub URL of the source PDF (for traceability).
+        page_texts: Extracted page texts (index 0 = page 1), used for context.
+        figure_records: Detected/cropped figure records.
+        descriptions_map: Existing `figure_id -> description` map; figures
+            already described are skipped.
+
+    Returns:
+        A list of task dicts, one per figure still needing a description.
+    """
     tasks: list[dict[str, Any]] = []
 
     for rec in figure_records:
@@ -403,11 +581,26 @@ def build_pdf_figure_tasks(
 
 
 def write_pdf_figure_tasks(task_file: Path, tasks: list[dict[str, Any]]) -> None:
+    """Write figure description tasks as JSON Lines (one task per line).
+
+    Args:
+        task_file: Destination `.jsonl` path.
+        tasks: Task dicts from `build_pdf_figure_tasks`.
+    """
     lines = [json.dumps(t, ensure_ascii=False) for t in tasks]
     task_file.write_text("\n".join(lines) + ("\n" if lines else ""), encoding="utf-8")
 
 
 def load_descriptions_map(desc_file: Path) -> dict[str, str]:
+    """Load a previously produced `figure_id -> description` map from disk.
+
+    Args:
+        desc_file: Path to `data/pdf_image_descriptions.json`.
+
+    Returns:
+        The description map, or an empty dict if the file is missing,
+        unparseable, or not a JSON object.
+    """
     if not desc_file.exists():
         return {}
 
@@ -432,6 +625,22 @@ def inject_figure_descriptions_into_pages(
     figure_records: list[dict[str, Any]],
     descriptions_map: dict[str, str],
 ) -> list[str]:
+    """Re-inject figure descriptions into page text as `[FIGURE_DESCRIPTIONS]` blocks.
+
+    This makes figure content retrievable by the RAG chunker/search even
+    though the diagrams themselves are images: each page's text gets an
+    appended block listing every figure detected on that page along with its
+    (possibly still-pending) description.
+
+    Args:
+        page_texts: Extracted page texts (index 0 = page 1).
+        figure_records: Detected/cropped figure records.
+        descriptions_map: `figure_id -> description` map; missing entries are
+            replaced with a placeholder note.
+
+    Returns:
+        A new list of page texts, each with its figure descriptions appended.
+    """
     page_to_figs: dict[int, list[dict[str, Any]]] = {}
     for rec in figure_records:
         page_to_figs.setdefault(int(rec["page_number"]), []).append(rec)
@@ -474,16 +683,27 @@ def extract_pdf_multimodal(
     source_pdf_url: str,
     data_dir: Path,
 ) -> dict[str, Any]:
-    """
-    Pipeline complet :
-    - texte page par page
-    - blocs texte
-    - rendu des pages
-    - détection des figures
-    - crops
-    - génération des tâches
-    - chargement descriptions existantes
-    - réinjection dans le texte
+    """Run the full multimodal PDF extraction pipeline for one PDF file.
+
+    Pipeline steps:
+    1. Extract text per page and text blocks (with bounding boxes).
+    2. Render each page to a PNG image.
+    3. Detect candidate figure regions on each page (OpenCV) and crop them.
+    4. Build description tasks for figures without an existing description.
+    5. Load any existing descriptions and re-inject them into the page text.
+
+    Args:
+        pdf_path: Path to the PDF file.
+        repo_name: Repository name (used for asset folder naming and figure ids).
+        rel_path: PDF path relative to the repo root.
+        source_pdf_url: GitHub URL of the source PDF (for traceability in tasks).
+        data_dir: Base data directory (`DATA_DIR`) under which rendered pages,
+            cropped figures, and task/description files are stored.
+
+    Returns:
+        A dict with `content` (enriched text), `figure_records`,
+        `figures_count`, `task_file`, `rendered_pages_count`, and
+        `content_extractor` label.
     """
     zoom = 2.0
 

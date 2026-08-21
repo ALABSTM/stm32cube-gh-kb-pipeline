@@ -1,6 +1,19 @@
 """
 Upload all F4 diagnostic cards JSON to datasource #28122.
 
+Series-specific batch uploader: appends every st_ready_diagnostic_cards_*.json file
+for STM32CubeF4 (main repo plus per-driver sub-repos under by_series/stm32cubef4/drivers/*)
+to existing KB #793 (ST GitHub Analyzer) datasource #28122
+(STready_F4_Diagnostic_Datasource), one file per API call via Add_Data_Source_Files.py
+(--operation add).
+
+Required env vars: same as Add_Data_Source_Files.py (PERSONA_API_KEY /
+ST_GITHUB_ANALYZER_API_KEY / ST_CHATGPT_API_KEY / ST_AI_BRIDGE_API_KEY / ST_API_KEY).
+
+Required input files: datasets/07_delivery/st_ready/by_series/stm32cubef4/
+diagnostic_cards_json/st_ready_diagnostic_cards_stm32cubef4.json (and
+drivers/*/diagnostic_cards_json/*.json).
+
 Usage:
     python pipeline_Automation/upload_f4_diagnostic_datasource.py --remote-user abir.gharbi@st.com [--verbose]
     python pipeline_Automation/upload_f4_diagnostic_datasource.py --remote-user abir.gharbi@st.com --dry-run
@@ -19,7 +32,7 @@ ADD_SCRIPT = PROJECT_ROOT / "pipeline_Automation" / "Add_Data_Source_Files.py"
 KB_ID = 793
 DATASOURCE_ID = 28122  # STready_F4_Diagnostic_Datasource
 
-PROCESSOR_PARAMS = '{"label": "{{label}}", "externalURL": "https://github.com/STMicroelectronics/{{repo}}/issues/{{evidence_refs[0].id}}", "rootTagPath": "diagnostic_cards"}'
+PROCESSOR_PARAMS = '{"label": "{{label}}", "externalURL": "{{externalURL}}", "rootTagPath": "diagnostic_cards"}'
 
 
 def find_all_f4_diagnostic_json() -> list[Path]:
@@ -45,6 +58,9 @@ def find_all_f4_diagnostic_json() -> list[Path]:
 
 
 def main():
+    """CLI entry point: find F4 diagnostic cards JSON files, optionally list them
+    (--dry-run), then upload each one via Add_Data_Source_Files.py --operation add.
+    """
     parser = argparse.ArgumentParser(description="Upload F4 diagnostic cards to datasource #28122")
     parser.add_argument("--remote-user", required=True, help="Your ST email (e.g. first.last@st.com)")
     parser.add_argument("--verbose", action="store_true")

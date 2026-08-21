@@ -31,14 +31,17 @@
 #>
 
 param(
-    [string[]]$Series = @("f4", "h5", "h7", "u5", "wl"),
+    [string[]]$Series = @(),
     [string]$PythonExe = "python",
+    [int]$KbId = 793,
     [string]$RemoteUser = "",
     [string]$ApiKey = "",
     [switch]$SkipIngestion,
     [switch]$SkipUpload,
     [switch]$ContinueOnError,
-    [int]$JsonSplitSize = 1000
+    [int]$JsonSplitSize = 1000,
+    [switch]$EnableIssuesByComponentFlow,
+    [switch]$ComponentIssuesOnly
 )
 
 Set-StrictMode -Version Latest
@@ -46,6 +49,54 @@ $ErrorActionPreference = "Stop"
 
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot "..\..")
 Set-Location $repoRoot
+
+$globalConfigPath = Join-Path $repoRoot "shared/config/config_all_series.json"
+if (-not (Test-Path -LiteralPath $globalConfigPath)) {
+    throw "Missing global series config: $globalConfigPath"
+}
+
+$cfgAll = ((Get-Content -LiteralPath $globalConfigPath -Raw).TrimStart([char]0xFEFF)) | ConvertFrom-Json
+$seriesSlugMap = @{}
+foreach ($seriesFull in @($cfgAll.all_series)) {
+    $name = [string]$seriesFull
+    if (-not $name.StartsWith("STM32Cube")) {
+        continue
+    }
+    $seriesCode = $name.Substring(9).ToUpperInvariant()
+    $seriesSlugMap[$seriesCode] = $name.ToLowerInvariant()
+}
+
+if ($seriesSlugMap.Count -eq 0) {
+    throw "No valid STM32Cube series found in: $globalConfigPath"
+}
+
+$normalizedSeries = @()
+if ($Series.Count -eq 0) {
+    $normalizedSeries = @($seriesSlugMap.Keys | Sort-Object)
+} else {
+    foreach ($item in $Series) {
+        $raw = [string]$item
+        if ([string]::IsNullOrWhiteSpace($raw)) {
+            continue
+        }
+        if ($raw.StartsWith("STM32Cube")) {
+            $code = $raw.Substring(9).ToUpperInvariant()
+        } else {
+            $code = $raw.ToUpperInvariant()
+        }
+        $normalizedSeries += $code
+    }
+}
+
+$normalizedSeries = @($normalizedSeries | Select-Object -Unique)
+foreach ($s in $normalizedSeries) {
+    if (-not $seriesSlugMap.ContainsKey($s)) {
+        $allowed = ($seriesSlugMap.Keys | Sort-Object) -join ", "
+        throw "Unsupported series '$s'. Allowed (from config_all_series.json): $allowed"
+    }
+}
+
+$Series = $normalizedSeries
 
 $timestamp = Get-Date -Format "yyyy-MM-dd_HH-mm"
 $logDir = Join-Path $repoRoot "logs"
@@ -63,6 +114,21 @@ function Run-Step {
     param([string]$Label, [string[]]$CmdArgs)
     Log "=== $Label ==="
     & $PythonExe @CmdArgs 2>&1 | Tee-Object -Append -FilePath $logFile
+    if ($LASTEXITCODE -ne 0) {
+        if ($ContinueOnError) {
+            Log "$Label FAILED (exit code $LASTEXITCODE) - continuing" "WARN"
+            return $false
+        }
+        throw "$Label failed with exit code $LASTEXITCODE"
+    }
+    Log "$Label completed successfully"
+    return $true
+}
+
+function Run-PowerShellStep {
+    param([string]$Label, [string[]]$CmdArgs)
+    Log "=== $Label ==="
+    & powershell @CmdArgs 2>&1 | Tee-Object -Append -FilePath $logFile
     if ($LASTEXITCODE -ne 0) {
         if ($ContinueOnError) {
             Log "$Label FAILED (exit code $LASTEXITCODE) - continuing" "WARN"
@@ -115,15 +181,6 @@ if ($SkipUpload) {
 } else {
     Log "Starting KB upload..."
 
-    # Datasource ID registry (per series, per artifact type)
-    $datasourceIds = @{
-        "f4" = @{ issues = 28099; files = 28103; resolver = 28118; diagnostic = 28122 }
-        "h5" = @{ issues = 28158; files = 28163; resolver = 28164; diagnostic = 28165 }
-        "u5" = @{ issues = 28167; files = 28168; resolver = 28244; diagnostic = 28170 }
-        "wl" = @{ issues = 28171; files = 28172; resolver = 28245; diagnostic = 28173 }
-        "h7" = @{ issues = 19896; files = 21824; resolver = 20403; diagnostic = 23768 }
-    }
-
     $artifactTypes = @(
         @{ type = "issues";     dir = "issues_json";           pattern = "st_ready_issues_*.json";           rootTag = "issues" }
         @{ type = "files";      dir = "files_json";            pattern = "st_ready_files_*.json";            rootTag = "files" }
@@ -133,8 +190,39 @@ if ($SkipUpload) {
 
     $uploaderScript = Join-Path $repoRoot "pipeline_Automation\upload\Add_Data_Source_Files.py"
 
+    function Get-OptionalPositiveIntValue {
+        param(
+            [AllowNull()][object]$Target,
+            [Parameter(Mandatory = $true)][string]$Name
+        )
+
+        if ($null -eq $Target) {
+            return 0
+        }
+        $prop = $Target.PSObject.Properties[$Name]
+        if ($null -eq $prop -or $null -eq $prop.Value) {
+            return 0
+        }
+        $parsed = 0
+        if ([int]::TryParse([string]$prop.Value, [ref]$parsed) -and $parsed -gt 0) {
+            return $parsed
+        }
+        return 0
+    }
+
     foreach ($s in $Series) {
-        $seriesDir = Join-Path $repoRoot "datasets\07_delivery\st_ready\by_series\stm32cube$s"
+        $seriesCode = [string]$s
+        $seriesKey = "STM32Cube$seriesCode"
+        $slug = $seriesSlugMap[$seriesCode]
+        $seriesDir = Join-Path $repoRoot "datasets\07_delivery\st_ready\by_series\$slug"
+
+        $idsEntry = $null
+        if ($null -ne $cfgAll.kb_datasource_ids) {
+            $idsProp = $cfgAll.kb_datasource_ids.PSObject.Properties[$seriesKey]
+            if ($null -ne $idsProp) {
+                $idsEntry = $idsProp.Value
+            }
+        }
 
         if (-not (Test-Path $seriesDir)) {
             Log "Series directory not found: $seriesDir - skipping" "WARN"
@@ -142,12 +230,23 @@ if ($SkipUpload) {
         }
 
         foreach ($artifact in $artifactTypes) {
-            $dsId = $datasourceIds[$s][$artifact.type]
+            if ($ComponentIssuesOnly -and $artifact.type -eq "issues") {
+                Log "Skipping monolithic issues upload for $seriesCode due to -ComponentIssuesOnly"
+                continue
+            }
+
+            $artifactKey = if ($artifact.type -eq "diagnostic") { "diagnostic" } else { $artifact.type }
+            $dsId = Get-OptionalPositiveIntValue -Target $idsEntry -Name $artifactKey
+            if ($dsId -le 0) {
+                Log "No datasource ID configured for $seriesKey/$($artifact.type) in config_all_series.json - skipping" "WARN"
+                continue
+            }
+
             $artifactDir = Join-Path $seriesDir $artifact.dir
             $files = @(Get-ChildItem -Path $artifactDir -Filter $artifact.pattern -File -ErrorAction SilentlyContinue)
 
             if ($files.Count -eq 0) {
-                Log "No $($artifact.type) files for $($s.ToUpper()) - skipping" "WARN"
+                Log "No $($artifact.type) files for $seriesCode - skipping" "WARN"
                 continue
             }
 
@@ -168,7 +267,33 @@ if ($SkipUpload) {
                 $uploadArgs += @("--remote-user", $RemoteUser)
             }
 
-            Run-Step -Label "Upload $($s.ToUpper()) $($artifact.type) (DS#$dsId)" -CmdArgs $uploadArgs
+            Run-Step -Label "Upload $seriesCode $($artifact.type) (DS#$dsId)" -CmdArgs $uploadArgs
+        }
+
+        if ($EnableIssuesByComponentFlow) {
+            $seriesUpper = $s.ToUpperInvariant()
+            $splitScript = Join-Path $repoRoot "pipeline_Automation/workflow/Split_Issues_By_Component.ps1"
+            $uploadScript = Join-Path $repoRoot "pipeline_Automation/workflow/Upload_Issues_By_Component.ps1"
+
+            Run-PowerShellStep -Label "Split issues by component ($seriesUpper)" -CmdArgs @(
+                "-ExecutionPolicy", "Bypass",
+                "-File", $splitScript,
+                "-Series", $seriesUpper,
+                "-PythonExe", $PythonExe
+            ) | Out-Null
+
+            $uploadPsArgs = @(
+                "-ExecutionPolicy", "Bypass",
+                "-File", $uploadScript,
+                "-Series", $seriesUpper,
+                "-PythonExe", $PythonExe,
+                "-KbId", "$KbId",
+                "-JsonSplitSize", "$JsonSplitSize"
+            )
+            if ($RemoteUser) {
+                $uploadPsArgs += @("-RemoteUser", $RemoteUser)
+            }
+            Run-PowerShellStep -Label "Upload issues by component ($seriesUpper)" -CmdArgs $uploadPsArgs | Out-Null
         }
     }
 }

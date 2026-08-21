@@ -138,6 +138,17 @@ def add_reference_box(
         p.level = 0
 
 
+def remove_formula_boxes(slide) -> None:
+    tokens = [
+        "reference formule alfred coherence",
+        "reference score strategie kb + qi",
+        "formula used trust",
+        "formula used quality gain",
+    ]
+    for sh in list(slide.shapes):
+        remove_shape_if_matches(sh, tokens)
+
+
 def fill_automation_slide(slide, diagrams_root: Path) -> None:
     set_slide_title(slide, "Automation serie complete - schema operationnel")
 
@@ -192,47 +203,46 @@ def add_formula_block(tf, text: str, size: int = 16, bold: bool = False) -> None
 
 
 def inject_formula_references(prs: Presentation) -> None:
-    # Target 1: Alfred evaluation slide.
-    alfred_idx = find_slide_by_keywords(prs, ["alfred", "evaluation"])
+    # Target 1: "Alfred Vision - Contextual Trust" slide.
+    alfred_idx = find_slide_by_keywords(prs, ["alfred vision", "contextual trust"])
     if alfred_idx is not None:
         slide = prs.slides[alfred_idx]
+        remove_formula_boxes(slide)
         add_reference_box(
             slide,
-            title="Reference formule Alfred coherence",
+            title="Formula used (trust)",
             lines=[
-                "C = clamp01(base * (1 - penalty))",
-                "base = (alpha*L + beta*S_sem) / (alpha + beta)",
-                "L = 0.7*O_desc + 0.3*O_ocr",
-                "penalty = clamp01(gamma * P_contradiction)",
-                "Classes: EXCELLENT>=0.75 | BON>=0.55 | ACCEPTABLE>=0.35 | INSUFFISANT<0.35",
+                "Trust(%) = (Evaluated - LowCoherence) / Evaluated * 100",
+                "Issue: (200 - 3) / 200 = 98.5%",
+                "PDF: (242 - 141) / 242 = 41.7%",
             ],
-            left=0.55,
-            top=6.45,
-            width=12.2,
-            height=0.9,
-            fill_rgb=(255, 238, 242),
-            line_rgb=(198, 40, 40),
+            left=8.9,
+            top=1.22,
+            width=3.8,
+            height=1.05,
+            fill_rgb=(238, 251, 251),
+            line_rgb=(0, 137, 123),
         )
 
-    # Target 2: Persona/KB comparison slide.
-    persona_idx = find_slide_by_keywords(prs, ["persona", "kb"])
+    # Target 2: "Comparative Study - Generic LLM vs Persona KB" slide.
+    persona_idx = find_slide_by_keywords(prs, ["comparative study", "generic llm", "persona kb"])
     if persona_idx is not None:
         slide = prs.slides[persona_idx]
+        remove_formula_boxes(slide)
         add_reference_box(
             slide,
-            title="Reference score strategie KB + QI",
+            title="Formula used (quality gain)",
             lines=[
-                "S = 0.40*R_top1 + 0.20*R_top3 + 0.35*R_answer - 0.15*R_hallucination - 0.05*(1 - B_latency)",
-                "B_latency = 1 - (latency - min_lat)/(max_lat - min_lat)",
-                "QI_offline = (total_0_to_7 / 7) * 100 ; Delta = QI_online - QI_offline",
-                "Persona: KB-first, Alfred seulement en fallback si KB non pertinente.",
+                "Gain(%) = (ScorePersona - ScoreLLM) / ScoreLLM * 100",
+                "= (8.1 - 5.8) / 5.8 * 100 = 39.7% ~ 39%",
+                "Score/answer = mean(question scores on /10)",
             ],
-            left=0.55,
-            top=6.35,
-            width=12.2,
-            height=1.0,
-            fill_rgb=(234, 247, 236),
-            line_rgb=(46, 125, 50),
+            left=8.9,
+            top=1.18,
+            width=3.8,
+            height=1.05,
+            fill_rgb=(239, 247, 255),
+            line_rgb=(25, 118, 210),
         )
 
 

@@ -1,4 +1,26 @@
-"""Convert test suite v2 CSV to XLSX."""
+"""
+Convert the v2 CSV test suite (Question;Answer;Tags) into a formatted Excel workbook.
+
+This is the v2 variant of the CSV-to-XLSX converter used for manual QA grading of
+the knowledge base. It does not read any pipeline JSON dataset; it only reformats
+an already-generated CSV file. Unlike the v1 builder, this script runs as a plain
+module-level script (no ``main()``/``if __name__`` guard) and does not strip quote
+characters from cell values.
+
+Input:
+    datasets/07_delivery/st_ready/all_series_test_suite_50q_v2.csv
+    (semicolon-delimited: Question;Answer;Tags)
+
+Output:
+    datasets/07_delivery/st_ready/all_series_test_suite_50q_v2.xlsx
+    Sheet "Test Suite 50Q v2" with columns:
+      A = Question (width 90), B = Answer (width 100), C = Tags (width 20)
+    Header row is bold/white-on-blue and centered, data rows wrap text, all cells
+    have thin borders, and the header row is frozen.
+
+Usage:
+    python pipeline_Automation/test_suites/build_test_suite_v2_xlsx.py
+"""
 import csv
 from pathlib import Path
 
@@ -32,18 +54,22 @@ with open(CSV_PATH, encoding="utf-8") as f:
             cell = ws.cell(row=row_idx, column=col_idx, value=value)
             cell.border = thin_border
             if row_idx == 1:
+                # Header row: bold white-on-blue, centered so it reads like a
+                # table title rather than a data cell.
                 cell.font = header_font
                 cell.fill = header_fill
                 cell.alignment = Alignment(horizontal="center")
             else:
+                # Data rows: wrap long question/answer text and align to the
+                # top so multi-line cells stay readable.
                 cell.alignment = Alignment(wrap_text=True, vertical="top")
 
-# Column widths
+# Column widths sized for long free-text Question/Answer content plus a short Tags column.
 ws.column_dimensions["A"].width = 90   # Question
 ws.column_dimensions["B"].width = 100  # Answer
 ws.column_dimensions["C"].width = 20   # Tags
 
-# Freeze header
+# Keep the header row visible while scrolling through many questions.
 ws.freeze_panes = "A2"
 
 wb.save(XLSX_PATH)

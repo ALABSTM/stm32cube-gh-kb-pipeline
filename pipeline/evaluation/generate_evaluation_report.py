@@ -1,15 +1,41 @@
 """
 Generate detailed evaluation report with charts for the PFE report.
 
+Role in the evaluation stage
+-----------------------------
+This is the "presentation layer" of the evaluation stage: it re-reads the
+same intermediate artifacts as run_full_evaluation.py (raw/clean/docs/sim/
+delivery JSON files) but, instead of printing text, renders matplotlib
+charts and an Excel workbook suitable for direct inclusion in the PFE report
+or a stakeholder presentation. It also optionally compiles a LaTeX report
+that embeds the generated charts into a PDF.
+
 Produces:
   - Console summary
   - Excel report with all metrics per stage
   - PNG charts (bar charts, pie charts) for each stage
   - Overall pipeline score dashboard
 
+Inputs
+------
+- ``data/raw_issues_<repo>.json``, ``data/raw_files_<repo>.json`` (ingestion)
+- ``data/clean_issues_<repo>.json``, ``data/clean_files_<repo>.json`` (cleaning)
+- ``data/docs_issues_<repo>_v2.json``, ``data/docs_files_<repo>_v2.json`` (enrichment)
+- ``data/docs_issues_<repo>_v2_sim.json`` (similarity)
+- ``datasets/07_delivery/st_ready/by_series/<repo>/*_json/st_ready_*.json`` and
+  ``*_with_alfred_image_text.json`` (delivery + Alfred image enrichment)
+- ``docs/evaluation_report.tex`` (optional, only when ``--pdf`` is used)
+
 Usage:
     python pipeline/evaluation/generate_evaluation_report.py --repo STM32CubeH7
     python pipeline/evaluation/generate_evaluation_report.py --all
+    python pipeline/evaluation/generate_evaluation_report.py --repo STM32CubeH7 --pdf
+
+Arguments:
+    --repo   Repository name to evaluate (default: STM32CubeH7).
+    --all    Evaluate every repo listed in the resolved config instead of a single one.
+    --pdf    After generating charts/Excel, also compile docs/evaluation_report.tex
+             to PDF via pdflatex (requires MiKTeX/TeX Live installed).
 
 Output:
     datasets/07_delivery/st_ready/evaluation_report/
@@ -69,12 +95,14 @@ SCORE_COLORS = {
 
 
 def _pct(n, total):
+    """Return n/total as a percentage rounded to 1 decimal, or 0.0 if total is 0."""
     if total == 0:
         return 0.0
     return round(n / total * 100, 1)
 
 
 def _score_label(pct):
+    """Map a coverage/success percentage to a qualitative label used for chart coloring."""
     if pct >= 95:
         return "EXCELLENT"
     if pct >= 85:
@@ -110,6 +138,17 @@ def _safe_pie(ax, values, labels, colors, title, autopct="%1.1f%%", startangle=9
 # ============================================================
 
 def collect_ingestion(repo: str) -> dict:
+    """Compute raw-data completeness metrics for the ingestion stage.
+
+    Args:
+        repo: Repo name used to locate ``raw_issues_<repo>.json`` /
+            ``raw_files_<repo>.json`` under DATA_DIR.
+
+    Returns:
+        Dict of counts/percentages (issues with body/title/labels, files with
+        content). Missing input files simply omit their metrics rather than
+        raising, since a repo may not have both issues and files ingested yet.
+    """
     metrics = {}
     raw_issues = DATA_DIR / f"raw_issues_{repo.lower()}.json"
     raw_files = DATA_DIR / f"raw_files_{repo.lower()}.json"
@@ -138,6 +177,16 @@ def collect_ingestion(repo: str) -> dict:
 
 
 def collect_cleaning(repo: str) -> dict:
+    """Compute cleaning-stage metrics: validity rate and classification coverage.
+
+    Args:
+        repo: Repo name used to locate ``clean_issues_<repo>.json`` /
+            ``clean_files_<repo>.json`` under DATA_DIR.
+
+    Returns:
+        Dict with issue validity/metadata coverage percentages, layer and
+        severity distributions, and file type classification coverage.
+    """
     metrics = {}
 
     clean_issues = DATA_DIR / f"clean_issues_{repo.lower()}.json"
@@ -180,6 +229,17 @@ def collect_cleaning(repo: str) -> dict:
 
 
 def collect_enrichment(repo: str) -> dict:
+    """Compute enrichment-stage metrics: metadata coverage and image description quality.
+
+    Args:
+        repo: Repo name used to locate ``docs_issues_<repo>_v2.json`` /
+            ``docs_files_<repo>_v2.json`` and delivery Alfred-enriched exports.
+
+    Returns:
+        Dict with docs metadata coverage percentages and image-description
+        success/failure counts (see inline notes for the multi-source lookup
+        strategy).
+    """
     metrics = {}
 
     docs_issues = DATA_DIR / f"docs_issues_{repo.lower()}_v2.json"
@@ -222,11 +282,15 @@ def collect_enrichment(repo: str) -> dict:
                 urls = rec.get("image_urls") or []
                 if isinstance(urls, list) and urls:
                     total_images += len(urls)
+                    # The Alfred-enriched delivery text embeds each successful
+                    # description inline as a "[IMAGE DESCRIPTION]" marker rather
+                    # than a separate structured field, so count occurrences to
+                    # estimate how many of this record's image_urls were described.
                     text = rec.get("st_ready_text") or rec.get("resolver_card_text") or ""
                     desc_count = text.count("[IMAGE DESCRIPTION]")
                     images_ok += min(desc_count, len(urls))
                     for _ in range(min(desc_count, len(urls))):
-                        desc_lengths.append(200)  # approx avg
+                        desc_lengths.append(200)  # approx avg length placeholder (exact text not extracted here)
                 analyses = rec.get("image_analyses") or []
                 if analyses and not urls:
                     for a in analyses:
@@ -235,6 +299,8 @@ def collect_enrichment(repo: str) -> dict:
                             images_ok += 1
                             desc_lengths.append(len(a.get("description") or ""))
         except Exception:
+            # Tolerate malformed/partial delivery files; one bad file should not
+            # abort the whole evaluation report generation.
             continue
 
     # Fallback: Check intermediate docs for image_records (legacy pipeline)
@@ -261,6 +327,15 @@ def collect_enrichment(repo: str) -> dict:
 
 
 def collect_similarity(repo: str) -> dict:
+    """Compute similarity-stage metrics: coverage of related_issue_ids links.
+
+    Args:
+        repo: Repo name used to locate ``docs_issues_<repo>_v2_sim.json``.
+
+    Returns:
+        Dict with related-issue coverage stats, or ``{"status": "NOT_RUN"}``
+        if the similarity stage was never executed for this repo.
+    """
     metrics = {}
     sim_path = DATA_DIR / f"docs_issues_{repo.lower()}_v2_sim.json"
 
@@ -284,6 +359,16 @@ def collect_similarity(repo: str) -> dict:
 
 
 def collect_delivery(repo: str) -> dict:
+    """Count ST-ready delivery documents exported per artifact type.
+
+    Args:
+        repo: Repo name used to locate
+            ``datasets/07_delivery/st_ready/by_series/<repo>/<type>_json/``.
+
+    Returns:
+        Dict with per-type document counts (issues/files/resolver_cases/
+        diagnostic_cards) and a total.
+    """
     metrics = {}
 
     # Search delivery paths
@@ -325,6 +410,15 @@ def collect_delivery(repo: str) -> dict:
 # ============================================================
 
 def chart_ingestion(metrics: dict, repo: str):
+    """Render and save the ingestion-stage chart (issues completeness bars + files pie).
+
+    Args:
+        metrics: Output of collect_ingestion.
+        repo: Repo name, used only for the chart title.
+
+    Side effects:
+        Writes ``01_ingestion_completeness.png`` to OUTPUT_DIR.
+    """
     fig, axes = plt.subplots(1, 2, figsize=(12, 5))
     fig.suptitle(f"Stage 1: Ingestion — {repo}", fontsize=14, fontweight="bold")
 
@@ -365,6 +459,15 @@ def chart_ingestion(metrics: dict, repo: str):
 
 
 def chart_cleaning(metrics: dict, repo: str):
+    """Render and save the cleaning-stage chart (classification coverage, file types, severity).
+
+    Args:
+        metrics: Output of collect_cleaning.
+        repo: Repo name, used only for the chart title.
+
+    Side effects:
+        Writes ``02_cleaning_validity.png`` to OUTPUT_DIR.
+    """
     fig, axes = plt.subplots(1, 3, figsize=(16, 5))
     fig.suptitle(f"Stage 2: Cleaning — {repo}", fontsize=14, fontweight="bold")
 
@@ -425,6 +528,15 @@ def chart_cleaning(metrics: dict, repo: str):
 
 
 def chart_enrichment(metrics: dict, repo: str):
+    """Render and save the enrichment-stage chart (metadata coverage, image description success).
+
+    Args:
+        metrics: Output of collect_enrichment.
+        repo: Repo name, used only for the chart title.
+
+    Side effects:
+        Writes ``03_enrichment_metadata.png`` to OUTPUT_DIR.
+    """
     fig, axes = plt.subplots(1, 3, figsize=(15, 5))
     fig.suptitle(f"Stage 3: Enrichment — {repo}", fontsize=14, fontweight="bold")
 
@@ -487,6 +599,15 @@ def chart_enrichment(metrics: dict, repo: str):
 
 
 def chart_similarity(metrics: dict, repo: str):
+    """Render and save the similarity-stage chart (related-issue coverage pie).
+
+    Args:
+        metrics: Output of collect_similarity.
+        repo: Repo name, used only for the chart title.
+
+    Side effects:
+        Writes ``04_similarity_coverage.png`` to OUTPUT_DIR.
+    """
     fig, ax = plt.subplots(1, 1, figsize=(8, 5))
     fig.suptitle(f"Stage 4: Similarity — {repo}", fontsize=14, fontweight="bold")
 
@@ -511,6 +632,15 @@ def chart_similarity(metrics: dict, repo: str):
 
 
 def chart_delivery(metrics: dict, repo: str):
+    """Render and save the delivery-stage chart (exported document volumes per type).
+
+    Args:
+        metrics: Output of collect_delivery.
+        repo: Repo name, used only for the chart title.
+
+    Side effects:
+        Writes ``05_delivery_volumes.png`` to OUTPUT_DIR.
+    """
     fig, ax = plt.subplots(1, 1, figsize=(10, 5))
     fig.suptitle(f"Stage 5: Delivery — {repo}", fontsize=14, fontweight="bold")
 
@@ -535,7 +665,21 @@ def chart_delivery(metrics: dict, repo: str):
 
 
 def chart_dashboard(all_metrics: dict, repo: str):
-    """Generate overall pipeline quality dashboard."""
+    """Generate overall pipeline quality dashboard.
+
+    Combines one representative percentage metric per stage into a single
+    horizontal bar chart, giving a one-glance view of pipeline health across
+    all five stages.
+
+    Args:
+        all_metrics: Dict keyed by stage name ("ingestion", "cleaning",
+            "enrichment", "similarity", "delivery") mapping to each stage's
+            collect_* output.
+        repo: Repo name, used only for the chart title.
+
+    Side effects:
+        Writes ``00_pipeline_dashboard.png`` to OUTPUT_DIR.
+    """
     fig, ax = plt.subplots(1, 1, figsize=(12, 6))
 
     stages = ["Ingestion", "Cleaning", "Enrichment", "Similarity", "Delivery"]
@@ -547,7 +691,8 @@ def chart_dashboard(all_metrics: dict, repo: str):
         min(100, all_metrics["delivery"].get("total_delivered", 0) / max(1, all_metrics["delivery"].get("total_delivered", 1)) * 100) if all_metrics["delivery"].get("total_delivered", 0) > 0 else 0,
     ]
 
-    # For delivery, use a different metric (presence = 100% if any docs)
+    # Delivery has no natural "percent complete" metric (it's a count), so treat
+    # "at least one document exported" as a pass/fail 100%/0% signal instead.
     if all_metrics["delivery"].get("total_delivered", 0) > 0:
         key_metrics[4] = 100.0
 
@@ -579,6 +724,20 @@ def chart_dashboard(all_metrics: dict, repo: str):
 # ============================================================
 
 def generate_excel_report(all_metrics: dict, repo: str):
+    """Write a multi-sheet Excel workbook (one sheet per stage) with metric/value/score columns.
+
+    Nested dict values (e.g. distributions) are skipped in the flat table
+    since Excel cells can't hold structured data; only scalar metrics are
+    shown, with a color-coded score column for percentage metrics.
+
+    Args:
+        all_metrics: Dict keyed by stage name mapping to each stage's
+            collect_* output.
+        repo: Unused for content but kept for API symmetry with chart_* functions.
+
+    Side effects:
+        Writes ``evaluation_report.xlsx`` to OUTPUT_DIR.
+    """
     wb = Workbook()
 
     header_fill = PatternFill(start_color="03234B", end_color="03234B", fill_type="solid")
@@ -631,6 +790,7 @@ def generate_excel_report(all_metrics: dict, repo: str):
 # ============================================================
 
 def main():
+    """CLI entry point: collect metrics, render charts/Excel, optionally compile PDF."""
     parser = argparse.ArgumentParser(description="Generate evaluation report with charts")
     parser.add_argument("--repo", default="STM32CubeH7", help="Repository name")
     parser.add_argument("--all", action="store_true", help="Run for all repos in config")
