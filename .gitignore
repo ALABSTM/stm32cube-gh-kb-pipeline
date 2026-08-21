@@ -40,7 +40,7 @@ datasets/07_delivery/st_ready/resolver_cases_json/
 datasets/07_delivery/st_ready/diagnostic_cards_json/
 
 # Keep documentation local only (not tracked in cloud repo)
-
+docs/
 
 # Keep repository memory notes local only
 memories/repo/
