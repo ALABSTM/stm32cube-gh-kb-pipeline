@@ -33,6 +33,7 @@ import argparse
 import csv
 import json
 import re
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
@@ -41,6 +42,135 @@ from pipeline.delivery.delivery_paths import (
     get_repo_artifact_dir,
 )
 from shared.utils.paths import DATA_DIR, PROJECT_ROOT, get_config_path
+
+
+GENERIC_DRIVER_COMPONENTS = {
+    "ADC", "CAN", "CEC", "COMP", "CORDIC", "CORTEX", "CRC", "CRS", "CRYP", "DAC",
+    "DCACHE", "DCMI", "DELAYBLOCK", "DFSDM", "DMA", "DMAMUX", "DMA2D", "DSI", "DTS",
+    "ETH", "EXTI", "FDCAN", "FIREWALL", "FLASH", "FMAC", "FMC", "GFXMMU", "GFXTIM",
+    "GPIO", "GPU2D", "GTZC", "HASH", "HRTIM", "HSEM", "HSPI", "I2C", "ICACHE", "IPCC",
+    "IRDA", "IWDG", "JPEG", "LCD", "LPGPIO", "LPTIM", "LTDC", "MDF", "MDIOS", "MDMA",
+    "MRSUBG", "OSPI", "OPAMP", "OTFDEC", "PKA", "PSSI", "PWR", "QSPI", "RAMCFG", "RAMECC",
+    "RCC", "RNG", "RTC", "SAI", "SDMMC", "SMARTCARD", "SPDIFRX", "SPI", "SWPMI", "TIM",
+    "TSC", "UART", "UCPD", "USART", "USB", "WWDG", "XSPI",
+}
+AMBIGUOUS_COMPONENTS = {"CAN", "COMP", "TIM"}
+NULL_COMPONENT_VALUES = {"", "none", "null", "unknown", "other", "n/a", "na"}
+
+
+def normalize_component(raw: Any) -> str:
+    """Return a canonical uppercase component token or empty string."""
+    value = "" if raw is None else str(raw).strip()
+    if not value:
+        return ""
+    canonical = re.sub(r"[^A-Za-z0-9]+", "_", value.upper()).strip("_")
+    aliases = {
+        "ETHERNET": "ETH",
+        "USB_OTG": "USB",
+        "TIMER": "TIM",
+        "TIMERS": "TIM",
+    }
+    return aliases.get(canonical, canonical)
+
+
+def _is_missing_component(raw: Any) -> bool:
+    value = "" if raw is None else str(raw).strip().lower()
+    return value in NULL_COMPONENT_VALUES
+
+
+def infer_component_for_issue(doc: dict[str, Any]) -> dict[str, Any]:
+    """Infer a component with score/confidence; apply only on high confidence."""
+    current = normalize_component(doc.get("component"))
+    if current in GENERIC_DRIVER_COMPONENTS:
+        return {
+            "component": current,
+            "applied": False,
+            "source": "component_field",
+            "confidence": "high",
+            "score": 0,
+            "hits": 0,
+            "top_candidates": f"{current}(score=0,hits=0)",
+        }
+
+    text = "\n".join(
+        [
+            str(doc.get("issue_title") or ""),
+            str(doc.get("clean_text") or ""),
+            str(doc.get("st_ready_text") or ""),
+            " ".join(str(lbl or "") for lbl in (doc.get("labels") or [])),
+        ]
+    )
+    if not text.strip():
+        return {
+            "component": current,
+            "applied": False,
+            "source": "none",
+            "confidence": "none",
+            "score": 0,
+            "hits": 0,
+            "top_candidates": "",
+        }
+
+    scores = Counter()
+    hits: dict[str, int] = {}
+    for comp in sorted(GENERIC_DRIVER_COMPONENTS):
+        local_hits = 0
+        p1 = re.compile(rf"(?i)(?:\\b|_){re.escape(comp)}(?:\\b|_)")
+        p2 = re.compile(rf"(?i){re.escape(comp)}[_A-Z0-9]+")
+        p3 = re.compile(rf"(?i)HAL_{re.escape(comp)}[_A-Z0-9]*")
+        p4 = re.compile(rf"(?i)LL_{re.escape(comp)}[_A-Z0-9]*")
+        c1 = len(p1.findall(text))
+        c2 = len(p2.findall(text))
+        c3 = len(p3.findall(text))
+        c4 = len(p4.findall(text))
+        local_hits = c1 + c2 + c3 + c4
+        if local_hits == 0:
+            continue
+        hits[comp] = local_hits
+        scores[comp] += c1
+        scores[comp] += c2 * 2
+        scores[comp] += (c3 + c4) * 3
+
+    if not scores:
+        return {
+            "component": current,
+            "applied": False,
+            "source": "none",
+            "confidence": "none",
+            "score": 0,
+            "hits": 0,
+            "top_candidates": "",
+        }
+
+    ranked = sorted(scores.items(), key=lambda kv: (-kv[1], -hits[kv[0]], kv[0]))
+    best_component, best_score = ranked[0]
+    best_hits = hits.get(best_component, 0)
+
+    if (best_component not in AMBIGUOUS_COMPONENTS and best_score >= 8 and best_hits >= 2) or (
+        best_component in AMBIGUOUS_COMPONENTS and best_score >= 20 and best_hits >= 6
+    ):
+        confidence = "high"
+    elif (best_component not in AMBIGUOUS_COMPONENTS and best_score >= 4) or (
+        best_component in AMBIGUOUS_COMPONENTS and best_score >= 10
+    ):
+        confidence = "medium"
+    else:
+        confidence = "low"
+
+    top_candidates = ", ".join(
+        f"{comp}(score={score},hits={hits.get(comp, 0)})" for comp, score in ranked[:3]
+    )
+    apply_inference = _is_missing_component(doc.get("component")) and confidence == "high"
+    resolved = best_component if apply_inference else current
+    return {
+        "component": resolved,
+        "applied": apply_inference,
+        "source": "inferred_high_confidence" if apply_inference else "none",
+        "confidence": confidence,
+        "score": int(best_score),
+        "hits": int(best_hits),
+        "top_candidates": top_candidates,
+    }
 
 
 def load_config() -> dict[str, Any]:
@@ -258,6 +388,7 @@ def export_repo(repo: str, include_invalid: bool, comments_chars: int) -> tuple[
     docs = json.loads(in_path.read_text(encoding="utf-8"))
     total = len(docs)
     exported = 0
+    inferred_component_fills = 0
 
     manifest_rows: list[dict[str, Any]] = []
 
@@ -265,27 +396,39 @@ def export_repo(repo: str, include_invalid: bool, comments_chars: int) -> tuple[
         if not include_invalid and not doc.get("is_valid", True):
             continue
 
-        issue_number = doc.get("issue_number")
-        title_slug = slugify(doc.get("issue_title") or "issue")
+        inference = infer_component_for_issue(doc)
+        doc_for_export = dict(doc)
+        if inference["applied"]:
+            doc_for_export["component"] = inference["component"]
+            inferred_component_fills += 1
+
+        issue_number = doc_for_export.get("issue_number")
+        title_slug = slugify(doc_for_export.get("issue_title") or "issue")
         file_name = f"issue_{issue_number}_{title_slug}.md"
         out_file = out_root / file_name
 
-        payload = compose_st_ready_issue(doc, comments_chars=comments_chars)
+        payload = compose_st_ready_issue(doc_for_export, comments_chars=comments_chars)
         out_file.write_text(payload, encoding="utf-8")
 
         manifest_rows.append(
             {
                 "id": doc.get("id"),
                 "issue_number": issue_number,
-                "issue_title": doc.get("issue_title"),
-                "state": doc.get("state"),
-                "layer": doc.get("layer"),
-                "component": doc.get("component"),
-                "issue_kind": doc.get("issue_kind"),
-                "severity": doc.get("severity"),
-                "is_valid": doc.get("is_valid"),
-                "evidence_strength": doc.get("evidence_strength"),
-                "rescue_applied": doc.get("rescue_applied"),
+                "issue_title": doc_for_export.get("issue_title"),
+                "state": doc_for_export.get("state"),
+                "layer": doc_for_export.get("layer"),
+                "component": doc_for_export.get("component"),
+                "component_original": doc.get("component"),
+                "component_inference_applied": inference["applied"],
+                "component_inference_confidence": inference["confidence"],
+                "component_inference_score": inference["score"],
+                "component_inference_hits": inference["hits"],
+                "component_inference_top_candidates": inference["top_candidates"],
+                "issue_kind": doc_for_export.get("issue_kind"),
+                "severity": doc_for_export.get("severity"),
+                "is_valid": doc_for_export.get("is_valid"),
+                "evidence_strength": doc_for_export.get("evidence_strength"),
+                "rescue_applied": doc_for_export.get("rescue_applied"),
                 "output_file": file_name,
                 "output_chars": len(payload),
             }
@@ -301,6 +444,12 @@ def export_repo(repo: str, include_invalid: bool, comments_chars: int) -> tuple[
             "state",
             "layer",
             "component",
+            "component_original",
+            "component_inference_applied",
+            "component_inference_confidence",
+            "component_inference_score",
+            "component_inference_hits",
+            "component_inference_top_candidates",
             "issue_kind",
             "severity",
             "is_valid",
@@ -319,6 +468,7 @@ def export_repo(repo: str, include_invalid: bool, comments_chars: int) -> tuple[
         "output_dir": str(out_root),
         "total_docs": total,
         "exported_docs": exported,
+        "inferred_component_fills": inferred_component_fills,
         "include_invalid": include_invalid,
         "comments_chars": comments_chars,
     }
@@ -348,41 +498,54 @@ def export_repo_json(repo: str, include_invalid: bool, comments_chars: int) -> t
 
     docs = json.loads(in_path.read_text(encoding="utf-8"))
     total = len(docs)
+    inferred_component_fills = 0
 
     payload_docs: list[dict[str, Any]] = []
     for doc in docs:
         if not include_invalid and not doc.get("is_valid", True):
             continue
 
-        github_url = doc.get("github_url")
-        issue_number = doc.get("issue_number")
-        issue_title = doc.get("issue_title")
-        repo_name = doc.get("repo")
+        inference = infer_component_for_issue(doc)
+        doc_for_export = dict(doc)
+        if inference["applied"]:
+            doc_for_export["component"] = inference["component"]
+            inferred_component_fills += 1
+
+        github_url = doc_for_export.get("github_url")
+        issue_number = doc_for_export.get("issue_number")
+        issue_title = doc_for_export.get("issue_title")
+        repo_name = doc_for_export.get("repo")
 
         payload_docs.append(
             {
-                "id": doc.get("id"),
+                "id": doc_for_export.get("id"),
                 "url_base": url_base,
-                "repo": doc.get("repo"),
+                "repo": doc_for_export.get("repo"),
                 "root_path": "issues",
-                "mcu_series": doc.get("mcu_series"),
+                "mcu_series": doc_for_export.get("mcu_series"),
                 "issue_number": issue_number,
                 "issue_title": issue_title,
-                "state": doc.get("state"),
-                "layer": doc.get("layer"),
-                "component": doc.get("component"),
-                "issue_kind": doc.get("issue_kind"),
-                "severity": doc.get("severity"),
-                "board": doc.get("board"),
-                "labels": doc.get("labels") or [],
+                "state": doc_for_export.get("state"),
+                "layer": doc_for_export.get("layer"),
+                "component": doc_for_export.get("component"),
+                "component_original": doc.get("component"),
+                "component_inference_applied": inference["applied"],
+                "component_inference_confidence": inference["confidence"],
+                "component_inference_score": inference["score"],
+                "component_inference_hits": inference["hits"],
+                "component_inference_top_candidates": inference["top_candidates"],
+                "issue_kind": doc_for_export.get("issue_kind"),
+                "severity": doc_for_export.get("severity"),
+                "board": doc_for_export.get("board"),
+                "labels": doc_for_export.get("labels") or [],
                 "github_url": github_url,
                 "externalURL": github_url,
                 "label": f"{repo_name} issue #{issue_number} - {issue_title}",
-                "is_valid": doc.get("is_valid"),
-                "evidence_strength": doc.get("evidence_strength"),
-                "rescue_applied": doc.get("rescue_applied"),
+                "is_valid": doc_for_export.get("is_valid"),
+                "evidence_strength": doc_for_export.get("evidence_strength"),
+                "rescue_applied": doc_for_export.get("rescue_applied"),
                 "delivery_template": "st_v2_structured_issue_card",
-                "st_ready_text": compose_st_ready_text(doc, comments_chars=comments_chars),
+                "st_ready_text": compose_st_ready_text(doc_for_export, comments_chars=comments_chars),
             }
         )
 
@@ -405,6 +568,7 @@ def export_repo_json(repo: str, include_invalid: bool, comments_chars: int) -> t
         "output_file": str(out_file),
         "total_docs": total,
         "exported_docs": len(payload_docs),
+        "inferred_component_fills": inferred_component_fills,
         "include_invalid": include_invalid,
         "comments_chars": comments_chars,
         "format": "json",
