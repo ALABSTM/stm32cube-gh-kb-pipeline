@@ -1,4 +1,4 @@
-name: Auto Update KB
+name: KB Auto Update
 
 on:
   schedule:
