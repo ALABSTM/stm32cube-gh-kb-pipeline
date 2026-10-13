@@ -5,7 +5,7 @@ This checklist is intended for supervisor validation on a fresh machine.
 ## 1) Scope
 
 Applies to these workflows:
-- `.github/workflows/manual_auto_update_kb.yml`
+- `.github/workflows/manual_update_kb.yml`
 - `.github/workflows/auto_update_kb.yml`
 
 ## 2) Machine prerequisites
@@ -37,7 +37,7 @@ Add these in Repository Settings -> Secrets and variables -> Actions.
 1. `RUNNER_CHECK_TOKEN`
 - Purpose: used by runner availability API check.
 - Used in:
-  - `.github/workflows/manual_auto_update_kb.yml`
+  - `.github/workflows/manual_update_kb.yml`
   - `.github/workflows/auto_update_kb.yml`
 
 2. One Alfred API key secret (at least one must be present)
@@ -46,7 +46,7 @@ Add these in Repository Settings -> Secrets and variables -> Actions.
 - or `ST_API_KEY`
 - Purpose: Alfred image/PDF enrichment before upload.
 - Used in:
-  - `.github/workflows/manual_auto_update_kb.yml`
+  - `.github/workflows/manual_update_kb.yml`
   - `.github/workflows/auto_update_kb.yml`
   - `pipeline_Automation/alfred/enrich_pdf_figures_with_alfred.py`
   - `pipeline_Automation/alfred/enrich_json_images_with_alfred.py`

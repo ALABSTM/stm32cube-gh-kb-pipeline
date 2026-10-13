@@ -336,7 +336,7 @@ Si le datasource reste bloque apres plusieurs rollbacks, creer un nouveau dataso
 
 Workflows principaux :
 - `.github/workflows/auto_update_kb.yml`
-- `.github/workflows/manual_auto_update_kb.yml`
+- `.github/workflows/manual_update_kb.yml`
 
 Le workflow exécute, pour chaque série, le script :
 

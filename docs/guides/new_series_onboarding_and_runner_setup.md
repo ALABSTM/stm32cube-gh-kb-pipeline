@@ -41,7 +41,7 @@ Le dossier de sortie principal est:
 
 ### 3.4 GitHub Actions
 1. .github/workflows/auto_update_kb.yml
-2. .github/workflows/manual_auto_update_kb.yml
+2. .github/workflows/manual_update_kb.yml
 
 ## 4) Definition detaillee des champs de config
 
@@ -201,7 +201,7 @@ Dans pipeline_Automation/workflow/run_all_series.py, ajouter:
 ## 6.5 Mettre a jour GitHub Actions
 Modifier:
 1. .github/workflows/auto_update_kb.yml
-2. .github/workflows/manual_auto_update_kb.yml
+2. .github/workflows/manual_update_kb.yml
 
 Ajouter C5 dans:
 1. input series (description/listes autorisees)
@@ -346,7 +346,7 @@ Apres upload reussi, renseigner shared/config/config_all_series.json:
 ## 9) Execution via GitHub Actions
 
 ## 9.1 Workflow manuel
-Utiliser .github/workflows/manual_auto_update_kb.yml
+Utiliser .github/workflows/manual_update_kb.yml
 
 Inputs recommandees pour migration composant:
 1. mode = Full ou Upload

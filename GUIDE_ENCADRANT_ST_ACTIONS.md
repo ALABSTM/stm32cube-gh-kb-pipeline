@@ -19,7 +19,7 @@ Ce guide permet d'executer et valider l'automatisation STM32Cube sur le depot ST
 
 ### 1.2 Workflows attendus
 - [ ] `.github/workflows/smoke_test_st_api.yml`
-- [ ] `.github/workflows/manual_auto_update_kb.yml`
+- [ ] `.github/workflows/manual_update_kb.yml`
 - [ ] `.github/workflows/auto_update_kb.yml`
 
 ### 1.3 Secrets requis
@@ -52,7 +52,7 @@ Workflow: `smoke_test_st_api.yml`
 - [ ] Resultat attendu: acces API OK
 
 ### Test 2 - Prepare only
-Workflow: `manual_auto_update_kb.yml`
+Workflow: `manual_update_kb.yml`
 Inputs:
 - `series=C0`
 - `mode=Prepare`
@@ -63,7 +63,7 @@ Inputs:
 - [ ] Resultat attendu: generation des artefacts ST-ready sans echec
 
 ### Test 3 - Upload only
-Workflow: `manual_auto_update_kb.yml`
+Workflow: `manual_update_kb.yml`
 Inputs recommandes:
 - `series=C0`
 - `mode=Upload`
@@ -75,7 +75,7 @@ Inputs recommandes:
 - [ ] Resultat attendu: upload KB sans erreur auth
 
 ### Test 4 - Full
-Workflow: `manual_auto_update_kb.yml`
+Workflow: `manual_update_kb.yml`
 Inputs recommandes:
 - `series=C0`
 - `mode=Full`
